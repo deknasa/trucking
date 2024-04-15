@@ -1101,30 +1101,33 @@
         setStatusPotongReturOptions(form),
         setStatusOliOptions(),
         setStatusBanDetailOptions(form),
-        setStatusBanOptions(form),
-        showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+        setStatusBanOptions(form)
       ])
-      .then((showPengeluaranStok) => {
-
-        let data = showPengeluaranStok[4];
-        if (selectedRows.length > 0) {
-           clearSelectedRows()
-         }
-        $('#crudModal').modal('show')
-        if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
-          form.find('[name]').attr('readonly', 'readonly')
-          form.find('[name=id]').prop('disabled', false)
-          form.find('[name="detail_keterangan[]"]').prop('readonly', false)
-
-          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-          name.attr('readonly', true)
-          name.find('.lookup-toggler').attr('disabled', true)
-
-          $('.tbl_aksi').hide()
-        }
-
+      .then((showPengeluaranStok)=>{
+        showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+        .then((showPengeluaranStok) => {
+  
+          let data = showPengeluaranStok;
+          if (selectedRows.length > 0) {
+             clearSelectedRows()
+           }
+          $('#crudModal').modal('show')
+          if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
+            form.find('[name]').attr('readonly', 'readonly')
+            form.find('[name=id]').prop('disabled', false)
+            form.find('[name="detail_keterangan[]"]').prop('readonly', false)
+  
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('readonly', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+  
+            $('.tbl_aksi').hide()
+          }
+  
+        })
       })
       .catch((error) => {
+        console.log(error);
         showDialog(error.statusText)
       })
       .finally(() => {
@@ -2105,6 +2108,7 @@
 
           } else {
             $.each(response.detail, (id, detail) => {
+              let idDetail = id
               let detailRow = $(`
                 <tr class="trow">
                       <td>
@@ -2128,6 +2132,10 @@
                         <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                       </td>
                       <td class="data_tbl tbl_qty">
+                        <div id="qtytestlookup${id}" style="display:none;" >
+                          <input type="text"  name="detail_qty_oli[]" id="detail_qty_oli${id}" data-ided="${id}" class="form-control qtytambahgantioli-lookup${id}">
+                        </div>
+                        
                         <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                       </td>  
                       <td class="data_tbl tbl_statusban">
@@ -2167,6 +2175,7 @@
               detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
               detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
               detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+              detailRow.find(`[name="detail_qty_oli[]"]`).val(detail.qty)
               detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
               detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
               detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
@@ -2195,6 +2204,14 @@
                   detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
                   detailRow.find(`#statusoli${id} option:contains('GANTI')`).remove()
                   detailRow.find(`#statusoli${id}`).trigger('change')
+                  $(`#detail_qty_oli${id}`).hide()
+                  $(`#qtytestlookup${id}`).hide()
+                  $(`#detail_qty${id}`).show()
+                }
+                else{
+                  $(`#detail_qty_oli${id}`).show()
+                  $(`#qtytestlookup${id}`).show()
+                  $(`#detail_qty${id}`).hide()
                 }
 
                 detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
@@ -2260,7 +2277,13 @@
                     elStatusOli.find(`option:contains('TAMBAH')`).remove()
                     elStatusOli.find(`option:contains('GANTI')`).remove()
                     elStatusOli.trigger('change')
+                    $(`#detail_qty_oli${idDetail}`).hide()
+                    $(`#qtytestlookup${idDetail}`).hide()
+                    $(`#detail_qty${idDetail}`).show()
                   } else {
+                    $(`#detail_qty_oli${idDetail}`).show()
+                    $(`#qtytestlookup${idDetail}`).show()
+                    $(`#detail_qty${idDetail}`).hide()
                     dataStatusOli.forEach(statusOli => {
                       let option = new Option(statusOli.text, statusOli.id)
 
@@ -2270,8 +2293,60 @@
                 },
                 onCancel: (element) => {
                   element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+                  satuanEl.val('');
+                  element.val('')
+                  element.data('currentValue', element.val())
+                  dataStatusOli.forEach(statusOli => {
+                    let option = new Option(statusOli.text, statusOli.id)
+          
+                    elStatusOli.append(option).trigger('change')
+                  });
                 }
               })
+              $(`.qtytambahgantioli-lookup${id}`).lookup({
+                title: 'qtytambahgantioli Lookup',
+                fileName: 'qtytambahgantioli',
+                beforeProcess: function(test) {
+                  this.postData = {
+                    // var levelcoa = $(`#levelcoa`).val();
+                    Aktif: 'AKTIF',
+                    stok_id: $(`#detailstokId_${idDetail}`).val(),
+                    statusoli: $(`#statusoli${idDetail}`).val(),
+                    isLookup: true
+
+                  }
+                },
+
+                onSelectRow: (qtytambahgantioli, element) => {
+                  element.val(qtytambahgantioli.qty)
+                  elQty = AutoNumeric.getAutoNumericElement($(`#detail_qty${idDetail}`)[0]);
+                  elQty.set(qtytambahgantioli.qty);
+                  // $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
+                  element.data('currentValue', element.val())
+                  lookupSelected(`qtytambahgantioli`);
+
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  element.val('')
+                  element.data('currentValue', element.val())
+                  elQty = AutoNumeric.getAutoNumericElement($(`#detail_qty${idDetail}`)[0]);
+                  elQty.set(0);
+                  enabledKorDisable()
+                }
+              })
+
+              $(`#statusoli${id}`).change(function(event) {
+                $(`#detail_qty_oli${idDetail}`).val('');
+                elQty = AutoNumeric.getAutoNumericElement($(`#detail_qty${idDetail}`)[0]);
+                elQty.set(0);
+              })
+
               id++;
               index++;
               row = id;
