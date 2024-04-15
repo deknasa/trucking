@@ -280,12 +280,12 @@
             //(kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
-            (filter != '') &&
-            (jenistgltampil != '') &&
-            (priode != '') &&
+            // (filter != '') &&
+            // (jenistgltampil != '') &&
+            (priode != '')
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&
-            (dataFilter != '')
+            // (dataFilter != '')
         ) {
             window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&kelompok=${kelompok}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
@@ -450,7 +450,7 @@
         } else {
             $('#trado').hide()
             $('#gandengan').hide()
-            $('#gudang').show()
+            $('#gudang').hide()
         }
     })
 
