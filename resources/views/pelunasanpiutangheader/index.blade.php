@@ -73,42 +73,42 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
 
-}
-
 
   function clearSelectedRows() {
     selectedRows = []
-    selectedbukti =[]
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -570,6 +570,51 @@ function checkboxHandler(element) {
 
       .customPager({
 
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createPelunasanPiutangHeader()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              viewPelunasanPiutang(selectedId)
+            }
+          },
+        ],
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -619,117 +664,49 @@ function checkboxHandler(element) {
               }
             }
           },
-          // {
-          //   id: 'approve',
-          //   title: 'Approve',
-          //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          //   dropmenuHTML: [{
-          //     id: 'approval-buka-cetak',
-          //     text: "Approval Buka Cetak PELUNASAN PIUTANG",
-          //     onClick: () => {
-          //       if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
-          //         let tglbukacetak = $('#tgldariheader').val().split('-');
-          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-          //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //           showDialog('Harap pilih salah satu record')
-          //         } else {
-          //           approvalBukaCetak(tglbukacetak, 'PELUNASANPIUTANGHEADER', selectedRows, selectedbukti);
-          //         }
-          //       }
-          //     }
-          //   }, ],
-          // }
-        ],
-        buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: function(event) {
-              createPelunasanPiutangHeader()
-            }
-          },
           {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(selectedId, 'EDIT')
-              }
-            }
-          },
-          {
-            id: 'delete',
-            innerHTML: '<i class="fa fa-trash"></i> DELETE',
-            class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(selectedId, 'DELETE')
-              }
-            }
-          },
-          {
-            id: 'view',
-            innerHTML: '<i class="fa fa-eye"></i> VIEW',
-            class: 'btn btn-orange btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [
+              // {
+              //   id: 'approveun',
+              //   text: "UN/APPROVAL Status penerimaan",
+              //   onClick: () => {
+              //     approve()
+              //   }
+              // },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PELUNASAN PIUTANG",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-              viewPelunasanPiutang(selectedId)
-            }
-          },
-        ],
-        extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            // {
-            //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
-            //   onClick: () => {
-            //     approve()
-            //   }
-            // },
-            {
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PELUNASAN PIUTANG",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                    approvalBukaCetak(tglbukacetak, 'PELUNASANPIUTANGHEADER', selectedRowsIndex, selectedbukti);
 
-                  approvalBukaCetak(tglbukacetak, 'PELUNASANPIUTANGHEADER', selectedRowsIndex, selectedbukti);
-
+                  }
                 }
-              }
-            },
-            {
-              id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PELUNASAN PIUTANG",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`) {
-                  let tglkirimberkas = $('#tgldariheader').val().split('-');
-                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Un/Approval Kirim Berkas PELUNASAN PIUTANG",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
 
-                  approvalKirimBerkas(tglkirimberkas, 'PELUNASANPIUTANGHEADER', selectedRowsIndex, selectedbukti);
+                    approvalKirimBerkas(tglkirimberkas, 'PELUNASANPIUTANGHEADER', selectedRowsIndex, selectedbukti);
 
+                  }
                 }
-              }
-            },            
-          ],
-        }]
+              },
+            ],
+          }
+        ]
 
       })
 
@@ -786,6 +763,11 @@ function checkboxHandler(element) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()

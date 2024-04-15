@@ -905,6 +905,11 @@
       }
 
       hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+      }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
         hakApporveCount--
         $('#approvalEdit').hide()

@@ -64,37 +64,37 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
   setSpaceBarCheckedHandler()
   reloadGrid()
@@ -484,74 +484,6 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
-            id: 'report',
-            title: 'Report',
-            caption: 'Report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
-                id: 'reportPrinterBesar',
-                text: "Printer Lain(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasi(selectedId, 'PRINTER BESAR')
-                  }
-                }
-              },
-              {
-                id: 'reportPrinterKecil',
-                text: "Printer Epson Seri LX(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasi(selectedId, 'PRINTER KECIL')
-                  }
-                }
-              },
-
-            ],
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('pengembaliankasgantungheader.export') }}?id=${selectedId}`)
-              }
-            }
-          },
-          // {
-          //   id: 'approve',
-          //   title: 'Approve',
-          //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          //   dropmenuHTML: [{
-          //     id: 'approval-buka-cetak',
-          //     text: "Approval Buka Cetak PENGEMBALIAN KAS GANTUNG",
-          //     onClick: () => {
-          //       if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
-          //         let tglbukacetak = $('#tgldariheader').val().split('-');
-          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-          //         approvalBukaCetak(tglbukacetak, 'PENGEMBALIANKASGANTUNGHEADER', selectedRows, selectedbukti);
-          //       }
-          //     }
-          //   }, ],
-          // }
-        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -601,47 +533,97 @@ function checkboxHandler(element) {
           },
         ],
         extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            // {
-            //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
-            //   onClick: () => {
-            //     approve()
-            //   }
-            // },
-            {
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PENGEMBALIAN KAS GANTUNG",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-                  approvalBukaCetak(tglbukacetak, 'PENGEMBALIANKASGANTUNGHEADER', selectedRowsIndex, selectedbukti);
-
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+            dropmenuHTML: [{
+                id: 'reportPrinterBesar',
+                text: "Printer Lain(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER BESAR')
+                  }
                 }
-              }
-            },
-            {
-              id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PENGEMBALIAN KAS GANTUNG",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalkirimberkas') }}`) {
-                  let tglkirimberkas = $('#tgldariheader').val().split('-');
-                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
-
-                  approvalKirimBerkas(tglkirimberkas, 'PENGEMBALIANKASGANTUNGHEADER', selectedRowsIndex, selectedbukti);
-
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER KECIL')
+                  }
                 }
+              },
+
+            ],
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                window.open(`{{ route('pengembaliankasgantungheader.export') }}?id=${selectedId}`)
               }
-            },            
-          ],
-        }]
+            }
+          },
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [
+              // {
+              //   id: 'approveun',
+              //   text: "UN/APPROVAL Status penerimaan",
+              //   onClick: () => {
+              //     approve()
+              //   }
+              // },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PENGEMBALIAN KAS GANTUNG",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                    approvalBukaCetak(tglbukacetak, 'PENGEMBALIANKASGANTUNGHEADER', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Un/Approval Kirim Berkas PENGEMBALIAN KAS GANTUNG",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PENGEMBALIANKASGANTUNGHEADER', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },
+            ],
+          }
+        ]
 
       })
 
@@ -703,6 +685,11 @@ function checkboxHandler(element) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()
@@ -812,7 +799,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
