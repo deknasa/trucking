@@ -518,76 +518,7 @@
 
       .customPager({
 
-        extndBtn: [{
-            id: 'report',
-            title: 'Report',
-            caption: 'Report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
-                id: 'reportPrinterBesar',
-                text: "Printer Lain(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasi(selectedId, 'PRINTER BESAR')
-                  }
-                }
-              },
-              {
-                id: 'reportPrinterKecil',
-                text: "Printer Epson Seri LX(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasi(selectedId, 'PRINTER KECIL')
-                  }
-                }
-              },
 
-            ],
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('penerimaantruckingheader.export') }}?id=${selectedId}`)
-              }
-            }
-          },
-          // {
-          //   id: 'approve',
-          //   title: 'Approve',
-          //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          //   dropmenuHTML: [{
-          //     id: 'approval-buka-cetak',
-          //     text: "Approval Buka Cetak PENERIMAAN TRUCKING ",
-          //     onClick: () => {
-          //       if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
-          //         let tglbukacetak = $('#tgldariheader').val().split('-');
-          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-          //         approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRows, selectedbukti);
-
-          //       }
-          //     }
-          //   }, ],
-          // }
-        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -637,47 +568,96 @@
           },
         ],
         extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            // {
-            //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
-            //   onClick: () => {
-            //     approve()
-            //   }
-            // },
-            {
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PENERIMAAN TRUCKING",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-                  approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
-
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+            dropmenuHTML: [{
+                id: 'reportPrinterBesar',
+                text: "Printer Lain(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER BESAR')
+                  }
                 }
-              }
-            },
-            {
-              id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PENERIMAAN TRUCKING",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`) {
-                  let tglkirimberkas = $('#tgldariheader').val().split('-');
-                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
-
-                  approvalKirimBerkas(tglkirimberkas, 'PENERIMAANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
-
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER KECIL')
+                  }
                 }
+              },
+
+            ],
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                window.open(`{{ route('penerimaantruckingheader.export') }}?id=${selectedId}`)
               }
-            },            
-          ],
-        }]
+            }
+          }, {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [
+              // {
+              //   id: 'approveun',
+              //   text: "UN/APPROVAL Status penerimaan",
+              //   onClick: () => {
+              //     approve()
+              //   }
+              // },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PENERIMAAN TRUCKING",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                    approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Un/Approval Kirim Berkas PENERIMAAN TRUCKING",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PENERIMAANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },
+            ],
+          }
+        ]
 
       })
 
