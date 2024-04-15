@@ -1062,6 +1062,11 @@
       $('#approval-buka-cetak').hide()
       // $('#approval-buka-cetak').attr('disabled', 'disabled')
     }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`) {
+      hakApporveCount--
+      $('#approval-kirim-berkas').hide()
+    }
     if (hakApporveCount < 1) {
       $('#approve').hide()
       // $('#approve').attr('disabled', 'disabled')

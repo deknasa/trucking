@@ -268,6 +268,55 @@
             }
           },
           {
+            label: 'STATUS KIRIM BERKAS',
+            name: 'statuskirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokirimberkas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokirimberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                                `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKirimBerkas = JSON.parse(value)
+              if (!statusKirimBerkas) {
+                return ``
+              }
+              let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
+                                <span>${statusKirimBerkas.SINGKATAN}</span>
+                                </div>
+                            `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
+              if (!statusKirimBerkas) {
+                return ` title=""`
+              }
+              return ` title="${statusKirimBerkas.MEMO}"`
+            }
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -431,6 +480,23 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER KIRIM BERKAS',
+            name: 'userkirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
+          },
+          {
+            label: 'TGL KIRIM BERKAS',
+            name: 'tglkirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
             }
           },
           {
@@ -808,6 +874,12 @@
     if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
       hakApporveCount--
       $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`) {
+      hakApporveCount--
+      $('#approval-kirim-berkas').hide()
       // $('#approval-buka-cetak').attr('disabled', 'disabled')
     }
     if (hakApporveCount < 1) {
