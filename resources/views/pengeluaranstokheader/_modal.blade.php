@@ -998,6 +998,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
     kodePengeluaranStok = ""
+    KelompokId = ""
   })
 
   function removeEditingBy(id) {
@@ -1476,6 +1477,22 @@
       success: response => {
         $(`#vulkanisirtotal${row}`).val(response.data.totalvulkan)
         $(`#statusban${row}`).val(response.data.statusban).trigger('change')
+      },
+      error: error => {
+        showDialog(error.responseJSON)
+      }
+    })
+  }
+  function getVulkanAfkir(stok_id) {
+    $.ajax({
+      url: `${apiUrl}stok/${stok_id}/getvulkan`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $('#afkir_vulkanisirke').val(parseInt(response.data.totalvulkan))
       },
       error: error => {
         showDialog(error.responseJSON)
@@ -2105,7 +2122,7 @@
             // form.find(`[name="jlhhari"]`).val()
             form.find(`[name="detail_keterangan[]"]`).val(response.detail[0].keterangan)
             $(`#qty_afkir`).val(response.detail[0].qty)
-
+            getVulkanAfkir(response.detail[0].stok_id)
           } else {
             $.each(response.detail, (id, detail) => {
               let idDetail = id
@@ -2788,7 +2805,9 @@
         satuanEl.val(stok.satuan);
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
-        $('#afkir_vulkanisirke').val(parseInt(stok.vulkan))
+        getVulkanAfkir(stok.id)
+        
+        
         getJlhHari(stok.id)
 
         element.data('currentValue', element.val())
