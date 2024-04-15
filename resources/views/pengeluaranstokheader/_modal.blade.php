@@ -1584,6 +1584,7 @@
           pengeluaranstok_id: idpengeluaranstok,
           penerimaanstokheader_nobukti: nobuktipenerimaan,
           KelompokId: KelompokId,
+          isLookup: true
           // },
 
 
@@ -2219,6 +2220,8 @@
                     pengeluaranstok_id: $(pengeluaranstokId).val(),
                     Aktif: 'AKTIF',
                     KelompokId: KelompokId,
+                    isLookup: true
+                    
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -2700,7 +2703,8 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          statusreuse: 'REUSE'
+          statusreuse: 'REUSE',
+          isLookup: true
         }
       },
       onSelectRow: (stok, element) => {
