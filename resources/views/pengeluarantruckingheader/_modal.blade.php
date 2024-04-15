@@ -5465,6 +5465,7 @@
                   pengeluaranstokheader = stok.id
                   element.val(stok.nobukti)
 
+                  lookupSelectedSpkPG(index,'SPK')
                   element.data('currentValue', element.val())
                 },
                 onCancel: (element) => {
@@ -5483,6 +5484,7 @@
                   // element.parents('td').find(`[name="stok_id[]"]`).val('')
                   element.val('')
                   element.data('currentValue', element.val())
+                  enabledLookupSpkPG(row)
                 }
               })
               $('.penerimaanstokheader-lookup').last().lookup({
@@ -5504,6 +5506,7 @@
                   penerimaanstokheader = stok.id
                   element.val(stok.nobukti)
 
+                  lookupSelectedSpkPG(index,'PG')
                   element.data('currentValue', element.val())
                 },
                 onCancel: (element) => {
@@ -5522,6 +5525,7 @@
                   // element.parents('td').find(`[name="stok_id[]"]`).val('')
                   element.val('')
                   element.data('currentValue', element.val())
+                  enabledLookupSpkPG(row)
                 }
               })
               $('.stok-lookup').last().lookup({
@@ -5967,6 +5971,7 @@
         penerimaanstokheader = stok.id
         element.val(stok.nobukti)
 
+        lookupSelectedSpkPG(row,'PG')
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -5987,6 +5992,7 @@
         element.val('')
         penerimaanstokheader = ''
         element.data('currentValue', element.val())
+        enabledLookupSpkPG(row)
       }
     })
 
@@ -6009,6 +6015,7 @@
         pengeluaranstokheader = stok.id
         element.val(stok.nobukti)
 
+        lookupSelectedSpkPG(row,'SPK')
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -6029,6 +6036,7 @@
         pengeluaranstokheader = ''
         element.val('')
         element.data('currentValue', element.val())
+        enabledLookupSpkPG(row)
       }
     })
 
@@ -8918,6 +8926,38 @@
       })
     })
   }
+  function lookupSelectedSpkPG(row,el) {
+    let spk = $('#crudForm').find(`#pengeluaranstok_nobukti_${row}`).parents('.input-group').children()
+    let pg = $('#crudForm').find(`#penerimaanstok_nobukti_${row}`).parents('.input-group').children()
+    console.log(spk,pg);
+    
+    switch (el) {
+      case 'SPK':
+        pg.attr('disabled', true)
+        pg.find('.lookup-toggler').attr('disabled', true)
+    
+        break;
+      case 'PG':                
+        spk.attr('disabled', true)
+        spk.find('.lookup-toggler').attr('disabled', true)
+    
+        break;
+      default:
+        break;
+    }
+  }
+  function enabledLookupSpkPG(row) {
+    let spk = $('#crudForm').find(`#pengeluaranstok_nobukti_${row}`).parents('.input-group').children()
+    let pg = $('#crudForm').find(`#penerimaanstok_nobukti_${row}`).parents('.input-group').children()
+
+    spk.attr('disabled', false)
+    spk.find('.lookup-toggler').attr('disabled', false)
+    pg.attr('disabled', false)
+    pg.find('.lookup-toggler').attr('disabled', false)
+
+
+  }
+    
 
   const setTampilan = function(relatedForm) {
     return new Promise((resolve, reject) => {
