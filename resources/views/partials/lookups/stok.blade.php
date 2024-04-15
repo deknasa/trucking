@@ -16,6 +16,7 @@ $('#stokLookup').jqGrid({
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
         KelompokId: `{!! $KelompokId ?? '' !!}`,
+        isLookup: `{!! $isLookup ?? '' !!}`,          
       },         
       idPrefix: 'stokLookup',
       colModel: [{

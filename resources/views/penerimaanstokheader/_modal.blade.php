@@ -1161,6 +1161,7 @@
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
+                isLookup: true
               }
             },
             onSelectRow: (stok, element) => {
@@ -1335,6 +1336,7 @@
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
+                isLookup: true
               }
             },
             onSelectRow: (stok, element) => {
@@ -1513,6 +1515,7 @@
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
             Aktif: 'AKTIF',
             KelompokId: KelompokId,
+            isLookup: true
           }
         },
         onSelectRow: (stok, element) => {
@@ -2648,6 +2651,7 @@
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           Aktif: 'AKTIF',
           KelompokId: KelompokId,
+          isLookup: true
         }
       },
       onSelectRow: (stok, element) => {
@@ -3104,6 +3108,7 @@
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                   Aktif: 'AKTIF',
+                  isLookup: true
                 }
               },
               onSelectRow: (stok, element) => {
