@@ -69,7 +69,7 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
 
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -88,7 +88,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -99,7 +99,7 @@
     }
 
   }
-  
+
   setSpaceBarCheckedHandler()
   reloadGrid()
 
@@ -276,6 +276,55 @@
             }
           },
           {
+            label: 'STATUS KIRIM BERKAS',
+            name: 'statuskirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokirimberkas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokirimberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                                `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKirimBerkas = JSON.parse(value)
+              if (!statusKirimBerkas) {
+                return ``
+              }
+              let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
+                                <span>${statusKirimBerkas.SINGKATAN}</span>
+                                </div>
+                            `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
+              if (!statusKirimBerkas) {
+                return ` title=""`
+              }
+              return ` title="${statusKirimBerkas.MEMO}"`
+            }
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -387,6 +436,23 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER KIRIM BERKAS',
+            name: 'userkirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
+          },
+          {
+            label: 'TGL KIRIM BERKAS',
+            name: 'tglkirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
             }
           },
           {
@@ -771,6 +837,12 @@
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
       if (hakApporveCount < 1) {
         // $('#approve').hide()
         $('#approve').attr('disabled', 'disabled')
@@ -877,7 +949,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
-    selectedbukti =[]
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
