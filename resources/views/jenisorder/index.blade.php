@@ -321,8 +321,7 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editJenisOrder(selectedId)
+                            cekValidasi(selectedId, 'EDIT')
                         }
                     },
                     {
@@ -334,7 +333,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId, 'DELETE')
                             }
                         }
                     },

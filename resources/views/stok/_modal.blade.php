@@ -256,6 +256,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
   var dataReuse = []
+  var data_id
 
   let dataMaxLength = []
 
@@ -400,6 +401,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    data_id = $('#crudForm').find('[name=id]').val();
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
@@ -415,12 +417,42 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     $('#crudModal').find('.modal-body').html(modalBody)
+    removeEditingBy(data_id)
 
     activeGrid = '#jqGrid'
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
     })
   })
+   function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'stok'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
 
   function createStok() {

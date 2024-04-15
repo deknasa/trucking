@@ -323,8 +323,11 @@ $('#jqGrid tbody tr').each(function(row, tr) {
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editAbsenTrado(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasi(selectedId, 'EDIT')
+                            }
                         }
                     },
                     {
@@ -336,7 +339,7 @@ $('#jqGrid tbody tr').each(function(row, tr) {
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId, 'DELETE')
                             }
                         }
                     },

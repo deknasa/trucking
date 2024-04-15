@@ -330,7 +330,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editKota(selectedId)
+                                cekValidasidelete(selectedId,'EDIT')
                             }
                         }
                     },
@@ -343,7 +343,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId,'DELETE')
                             }
                         }
                     },

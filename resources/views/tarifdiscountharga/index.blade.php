@@ -398,7 +398,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editTarifDiscountHarga(selectedId)
+                                cekValidasidelete(selectedId, 'EDIT')
                             }
 
                         }
@@ -412,7 +412,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                deleteTarifDiscountHarga(selectedId)
+                                cekValidasidelete(selectedId, 'DELETE')
                             }
                         }
                     },

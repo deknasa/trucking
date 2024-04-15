@@ -322,7 +322,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editZona(selectedId)
+                                cekValidasidelete(selectedId,'EDIT')
                             }
                         }
                     },
@@ -335,7 +335,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId,'DELETE')
                             }
                         }
                     },
