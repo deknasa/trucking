@@ -332,7 +332,7 @@
                             <th class="data_tbl tbl_penerimaantruckingheader" style="width: 20%; min-width: 200px;">NO BUKTI PENERIMAAN TRUCKING</th>
                             <th style="width:10%; min-width: 100px" class="data_tbl tbl_qty">qty</th>
                             <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa</th>
-                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_harga">total harga</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_harga">harga spk/pg</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_nominal">Nominal</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_nominaltagih kolom_bbt">tagihan</th>
                             <th class="data_tbl tbl_keterangan" style="width: 20%; min-width: 200px;">Keterangan</th>
