@@ -202,6 +202,16 @@
             }
           },
           {
+            label: 'SUPIR',
+            name: 'supir',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
+            label: 'TRADO',
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
             label: 'CONTAINER',
             name: 'container_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
@@ -405,16 +415,6 @@
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'SUPIR',
-            name: 'supir',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
-          },
-          {
-            label: 'TRADO',
-            name: 'trado',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
           },
           {
             label: 'CREATED AT',
