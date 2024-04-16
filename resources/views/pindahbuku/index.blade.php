@@ -566,7 +566,7 @@ function checkboxHandler(element) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', selectedRowsIndex, selectedbukti);
+                  approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', selectedRows, selectedbukti);
 
                 }
               }
@@ -579,7 +579,7 @@ function checkboxHandler(element) {
                   let tglkirimberkas = $('#tgldariheader').val().split('-');
                   tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
 
-                  approvalKirimBerkas(tglkirimberkas, 'PINDAHBUKU', selectedRowsIndex, selectedbukti);
+                  approvalKirimBerkas(tglkirimberkas, 'PINDAHBUKU', selectedRows, selectedbukti);
 
                 }
               }
