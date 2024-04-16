@@ -125,6 +125,18 @@
                 </select>
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS INVOICE EXTRA <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="statusinvoiceextra" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS INVOICE EXTRA --</option>
+                </select>
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-md-2">
@@ -307,6 +319,7 @@
 
     initSelect2(form.find(`[name="statustas"]`), true)
     initSelect2(form.find(`[name="statusaktif"]`), true)
+    initSelect2(form.find(`[name="statusinvoiceextra"]`), true)
 
 
     initLookup()
@@ -369,6 +382,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -405,6 +419,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -441,6 +456,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -478,6 +494,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -659,6 +676,42 @@
             let option = new Option(statusAktif.text, statusAktif.id)
 
             relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusInvoiceOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusinvoiceextra]').empty()
+      relatedForm.find('[name=statusinvoiceextra]').append(
+        new Option('-- PILIH STATUS INVOICE EXTRA --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS AKTIF"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAktif => {
+            let option = new Option(statusAktif.text, statusAktif.id)
+
+            relatedForm.find('[name=statusinvoiceextra]').append(option).trigger('change')
           });
 
           resolve()

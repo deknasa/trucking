@@ -300,6 +300,56 @@
                     },
 
                     {
+                        label: 'STATUS INV. EXTRA',
+                        name: 'statusinvoiceextra',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        stype: 'select',
+                        searchoptions: {
+                            value: `:ALL;<?php
+                                            $i = 1;
+
+                                            foreach ($combo['statusaktif'] as $statusaktif) :
+                                                echo "$statusaktif[text]:$statusaktif[text]";
+
+                                                if ($i !== count($combo['statusaktif'])) {
+                                                    echo ';';
+                                                }
+                                                $i++;
+                                            endforeach;
+
+                                            ?>
+                                     `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusAktif = JSON.parse(value)
+                            if (!statusAktif) {
+                                return ''
+                            }
+
+                            let formattedValue = $(`
+                                            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+                                            <span>${statusAktif.SINGKATAN}</span>
+                                            </div>
+                                        `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusAktif = JSON.parse(rowObject.statusinvoiceextra)
+
+                            if (!statusAktif) {
+                                return ` title=""`
+                            }
+                            return ` title="${statusAktif.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -446,7 +496,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'edit')
+                                cekValidasidelete(selectedId, 'edit')
                                 // editAgen(selectedId)
                             }
                         }
@@ -460,7 +510,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'delete')
+                                cekValidasidelete(selectedId, 'delete')
                             }
                         }
                     },
@@ -584,22 +634,22 @@
             if (!`{{ $myAuth->hasPermission('customer', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            let hakApporveCount = 0 ;
+            let hakApporveCount = 0;
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
-              hakApporveCount--
-              $('#approveun').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approveun').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`) {
-              hakApporveCount--
-              $('#approvalnonaktif').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
-              $('#approve').hide()
-            //   $('#approve').attr('disabled', 'disabled')
+                $('#approve').hide()
+                //   $('#approve').attr('disabled', 'disabled')
             }
         }
 
