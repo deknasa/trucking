@@ -407,6 +407,16 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
+            label: 'SUPIR',
+            name: 'supir',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
+            label: 'TRADO',
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
             label: 'CREATED AT',
             name: 'created_at',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
