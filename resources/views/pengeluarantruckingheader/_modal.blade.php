@@ -5632,6 +5632,14 @@
                 }
               })
 
+              if (kodepengeluaran === "KLAIM") {
+                detailRow.find(`[name="nominal[]"]`).val(detail.nominaltagih)
+                if (detail.pengeluaranstok_nobukti) {
+                  lookupSelectedSpkPG(index,'SPK')
+                }else if(detail.penerimaanstok_nobukti){
+                  lookupSelectedSpkPG(index,'PG')
+                }
+              }
               indexRow = index
             })
 
@@ -8930,6 +8938,7 @@
     let spk = $('#crudForm').find(`#pengeluaranstok_nobukti_${row}`).parents('.input-group').children()
     let pg = $('#crudForm').find(`#penerimaanstok_nobukti_${row}`).parents('.input-group').children()
     console.log(spk,pg);
+    console.log(row);
     
     switch (el) {
       case 'SPK':
