@@ -126,7 +126,7 @@
                     {
                         label: 'keterangan',
                         name: 'keterangan',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_4 : md_mobile_3,
                     },
                     {
                         label: 'Status Approval',
