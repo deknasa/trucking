@@ -124,6 +124,11 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
+                        label: 'keterangan',
+                        name: 'keterangan',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+                    },
+                    {
                         label: 'Status Approval',
                         name: 'statusapproval',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

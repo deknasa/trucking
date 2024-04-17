@@ -59,6 +59,16 @@
                                 <input type="text" name="supirserap" class="form-control supirserap-lookup">
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-12 col-md-2">
+                                <label class="col-form-label">
+                                    KETERANGAN <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <input type="text" name="keterangan" class="form-control">
+                            </div>
+                        </div>
 
                     </div>
                     <div class="modal-footer justify-content-start">
