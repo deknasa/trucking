@@ -508,13 +508,44 @@
     setJobReadOnly()
   })
 
-  $(document).on("change", `[name=tglbukti]`, function(event) {
+  $(`#crudForm [name="tglbukti"]`).on('change', function(event) {
     $(`#crudForm [name="trado_id"]`).val('')
     $(`#crudForm [name="supir_id"]`).val('')
     $(`#crudForm [name="absensidetail_id"]`).val('')
     $(`#crudForm [name="trado"]`).val('')
     $('#crudForm [name=trado]').data('currentValue', '')
+    validasiTglTrip()
   })
+
+  function validasiTglTrip() {
+    $.ajax({
+      url: `${apiUrl}suratpengantarapprovalinputtrip/validasiTanggalTrip`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        tglbukti: $('#crudForm').find(`[name="tglbukti"]`).val()
+      },
+      success: response => {
+        if (response.status == false) {
+          showDialog(response.keterangan)
+        }
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          setErrorMessages($(`#crudForm`), error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function enabledLogTrip(selected) {
     if (selected == upahZona) {
