@@ -108,12 +108,12 @@
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
-        // {
-        //   label: 'SHIPPER',
-        //   name: 'pelanggan',
-        //   width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-        //   align: 'left'
-        // },
+        {
+          label: 'SHIPPER',
+          name: 'pelanggan',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          align: 'left',
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -149,6 +149,10 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadComplete: function(data) {
+        let isShowShipper = (`{!! $orderemklshipper ?? '' !!}`)
+        if(isShowShipper == 'TIDAK'){
+          $("#orderanemklLookup").jqGrid("hideCol", 'pelanggan');
+        }
         changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
