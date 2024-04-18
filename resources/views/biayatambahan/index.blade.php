@@ -101,7 +101,9 @@
     loadDetailGrid()
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
-      loadDataHeader('suratpengantar')
+      loadDataHeader('suratpengantar', {
+        biayatambahan: true
+      })
       selectedRows = []
       $('#gs_').prop('checked', false)
     })
@@ -156,14 +158,33 @@
             hidden: true
           },
           {
-            label: 'JOB TRUCKING',
-            name: 'jobtrucking',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
             label: 'NO TRIP',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'KETERANGAN EXTRA',
+            name: 'ketextra',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+          },
+          {
+            label: 'BIAYA EXT. SUPIR',
+            name: 'biayaextra',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KETERANGAN EXTRA TAGIH',
+            name: 'ketextratagih',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+          },
+          {
+            label: 'TAGIH KE EMKL',
+            name: 'biayatagih',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
           },
           {
             label: 'TGL TRIP',
@@ -522,6 +543,11 @@
             label: 'MANDOR SUPIR',
             name: 'mandorsupir_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+          },
+          {
+            label: 'JOB TRUCKING',
+            name: 'jobtrucking',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'GUDANG SAMA',
@@ -936,7 +962,7 @@
     }
   })
 
-  
+
   function approveBiayaTambahan() {
     event.preventDefault()
     $.ajax({
