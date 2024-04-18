@@ -40,7 +40,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    SUPIR <span class="text-danger">*</span>
+                                    SUPIR 
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
