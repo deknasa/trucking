@@ -198,6 +198,7 @@
   var statustas
   var kodecontainer
   var isAllowEdited;
+  let orderemklshipper
 
   $(document).ready(function() {
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -878,7 +879,7 @@
             }
           })
 
-
+          orderemklshipper = response.orderemklshipper
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -1099,6 +1100,7 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
+          orderemklshipper : orderemklshipper
         }
       },
       onSelectRow: (orderanemkl, element) => {
@@ -1129,6 +1131,7 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
+          orderemklshipper : orderemklshipper
         }
       },
       onSelectRow: (orderanemkl, element) => {
