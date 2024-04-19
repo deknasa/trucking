@@ -18,6 +18,7 @@
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#rekap-tab">Rekap Absen Trado</a></li>
               <li class="kasgantung_nobukti"><a href="#kasgantung-tab">KAS GANTUNG</a></li>
+              <li><a href="#tidaklengkap-tab">Data tidak lengkap</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
@@ -27,6 +28,9 @@
             </div>
             <div class="kasgantung_nobukti" id="kasgantung-tab">
               <table id="kasgantungGrid"></table>
+            </div>
+            <div id="tidaklengkap-tab">
+              <table id="dataTidakLengkapGrid"></table>
             </div>
           </div>
         </div>
@@ -41,6 +45,7 @@
 @include('absensisupir._detail')
 @include('absensisupir._rekapabsentrado')
 @include('absensisupir._kasgantung')
+@include('absensisupir._tidaklengkap')
 
 @push('scripts')
 <script>
@@ -138,6 +143,7 @@
     $("#tabs").tabs()
     setTampilanIndex()
     loadDetailGrid()
+    loadDataTidakLengkapGrid()
     loadRekapAbsenTradoGrid()
     loadKasGantungGrid()
     setTradoMilikSupir()
@@ -563,6 +569,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
+          loadDataTidakLengkap(id)
           loadRekapAbsenTradoData(id)
           if (showKasgantung) {
             loadKasGantungData(nobukti)
