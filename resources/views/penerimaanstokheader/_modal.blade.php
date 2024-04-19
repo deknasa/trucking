@@ -312,6 +312,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
   var KelompokId = "";
+  var StokId = "";
   var listKodePenerimaan = [];
   var listIdPenerimaan = [];
   $(document).ready(function() {
@@ -1161,6 +1162,7 @@
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
+                StokId: StokId,
                 isLookup: true
               }
             },
@@ -1336,6 +1338,7 @@
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
+                StokId: StokId,
                 isLookup: true
               }
             },
@@ -1515,6 +1518,7 @@
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
             Aktif: 'AKTIF',
             KelompokId: KelompokId,
+            StokId: StokId,
             isLookup: true
           }
         },
@@ -2651,6 +2655,7 @@
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           Aktif: 'AKTIF',
           KelompokId: KelompokId,
+          StokId: StokId,
           isLookup: true
         }
       },
@@ -2740,9 +2745,12 @@
     //check jika lookup baris pertama
     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
       KelompokId = "";
+      StokId = "";
     } else {
       let detailstokKelompok = $('.detailstokKelompok')
+      let detailstokId = $('.detailstokId')
       KelompokId = $(detailstokKelompok[0]).val();
+      StokId = $(detailstokId[0]).val();
     }
   }
 

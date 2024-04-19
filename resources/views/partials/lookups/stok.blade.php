@@ -17,6 +17,7 @@
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
         KelompokId: `{!! $KelompokId ?? '' !!}`,
+        StokId: `{!! $StokId ?? '' !!}`,
         isLookup: `{!! $isLookup ?? '' !!}`,
       },
       idPrefix: 'stokLookup',
