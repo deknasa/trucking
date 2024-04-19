@@ -166,6 +166,7 @@
             $(this).jqGrid('footerData', 'set', {
               trado: 'Total:',
               uangjalan: data.totalNominal,
+              jumlahtrip: data.jlhtrip,
             }, true)
           }
 
