@@ -446,6 +446,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let pengeluaranheader_id
   var KelompokId = "";
+  var StokId = "";
   var listKodePengeluaran = [];
   var listIdPengeluaran = [];
   var index = 0;
@@ -999,6 +1000,7 @@
     initDatepicker('datepickerIndex')
     kodePengeluaranStok = ""
     KelompokId = ""
+    StokId = ""
   })
 
   function removeEditingBy(id) {
@@ -1604,6 +1606,7 @@
           pengeluaranstok_id: idpengeluaranstok,
           penerimaanstokheader_nobukti: nobuktipenerimaan,
           KelompokId: KelompokId,
+          StokId: StokId,
           isLookup: true
           // },
 
@@ -2254,6 +2257,7 @@
                     pengeluaranstok_id: $(pengeluaranstokId).val(),
                     Aktif: 'AKTIF',
                     KelompokId: KelompokId,
+                    StokId: StokId,
                     isLookup: true
                     
                   }
@@ -2524,10 +2528,14 @@
     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
       if ((listKodePengeluaran[0] != kodePengeluaranStok)) {
         KelompokId = "";
+        StokId = "";
       }
     } else {
       let detailstokKelompok = $('.detailstokKelompok')[0]
+      let detailstokId = $('.detailstokId')
+
       KelompokId = $(detailstokKelompok).val();
+      StokId = $(detailstokId[0]).val();      
     }
   }
 
