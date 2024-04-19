@@ -301,34 +301,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'serviceoutheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'serviceoutheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     function createServiceOut() {
         let form = $('#crudForm')
@@ -546,8 +546,8 @@
                             beforeProcess: function(test) {
                                 this.postData = {
                                     serviceout: true,
-                                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val(),
-                                    nobukti:$('#crudForm').find(`[name="nobukti"] `).val()
+                                    trado_id: $('#crudForm').find(`[name="trado_id"] `).val(),
+                                    nobukti: $('#crudForm').find(`[name="nobukti"] `).val()
                                 }
                             },
                             onSelectRow: (servicein, element) => {
@@ -602,8 +602,8 @@
             beforeProcess: function(test) {
                 this.postData = {
                     serviceout: true,
-                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val(),
-                    nobukti:$('#crudForm').find(`[name="nobukti"] `).val()
+                    trado_id: $('#crudForm').find(`[name="trado_id"] `).val(),
+                    nobukti: $('#crudForm').find(`[name="nobukti"] `).val()
                 }
             },
             onSelectRow: (servicein, element) => {
@@ -649,28 +649,24 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'PRINTER BESAR') {
-                            window.open(`{{ route('serviceoutheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-                        } else if (Aksi == 'PRINTER KECIL') {
-                            window.open(`{{ route('serviceoutheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-                        }
-                        if (Aksi == 'EDIT') {
-                            editServiceOut(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteServiceOut(Id)
-                        }
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('serviceoutheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('serviceoutheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                    }
+                    if (Aksi == 'EDIT') {
+                        editServiceOut(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteServiceOut(Id)
+                    }
                 }
+
+
             }
         })
     }

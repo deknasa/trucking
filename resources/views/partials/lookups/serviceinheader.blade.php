@@ -20,6 +20,7 @@
         tglsampai: $('#tglsampaiheaderlookup').val(),
         serviceout:`{!! $serviceout ?? '' !!}`,
         nobukti:`{!! $nobukti ?? '' !!}`,
+        from:`{!! $from ?? '' !!}`,
         trado_id:`{!! $trado_id ?? '' !!}`
 
       },

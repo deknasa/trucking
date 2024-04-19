@@ -59,17 +59,17 @@
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
-                              <label class="col-form-label">
-                                Status Service Out <span class="text-danger">*</span>
-                              </label>
+                                <label class="col-form-label">
+                                    Status Service Out <span class="text-danger">*</span>
+                                </label>
                             </div>
-              
-              
+
+
                             <div class="col-12 col-sm-4 col-md-4">
-                              <input type="hidden" name="statusserviceout">
-                              <input type="text" name="statusserviceoutnama" id="statusserviceoutnama" class="form-control lg-form status-lookup">
+                                <input type="hidden" name="statusserviceout">
+                                <input type="text" name="statusserviceoutnama" id="statusserviceoutnama" class="form-control lg-form status-lookup">
                             </div>
-                          </div>
+                        </div>
 
 
                         <div class="row mt-5">
@@ -314,34 +314,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'serviceinheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'serviceinheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     function createServicein() {
         let form = $('#crudForm')
@@ -353,7 +353,7 @@
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service in')
-       
+
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -364,22 +364,22 @@
         }
 
         Promise
-        .all([
-          showDefault(form),
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-            $('#table_body').html('')
-            addRow()
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
-       
+            .all([
+                showDefault(form),
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+                $('#table_body').html('')
+                addRow()
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
+
     }
 
     function editServicein(id) {
@@ -624,7 +624,7 @@
                     $.each(response.data, (index, value) => {
                         console.log(value)
                         let element = form.find(`[name="${index}"]`)
-                        
+
                         if (element.is('select')) {
                             element.val(value).trigger('change')
                         } else {
@@ -639,8 +639,8 @@
             })
         })
     }
-    
-    
+
+
     function addRow() {
         let detailRow = (`
         <tr>
@@ -698,27 +698,43 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'PRINTER BESAR') {
-                            window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-                        } else if (Aksi == 'PRINTER KECIL') {
-                            window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-                        }
-                        if (Aksi == 'EDIT') {
-                            editServicein(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteServicein(Id)
-                        }
+
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
                     }
 
+                    cekValidasiAksi(Id, Aksi)
+                }
+
+            }
+        })
+    }
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}serviceinheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'EDIT') {
+                        editServicein(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteServicein(Id)
+                    }
                 }
             }
         })
@@ -827,7 +843,7 @@
                 element.data('currentValue', element.val());
             },
         });
-        
+
     }
     const setTglBukti = function(form) {
         return new Promise((resolve, reject) => {

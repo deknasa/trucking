@@ -2941,6 +2941,12 @@
     $('.servicein-lookup').lookup({
       title: 'service in Lookup',
       fileName: 'serviceinheader',
+      beforeProcess: function(test) {
+        this.postData = {
+          from: 'pengeluaranstok',
+          nobukti: $('#crudForm').find(`[name="nobukti"] `).val()
+        }
+      },
       onSelectRow: (servicein, element) => {
         penerimaanOrServicein('servicein')
         element.val(servicein.nobukti)
