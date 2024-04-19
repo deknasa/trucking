@@ -673,34 +673,40 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'prosesuangjalansupirheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'prosesuangjalansupirheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
+
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+        $('#crudForm').find(`[name="tgltransfer[]"]`).val($(this).val()).trigger('change');
+        $('#crudForm').find(`[name="tgladjust"]`).val($(this).val()).trigger('change');
+        $('#crudForm').find(`[name="tgldeposit"]`).val($(this).val()).trigger('change');
+    });
 
     // function setTotal() {
     //     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -1680,7 +1686,7 @@
             }
         })
 
-        $('#crudForm').find(`[name="tgltransfer[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find(`[name="tgltransfer[]"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
         initDatepicker();
         initAutoNumeric(detailRow.find('.autonumeric'))
         setTotalTransfer()
