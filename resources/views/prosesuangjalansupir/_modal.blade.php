@@ -706,6 +706,23 @@
         $('#crudForm').find(`[name="tgltransfer[]"]`).val($(this).val()).trigger('change');
         $('#crudForm').find(`[name="tgladjust"]`).val($(this).val()).trigger('change');
         $('#crudForm').find(`[name="tgldeposit"]`).val($(this).val()).trigger('change');
+        if ($('#crudForm').find(`[name="supir"]`).val() != '') {
+            let tglbukti = $('#crudForm [name=tglbukti]').val();
+            let parts = tglbukti.split('-'); // Split the string into parts using '-'
+            let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+            $(`#crudForm [name="keterangantransfer[]"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+            $(`#crudForm [name="keteranganadjust"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+
+        }
+    });
+    $(document).on('change', `#crudForm [name="tgladjust"]`, function() {
+        if ($('#crudForm').find(`[name="supir"]`).val() != '') {
+            let tgladjust = $('#crudForm [name=tgladjust]').val();
+            let parts = tgladjust.split('-'); // Split the string into parts using '-'
+            let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+            $(`#crudForm [name="keteranganadjust"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+
+        }
     });
 
     // function setTotal() {
@@ -769,28 +786,76 @@
 
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Save
-    `)
+        <i class="fa fa-save"></i>
+        Save
+        `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Proses Uang Jalan Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         $('#table_body').html('')
-        if (selectedRows.length > 0) {
-            clearSelectedRows()
-        }
+
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgladjust]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldeposit]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         addRowTransfer()
-        $('#addRowTransfer').show()
         initAutoNumeric(form.find(`[name="nilaideposit"]`))
         initAutoNumeric(form.find(`[name="nilaiadjust"]`))
         initAutoNumeric(form.find(`[name="uangjalan"]`))
         loadPengembalianGrid()
+        Promise
+            .all([
+                showDefault(form)
+            ])
+            .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
+                $('#crudModal').modal('show')
+                $('#addRowTransfer').show()
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+    }
+
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}prosesuangjalansupirheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = '';
+                        if(index == 'bank_idtransfer' || index == 'banktransfer')
+                        {
+                             element = form.find(`[name="${index}[]"]`)
+                        }else{
+                             element = form.find(`[name="${index}"]`)
+                        }
+                        // let element = form.find(`[name="statusaktif"]`)
+
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
     }
 
     function editProsesUangJalanSupir(userId) {
@@ -1662,6 +1727,16 @@
 
 
         $('#detailTransfer #tbodyTransfer').append(detailRow)
+
+        $(document).on('change', detailRow.find(`[name="tgltransfer[]"]`), function() {
+            if ($('#crudForm').find(`[name="supir"]`).val() != '') {
+                let tgltransfer = detailRow.find(`[name="tgltransfer[]"]`).val();
+                let parts = tgltransfer.split('-'); // Split the string into parts using '-'
+                let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+                detailRow.find(`[name="keterangantransfer[]"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+
+            }
+        });
         $('.bank-lookup').last().lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
@@ -1685,7 +1760,10 @@
                 element.data('currentValue', element.val())
             }
         })
-
+        let bankid_transfer = $('#detailTransfer tbody').children('tr:first').find(`td [name="bank_idtransfer[]"]`).val()
+        let bank_transfer = $('#detailTransfer tbody').children('tr:first').find(`td [name="banktransfer[]"]`).val()
+        detailRow.find(`[name="bank_idtransfer[]"]`).val(bankid_transfer)
+        detailRow.find(`[name="banktransfer[]"]`).val(bank_transfer)
         $('#crudForm').find(`[name="tgltransfer[]"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
         initDatepicker();
         initAutoNumeric(detailRow.find('.autonumeric'))
@@ -1818,6 +1896,12 @@
                 $('#tablePengembalian').jqGrid("clearGridData");
                 $("#tablePengembalian")[0].p.selectedRowIds = [];
                 $('#crudForm [name=keterangandeposit]').val("DEPOSITO SUPIR " + supir.supir)
+                let tglbukti = $('#crudForm [name=tglbukti]').val();
+                let parts = tglbukti.split('-'); // Split the string into parts using '-'
+                let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+                $(`#crudForm [name="keterangantransfer[]"]`).val("UANG JALAN " + supir.supir + ' TGL ' + formattedDate)
+                $(`#crudForm [name="keteranganadjust"]`).val("UANG JALAN " + supir.supir + ' TGL ' + formattedDate)
+
 
                 getDataPengembalian(supir.supir_id).then((response) => {
                     setTimeout(() => {
