@@ -2905,9 +2905,11 @@
       title: 'penerimaan stok header Lookup',
       fileName: 'penerimaanstokheader',
       onSelectRow: (penerimaan, element) => {
+        console.log(penerimaan.stok_id);
         setSuplier(penerimaan.id);
         element.val(penerimaan.nobukti)
         KelompokId = penerimaan.kelompok_id
+        StokId = penerimaan.stok_id
         element.data('currentValue', element.val())
         penerimaanOrServicein('penerimaan')
         if (kodePengeluaranStok == listKodePengeluaran[1]) {
