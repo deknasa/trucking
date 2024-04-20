@@ -157,6 +157,14 @@
           search: false,
           hidden: true
         },
+        {
+          label: 'stok_id',
+          name: 'stok_id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
       ],
       autowidth: true,
       responsive: true,
