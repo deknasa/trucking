@@ -96,7 +96,7 @@
                 <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   KODE PERKIRAAN <span class="text-danger">*</span></label>
@@ -106,6 +106,7 @@
                 <input type="text" name="keterangancoa" class="form-control coa-lookup">
               </div>
             </div>
+            --}}
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -128,7 +129,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dataMaxLength = []
-  var data_id 
+  var data_id
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -160,7 +161,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })  
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -253,7 +254,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    removeEditingBy(data_id)    
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -476,30 +477,30 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
 
-      $.ajax({
-        url: `${apiUrl}alatbayar/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}alatbayar/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
@@ -581,9 +582,12 @@
         },
         success: response => {
           response.data.forEach(statusDefault => {
-            let option = new Option(statusDefault.text, statusDefault.id)
+            if (statusDefault.grp == 'STATUS DEFAULT') {
 
-            relatedForm.find('[name=statusdefault]').append(option).trigger('change')
+              let option = new Option(statusDefault.text, statusDefault.id)
+
+              relatedForm.find('[name=statusdefault]').append(option).trigger('change')
+            }
           });
 
           resolve()
@@ -740,7 +744,7 @@
     })
   }
 
-  function cekValidasidelete(Id,aksi) {
+  function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}alatbayar/${Id}/cekValidasi`,
       method: 'POST',
@@ -748,7 +752,7 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      data:{
+      data: {
         aksi: aksi,
       },
       success: response => {
@@ -763,9 +767,9 @@
         if (error == true) {
           showDialog(response.message)
         } else {
-          if (aksi=="edit") {
+          if (aksi == "edit") {
             editAlatBayar(Id)
-          }else if (aksi=="delete"){
+          } else if (aksi == "delete") {
             deleteAlatBayar(Id)
           }
         }
