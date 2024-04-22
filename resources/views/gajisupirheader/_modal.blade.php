@@ -746,6 +746,18 @@
                     name: 'rincian_keteranganbiaya[]',
                     value: dataTrip.keteranganbiaya
                 })
+                data.push({
+                    name: 'rincian_container[]',
+                    value: dataTrip.container_id
+                })
+                data.push({
+                    name: 'rincian_statuscontainer[]',
+                    value: dataTrip.statuscontainer_id
+                })
+                data.push({
+                    name: 'rincian_upahid[]',
+                    value: dataTrip.upah_id
+                })
             });
 
             $.each(selectedRowsAbsensiNobukti, function(index, item) {
@@ -2835,6 +2847,33 @@
                         name: 'keteranganbiaya',
                         width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                         align: 'left',
+                    },
+                    {
+                        label: 'CONTAINER',
+                        name: 'container',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align: 'left'
+                    },
+                    {
+                        label: 'STATUS CONTAINER',
+                        name: 'statuscontainer',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left'
+                    },
+                    {
+                        label: 'CONTAINER',
+                        name: 'container_id',
+                        hidden: true,
+                    },
+                    {
+                        label: 'STATUS CONTAINER',
+                        name: 'statuscontainer_id',
+                        hidden: true,
+                    },
+                    {
+                        label: 'upah',
+                        name: 'upah_id',
+                        hidden: true,
                     },
                 ],
                 autowidth: true,
