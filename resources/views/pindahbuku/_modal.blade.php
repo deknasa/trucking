@@ -298,34 +298,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'pindahbuku'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'pindahbuku'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
         if ($(`#crudForm [name="alatbayar"]`).val() != 'GIRO') {
@@ -694,6 +694,54 @@
             el.find(`[name="nowarkat"]`).attr('readonly', true)
             el.find(`[name="nowarkat"]`).val('')
         }
+    }
+
+
+    function approve() {
+
+        event.preventDefault()
+
+        let form = $('#crudForm')
+        $(this).attr('disabled', '')
+        $('#processingLoader').removeClass('d-none')
+
+        $.ajax({
+            url: `${apiUrl}pindahbuku/approval`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                pindahId: selectedRows,
+                bukti: selectedbukti,
+                table: 'pindahbuku',
+                statusapproval: 'statusapproval',
+            },
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
+
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                selectedRows = []
+                selectedbukti = []
+                $('#gs_').prop('checked', false)
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        }).always(() => {
+            $('#processingLoader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
+
     }
 </script>
 @endpush()
