@@ -658,17 +658,22 @@
           form.find(`[name="tglbukti"]`).prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
-        form.find(`[name="supplier"]`).prop('readonly', true)
-        form.find(`[name="supplier"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').remove()
+        // form.find(`[name="supplier"]`).prop('readonly', true)
+        // form.find(`[name="supplier"]`).parent('.input-group').find('.input-group-append').remove()
+        // form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').remove()
         if (statusApproval == 3) {
 
           form.find(`[name="bank"]`).prop('readonly', false)
           form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
           form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
-          form.find(`[name="alatbayar"]`).prop('readonly', false)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+         
+          form.find(`[name="alatbayar"]`).prop('readonly', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+         
+          form.find(`[name="supplier"]`).prop('readonly', true)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
 
         } else {
 
@@ -676,9 +681,13 @@
           form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
           form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
 
-          form.find(`[name="alatbayar"]`).prop('readonly', true)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).prop('readonly', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+          
+          form.find(`[name="supplier"]`).prop('readonly', false)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
         }
         enableTglJatuhTempo(form)
         enableNoWarkat(form)
@@ -1034,6 +1043,9 @@
               if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'view') {
                 disabled = 'disabled'
               }
+              if ($('#crudForm').data('action') == 'edit' && statusApproval == '3'){
+                disabled = 'disabled'
+              }
               return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHutangHandler(this, ${rowData.id})">`;
             },
           },
@@ -1320,9 +1332,17 @@
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
           if ($('#crudForm').data('action') != 'delete') {
-            return $(this)
-              .find(`tr input[value=${rowData.id}]`)
-              .is(":checked");
+            if ($('#crudForm').data('action') != 'edit') {
+              return $(this)
+                .find(`tr input[value=${rowData.id}]`)
+                .is(":checked");
+            }else{//edit
+              if (statusApproval != '3') {//edit dan tidak approval
+                return $(this)
+                .find(`tr input[value=${rowData.id}]`)
+                .is(":checked");
+              }
+            }
           }
         },
         validationCell: function(cellobject, errormsg, iRow, iCol) {
