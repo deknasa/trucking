@@ -39,37 +39,37 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
   setSpaceBarCheckedHandler()
   reloadGrid()
@@ -136,7 +136,51 @@ function checkboxHandler(element) {
             search: false,
             hidden: true
           },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
 
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
           {
             label: 'STATUS CETAK',
             name: 'statuscetak',
@@ -264,6 +308,23 @@ function checkboxHandler(element) {
           {
             label: 'TGL buka CETAK',
             name: 'tglbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
@@ -459,7 +520,7 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                    nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
                 cekValidasi(selectedId, 'EDIT', nobukti)
               }
             }
@@ -473,7 +534,7 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                    nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
                 cekValidasi(selectedId, 'DELETE', nobukti)
               }
             }
@@ -492,8 +553,7 @@ function checkboxHandler(element) {
             }
           },
         ],
-        extndBtn: [
-          {
+        extndBtn: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
@@ -545,47 +605,49 @@ function checkboxHandler(element) {
             }
           },
           {
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            // {
-            //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
-            //   onClick: () => {
-            //     approve()
-            //   }
-            // },
-            {
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PINDAH BUKU",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-                  approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', selectedRows, selectedbukti);
-
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approveun',
+                text: "UN/APPROVAL pindah buku",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pindahbuku', 'approval') }}`) {
+                    approve()
+                  }
                 }
-              }
-            },
-            {
-              id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PINDAH BUKU",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`) {
-                  let tglkirimberkas = $('#tgldariheader').val().split('-');
-                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PINDAH BUKU",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalKirimBerkas(tglkirimberkas, 'PINDAHBUKU', selectedRows, selectedbukti);
+                    approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', selectedRows, selectedbukti);
 
+                  }
                 }
-              }
-            },            
-          ],
-        }]
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Un/Approval Kirim Berkas PINDAH BUKU",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PINDAHBUKU', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
+            ],
+          }
+        ]
 
       })
 
@@ -653,7 +715,7 @@ function checkboxHandler(element) {
 
   })
 
-  function cekValidasi(Id, Aksi,nobukti) {
+  function cekValidasi(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pindahbuku/${Id}/cekvalidasi`,
       method: 'POST',
@@ -661,7 +723,7 @@ function checkboxHandler(element) {
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      data:{
+      data: {
         nobukti: nobukti,
         aksi: Aksi
       },
@@ -674,7 +736,7 @@ function checkboxHandler(element) {
             window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterBesar`)
           } else if (Aksi == 'PRINTER KECIL') {
             window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterKecil`)
-          } 
+          }
           if (Aksi == 'EDIT') {
             editPindahBuku(Id)
           }
@@ -710,7 +772,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
