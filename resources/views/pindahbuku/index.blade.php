@@ -703,6 +703,12 @@
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
       hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pindahbuku', 'approval') }}`) {
+        hakApporveCount--
+        $('#approveun').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`) {
         hakApporveCount--
         $('#approval-kirim-berkas').hide()
