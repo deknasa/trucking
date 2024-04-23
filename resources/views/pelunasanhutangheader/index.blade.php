@@ -286,6 +286,20 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'POTONGAN',
+            name: 'potongan',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'SUPPLIER',
             name: 'supplier_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
