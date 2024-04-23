@@ -369,6 +369,12 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
+            label: 'ALAT BAYAR',
+            name: 'alatbayar_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
+          },
+          {
             label: 'POSTING DARI',
             name: 'postingdari',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,

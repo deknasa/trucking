@@ -91,8 +91,18 @@
                                 <input type="text" name="bank" class="form-control bank-lookup">
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    ALAT BAYAR <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="alatbayar_id">
+                                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                            </div>
+                        </div>
 
-                        {{--  <div class="row form-group">
+                        {{-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
                                     No Bukti Penerimaan Giro</label>
@@ -169,6 +179,7 @@
     let type
     let penerimaanGiro = '';
     let isEditTgl
+    let bankId
 
     $(document).ready(function() {
 
@@ -384,34 +395,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'penerimaanheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'penerimaanheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     function setTotal() {
         let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -536,6 +547,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                     })
                     .catch((error) => {
                         showDialog(error.responseJSON)
@@ -597,6 +610,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                         $('#crudForm [name=pelanggan]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=pelanggan]').parent('.input-group').find('.input-group-append').remove()
                         $('#crudForm [name=penerimaangiro_nobukti]').parent('.input-group').find('.button-clear').remove()
@@ -648,6 +663,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                     })
                     .catch((error) => {
                         showDialog(error.responseJSON)
@@ -690,6 +707,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
                         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                         name.attr('disabled', true)
@@ -722,6 +741,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
                         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                         name.attr('disabled', true)
@@ -856,6 +877,7 @@
                 },
                 success: response => {
                     let tgl = response.data.tglbukti
+                    bankId = response.data.bank_id
                     $.each(response.data, (index, value) => {
                         let element = form.find(`[name="${index}"]`)
                         if (element.is('select')) {
@@ -872,6 +894,9 @@
                             element.data('current-value', value)
                         }
                         if (index == 'bank') {
+                            element.data('current-value', value).prop('readonly', true)
+                        }
+                        if (index == 'alatbayar') {
                             element.data('current-value', value).prop('readonly', true)
                         }
                         if (index == 'penerimaangiro_nobukti') {
@@ -1159,8 +1184,8 @@
             data: {
                 penerimaanId: selectedRows,
                 bukti: selectedbukti,
-                table: 'penerimaanheader' ,
-                statusapproval: 'statusapproval'                   
+                table: 'penerimaanheader',
+                statusapproval: 'statusapproval'
             },
             success: response => {
                 $('#crudForm').trigger('reset')
@@ -1277,6 +1302,7 @@
             },
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
+                bankId = bank.id
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
@@ -1311,6 +1337,32 @@
                 $('.aksiGiro').show()
                 $('#table_body').html('')
                 addRow();
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.alatbayar-lookup').lookup({
+            title: 'Alat Bayar Lookup',
+            fileName: 'alatbayar',
+            beforeProcess: function(test) {
+                // const bank_ID=0        
+                this.postData = {
+                    bank_Id: bankId,
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (alatbayar, element) => {
+                $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+                element.val(alatbayar.namaalatbayar)
+                element.data('currentValue', element.val())
+                enableTglJatuhTempo($(`#crudForm`))
+                enableNoWarkat($(`#crudForm`))
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $(`#crudForm [name="alatbayar_id"]`).first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
