@@ -212,7 +212,7 @@
               element.val(value)
             }
           })
-          if (response.data.tglberhentisupir !== "1900-01-01") {
+          if (response.data.tglberhentisupir !== "1900-01-01" && response.data.tglberhentisupir != null) {
             form.data('action', 'unapprove')
             form.find('[name=tglberhentisupir]').prop('readonly', true)
             form.find('[name=keteranganberhentisupir]').prop('readonly', true)
