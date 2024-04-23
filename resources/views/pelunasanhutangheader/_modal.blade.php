@@ -514,6 +514,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    selectedRows = []
     statusApproval = ''
     removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
@@ -618,6 +619,10 @@
     }
     $('#crudForm').find(`[name=tglcair]`).attr('readonly', true)
     $('#crudForm').find(`[name=tglcair]`).parent('.input-group').find('.input-group-append').hide()
+    
+    form.find(`[name="alatbayar"]`).prop('readonly', true)
+    form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+    form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
 
     let name = $('#crudForm').find(`[name=bank]`).parents('.input-group').children()
     name.attr('disabled', true)
@@ -667,9 +672,9 @@
           form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
           form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
          
-          form.find(`[name="alatbayar"]`).prop('readonly', true)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).prop('readonly', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
          
           form.find(`[name="supplier"]`).prop('readonly', true)
           form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
@@ -681,9 +686,9 @@
           form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
           form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
 
-          form.find(`[name="alatbayar"]`).prop('readonly', false)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
-          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).prop('readonly', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
           
           form.find(`[name="supplier"]`).prop('readonly', false)
           form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
