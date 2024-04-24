@@ -151,6 +151,85 @@
                         hidden: true
                     },
                     {
+                        label: 'STATUS APPROVAL',
+                        name: 'statusapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4",
+                                    ajax: {
+                                        url: `${apiUrl}parameter/combo`,
+                                        dataType: 'JSON',
+                                        headers: {
+                                            Authorization: `Bearer ${accessToken}`
+                                        },
+                                        data: {
+                                            grp: 'STATUS Approval',
+                                            subgrp: 'STATUS Approval'
+                                        },
+                                        beforeSend: () => {
+                                            // clear options
+                                            $(element).data('select2').$results.children().filter((index, element) => {
+                                                // clear options except index 0, which
+                                                // is the "searching..." label
+                                                if (index > 0) {
+                                                    element.remove()
+                                                }
+                                            })
+                                        },
+                                        processResults: (response) => {
+                                            let formattedResponse = response.data.map(row => ({
+                                                id: row.text,
+                                                text: row.text
+                                            }));
+                                            
+                                            formattedResponse.unshift({
+                                                id: 'ALL',
+                                                text: 'ALL'
+                                            });
+                                            
+                                            return {
+                                                results: formattedResponse
+                                            };
+                                        },
+                                    }
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            if (!value) {
+                                return ''
+                            }
+                          let statusApproval = JSON.parse(value)
+            
+                          if (statusApproval == null) {
+                            return '';
+                          }
+            
+                          let formattedValue = $(`
+                            <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                              <span>${statusApproval.SINGKATAN}</span>
+                            </div>
+                          `)
+            
+                          return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            if (!rowObject.statusapproval) {
+                                return ''
+                            }
+                          let statusApproval = JSON.parse(rowObject.statusapproval)
+                          if (statusApproval == null) {
+                            return '';
+                          }
+                          return ` title="${statusApproval.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'NAMA',
                         name: 'namasupir',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
@@ -1111,6 +1190,13 @@
                                 }
                             },
                             {
+                                id: 'approveun',
+                                text: "Approval Kacab",
+                                onClick: () => {
+                                    approve()
+                                }
+                            },
+                            {
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
                                 onClick: () => {
@@ -1659,6 +1745,13 @@
         if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
             hakApporveCount--
             $('#approvalSupirLuarKota').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+        hakApporveCount++
+        console.log(`{{ $myAuth->hasPermission('supir', 'approval') }}`);
+        if (!`{{ $myAuth->hasPermission('supir', 'approval') }}`) {
+            hakApporveCount--
+            $('#approveun').hide()
             // $('#approval-buka-cetak').attr('disabled', 'disabled')
         }
 
