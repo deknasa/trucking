@@ -78,6 +78,7 @@
   let tgldariheader
   let tglsampaiheader
   let selectedRowsIndex = [];
+  let nobuktiRicForSearching = '';
 
   let selectedbukti = [];
 
@@ -492,7 +493,7 @@
           loadDepositoData(nobukti)
           loadBBMData(nobukti)
           loadAbsensiData(nobukti)
-
+          nobuktiRicForSearching = nobukti
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
