@@ -853,7 +853,7 @@
                         }
                     },                    
                     {
-                        label: 'STATUS APP HISTORY TRADO MILIK MANDOR',
+                        label: 'STATUS APP HISTORY TRADO MILIK SUPIR',
                         name: 'statusapprovalhistorytradomiliksupir',
                         width: 200,
                         stype: 'select',
