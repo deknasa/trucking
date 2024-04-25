@@ -1349,6 +1349,49 @@
     xhr.send();
   }
 
+  function approve() {
+    event.preventDefault()
+    
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+    
+    $.ajax({
+      url: `${apiUrl}supir/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsSupir
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+        
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsSupir = []
+        $('#gs_check').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+    
+  }
 
   function approvenonaktif() {
 
