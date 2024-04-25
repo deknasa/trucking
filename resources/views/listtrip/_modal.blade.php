@@ -1277,6 +1277,7 @@
                     idtrip: $('#crudForm [name=id]').val(),
                     statuscontainer_id: $('#crudForm [name=statuscontainer_id]').val(),
                     tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
+                    tglbukti: $('#crudForm [name=tglbukti]').val(),
                     isPulangLongtrip: isPulangLongtrip
                 }
             },

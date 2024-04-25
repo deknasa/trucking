@@ -668,12 +668,12 @@
       setTotalTagih()
     })
     $(document).on('change', `#crudForm [name="statuskandang"]`, function(event) {
-        // if ($(`#crudForm [name="statuskandang"]`).val() == 600){
-            $('#crudForm [name=upah]').data('currentValue','')
-            $('#crudForm [name=upah]').val('')
-            $('#crudForm [name=upah_id]').val('')
-            clearUpahSupir()
-        // }
+      // if ($(`#crudForm [name="statuskandang"]`).val() == 600){
+      $('#crudForm [name=upah]').data('currentValue', '')
+      $('#crudForm [name=upah]').val('')
+      $('#crudForm [name=upah_id]').val('')
+      clearUpahSupir()
+      // }
     })
 
 
@@ -1662,7 +1662,7 @@
     })
   }
 
-  function getDataUpahSupir() {
+  function getDataUpahSupir(isStatusContainer = false) {
     $.ajax({
       url: `${apiUrl}upahsupir/getrincian`,
       method: 'POST',
@@ -1680,7 +1680,12 @@
         $('#crudForm').find(`[name="gajisupirmaster"]`).val(response.data.nominalsupir)
         $('#crudForm').find(`[name="gajikenekmaster"]`).val(response.data.nominalkenek)
         $('#crudForm').find(`[name="komisisupirmaster"]`).val(response.data.nominalkomisi)
+        if (isStatusContainer) {
+          $('#crudForm').find(`[name="gajisupir"]`).val(response.data.nominalsupir)
+          initAutoNumeric($('#crudForm').find(`[name="gajisupir"]`))
+          setNominalKenek(response.data.nominalkenek, response.data.nominalkomisi)
 
+        }
         initAutoNumeric($('#crudForm').find(`[name="gajisupirmaster"]`))
         initAutoNumeric($('#crudForm').find(`[name="gajikenekmaster"]`))
         initAutoNumeric($('#crudForm').find(`[name="komisisupirmaster"]`))
@@ -1915,6 +1920,9 @@
         enableTripAsalLongTrip()
         // }
         // getGaji()
+        getTarifOmset($('#crudForm [name=tarifrincian_id]').val(), $('#crudForm [name=container_id]').val())
+        getNominalSupir()
+        getDataUpahSupir(true)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2509,6 +2517,13 @@
       $('#crudForm').find(`[name="gajikenek"]`).attr('readonly', false)
 
     }
+  }
+
+  function clearGajiSupir() {
+    $('#crudForm').find(`[name="gajisupir"]`).val('')
+    $('#crudForm').find(`[name="gajisupirmaster"]`).val('')
+    $('#crudForm').find(`[name="gajikenekmaster"]`).val('')
+    $('#crudForm').find(`[name="komisisupirmaster"]`).val('')
   }
 
   function getOrderanTrucking(id) {

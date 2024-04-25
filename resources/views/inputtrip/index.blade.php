@@ -1328,6 +1328,7 @@
           statuslongtrip: statusLongtrip,
           tarif_id: tarifrincianId,
           tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
+          tglbukti: $('#crudForm [name=tglbukti]').val(),
           isPulangLongtrip: isPulangLongtrip
         }
       },

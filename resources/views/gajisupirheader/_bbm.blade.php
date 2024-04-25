@@ -55,7 +55,7 @@
         page: pageJurnal,
         viewrecords: true,
         postData: {
-          nobukti: nobukti
+          nobukti: nobuktiRicForSearching
         },
         prmNames: {
           sort: 'sortIndex',
@@ -121,19 +121,11 @@
         beforeSearch: function() {
           $(this).setGridParam({
             postData: {
-                nobukti: nobukti
+                nobukti: nobuktiRicForSearching
             },
           })
           clearGlobalSearch($('#bbmGrid'))
         },
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
       })
       .customPager()
 
