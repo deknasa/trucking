@@ -23,13 +23,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Kas/Bank<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="bank_id">
                                 <input type="text" name="bank" class="form-control bank-lookup">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -105,7 +105,7 @@
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
         $.ajax({
-            url: `{{ route('exportlaporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
+            url: `{{ route('exportlaporankasgantung.export') }}?periode=${periode}`,
             type: 'GET',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
