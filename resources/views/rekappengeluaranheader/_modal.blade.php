@@ -411,6 +411,8 @@
     }
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Add Rekap Pengeluaran')
+    form.find('#btnTampil').prop('disabled', false)
+
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
