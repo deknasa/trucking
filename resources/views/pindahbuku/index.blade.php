@@ -253,6 +253,13 @@
             }
           },
           {
+            label: 'NOMINAL',
+            name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'BANK DARI',
             name: 'bankdari',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -292,13 +299,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'right',
-            formatter: currencyFormat,
           },
           {
             label: 'KETERANGAN',

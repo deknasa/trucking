@@ -333,6 +333,13 @@
                         }
                     },
                     {
+                        label: 'NOMINAL',
+                        name: 'nominal',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'right',
+                        formatter: currencyFormat
+                    },
+                    {
                         label: 'pengeluaran_nobukti',
                         name: 'pengeluaran_nobukti',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -367,13 +374,6 @@
                         name: 'dibayarke',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
-                    },
-                    {
-                        label: 'NOMINAL',
-                        name: 'nominal',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-                        align: 'right',
-                        formatter: currencyFormat
                     },
                     {
                         label: 'MODIFIED BY',
