@@ -357,6 +357,13 @@ function checkboxHandler(element) {
             }
           },
           {
+            label: 'NOMINAL',
+            name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'CUSTOMER ',
             name: 'agen_id',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,

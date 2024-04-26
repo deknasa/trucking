@@ -351,6 +351,13 @@
             }
           },
           {
+            label: 'NOMINAL',
+            name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'ALAT BAYAR',
             name: 'alatbayar_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

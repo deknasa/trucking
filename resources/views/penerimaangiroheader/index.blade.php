@@ -315,7 +315,7 @@
                     {
                         label: 'NO BUKTI',
                         name: 'nobukti',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'left'
                     },
                     {
@@ -328,6 +328,13 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
+                    },
+                    {
+                        label: 'NOMINAL',
+                        name: 'nominal',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'right',
+                        formatter: currencyFormat,
                     },
                     {
                         label: 'CUSTOMER ',
