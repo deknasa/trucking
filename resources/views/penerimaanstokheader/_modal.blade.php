@@ -3005,7 +3005,7 @@
                       <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                     </td>
                     <td>
-                      <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
+                      <input type="text" disabled name="detail_satuan[]" id=""   class="form-control detail_satuan_${id}">
                     </td> 
                     <td>
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
@@ -3075,6 +3075,9 @@
               detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
               detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             }
+            if (detail.satuan) {
+              detailRow.find(`[name="detail_satuan[]"]`).val(detail.satuan)
+            }
             detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
             detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
             detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
@@ -3105,6 +3108,7 @@
 
 
             setRowNumbers()
+            let row = id ;
             $(`#detail_stok_${id}`).lookup({
               title: 'stok Lookup',
               fileName: 'stok',
