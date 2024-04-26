@@ -19,6 +19,7 @@
                   <label class="col-sm-2 col-form-label">No KTP<span class="text-danger">*</span></label>
                   <div class="col-sm-10">
                     <input type="text" name="noktp" id="noktp" maxlength="16" class="form-control numbernoseparate">
+                    <div id="pesan-enter-noktp">Setelah mengisi Noktp tekan <b>enter</b> </div>
                   </div>
                 </div>
 
@@ -498,6 +499,13 @@
       },
     })
   }
+  $('#crudForm [name=noktp]').focus(function(){
+    $(`#pesan-enter-noktp`).show();
+  });
+
+  $('#crudForm [name=noktp]').blur(function(){
+    $(`#pesan-enter-noktp`).hide();
+  });
 
   $('#crudForm [name=noktp]').bind("enterKey", function(e) {
     let form = $('#crudForm');
@@ -523,6 +531,13 @@
               element.val(dateFormat(value))
             } else {
               element.val(value)
+            }
+
+            if (index == "namasupir") {
+              element.prop("readonly", true)
+            }
+            if (index == "tglmasuk") {
+              element.val(dateFormat(''))
             }
           })
           initDropzone('edit', response.data)

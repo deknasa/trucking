@@ -1748,7 +1748,6 @@
             // $('#approval-buka-cetak').attr('disabled', 'disabled')
         }
         hakApporveCount++
-        console.log(`{{ $myAuth->hasPermission('supir', 'approval') }}`);
         if (!`{{ $myAuth->hasPermission('supir', 'approval') }}`) {
             hakApporveCount--
             $('#approveun').hide()
