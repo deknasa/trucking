@@ -408,6 +408,8 @@
     if (selectedRows.length > 0) {
       clearSelectedRows()
     }
+    
+    form.find('#btnTampil').prop('disabled', false)
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Add Rekap Penerimaan')
     $('#crudModal').modal('show')

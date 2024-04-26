@@ -235,12 +235,6 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
-            label: 'bank',
-            name: 'bank',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
@@ -250,6 +244,19 @@ function checkboxHandler(element) {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'bank',
+            name: 'bank',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
           },
           {
             label: 'TGL Transaksi',
