@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         
         <form action="" method="post">
 
@@ -290,7 +295,7 @@
       Save
     `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Opname')
+    $('#crudModalTitle').text('Add Opname')
     if (selectedRows.length > 0) {
               clearSelectedRows()
             }
