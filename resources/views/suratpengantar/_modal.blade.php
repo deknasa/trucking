@@ -2197,7 +2197,7 @@
     })
     $('.orderantrucking-lookup').lookup({
       title: 'Job Trucking Lookup',
-      fileName: 'orderantrucking',
+      fileName: 'orderantruckingsp',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2205,30 +2205,33 @@
           agen_id: $('#crudForm [name=agen_id]').val(),
           pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
           jenisorder_id: $('#crudForm [name=jenisorder_id]').val(),
-          from: 'suratpengantar'
+          trado_id: $('#crudForm [name=trado_id]').val(),
+          tglbukti: $('#crudForm [name=tglbukti]').val(),
         }
       },
       onSelectRow: (orderantrucking, element) => {
         element.val(orderantrucking.nobukti)
         element.data('currentValue', element.val())
-        getOrderanTrucking(orderantrucking.id)
-        enabledUpahSupir()
+        getOrderanTrucking(orderantrucking.nobukti)
+        // enabledUpahSupir()
+        getTarifOmset($('#crudForm [name=tarifrincian_id]').val(), orderantrucking.containerid)
+        
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        upahSupirReadOnly()
-        clearUpahSupir()
-        nominalSupir = 0
-        getNominalSupir()
-        $('#crudForm [name=gajikenek]').val(0)
-        $('#crudForm [name=komisisupir]').val(0)
-        kotadariId = 0
-        kotasampaiId = 0
+        // upahSupirReadOnly()
+        // clearUpahSupir()
+        // nominalSupir = 0
+        // getNominalSupir()
+        // $('#crudForm [name=gajikenek]').val(0)
+        // $('#crudForm [name=komisisupir]').val(0)
+        // kotadariId = 0
+        // kotasampaiId = 0
         element.val('')
-        $('#crudForm [name=upah_id]').val('')
-        $('#crudForm [name=upah]').val('').data('currentValue', '')
+        // $('#crudForm [name=upah_id]').val('')
+        // $('#crudForm [name=upah]').val('').data('currentValue', '')
         $('#crudForm [name=agen]').val('')
         $('#crudForm [name=agen_id]').val('')
         $('#crudForm [name=container_id]').val('')
@@ -2244,6 +2247,12 @@
         // $('#crudForm [name=omset]').val('')
         // $('#crudForm [name=totalton]').val('')
         element.data('currentValue', element.val())
+        getDataUpahSupir()
+        $('#crudForm').find(`[name="omset"]`).val(0)
+        $('#crudForm [name=gajisupir]').val(0)
+        initAutoNumeric($('#crudForm').find('[name="omset"]'))
+        initAutoNumeric($('#crudForm').find('[name="gajisupir"]'))
+        setNominalKenek(0, 0)
       }
     })
 
@@ -2526,17 +2535,20 @@
     $('#crudForm').find(`[name="komisisupirmaster"]`).val('')
   }
 
-  function getOrderanTrucking(id) {
+  function getOrderanTrucking(nobukti) {
     $.ajax({
-      url: `${apiUrl}suratpengantar/${id}/getOrderanTrucking`,
+      url: `${apiUrl}suratpengantar/getOrderanTrucking`,
       method: 'GET',
       dataType: 'JSON',
+      data: {
+        nobukti: nobukti
+      },
       headers: {
         'Authorization': `Bearer ${accessToken}`
       },
       success: response => {
         // getTarifOmset(response.data.tarif_id)
-        console.log(response.data)
+        jenisorderId = response.data.jenisorder_id
         containerId = response.data.container_id
         // $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
         $('#crudForm [name=agen]').val(response.data.agen)
@@ -2557,6 +2569,7 @@
         //   .val(response.data.statusperalihan)
         //   .trigger('change')
         //   .trigger('select2:selected');
+        getDataUpahSupir(true)
       },
       error: error => {
         showDialog(error.statusText)
