@@ -176,7 +176,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <div class="input-group">
-                  <input type="text" name="jarakfullempty" class="form-control" style="text-align: right">
+                  <input type="text" name="jarakfullempty" class="form-control" style="text-align: right" readonly>
                   <div class="input-group-append">
                     <span class="input-group-text" style="font-weight: bold;">KM</span>
                   </div>
@@ -553,7 +553,7 @@
           $('#crudModal').modal('hide')
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page,
             postData: {
               proses: 'reload'
@@ -629,7 +629,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'upahsupir'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -638,7 +638,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -691,6 +691,14 @@
     new AutoNumeric('#nominalTol').set(total)
   }
 
+
+  $(document).on('input', `#crudForm [name="jarak"]`, function(event) {
+
+    let jaraks = $(`#crudForm [name="jarak"]`)
+    let total = 0
+    total = AutoNumeric.getNumber(jaraks[0]) * 2;
+    new AutoNumeric($(`#crudForm [name="jarakfullempty"]`)[0]).set(total)
+  })
 
   function createUpahSupir() {
     let form = $('#crudForm')
@@ -1039,8 +1047,8 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      data:{
-        aksi:aksi
+      data: {
+        aksi: aksi
       },
       success: response => {
         var kondisi = response.kondisi
@@ -2061,18 +2069,20 @@
         }
       },
       onSelectRow: (tarif, element) => {
-        $('#crudForm').find(`[name=penyesuaian]`).val(tarif.penyesuaian).prop('readonly', true)
+        $('#crudForm').find(`[name=penyesuaian]`).val(tarif.penyesuaian)
         $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
         $('#crudForm [name=kotasampai]').val(tarif.tujuan)
+        $('#crudForm [name=kotasampai]').data('currentValue', tarif.tujuan)
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
-        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
+        // $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
         // $('#kotaupahsupir').prop('readonly', true)
         // $('#kotaupahsupir').parent('.input-group').hide()
         $('#kotatarif').prop('type', 'text')
-        $('#kotatarif').prop('readonly', true).show()
+        $('#kotatarif').show()
+        // $('#kotatarif').prop('readonly', true).show()
 
-        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').hide()
-        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').hide()
+        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
+        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
         // element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
         element.val(tarif.tujuanpenyesuaian)
         element.data('currentValue', element.val())

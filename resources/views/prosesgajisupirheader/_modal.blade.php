@@ -1694,19 +1694,6 @@
                     resolve(response)
                 },
                 error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-
-
-                        errors = error.responseJSON.errors
-                        reject(errors)
-
-                    } else {
-                        showDialog(error.responseJSON)
-                    }
-                },
-                error: error => {
                     reject(error)
                 }
             })
