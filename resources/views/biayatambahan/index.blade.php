@@ -158,6 +158,52 @@
             hidden: true
           },
           {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combotitipan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combotitipan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusApprovalBiayaTambahan = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApprovalBiayaTambahan.WARNA}; color: #fff;">
+                  <span>${statusApprovalBiayaTambahan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusapproval) {
+                return ` title=""`
+              }
+              let statusApprovalBiayaTambahan = JSON.parse(rowObject.statusapproval)
+              return ` title="${statusApprovalBiayaTambahan.MEMO}"`
+            }
+          },          
+          {
             label: 'NO TRIP',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
