@@ -48,49 +48,49 @@
             <div class="row form-group ">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                UPAH SUPIR
+                  UPAH SUPIR
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                    <input type="hidden" name="upah_id">
-                    <input type="text" name="upah" id="upah" class="form-control upahsupir-lookup">
-                  </div>
-                </div>
+                <input type="hidden" name="upah_id">
+                <input type="text" name="upah" id="upah" class="form-control upahsupir-lookup">
+              </div>
+            </div>
 
-                <div class="row form-group ">
-                <div class="col-12 col-sm-3 col-md-2">
+            <div class="row form-group ">
+              <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                PENYESUAIAN
-                </label>
-              </div>       
-              <div class="col-12 col-sm-9 col-md-10">
-                    <input type="text" name="penyesuaian" id="penyesuaian" class="form-control" readonly>
-                  </div>
-                </div>
-
-                <div class="row form-group ">
-                <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                DARI
+                  PENYESUAIAN
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                    <input type="hidden" name="dari_id" >
-                    <input type="text" name="dari" id="dari" class="form-control kotadari-lookup" readonly>
-                  </div>
-                </div>
+                <input type="text" name="penyesuaianupah" id="penyesuaian" class="form-control" readonly>
+              </div>
+            </div>
 
-                <div class="row form-group ">
-                <div class="col-12 col-sm-3 col-md-2">
+            <div class="row form-group ">
+              <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                SAMPAI
+                  DARI
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                    <input type="hidden" name="sampai_id">
-                    <input type="text" name="sampai" id="sampai" class="form-control kotasampai-lookup" readonly>
-                  </div>
-                </div>
+                <input type="hidden" name="dari_id">
+                <input type="text" name="dari" id="dari" class="form-control kotadari-lookup" readonly>
+              </div>
+            </div>
+
+            <div class="row form-group ">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  SAMPAI
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="sampai_id">
+                <input type="text" name="sampai" id="sampai" class="form-control kotasampai-lookup" readonly>
+              </div>
+            </div>
 
 
             <div class="row form-group">
@@ -198,7 +198,7 @@
                 </div>
               </div>
             </div>
-   
+
             <div class="row form-group statuspostingtnl">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -372,7 +372,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })      
+      })
       data.push({
         name: 'info',
         value: info
@@ -428,7 +428,10 @@
           id = response.data.id
 
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              proses: 'reload'
+            }
           }).trigger('reloadGrid');
 
 
@@ -482,6 +485,7 @@
     removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
   function removeEditingBy(id) {
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
@@ -494,7 +498,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'tarif'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -503,7 +507,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -797,37 +801,37 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}tarif/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}tarif/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
             form.find(`[name=${index}]`).attr('maxlength', value)
 
- 
+
           }
         })
         resolve()
@@ -1285,7 +1289,7 @@
         $('#crudForm [name=kota_id]').first().val(kota.id)
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
-       $('#crudForm [name=tujuan]').val(kota.keterangan)
+        $('#crudForm [name=tujuan]').val(kota.keterangan)
 
       },
       onCancel: (element) => {
@@ -1297,7 +1301,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
 
     $('.zona-lookup').lookupMaster({
       title: 'Zona Lookup',
@@ -1406,12 +1410,12 @@
       title: 'Upah Supir Lookup',
       fileName: 'upahsupirMaster',
       typeSearch: 'ALL',
-      searching: 1,      
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-        
+
           Aktif: 'AKTIF',
           searching: 1,
           valueName: 'upahsupir_id',
@@ -1425,10 +1429,10 @@
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upah_id]').val(upahsupir.id)
 
-          $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
-          $('#crudForm [name=dari]').val(upahsupir.kotadari_id)
-          $('#crudForm [name=sampai]').val(upahsupir.kotasampai_id)
-          element.val(`${upahsupir.kotadari_id} - ${upahsupir.kotasampai_id}`)
+        $('#crudForm [name=penyesuaianupah]').val(upahsupir.penyesuaian)
+        $('#crudForm [name=dari]').val(upahsupir.kotadari_id)
+        $('#crudForm [name=sampai]').val(upahsupir.kotasampai_id)
+        element.val(`${upahsupir.kotadari_id} - ${upahsupir.kotasampai_id}`)
 
         element.data('currentValue', element.val())
         // clearTrado()
@@ -1448,14 +1452,14 @@
 
   function clearUpahSupir() {
 
-      $('#crudForm [name=upah_id]').val('')
-      $('#crudForm [name=upah]').data('currentValue', '')
-      $('#crudForm [name=dari_id]').val('')
-      $('#crudForm [name=sampai_id]').val('')
-      $('#crudForm [name=dari]').val('')
-      $('#crudForm [name=sampai]').val('')
-      $('#crudForm [name=penyesuaian]').val('')
-      }
+    $('#crudForm [name=upah_id]').val('')
+    $('#crudForm [name=upah]').data('currentValue', '')
+    $('#crudForm [name=dari_id]').val('')
+    $('#crudForm [name=sampai_id]').val('')
+    $('#crudForm [name=dari]').val('')
+    $('#crudForm [name=sampai]').val('')
+    $('#crudForm [name=penyesuaian]').val('')
+  }
 
 
   function setUpRow() {
@@ -1668,8 +1672,8 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      data:{
-        aksi:aksi
+      data: {
+        aksi: aksi
       },
       success: response => {
         var kondisi = response.kondisi
@@ -1681,7 +1685,7 @@
             } else {
               showDialog(response.message['keterangan'])
             }
-          }else{
+          } else {
             showDialog(response.message['keterangan'])
           }
         } else {
