@@ -61,11 +61,22 @@
   let isKomisi;
   let isApprovalBiayaTambahan;
   let selectedRows = [];
+  let selectedbukti = [];
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    // let valueid= $(element).parents('tr').find(`td[aria-describedby="jqGrid_id"]`).text();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    
+    onSelectRowExisting(value)
+
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
+
     if (element.checked) {
-      selectedRows.push($(element).parents('tr').find(`td[aria-describedby="jqGrid_nobukti"]`).text())
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
@@ -77,11 +88,21 @@
       if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
+
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
     }
   }
 
   function clearSelectedRows() {
     selectedRows = []
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -127,7 +148,8 @@
       $('#gs_').prop('checked', false)
     })
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `${apiUrl}suratpengantar`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -166,7 +188,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="Id[]" value="${rowData.nobukti}" onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           }, {
             label: 'ID',
@@ -480,7 +502,7 @@
               }
               return ` title="${statusGajisupir.MEMO}"`
             }
-          },          
+          },
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
@@ -532,7 +554,7 @@
               }
               return ` title="${statusInvoice.MEMO}"`
             }
-          },          
+          },
           {
             label: 'MANDOR TRADO',
             name: 'mandortrado_id',
@@ -831,11 +853,12 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+
+        onSelectRow: onSelectRowFunction = function(id) {
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -1244,11 +1267,11 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          Id: selectedRows,
+          Id: selectedbukti,
           table: 'surat pengantar'
         },
         success: response => {
-          clearSelectedRows() 
+          clearSelectedRows()
           $('#jqGrid').jqGrid().trigger('reloadGrid');
         },
         error: error => {
@@ -1282,11 +1305,11 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          Id: selectedRows,
+          Id: selectedbukti,
           table: 'surat pengantar'
         },
         success: response => {
-          clearSelectedRows() 
+          clearSelectedRows()
           $('#jqGrid').jqGrid().trigger('reloadGrid');
         },
         error: error => {
@@ -1321,11 +1344,11 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          Id: selectedRows,
+          Id: selectedbukti,
           table: 'surat pengantar'
         },
         success: response => {
-          clearSelectedRows() 
+          clearSelectedRows()
           $('#jqGrid').jqGrid().trigger('reloadGrid');
         },
         error: error => {
