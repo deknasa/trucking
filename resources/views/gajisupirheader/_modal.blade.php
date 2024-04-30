@@ -128,7 +128,7 @@
                                                 <label class="col-form-label">
                                                     Nominal Deposito</label>
                                             </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
+                                            <div class="col-12 col-sm-9 col-md-10" id="contNomDepo">
                                                 <input type="text" name="nomDeposito" class="form-control text-right">
                                             </div>
                                         </div>
@@ -166,7 +166,7 @@
                                                 <label class="col-form-label">
                                                     Nominal BBM</label>
                                             </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
+                                            <div class="col-12 col-sm-9 col-md-10" id="contNomBbm">
                                                 <input type="text" name="nomBBM" class="form-control text-right">
                                             </div>
                                         </div>
@@ -201,6 +201,10 @@
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
+                        </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
                         </button>
                         <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
@@ -646,14 +650,23 @@
             }
         })
 
+
         $('#btnSubmit').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+        function submit(button) {
 
             let method
             let url
             let form = $('#crudForm')
 
 
-            event.preventDefault()
 
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
@@ -905,6 +918,10 @@
             });
 
             data.push({
+                name: 'button',
+                value: button
+            })
+            data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
             })
@@ -977,21 +994,6 @@
                 data: data,
                 success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            proses: 'reload',
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
-                        }
-                    }).trigger('reloadGrid');
-
                     selectedRows = []
                     selectedNobukti = [];
                     selectedGajiSupir = [];
@@ -1004,11 +1006,72 @@
                     selectedTolSupir = [];
                     selectedRitasi = [];
                     clearSelectedRowsAbsensi()
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
-                    }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                proses: 'reload',
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
+                        }
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    } else {
+
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        createGajiSupirHeader()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        $("#rekapRincian")[0].p.selectedRowIds = [];
+                        $('#rekapRincian').jqGrid("clearGridData");
+                        $("#rekapRincian")
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+                        $('#tableAbsensi').jqGrid("clearGridData");
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tableAbsensi_absensi_uangjalan"]`).text(0))
+                        $("#tablePotPribadi")[0].p.selectedRowIds = [];
+                        $('#tablePotPribadi').jqGrid("clearGridData");
+                        $("#tablePotPribadi")
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+                        $("#tablePotSemua")[0].p.selectedRowIds = [];
+                        $('#tablePotSemua').jqGrid("clearGridData");
+                        $("#tablePotSemua")
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+                        let nominalDepoEl = `<input type="text" name="nomDeposito" class="form-control text-right">`
+                        $('#crudForm').find(`[name="nomDeposito"]`).remove()
+                        $('#contNomDepo').append(nominalDepoEl)
+                        new AutoNumeric(`#crudForm [name="nomDeposito"]`)
+                        let nominalBBMEl = `<input type="text" name="nomBBM" class="form-control text-right">`
+                        $('#crudForm').find(`[name="nomBBM"]`).remove()
+                        $('#contNomBbm').append(nominalBBMEl)
+                        new AutoNumeric(`#crudForm [name="nomBBM"]`)
+                        hitung()
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_nominalPP"]`).text(0))
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_nominalPS"]`).text(0))
+
+
                     }
                 },
                 error: error => {
@@ -1066,7 +1129,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -1074,6 +1137,11 @@
 
         $("#tabs").tabs()
         setFormBindKeys(form)
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
 
         activeGrid = null
         form.find('#btnSubmit').prop('disabled', false)
@@ -1109,34 +1177,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'gajisupirheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'gajisupirheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     function createGajiSupirHeader() {
         let form = $('#crudForm')

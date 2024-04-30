@@ -44,6 +44,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -63,6 +67,14 @@
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
 
       let method
       let url
@@ -71,6 +83,10 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
+      data.push({
+        name: 'button',
+        value: button
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -127,17 +143,29 @@
         },
         data: data,
         success: response => {
-          $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
 
-          id = response.data.id
+          if (button == 'btnSubmit') {
+            $('#crudForm').trigger('reset')
+            $('#crudModal').modal('hide')
 
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
-          }).trigger('reloadGrid');
+            id = response.data.id
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page
+            }).trigger('reloadGrid');
+
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            showSuccessDialog(response.message)
+            createBukaAbsensi()
+            $('#crudForm').find('[name=tglabsensi]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
           }
         },
         error: error => {
@@ -154,7 +182,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -162,6 +190,11 @@
 
     setFormBindKeys(form)
     initLookup();
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     activeGrid = null
     initDatepicker()
     $('#crudForm').find('[name=tglabsensi]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

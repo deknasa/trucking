@@ -221,6 +221,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -356,8 +360,17 @@
     })
 
 
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
 
       let method
       let url
@@ -685,6 +698,10 @@
 
 
       data.push({
+        name: 'button',
+        value: button
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
@@ -762,29 +779,74 @@
         success: response => {
 
 
-          id = response.data.id
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
+          if (button == 'btnSubmit') {
+            id = response.data.id
+            $('#crudModal').modal('hide')
+            $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#penerimaanheader_id').val(response.data.penerimaantrucking_id).trigger('change')
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              proses: 'reload',
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader),
-              penerimaanheader_id: response.data.penerimaantrucking_id
+            $('#penerimaanheader_id').val(response.data.penerimaantrucking_id).trigger('change')
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                proses: 'reload',
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader),
+                penerimaanheader_id: response.data.penerimaantrucking_id
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
 
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            let penerimaanTruckingVal = $('#crudForm').find('[name="penerimaantrucking"]').val();
+            let penerimaanTruckingIdVal = $('#crudForm').find('[name="penerimaantrucking_id"]').val();
+            showSuccessDialog(response.message, response.data.nobukti)
+            createPenerimaanTruckingHeader()
+            $('#crudForm').find('input[type="text"]').not('[name="penerimaantrucking"]').data('current-value', '')
+            $('#crudForm').find('[name="penerimaantrucking"]').val(penerimaanTruckingVal)
+            $('#crudForm').find('[name="penerimaantrucking_id"]').val(penerimaanTruckingIdVal)
+            $('#crudForm').find('[name=tglbukti]').focus()
+            setTampilanForm();
+            if (KodePenerimaanId == 'PJP') {
+              $("#tablePinjaman")[0].p.selectedRowIds = [];
+              $('#tablePinjaman').jqGrid("clearGridData");
+              $("#tablePinjaman")
+                .jqGrid("setGridParam", {
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            }
+            if (KodePenerimaanId == 'PJPK') {
+
+              $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
+              $('#tablePinjamanKaryawan').jqGrid("clearGridData");
+              $("#tablePinjamanKaryawan")
+                .jqGrid("setGridParam", {
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            }
+            if (KodePenerimaanId == 'PBT') {
+
+              $("#tablePengembalianTitipan")[0].p.selectedRowIds = [];
+              $('#tablePengembalianTitipan').jqGrid("clearGridData");
+              $("#tablePengembalianTitipan")
+                .jqGrid("setGridParam", {
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+              initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(0))
+            }
           }
         },
         error: error => {
@@ -873,7 +935,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   function setKodePenerimaan(kode) {
@@ -1082,6 +1144,7 @@
     initLookup()
     initDatepicker()
     if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
       if ($('#penerimaanheader_id').val() != '') {
         let index = listIdPenerimaan.indexOf($('#penerimaanheader_id').val());
         // setKodePenerimaan(penerimaantrucking.kodepenerimaan)
@@ -1091,6 +1154,8 @@
         $('#crudForm').find(`[name="penerimaantrucking"]`).data('currentValue', listKeteranganPenerimaan[index])
         $('#crudForm').find(`[name="penerimaantrucking_id"]`).val($('#penerimaanheader_id').val())
       }
+    } else {
+      form.find('#btnSaveAdd').hide()
     }
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -1176,7 +1241,7 @@
         if (selectedRows.length > 0) {
           clearSelectedRows()
         }
-        $('#btnReloadPJP').parents('.row').show()
+        // $('#btnReloadPJP').parents('.row').show()
         $('#crudModal').modal('show')
       })
       .catch((error) => {

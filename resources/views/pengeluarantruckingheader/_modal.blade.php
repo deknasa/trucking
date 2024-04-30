@@ -1374,7 +1374,7 @@
             $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
             $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
             $('#crudForm').find('[name=tglbukti]').focus()
-           setTampilan()
+           setTampilanForm()
            
             if (KodePengeluaranId == 'KBBM') {
               $("#tablePelunasanbbm")[0].p.selectedRowIds = [];

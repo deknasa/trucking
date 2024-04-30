@@ -91,6 +91,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -170,7 +174,14 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
 
+    function submit(button) {
       let method
       let url
       let form = $('#crudForm')
@@ -187,6 +198,10 @@
       })
 
 
+      data.push({
+        name: 'button',
+        value: button
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -259,26 +274,35 @@
         },
         data: data,
         success: response => {
-          $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (button == 'btnSubmit') {
+            $('#crudForm').trigger('reset')
+            $('#crudModal').modal('hide')
 
-          id = response.data.id
+            id = response.data.id
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            showSuccessDialog(response.message, response.data.nobukti)
+            createInvoiceExtraHeader()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
           }
         },
         error: error => {
@@ -295,7 +319,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -303,6 +327,11 @@
 
     setFormBindKeys(form)
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     activeGrid = null
     initLookup()
     initDatepicker()
@@ -350,7 +379,7 @@
         }
       },
     })
-  }  
+  }
 
   function cekValidasi(Id, Aksi) {
     $.ajax({
