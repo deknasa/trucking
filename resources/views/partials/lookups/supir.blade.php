@@ -112,6 +112,11 @@
           align: 'left',
         },
         {
+          label: 'NAMA ALIAS',
+          name: 'namaalias',
+          align: 'left',
+        },
+        {
           label: 'TGL LAHIR',
           name: 'tgllahir',
           formatter: "date",
