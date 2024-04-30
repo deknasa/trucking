@@ -60,37 +60,41 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
-      }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
 
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
 
   function clearSelectedRows() {
@@ -117,7 +121,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
@@ -138,7 +142,8 @@ function checkboxHandler(element) {
     })
 
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'prosesuangjalansupirheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -431,15 +436,15 @@ function checkboxHandler(element) {
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           // let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/prosesuangjalansupirdetail/${currentTab}/grid`, function() {
           //   loadGrid(id,nobukti)
           // })
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           if (!hasDetail) {
@@ -744,11 +749,11 @@ function checkboxHandler(element) {
       $('#approval-buka-cetak').hide()
       // $('#approval-buka-cetak').attr('disabled', 'disabled')
     }
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`) {
-        hakApporveCount--
-        $('#approval-kirim-berkas').hide()
-      }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`) {
+      hakApporveCount--
+      $('#approval-kirim-berkas').hide()
+    }
     if (hakApporveCount < 1) {
       $('#approve').hide()
       // $('#approve').attr('disabled', 'disabled')
