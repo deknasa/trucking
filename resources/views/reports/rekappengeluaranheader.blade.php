@@ -17,6 +17,7 @@
   <script type="text/javascript">
     let rekappengeluaran = <?= json_encode($rekappengeluaran); ?>;
     let printer = <?= json_encode($printer); ?>;
+    let formatcetakan = <?= json_encode($formatcetakan); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -45,10 +46,15 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      if (printer['tipe'] == 'reportPrinterBesar') {
-        report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaranBesar.mrt') }}`)
-      } else {
-        report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaran.mrt') }}`)
+      console.log(rekappengeluaran.formatcetakan , formatcetakan.id);
+      if (rekappengeluaran.formatcetakan == formatcetakan.id) {
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaranBesar.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaran.mrt') }}`)
+        }
+      }else{
+        report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaranBank2.mrt') }}`)        
       }
 
       report.dictionary.dataSources.clear()

@@ -88,6 +88,18 @@
                 </select>
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  format Cetakan 
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="formatcetakan" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH FORMAT cetakan --</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -288,6 +300,7 @@
 
     setStatusFormatPenerimaanOptions(form)
     setStatusFormatPengeluaranOptions(form)
+    setStatusFormatCetakanOptions(form)
 
     Promise
       .all([
@@ -332,6 +345,7 @@
       .all([
         setStatusFormatPenerimaanOptions(form),
         setStatusFormatPengeluaranOptions(form),
+        setStatusFormatCetakanOptions(form),
         setStatusAktifOptions(form),
         getMaxLength(form)
 
@@ -374,6 +388,7 @@
       .all([
         setStatusFormatPenerimaanOptions(form),
         setStatusFormatPengeluaranOptions(form),
+        setStatusFormatCetakanOptions(form),
         setStatusAktifOptions(form),
         getMaxLength(form)
 
@@ -416,6 +431,7 @@
       .all([
         setStatusFormatPenerimaanOptions(form),
         setStatusFormatPengeluaranOptions(form),
+        setStatusFormatCetakanOptions(form),
         setStatusAktifOptions(form),
         getMaxLength(form)
 
@@ -607,6 +623,48 @@
             let option = new Option(pengeluaranBank.text, pengeluaranBank.id)
 
             relatedForm.find('[name=formatpengeluaran]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setStatusFormatCetakanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=formatcetakan]').empty()
+      relatedForm.find('[name=formatcetakan]').append(
+        new Option('-- PILIH FORMAT CETAKAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "kelompok",
+              "op": "cn",
+              "data": "FORMAT CETAKAN BANK"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(pengeluaranBank => {
+            
+            let text = JSON.parse(pengeluaranBank.memo);
+            let option = new Option(text.MEMO, pengeluaranBank.id)
+
+            relatedForm.find('[name=formatcetakan]').append(option).trigger('change')
           });
 
           resolve()
