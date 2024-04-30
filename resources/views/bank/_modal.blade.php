@@ -91,7 +91,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  format Cetakan <span class="text-danger">*</span>
+                  format Cetakan 
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -662,7 +662,6 @@
           response.data.forEach(pengeluaranBank => {
             
             let text = JSON.parse(pengeluaranBank.memo);
-            console.log(text);
             let option = new Option(text.MEMO, pengeluaranBank.id)
 
             relatedForm.find('[name=formatcetakan]').append(option).trigger('change')
