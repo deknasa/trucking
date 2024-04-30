@@ -386,6 +386,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -675,9 +679,17 @@
       }
     })
 
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
 
+    function submit(button) {
       let method
       let url
       let form = $('#crudForm')
@@ -1243,6 +1255,10 @@
       }
 
       data.push({
+        name: 'button',
+        value: button
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
@@ -1324,32 +1340,76 @@
         data: data,
         success: response => {
 
+          if (button == 'btnSubmit') {
+            id = response.data.id
+            $('#crudModal').modal('hide')
+            $('#crudModal').find('#crudForm').trigger('reset')
 
-          id = response.data.id
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
+            $('#pengeluaranheader_id').val(response.data.pengeluarantrucking_id).trigger('change')
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                proses: 'reload',
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader),
+                penerimaanheader_id: response.data.penerimaantrucking_id,
+                pengeluaranheader_id: response.data.pengeluarantrucking_id
+              }
+            }).trigger('reloadGrid');
 
-          $('#pengeluaranheader_id').val(response.data.pengeluarantrucking_id).trigger('change')
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              proses: 'reload',
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader),
-              penerimaanheader_id: response.data.penerimaantrucking_id,
-              pengeluaranheader_id: response.data.pengeluarantrucking_id
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
+          } else {
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            let pengeluaranTruckingVal = $('#crudForm').find('[name="pengeluarantrucking"]').val();
+            let pengeluaranTruckingIdVal = $('#crudForm').find('[name="pengeluarantrucking_id"]').val();
+            showSuccessDialog(response.message, response.data.nobukti)
+            createPengeluaranTruckingHeader()
+            $('#crudForm').find('input[type="text"]').not('[name="pengeluarantrucking"]').data('current-value', '')
+            $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
+            $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
+            $('#crudForm').find('[name=tglbukti]').focus()
+           setTampilan()
+           
+            if (KodePengeluaranId == 'KBBM') {
+              $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
+              $('#tablePelunasanbbm').jqGrid("clearGridData");
+              $("#tablePelunasanbbm")
+                .jqGrid("setGridParam", {
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            }
+            if (KodePengeluaranId == 'TDE') {
+              $("#tableDeposito")[0].p.selectedRowIds = [];
+              $('#tableDeposito').jqGrid("clearGridData");
+              $("#tableDeposito")
+                .jqGrid("setGridParam", {
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+
+            }
+            if (KodePengeluaranId == 'TDEK') {
+              $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
+              $('#tableDepositoKaryawan').jqGrid("clearGridData");
+              $("#tableDepositoKaryawan")
+                .jqGrid("setGridParam", {
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            }
+          }
 
           selectedRows = []
           clearSelectedRowsSumbangan()
           clearSelectedRowsOTOK()
           clearSelectedRowsOTOL()
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -1423,7 +1483,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   function setKodePengeluaran(kode) {
@@ -2900,6 +2960,8 @@
     // initSelect2(form.find(`[name="postingpinjaman"]`), true)
     initSelect2(form.find(`[name="statuscabang"]`), true)
     if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+
       if ($('#pengeluaranheader_id').val() != '') {
         let index = listIdPengeluaran.indexOf($('#pengeluaranheader_id').val());
         setKodePengeluaran(listKodePengeluaran[index]);
@@ -2907,6 +2969,9 @@
         $('#crudForm').find(`[name="pengeluarantrucking"]`).data('currentValue', listKeteranganPengeluaran[index])
         $('#crudForm').find(`[name="pengeluarantrucking_id"]`).val($('#pengeluaranheader_id').val())
       }
+    } else {
+
+      form.find('#btnSaveAdd').hide()
     }
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -5465,7 +5530,7 @@
                   pengeluaranstokheader = stok.id
                   element.val(stok.nobukti)
 
-                  lookupSelectedSpkPG(index,'SPK')
+                  lookupSelectedSpkPG(index, 'SPK')
                   element.data('currentValue', element.val())
                 },
                 onCancel: (element) => {
@@ -5506,7 +5571,7 @@
                   penerimaanstokheader = stok.id
                   element.val(stok.nobukti)
 
-                  lookupSelectedSpkPG(index,'PG')
+                  lookupSelectedSpkPG(index, 'PG')
                   element.data('currentValue', element.val())
                 },
                 onCancel: (element) => {
@@ -5635,9 +5700,9 @@
               if (kodepengeluaran === "KLAIM") {
                 detailRow.find(`[name="nominal[]"]`).val(detail.nominaltagih)
                 if (detail.pengeluaranstok_nobukti) {
-                  lookupSelectedSpkPG(index,'SPK')
-                }else if(detail.penerimaanstok_nobukti){
-                  lookupSelectedSpkPG(index,'PG')
+                  lookupSelectedSpkPG(index, 'SPK')
+                } else if (detail.penerimaanstok_nobukti) {
+                  lookupSelectedSpkPG(index, 'PG')
                 }
               }
               indexRow = index
@@ -5979,7 +6044,7 @@
         penerimaanstokheader = stok.id
         element.val(stok.nobukti)
 
-        lookupSelectedSpkPG(row,'PG')
+        lookupSelectedSpkPG(row, 'PG')
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -6023,7 +6088,7 @@
         pengeluaranstokheader = stok.id
         element.val(stok.nobukti)
 
-        lookupSelectedSpkPG(row,'SPK')
+        lookupSelectedSpkPG(row, 'SPK')
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -8934,27 +8999,29 @@
       })
     })
   }
-  function lookupSelectedSpkPG(row,el) {
+
+  function lookupSelectedSpkPG(row, el) {
     let spk = $('#crudForm').find(`#pengeluaranstok_nobukti_${row}`).parents('.input-group').children()
     let pg = $('#crudForm').find(`#penerimaanstok_nobukti_${row}`).parents('.input-group').children()
-    console.log(spk,pg);
+    console.log(spk, pg);
     console.log(row);
-    
+
     switch (el) {
       case 'SPK':
         pg.attr('disabled', true)
         pg.find('.lookup-toggler').attr('disabled', true)
-    
+
         break;
-      case 'PG':                
+      case 'PG':
         spk.attr('disabled', true)
         spk.find('.lookup-toggler').attr('disabled', true)
-    
+
         break;
       default:
         break;
     }
   }
+
   function enabledLookupSpkPG(row) {
     let spk = $('#crudForm').find(`#pengeluaranstok_nobukti_${row}`).parents('.input-group').children()
     let pg = $('#crudForm').find(`#penerimaanstok_nobukti_${row}`).parents('.input-group').children()
@@ -8966,7 +9033,7 @@
 
 
   }
-    
+
 
   const setTampilan = function(relatedForm) {
     return new Promise((resolve, reject) => {
