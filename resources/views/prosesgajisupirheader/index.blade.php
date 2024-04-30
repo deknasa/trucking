@@ -96,7 +96,12 @@
 
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
+
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRowsIndex.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -114,7 +119,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -150,7 +155,7 @@
       },
       success: (response) => {
         selectedRowsIndex = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
@@ -178,7 +183,8 @@
       selectedbukti = []
       $('#gs_check').prop('checked', false);
     })
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `${apiUrl}prosesgajisupirheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -534,13 +540,13 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           pengeluaran_nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
 
@@ -746,37 +752,36 @@
           caption: 'Approve',
           innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
+          dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak PROSES  GAJI SUPIR",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
             {
-            id: 'approval-buka-cetak',
-            text: "Approval Buka Cetak PROSES  GAJI SUPIR",
-            onClick: () => {
-              if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
-                let tglbukacetak = $('#tgldariheader').val().split('-');
-                tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              id: 'approval-kirim-berkas',
+              text: "Un/Approval Kirim Berkas PROSES  GAJI SUPIR",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+                  approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
 
+                }
               }
-            }
-          }, 
-          {
-            id: 'approval-kirim-berkas',
-            text: "Un/Approval Kirim Berkas PROSES  GAJI SUPIR",
-            onClick: () => {
-              if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`) {
-                let tglkirimberkas = $('#tgldariheader').val().split('-');
-                tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            },
 
-                approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
-
-              }
-            }
-          }, 
-          
-        ],
+          ],
 
         }]
 
