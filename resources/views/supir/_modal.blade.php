@@ -452,15 +452,15 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     data_id = $('#crudForm').find('[name=id]').val();
-    
-  //   let form = $('#crudForm')
 
-  //   setFormBindKeys(form)
+    //   let form = $('#crudForm')
 
-  //   activeGrid = null
+    //   setFormBindKeys(form)
 
-  //   getMaxLength(form)
-  //   initLookup()
+    //   activeGrid = null
+
+    //   getMaxLength(form)
+    //   initLookup()
   })
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
@@ -470,6 +470,7 @@
       dropzone.removeAllFiles()
     })
   })
+
   function removeEditingBy(id) {
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
@@ -482,7 +483,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'supir'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -491,7 +492,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -499,11 +500,11 @@
       },
     })
   }
-  $('#crudForm [name=noktp]').focus(function(){
+  $('#crudForm [name=noktp]').focus(function() {
     $(`#pesan-enter-noktp`).show();
   });
 
-  $('#crudForm [name=noktp]').blur(function(){
+  $('#crudForm [name=noktp]').blur(function() {
     $(`#pesan-enter-noktp`).hide();
   });
 
@@ -1366,11 +1367,11 @@
 
   function approve() {
     event.preventDefault()
-    
+
     let form = $('#crudForm')
     $(this).attr('disabled', '')
     $('#processingLoader').removeClass('d-none')
-    
+
     $.ajax({
       url: `${apiUrl}supir/approval`,
       method: 'POST',
@@ -1385,7 +1386,7 @@
       success: response => {
         $('#crudForm').trigger('reset')
         $('#crudModal').modal('hide')
-        
+
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
         selectedRowsSupir = []
@@ -1395,7 +1396,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -1405,7 +1406,7 @@
       $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
-    
+
   }
 
   function approvenonaktif() {
@@ -1418,6 +1419,51 @@
 
     $.ajax({
       url: `${apiUrl}supir/approvalnonaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsSupir
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsSupir = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
+  function approveaktif() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}supir/approvalaktif`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
@@ -1506,7 +1552,7 @@
       },
       data: {
         aksi: Aksi
-      },      
+      },
       success: response => {
         var error = response.error
         if (error) {

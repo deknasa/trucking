@@ -1204,6 +1204,13 @@
                                 }
                             },
                             {
+                                id: 'approvalaktif',
+                                text: "Approval Aktif",
+                                onClick: () => {
+                                    approvalAktif('supir')
+                                }
+                            },
+                            {
                                 id: 'approvalSupirLuarKota',
                                 text: "un/Approval Supir Luar Kota",
                                 onClick: () => {
