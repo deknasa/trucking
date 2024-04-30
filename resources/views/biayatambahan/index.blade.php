@@ -50,6 +50,10 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
     if (element.checked) {
       selectedRows.push($(element).val())
       $(element).parents('tr').addClass('bg-light-blue')
@@ -107,8 +111,10 @@
       selectedRows = []
       $('#gs_').prop('checked', false)
     })
+    var grid = $("#jqGrid");
+    grid.jqGrid({
 
-    $("#jqGrid").jqGrid({
+        // $("#jqGrid").jqGrid({
         url: `${apiUrl}suratpengantar`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -202,7 +208,7 @@
               let statusApprovalBiayaTambahan = JSON.parse(rowObject.statusapproval)
               return ` title="${statusApprovalBiayaTambahan.MEMO}"`
             }
-          },          
+          },
           {
             label: 'NO TRIP',
             name: 'nobukti',
@@ -883,11 +889,13 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+        onSelectRow: onSelectRowFunction =function(id) {
+
+        // onSelectRow: function(id) {
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)

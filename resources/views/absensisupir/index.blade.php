@@ -76,9 +76,11 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    // perubahan
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
     $("#jqGrid").jqGrid('setSelection', value,false);
     onSelectRowExisting(value)
+    // 
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
 
@@ -165,8 +167,10 @@
       selectedbukti = []
       $('#gs_').prop('checked', false)
     })
-    var grid= $("#jqGrid");
+    // perubahan
+    var grid= $("#jqGrid");  
     grid.jqGrid({
+      // 
         url: `${apiUrl}absensisupirheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -564,6 +568,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
+        // perubahan
         onSelectRow: onSelectRowFunction =function(id) {
           console.log($(this));
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_kasgantung_nobukti"]`).attr('title') ?? '';
@@ -572,6 +577,7 @@
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
           page = grid.jqGrid('getGridParam', 'page')
           let limit = grid.jqGrid('getGridParam', 'postData').limit
+          // 
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
