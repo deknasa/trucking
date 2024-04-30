@@ -2723,6 +2723,12 @@
                         align: 'left'
                     },
                     {
+                        label: 'SHIPPER',
+                        name: 'pelanggan_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        align: 'left'
+                    },
+                    {
                         label: 'DARI',
                         name: 'dari_id',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -3133,7 +3139,7 @@
             },
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supir_id]').first().val(supir.id)
-                element.val(supir.namasupir)
+                element.val(supir.namaalias)
                 element.data('currentValue', element.val())
 
             },
