@@ -69,6 +69,28 @@
             hidden: true
           },
           {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+          },
+          {
+            label: 'KETERANGAN BIAYA TAMBAHAN',
+            name: 'keteranganbiaya',
+            width: '200px'
+          },
+          {
+            label: 'NOMINAL SUPIR',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'NOMINAL TAGIH',
+            name: 'nominaltagih',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+
+          {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
             stype: 'select',
@@ -114,29 +136,6 @@
               return ` title="${statusApprovalBiayaTambahan.MEMO}"`
             }
           },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-          },
-          {
-            label: 'KETERANGAN BIAYA TAMBAHAN',
-            name: 'keteranganbiaya',
-            width: '200px'
-          },
-          {
-            label: 'NOMINAL SUPIR',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'NOMINAL TAGIH',
-            name: 'nominaltagih',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-
-
           {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
