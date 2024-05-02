@@ -87,7 +87,7 @@
                                                         <th width="2%" class="tbl_aksi">Aksi</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="table_body">
 
                                                 </tbody>
                                                 <tfoot>
@@ -110,6 +110,10 @@
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
+                        </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
                         </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
@@ -175,6 +179,16 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        
+
+        function submit(button) {
+            event.preventDefault()
 
             let method
             let url
@@ -211,6 +225,10 @@
                 name: 'limit',
                 value: limit
             })
+            data.push({
+                name: 'button',
+                value: button
+            })
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
@@ -246,26 +264,36 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
 
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+    
+                        $('#crudModal').modal('hide')
+    
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+    
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
-
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
-                    }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                        
+                    }else{
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        createServicein()
                     }
                 },
                 error: error => {
@@ -282,7 +310,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -295,6 +323,11 @@
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
+        }
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
         }
 
         getMaxLength(form)
