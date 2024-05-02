@@ -120,6 +120,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -189,6 +193,15 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
+      event.preventDefault()
       let method
       let url
       let form = $('#crudForm')
@@ -243,6 +256,10 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -267,7 +284,7 @@
 
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
-      console.log(data);
+      
       $.ajax({
         url: url,
         method: method,
@@ -278,22 +295,31 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          id = response.data.id
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+  
+            id = response.data.id
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+  
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+  
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
             }
-          }).trigger('reloadGrid');
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+          }else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#table_body').html('')
+            showSuccessDialog(response.message, response.data.nobukti)
+            createNotaDebet();
           }
         },
         error: error => {
@@ -310,7 +336,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -324,6 +350,11 @@
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
+    }
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
