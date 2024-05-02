@@ -161,6 +161,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -242,6 +246,15 @@
         })
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        
+        function submit(button) { 
+            event.preventDefault()
             let method
             let url
             let form = $('#crudForm')
@@ -293,6 +306,11 @@
                 name: 'bankheader',
                 value: data.find(item => item.name === "bank_id").value
             })
+            data.push({
+                name: 'button',
+                value: button
+            })
+            
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
             let bankheader = data.find(item => item.name === "bank_id").value
@@ -330,33 +348,42 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
-                    $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    penerimaanGiro = ''
 
-                    $('#bankheader').val(response.data.bank_id).trigger('change')
-
-                    // $('.select2').select2({
-                    //     width: 'resolve',
-                    //     theme: "bootstrap4"
-                    // });
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            bank: response.data.bank_id,
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        $('#crudModal').modal('hide')
+                        penerimaanGiro = ''
+                        
+                        $('#bankheader').val(response.data.bank_id).trigger('change')
+                        
+                        // $('.select2').select2({
+                        //     width: 'resolve',
+                        //     theme: "bootstrap4"
+                        // });
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                bank: response.data.bank_id,
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+                        
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
-
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
-                    }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    }else{
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        createPenerimaan();
                     }
                 },
                 error: error => {
@@ -372,7 +399,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
@@ -382,6 +409,12 @@
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
+        }
+
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
         }
         initLookup()
         initSelect2(form.find('.select2bs4'), true)

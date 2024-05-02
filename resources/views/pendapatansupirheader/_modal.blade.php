@@ -165,6 +165,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -283,6 +287,15 @@
         })
 
         $('#btnSubmit').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        
+        function submit(button) {
             event.preventDefault()
 
             let method
@@ -465,6 +478,10 @@
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
             })
+            data.push({
+                name: 'button',
+                value: button
+            })
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
@@ -501,32 +518,57 @@
                 data: data,
                 success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    selectedRowsTrip = []
-                    selectedTrip = [];
-                    selectedRic = [];
-                    selectedNominal = [];
-                    selectedDari = [];
-                    selectedSampai = [];
-                    selectedGajiKenek = [];
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                    id = response.data.id
+                    if (button == 'btnSubmit') {
+                        $('#crudModal').modal('hide')
+                        selectedRowsTrip = []
+                        selectedTrip = [];
+                        selectedRic = [];
+                        selectedNominal = [];
+                        selectedDari = [];
+                        selectedSampai = [];
+                        selectedGajiKenek = [];
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+    
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
-
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    }else{
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        
+                        $("#tableDeposito")[0].p.selectedRowIds = [];
+                        $('#tableDeposito').jqGrid("clearGridData");
+                        $("#tableDeposito")
+                        .jqGrid("setGridParam", {
+                            selectedRowIds: []
+                        })
+                        .trigger("reloadGrid");
+                        
+                        $("#tablePinjaman")[0].p.selectedRowIds = [];
+                        $('#tablePinjaman').jqGrid("clearGridData");
+                        $("#tablePinjaman")
+                        .jqGrid("setGridParam", {
+                            selectedRowIds: []
+                        })
+                        .trigger("reloadGrid");
+                        createPendapatanSupir()
                     }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
+                    
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -542,14 +584,18 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
         $("#tabsModal").tabs()
         setFormBindKeys(form)
-
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         activeGrid = null
 
         getMaxLength(form)

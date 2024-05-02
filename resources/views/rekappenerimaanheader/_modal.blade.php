@@ -92,6 +92,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -157,6 +161,15 @@
     })
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {       
       event.preventDefault()
 
       let method
@@ -231,6 +244,10 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -267,23 +284,38 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          id = response.data.id
-
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+  
+            id = response.data.id
+  
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+  
+  
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
             }
-          }).trigger('reloadGrid');
-
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+          }else{
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            showSuccessDialog(response.message, response.data.nobukti)
+            $("#modalgrid")[0].p.selectedRowIds = [];
+            $('#modalgrid').jqGrid("clearGridData");
+            $("#modalgrid")
+            .jqGrid("setGridParam", {
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+            createRekapPenerimaanHeader();
           }
         },
         error: error => {
@@ -300,7 +332,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   function kodepenerimaan(kodepenerimaan) {
@@ -316,6 +348,11 @@
     initDatepicker()
     initLookup()
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     loadModalGrid()
     // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     // getMaxLength(form)
