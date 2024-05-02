@@ -295,6 +295,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -466,6 +470,15 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
+      event.preventDefault()
 
       let method
       let url
@@ -523,6 +536,10 @@
         name: 'penerimaanheader_id',
         value: $('#penerimaanstokId').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
       let penerimaanheader_id = $('#penerimaanstokId').val()
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -559,25 +576,42 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          id = response.data.id
           $('#kodepenerimaanheader').val(response.data.penerimaanstok_id).trigger('change')
-
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            postData: {
-              proses: 'reload',
-              penerimaanheader_id: response.data.penerimaanstok_id,
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
-            },
-            page: response.data.page
-          }).trigger('reloadGrid')
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+  
+            id = response.data.id
+  
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              postData: {
+                proses: 'reload',
+                penerimaanheader_id: response.data.penerimaanstok_id,
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              },
+              page: response.data.page
+            }).trigger('reloadGrid')
+  
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          }else{
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            if ($('#kodepenerimaanheader').val() != '') {
+              let index = listIdPenerimaan.indexOf($('#kodepenerimaanheader').val());
+              setKodePenerimaan(listKodePenerimaan[index]);
+              setIsDateAvailable($('#kodepenerimaanheader').val())
+      
+              $('#crudForm').find(`[name="penerimaanstok"]`).val(listKodePenerimaan[index])
+              $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
+              $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
+            }
+            showSuccessDialog(response.message, response.data.nobukti)
+            createPenerimaanstokHeader();
           }
         },
         error: error => {
@@ -594,7 +628,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   function setKodePenerimaan(kode) {
@@ -2168,6 +2202,12 @@
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
+    }
+
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
     }
     getMaxLength(form)
   })
