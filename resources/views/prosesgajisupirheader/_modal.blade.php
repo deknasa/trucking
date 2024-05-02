@@ -276,6 +276,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -444,6 +448,17 @@
     $(document).ready(function() {
 
         $('#btnSubmit').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+
+        function submit(button) {
+
 
             let method
             let url
@@ -634,24 +649,36 @@
                 data: data,
                 success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
 
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            proses: 'reload',
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                proses: 'reload',
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        clearSelectedRows()
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
+                    } else {
 
-                    clearSelectedRows()
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        createProsesGajiSupirHeader()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        $('#rekapRincian').jqGrid("clearGridData");
+                        clearRows()
+                        countNominal()
                     }
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
@@ -671,7 +698,7 @@
                 $(this).removeAttr('disabled')
             })
 
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -681,6 +708,11 @@
         setFormBindKeys(form)
 
         activeGrid = null
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         initLookup()
         initDatepicker()
         getMaxLength(form)
@@ -715,34 +747,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'prosesgajisupirheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'prosesgajisupirheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
 
     function rekapRincian() {

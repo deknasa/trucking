@@ -163,6 +163,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -245,8 +249,17 @@
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })
-
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+
+    function submit(button) {
       event.preventDefault()
 
       let method
@@ -260,6 +273,10 @@
         data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
 
+      data.push({
+        name: 'button',
+        value: button
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -343,32 +360,53 @@
         success: response => {
 
 
-          id = response.data.id
-          console.log(id)
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
-          $('#bankheader').val(response.data.bank_id).trigger('change')
+          if (button == 'btnSubmit') {
+            id = response.data.id
+            console.log(id)
+            $('#crudModal').modal('hide')
+            $('#crudModal').find('#crudForm').trigger('reset')
+            $('#bankheader').val(response.data.bank_id).trigger('change')
 
-          // $('.select2').select2({
-          //   width: 'resolve',
-          //   theme: "bootstrap4"
-          // });
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              bank_id: response.data.bank_id,
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader),
-              proses: 'reload'
+            // $('.select2').select2({
+            //   width: 'resolve',
+            //   theme: "bootstrap4"
+            // });
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                bank_id: response.data.bank_id,
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader),
+                proses: 'reload'
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
+          } else {
 
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            showSuccessDialog(response.message, response.data.nobukti)
+            let bankVal = $('#crudForm').find('[name="bank"]').val();
+            let bankIdVal = $('#crudForm').find('[name="bank_id"]').val();
+            let alatbayarVal = $('#crudForm').find('[name="alatbayar"]').val();
+            let alatbayarIdVal = $('#crudForm').find('[name="alatbayar_id"]').val();
+
+            createPengeluaran(true)
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#crudForm').find('[name=tglbukti]').focus()
+            $('#crudForm').find('[name="bank"]').val(bankVal)
+            $('#crudForm').find('[name="bank"]').data('current-value', bankVal)
+            $('#crudForm').find('[name="bank_id"]').val(bankIdVal)
+            $('#crudForm').find('[name="alatbayar"]').val(alatbayarVal)
+            $('#crudForm').find('[name="alatbayar"]').data('current-value', alatbayarVal)
+            $('#crudForm').find('[name="alatbayar_id"]').val(alatbayarIdVal)
+
           }
-
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -387,7 +425,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -398,6 +436,11 @@
 
     activeGrid = null
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     getMaxLength(form)
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -461,7 +504,7 @@
     new AutoNumeric('#total').set(total)
   }
 
-  function createPengeluaran() {
+  function createPengeluaran(isSaveAdd = false) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
     form.trigger('reset')
@@ -479,35 +522,63 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+    if (isSaveAdd) {
 
-    Promise
-      .all([
-        setStatusJenisTransaksiOptions(form),
-        setPenerimaOptions(form),
-      ])
-      .then(() => {
-        showDefault(form)
-          .then(() => {
-            if (bankId == 3) {
-              $('.bmt').show()
-            } else {
-              $('.bmt').hide()
-            }
-            if (selectedRows.length > 0) {
-              clearSelectedRows()
-            }
-            $('#crudModal').modal('show')
-            addRow()
-            enableTglJatuhTempo(form)
-          })
-          .catch((error) => {
-            showDialog(error.responseJSON)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+      Promise
+        .all([
+          setStatusJenisTransaksiOptions(form),
+          setPenerimaOptions(form),
+        ])
+        .then(() => {
+          if (bankId == 3) {
+            $('.bmt').show()
+          } else {
+            $('.bmt').hide()
+          }
+          if (selectedRows.length > 0) {
+            clearSelectedRows()
+          }
+          $('#crudModal').modal('show')
+          addRow()
+          enableTglJatuhTempo(form)
+        })
+        .catch((error) => {
+          showDialog(error.responseJSON)
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
+    } else {
 
+      Promise
+        .all([
+          setStatusJenisTransaksiOptions(form),
+          setPenerimaOptions(form),
+        ])
+        .then(() => {
+          showDefault(form)
+            .then(() => {
+              if (bankId == 3) {
+                $('.bmt').show()
+              } else {
+                $('.bmt').hide()
+              }
+              if (selectedRows.length > 0) {
+                clearSelectedRows()
+              }
+              $('#crudModal').modal('show')
+              addRow()
+              enableTglJatuhTempo(form)
+            })
+            .catch((error) => {
+              showDialog(error.responseJSON)
+            })
+            .finally(() => {
+              $('.modal-loader').addClass('d-none')
+            })
+        })
+
+    }
     setTotal()
   }
 
@@ -795,7 +866,7 @@
           // if (response.force) {
           //   showConfirmForce(response.message, Id)
           // } else {
-            showDialog(response)
+          showDialog(response)
           // }
         } else {
           if (Aksi == 'PRINTER BESAR') {
