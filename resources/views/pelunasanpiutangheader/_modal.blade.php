@@ -211,6 +211,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -328,6 +332,15 @@
     })
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
 
       let method
       let url
@@ -514,6 +527,10 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -552,28 +569,43 @@
 
           id = response.data.id
           $('#crudModal').find('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-          $('#piutangrow').html('')
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+            $('#piutangrow').html('')
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+  
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
-
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
-
-          $('#detailList tbody').html('')
-          $('#nominalPiutang').html('')
-          $('#sisaPiutang').html('')
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+  
+            $('#detailList tbody').html('')
+            $('#nominalPiutang').html('')
+            $('#sisaPiutang').html('')
+  
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          }else{
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            showSuccessDialog(response.message, response.data.nobukti)
+            
+            $("#tablePelunasan")[0].p.selectedRowIds = [];
+            $('#tablePelunasan').jqGrid("clearGridData");
+            $("#tablePelunasan")
+            .jqGrid("setGridParam", {
+              selectedRowIds: []
+            })
+            createPelunasanPiutangHeader();
           }
         },
         error: error => {
@@ -622,7 +654,7 @@
         $(this).removeAttr('disabled')
       })
 
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -636,6 +668,11 @@
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
+    }
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
     }
     initLookup()
     initDatepicker()

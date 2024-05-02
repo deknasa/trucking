@@ -428,6 +428,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -525,6 +529,15 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
+      event.preventDefault()
 
       let method
       let url
@@ -589,6 +602,10 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
       if (action != 'delete') {
         data.push({
           name: 'pengeluaranheader_id',
@@ -636,25 +653,42 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          id = response.data.id
           $('#kodepengeluaranheader').val(response.data.pengeluaranstok_id).trigger('change')
-
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            postData: {
-              proses: 'reload',
-              pengeluaranheader_id: response.data.pengeluaranstok_id,
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
-            },
-            page: response.data.page
-          }).trigger('reloadGrid')
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+  
+            id = response.data.id
+  
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              postData: {
+                proses: 'reload',
+                pengeluaranheader_id: response.data.pengeluaranstok_id,
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              },
+              page: response.data.page
+            }).trigger('reloadGrid')
+  
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          }else{
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            if ($('#kodepengeluaranheader').val() != '') {
+              let IdPengeluaran = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
+              setKodePengeluaran(listKodePengeluaran[IdPengeluaran]);
+              setIsDateAvailable($('#kodepengeluaranheader').val())
+      
+              $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[IdPengeluaran])
+              $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[IdPengeluaran])
+              $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
+            }
+            showSuccessDialog(response.message, response.data.nobukti)
+            createPengeluaranstokHeader();
           }
         },
         error: error => {
@@ -671,7 +705,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   function setKodePengeluaran(kode) {
@@ -952,6 +986,7 @@
 
     activeGrid = null
     initDatepicker()
+    initLookup()
     if (form.data('action') == 'add') {
       if ($('#kodepengeluaranheader').val() != '') {
         let IdPengeluaran = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
@@ -989,6 +1024,11 @@
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
+    }
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
     }
     // getMaxLength(form)
   })
@@ -1045,13 +1085,6 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
-      background: '#fff'
-    })
-    let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
-    tglbukti.find('button').attr('disabled', true)
-
     $('#crudModalTitle').text('Add Pengeluaran Stok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -1068,10 +1101,15 @@
            clearSelectedRows()
          }
         $('#crudModal').modal('show')
-        initLookup()
         // addRow()
         initRowcreate()
         // sumary()
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+          background: '#fff'
+        })
+        let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+        tglbukti.find('button').attr('disabled', true)
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1136,7 +1174,7 @@
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
-    initLookup()
+    // initLookup()
   }
 
   function deletePengeluaranstokHeader(pengeluaranStokHeaderId) {
@@ -1205,7 +1243,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-    initLookup()
+    // initLookup()
   }
 
   function viewPengeluaranstokHeader(pengeluaranStokHeaderId) {
@@ -1277,7 +1315,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-    initLookup()
+    // initLookup()
   }
 
   function getMaxLength(form) {
