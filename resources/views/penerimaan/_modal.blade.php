@@ -123,16 +123,16 @@
                         </div>--}}
 
                         <div class="table-responsive table-scroll">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2010px;">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
                                 <thead>
                                     <tr>
                                         <th width="1%">No</th>
                                         <th width="5%">Nama Perkiraan</th>
-                                        <th width="6%">Tgl jatuh tempo</th>
-                                        <th width="4%">No warkat</th>
-                                        <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
+                                        <th width="4%">Tgl jatuh tempo</th>
+                                        <th width="4%">No warkat</th>
+                                        <th width="5%" class="bankpelanggan">Bank Pelanggan</th>
                                         <th width="1%" class="aksiGiro tbl_aksi">Aksi</th>
                                     </tr>
                                 </thead>
@@ -141,7 +141,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6">
+                                        <td class='colspan'>
                                             <p class="text-right font-weight-bold">TOTAL :</p>
                                         </td>
                                         <td>
@@ -186,7 +186,6 @@
     let bankId
 
     $(document).ready(function() {
-
         $("#crudForm [name]").attr("autocomplete", "off");
         $(document).on('change', '[name=statuskas]', function() {
             if ($(this).val() == 116) {
@@ -500,6 +499,16 @@
                             clearSelectedRows()
                         }
                         $('#crudModal').modal('show')
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.responseJSON)
@@ -576,6 +585,17 @@
                             form.find(`[name="tglbukti"]`).prop('readonly', true)
                             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                         }
+
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
@@ -636,6 +656,17 @@
                     .then(() => {
                         clearSelectedRows()
                         $('#gs_').prop('checked', false)
+
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tglbukti]').attr('readonly', true)
                         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
@@ -690,6 +721,16 @@
                     .then(() => {
                         if (selectedRows.length > 0) {
                             clearSelectedRows()
+                        }
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
                         }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
@@ -766,6 +807,16 @@
                     })
                     .then(() => {
                         clearSelectedRows()
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                         $('#gs_').prop('checked', false)
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -948,6 +999,12 @@
                                 <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
                             </td>
                             <td>
+                                <input type="text" name="keterangan_detail[]"  class="form-control" ${readOnly}>
+                            </td>
+                            <td>
+                                <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
+                            </td>
+                            <td>
                                 <div class="input-group">
                                     <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                                 </div>
@@ -955,15 +1012,9 @@
                             <td>
                                 <input type="text" name="nowarkat[]"  class="form-control">
                             </td>
-                            <td>
+                            <td class="bankpelanggan">
                                 <input type="hidden" name="bankpelanggan_id[]">
                                 <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
-                            </td>
-                            <td>
-                                <input type="text" name="keterangan_detail[]"  class="form-control" ${readOnly}>
-                            </td>
-                            <td>
-                                <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                             </td>
                             <td class="tbl_aksi">
                                 <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1105,6 +1156,12 @@
           <input type="text" name="ketcoakredit[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
+          <input type="text" name="keterangan_detail[]"  class="form-control">
+        </td>
+        <td>
+          <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
+        </td>
+        <td>
           <div class="input-group">
             <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
           </div>
@@ -1112,15 +1169,9 @@
         <td>
           <input type="text" name="nowarkat[]"  class="form-control">
         </td>
-        <td>
+        <td class="bankpelanggan">
             <input type="hidden" name="bankpelanggan_id[]">
             <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
-        </td>
-        <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
-        </td>
-        <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
         <td class="aksiGiro tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>

@@ -431,6 +431,7 @@
     let apiTruckingBtgUrl = `{{ config('app.trucking_api_btg_url') }}`
     var pleaseSelectARow;
     let isAllowedForceEdit = false
+    let accessCabang = `{{ session('cabang') }}`
 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
