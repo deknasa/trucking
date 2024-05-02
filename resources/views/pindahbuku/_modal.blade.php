@@ -98,7 +98,7 @@
                                         NOMINAL <span class="text-danger">*</span>
                                     </label>
                                 </div>
-                                <div class="col-12 col-md-10">
+                                <div class="col-12 col-md-10" id="contNominal">
                                     <input type="text" name="nominal" class="form-control text-right">
                                 </div>
                             </div>
@@ -118,6 +118,10 @@
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
+                        </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
                         </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
@@ -149,6 +153,15 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+
+        function submit(button) {
 
             let method
             let url
@@ -161,6 +174,10 @@
                 data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[index])
             })
 
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'tgldariheader',
                 value: $('#tgldariheader').val()
@@ -236,21 +253,35 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
 
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
 
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
-                        }
-                    }).trigger('reloadGrid');
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
 
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+                    } else {
+
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        createPindahBuku()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        let nominalEl = `<input type="text" name="nominal" class="form-control text-right">`
+                        $('#crudForm').find(`[name="nominal"]`).remove()
+                        $('#contNominal').append(nominalEl)
+                        new AutoNumeric(`#crudForm [name="nominal"]`)
+                        
+                    }
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
                     }
@@ -269,7 +300,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     });
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -277,6 +308,11 @@
 
         setFormBindKeys(form)
 
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
