@@ -568,6 +568,7 @@
 
     function approvalBukaCetak(periode, table, selectedRows, buktiselectedRows) {
 
+      $('#processingLoader').removeClass('d-none')
       $.ajax({
         url: `${apiUrl}approvalbukacetak`,
         method: 'POST',
