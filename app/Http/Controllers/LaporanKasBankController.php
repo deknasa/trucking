@@ -36,7 +36,6 @@ class LaporanKasBankController extends MyController
             'bank_id' => $request->bank_id,
             'bank' => $request->bank,
         ];
-
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -45,9 +44,10 @@ class LaporanKasBankController extends MyController
         $data = $header['data'];
         $dataCabang['namacabang'] = $header['namacabang'];
         $printer['tipe'] = $request->printer;
+        $cabang['cabang'] = session('cabang');
 
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data','dataCabang', 'user', 'detailParams','printer'));
+        return view('reports.laporankasbank', compact('data','dataCabang', 'user', 'detailParams','printer','cabang'));
     }
 
     public function export(Request $request): void
