@@ -41,13 +41,20 @@ class LaporanKasBankController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
-        $data = $header['data'];
+        if (session('cabang') == 'PUSAT') {
+            $data = $header['data'];
+            array_shift($data);
+        } else {
+            $data = $header['data'];
+        }
+        $infopemeriksa = $header['infopemeriksa'];
+        $datasaldo = $header['datasaldo'];
         $dataCabang['namacabang'] = $header['namacabang'];
         $printer['tipe'] = $request->printer;
         $cabang['cabang'] = session('cabang');
 
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data','dataCabang', 'user', 'detailParams','printer','cabang'));
+        return view('reports.laporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa'));
     }
 
     public function export(Request $request): void
@@ -65,8 +72,8 @@ class LaporanKasBankController extends MyController
             ->get(config('app.api_url') . 'laporankasbank/export', $detailParams);
 
         $data = $header['data'];
-        
-        if(count($data) == 0){
+
+        if (count($data) == 0) {
             throw new \Exception('TIDAK ADA DATA');
         }
         $namacabang = $header['namacabang'];
@@ -86,7 +93,7 @@ class LaporanKasBankController extends MyController
         $sheet->mergeCells('A3:B3');
         $sheet->setCellValue('A4', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         $sheet->mergeCells('A4:B4');
-        $sheet->setCellValue('A5', 'Buku Kas/Bank : '. $request->bank);
+        $sheet->setCellValue('A5', 'Buku Kas/Bank : ' . $request->bank);
         $sheet->mergeCells('A5:B5');
 
         $sheet->getStyle("A3")->getFont()->setBold(true);
@@ -168,12 +175,12 @@ class LaporanKasBankController extends MyController
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
- 
-            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
             $sheet->setCellValue("A$detail_start_row", $dateValue);
-            $sheet->getStyle("A$detail_start_row") 
-            ->getNumberFormat() 
-            ->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("A$detail_start_row")
+                ->getNumberFormat()
+                ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
@@ -204,7 +211,7 @@ class LaporanKasBankController extends MyController
         $sheet->setCellValue("E$detail_start_row", "=SUM(E9:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->setCellValue("F$detail_start_row",  "=SUM(F9:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("G$detail_start_row",  "=G".($dataRow-1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$detail_start_row",  "=G" . ($dataRow - 1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
