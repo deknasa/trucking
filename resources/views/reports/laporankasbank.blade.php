@@ -15,6 +15,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
     let printer = <?= json_encode($printer); ?>;
+    let cabang = <?= json_encode($cabang); ?>;
 
 
     function Start() {
@@ -33,10 +34,19 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      if (printer['tipe'] == 'reportPrinterBesar') {
-        report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
+      if (cabang['cabang'] == 'PUSAT') {
+
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarPusat.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankPusat.mrt') }}`)
+        }
       } else {
-        report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
+        }
       }
 
 
