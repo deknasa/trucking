@@ -295,6 +295,7 @@ use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\LaporanArusDanaPusatController;
+use App\Http\Controllers\TripTangkiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1744,6 +1745,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanarusdanapusat/export', [LaporanArusDanaPusatController::class, 'export'])->name('laporanarusdanapusat.export');
     Route::get('laporanarusdanapusat/index', [LaporanArusDanaPusatController::class, 'index']);
     Route::resource('laporanarusdanapusat', LaporanArusDanaPusatController::class);
+    
+    Route::get('triptangki/report', [TripTangkiController::class, 'report'])->name('triptangki.report');
+    Route::get('triptangki/index', [TripTangkiController::class, 'index']);
+    Route::resource('triptangki', TripTangkiController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
