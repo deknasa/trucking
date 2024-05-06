@@ -294,6 +294,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\LaporanArusDanaPusatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1738,6 +1739,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('exportperhitunganbonus', ExportPerhitunganBonusController::class);
     Route::get('suratpengantarbiayatambahan/index', [SuratPengantarBiayaTambahanController::class, 'index']);
     Route::resource('suratpengantarbiayatambahan', SuratPengantarBiayaTambahanController::class);
+
+    Route::get('laporanarusdanapusat/report', [LaporanArusDanaPusatController::class, 'report'])->name('laporanarusdanapusat.report');
+    Route::get('laporanarusdanapusat/export', [LaporanArusDanaPusatController::class, 'export'])->name('laporanarusdanapusat.export');
+    Route::get('laporanarusdanapusat/index', [LaporanArusDanaPusatController::class, 'index']);
+    Route::resource('laporanarusdanapusat', LaporanArusDanaPusatController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
