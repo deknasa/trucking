@@ -161,6 +161,10 @@
         name: 'aksi',
         value: action.toUpperCase()
       })
+      data.push({
+        name: 'button',
+        value: 'btnSubmit'
+      })
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -464,6 +468,7 @@
           <input type="text" value="${detail.supir_id}" id="supir_id" name="supir_id[]"  readonly  hidden >
           <input type="text" value="${detail.trado_id}" id="trado_id" name="trado_id[]"  readonly  hidden >
           <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly  hidden >
+          <input type="text" value="${detail.statusjeniskendaraan}" id="statusjeniskendaraan" name="statusjeniskendaraan[]"  readonly  hidden >
           `)
           $('#detailList').append(detailRow)
 
@@ -503,6 +508,7 @@
           <input type="text" value="${detail.supir_id}" id="supir_id" name="supir_id[]"  readonly  hidden >
           <input type="text" value="${detail.trado_id}" id="trado_id" name="trado_id[]"  readonly  hidden >
           <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly  hidden >
+          <input type="text" value="${detail.statusjeniskendaraan}" id="statusjeniskendaraan" name="statusjeniskendaraan[]"  readonly  hidden >
           `)
           $('#detailList').append(detailRow)
 
