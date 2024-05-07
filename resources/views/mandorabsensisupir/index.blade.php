@@ -42,6 +42,7 @@
               <th width="8%">Supir serap</th>
               <th width="12%">Supir</th>
               <th width="10%">Status</th>
+              <th width="10%">Jenis Kendaraan</th>
               <th width="8%">jlh trip</th>
               <th width="15%">Keterangan</th>
               <th width="6%">tgl batas</th>
@@ -100,7 +101,7 @@
       getAll(1, 0, filterObject)
     //deleted_id
 
-      let dataColumn = ["kodetrado","statussupirserap","namasupir","absentrado","jlhtrip","keterangan"] 
+      let dataColumn = ["kodetrado","statussupirserap","namasupir","absentrado",'jeniskendaraan',"jlhtrip","keterangan"] 
       filtersEditAll(dataColumn)
       bindKeyPagerEditAll()
       totalInfoPage()
@@ -109,7 +110,7 @@
 
     getAll(1, 0, filterObject)
     //deleted_id
-    let dataColumn = ["kodetrado","statussupirserap","namasupir","absentrado","jlhtrip","keterangan"] 
+    let dataColumn = ["kodetrado","statussupirserap","namasupir","absentrado",'jeniskendaraan',"jlhtrip","keterangan"] 
     filtersEditAll(dataColumn)
     bindKeyPagerEditAll()
     totalInfoPage()
@@ -149,24 +150,29 @@
 
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            let angka = indexes[0]
-            let col = indexes[1]
-            let element = $(`#row${angka}`).find(`[name="${col}[]"]`);
-            if ($(element).length > 0 && !$(element).is(":hidden")) {
-              $(element).addClass("is-invalid");
-              $(`
-              <div class="invalid-feedback">
-              ${error[0].toLowerCase()}
-              </div>
-              `).appendTo($(element).parent());
-            } else {
-              console.log(error);
-              return showDialog(error);
-            }
-          });
+          if (error.status === 422) {
+            errors = error.responseJSON.errors
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              let angka = indexes[0]
+              let col = indexes[1]
+              let element = $(`#row${angka}`).find(`[name="${col}[]"]`);
+              if ($(element).length > 0 && !$(element).is(":hidden")) {
+                $(element).addClass("is-invalid");
+                $(`
+                <div class="invalid-feedback">
+                ${error[0].toLowerCase()}
+                </div>
+                `).appendTo($(element).parent());
+              } else {
+                // console.log(error);
+                return showDialog(error);
+              }
+            });
+          } else {
+            showDialog(error.responseJSON)
+          }
+          
         },
       }).always(() => {
         $('#processingLoader').addClass('d-none')
@@ -245,6 +251,10 @@
           <input type="text" name="absentrado[]"  data-current-value="" class="form-control  absentrado-lookup-${index}" value="">
         </td>
         <td>
+          <input type="hidden" name="jeniskendaraan_id[]" value="">
+          <input type="text" name="jeniskendaraan[]"  data-current-value="" id="jeniskendaraan-${index}" class="form-control  jeniskendaraan-lookup-${index}" value="">
+        </td>
+        <td>
           <input type="text" class="form-control autonumeric" name="jlhtrip[]" value="${detail.jlhtrip}" disabled></input>
           <input type="text" class="form-control inputmask-time" hidden name="jam[]" value="${detail.jam}"></input>
         </td>
@@ -277,6 +287,15 @@
       if (detail.absentrado) {
         detailRow.find(`[name="absentrado[]"]`).val(detail.absentrado)
         detailRow.find(`[name="absentrado[]"]`).attr("data-current-value", detail.absentrado);
+      }
+      if (detail.statusjeniskendaraan) {
+        detailRow.find(`[name="jeniskendaraan_id[]"]`).val(detail.statusjeniskendaraan)
+        detailRow.find(`[name="jeniskendaraan[]"]`).val(detail.statusjeniskendaraannama)
+        detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", detail.statusjeniskendaraannama);
+      }else{
+        detailRow.find(`[name="jeniskendaraan_id[]"]`).val(data.attributes.defaultJenis.id)
+        detailRow.find(`[name="jeniskendaraan[]"]`).val(data.attributes.defaultJenis.text)
+        detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", data.attributes.defaultJenis.text);
       }
       // console.log(response.attributes.tradosupir);
       initLookupDetail(index, detailRow, detail);
@@ -313,6 +332,7 @@
       supir_id: ( $(rowElement).find(`[name="supir_id[]"]`).val() != "null") ? $(rowElement).find(`[name="supir_id[]"]`).val() : 0,
       supirold_id: ( $(rowElement).find(`[name="supirold_id[]"]`).val() != "null") ? $(rowElement).find(`[name="supirold_id[]"]`).val() : 0,
       absen_id: ( $(rowElement).find(`[name="absen_id[]"]`).val() != "null") ? $(rowElement).find(`[name="absen_id[]"]`).val() : 0,
+      statusjeniskendaraan: ( $(rowElement).find(`[name="jeniskendaraan_id[]"]`).val() != "null") ? $(rowElement).find(`[name="jeniskendaraan_id[]"]`).val() : 0,
       kodetrado: ( $(rowElement).find(`[name="kodetrado[]"]`).val() != 'null') ? $(rowElement).find(`[name="kodetrado[]"]`).val() :"",
       namasupir: ( $(rowElement).find(`[name="namasupir[]"]`).val() != 'null') ? $(rowElement).find(`[name="namasupir[]"]`).val() :"",
       namasupir_old: ( $(rowElement).find(`[name="namasupir_old[]"]`).val() )? $(rowElement).find(`[name="namasupir_old[]"]`).val() :"",
@@ -498,6 +518,40 @@
         setSupirEnableIndex(false, index)
       }
     })
+    $(`.jeniskendaraan-lookup-${rowLookup}`).last().lookupMaster({
+      title: 'Jenis Kendaraan',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS JENIS KENDARAAN',
+          subgrp: 'STATUS JENIS KENDARAAN',
+          searching: 1,
+          valueName: `jeniskendaraan_id`,
+          searchText: `jeniskendaraan-${index}`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'JENIS KENDARAAN'
+        };
+      },
+      onSelectRow: (status, element) => {
+        element.parents('td').find(`[name="jeniskendaraan_id[]"]`).val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="jeniskendaraan_id[]"]`).val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    
   }
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
@@ -515,6 +569,7 @@
 
     }
   }
+
 </script>
 @endpush()
 @endsection

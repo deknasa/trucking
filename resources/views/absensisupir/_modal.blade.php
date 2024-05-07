@@ -46,7 +46,7 @@
                 <div class="card" style="max-height:500px; overflow-y: scroll;">
                   <div class="card-body">
                     <!-- <div class="table-responsive"> -->
-                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800px;">
+                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px;">
                       <thead>
                         <tr>
                           <th width="2%">No</th>
@@ -54,8 +54,9 @@
                           <th width="6%">supir serap</th>
                           <th width="12%">Supir</th>
                           <th width="10%" class="uangjalan">Uang Jalan</th>
-                          <th width="25%">Keterangan</th>
-                          <th width="15%">Status</th>
+                          <th width="20%">Keterangan</th>
+                          <th width="12%">jenis kendaraan</th>
+                          <th width="12%">Status</th>
                           <th width="6%">jlh trip</th>
                           <th width="9%">tgl batas</th>
                           {{-- <th width="2%">Aksi</th> --}}
@@ -751,6 +752,10 @@
                 <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
               </td>
               <td>
+                <input type="hidden" name="statusjeniskendaraan[]" value="">
+                <input type="text" name="jeniskendaraan[]"  data-current-value="" id="jeniskendaraan-${index}" class="form-control  jeniskendaraan-lookup" value="">
+              </td>
+              <td>
                 <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
                 <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
               </td>
@@ -768,6 +773,15 @@
             `)
 
             detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+            if (detail.statusjeniskendaraan) {
+              detailRow.find(`[name="statusjeniskendaraan[]"]`).val(detail.statusjeniskendaraan)
+              detailRow.find(`[name="jeniskendaraan[]"]`).val(detail.statusjeniskendaraannama)
+              detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", detail.statusjeniskendaraannama);
+            }else{
+              detailRow.find(`[name="statusjeniskendaraan[]"]`).val(data.attributes.defaultJenis.id)
+              detailRow.find(`[name="jeniskendaraan[]"]`).val(data.attributes.defaultJenis.text)
+              detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", data.attributes.defaultJenis.text);
+            }
             // getabsentrado(detail.absen_id).then((response) => {
             //       setSupirEnableIndex(response, index)
             //     }).catch(() => {
@@ -861,6 +875,38 @@
                 setSupirEnableIndex(false, index)
               }
             })
+            $(`.jeniskendaraan-lookup`).last().lookupMaster({
+              title: 'Jenis Kendaraan',
+              fileName: 'parameterMaster',
+              typeSearch: 'ALL',
+              searching: 1,
+              beforeProcess: function() {
+                this.postData = {
+                  url: `${apiUrl}parameter/combo`,
+                  grp: 'STATUS JENIS KENDARAAN',
+                  subgrp: 'STATUS JENIS KENDARAAN',
+                  searching: 1,
+                  valueName: `jeniskendaraan_id`,
+                  searchText: `jeniskendaraan-${index}`,
+                  singleColumn: true,
+                  hideLabel: true,
+                  title: 'JENIS KENDARAAN'
+                };
+              },
+              onSelectRow: (status, element) => {
+                element.parents('td').find(`[name="jeniskendaraan_id[]"]`).val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'));
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="jeniskendaraan_id[]"]`).val('')
+                element.val('');
+                element.data('currentValue', element.val());
+              },
+            });
             if (detail.berlaku == 0) {
               $('.absentrado-lookup').last().parents('td').children().find('input').attr('disabled', true)
               $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
