@@ -295,7 +295,9 @@ use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\LaporanArusDanaPusatController;
+use App\Http\Controllers\TarifTangkiController;
 use App\Http\Controllers\TripTangkiController;
+use App\Http\Controllers\UpahSupirTangkiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1749,6 +1751,16 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('triptangki/report', [TripTangkiController::class, 'report'])->name('triptangki.report');
     Route::get('triptangki/index', [TripTangkiController::class, 'index']);
     Route::resource('triptangki', TripTangkiController::class);
+
+    Route::get('tariftangki/export', [TarifTangkiController::class, 'export'])->name('tariftangki.export');
+    Route::get('tariftangki/report', [TarifTangkiController::class, 'report'])->name('tariftangki.report');
+    Route::get('tariftangki/index', [TarifTangkiController::class, 'index']);
+    Route::resource('tariftangki', TarifTangkiController::class);
+
+    Route::get('upahsupirtangki/export', [UpahSupirTangkiController::class, 'export'])->name('upahsupirtangki.export');
+    Route::get('upahsupirtangki/report', [UpahSupirTangkiController::class, 'report'])->name('upahsupirtangki.report');
+    Route::get('upahsupirtangki/index', [UpahSupirTangkiController::class, 'index']);
+    Route::resource('upahsupirtangki', UpahSupirTangkiController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

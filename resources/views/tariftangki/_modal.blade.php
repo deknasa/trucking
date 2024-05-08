@@ -21,18 +21,6 @@
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div> -->
-
-            <div class="row form-group jenisorder">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  JENIS ORDER </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
-              </div>
-            </div>
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -52,8 +40,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="upah_id">
-                <input type="text" name="upah" id="upah" class="form-control upahsupir-lookup">
+                <input type="hidden" name="upahsupirtangki_id">
+                <input type="text" name="upahsupirtangki" id="upah" class="form-control upahsupir-lookup">
               </div>
             </div>
 
@@ -123,17 +111,7 @@
                 <input type="text" name="penyesuaian" class="form-control">
               </div>
             </div>
-            {{-- <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  CONTAINER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="container_id">
-                <input type="text" name="container" class="form-control container-lookup">
-              </div>
-            </div>
-             <div class="row form-group">
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   NOMINAL <span class="text-danger">*</span>
@@ -142,7 +120,7 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="nominal" class="form-control text-right">
               </div>
-            </div>--}}
+            </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -154,38 +132,34 @@
                   <option value="">-- PILIH STATUS AKTIF --</option>
 
                 </select>
-                <!-- <input type="hidden" name="statusaktif_id" class="filled-row">
-                <input type="text" name="statusaktif_name" id="statusaktif_name" class="form-control lg-form statusaktif-lookup filled-row" autocomplete="off"> -->
-
               </div>
             </div>
-            <div class="row form-group statussistemton">
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  SISTEM TON <span class="text-danger">*</span>
+                  STATUS PENYESUAIAN HARGA <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH SISTEM TON --</option>
+                <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS PENYESUAIAN HARGA --</option>
 
                 </select>
-
-                <!-- <input type="hidden" name="statussistemton_id" class="filled-row">
-                <input type="text" name="statussistemton_name" id="statussistemton_name" class="form-control lg-form statussistemton-lookup filled-row" autocomplete="off"> -->
-
               </div>
             </div>
-            {{-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+            
+            <div class="row form-group statuspostingtnl">
+              <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NOMINAL TON
-                </label>
+                  STATUS POSTING TNL <span class="text-danger">*</span></label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nominalton" class="form-control text-right">
+              <div class="col-12 col-md-10">
+                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                  <option value="">-- PILIH STATUS POSTING TNL --</option>
+
+                </select>
               </div>
-            </div>--}}
+            </div>
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -198,34 +172,6 @@
                 </div>
               </div>
             </div>
-
-            <div class="row form-group statuspostingtnl">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  STATUS POSTING TNL <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
-                  <option value="">-- PILIH STATUS POSTING TNL --</option>
-
-                </select>
-                <!-- <input type="hidden" name="statuspostingtnl_id" class="filled-row">
-                <input type="text" name="statuspostingtnl_name" id="statuspostingtnl_name" class="form-control lg-form statuspostingtnl-lookup filled-row" autocomplete="off"> -->
-
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  ZONA </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="zona_id">
-                <input type="text" name="zona" id="zona" class="form-control zona-lookup">
-              </div>
-            </div>
-
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -235,48 +181,6 @@
                 <input type="hidden" name="keterangan">
                 <input type="text" name="keterangan" class="form-control keterangan">
               </div>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:500px">
-                <thead class="table-secondary">
-                  <tr>
-                    <th width="5%">NO</th>
-                    <th width="55%">CONTAINER</th>
-                    <th width="40%">NOMINAL</th>
-                    {{-- <th width="5%">AKSI</th> --}}
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
-                  {{--<tr>
-                    <td>1</td>
-                    <td>
-                      <input type="hidden" name="container_id[]">
-                      <input type="text" name="container[]" class="form-control container-lookup">
-                    </td>
-                    <td>
-                      <input type="text" name="nominal[]" class="form-control autonumeric">
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                    </td> 
-                  </tr>--}}
-                </tbody>
-                <tfoot>
-                  <tr style="display: none;">
-                    <td colspan="2">
-                      <p class="text-right font-weight-bold"></p>
-                    </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="nominal"></p>
-                    </td>
-
-                    {{-- <td>
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
-                    </td> --}}
-                  </tr>
-                </tfoot>
-              </table>
             </div>
           </div>
           <div class="modal-footer justify-content-start">
@@ -337,8 +241,8 @@
       let formData = data
 
 
-      $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      $('#crudForm').find(`[name="nominal"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[index])
       })
 
       if (aksiEdit == false) {
@@ -393,20 +297,20 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}tarif`
+          url = `${apiUrl}tariftangki`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}tarif/${tarifId}`
+          url = `${apiUrl}tariftangki/${tarifId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}tarif/${tarifId}`
+          url = `${apiUrl}tariftangki/${tarifId}`
 
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}tarif`
+          url = `${apiUrl}tariftangki`
           break;
       }
 
@@ -497,7 +401,7 @@
       data: {
         id: id,
         aksi: 'BATAL',
-        table: 'tarif'
+        table: 'tariftangki'
 
       },
       success: response => {
@@ -516,7 +420,7 @@
     })
   }
 
-  function createTarif() {
+  function createTarifTangki() {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -528,18 +432,15 @@
   `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Add Tarif')
+    $('#crudModalTitle').text('Add Tarif Tangki')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setUpRow()
-
     Promise
       .all([
         setStatusAktifOptions(form),
-        // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
+        setStatusPenyesuaianHargaOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
@@ -557,15 +458,15 @@
           })
       })
 
-    initAutoNumeric(form.find(`[name="nominal[]"]`), {
+    initAutoNumeric(form.find(`[name="nominal"]`), {
       minimumValue: 0
     })
-    initAutoNumeric(form.find(`[name="nominalton"]`), {
-      minimumValue: 0
-    })
+    // initAutoNumeric(form.find(`[name="nominalton"]`), {
+    //   minimumValue: 0
+    // })
   }
 
-  function editTarif(tarifId) {
+  function editTarifTangki(tarifId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -577,21 +478,20 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Tarif')
+    $('#crudModalTitle').text('Edit Tarif Tangki')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
+        setStatusPenyesuaianHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
       ])
       .then(() => {
-        showTarif(form, tarifId)
+        showTarifTangki(form, tarifId)
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -607,7 +507,6 @@
               // })
 
               statusAktif = form.find(`[name="statusaktif"]`).val()
-              statusSistemTon = form.find(`[name="statussistemton"]`).val()
               statusPenyesuaianHarga = form.find(`[name="statuspenyesuaianharga"]`).val()
               $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
               let name = $('#crudForm').find(`[name]`).parents('.input-group')
@@ -615,7 +514,6 @@
               name.children().find('.lookup-toggler').attr('disabled', true)
               console.log(form.find(`[name="statusaktif"]`).val())
               // form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
-              form.find(`[name="statussistemton"]`).prop('disabled', 'disabled')
               form.find(`[name="statuspenyesuaianharga"]`).prop('disabled', 'disabled')
               // form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
               form.find(`[name="zona"]`).prop('readonly', true)
@@ -623,7 +521,7 @@
               form.find(`[name="tujuan"]`).prop('readonly', true)
               form.find(`[name="kota"]`).prop('readonly', true)
               form.find(`[name="parent"]`).prop('readonly', true)
-              form.find(`[name="upahsupir"]`).prop('readonly', true)
+              form.find(`[name="upahsupirtangki"]`).prop('readonly', true)
             } else {
               $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
@@ -653,7 +551,7 @@
       })
   }
 
-  function deleteTarif(tarifId) {
+  function deleteTarifTangki(tarifId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -665,21 +563,20 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Tarif')
+    $('#crudModalTitle').text('Delete Tarif Tangki')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
+        setStatusPenyesuaianHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
       ])
       .then(() => {
-        showTarif(form, tarifId)
+        showTarifTangki(form, tarifId)
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -698,7 +595,7 @@
       })
   }
 
-  function viewTarif(tarifId) {
+  function viewTarifTangki(tarifId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -710,21 +607,20 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Tarif')
+    $('#crudModalTitle').text('View Tarif Tangki')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
+        setStatusPenyesuaianHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
       ])
       .then(() => {
-        showTarif(form, tarifId)
+        showTarifTangki(form, tarifId)
           .then(SuratPengantarApprovalInputTripId => {
             form.find('[name]').removeAttr('disabled')
             form.find('select').each((index, select) => {
@@ -802,7 +698,7 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}tarif/field_length`,
+          url: `${apiUrl}tariftangki/field_length`,
           method: 'GET',
           dataType: 'JSON',
           headers: {
@@ -1001,11 +897,11 @@
     })
   }
 
-  function showTarif(form, tarifId, parent = false) {
+  function showTarifTangki(form, tarifId, parent = false) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
       $.ajax({
-        url: `${apiUrl}tarif/${tarifId}`,
+        url: `${apiUrl}tariftangki/${tarifId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -1016,16 +912,14 @@
             delete response.data['id'];
             delete response.data['parent_id'];
             delete response.data['parent'];
-            delete response.data['upah_id'];
-            delete response.data['upah'];
+            delete response.data['upahsupirtangki_id'];
+            delete response.data['upahsupirtangki'];
             delete response.data['dari'];
             delete response.data['sampai'];
             delete response.data['penyesuaianupah'];
             delete response.data['penyesuaian'];
             delete response.data['statuspostingtnl'];
             delete response.data['tglmulaiberlaku'];
-            delete response.data['jenisorder_id'];
-            delete response.data['jenisorder'];
           }
 
           $.each(response.data, (index, value) => {
@@ -1042,13 +936,10 @@
             if (index == 'kota') {
               element.data('current-value', value)
             }
-            if (index == 'zona') {
-              element.data('current-value', value)
-            }
             if (index == 'parent') {
               element.data('current-value', value)
             }
-            if (index == 'upahsupir') {
+            if (index == 'upahsupirtangki') {
               element.data('current-value', value)
             }
             if (!parent) {
@@ -1058,48 +949,13 @@
               }
             }
           })
+          initAutoNumeric(form.find(`[name="nominal"]`), {
+            minimumValue: 0
+          })
 
           if (parent) {
             $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change')
           }
-          if (!parent) {
-            $('#detailList tbody').html('')
-            $.each(response.detail, (index, detail) => {
-              // $.each(response.data.upahsupir_rincian, (index, detail) => {
-              let detailRow = $(`
-                <tr>
-                  <td></td>
-                  
-                  
-                  <input type="hidden" name="detail_id[]" value="${detail.id}">
-                  <td>
-                    <input type="hidden" name="container_id[]">
-                    <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control " readonly>
-                  </td>
-                  <td>
-                    <input type="text" name="nominal[]" class="form-control autonumeric">
-                  </td>
-                  
-                </tr>
-              `)
-
-              detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-              detailRow.find(`[name="container[]"]`).val(detail.container)
-              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-
-              $('#detailList tbody').append(detailRow)
-
-              initAutoNumeric(detailRow.find('.autonumeric'), {
-                minimumValue: 0
-              })
-
-            })
-          } else {
-            setUpRow()
-          }
-          // setuprowshow(userId);
-
-          setRowNumbers()
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -1271,23 +1127,14 @@
       }
     })
 
-    $('.kota-lookup').lookupMaster({
+    $('.kota-lookup').lookup({
       title: 'Kota Lookup',
-      fileName: 'kotaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kota',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kota_id',
-          searchText: 'kota-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'kota',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kota, element) => {
@@ -1374,30 +1221,21 @@
       }
     })
 
-    $('.parent-lookup').lookupMaster({
-      title: 'Tarif Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+    $('.parent-lookup').lookup({
+      title: 'Tarif Tangki Lookup',
+      fileName: 'tariftangki',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          jenisOrder: $('#crudForm [name=jenisorder]').val(),
           isParent: true,
           searching: 1,
-          valueName: 'parent_id',
-          searchText: 'parent-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'parent',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (tarif, element) => {
         let form = $('#crudForm')
-        showTarif(form, tarif.id, true)
+        showTarifTangki(form, tarif.id, true)
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
         $('#crudForm [name=parent_id]').first().val(tarif.id)
@@ -1411,28 +1249,18 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.upahsupir-lookup').lookupMaster({
-      title: 'Upah Supir Lookup',
-      fileName: 'upahsupirMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+    $('.upahsupir-lookup').lookup({
+      title: 'upah supir tangki Lookup',
+      fileName: 'upahsupirtangki',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'upahsupir_id',
-          searchText: 'upahsupir-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'upahsupir',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (upahsupir, element) => {
-        $('#crudForm [name=upah_id]').val(upahsupir.id)
+        $('#crudForm [name=upahsupirtangki_id]').val(upahsupir.id)
 
         $('#crudForm [name=penyesuaianupah]').val(upahsupir.penyesuaian)
         $('#crudForm [name=dari]').val(upahsupir.kotadari_id)
@@ -1447,7 +1275,7 @@
       },
       onClear: (element) => {
         tarifrincianId = 0
-        $('#crudForm [name=upah_id]').val('')
+        $('#crudForm [name=upahsupirtangki_id]').val('')
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
@@ -1457,7 +1285,7 @@
 
   function clearUpahSupir() {
 
-    $('#crudForm [name=upah_id]').val('')
+    $('#crudForm [name=upahsupirtangki_id]').val('')
     $('#crudForm [name=upah]').data('currentValue', '')
     $('#crudForm [name=dari_id]').val('')
     $('#crudForm [name=sampai_id]').val('')
@@ -1596,7 +1424,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}tarif/default`,
+        url: `${apiUrl}tariftangki/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -1632,7 +1460,7 @@
     $('#processingLoader').removeClass('d-none')
 
     $.ajax({
-      url: `${apiUrl}tarif/approvalnonaktif`,
+      url: `${apiUrl}tariftangki/approvalnonaktif`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
@@ -1671,7 +1499,7 @@
 
   function cekValidasidelete(Id, aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}tarif/${Id}/cekValidasi`,
+      url: `{{ config('app.api_url') }}tariftangki/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -1686,19 +1514,19 @@
           if (!response.editblok) {
             if (aksi == 'EDIT') {
               aksiEdit = false
-              editTarif(selectedId)
+              editTarifTangki(selectedId)
             } else {
-              showDialog(response.message['keterangan'])
+              showDialog(response.message)
             }
           } else {
-            showDialog(response.message['keterangan'])
+            showDialog(response.message)
           }
         } else {
           if (aksi == 'EDIT') {
             aksiEdit = true
-            editTarif(selectedId)
+            editTarifTangki(selectedId)
           } else {
-            deleteTarif(selectedId)
+            deleteTarifTangki(selectedId)
           }
         }
 
