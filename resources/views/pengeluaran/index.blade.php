@@ -61,6 +61,7 @@
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
+  let activeGrid 
   let limit
   let postData
   let sortname = 'nobukti'
