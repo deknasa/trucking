@@ -600,7 +600,10 @@
                 name: 'limit',
                 value: limit
             })
-
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'tgldariheader',
                 value: $('#tgldariheader').val()
