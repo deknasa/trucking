@@ -404,21 +404,28 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('kerusakan', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('kerusakan', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('kerusakan', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('kerusakan', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('kerusakan', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('kerusakan', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('kerusakan', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
             if (!`{{ $myAuth->hasPermission('kerusakan', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }

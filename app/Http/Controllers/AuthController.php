@@ -93,6 +93,7 @@ class AuthController extends MyController
         // Auth::user()
 
         $parametercabang = DB::table('parameter')->where('grp', 'CABANG')->where('subgrp', 'CABANG')->first();
+        $parametertnl = DB::table('parameter')->where('grp', 'TNL')->where('subgrp', 'TNL')->first();
         // dd($parametercabang->text);
 
         if (Auth::attempt($credentials)) {
@@ -226,6 +227,7 @@ class AuthController extends MyController
             session(['access_token' => $token['access_token']]);
             session(['access_token_tnl' => $tokenTNL]);
             session(['cabang' =>  $parametercabang->text]);
+            session(['tnl' =>  $parametertnl->text]);
 
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);

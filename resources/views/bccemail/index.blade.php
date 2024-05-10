@@ -478,21 +478,28 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('bccemail', 'store') }}`) {
+      if (cabangTnl == 'YA') {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('bccemail', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
+        $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('bccemail', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('bccemail', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('bccemail', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
       }
 
       if (!`{{ $myAuth->hasPermission('bccemail', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('bccemail', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
 
       if (!`{{ $myAuth->hasPermission('bccemail', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')

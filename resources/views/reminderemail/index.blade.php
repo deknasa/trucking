@@ -408,21 +408,28 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('reminderemail', 'store') }}`) {
+      if (cabangTnl == 'YA') {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('reminderemail', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
+        $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('reminderemail', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('reminderemail', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('reminderemail', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
       }
 
       if (!`{{ $myAuth->hasPermission('reminderemail', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('reminderemail', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
 
       if (!`{{ $myAuth->hasPermission('reminderemail', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')

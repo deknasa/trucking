@@ -444,21 +444,28 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('gandengan', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('gandengan', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('gandengan', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('gandengan', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('gandengan', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('gandengan', 'store') }}`) {
-                $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('gandengan', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('gandengan', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')

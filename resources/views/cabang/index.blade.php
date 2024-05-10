@@ -381,7 +381,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId,'edit')
+                                cekValidasi(selectedId, 'edit')
                             }
                         }
                     },
@@ -394,7 +394,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId,'delete')
+                                cekValidasi(selectedId, 'delete')
                             }
                         }
                     },
@@ -451,7 +451,7 @@
                             id: 'approvalKoneksi',
                             text: ' UN/APPROVAL KONEKSI',
                             onClick: () => {
-                                var selectedOne = selectedOnlyOne();                            
+                                var selectedOne = selectedOnlyOne();
                                 if (selectedOne[0]) {
                                     approvalKoneksi(selectedOne[1])
                                 } else {
@@ -498,19 +498,28 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
+
             }
+
             if (!`{{ $myAuth->hasPermission('cabang', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-            if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('cabang', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
@@ -585,10 +594,10 @@
                         msg = `YAKIN SET KONEKSI MENJADI OFFLINE `
                     }
                     showConfirm(msg, response.data.namacabang, `cabang/${response.data.id}/approvalkonensi`)
-                    .then(()=>{
-                        selectedRows = []
-                        $('#gs_').prop('checked', false)
-                    })
+                        .then(() => {
+                            selectedRows = []
+                            $('#gs_').prop('checked', false)
+                        })
                 },
             })
         }

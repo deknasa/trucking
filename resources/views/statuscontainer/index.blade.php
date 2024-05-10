@@ -325,7 +325,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId,'edit')
+                                cekValidasi(selectedId, 'edit')
                             }
                         }
                     },
@@ -338,7 +338,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId,'delete')
+                                cekValidasi(selectedId, 'delete')
                             }
                         }
                     },
@@ -416,21 +416,28 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('statuscontainer', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('statuscontainer', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('statuscontainer', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('statuscontainer', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('statuscontainer', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('statuscontainer', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('statuscontainer', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('statuscontainer', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')

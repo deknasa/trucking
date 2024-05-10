@@ -432,6 +432,7 @@
     var pleaseSelectARow;
     let isAllowedForceEdit = false
     let accessCabang = `{{ session('cabang') }}`
+    let cabangTnl = `{{ session('tnl') }}`
 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));

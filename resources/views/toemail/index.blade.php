@@ -473,16 +473,22 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('toemail', 'store') }}`) {
+      if (cabangTnl == 'YA') {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('toemail', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('toemail', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('toemail', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('toemail', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('toemail', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
       }
 
       if (!`{{ $myAuth->hasPermission('toemail', 'export') }}`) {
