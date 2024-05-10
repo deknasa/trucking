@@ -199,10 +199,13 @@
   var kodecontainer
   var isAllowEdited;
   let orderemklshipper
+  var jenisKendaraanTangki;
+
 
   $(document).ready(function() {
     $("#crudForm [name]").attr("autocomplete", "off");
     var orederan_id;
+    getStatusJenisKendaraan()
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -828,6 +831,36 @@
     })
   }
 
+  function getStatusJenisKendaraan() {
+    $.ajax({
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
+            "field": "grp",
+            "op": "cn",
+            "data": "STATUS JENIS KENDARAAN"
+          }, {
+            "field": "text",
+            "op": "cn",
+            "data": "TANGKI"
+          }]
+        })
+      },
+      success: response => {
+        jenisKendaraanTangki = response.data[0].id;
+      }
+    })
+    }
+    
+
   function showOrderanTrucking(form, orderanTruckingId) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -878,6 +911,16 @@
               getagentas(form, value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
             }
           })
+          if (jenisKendaraanTangki == response.data.statusjeniskendaraan) {
+            let container = $('#crudForm').find(`[name="container"]`).parents('.form-group').hide()
+            let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.form-group').hide()
+            let nojobemkl = $('#crudForm').find(`[name="nojobemkl"]`).parents('.form-group').hide()
+            let nocont = $('#crudForm').find(`[name="nocont"]`).parents('.form-group').hide()
+            let noseal = $('#crudForm').find(`[name="noseal"]`).parents('.form-group').hide()
+            let nojobemkl2 = $('#crudForm').find(`[name="nojobemkl2"]`).parents('.form-group').hide()
+            let nocont2 = $('#crudForm').find(`[name="nocont2"]`).parents('.form-group').hide()
+            let noseal2 = $('#crudForm').find(`[name="noseal2"]`).parents('.form-group').hide()
+          }
 
           orderemklshipper = response.orderemklshipper
           if (form.data('action') === 'delete') {
