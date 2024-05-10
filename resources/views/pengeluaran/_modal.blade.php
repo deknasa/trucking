@@ -130,8 +130,8 @@
                       <th style="width: 180px; min-width: 180px;">Nominal</th>
                       <th style="width: 180px; min-width: 180px;">No warkat</th>
                       <th style="width: 150px; min-width: 150px;">Tgl jatuh tempo</th>
-                      <th style="width: 210px; min-width: 210px;">No Invoice</th>
-                      <th style="width: 210px; min-width: 210px;">Bank</th>
+                      <th class="tbl_noinvoice" style="width: 210px; min-width: 210px;">No Invoice</th>
+                      <th class="tbl_bank" style="width: 210px; min-width: 210px;">Bank</th>
                       <th style="width: 10px; min-width: 10px;" class="aksiBmt tbl_aksi">Aksi</th>
                     </tr>
                   </thead>
@@ -141,13 +141,13 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colspan="3">
+                      <td colspan="3" id="colspan-1">
                         <p class="text-right font-weight-bold">TOTAL :</p>
                       </td>
                       <td>
                         <p class="text-right font-weight-bold autonumeric" id="total"></p>
                       </td>
-                      <td colspan="4"></td>
+                      <td colspan="4" id="colspan-2"></td>
                       <td class="aksiBmt tbl_aksi">
                         <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                       </td>
@@ -442,6 +442,7 @@
       form.find('#btnSaveAdd').hide()
     }
     getMaxLength(form)
+    isCabangPusat()
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
@@ -1060,10 +1061,10 @@
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                       </div>
                   </td>
-                  <td>
+                  <td class="tbl_noinvoice">
                       <input type="text" name="noinvoice[]" class="form-control">
                   </td>
-                  <td>
+                  <td class="tbl_bank">
                       <input type="text" name="bank_detail[]" class="form-control">
                   </td>
                   <td class="tbl_aksi">
@@ -1156,12 +1157,12 @@
             <input type="text" name="tgljatuhtempo[]" class="form-control">   
           </div>
         </td>
-        <td>
+        <td class="tbl_noinvoice">
           <div class="input-group">
             <input type="text" name="noinvoice[]" class="form-control">   
           </div>
         </td>
-        <td>
+        <td class="tbl_bank">
           <div class="input-group">
             <input type="text" name="bank_detail[]" class="form-control">   
           </div>
@@ -1333,6 +1334,41 @@
     }
   }
 
+  function isCabangPusat() {
+    let data = [];
+    data.push({
+        name: 'grp',
+        value: 'CABANG'
+    })
+    data.push({
+        name: 'subgrp',
+        value: 'CABANG'
+    })
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data : data,
+      success: response => {
+        
+        if (response.text == 'PUSAT') {;
+          $('.tbl_noinvoice').hide();
+          $('.tbl_bank').hide();
+          $('#colspan-2').attr('colspan', 2);
+        }else{
+          $('.tbl_noinvoice').show();
+          $('.tbl_bank').show();
+          $('#colspan-2').attr('colspan', 4);
+        }
+    
+          
+      }
+    })
+  }
+
   function initLookup() {
 
     $('.pelanggan-lookup').lookup({
@@ -1488,10 +1524,10 @@
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                       </div>
                   </td>
-                  <td>
+                  <td class="tbl_noinvoice">
                       <input type="text" name="noinvoice[]" class="form-control">
                   </td>
-                  <td>
+                  <td class="tbl_bank">
                       <input type="text" name="bank_detail[]" class="form-control">
                   </td>
               </tr>
