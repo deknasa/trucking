@@ -204,7 +204,6 @@
 
   function loadDataTidakLengkap(id) {
     abortGridLastRequest($('#dataTidakLengkapGrid'))
-    console.log('asda');
     $('#dataTidakLengkapGrid').setGridParam({
       url: `${apiUrl}absensisupirdetail`,
       datatype: "json",
