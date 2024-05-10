@@ -326,7 +326,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId,'edit')
+                                cekValidasi(selectedId, 'edit')
                             }
                         }
                     },
@@ -339,7 +339,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId,'delete')
+                                cekValidasi(selectedId, 'delete')
                             }
                         }
                     },
@@ -416,21 +416,29 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('mandor', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('mandor', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('mandor', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('mandor', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('mandor', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('mandor', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('mandor', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
             if (!`{{ $myAuth->hasPermission('mandor', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }

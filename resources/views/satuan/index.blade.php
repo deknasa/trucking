@@ -77,8 +77,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [
-                    {
+                colModel: [{
                         label: '',
                         name: '',
                         width: 30,
@@ -366,9 +365,9 @@
                         innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
                         class: 'btn btn-purple btn-sm mr-1',
                         onClick: () => {
-    
+
                             approvalNonAktif('satuan')
-    
+
                         }
                     },
                 ]
@@ -402,18 +401,24 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('satuan', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('satuan', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
 
-            // if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
+                // if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
                 if ((!`{{ $myAuth->hasPermission('satuan', 'update') }}`) && (!`{{ $myAuth->hasPermission('satuan', 'updateuser') }}`)) {
 
-                $('#edit').attr('disabled', 'disabled')
-            }
+                    $('#edit').attr('disabled', 'disabled')
+                }
 
-            if (!`{{ $myAuth->hasPermission('satuan', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
+                if (!`{{ $myAuth->hasPermission('satuan', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
             if (!`{{ $myAuth->hasPermission('satuan', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
