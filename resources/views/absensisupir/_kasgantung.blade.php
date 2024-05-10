@@ -139,11 +139,15 @@
     loadGlobalSearch($('#kasgantungGrid'))
   }
 
-  function loadKasGantungData(nobukti) {
+  function loadKasGantungData(nobukti,absensiTangki) {
     abortGridLastRequest($('#kasgantungGrid'))
 
+    let url = `${apiUrl}kasgantungdetail/getKasgantung`
+    if (absensiTangki) {
+      url = `${apiUrl}absensisupirproses/get`
+    }
     $('#kasgantungGrid').setGridParam({
-      url: `${apiUrl}kasgantungdetail/getKasgantung`,
+      url: url,
       datatype: "json",
       postData: {
         nobukti: nobukti

@@ -39,8 +39,8 @@
 @include('absensisupirapprovalheader._modal')
 <!-- Detail -->
 @include('absensisupirapprovalheader._detail')
-@include('pengeluaran._pengeluaran')
-@include('jurnalumum._jurnal')
+@include('absensisupirapprovalheader._pengeluaran')
+@include('absensisupirapprovalheader._jurnal')
 
 @push('scripts')
 <script>
@@ -54,6 +54,7 @@
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
+  let absensiTangki;
   let limit
   let postData
   let sortname = 'nobukti'
@@ -136,6 +137,7 @@
   $(document).ready(function() {
     $("#tabs").tabs()
 
+    isAbsensiTangki()
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)
@@ -377,6 +379,19 @@
           {
             label: 'NO BUKTI pengeluaran',
             width: 210,
+            name: 'pengeluaran',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return rowData.pengeluaran_url
+            }
+          },
+          {
+            label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
@@ -496,8 +511,12 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
-          loadPengeluaranData(id, nobukti)
-          loadJurnalUmumData(id, nobukti)
+          let referen = nobukti
+          if (absensiTangki) {
+            referen = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+          }
+          loadPengeluaranData(id,referen,absensiTangki)
+          loadJurnalUmumData(id, referen,absensiTangki)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -886,6 +905,40 @@
     //   })
     // })
   })
+  const isAbsensiTangki = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'ABSENSI TANGKI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'ABSENSI TANGKI'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.text == "YA") {
+            $("#jqGrid").jqGrid('showCol', 'pengeluaran');
+            $("#jqGrid").jqGrid('hideCol', 'pengeluaran_nobukti')
+            absensiTangki = true;
+          }else{
+            $("#jqGrid").jqGrid('showCol', 'pengeluaran_nobukti');
+            $("#jqGrid").jqGrid('hideCol', 'pengeluaran')
+            absensiTangki = false;
+          }
+        }
+      })
+    })
+  }
+  
 </script>
 @endpush()
 @endsection

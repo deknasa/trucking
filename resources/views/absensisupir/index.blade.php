@@ -68,6 +68,7 @@
   var statusTidakBisaEdit;
   let approveEditRequest = null;
   let showKasgantung = true;
+  let absensiTangki;
   let tgldariheader
   let tglsampaiheader
   let isTradoMilikSupir = ''
@@ -148,6 +149,7 @@
 
     $("#tabs").tabs()
     setTampilanIndex()
+    isAbsensiTangki()
     loadDetailGrid()
     loadDataTidakLengkapGrid()
     loadRekapAbsenTradoGrid()
@@ -282,6 +284,18 @@
             formatter: 'date',
             formatoptions: {
               newformat: 'd-m-Y'
+            }
+          },
+          {
+            label: 'NO BUKTI KGT',
+            name: 'kasgantung',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return rowData.kasgantung_url
             }
           },
           {
@@ -570,7 +584,6 @@
         },
         // perubahan
         onSelectRow: onSelectRowFunction =function(id) {
-          console.log($(this));
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_kasgantung_nobukti"]`).attr('title') ?? '';
 
           activeGrid = grid
@@ -584,7 +597,11 @@
           loadDataTidakLengkap(id)
           loadRekapAbsenTradoData(id)
           if (showKasgantung) {
-            loadKasGantungData(nobukti)
+            let referen = nobukti
+            if (absensiTangki) {
+              referen = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+            }
+            loadKasGantungData(referen,absensiTangki)
           }
         },
         loadComplete: function(data) {
@@ -1133,6 +1150,42 @@
             });
             showKasgantung = false;
           }
+
+        }
+      })
+    })
+  }
+
+  const isAbsensiTangki = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'ABSENSI TANGKI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'ABSENSI TANGKI'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.text == "YA") {
+            $("#jqGrid").jqGrid('showCol', 'kasgantung');
+            $("#jqGrid").jqGrid('hideCol', 'kasgantung_nobukti')
+            absensiTangki = true;
+          }else{
+            $("#jqGrid").jqGrid('showCol', 'kasgantung_nobukti');
+            $("#jqGrid").jqGrid('hideCol', 'kasgantung')
+            absensiTangki = false;
+          }
+            
 
         }
       })
