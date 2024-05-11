@@ -567,7 +567,7 @@
               if (selectedRows.length > 0) {
                 clearSelectedRows()
               }
-              $('#crudModal').modal('show')
+              $('#crudModal').modal('show')                            
               addRow()
               enableTglJatuhTempo(form)
             })
@@ -1358,6 +1358,9 @@
           $('.tbl_noinvoice').hide();
           $('.tbl_bank').hide();
           $('#colspan-2').attr('colspan', 2);
+          $('#detailList').css({
+                  width: '1200px'
+                });
         }else{
           $('.tbl_noinvoice').show();
           $('.tbl_bank').show();
