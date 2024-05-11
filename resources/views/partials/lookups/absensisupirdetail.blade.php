@@ -22,6 +22,7 @@
         pengajuantrip_id: `{!! $pengajuantrip_id ?? '' !!}`,
         isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
         uangJalanId: `{!! $uangJalanId ?? '' !!}`,
+        statusjeniskendaraan: `{!! $statusjeniskendaraan ?? '' !!}`,
       },
       colModel: [{
           label: 'TRADO',

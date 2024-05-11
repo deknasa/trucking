@@ -33,7 +33,16 @@
                     <input type="text" name="jobtrucking" class="form-control orderantrucking-lookup">
                   </div>
                 </div>
-                <div class="form-group ">
+
+                <div class="form-group statusjeniskendaraan">
+                  <label class="col-sm-12 col-form-label">STATUS JENIS KENDARAAN <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusjeniskendaraan" class="form-control select2bs4" id="statusjeniskendaraan">
+                      <option value="">-- PILIH STATUS JENIS KENDARAAN --</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group jenissuratpengantar">
                   <label class="col-sm-12 col-form-label">JENIS SURAT PENGANTAR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statuslongtrip" class="form-control select2bs4" id="statuslongtrip">
@@ -41,7 +50,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group gudangsama">
                   <label class="col-sm-12 col-form-label">GUDANG SAMA <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusgudangsama" class="form-control select2bs4" id="statusgudangsama">
@@ -73,21 +82,21 @@
                     <input type="text" name="agen" class="form-control agen-lookup">
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group jenisorder">
                   <label class="col-sm-12 col-form-label"><em><u>JENIS ORDERAN </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="jenisorder_id">
                     <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group statuscontainer">
                   <label class="col-sm-12 col-form-label">FULL / EMPTY <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="statuscontainer_id">
                     <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group containers">
                   <label class="col-sm-12 col-form-label"><em><u>CONTAINER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
@@ -202,7 +211,7 @@
                   </div>
                 </div>
 
-                <div class="form-group ">
+                <div class="form-group gudang">
                   <label class="col-sm-12 col-form-label">GUDANG <span class="text-danger"></span></label>
                   <div class="col-sm-12">
                     <input type="text" name="gudang" class="form-control">
@@ -215,13 +224,13 @@
                     <input type="text" name="nosp" class="form-control">
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group nocont">
                   <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (1)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group noseal">
                   <label class="col-sm-12 col-form-label"><em><u>NO SEAL (1)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal" class="form-control" readonly>
@@ -230,7 +239,7 @@
               </div>
               <div class="col-md-4">
 
-                <div class="col-md-12">
+                <div class="col-md-12 statusperalihan">
                   <div class="card mt-3">
                     <div class="card-header bg-info">
                     </div>
@@ -265,25 +274,25 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group nocont2">
                   <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (2)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont2" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group noseal2">
                   <label class="col-sm-12 col-form-label"><em><u>NO SEAL (2)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal2" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group nojob">
                   <label class="col-sm-12 col-form-label"><em><u>NO JOB (1)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group nojob2">
                   <label class="col-sm-12 col-form-label"><em><u>NO JOB (2)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob2" class="form-control" readonly>
@@ -303,19 +312,25 @@
                     <input type="text" name="keterangan" class="form-control">
                   </div>
                 </div>
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">HARGA PER TON</label>
+                <div class="form-group hargaton">
+                  <label class="col-sm-12 col-form-label">HARGA PER TON (UPAH)</label>
                   <div class="col-sm-12">
                     <input type="text" name="hargaperton" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group hargaton">
+                  <label class="col-sm-12 col-form-label">HARGA PER TON (TARIF)</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="hargapertontarif" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group qtyton">
                   <label class="col-sm-12 col-form-label">QTY TON<span class="text-danger"></span></label>
                   <div class="col-sm-12">
                     <input type="text" name="qtyton" class="form-control">
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group batalmuat">
                   <label class="col-sm-12 col-form-label">BATAL MUAT<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusbatalmuat" class="form-control select2bs4" id="statusbatalmuat">
@@ -340,7 +355,7 @@
                   <div class="col-md-6">
                     BIAYA
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 masterupah">
                     MASTER
                   </div>
                 </div>
@@ -367,7 +382,7 @@
                         <input type="text" name="gajikenek" id="gajikenek" class="form-control text-right" readonly>
                       </div>
                     </div>
-                    <div class="row form-group">
+                    <div class="row form-group row-komisisupir">
                       <div class="col-12 col-md-2">
                         <label class="col-form-label">
                           KOMISI SUPIR </label>
@@ -377,7 +392,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 masterupah">
 
                     <div class="row form-group">
                       <div class="col-12 col-md-2">
@@ -494,6 +509,8 @@
   let isTripAsal = true;
   let isPulangLongtrip;
   let isGudangSama = true;
+  let statusJenisKendaran
+  let jenisKendaraan
 
   $(document).ready(function() {
     $('.nobukti_tripasal').hide()
@@ -710,6 +727,8 @@
         data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
       }
       // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
+      data.filter((row) => row.name === 'hargaperton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargaperton"]`)[0])
+      data.filter((row) => row.name === 'hargapertontarif')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
       data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
       data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
       data.filter((row) => row.name === 'komisisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="komisisupir"]`)[0])
@@ -717,6 +736,10 @@
       data.filter((row) => row.name === 'gajisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajisupir"]`)[0])
       // })
 
+      data.push({
+        name: 'statusjeniskendaraan',
+        value: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val()
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -817,6 +840,80 @@
         $(this).removeAttr('disabled')
       })
     })
+  })
+
+  $(document).on('input', `#crudForm [name="qtyton"]`, function(event) {
+    setNominalTangki()
+  })
+
+  function setNominalTangki() {
+
+    let qtyton = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
+    let hargaTon = AutoNumeric.getNumber($(`#crudForm [name="hargaperton"]`)[0])
+    let hargaTonTarif = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
+    let totalTarif = Math.round((qtyton * hargaTonTarif) / 100) * 100;
+    let totalUpah = Math.round((qtyton * hargaTon) / 100) * 100;
+
+    nominalSupir = totalUpah
+    $(`#crudForm [name="omset"]`).val(totalTarif)
+    initAutoNumeric($(`#crudForm [name="omset"]`))
+    $(`#crudForm [name="gajisupir"]`).val(totalUpah)
+    initAutoNumeric($(`#crudForm [name="gajisupir"]`))
+  }
+  $(document).on('change', `#crudForm [name="statusjeniskendaraan"]`, function(event) {
+
+    let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
+    statusJenisKendaran = statusjeniskendaraan
+    if (statusjeniskendaraan == 'TANGKI') {
+      $('.jenissuratpengantar').hide()
+      $('.gudangsama').hide()
+      $('.statuskandang').hide()
+      $('.jenisorder').hide()
+      $('.statuscontainer').hide()
+      $('.containers').hide()
+      $('.jobtrucking').hide()
+      $('.gudang').hide()
+      $('.nocont').hide()
+      $('.noseal').hide()
+      $('.statusperalihan').hide()
+      $('.nocont2').hide()
+      $('.noseal2').hide()
+      $('.nojob').hide()
+      $('.nojob2').hide()
+      $('.batalmuat').hide()
+      $('.nobukti_tripasal').hide()
+      $('.masterupah').hide()
+      $('.row-gajikenek').hide()
+      $('.row-komisisupir').hide()
+      $('.gandengan').show()
+      $('.gandengan').find('label').text('No Tangki')
+      containerId = 0
+      statuscontainerId = 0
+      jenisorderId = 0
+    }
+    if (statusjeniskendaraan == 'GANDENGAN') {
+
+      $('.jenissuratpengantar').show()
+      $('.gudangsama').show()
+      $('.statuskandang').show()
+      $('.jenisorder').show()
+      $('.statuscontainer').show()
+      $('.containers').show()
+      $('.jobtrucking').show()
+      $('.gudang').show()
+      $('.hargaton').hide()
+      $('.qtyton').hide()
+      $('.gandengan').hide()
+      $('.gandengan').find('label').text('No GANDENGAN / CHASIS')
+      let upahsupir = $('#crudForm [name=upah]')
+
+      upahsupir.val('')
+      upahsupir.data('currentValue', '')
+      $('#crudForm [name=upah_id]').val('')
+      upahsupir.attr('readonly', true)
+      upahsupir.parents('.input-group').find('.input-group-append').hide()
+      upahsupir.parents('.input-group').find('.button-clear').hide()
+    }
   })
 
   $(document).on('change', `#crudForm [name="statuslongtrip"]`, function(event) {
@@ -1013,6 +1110,7 @@
 
     Promise
       .all([
+        setStatusJenisKendaraanOptions(form),
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
@@ -1029,10 +1127,22 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            
+            jenisKendaraan = $('#crudForm').find(`[name="statusjeniskendaraan"]`).val()
+            $('#crudForm').find('[name=statusjeniskendaraan]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             inputReadOnly()
             editValidasi(isAllowEdited);
+
+            if (statusJenisKendaran == 'TANGKI') {
+
+              $('#crudForm [name=jobtrucking]').attr('readonly', true)
+              $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').hide()
+              $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
+            }
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -1061,6 +1171,7 @@
 
     Promise
       .all([
+        setStatusJenisKendaraanOptions(form),
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
@@ -1105,6 +1216,7 @@
 
     Promise
       .all([
+        setStatusJenisKendaraanOptions(form),
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
@@ -1212,7 +1324,44 @@
       })
     })
   }
+  const setStatusJenisKendaraanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusjeniskendaraan]').empty()
+      relatedForm.find('[name=statusjeniskendaraan]').append(
+        new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+      ).trigger('change')
 
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS JENIS KENDARAAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusJenisKendaraan => {
+            let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id)
+            relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
   const setStatusLongTripOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statuslongtrip]').empty()
@@ -1547,6 +1696,8 @@
           getTarifOmset(response.data.tarifrincian_id, response.data.container_id)
           // $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
           // getGaji(response.data.nominalplusborongan)
+          initAutoNumeric(form.find(`[name="hargaperton"]`))
+          initAutoNumeric(form.find(`[name="hargapertontarif"]`))
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
           initAutoNumeric(form.find(`[name="qtyton"]`))
@@ -1659,6 +1810,30 @@
           reject(error)
         }
       })
+    })
+  }
+
+  function getDataUpahSupirTangki(tarif_id) {
+    console.log('tarif_id', tarif_id)
+    $.ajax({
+      url: `${apiUrl}upahsupirtangki/getrincian`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        idtrip: $('#crudForm').find(`[name="id"]`).val(),
+        tarif_id: tarif_id,
+        upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
+      },
+      success: response => {
+        $('#crudForm').find(`[name="hargaperton"]`).val(response.data.nominalsupir)
+        initAutoNumeric($('#crudForm').find(`[name="hargaperton"]`))
+        $('#crudForm').find(`[name="hargapertontarif"]`).val(response.data.nominaltarif)
+        initAutoNumeric($('#crudForm').find(`[name="hargapertontarif"]`))
+        setNominalTangki()
+      }
     })
   }
 
@@ -1955,7 +2130,8 @@
           statuskandang_Id: $('#crudForm [name=statuskandang]').val(),
           statusUpahZona: statusUpahZona,
           tglbukti: $('#crudForm [name=tglbukti]').val(),
-          longtrip: $('#crudForm [name=statuslongtrip]').val()
+          longtrip: $('#crudForm [name=statuslongtrip]').val(),
+          statusjeniskendaraan: statusJenisKendaran
         }
       },
       onSelectRow: (upahsupir, element) => {
@@ -1987,8 +2163,13 @@
         setNominalKenek(nominalKenek, nominalKomisi)
         element.data('currentValue', element.val())
         getNominalSupir()
-        getTarifOmset(upahsupir.tarif_id, containerId)
-        getDataUpahSupir()
+        if (statusJenisKendaran == 'TANGKI') {
+          console.log('dininini', upahsupir.tarif_id)
+          getDataUpahSupirTangki(upahsupir.tarif_id)
+        } else {
+          getDataUpahSupir()
+          getTarifOmset(upahsupir.tarif_id, containerId)
+        }
         clearTripAsal()
       },
       onCancel: (element) => {
@@ -2019,6 +2200,7 @@
 
           tgltrip: $('#crudForm [name=tglbukti]').val(),
           Aktif: 'AKTIF',
+          statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val()
         }
       },
       onSelectRow: (trado, element) => {
@@ -2215,7 +2397,7 @@
         getOrderanTrucking(orderantrucking.nobukti)
         // enabledUpahSupir()
         getTarifOmset($('#crudForm [name=tarifrincian_id]').val(), orderantrucking.containerid)
-        
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2450,7 +2632,9 @@
         'Authorization': `Bearer ${accessToken}`
       },
       data: {
-        container_id: contId
+        container_id: contId,
+        statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val(),
+        idtrip: $('#crudForm [name=id]').val()
       },
       success: response => {
         if (response.dataTarif != null) {
