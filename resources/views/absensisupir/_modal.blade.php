@@ -912,6 +912,21 @@
               $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
               $('.absentrado-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
             }
+            if ( detail.pujnobukti_readonly == "readonly") {
+              $('.absentrado-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.absentrado-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+              
+              $('.jeniskendaraan-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.jeniskendaraan-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.jeniskendaraan-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+              
+              $('.uangjalan').last().attr('readonly', true)
+             
+              $('.supir-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.supir-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.supir-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+            }
           })
 
           setRowNumbers()
