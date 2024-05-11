@@ -43,7 +43,7 @@ class LaporanKasBankController extends MyController
 
         if (session('cabang') == 'PUSAT') {
             $data = $header['data'];
-            array_shift($data);
+            // array_shift($data);
         } else {
             $data = $header['data'];
         }
