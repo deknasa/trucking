@@ -2,12 +2,15 @@
 
 @push('scripts')
 <script>
- $('#upahSupirRincianLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'upahsupirrincian/get' }}`,
+  
+  jenisKendaraan = (`{!! $statusjeniskendaraan ?? '' !!}`)
+  urlUpahsupir = (jenisKendaraan == 'TANGKI') ? 'upahsupirtangki/get' : 'upahsupirrincian/get';
+  $('#upahSupirRincianLookup').jqGrid({
+      url: `{{ config('app.api_url') . '${urlUpahsupir}' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
-      datatype: "json", 
+      datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         container_id: `{!! $container_Id ?? '' !!}`,
@@ -17,117 +20,116 @@
         statusupahzona: `{!! $statusUpahZona ?? '' !!}`,
         tglbukti: `{!! $tglbukti ?? '' !!}`,
         longtrip: `{!! $longtrip ?? '' !!}`
-      }, 
+      },
       idPrefix: 'upahSupirRincianLookup',
-      colModel: [
+      colModel: [{
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
         {
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          }, 
-          {
-            label: 'upah id',
-            name: 'upah_id',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Kota dari Id',
-            name: 'kotadari_id',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Kota Sampai Id',
-            name: 'kotasampai_id',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Zona dari Id',
-            name: 'zonadari_id',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Zona Sampai Id',
-            name: 'zonasampai_id',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Tarif ID',
-            name: 'tarif_id',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Tarif',
-            name: 'tarif',
-            align: 'left'
-          },
-          {
-            label: 'DARI',
-            name: 'kotadari',
-            align: 'left'
-          },
-          {
-            label: 'TUJUAN',
-            name: 'kotasampai',
-            align: 'left'
-          },
-          {
-            label: 'PENYESUAIAN',
-            name: 'penyesuaian',
-            align: 'left'
-          },
-          {
-            label: 'ZONA DARI',
-            name: 'zonadari',
-            align: 'left'
-          },
-          {
-            label: 'ZONA SAMPAI',
-            name: 'zonasampai',
-            align: 'left'
-          },
-          {
-            label: 'JARAK',
-            name: 'jarak',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'Container',
-            name: 'container',
-            align: 'left'
-          },
-          {
-            label: 'Status Container',
-            name: 'statuscontainer',
-            align: 'left'
-          },
-          {
-            label: 'Nominal Supir',
-            name: 'nominalsupir',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'Nominal Kenek',
-            name: 'nominalkenek',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'Nominal Komisi',
-            name: 'nominalkomisi',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+          label: 'upah id',
+          name: 'upah_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Kota dari Id',
+          name: 'kotadari_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Kota Sampai Id',
+          name: 'kotasampai_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Zona dari Id',
+          name: 'zonadari_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Zona Sampai Id',
+          name: 'zonasampai_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Tarif ID',
+          name: 'tarif_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Tarif',
+          name: 'tarif',
+          align: 'left'
+        },
+        {
+          label: 'DARI',
+          name: 'kotadari',
+          align: 'left'
+        },
+        {
+          label: 'TUJUAN',
+          name: 'kotasampai',
+          align: 'left'
+        },
+        {
+          label: 'PENYESUAIAN',
+          name: 'penyesuaian',
+          align: 'left'
+        },
+        {
+          label: 'ZONA DARI',
+          name: 'zonadari',
+          align: 'left'
+        },
+        {
+          label: 'ZONA SAMPAI',
+          name: 'zonasampai',
+          align: 'left'
+        },
+        {
+          label: 'JARAK',
+          name: 'jarak',
+          align: 'right',
+          formatter: currencyFormat
+        },
+        {
+          label: 'Container',
+          name: 'container',
+          align: 'left'
+        },
+        {
+          label: 'Status Container',
+          name: 'statuscontainer',
+          align: 'left'
+        },
+        {
+          label: 'Nominal Supir',
+          name: 'nominalsupir',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'Nominal Kenek',
+          name: 'nominalkenek',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'Nominal Komisi',
+          name: 'nominalkomisi',
+          align: 'right',
+          formatter: currencyFormat,
+        },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
@@ -193,45 +195,45 @@
             return ` title="${statusAktif.MEMO}"`
           }
         },
-          {
-            label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'Kota Dari Sampai',
-            name: 'kotadarisampai',
-            align: 'left'
-          },
+        {
+          label: 'TGL MULAI BERLAKU',
+          name: 'tglmulaiberlaku',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'Kota Dari Sampai',
+          name: 'kotadarisampai',
+          align: 'left'
+        },
 
       ],
       autowidth: true,
@@ -247,7 +249,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-    //   pager: $('#upahSupirRincianLookupPager'),
+      //   pager: $('#upahSupirRincianLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -270,10 +272,20 @@
       loadBeforeSend: function(jqXHR) {
         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
 
+        jenisKendaraan = (`{!! $statusjeniskendaraan ?? '' !!}`)
+        if(jenisKendaraan == 'TANGKI'){
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'zonadari');
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'zonasampai');
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'container');
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'statuscontainer');
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'nominalsupir');
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'nominalkenek');
+          $("#upahSupirRincianLookup").jqGrid("hideCol", 'nominalkomisi');
+        }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -326,12 +338,12 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-          abortGridLastRequest($(this))
-          
-          clearGlobalSearch($('#upahSupirRincianLookup'))
+        abortGridLastRequest($(this))
+
+        clearGlobalSearch($('#upahSupirRincianLookup'))
       },
     })
     .customPager()
-    loadGlobalSearch($('#upahSupirRincianLookup'))
-    loadClearFilter($('#upahSupirRincianLookup'))
+  loadGlobalSearch($('#upahSupirRincianLookup'))
+  loadClearFilter($('#upahSupirRincianLookup'))
 </script>

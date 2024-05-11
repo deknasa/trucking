@@ -27,6 +27,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group statusjeniskendaraan">
+                            <label class="col-sm-12 col-form-label">STATUS JENIS KENDARAAN <span class="text-danger">*</span></label>
+                            <div class="col-sm-12">
+                                <select name="statusjeniskendaraan" class="form-control select2bs4" id="statusjeniskendaraan">
+                                    <option value="">-- PILIH STATUS JENIS KENDARAAN --</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group statusupahzona">
                             <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
@@ -35,7 +43,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group ">
+                        <div class="form-group jenissuratpengantar">
                             <label class="col-sm-12 col-form-label">JENIS SURAT PENGANTAR <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
                                 <select name="statuslongtrip" class="form-control select2bs4" id="statuslongtrip">
@@ -52,7 +60,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group ">
+                        <div class="form-group gudangsama">
                             <label class="col-sm-12 col-form-label">GUDANG SAMA <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
                                 <select name="statusgudangsama" class="form-control select2bs4" id="statusgudangsama">
@@ -79,7 +87,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group ">
+                        <div class="form-group jenisorder">
                             <label class="col-sm-12 col-form-label">JENIS ORDERAN <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
                                 <input type="hidden" name="jenisorder_id">
@@ -87,7 +95,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group ">
+                        <div class="form-group statuscontainer">
                             <label class="col-sm-12 col-form-label">FULL / EMPTY <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
                                 <input type="hidden" name="statuscontainer_id">
@@ -95,7 +103,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group ">
+                        <div class="form-group containers">
                             <label class="col-sm-4 col-form-label">CONTAINER <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
                                 <input type="hidden" name="container_id">
@@ -211,7 +219,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group ">
+                        <div class="form-group jobtrucking">
                             <label name="labeljobtrucking" class="col-sm-12 col-form-label">NO JOB TRUCKING
                                 {{-- <span class="text-danger">*</span> --}}
                             </label>
@@ -220,7 +228,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group ">
+                        <div class="form-group gudang">
                             <label class="col-sm-12 col-form-label">GUDANG <span class="text-danger">*</span></label>
                             <div class="col-sm-12">
                                 <input type="text" name="gudang" class="form-control">
@@ -300,6 +308,7 @@
     let isTripAsal = true;
     let isPulangLongtrip;
     let isGudangSama = true;
+    let statusJenisKendaran
 
 
     $(document).ready(function() {
@@ -321,6 +330,10 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
+            data.push({
+                name: 'statusjeniskendaraan',
+                value: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val()
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -420,6 +433,77 @@
                 $(this).removeAttr('disabled')
             })
         })
+    })
+    $(document).on('change', `#crudForm [name="statusjeniskendaraan"]`, function(event) {
+
+        let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
+        statusJenisKendaran = statusjeniskendaraan
+        if (statusjeniskendaraan == 'TANGKI') {
+            $('.jenissuratpengantar').hide()
+            $('.gudangsama').hide()
+            $('.statuskandang').hide()
+            $('.jenisorder').hide()
+            $('.jenisorder').find('[name=jenisorder_id]').val('')
+            $('.jenisorder').find('[name=jenisorder]').val('')
+            $('.statuscontainer').hide()
+            $('.statuscontainer').find('[name=statuscontainer_id]').val('')
+            $('.statuscontainer').find('[name=statuscontainer]').val('')
+            $('.containers').hide()
+            $('.containers').find('[name=container_id]').val('')
+            $('.containers').find('[name=container]').val('')
+            $('.jobtrucking').hide()
+            $('.jobtrucking').find('[name=jobtrucking]').val('')
+            $('.gudang').hide()
+            $('.gudang').find('[name=gudang]').val('')
+            $('.gandengan').show()
+            $('.gandengan').find('label').text('No Tangki')
+            let upahsupir = $('#crudForm [name=upah]')
+            upahsupir.val('')
+            upahsupir.data('currentValue', '')
+            $('#crudForm [name=upah_id]').val('')
+            upahsupir.attr('readonly', false)
+            upahsupir.parents('.input-group').find('.input-group-append').show()
+            upahsupir.parents('.input-group').find('.button-clear').show()
+            $('#crudForm [name=dari]').val('')
+            $('#crudForm [name=dari_id]').val('')
+            $('#crudForm [name=sampai]').val('')
+            $('#crudForm [name=sampai_id]').val('')
+            $('#crudForm [name=tarifrincian]').val('')
+            $('#crudForm [name=tarifrincian_id]').val('')
+            $('#crudForm [name=penyesuaian]').val('')
+            containerId = 0
+            statuscontainerId = 0
+            jenisorderId = 0
+        }
+        if (statusjeniskendaraan == 'GANDENGAN') {
+
+            $('.jenissuratpengantar').show()
+            $('.gudangsama').show()
+            $('.statuskandang').show()
+            $('.jenisorder').show()
+            $('.statuscontainer').show()
+            $('.containers').show()
+            $('.jobtrucking').show()
+            $('.gudang').show()
+            $('.gandengan').hide()
+            $('.gandengan').find('label').text('No GANDENGAN / CHASIS')
+            let upahsupir = $('#crudForm [name=upah]')
+
+            upahsupir.val('')
+            upahsupir.data('currentValue', '')
+            $('#crudForm [name=upah_id]').val('')
+            upahsupir.attr('readonly', true)
+            upahsupir.parents('.input-group').find('.input-group-append').hide()
+            upahsupir.parents('.input-group').find('.button-clear').hide()
+
+            $('#crudForm [name=dari]').val('')
+            $('#crudForm [name=dari_id]').val('')
+            $('#crudForm [name=sampai]').val('')
+            $('#crudForm [name=sampai_id]').val('')
+            $('#crudForm [name=tarifrincian]').val('')
+            $('#crudForm [name=tarifrincian_id]').val('')
+            $('#crudForm [name=penyesuaian]').val('')
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -637,6 +721,7 @@
 
         Promise
             .all([
+                setStatusJenisKendaraanOptions(form),
                 setStatusLongTripOptions(form),
                 setStatusGudangSamaOptions(form),
                 setStatusUpahZonaOptions(form),
@@ -653,6 +738,9 @@
                         kotaUpahZona()
                         setJobReadOnly()
 
+                        $('#crudForm').find('[name=statusjeniskendaraan]').attr('disabled', 'disabled').css({
+                            background: '#fff'
+                        })
                         if ($('#crudForm [name=nobukti_tripasal]').val() != '') {
                             setJobTruckingFromTripAsal()
                         }
@@ -684,6 +772,7 @@
 
         Promise
             .all([
+                setStatusJenisKendaraanOptions(form),
                 setStatusLongTripOptions(form),
                 setStatusGudangSamaOptions(form),
                 setStatusUpahZonaOptions(form),
@@ -730,6 +819,7 @@
 
         Promise
             .all([
+                setStatusJenisKendaraanOptions(form),
                 setStatusLongTripOptions(form),
                 setStatusGudangSamaOptions(form),
                 setStatusUpahZonaOptions(form),
@@ -1008,6 +1098,45 @@
                         }
                         relatedForm.find('[name=statusupahzona]').append(option).trigger('change')
                     });
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const setStatusJenisKendaraanOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statusjeniskendaraan]').empty()
+            relatedForm.find('[name=statusjeniskendaraan]').append(
+                new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS JENIS KENDARAAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusJenisKendaraan => {
+                        let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id)
+                        relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change')
+                    });
+
                     resolve()
                 },
                 error: error => {
@@ -1479,6 +1608,7 @@
                 this.postData = {
                     tgltrip: $('#crudForm [name=tglbukti]').val(),
                     Aktif: 'AKTIF',
+                    statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val()
                 }
             },
             onSelectRow: (absensi, element) => {
@@ -1521,7 +1651,7 @@
                 if ($('#crudForm [name=gandenganasal_id]').val() == '') {
                     gandenganId = gandengan.id
                 }
-                element.val(gandengan.keterangan)
+                element.val(gandengan.kodegandengan)
                 element.data('currentValue', element.val())
                 clearJobTrucking()
             },
@@ -1655,7 +1785,8 @@
                     statuskandang_Id: $('#crudForm [name=statuskandang]').val(),
                     statusUpahZona: statusUpahZona,
                     tglbukti: $('#crudForm [name=tglbukti]').val(),
-                    longtrip: $('#crudForm [name=statuslongtrip]').val()
+                    longtrip: $('#crudForm [name=statuslongtrip]').val(),
+                    statusjeniskendaraan: statusJenisKendaran
                 }
             },
             onSelectRow: (upahsupir, element) => {
