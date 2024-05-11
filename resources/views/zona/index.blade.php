@@ -322,7 +322,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'EDIT')
+                                cekValidasidelete(selectedId, 'EDIT')
                             }
                         }
                     },
@@ -335,7 +335,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'DELETE')
+                                cekValidasidelete(selectedId, 'DELETE')
                             }
                         }
                     },
@@ -412,17 +412,25 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('zona', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('zona', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('zona', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('zona', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('zona', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
-            if (!`{{ $myAuth->hasPermission('zona', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
+
             if (!`{{ $myAuth->hasPermission('zona', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }

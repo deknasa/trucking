@@ -93,6 +93,7 @@ class AuthController extends MyController
         // Auth::user()
 
         $parametercabang = DB::table('parameter')->where('grp', 'CABANG')->where('subgrp', 'CABANG')->first();
+        $parametertnl = DB::table('parameter')->where('grp', 'TNL')->where('subgrp', 'TNL')->first();
         // dd($parametercabang->text);
 
         if (Auth::attempt($credentials)) {
@@ -111,7 +112,7 @@ class AuthController extends MyController
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
-                // dd($token->getBody()->getContents());
+            // dd($token->getBody()->getContents());
             $tokenUrlTas = '';
             if ($parametercabang->text == "PUSAT") {
                 // $credentialsAdmin = [
@@ -153,7 +154,6 @@ class AuthController extends MyController
                 //     'Accept' => 'application/json'
                 // ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
-
             } else {
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
                 $linkUrlTas = strtolower($linkUrl->text); //http://tasjkt.kozow.com:8074/trucking-api/public/api/
@@ -192,7 +192,7 @@ class AuthController extends MyController
                     'Accept' => 'application/json'
                 ])->withOptions(['verify' => false])
                     ->post(config('app.trucking_api_tnl') . 'token', $credentials);
-                    // dd($getTokenTNL->json());
+                // dd($getTokenTNL->json());
 
                 $tokenTNL = $getTokenTNL['access_token'];
             }
@@ -208,32 +208,36 @@ class AuthController extends MyController
 
             // dd(config('app.emkl_api_url') . 'token');
 
-                $credentials['user'] = 'ADMIN';
-                $credentials['password'] = config('app.password_emkl');
-                $credentials['ipclient'] = $request->ip();
-                $credentials['ipserver'] = $cekIp['data']['ipserver'];
-                $credentials['latitude'] = $lat;
-                $credentials['longitude'] = $long;
-                $credentials['browser'] = $this->get_client_browser();
-                $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
-                $tokenEmkl = Http::withHeaders([
-                    'Accept' => 'application/json'
-                ])->withOptions(['verify' => false])
-                    ->post(config('app.emkl_api_url') . 'token', $credentials);
+            $credentials['user'] = 'ADMIN';
+            $credentials['password'] = config('app.password_emkl');
+            $credentials['ipclient'] = $request->ip();
+            $credentials['ipserver'] = $cekIp['data']['ipserver'];
+            $credentials['latitude'] = $lat;
+            $credentials['longitude'] = $long;
+            $credentials['browser'] = $this->get_client_browser();
+            $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
+            $tokenEmkl = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.emkl_api_url') . 'token', $credentials);
 
-            
+
 
             session(['access_token' => $token['access_token']]);
             session(['access_token_tnl' => $tokenTNL]);
             session(['cabang' =>  $parametercabang->text]);
+            session(['tnl' =>  $parametertnl->text]);
 
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
 
-            session(['access_token_emkl' => $tokenEmkl['access_token']]);
+            if ($parametercabang->text != 'PUSAT') {
+                session(['access_token_emkl' => $tokenEmkl['access_token']]);
+            }
+
             // dd($tokenEmkl['access_token']);
             // session(['access_token_emkl' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YjJhNDU1My1mYWZkLTQ4MDQtOTYxNy03MTNlNmZmYWU5MGUiLCJqdGkiOiI5MmEwNzBkY2I4NGE1ZjY4MjBjYzgxZWMzM2E2Mzg1YjM0ZGNlNTc5MjYzYTRhYzI0ZGEzZjJkYWZhNmVkYTRkODQzZGY0MGEyZTZiMjU5MiIsImlhdCI6MTcwNjE3ODA4OSwibmJmIjoxNzA2MTc4MDg5LCJleHAiOjE3Mzc4MDA0ODksInN1YiI6IiIsInNjb3BlcyI6W119.k1AM705wPDHCnC89oVn2HE_lPJc0Se347ikE3gJM-ibwd-yKSHngz_2qFG3Nlc1KyzuY6nhU3IKiGAudKg-1E3yc6og0sLmrmJ_3HQta3Lp4NMAHK6St_1Gx-RrspEUC1777KMv3kIZBm3sbrWPUWpb08RIH3m0LPvMErJKDLFAMM9HAAJscHeyqumA1Q5OyUTmS6hx4tGuYE-POiWcq-hEmP_TBcjvuPYWSAOO0PPHCxV88PRjN1E73dnn3hCQ3ZGnJvYFmgSn_YOUWqQ8YH95pc6hto8VTFuTwSIUzwzL1A02M5wvIfXJLlY6q8ebWQecHNmLtL1DBZN7y8JgG4Mm2VeUu7Gymv8rRgjMR_C6mV4lKzvTpA23GdbM2OOYWqSm8nZPXw689NEMakaK6aKRwkXe5xba2EK8OuxtzoDQ-_l5GzNcC-r2gwRZya0S-NzpWmuaLYA8iOIdp26511AqO05mSdr0_1qvMQz0BJK6PiSu4r0Qx4eREojkTUCtSbz-Ynh74kde4fQtXsONabdry2bfUNIUcDfU0hY3uTMLMcIA8Zds0Dy7S_y_y7za3BUFapU5_UiUNc4IpoJ5t6VkH2Xy46d0riSG_1bzzxaDo8YxaryMR4QJAK5Mn0K4GfgH7n2YmxmPiBcixAIM-oV5C3YvFtIm8YjfoyR2rWC8']);
-            
+
             session(['menus' => (new Menu())->getMenu()]);
             if ($parametercabang->text == "PUSAT") {
                 // session(['access_token_mdn' => $tokenMdn]);
@@ -248,7 +252,7 @@ class AuthController extends MyController
                 }
             }
 
-            return redirect()->route('dashboard')->with(['from_login'=>true]);
+            return redirect()->route('dashboard')->with(['from_login' => true]);
         } else {
             return redirect()->back()->withErrors([
                 'user_not_found' => 'User not registered'

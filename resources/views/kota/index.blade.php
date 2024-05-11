@@ -330,7 +330,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'EDIT')
+                                cekValidasidelete(selectedId, 'EDIT')
                             }
                         }
                     },
@@ -343,7 +343,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'DELETE')
+                                cekValidasidelete(selectedId, 'DELETE')
                             }
                         }
                     },
@@ -420,21 +420,30 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('kota', 'store') }}`) {
+
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('kota', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+
+                if (!`{{ $myAuth->hasPermission('kota', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('kota', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('kota', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('kota', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('kota', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
             if (!`{{ $myAuth->hasPermission('kota', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }

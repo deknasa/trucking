@@ -410,20 +410,27 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('jenistrado', 'store') }}`) {
-                $('#add').attr('disabled', 'disabled')
-            }
 
+            if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('jenistrado', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('jenistrado', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('jenistrado', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
+
+            }
             if (!`{{ $myAuth->hasPermission('jenistrado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('jenistrado', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('jenistrado', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
             }
             if (!`{{ $myAuth->hasPermission('jenistrado', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')

@@ -405,19 +405,25 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('merk', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            // if (!`{{ $myAuth->hasPermission('merk', 'update') }}`) {
-            if ((!`{{ $myAuth->hasPermission('merk', 'update') }}`) && (!`{{ $myAuth->hasPermission('merk', 'updateuser') }}`)) {
-
                 $('#edit').attr('disabled', 'disabled')
-            }
-
-
-            if (!`{{ $myAuth->hasPermission('merk', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('merk', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                // if (!`{{ $myAuth->hasPermission('merk', 'update') }}`) {
+                if ((!`{{ $myAuth->hasPermission('merk', 'update') }}`) && (!`{{ $myAuth->hasPermission('merk', 'updateuser') }}`)) {
+
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+
+                if (!`{{ $myAuth->hasPermission('merk', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
             if (!`{{ $myAuth->hasPermission('merk', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
