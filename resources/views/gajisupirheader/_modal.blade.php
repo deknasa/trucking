@@ -47,6 +47,18 @@
                                 </div>
                             </div>
 
+                            <div class="row form-group statusjeniskendaraan">
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
+                                        STATUS JENIS KENDARAAN <span class="text-danger">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-10">
+                                    <select name="statusjeniskendaraan" class="form-control select2bs4" id="statusjeniskendaraan">
+                                        <option value="">-- PILIH STATUS JENIS KENDARAAN --</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="row form-group">
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
@@ -262,6 +274,7 @@
     let selectedRowsAbsensiUangjalan = [];
     let selectedRowsAbsensiTrado = [];
     let isReload = false;
+    let isJenisTangki
 
     function checkboxHandler(element, rowId) {
 
@@ -577,6 +590,7 @@
                                 supir_id: $('#crudForm').find('[name=supir_id]').val(),
                                 tgldari: $('#crudForm').find('[name=tgldari]').val(),
                                 tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                                statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                                 aksi: aksi
                             },
                             datatype: "json"
@@ -918,6 +932,10 @@
             });
 
             data.push({
+                name: 'statusjeniskendaraan',
+                value: form.find(`[name="statusjeniskendaraan"]`).val()
+            })
+            data.push({
                 name: 'button',
                 value: button
             })
@@ -1149,6 +1167,7 @@
             form.find('#btnSubmit').prop('disabled', true)
         }
 
+        initSelect2(form.find('.select2bs4'), true)
         getMaxLength(form)
         initLookup()
         initDatepicker()
@@ -1217,18 +1236,9 @@
 
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Rincian Gaji Supir')
-        if (selectedRowsIndex.length > 0) {
-            clearSelectedRowsIndex()
-        }
-        $('#crudModal').modal('show')
+
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglbuktiDeposito]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglbuktiBBM]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglbuktiPinjaman]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#detailLainnya').html('')
 
         rekapRincian()
@@ -1244,6 +1254,36 @@
         loadPotSemuaGrid()
         loadPotPribadiGrid()
         loadUangJalan()
+        Promise
+            .all([
+                setStatusJenisKendaraanOptions(form),
+                isTangki()
+            ])
+            .then(() => {
+                showDefault(form)
+                    .then(() => {
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        $('#crudModal').modal('show')
+                        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                        $('#crudForm').find('[name=tglbuktiDeposito]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                        $('#crudForm').find('[name=tglbuktiBBM]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                        $('#crudForm').find('[name=tglbuktiPinjaman]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+                    }).catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
+            })
+
     }
 
     function editGajiSupirHeader(Id) {
@@ -1261,25 +1301,32 @@
 
         Promise
             .all([
-                showGajiSupir(form, Id, 'edit')
+                setStatusJenisKendaraanOptions(form),
+                isTangki()
             ])
             .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
-                }
-                $('#crudModal').modal('show')
-                // form.find(`[name="tglbukti"]`).prop('readonly', true)
-                // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                showGajiSupir(form, Id, 'edit')
+                    .then(() => {
 
-                form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        $('#crudModal').modal('show')
+                        // form.find(`[name="tglbukti"]`).prop('readonly', true)
+                        // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+                    }).catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
-            .catch((error) => {
-                showDialog(error.responseJSON)
-            })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
-            })
+
     }
 
     function deleteGajiSupirHeader(Id) {
@@ -1297,25 +1344,31 @@
         form.find('#btnTampil').prop('disabled', true)
         Promise
             .all([
-                showGajiSupir(form, Id, 'delete')
+                setStatusJenisKendaraanOptions(form),
+                isTangki()
             ])
             .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
-                }
-                $('#crudModal').modal('show')
-                form.find(`[name="tglbukti"]`).prop('readonly', true)
-                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-                form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+                showGajiSupir(form, Id, 'delete')
+                    .then(() => {
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        $('#crudModal').modal('show')
+                        form.find(`[name="tglbukti"]`).prop('readonly', true)
+                        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
-            .catch((error) => {
-                showDialog(error.responseJSON)
-            })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
-            })
-
     }
 
     function viewGajiSupirHeader(Id) {
@@ -1336,23 +1389,31 @@
         form.find('#btnTampil').prop('disabled', true)
         Promise
             .all([
-                showGajiSupir(form, Id, 'delete')
+                setStatusJenisKendaraanOptions(form),
+                isTangki()
             ])
             .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
-                }
-                $('#crudModal').modal('show')
-                form.find(`[name="tglbukti"]`).prop('readonly', true)
-                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-                form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
-            })
-            .catch((error) => {
-                showDialog(error.responseJSON)
-            })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
+                showGajiSupir(form, Id, 'delete')
+                    .then(() => {
+
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        $('#crudModal').modal('show')
+                        form.find(`[name="tglbukti"]`).prop('readonly', true)
+                        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
 
     }
@@ -1377,6 +1438,74 @@
                     }
                 }
             }
+        })
+    }
+
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}gajisupirheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        // let element = form.find(`[name="statusaktif"]`)
+
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const setStatusJenisKendaraanOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statusjeniskendaraan]').empty()
+            relatedForm.find('[name=statusjeniskendaraan]').append(
+                new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS JENIS KENDARAAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusJenisKendaraan => {
+                        let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id)
+                        relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -1444,6 +1573,35 @@
                             $(`.${field}`).hide()
                         });
                     }
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+    const isTangki = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'ABSENSI TANGKI'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'ABSENSI TANGKI'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    isJenisTangki = response.text
                     resolve()
                 },
                 error: error => {
@@ -2530,210 +2688,218 @@
     }
 
     function showGajiSupir(form, gajiId, aksi) {
-        detailLainnya()
+        return new Promise((resolve, reject) => {
+            detailLainnya()
 
-        $.ajax({
-            url: `${apiUrl}gajisupirheader/${gajiId}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+            $.ajax({
+                url: `${apiUrl}gajisupirheader/${gajiId}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-                    form.find(`[name="${index}"]`).val(value)
+                        form.find(`[name="${index}"]`).val(value)
 
-                    if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
+                        if (element.hasClass('datepicker')) {
+                            element.val(dateFormat(value))
+                        } else if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        }
+
+                        if (index == 'supir') {
+                            element.data('current-value', value).prop('readonly', true)
+                        }
+
+
+                    })
+
+                    initAutoNumeric(form.find(`[name="subtotal"]`))
+                    initAutoNumeric(form.find(`[name="uangjalan"]`))
+                    initAutoNumeric(form.find(`[name="berjenjanguangmakan"]`))
+                    initAutoNumeric(form.find(`[name="uangmakanharian"]`))
+                    initAutoNumeric(form.find(`[name="deposito"]`))
+                    initAutoNumeric(form.find(`[name="potonganpinjaman"]`))
+                    initAutoNumeric(form.find(`[name="potonganpinjamansemua"]`))
+                    initAutoNumeric(form.find(`[name="bbm"]`))
+
+                    rekapRincian()
+                    // $.each(response.getTrip, (index, detail) => {
+
+                    //     selectedRows.push(detail.id)
+                    //     selectedNobukti.push(detail.nobuktitrip)
+                    //     selectedGajiSupir.push(detail.gajisupir)
+                    //     selectedGajiKenek.push(detail.gajikenek)
+                    //     selectedKomisiSupir.push(detail.komisisupir)
+                    //     selectedUpahRitasi.push(detail.upahritasi)
+                    //     selectedStatusRitasi.push(detail.statusritasi)
+                    //     selectedBiayaExtra.push(detail.biayaextra)
+                    //     selectedKetBiaya.push(detail.keteranganbiaya)
+                    //     selectedTolSupir.push(detail.tolsupir)
+                    //     selectedRitasi.push(detail.ritasi_nobukti)
+
+                    // })
+
+                    // $('#rekapRincian').jqGrid("clearGridData");
+                    // $('#rekapRincian').jqGrid('setGridParam', {
+                    //     url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
+                    //     postData: {
+                    //         limit: 0,
+                    //         supir_id: $('#crudForm [name=supir_id]').val(),
+                    //         supir: $('#crudForm [name=supir]').val(),
+                    //         tgldari: $('#crudForm [name=tgldari]').val(),
+                    //         tglsampai: $('#crudForm [name=tglsampai]').val(),
+                    //         sortIndex: sortnameRincian,
+                    //     },
+                    //     datatype: "json"
+                    // }).trigger('reloadGrid');
+                    getAllTrip('show').then((response) => {
+
+                        let selectedTrip = []
+                        let totalBerjenjang = 0
+
+                        $.each(response.data, (index, value) => {
+                            selectedTrip.push(value.id)
+                            totalBerjenjang += parseFloat(value.uangmakanberjenjang)
+                        })
+                        setTimeout(() => {
+
+                            $("#rekapRincian")
+                                .jqGrid("setGridParam", {
+                                    datatype: "local",
+                                    data: response.data,
+                                    originalData: response.data,
+                                    rowNum: response.data.length,
+                                    selectedRowIds: selectedTrip
+                                })
+                                .trigger("reloadGrid");
+                            hitung(selectedTrip)
+                        }, 100);
+
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(totalBerjenjang))
+
+                    });
+                    loadPotSemuaGrid()
+                    getDataPotSemua(gajiId).then((response) => {
+
+                        let selectedIdPS = []
+                        let totalBayarPS = 0
+
+                        $.each(response.data, (index, value) => {
+                            if (value.gajisupir_id != null) {
+                                selectedIdPS.push(value.id)
+                                totalBayarPS += parseFloat(value.nominalPS)
+                            }
+                        })
+                        $('#tablePotSemua').jqGrid("clearGridData");
+                        setTimeout(() => {
+
+                            $("#tablePotSemua")
+                                .jqGrid("setGridParam", {
+                                    datatype: "local",
+                                    data: response.data,
+                                    originalData: response.data,
+                                    rowNum: response.data.length,
+                                    selectedRowIds: selectedIdPS
+                                })
+                                .trigger("reloadGrid");
+                        }, 100);
+
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_nominalPS"]`).text(totalBayarPS))
+
+                    });
+
+                    loadPotPribadiGrid()
+                    getDataPotPribadi(response.data.supir_id, gajiId).then((response) => {
+
+                        let selectedIdPP = []
+                        let totalBayarPP = 0
+
+                        $.each(response.data, (index, value) => {
+                            if (value.gajisupir_id != null) {
+                                selectedIdPP.push(value.id)
+                                totalBayarPP += parseFloat(value.nominalPP)
+                            }
+                        })
+                        $('#tablePotPribadi').jqGrid("clearGridData");
+                        setTimeout(() => {
+
+                            $("#tablePotPribadi")
+                                .jqGrid("setGridParam", {
+                                    datatype: "local",
+                                    data: response.data,
+                                    originalData: response.data,
+                                    rowNum: response.data.length,
+                                    selectedRowIds: selectedIdPP
+                                })
+                                .trigger("reloadGrid");
+                        }, 100);
+
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_nominalPP"]`).text(totalBayarPP))
+
+                    });
+                    let supir = form.find(`[name="supir"]`).val();
+
+
+                    if (response.deposito != null) {
+                        form.find(`[name="nobuktiDeposito"]`).val(response.deposito.nobukti)
+                        form.find(`[name="tglbuktiDeposito"]`).val(response.data.tglbukti)
+                        initAutoNumeric(form.find(`[name="nomDeposito"]`).val(response.deposito.nominal))
+                        form.find(`[name="ketDeposito"]`).val(response.deposito.keterangan)
+                    } else {
+                        let defaultKetDeposito = "DEPOSITO SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
+                        form.find(`[name="ketDeposito"]`).val(defaultKetDeposito);
+                        initAutoNumeric(form.find(`[name="nomDeposito"]`))
+                    }
+                    if (response.bbm != null) {
+                        form.find(`[name="nobuktiBBM"]`).val(response.bbm.nobukti)
+                        form.find(`[name="tglbuktiBBM"]`).val(response.data.tglbukti)
+                        initAutoNumeric(form.find(`[name="nomBBM"]`).val(response.bbm.nominal))
+                        form.find(`[name="ketBBM"]`).val(response.bbm.keterangan)
+                    } else {
+                        initAutoNumeric(form.find(`[name="nomBBM"]`))
+                        let defaultKetBBM = "HUTANG BBM SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
+                        form.find(`[name="ketBBM"]`).val(defaultKetBBM);
                     }
 
-                    if (index == 'supir') {
-                        element.data('current-value', value).prop('readonly', true)
+                    loadUangJalan()
+                    $.each(response.getUangjalan, (index, detail) => {
+
+                        selectedRowsAbsensi.push(detail.absensi_id)
+                        selectedRowsAbsensiNobukti.push(detail.absensi_nobukti)
+                        selectedRowsAbsensiUangjalan.push(detail.absensi_uangjalan)
+                        selectedRowsAbsensiTrado.push(detail.absensi_tradoid)
+                    })
+
+                    $('#tableAbsensi').jqGrid("clearGridData");
+                    $('#tableAbsensi').jqGrid('setGridParam', {
+                        url: `${apiUrl}gajisupirheader/${gajiId}/getEditAbsensi`,
+                        postData: {
+                            supir_id: $('#crudForm').find('[name=supir_id]').val(),
+                            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                        },
+                        datatype: "json"
+                    }).trigger('reloadGrid');
+
+                    if (aksi == 'delete') {
+
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
                     }
 
+                    hitung()
+                    hitungUangJalan();
 
-                })
-
-                initAutoNumeric(form.find(`[name="subtotal"]`))
-                initAutoNumeric(form.find(`[name="uangjalan"]`))
-                initAutoNumeric(form.find(`[name="berjenjanguangmakan"]`))
-                initAutoNumeric(form.find(`[name="uangmakanharian"]`))
-                initAutoNumeric(form.find(`[name="deposito"]`))
-                initAutoNumeric(form.find(`[name="potonganpinjaman"]`))
-                initAutoNumeric(form.find(`[name="potonganpinjamansemua"]`))
-                initAutoNumeric(form.find(`[name="bbm"]`))
-
-                rekapRincian()
-                // $.each(response.getTrip, (index, detail) => {
-
-                //     selectedRows.push(detail.id)
-                //     selectedNobukti.push(detail.nobuktitrip)
-                //     selectedGajiSupir.push(detail.gajisupir)
-                //     selectedGajiKenek.push(detail.gajikenek)
-                //     selectedKomisiSupir.push(detail.komisisupir)
-                //     selectedUpahRitasi.push(detail.upahritasi)
-                //     selectedStatusRitasi.push(detail.statusritasi)
-                //     selectedBiayaExtra.push(detail.biayaextra)
-                //     selectedKetBiaya.push(detail.keteranganbiaya)
-                //     selectedTolSupir.push(detail.tolsupir)
-                //     selectedRitasi.push(detail.ritasi_nobukti)
-
-                // })
-
-                // $('#rekapRincian').jqGrid("clearGridData");
-                // $('#rekapRincian').jqGrid('setGridParam', {
-                //     url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
-                //     postData: {
-                //         limit: 0,
-                //         supir_id: $('#crudForm [name=supir_id]').val(),
-                //         supir: $('#crudForm [name=supir]').val(),
-                //         tgldari: $('#crudForm [name=tgldari]').val(),
-                //         tglsampai: $('#crudForm [name=tglsampai]').val(),
-                //         sortIndex: sortnameRincian,
-                //     },
-                //     datatype: "json"
-                // }).trigger('reloadGrid');
-                getAllTrip('show').then((response) => {
-
-                    let selectedTrip = []
-                    let totalBerjenjang = 0
-
-                    $.each(response.data, (index, value) => {
-                        selectedTrip.push(value.id)
-                        totalBerjenjang += parseFloat(value.uangmakanberjenjang)
-                    })
-                    setTimeout(() => {
-
-                        $("#rekapRincian")
-                            .jqGrid("setGridParam", {
-                                datatype: "local",
-                                data: response.data,
-                                originalData: response.data,
-                                rowNum: response.data.length,
-                                selectedRowIds: selectedTrip
-                            })
-                            .trigger("reloadGrid");
-                        hitung(selectedTrip)
-                    }, 100);
-
-                    initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(totalBerjenjang))
-
-                });
-                loadPotSemuaGrid()
-                getDataPotSemua(gajiId).then((response) => {
-
-                    let selectedIdPS = []
-                    let totalBayarPS = 0
-
-                    $.each(response.data, (index, value) => {
-                        if (value.gajisupir_id != null) {
-                            selectedIdPS.push(value.id)
-                            totalBayarPS += parseFloat(value.nominalPS)
-                        }
-                    })
-                    $('#tablePotSemua').jqGrid("clearGridData");
-                    setTimeout(() => {
-
-                        $("#tablePotSemua")
-                            .jqGrid("setGridParam", {
-                                datatype: "local",
-                                data: response.data,
-                                originalData: response.data,
-                                rowNum: response.data.length,
-                                selectedRowIds: selectedIdPS
-                            })
-                            .trigger("reloadGrid");
-                    }, 100);
-
-                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_nominalPS"]`).text(totalBayarPS))
-
-                });
-
-                loadPotPribadiGrid()
-                getDataPotPribadi(response.data.supir_id, gajiId).then((response) => {
-
-                    let selectedIdPP = []
-                    let totalBayarPP = 0
-
-                    $.each(response.data, (index, value) => {
-                        if (value.gajisupir_id != null) {
-                            selectedIdPP.push(value.id)
-                            totalBayarPP += parseFloat(value.nominalPP)
-                        }
-                    })
-                    $('#tablePotPribadi').jqGrid("clearGridData");
-                    setTimeout(() => {
-
-                        $("#tablePotPribadi")
-                            .jqGrid("setGridParam", {
-                                datatype: "local",
-                                data: response.data,
-                                originalData: response.data,
-                                rowNum: response.data.length,
-                                selectedRowIds: selectedIdPP
-                            })
-                            .trigger("reloadGrid");
-                    }, 100);
-
-                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_nominalPP"]`).text(totalBayarPP))
-
-                });
-                let supir = form.find(`[name="supir"]`).val();
-
-
-                if (response.deposito != null) {
-                    form.find(`[name="nobuktiDeposito"]`).val(response.deposito.nobukti)
-                    form.find(`[name="tglbuktiDeposito"]`).val(response.data.tglbukti)
-                    initAutoNumeric(form.find(`[name="nomDeposito"]`).val(response.deposito.nominal))
-                    form.find(`[name="ketDeposito"]`).val(response.deposito.keterangan)
-                } else {
-                    let defaultKetDeposito = "DEPOSITO SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
-                    form.find(`[name="ketDeposito"]`).val(defaultKetDeposito);
-                    initAutoNumeric(form.find(`[name="nomDeposito"]`))
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
                 }
-                if (response.bbm != null) {
-                    form.find(`[name="nobuktiBBM"]`).val(response.bbm.nobukti)
-                    form.find(`[name="tglbuktiBBM"]`).val(response.data.tglbukti)
-                    initAutoNumeric(form.find(`[name="nomBBM"]`).val(response.bbm.nominal))
-                    form.find(`[name="ketBBM"]`).val(response.bbm.keterangan)
-                } else {
-                    initAutoNumeric(form.find(`[name="nomBBM"]`))
-                    let defaultKetBBM = "HUTANG BBM SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
-                    form.find(`[name="ketBBM"]`).val(defaultKetBBM);
-                }
-
-                loadUangJalan()
-                $.each(response.getUangjalan, (index, detail) => {
-
-                    selectedRowsAbsensi.push(detail.absensi_id)
-                    selectedRowsAbsensiNobukti.push(detail.absensi_nobukti)
-                    selectedRowsAbsensiUangjalan.push(detail.absensi_uangjalan)
-                    selectedRowsAbsensiTrado.push(detail.absensi_tradoid)
-                })
-
-                $('#tableAbsensi').jqGrid("clearGridData");
-                $('#tableAbsensi').jqGrid('setGridParam', {
-                    url: `${apiUrl}gajisupirheader/${gajiId}/getEditAbsensi`,
-                    postData: {
-                        supir_id: $('#crudForm').find('[name=supir_id]').val(),
-                        tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                    },
-                    datatype: "json"
-                }).trigger('reloadGrid');
-
-                if (aksi == 'delete') {
-
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
-                }
-
-                hitung()
-                hitungUangJalan();
-
-            }
+            })
         })
     }
 
@@ -3303,6 +3469,7 @@
                     supir: $('#crudForm').find(`[name="supir"]`).val(),
                     tgldari: $('#crudForm').find(`[name="tgldari"]`).val(),
                     tglsampai: $('#crudForm').find(`[name="tglsampai"]`).val(),
+                    statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                     sortIndex: sortnameRincian,
                     aksi: aksi
                 },
@@ -3338,6 +3505,7 @@
                     supir_id: supirId,
                     tgldari: dari,
                     tglsampai: sampai,
+                    statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                     sortIndex: sortnameAbsensi,
                     aksi: aksi
                 },
