@@ -117,7 +117,7 @@
                   NOMINAL <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-10 nominalinput">
                 <input type="text" name="nominal" class="form-control text-right">
               </div>
             </div>
@@ -147,7 +147,7 @@
                 </select>
               </div>
             </div>
-            
+
             <div class="row form-group statuspostingtnl">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -949,9 +949,18 @@
               }
             }
           })
-          initAutoNumeric(form.find(`[name="nominal"]`), {
-            minimumValue: 0
-          })
+          if (parent) {
+            let newNominalEl = $(`<input type="text" name="nominal" class="form-control text-right">`)
+            $('#crudForm').find('[name=nominal]').remove()
+            $('.nominalinput').append(newNominalEl)
+            initAutoNumeric($('#crudForm').find(`[name="nominal"]`), {
+              minimumValue: 0
+            })
+          } else {
+            initAutoNumeric(form.find(`[name="nominal"]`), {
+              minimumValue: 0
+            })
+          }
 
           if (parent) {
             $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change')
