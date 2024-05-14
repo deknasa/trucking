@@ -32,6 +32,12 @@
             name: 'status',
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
+          {
+            label: 'jenis kendaraan',
+            name: 'statusjeniskendaraan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+          },
+
 
           // {
           //   label: 'STATUS TRIP',
