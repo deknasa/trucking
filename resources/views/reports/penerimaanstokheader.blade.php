@@ -19,17 +19,18 @@
     var penerimaanstokheaders = <?= json_encode($penerimaanstokheaders); ?>;
     var printer = <?= json_encode($printer); ?>;
     console.log(printer['tipe'])
+
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
       viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
 
 
-      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);      
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
-      
+
       var statuscetak = penerimaanstokheaders.statuscetak_id
       var sudahcetak = penerimaanstokheaders['combo']['id']
       if (statuscetak == sudahcetak) {
@@ -38,8 +39,8 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-     //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
@@ -49,12 +50,12 @@
       if (printer['tipe'] == 'reportPrinterBesar') {
         switch (penerimaanstokheaders.statusformat) {
           case '132':
-          //DOT
+            //DOT
             report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGDOBesar.mrt') }}`)
             break;
           case '133':
             //POT
-            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPOBesar.mrt') }}`)//now
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPOBesar.mrt') }}`) //now
             break;
           case '134':
             //SPB
@@ -88,15 +89,15 @@
             report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPBBesar.mrt') }}`)
             break;
         }
-      }else{
+      } else {
         switch (penerimaanstokheaders.statusformat) {
           case '132':
-          //DOT
+            //DOT
             report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGDO.mrt') }}`)
             break;
           case '133':
             //POT
-            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPO.mrt') }}`)//now
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPO.mrt') }}`) //now
             break;
           case '134':
             //SPB
@@ -143,16 +144,17 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
-      
-      viewer.onPrintReport = function (event) {
+
+      viewer.onPrintReport = function(event) {
         triggerEvent(window, 'afterprint');
       }
+
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
-            var e = document.createEvent('HTMLEvents');
-            e.initEvent(type, false, true);
-            el.dispatchEvent(e);
+          var e = document.createEvent('HTMLEvents');
+          e.initEvent(type, false, true);
+          el.dispatchEvent(e);
         } else {
           // IE8
           var e = document.createEventObject();
@@ -160,11 +162,19 @@
           el.fireEvent('on' + e.eventType, e);
         }
       }
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = penerimaanstokheaders.id
+          window.opener.removeEditingBy(id);
+        }
+      });
+
 
       window.addEventListener('afterprint', (event) => {
         var id = penerimaanstokheaders.id
         var apiUrl = `{{ config('app.api_url') }}`;
-        
+
         $.ajax({
           url: `${apiUrl}penerimaanstokheader/${id}/printreport`,
           method: 'GET',
@@ -175,35 +185,35 @@
           success: response => {
             // location.reload();
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
 
           }
-    
+
         })
-          
+
       });
-      
+
     }
   </script>
 
   <script type="text/javascript">
-    $( document ).ready(function() {
+    $(document).ready(function() {
       var statuscetak = penerimaanstokheaders.statuscetak_id
       var sudahcetak = penerimaanstokheaders['combo']['id']
       if (statuscetak == sudahcetak) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+        $(document).on('keydown', function(e) {
+          if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
             alert("Document SUdah Pernah Dicetak ");
             e.cancelBubble = true;
             e.preventDefault();
             e.stopImmediatePropagation();
-          }  
-        });  
+          }
+        });
       }
 
 
     });
-        
   </script>
   <style>
     .stiJsViewerPage {
@@ -211,7 +221,9 @@
     }
   </style>
 </head>
+
 <body onLoad="Start()">
   <div id="content"></div>
 </body>
+
 </html>

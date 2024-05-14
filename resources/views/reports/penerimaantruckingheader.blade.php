@@ -126,6 +126,14 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = penerimaantruckings.id
+          window.opener.removeEditingBy(id);
+        }
+      });
+
       window.addEventListener('afterprint', (event) => {
         var id = penerimaantruckings.id
         var apiUrl = `{{ config('app.api_url') }}`;
@@ -138,6 +146,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
