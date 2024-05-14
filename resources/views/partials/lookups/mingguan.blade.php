@@ -68,10 +68,10 @@
       responsive: true,
       shrinkToFit: false,
       height: 450,
-      rowNum: 0,
+      rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
-      rowList: [0],
+      rowList: [10, 20, 50, 0],
       toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
@@ -136,7 +136,7 @@
         sortname = $(this).jqGrid("getGridParam", "sortname")
         sortorder = $(this).jqGrid("getGridParam", "sortorder")
         totalRecord = $(this).getGridParam("records")
-        limit = 0
+        limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
         $('.clearsearchclass').click(function() {
