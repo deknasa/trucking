@@ -18,21 +18,26 @@
           label: 'Minggu',
           name: 'fKode',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+
         },
         {
           label: 'Tahun',
           name: 'fTahun',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'Minggu Ke',
           name: 'fMingguKe',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'Bulan Ke',
           name: 'fBulanKe',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'Tgl Dari',
@@ -42,7 +47,9 @@
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
-          }
+          },
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+
         },
         {
           label: 'Tgl Sampai',
@@ -52,17 +59,19 @@
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
-          }
+          },
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+
         },
       ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
       height: 450,
-      rowNum: 10,
+      rowNum: 0,
       rownumbers: true,
       rownumWidth: 45,
-      rowList: [10, 20, 50, 0],
+      rowList: [0],
       toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
@@ -127,7 +136,7 @@
         sortname = $(this).jqGrid("getGridParam", "sortname")
         sortorder = $(this).jqGrid("getGridParam", "sortorder")
         totalRecord = $(this).getGridParam("records")
-        limit = $(this).jqGrid('getGridParam', 'postData').limit
+        limit = 0
         postData = $(this).jqGrid('getGridParam', 'postData')
 
         $('.clearsearchclass').click(function() {
