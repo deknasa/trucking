@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b7878d8658e9fef201e6708fe3629557",
+  "ReportGuid": "3fb99077aad289ad37305e8cee31c590",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://server:8074/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1715595223000+0700)/",
+  "ReportChanged": "/Date(1715396546000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1459,6 +1459,16 @@
               "CanGrow": true,
               "ClientRectangle": "242,0,27,6",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1488,6 +1498,16 @@
               "CanGrow": true,
               "ClientRectangle": "161,0,23,6",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1524,6 +1544,14 @@
                   "Column": "data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
+                  "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
                   "BorderSides": "None"
                 }
               },
@@ -1564,6 +1592,14 @@
                   "Value1": "1.0",
                   "Enabled": false,
                   "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
                 }
               },
               "Interaction": {
@@ -1595,6 +1631,16 @@
               "CanGrow": true,
               "ClientRectangle": "136,0,23,6",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1624,6 +1670,16 @@
               "CanGrow": true,
               "ClientRectangle": "88,0,46,6",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1647,6 +1703,16 @@
               "CanGrow": true,
               "ClientRectangle": "55.28,0.06,30.73,6.09",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1677,6 +1743,14 @@
                   "Column": "data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
+                  "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
                   "BorderSides": "None"
                 }
               },
@@ -1710,6 +1784,14 @@
                   "Column": "data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
+                  "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "Column": "data.nobukti",
+                  "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
                   "BorderSides": "None"
                 }
               },
@@ -2396,6 +2478,16 @@
           "Guid": "2700fe76c07f1be337190531af81ba6d",
           "ClientRectangle": "54.59,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2420,6 +2512,16 @@
           "Guid": "797319dd7db58744e61c1b7f1c573577",
           "ClientRectangle": "18,75.8,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2432,6 +2534,16 @@
           "Guid": "250aa8c26bc31e5f3415f4beb3b23bac",
           "ClientRectangle": "87,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2444,6 +2556,16 @@
           "Guid": "f414c3de74ae5cbf2e4fa20505eed483",
           "ClientRectangle": "135,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2456,6 +2578,16 @@
           "Guid": "6d4dbd7747d0518b46aa8c50e5b2d5df",
           "ClientRectangle": "160,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2468,6 +2600,16 @@
           "Guid": "f7a68511e7e39ca51ea32f6b3cb3a471",
           "ClientRectangle": "185,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2480,6 +2622,16 @@
           "Guid": "c445d0ee9547ee2109732f02137b1660",
           "ClientRectangle": "213,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -2492,6 +2644,16 @@
           "Guid": "766bebcc487724d57025f7e26f197a75",
           "ClientRectangle": "241,75.79,0.254,22.06",
           "ComponentPlacement": "p.Page1",
+          "Conditions": {
+            "0": {
+              "Ident": "StiCondition",
+              "Column": "data.nobukti",
+              "Value1": "SALDO AWAL",
+              "Enabled": false,
+              "TextColor": "255,255,255",
+              "BorderSides": "None"
+            }
+          },
           "Interaction": {
             "Ident": "StiInteraction"
           },
