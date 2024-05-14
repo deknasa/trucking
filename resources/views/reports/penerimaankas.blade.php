@@ -82,6 +82,14 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = pengeluaranheader.id
+          window.opener.removeEditingBy(id);
+        }
+      });
+
       window.addEventListener('afterprint', (event) => {
         var id = penerimaanheader.id
         var apiUrl = `{{ config('app.api_url') }}`;
