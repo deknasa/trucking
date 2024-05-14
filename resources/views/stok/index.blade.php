@@ -674,6 +674,14 @@
                                 approvalNonAktif('stok')
                             }
                         },
+                        {
+                            id: 'approvalaktif',
+                            text: ' APPROVAL AKTIF',
+                            onClick: () => {
+                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                approvalAktif('stok')
+                            }
+                        },
                     ],
                 }]
 
@@ -761,6 +769,12 @@
             if (!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`) {
                 hakApporveCount--
                 $('#approveun').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
