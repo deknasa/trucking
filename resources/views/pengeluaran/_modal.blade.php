@@ -184,6 +184,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
   let isEditTgl
+  let cabangPusat
 
   $(document).ready(function() {
 
@@ -442,7 +443,8 @@
       form.find('#btnSaveAdd').hide()
     }
     getMaxLength(form)
-    isCabangPusat()
+    rowCabangPusat()
+    
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
@@ -1218,6 +1220,7 @@
     enableTglJatuhTempo(detailRow)
     enableNoWarkat(detailRow)
     setRowNumbers()
+    rowCabangPusat()
   }
 
   function enableTglJatuhTempo(el) {
@@ -1334,27 +1337,9 @@
     }
   }
 
-  function isCabangPusat() {
-    let data = [];
-    data.push({
-        name: 'grp',
-        value: 'CABANG'
-    })
-    data.push({
-        name: 'subgrp',
-        value: 'CABANG'
-    })
-    $.ajax({
-      url: `${apiUrl}parameter/getparamfirst`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data : data,
-      success: response => {
-        
-        if (response.text == 'PUSAT') {;
+  
+  function rowCabangPusat() {
+    if (accessCabang == 'PUSAT') {;
           $('.tbl_noinvoice').hide();
           $('.tbl_bank').hide();
           $('#colspan-2').attr('colspan', 2);
@@ -1366,10 +1351,6 @@
           $('.tbl_bank').show();
           $('#colspan-2').attr('colspan', 4);
         }
-    
-          
-      }
-    })
   }
 
   function initLookup() {
