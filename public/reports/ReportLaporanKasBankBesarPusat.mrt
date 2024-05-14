@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "fde6fe7b1d8eb99e6d30ff1d4e8a4438",
+  "ReportGuid": "30c903c58a7ee662d25f8a5b6dc3d92b",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://server:8074/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1715675285000+0700)/",
+  "ReportChanged": "/Date(1715675980000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -478,7 +478,7 @@
         "0": {
           "Ident": "StiPageHeaderBand",
           "Name": "PageHeaderBand1",
-          "ClientRectangle": "0,4,276.4,31.8",
+          "ClientRectangle": "0,4,274.4,31.8",
           "ComponentPlacement": "ph.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1158,7 +1158,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,198.9,276.4,6",
+          "ClientRectangle": "0,198.9,274.4,6",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1184,7 +1184,7 @@
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
           "PrintOn": "OnlyFirstPage",
-          "ClientRectangle": "0,43.8,276.4,8",
+          "ClientRectangle": "0,43.8,274.4,8",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1305,7 +1305,7 @@
         "3": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,59.8,276.4,0",
+          "ClientRectangle": "0,59.8,274.4,0",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1319,7 +1319,7 @@
         "4": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand2",
-          "ClientRectangle": "0,67.8,276.4,0",
+          "ClientRectangle": "0,67.8,274.4,0",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1333,7 +1333,7 @@
         "5": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand3",
-          "ClientRectangle": "0,75.8,276.4,0.06",
+          "ClientRectangle": "0,75.8,274.4,0.06",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1441,7 +1441,7 @@
         "6": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,83.86,276.4,6",
+          "ClientRectangle": "0,83.86,274.4,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1742,7 +1742,7 @@
         "7": {
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
-          "ClientRectangle": "0,97.86,276.4,32",
+          "ClientRectangle": "0,97.86,274.4,32",
           "ComponentPlacement": "f.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2536,7 +2536,7 @@
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
-        "Left": 0,
+        "Left": 2,
         "Right": 3,
         "Top": 10,
         "Bottom": 1
