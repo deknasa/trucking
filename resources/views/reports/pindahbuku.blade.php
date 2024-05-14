@@ -37,8 +37,8 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-     //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
@@ -59,8 +59,8 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-        // designer.report = report;
-        // designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
 
       viewer.onPrintReport = function(event) {
@@ -81,6 +81,14 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = pindahbuku.id
+          window.opener.removeEditingBy(id);
+        }
+      });
+
       window.addEventListener('afterprint', (event) => {
         var id = pindahbuku.id
         var apiUrl = `{{ config('app.api_url') }}`;
@@ -93,6 +101,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
