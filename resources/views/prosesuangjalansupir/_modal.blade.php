@@ -452,6 +452,7 @@
             event.preventDefault()
             submit($(this).attr('id'))
         })
+
         function submit(button) {
             event.preventDefault()
 
@@ -608,30 +609,30 @@
                                 tglsampai: dateFormat(response.data.tglsampaiheader)
                             }
                         }).trigger('reloadGrid');
-    
+
                         if (id == 0) {
                             $('#detail').jqGrid().trigger('reloadGrid')
                         }
-    
+
                         if (response.data.grp == 'FORMAT') {
                             updateFormat(response.data)
                         }
-                    }else{
+                    } else {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        uangjalan =  AutoNumeric.getAutoNumericElement($('#crudForm').find(`input[name="uangjalan"]`)[0]);
+                        uangjalan = AutoNumeric.getAutoNumericElement($('#crudForm').find(`input[name="uangjalan"]`)[0]);
                         uangjalan.set(0);
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
                         showSuccessDialog(response.message, response.data.nobukti)
-                        
+
                         $("#tablePengembalian")[0].p.selectedRowIds = [];
                         $('#tablePengembalian').jqGrid("clearGridData");
                         $("#tablePengembalian")
-                        .jqGrid("setGridParam", {
-                            selectedRowIds: []
-                        })
-                        .trigger("reloadGrid");
-                       
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+
                         createProsesUangJalanSupir()
                     }
 
@@ -699,7 +700,7 @@
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
-        
+
         if (form.data('action') == 'add') {
             form.find('#btnSaveAdd').show()
         } else {
@@ -709,6 +710,7 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
@@ -876,11 +878,10 @@
                 success: response => {
                     $.each(response.data, (index, value) => {
                         let element = '';
-                        if(index == 'bank_idtransfer' || index == 'banktransfer')
-                        {
-                             element = form.find(`[name="${index}[]"]`)
-                        }else{
-                             element = form.find(`[name="${index}"]`)
+                        if (index == 'bank_idtransfer' || index == 'banktransfer') {
+                            element = form.find(`[name="${index}[]"]`)
+                        } else {
+                            element = form.find(`[name="${index}"]`)
                         }
                         // let element = form.find(`[name="statusaktif"]`)
 
