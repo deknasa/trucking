@@ -192,11 +192,12 @@ class PengeluaranHeaderController extends MyController
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $pengeluaran["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-
+        $cabang['cabang'] = session('cabang');
+        // dd($cabang['cabang']);
         if($pengeluaran['tipe_bank'] === 'KAS')
-        { return view('reports.pengeluarankas', compact('pengeluaran', 'pengeluaran_details','printer'));
+        { return view('reports.pengeluarankas', compact('pengeluaran', 'pengeluaran_details','printer', 'cabang',));
         } else {
-            return view('reports.pengeluaranbank', compact('pengeluaran', 'pengeluaran_details','printer'));
+            return view('reports.pengeluaranbank', compact('pengeluaran', 'pengeluaran_details','printer', 'cabang',));
         }
     }
 
