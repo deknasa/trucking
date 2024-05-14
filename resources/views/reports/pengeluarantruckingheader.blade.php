@@ -174,6 +174,14 @@
           el.fireEvent('on' + e.eventType, e);
         }
       }
+      
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = pengeluarantruckings.id
+          window.opener.removeEditingBy(id);
+        }
+      });
 
       window.addEventListener('afterprint', (event) => {
         var id = pengeluarantruckings.id
@@ -187,6 +195,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
