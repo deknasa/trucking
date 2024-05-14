@@ -101,7 +101,8 @@ class PindahBukuController extends MyController
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pindahbuku["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        return view('reports.pindahbuku', compact('pindahbuku','printer'));
+        $cabang['cabang'] = session('cabang');
+        return view('reports.pindahbuku', compact('pindahbuku','printer','cabang'));
     }
 
     public function export(Request $request): void
