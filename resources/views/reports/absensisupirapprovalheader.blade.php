@@ -81,6 +81,13 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = absensiappheader.id
+          window.opener.removeEditingBy(id);
+        }
+      });
       window.addEventListener('afterprint', (event) => {
         var id = absensiappheader.id
         var apiUrl = `{{ config('app.api_url') }}`;
@@ -93,6 +100,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })

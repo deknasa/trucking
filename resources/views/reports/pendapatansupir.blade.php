@@ -38,7 +38,7 @@
           viewerOptions.toolbar.showSaveButton = false;
           viewerOptions.toolbar.showOpenButton = false;
         }
-      }else{
+      } else {
         var statuscetak = pendapatansupirs2.statuscetak_id
         var sudahcetak = pendapatansupirs2['combo']['id']
         if (statuscetak == sudahcetak) {
@@ -47,8 +47,8 @@
           viewerOptions.toolbar.showOpenButton = false;
         }
       }
-     //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
@@ -101,6 +101,18 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          if (formatKomisi == 'FORMAT 1') {
+            var id = pendapatansupirs.id
+          } else {
+            var id = pendapatansupirs2.id
+
+          }
+          window.opener.removeEditingBy(id);
+        }
+      });
       window.addEventListener('afterprint', (event) => {
         if (formatKomisi == 'FORMAT 1') {
           var id = pendapatansupirs.id
@@ -118,6 +130,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
