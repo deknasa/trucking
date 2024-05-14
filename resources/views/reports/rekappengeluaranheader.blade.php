@@ -38,23 +38,23 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-     //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      console.log(rekappengeluaran.formatcetakan , formatcetakan.id);
+      console.log(rekappengeluaran.formatcetakan, formatcetakan.id);
       if (rekappengeluaran.formatcetakan == formatcetakan.id) {
         if (printer['tipe'] == 'reportPrinterBesar') {
           report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaranBesar.mrt') }}`)
         } else {
           report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaran.mrt') }}`)
         }
-      }else{
-        report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaranBank2.mrt') }}`)        
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportRekapPengeluaranBank2.mrt') }}`)
       }
 
       report.dictionary.dataSources.clear()
@@ -87,6 +87,14 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = rekappengeluaran.id
+          window.opener.removeEditingBy(id);
+        }
+      });
+
       window.addEventListener('afterprint', (event) => {
         var id = rekappengeluaran.id
         var apiUrl = `{{ config('app.api_url') }}`;
@@ -99,6 +107,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
