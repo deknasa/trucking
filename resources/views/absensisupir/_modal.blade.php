@@ -52,6 +52,7 @@
                           <th width="2%">No</th>
                           <th width="13%">Trado</th>
                           <th width="6%">supir serap</th>
+                          <th width="6%">tambahan trado</th>
                           <th width="12%">Supir</th>
                           <th width="10%" class="uangjalan">Uang Jalan</th>
                           <th width="20%">Keterangan</th>
@@ -737,6 +738,9 @@
               </td>
               <td>
                 <input type="text" class="form-control" name="statussupirserap[]" value="${detail.statussupirserap}" readonly>
+              </td>
+              <td>
+                <input type="text" class="form-control" name="statustambahantrado[]" value="${detail.statustambahantrado}" readonly>
               </td>
               <td>
                 <input type="hidden" name="supir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
