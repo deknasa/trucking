@@ -41,9 +41,13 @@ class LaporanKasBankController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
+        $jumlah['jumlah'] = 1;
         if (session('cabang') == 'PUSAT') {
             $data = $header['data'];
-            array_shift($data);
+            if (count($data) > 1) {
+                array_shift($data);
+                $jumlah['jumlah'] = 2;
+            }
         } else {
             $data = $header['data'];
         }
@@ -54,7 +58,7 @@ class LaporanKasBankController extends MyController
         $cabang['cabang'] = session('cabang');
 
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa'));
+        return view('reports.laporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa', 'jumlah'));
     }
 
     public function export(Request $request): void

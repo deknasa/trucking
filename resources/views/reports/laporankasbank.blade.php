@@ -16,6 +16,7 @@
   <script type="text/javascript">
     let printer = <?= json_encode($printer); ?>;
     let cabang = <?= json_encode($cabang); ?>;
+    let jumlah = <?= json_encode($jumlah); ?>;
 
 
     function Start() {
@@ -36,10 +37,10 @@
       viewer.renderHtml('content')
       if (cabang['cabang'] == 'PUSAT') {
 
-        if (printer['tipe'] == 'reportPrinterBesar') {
+        if (jumlah['jumlah'] == 2) {
           report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarPusat.mrt') }}`)
-        } else {
-          report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankPusat.mrt') }}`)
+        }else{          
+          report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt') }}`)
         }
       } else {
         if (printer['tipe'] == 'reportPrinterBesar') {
