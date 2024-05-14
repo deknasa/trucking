@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">CABANG<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">CABANG<span class="text-danger"></span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="cabang_id">
