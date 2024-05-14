@@ -37,8 +37,8 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-     //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
@@ -81,6 +81,13 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = kasgantung.id
+          window.opener.removeEditingBy(id);
+        }
+      });
       window.addEventListener('afterprint', (event) => {
         var id = kasgantung.id
         var apiUrl = `{{ config('app.api_url') }}`;
@@ -93,6 +100,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
