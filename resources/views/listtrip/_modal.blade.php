@@ -178,6 +178,14 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="form-group triptangki">
+                            <label class="col-sm-12 col-form-label">TRIP TANGKI <span class="text-danger">*</span></label>
+                            <div class="col-sm-12">
+                                <input type="hidden" name="triptangki_id">
+                                <input type="text" name="triptangki" class="form-control triptangki-lookup">
+                            </div>
+                        </div>
+
 
                         <div class="form-group ">
                             <label class="col-sm-12 col-form-label">SHIPPER <span class="text-danger">*</span></label>
@@ -486,6 +494,7 @@
             $('.jobtrucking').show()
             $('.gudang').show()
             $('.gandengan').hide()
+            $('.triptangki').hide()
             $('.gandengan').find('label').text('No GANDENGAN / CHASIS')
             let upahsupir = $('#crudForm [name=upah]')
 
@@ -500,6 +509,8 @@
             $('#crudForm [name=dari_id]').val('')
             $('#crudForm [name=sampai]').val('')
             $('#crudForm [name=sampai_id]').val('')
+            $('#crudForm [name=triptangki]').val('')
+            $('#crudForm [name=triptangki_id]').val('')
             $('#crudForm [name=tarifrincian]').val('')
             $('#crudForm [name=tarifrincian_id]').val('')
             $('#crudForm [name=penyesuaian]').val('')
@@ -1574,6 +1585,34 @@
             }
         })
 
+        $('.triptangki-lookup').lookup({
+            title: 'Trip tangki Lookup',
+            fileName: 'triptangki',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    tglbukti: $('#crudForm [name=tglbukti]').val(),
+                    statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val(),
+                    trado_id: $('#crudForm [name=trado_id]').val(),
+                    supir_id: $('#crudForm [name=supir_id]').val(),
+                    from: 'listtrip'
+                }
+            },
+            onSelectRow: (triptangki, element) => {
+                $('#crudForm [name=triptangki_id]').first().val(triptangki.id)
+                element.val(triptangki.keterangan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=triptangki_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
         $('.trado-lookup').lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
@@ -1644,6 +1683,7 @@
                 this.postData = {
 
                     Aktif: 'AKTIF',
+                    statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                 }
             },
             onSelectRow: (gandengan, element) => {
@@ -1651,7 +1691,7 @@
                 if ($('#crudForm [name=gandenganasal_id]').val() == '') {
                     gandenganId = gandengan.id
                 }
-                element.val(gandengan.kodegandengan)
+                element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
                 clearJobTrucking()
             },
