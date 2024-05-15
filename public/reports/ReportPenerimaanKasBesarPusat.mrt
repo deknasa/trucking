@@ -6,7 +6,7 @@
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanKasBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1715766037000+0700)/",
+  "ReportChanged": "/Date(1715766816000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -817,7 +817,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,133.44,205,3.56",
+          "ClientRectangle": "0,137.44,205,3.56",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1667,15 +1667,15 @@
         }
       },
       "PageWidth": 216,
-      "PageHeight": 139,
+      "PageHeight": 148,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
         "Left": 1,
         "Right": 10,
-        "Top": 1,
-        "Bottom": 1
+        "Top": 4,
+        "Bottom": 3
       }
     }
   }
