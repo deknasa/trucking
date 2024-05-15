@@ -174,6 +174,14 @@
                   </div>
                 </div>
 
+                <div class="form-group triptangki">
+                  <label class="col-sm-12 col-form-label">TRIP TANGKI <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="triptangki_id">
+                    <input type="text" name="triptangki" class="form-control triptangki-lookup">
+                  </div>
+                </div>
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">SHIPPER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -483,10 +491,11 @@
       $('.gudang').hide()
       $('.gudang').find('[name=gudang]').val('')
       $('.gandengan').show()
+      $('.triptangki').show()
       $('.gandengan').find('label').text('No Tangki')
       let upahsupir = $('#crudForm [name=upah]')
       upahsupir.val('')
-      upahsupir.data('currentValue','')
+      upahsupir.data('currentValue', '')
       $('#crudForm [name=upah_id]').val('')
       upahsupir.attr('readonly', false)
       upahsupir.parents('.input-group').find('.input-group-append').show()
@@ -513,20 +522,23 @@
       $('.jobtrucking').show()
       $('.gudang').show()
       $('.gandengan').hide()
+      $('.triptangki').hide()
       $('.gandengan').find('label').text('No GANDENGAN / CHASIS')
       let upahsupir = $('#crudForm [name=upah]')
-      
+
       upahsupir.val('')
-      upahsupir.data('currentValue','')
+      upahsupir.data('currentValue', '')
       $('#crudForm [name=upah_id]').val('')
       upahsupir.attr('readonly', true)
       upahsupir.parents('.input-group').find('.input-group-append').hide()
       upahsupir.parents('.input-group').find('.button-clear').hide()
-      
+
       $('#crudForm [name=dari]').val('')
       $('#crudForm [name=dari_id]').val('')
       $('#crudForm [name=sampai]').val('')
       $('#crudForm [name=sampai_id]').val('')
+      $('#crudForm [name=triptangki]').val('')
+      $('#crudForm [name=triptangki_id]').val('')
       $('#crudForm [name=tarifrincian]').val('')
       $('#crudForm [name=tarifrincian_id]').val('')
       $('#crudForm [name=penyesuaian]').val('')
@@ -1252,17 +1264,21 @@
       },
       data: {
         trado_id: $('#crudForm').find(`[name="trado_id"]`).val(),
+        supir_id: $('#crudForm').find(`[name="supir_id"]`).val(),
+        tglbukti: $('#crudForm').find(`[name="tglbukti"]`).val(),
         upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
         statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val(),
         statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
       },
       success: response => {
-        if (response.data.length > 0) {
+        if (response.data != null) {
 
-          $('.tableInfo').show()
-          $('#infoTrado').html('')
-          $.each(response.data, (index, detail) => {
-            let detailRow = $(`
+          if (response.data.length > 0) {
+
+            $('.tableInfo').show()
+            $('#infoTrado').html('')
+            $.each(response.data, (index, detail) => {
+              let detailRow = $(`
               <tr>
                 <td> ${detail.status} </td>
                 <td align="right"> ${numberWithCommas(detail.kmperjalanan)} </td>
@@ -1273,8 +1289,9 @@
               </tr>
             `)
 
-            $('#infoTrado').append(detailRow)
-          })
+              $('#infoTrado').append(detailRow)
+            })
+          }
         }
       },
       error: error => {
@@ -1614,6 +1631,35 @@
       }
     })
 
+    $('.triptangki-lookup').lookup({
+      title: 'Trip tangki Lookup',
+      fileName: 'triptangki',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          tglbukti: $('#crudForm [name=tglbukti]').val(),
+          statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val(),
+          trado_id: $('#crudForm [name=trado_id]').val(),
+          supir_id: $('#crudForm [name=supir_id]').val(),
+          from: 'inputtrip'
+        }
+      },
+      onSelectRow: (triptangki, element) => {
+        $('#crudForm [name=triptangki_id]').first().val(triptangki.id)
+        element.val(triptangki.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=triptangki_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
@@ -1685,6 +1731,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
         }
       },
       onSelectRow: (gandengan, element) => {

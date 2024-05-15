@@ -330,6 +330,13 @@
                     <input type="text" name="qtyton" class="form-control">
                   </div>
                 </div>
+                <div class="form-group triptangki">
+                  <label class="col-sm-12 col-form-label">TRIP TANGKI <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="triptangki_id">
+                    <input type="text" name="triptangki" class="form-control triptangki-lookup">
+                  </div>
+                </div>
                 <div class="form-group batalmuat">
                   <label class="col-sm-12 col-form-label">BATAL MUAT<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -886,6 +893,7 @@
       $('.row-gajikenek').hide()
       $('.row-komisisupir').hide()
       $('.gandengan').show()
+      $('.triptangki').show()
       $('.gandengan').find('label').text('No Tangki')
       containerId = 0
       statuscontainerId = 0
@@ -904,6 +912,7 @@
       $('.hargaton').hide()
       $('.qtyton').hide()
       $('.gandengan').hide()
+      $('.triptangki').hide()
       $('.gandengan').find('label').text('No GANDENGAN / CHASIS')
       let upahsupir = $('#crudForm [name=upah]')
 
@@ -1127,7 +1136,7 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
-            
+
             jenisKendaraan = $('#crudForm').find(`[name="statusjeniskendaraan"]`).val()
             $('#crudForm').find('[name=statusjeniskendaraan]').attr('disabled', 'disabled').css({
               background: '#fff'
@@ -1814,7 +1823,6 @@
   }
 
   function getDataUpahSupirTangki(tarif_id) {
-    console.log('tarif_id', tarif_id)
     $.ajax({
       url: `${apiUrl}upahsupirtangki/getrincian`,
       method: 'POST',
@@ -1826,6 +1834,7 @@
         idtrip: $('#crudForm').find(`[name="id"]`).val(),
         tarif_id: tarif_id,
         upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
+        triptangki_id: $('#crudForm').find(`[name="triptangki_id"]`).val(),
       },
       success: response => {
         $('#crudForm').find(`[name="hargaperton"]`).val(response.data.nominalsupir)
@@ -2164,7 +2173,6 @@
         element.data('currentValue', element.val())
         getNominalSupir()
         if (statusJenisKendaran == 'TANGKI') {
-          console.log('dininini', upahsupir.tarif_id)
           getDataUpahSupirTangki(upahsupir.tarif_id)
         } else {
           getDataUpahSupir()
@@ -2256,6 +2264,37 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $('.triptangki-lookup').lookup({
+      title: 'Trip tangki Lookup',
+      fileName: 'triptangki',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          tglbukti: $('#crudForm [name=tglbukti]').val(),
+          statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val(),
+          trado_id: $('#crudForm [name=trado_id]').val(),
+          supir_id: $('#crudForm [name=supir_id]').val(),
+          from: 'suratpengantar'
+        }
+      },
+      onSelectRow: (triptangki, element) => {
+        $('#crudForm [name=triptangki_id]').first().val(triptangki.id)
+        element.val(triptangki.keterangan)
+        element.data('currentValue', element.val())
+        getDataUpahSupirTangki($('#crudForm [name=tarifrincian_id]').val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=triptangki_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.gandengan-lookup').lookup({
       title: 'Gandengan Lookup',
       fileName: 'gandengan',
@@ -2264,6 +2303,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
         }
       },
       onSelectRow: (gandengan, element) => {
