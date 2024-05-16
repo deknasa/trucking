@@ -70,12 +70,12 @@
                   </select>
                 </div>
 
-                <div class="col-12 col-md-2  ">
+                <div class="col-12 col-md-2 jenisorder">
                   <label class="col-form-label">
                     Jenis Order <span class="text-danger">*</span>
                   </label>
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4 jenisorder">
                   <input type="hidden" name="jenisorder_id">
                   <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
@@ -84,11 +84,22 @@
               <div class="row form-group noinvoicepajak">
                 <div class="col-12 col-md-2  ">
                   <label class="col-form-label">
-                    no invoice pajak 
+                    no invoice pajak
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="noinvoicepajak" class="form-control">
+                </div>
+
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
+                    STATUS JENIS KENDARAAN <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <select name="statusjeniskendaraan" class="form-control select2bs4" id="statusjeniskendaraan">
+                    <option value="">-- PILIH STATUS JENIS KENDARAAN --</option>
+                  </select>
                 </div>
               </div>
 
@@ -244,6 +255,10 @@
       data.push({
         name: 'noinvoicepajak',
         value: form.find(`[name="noinvoicepajak"]`).val()
+      })
+      data.push({
+        name: 'statusjeniskendaraan',
+        value: form.find(`[name="statusjeniskendaraan"]`).val()
       })
 
       data.push({
@@ -492,6 +507,29 @@
     initDatepicker('datepickerIndex')
   })
 
+
+  $(document).on('change', `#crudForm [name="statusjeniskendaraan"]`, function(event) {
+
+    let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
+    statusJenisKendaran = statusjeniskendaraan
+    let jenisorder = $('#crudForm [name=jenisorder]')
+    if (statusjeniskendaraan == 'TANGKI') {
+
+      jenisorder.val('')
+      jenisorder.data('currentValue', '')
+      $('#crudForm [name=jenisorder_id]').val('')
+      jenisorder.attr('readonly', true)
+      jenisorder.parents('.input-group').find('.input-group-append').hide()
+      jenisorder.parents('.input-group').find('.button-clear').hide()
+    }
+    if (statusjeniskendaraan == 'GANDENGAN') {
+
+      jenisorder.attr('readonly', false)
+      jenisorder.parents('.input-group').find('.input-group-append').show()
+      jenisorder.parents('.input-group').find('.button-clear').show()
+    }
+  })
+
   function removeEditingBy(id) {
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
@@ -538,6 +576,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -585,6 +624,7 @@
       .all([
         setTglBukti(form),
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -639,6 +679,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -683,6 +724,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -716,7 +758,7 @@
       url = `${invId}/getAllEdit`
     }
 
-    if ($('#crudForm').find(`[name="agen_id"]`).val() != '' && $('#crudForm').find(`[name="jenisorder_id"]`).val() != '') {
+    if ($('#crudForm').find(`[name="agen_id"]`).val() != '') {
       $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
         $("#tableInvoice")[0].p.selectedRowIds = [];
@@ -1205,6 +1247,10 @@
       value: form.find(`[name="statuspilihaninvoice"]`).val()
     })
     data.push({
+      name: 'statusjeniskendaraan',
+      value: form.find(`[name="statusjeniskendaraan"]`).val()
+    })
+    data.push({
       name: 'limit',
       value: 0
     })
@@ -1400,6 +1446,7 @@
           }
           // getEdit(invId, aksi)
           $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+          $('#crudForm').find("[name=statusjeniskendaraan]").prop('disabled', true);
           $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
           $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           // loadInvoiceGrid();
@@ -1666,6 +1713,49 @@
       })
     })
   }
+  const setStatusJenisKendaraanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusjeniskendaraan]').empty()
+      relatedForm.find('[name=statusjeniskendaraan]').append(
+        new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS JENIS KENDARAAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusJenisKendaraan => {
+            let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id)
+            if (statusJenisKendaraan.default == "YA") {
+              selectedId = statusJenisKendaraan.id
+            }
+            relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change')
+          });
+
+          relatedForm.find('[name=statusjeniskendaraan]').val(selectedId).trigger('change')
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
 
   function setTglJatuhTempo(top = 0) {
     // Tanggal awal dalam format "YYYY-MM-DD"
