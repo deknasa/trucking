@@ -931,6 +931,9 @@
               $('.supir-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
               $('.supir-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
             }
+            if (detail.tidakadasupir == "readonly") {
+              setSupirEnableIndex({supir:1}, index)
+            }
           })
 
           setRowNumbers()
@@ -1206,18 +1209,28 @@
   }
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
+    var supirText = $(`#supir_row_${rowId}`).parents('.input-group').children()
+
     if (kodeabsensitrado.supir) {
       $(`#supir_row_${rowId}`).val('')
       $(`#supir_id_row_${rowId}`).val('')
-      // $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
+
+      $(`#supir_id_row_${rowId}`).prop('readonly', true);
+      $(`#supir_row_${rowId}`).prop('readonly', true);
+      $(supirText[1]).attr('disabled', true)
+      $(supirText[2]).find('.lookup-toggler').attr('disabled', true)
     } else {
-      console.log(rowId);
+      $(`#supir_id_row_${rowId}`).prop('readonly', false);
+      $(`#supir_row_${rowId}`).prop('readonly', false);
+      $(supirText[1]).attr('disabled', false)
+      $(supirText[2]).find('.lookup-toggler').attr('disabled', false)
       let namasupir_old = $(`#supir_old_row_${rowId}`).val()
       let supir_id_old = $(`#supir_old_id_row_${rowId}`).val()
+      if (namasupir_old != null && supir_id_old != 0 && namasupir_old != 'null' && supir_id_old != '0') {
+        $(`#supir_row_${rowId}`).val(namasupir_old)
+        $(`#supir_id_row_${rowId}`).val(supir_id_old)
+      }
 
-      console.log($(`#supir_old_row_${rowId}`), $(`#supir_old_id_row_${rowId}`));
-      $(`#supir_row_${rowId}`).val(namasupir_old)
-      $(`#supir_id_row_${rowId}`).val(supir_id_old)
     }
     if (kodeabsensitrado.uang) {
       $(`#uangjalan_row_${rowId}`).attr('readonly', true)
