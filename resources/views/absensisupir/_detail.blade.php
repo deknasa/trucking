@@ -35,7 +35,7 @@
           {
             label: 'jenis kendaraan',
             name: 'statusjeniskendaraan',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
 
           // {

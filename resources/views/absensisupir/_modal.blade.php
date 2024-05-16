@@ -46,20 +46,20 @@
                 <div class="card" style="max-height:500px; overflow-y: scroll;">
                   <div class="card-body">
                     <!-- <div class="table-responsive"> -->
-                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px;">
+                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2150px;">
                       <thead>
                         <tr>
                           <th width="2%">No</th>
                           <th width="13%">Trado</th>
-                          <th width="6%">supir serap</th>
-                          <th width="6%">tambahan trado</th>
-                          <th width="12%">Supir</th>
+                          <th width="5%">supir serap</th>
+                          <th width="5%">tambahan trado</th>
+                          <th width="10%">Supir</th>
                           <th width="10%" class="uangjalan">Uang Jalan</th>
-                          <th width="20%">Keterangan</th>
-                          <th width="12%">jenis kendaraan</th>
-                          <th width="12%">Status</th>
+                          <th width="16%">Keterangan</th>
+                          <th width="10%">jenis kendaraan</th>
+                          <th width="10%">Status</th>
                           <th width="6%">jlh trip</th>
-                          <th width="9%">tgl batas</th>
+                          <th width="8%">tgl batas</th>
                           {{-- <th width="2%">Aksi</th> --}}
                         </tr>
                       </thead>

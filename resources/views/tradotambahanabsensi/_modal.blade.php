@@ -229,7 +229,6 @@
 
         setFormBindKeys(form)
         activeGrid = null
-        getMaxLength(form)
         if (form.data('action') == 'add') {
             form.find('#btnSaveAdd').show()
         } else {
@@ -442,30 +441,6 @@
         })
     }
 
-    function getMaxLength(form) {
-        if (!form.attr('has-maxlength')) {
-            $.ajax({
-                url: `${apiUrl}supirserap/field_length`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                success: response => {
-                    $.each(response.data, (index, value) => {
-                        if (value !== null && value !== 0 && value !== undefined) {
-                            form.find(`[name=${index}]`).attr('maxlength', value)
-                        }
-                    })
-
-                    form.attr('has-maxlength', true)
-                },
-                error: error => {
-                    showDialog(error.responseJSON)
-                }
-            })
-        }
-    }
 
     function initLookup() {
         $('.trado-lookup').lookup({
