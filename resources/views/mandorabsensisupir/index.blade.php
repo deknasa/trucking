@@ -40,6 +40,7 @@
               <th width="2%">No</th>
               <th width="8%">Trado</th>
               <th width="8%">Supir serap</th>
+              <th width="8%">tambahan trado</th>
               <th width="12%">Supir</th>
               <th width="10%">Status</th>
               <th width="10%">Jenis Kendaraan</th>
@@ -101,7 +102,7 @@
       getAll(1, 0, filterObject)
     //deleted_id
 
-      let dataColumn = ["kodetrado","statussupirserap","namasupir","absentrado",'jeniskendaraan',"jlhtrip","keterangan"] 
+      let dataColumn = ["kodetrado","statussupirserap","statustambahantrado","namasupir","absentrado",'jeniskendaraan',"jlhtrip","keterangan"] 
       filtersEditAll(dataColumn)
       bindKeyPagerEditAll()
       totalInfoPage()
@@ -110,7 +111,7 @@
 
     getAll(1, 0, filterObject)
     //deleted_id
-    let dataColumn = ["kodetrado","statussupirserap","namasupir","absentrado",'jeniskendaraan',"jlhtrip","keterangan"] 
+    let dataColumn = ["kodetrado","statussupirserap","statustambahantrado","namasupir","absentrado",'jeniskendaraan',"jlhtrip","keterangan"] 
     filtersEditAll(dataColumn)
     bindKeyPagerEditAll()
     totalInfoPage()
@@ -237,6 +238,9 @@
         </td>
         <td>
           <input type="text" name="statussupirserap[]" class="form-control" value="${detail.statussupirserap}" readonly>
+        </td>
+        <td>
+          <input type="text" name="statustambahantrado[]" class="form-control" value="${detail.statustambahantrado}" readonly>
         </td>
         <td>
           <input type="hidden" name="namasupir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
