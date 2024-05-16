@@ -84,7 +84,7 @@
               <div class="row form-group noinvoicepajak">
                 <div class="col-12 col-md-2  ">
                   <label class="col-form-label">
-                    no invoice pajak <span class="text-danger">*</span>
+                    no invoice pajak 
                   </label>
                 </div>
                 <div class="col-12 col-md-4">

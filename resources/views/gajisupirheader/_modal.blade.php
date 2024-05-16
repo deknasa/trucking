@@ -1903,7 +1903,7 @@
 
             urlPotSemua = `${apiUrl}gajisupirheader/${id}/edit/editpinjsemua`
 
-        } else if (aksi == 'delete') {
+        } else if (aksi == 'delete' || aksi == 'view') {
             urlPotSemua = `${apiUrl}gajisupirheader/${id}/delete/editpinjsemua`
             attribut = 'disabled'
             forCheckbox = 'disabled'
@@ -2302,7 +2302,7 @@
             id = $(`#crudForm`).find(`[name="id"]`).val()
             urlPotPribadi = `${apiUrl}gajisupirheader/${id}/${supirId}/edit/editpinjpribadi`
 
-        } else if (aksi == 'delete') {
+        } else if (aksi == 'delete' || aksi =='view') {
             urlPotPribadi = `${apiUrl}gajisupirheader/${id}/${supirId}/delete/editpinjpribadi`
             attribut = 'disabled'
             forCheckbox = 'disabled'
