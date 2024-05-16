@@ -559,11 +559,20 @@
   }
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
+    var supirText = $(`.supir-lookup-${rowId}`).parents('.input-group').children()
     if (kodeabsensitrado.supir) {
       // console.log(kodeabsensitrado);
       $(`#supir_id_row_${rowId}`).val("");
       $(`.supir-lookup-${rowId}`).last().val("");
+      $(`#supir_id_row_${rowId}`).prop('readonly', true);
+      $(`.supir-lookup-${rowId}`).prop('readonly', true);
+      $(supirText[1]).attr('disabled', true)
+      $(supirText[2]).find('.lookup-toggler').attr('disabled', true)
     } else {
+      $(`#supir_id_row_${rowId}`).prop('readonly', false);
+      $(`.supir-lookup-${rowId}`).prop('readonly', false);
+      $(supirText[1]).attr('disabled', false)
+      $(supirText[2]).find('.lookup-toggler').attr('disabled', false)
       let namasupir_old = $(`#supir_old_row_${rowId}`).val();
       let supir_id_old = $(`#supir_old_id_row_${rowId}`).last().val();
       if (namasupir_old != null && supir_id_old != 0 && namasupir_old != 'null' && supir_id_old != '0') {
