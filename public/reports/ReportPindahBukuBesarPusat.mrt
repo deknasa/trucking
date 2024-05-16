@@ -3,7 +3,7 @@
   "ReportGuid": "7ea42a2d04a8d8d05052cdb02e8ecb17",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
+  "ReportFile": "http://server:8074/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
   "ReportChanged": "/Date(1715676213000+0700)/",
