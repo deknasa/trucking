@@ -313,12 +313,6 @@
                   </div>
                 </div>
                 <div class="form-group hargaton">
-                  <label class="col-sm-12 col-form-label">HARGA PER TON (UPAH)</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="hargaperton" class="form-control" readonly>
-                  </div>
-                </div>
-                <div class="form-group hargaton">
                   <label class="col-sm-12 col-form-label">HARGA PER TON (TARIF)</label>
                   <div class="col-sm-12">
                     <input type="text" name="hargapertontarif" class="form-control" readonly>
@@ -734,7 +728,6 @@
         data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
       }
       // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
-      data.filter((row) => row.name === 'hargaperton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargaperton"]`)[0])
       data.filter((row) => row.name === 'hargapertontarif')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
       data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
       data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
@@ -856,17 +849,12 @@
   function setNominalTangki() {
 
     let qtyton = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
-    let hargaTon = AutoNumeric.getNumber($(`#crudForm [name="hargaperton"]`)[0])
     let hargaTonTarif = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
     let totalTarif = Math.round((qtyton * hargaTonTarif) / 100) * 100;
-    let totalUpah = Math.round((qtyton * hargaTon) / 100) * 100;
-
-    nominalSupir = totalUpah
     $(`#crudForm [name="omset"]`).val(totalTarif)
     initAutoNumeric($(`#crudForm [name="omset"]`))
-    $(`#crudForm [name="gajisupir"]`).val(totalUpah)
-    initAutoNumeric($(`#crudForm [name="gajisupir"]`))
   }
+
   $(document).on('change', `#crudForm [name="statusjeniskendaraan"]`, function(event) {
 
     let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
@@ -1705,7 +1693,6 @@
           getTarifOmset(response.data.tarifrincian_id, response.data.container_id)
           // $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
           // getGaji(response.data.nominalplusborongan)
-          initAutoNumeric(form.find(`[name="hargaperton"]`))
           initAutoNumeric(form.find(`[name="hargapertontarif"]`))
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
@@ -1837,8 +1824,9 @@
         triptangki_id: $('#crudForm').find(`[name="triptangki_id"]`).val(),
       },
       success: response => {
-        $('#crudForm').find(`[name="hargaperton"]`).val(response.data.nominalsupir)
-        initAutoNumeric($('#crudForm').find(`[name="hargaperton"]`))
+        nominalSupir = response.data.nominalsupir
+        $('#crudForm').find(`[name="gajisupir"]`).val(response.data.nominalsupir)
+        initAutoNumeric($('#crudForm').find(`[name="gajisupir"]`))
         $('#crudForm').find(`[name="hargapertontarif"]`).val(response.data.nominaltarif)
         initAutoNumeric($('#crudForm').find(`[name="hargapertontarif"]`))
         setNominalTangki()
