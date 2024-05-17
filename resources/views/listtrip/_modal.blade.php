@@ -1484,7 +1484,7 @@
 
                 element.val(pelanggan.namapelanggan)
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 clearTripAsal()
             },
             onCancel: (element) => {
@@ -1494,7 +1494,7 @@
                 $('#crudForm [name=pelanggan_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 clearTripAsal()
             }
         })
@@ -1514,7 +1514,7 @@
                 containerId = container.id
                 element.val(container.keterangan)
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 enabledUpahSupir()
                 clearTripAsal()
             },
@@ -1530,7 +1530,7 @@
                 clearUpahSupir()
                 element.val('')
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 clearTripAsal()
             }
         })
@@ -1563,7 +1563,7 @@
                     enableTripAsalLongTrip()
                 } else {
 
-                    clearJobTrucking()
+                    // clearJobTrucking()
                     enableTripAsalLongTrip()
                 }
             },
@@ -1579,7 +1579,7 @@
                 clearUpahSupir()
                 element.val('')
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 isPulangLongtrip = false;
                 clearTripAsal()
             }
@@ -1693,7 +1693,7 @@
                 }
                 element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1705,7 +1705,7 @@
                     gandenganId = 0
                 }
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
             }
         })
         $('.agen-lookup').lookup({
@@ -1723,7 +1723,7 @@
                 $('#crudForm [name=agen_id]').first().val(agen.id)
                 element.val(agen.namaagen)
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 clearTripAsal()
             },
             onCancel: (element) => {
@@ -1733,7 +1733,7 @@
                 $('#crudForm [name=agen_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 clearTripAsal()
             }
         })
@@ -1853,7 +1853,7 @@
                     element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
                 }
                 kotaUpahZona()
-                clearJobTrucking()
+                // clearJobTrucking()
                 element.data('currentValue', element.val())
                 // clearTrado()
                 getInfoTrado()
@@ -1868,7 +1868,7 @@
                 clearUpahSupir()
                 element.val('')
                 element.data('currentValue', element.val())
-                clearJobTrucking()
+                // clearJobTrucking()
                 // clearTrado()
                 clearTripAsal()
             }
