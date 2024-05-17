@@ -313,6 +313,9 @@
         $(`.supir-editable`).last().parents('td').children().find('.lookup-toggler').attr('disabled', false)
         $(`.supir-editable`).last().parents('td').children().find('.button-clear').attr('disabled', false)
       }
+      if (detail.tidakadasupir == "readonly") {
+        setSupirEnableIndex({supir:1}, index)
+      }
 
       // supir
       // absentrado
