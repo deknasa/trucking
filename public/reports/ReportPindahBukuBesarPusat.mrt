@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "890cbf87f40c137e28d28422ef7c56aa",
+  "ReportGuid": "e18fa577724b3fccc45cbaf3cdfccc72",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://server:8074/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1715833501000+0700)/",
+  "ReportChanged": "/Date(1715909752000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -394,7 +394,7 @@
               "Name": "Text14",
               "Guid": "65761f329059de895ec96fdb1f7bd0f4",
               "CanGrow": true,
-              "ClientRectangle": "25,11,58,6",
+              "ClientRectangle": "25,11,36,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -420,7 +420,7 @@
               "Name": "Text15",
               "Guid": "2a6b5128eff264a87e0a97c5279bf92f",
               "CanGrow": true,
-              "ClientRectangle": "25,15,58,6",
+              "ClientRectangle": "25,15,36,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -450,7 +450,7 @@
               "Name": "Text16",
               "Guid": "06932b450000a7cace13d3968dec857b",
               "CanGrow": true,
-              "ClientRectangle": "112,11,80,6",
+              "ClientRectangle": "92,11,80,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -475,7 +475,7 @@
               "Ident": "StiText",
               "Name": "Text37",
               "Guid": "8f63ad23a057d86a324e7592e443cede",
-              "ClientRectangle": "110,11,2,6",
+              "ClientRectangle": "88,11,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -530,7 +530,7 @@
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "8bdc82f2568931c00ee6b62cd32e1e1d",
-              "ClientRectangle": "95,11,15,6",
+              "ClientRectangle": "70,11,15,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -665,7 +665,7 @@
               "Name": "Text30",
               "Guid": "2e39d2dc645838a368bac86ea6dbd437",
               "CanGrow": true,
-              "ClientRectangle": "112,15,78,6",
+              "ClientRectangle": "92,15,78,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -690,7 +690,7 @@
               "Ident": "StiText",
               "Name": "Text34",
               "Guid": "9b16c08b2229a47cd95c74c82b388065",
-              "ClientRectangle": "95,15,15,6",
+              "ClientRectangle": "70,15,15,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -709,7 +709,7 @@
               "Ident": "StiText",
               "Name": "Text33",
               "Guid": "e8917dbbeec393d4902f36963982bb8f",
-              "ClientRectangle": "110,15,2,6",
+              "ClientRectangle": "88,15,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -813,7 +813,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,123.08,205,3.62",
+          "ClientRectangle": "0,136.38,205,3.62",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1764,14 +1764,14 @@
         }
       },
       "PageWidth": 216,
-      "PageHeight": 139.7,
+      "PageHeight": 148,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
         "Left": 1,
         "Right": 10,
-        "Top": 10,
+        "Top": 5,
         "Bottom": 3
       }
     }

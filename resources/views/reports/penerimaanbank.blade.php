@@ -11,12 +11,13 @@
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
-   <!-- <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
+  <!-- <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     let penerimaanheader = <?= json_encode($penerimaan); ?>;
     let printer = <?= json_encode($printer); ?>;
+    let cabang = <?= json_encode($cabang); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -37,18 +38,27 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-      //  options.appearance.fullScreenMode = true
+      // var options = new Stimulsoft.Designer.StiDesignerOptions()
+      // options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      if (printer['tipe'] == 'reportPrinterBesar') {
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanBankBesar.mrt') }}`)
+      if (cabang['cabang'] == 'PUSAT') {
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportPenerimaanBankBesarPusat.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportPenerimaanBank.mrt') }}`)
+        }
+
       } else {
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanBank.mrt') }}`)
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportPenerimaanBankBesar.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportPenerimaanBank.mrt') }}`)
+        }
       }
 
       report.dictionary.dataSources.clear()
