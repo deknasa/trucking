@@ -139,7 +139,7 @@
             name: 'id',
             width: '50px',
             search: false,
-            // hidden: true
+            hidden: true
           },
           {
             label: 'trado_id',
@@ -182,7 +182,16 @@
             hidden: true,
            
           },
-          
+          {
+            label: 'TAMBAHAN TRADO',
+            name: 'statustambahantrado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
+          {
+            label: 'supir serap',
+            name: 'statussupirserap',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
           {
             label: 'Trado',
             name: 'kodetrado',
@@ -274,6 +283,12 @@
               }
             },
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          },
+          {
+            label: 'jenis kendaraan',
+            name: 'statusjeniskendaraannama',
+            editable: false,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
             label: 'jlh trip',
