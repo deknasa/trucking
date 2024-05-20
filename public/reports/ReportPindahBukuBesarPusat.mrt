@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e18fa577724b3fccc45cbaf3cdfccc72",
+  "ReportGuid": "911f97eb8d7b5efaa7d32be16e87a0de",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1715909752000+0700)/",
+  "ReportChanged": "/Date(1716199249000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -813,7 +813,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,136.38,205,3.62",
+          "ClientRectangle": "0,133.38,205,3.62",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1772,7 +1772,7 @@
         "Left": 1,
         "Right": 10,
         "Top": 5,
-        "Bottom": 3
+        "Bottom": 6
       }
     }
   }
