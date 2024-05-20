@@ -960,7 +960,7 @@
             value: dataPelunasanBBM.id
           })
         })
-      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM") {
+      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS" || KodePengeluaranId == "BTK" || KodePengeluaranId == "BTB") {
         data = []
 
         data.push({
@@ -995,7 +995,8 @@
           name: 'bank',
           value: form.find(`[name="bank"]`).val()
         })
-        if (KodePengeluaranId == "BSM") {
+        let selectedRowsBLL
+        if (KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS" || KodePengeluaranId == "BTK" || KodePengeluaranId == "BTB") {
 
           data.push({
             name: 'tgldari',
@@ -1005,18 +1006,26 @@
             name: 'tglsampai',
             value: form.find(`[name="tglsampai"]`).val()
           })
+           selectedRowsBLL = $(`#tableBSM`).getGridParam("selectedRowIds");
 
         } else {
+           selectedRowsBLL = $(`#table${KodePengeluaranId}`).getGridParam("selectedRowIds");
 
           data.push({
             name: 'periode',
             value: form.find(`[name="periode"]`).val()
           })
         }
-        let selectedRowsBLL = $(`#table${KodePengeluaranId}`).getGridParam("selectedRowIds");
         let jumlahdetail = 0;
         $.each(selectedRowsBLL, function(index, value) {
-          dataBLL = $(`#table${KodePengeluaranId}`).jqGrid("getLocalRow", value);
+          if (KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS" || KodePengeluaranId == "BTK" || KodePengeluaranId == "BTB") {
+            dataBLL = $(`#tableBSM`).jqGrid("getLocalRow", value);
+
+          } else {
+            dataBLL = $(`#table${KodePengeluaranId}`).jqGrid("getLocalRow", value);
+
+          }
+
           let selectedNominal = (dataBLL.nominal == undefined) ? 0 : dataBLL.nominal;
           if (selectedNominal != 0) {
             jumlahdetail++
@@ -1374,8 +1383,8 @@
             $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
             $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
             $('#crudForm').find('[name=tglbukti]').focus()
-           setTampilanForm()
-           
+            setTampilanForm()
+
             if (KodePengeluaranId == 'KBBM') {
               $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
               $('#tablePelunasanbbm').jqGrid("clearGridData");
@@ -1552,6 +1561,15 @@
         tampilanOTOL()
         break;
       case 'BSM': //listKodePengeluaran[17]:
+        tampilanBSM()
+        break;
+      case 'BLS': //listKodePengeluaran[17]:
+        tampilanBSM()
+        break;
+      case 'BTK': //listKodePengeluaran[17]:
+        tampilanBSM()
+        break;
+      case 'BTB': //listKodePengeluaran[17]:
         tampilanBSM()
         break;
       default:
@@ -2746,17 +2764,17 @@
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    if (KodePengeluaranId == 'BLS') {
-      $('.colmn-offset').show()
-      $('.tbl_penerimaantruckingheader').show()
-      $('[name=keterangancoa]').parents('.form-group').show()
-      $('.colspan').attr('colspan', 3);
-    } else {
-      $('.colspan').attr('colspan', 2);
-      $('.colmn-offset').show()
-      $('.tbl_penerimaantruckingheader').hide()
-      $('[name=keterangancoa]').parents('.form-group').hide()
-    }
+    // if (KodePengeluaranId == 'BLS') {
+    //   $('.colmn-offset').show()
+    //   $('.tbl_penerimaantruckingheader').show()
+    //   $('[name=keterangancoa]').parents('.form-group').show()
+    //   $('.colspan').attr('colspan', 3);
+    // } else {
+    $('.colspan').attr('colspan', 2);
+    $('.colmn-offset').show()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    // }
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=statusposting]').parents('.form-group').hide()
     $('.tbl_stok_id').hide()
@@ -5269,7 +5287,7 @@
 
             });
 
-          } else if (kodepengeluaran === "BSM") {
+          } else if (kodepengeluaran === "BSM" || kodepengeluaran === "BLS" || KodePengeluaranId == "BTK" || KodePengeluaranId == "BTB") {
 
             getDataBiayaLapangan().then((response) => {
 
