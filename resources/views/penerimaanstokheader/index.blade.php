@@ -784,16 +784,16 @@
                 }
               },
               {
-                id: 'approvalEditKeterangan',
-                text: ' UN/APPROVAL status Edit Keterangan',
+                id: 'approvalBukaTglBatasPG',
+                text: ' approval/un Buka Tgl Batas PG',
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
-                    // var selectedOne = selectedOnlyOne();
-                    // if (selectedOne[0]) {
-                      approveEditKeterangan(selectedOne[1])
-                    // } else {
-                    //   showDialog(selectedOne[1])
-                    // }
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`) {
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedRows.length > 0) {
+                      approvalBukaTglBatasPG()
+                    } else {
+                      showDialog('Harap pilih salah satu record')
+                    }
                   }
                 }
               },
@@ -977,7 +977,8 @@
         },
       })
     }
-    function approvalBukaTglBatasPG(table) {
+    function approvalBukaTglBatasPG() {
+      console.log(selectedRows);
       event.preventDefault()
       
       let form = $('#crudForm')
@@ -985,7 +986,7 @@
       $('#processingLoader').removeClass('d-none')
       
       $.ajax({
-        url: `${apiUrl}${table}/approvalnonaktif`,
+        url: `${apiUrl}penerimaanstokheader/approvalbukatglbataspg`,
         method: 'POST',
         dataType: 'JSON',
         headers: {
@@ -993,7 +994,6 @@
         },
         data: {
           Id: selectedRows,
-          table: table
         },
         success: response => {
           $('#crudForm').trigger('reset')
@@ -1132,6 +1132,11 @@
     if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`) {
       hakApporveCount--
       $('#approval-kirim-berkas').hide()
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`) {
+      hakApporveCount--
+      $('#approvalBukaTglBatasPG').hide()
     }
     if (hakApporveCount < 1) {
       $('#approve').hide()
