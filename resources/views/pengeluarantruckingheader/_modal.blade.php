@@ -960,7 +960,7 @@
             value: dataPelunasanBBM.id
           })
         })
-      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM") {
+      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS") {
         data = []
 
         data.push({
@@ -995,7 +995,7 @@
           name: 'bank',
           value: form.find(`[name="bank"]`).val()
         })
-        if (KodePengeluaranId == "BSM") {
+        if (KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS")  {
 
           data.push({
             name: 'tgldari',
@@ -1374,8 +1374,8 @@
             $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
             $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
             $('#crudForm').find('[name=tglbukti]').focus()
-           setTampilanForm()
-           
+            setTampilanForm()
+
             if (KodePengeluaranId == 'KBBM') {
               $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
               $('#tablePelunasanbbm').jqGrid("clearGridData");
@@ -1552,6 +1552,9 @@
         tampilanOTOL()
         break;
       case 'BSM': //listKodePengeluaran[17]:
+        tampilanBSM()
+        break;
+      case 'BLS': //listKodePengeluaran[17]:
         tampilanBSM()
         break;
       default:
@@ -5269,7 +5272,7 @@
 
             });
 
-          } else if (kodepengeluaran === "BSM") {
+          } else if (kodepengeluaran === "BSM" || kodepengeluaran === "BLS") {
 
             getDataBiayaLapangan().then((response) => {
 
