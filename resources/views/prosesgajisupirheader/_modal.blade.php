@@ -1132,7 +1132,7 @@
         loadGlobalSearch($('#rekapRincian'))
     }
 
-    $(`#crudForm [name="statusjeniskendaraan"]`).on('change', function(event) {
+    $(document).on('change', `[name="statusjeniskendaraan"]`, function(event) {
         let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
         statusJenisKendaran = statusjeniskendaraan
         if (statusjeniskendaraan == 'TANGKI') {
