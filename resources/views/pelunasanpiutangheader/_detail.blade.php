@@ -100,6 +100,24 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
+            label: 'KET. POTONGAN B. PPH',
+            name: 'keteranganpotonganpph',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
+          },
+          {
+            label: 'KODE PERKIRAAN POTONGAN B. PPH',
+            name: 'coapotonganpph',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            width: 220
+          },
+          {
+            label: 'POTONGAN B. PPH',
+            name: 'potonganpph',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'NOMINAL LEBIH BAYAR',
             name: 'nominallebihbayar',
             align: 'right',
@@ -173,6 +191,7 @@
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
               potongan: data.attributes.totalPotongan,
+              potonganpph: data.attributes.totalPotonganPPH,
               nominallebihbayar: data.attributes.totalNominalLebih,
             }, true)
           }

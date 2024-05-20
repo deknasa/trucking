@@ -412,6 +412,24 @@
             }
           },
           {
+            label: 'NOTA KREDIT B. PPH',
+            name: 'notakreditpph_nobukti',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadernotakreditheader
+              let tglsampai = rowData.tglsampaiheadernotakreditheader
+              let url = "{{route('notakreditheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
