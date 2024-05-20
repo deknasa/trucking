@@ -313,6 +313,14 @@
         $(`.supir-editable`).last().parents('td').children().find('.lookup-toggler').attr('disabled', false)
         $(`.supir-editable`).last().parents('td').children().find('.button-clear').attr('disabled', false)
       }
+      if (detail.jlhtrip > 0) {
+        $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('input').attr('readonly',true)
+        $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+        $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.button-clear').attr('disabled', true)
+      }
+      if (detail.tidakadasupir == "readonly") {
+        setSupirEnableIndex({supir:1}, index)
+      }
 
       // supir
       // absentrado

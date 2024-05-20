@@ -911,6 +911,9 @@
                 element.data('currentValue', element.val());
               },
             });
+            $('.jeniskendaraan-lookup').last().parents('td').children().find('input').attr('disabled', true)
+            $('.jeniskendaraan-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+            $('.jeniskendaraan-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
             if (detail.berlaku == 0) {
               $('.absentrado-lookup').last().parents('td').children().find('input').attr('disabled', true)
               $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)

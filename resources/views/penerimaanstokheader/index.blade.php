@@ -784,6 +784,20 @@
                 }
               },
               {
+                id: 'approvalEditKeterangan',
+                text: ' UN/APPROVAL status Edit Keterangan',
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
+                    // var selectedOne = selectedOnlyOne();
+                    // if (selectedOne[0]) {
+                      approveEditKeterangan(selectedOne[1])
+                    // } else {
+                    //   showDialog(selectedOne[1])
+                    // }
+                  }
+                }
+              },
+              {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENERIMAAN STOK",
                 onClick: () => {
@@ -963,6 +977,53 @@
         },
       })
     }
+    function approvalBukaTglBatasPG(table) {
+      event.preventDefault()
+      
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+      
+      $.ajax({
+        url: `${apiUrl}${table}/approvalnonaktif`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+          table: table
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+      
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+      
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
+
 
     function approveEditKeterangan(id) {
       if (approveEditRequest) {
