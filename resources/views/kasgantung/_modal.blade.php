@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control" readonly>
+                  <input type="text" name="bank" class="form-control bank-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -210,7 +210,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
       event.preventDefault()
 
@@ -307,9 +307,9 @@
           $('#crudForm').trigger('reset')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             id = response.data.id
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -319,14 +319,14 @@
                 tglsampai: dateFormat(response.data.tglsampaiheader)
               }
             }).trigger('reloadGrid');
-  
+
             if (id == 0) {
               $('#detail').jqGrid().trigger('reloadGrid')
             }
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -367,7 +367,7 @@
     } else {
       form.find('#btnSaveAdd').hide()
     }
-    
+
 
     getMaxLength(form)
     initLookup()
@@ -409,7 +409,7 @@
         }
       },
     })
-  }  
+  }
 
 
   function setTotal() {
@@ -493,6 +493,9 @@
           form.find(`[name="tglbukti"]`).prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -529,6 +532,9 @@
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -917,7 +923,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          // tipe: 'KAS',
+          tipe: 'KAS',
         }
       },
       onSelectRow: (bank, element) => {

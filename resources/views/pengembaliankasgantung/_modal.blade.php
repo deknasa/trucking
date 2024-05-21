@@ -97,8 +97,8 @@
                     POSTING </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="bank" class="form-control" readonly>
-                  <input type="text" id="bankId" name="bank_id" hidden>
+                  <input type="text" name="bank" class="form-control bank-lookup">
+                  <input type="hidden" id="bankId" name="bank_id">
                 </div>
               </div>
               <div class="row form-group">
@@ -172,7 +172,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
       event.preventDefault()
 
@@ -329,9 +329,9 @@
           $('#crudForm').trigger('reset')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             id = response.data.id
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -341,11 +341,11 @@
                 tglsampai: dateFormat(response.data.tglsampaiheader)
               }
             }).trigger('reloadGrid');
-  
+
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -353,11 +353,11 @@
             $("#tablePengembalian")[0].p.selectedRowIds = [];
             $('#tablePengembalian').jqGrid("clearGridData");
             $("#tablePengembalian")
-            .jqGrid("setGridParam", {
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
-            
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+
             createPengembalianKasGantung();
           }
         },
@@ -467,7 +467,7 @@
         }
       },
     })
-  }  
+  }
 
   function rangeKasgantung() {
 
@@ -481,9 +481,7 @@
     getDataPengembalian(tgldari, tglsampai)
       .then((response) => {
 
-        if ($('#crudForm').data('action') == 'add') {
-          $("#tablePengembalian")[0].p.selectedRowIds = [];
-        }
+        $("#tablePengembalian")[0].p.selectedRowIds = [];
         selectedId = []
         totalBayar = 0
         $.each(response.data, (index, value) => {
@@ -615,6 +613,9 @@
           form.find(`[name="tglbukti"]`).not('#gs_tglbukti').prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -657,6 +658,9 @@
         form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="tglsampai"]`).prop('readonly', true)
         form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -1104,7 +1108,8 @@
     data = {
       limit: 0,
       tgldari: dari,
-      tglsampai: sampai
+      tglsampai: sampai,
+      bank_id: $(`#crudForm`).find(`[name="bank_id"]`).val()
     }
 
     return new Promise((resolve, reject) => {
@@ -1435,11 +1440,11 @@
         if (error) {
           showDialog(response)
         } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
             cekValidasiAksi(Id, Aksi)
           }
         }
@@ -1471,8 +1476,8 @@
       method: 'POST',
       dataType: 'JSON',
       data: {
-                aksi: Aksi
-            },
+        aksi: Aksi
+      },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
@@ -1487,7 +1492,7 @@
           if (Aksi == 'DELETE') {
             deletePengembalianKasGantung(Id)
           }
-        }        
+        }
         // var kondisi = response.kondisi
         // if (kondisi == true) {
         //   showDialog(response.message['keterangan'])
@@ -1616,6 +1621,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          tipe: 'KAS'
         }
       },
       onSelectRow: (bank, element) => {
