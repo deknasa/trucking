@@ -350,6 +350,7 @@
       namasupir_old: ( $(rowElement).find(`[name="namasupir_old[]"]`).val() )? $(rowElement).find(`[name="namasupir_old[]"]`).val() :"",
       absentrado: ( $(rowElement).find(`[name="absentrado[]"]`).val() != 'null') ? $(rowElement).find(`[name="absentrado[]"]`).val() :"",
       keterangan: ( $(rowElement).find(`[name="keterangan[]"]`).val() != 'null') ? $(rowElement).find(`[name="keterangan[]"]`).val() :"",
+      statustambahantrado: ( $(rowElement).find(`[name="statustambahantrado[]"]`).val() != 'null') ? $(rowElement).find(`[name="statustambahantrado[]"]`).val() :"",
       tglbukti: ( $(rowElement).find(`[name="tglbukti[]"]`).val() != 'null') ? $(rowElement).find(`[name="tglbukti[]"]`).val() :"",
     }
   }
