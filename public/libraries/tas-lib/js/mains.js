@@ -1295,7 +1295,7 @@ function showSuccessDialog(statusText = "", message = "") {
 // 	$(".ui-dialog-titlebar-close").find("p").remove();
 // }
 
-function showDialog(response) {
+function showDialog(response, maxWIdth = '600px') {
     $("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`);
@@ -1314,6 +1314,9 @@ function showDialog(response) {
 
             $("#dialog-message").dialog({
                 modal: true,
+                width: 'auto',   // Automatically adjust width
+                height: 'auto',
+                resizable: false,
                 buttons: [
                     {
                         text: "Ok",
@@ -1322,6 +1325,13 @@ function showDialog(response) {
                         },
                     },
                 ],
+                open: function() {
+                    // Adjust the dialog size after it is opened
+                    $(this).css({
+                        'max-width': maxWIdth,   // Set your desired maximum width here
+                    });
+                    $(this).dialog("option", "position", { my: "center", at: "center", of: window });
+                }
             });
             $(".ui-dialog-titlebar-close").find("p").remove();
         } else {
@@ -1331,6 +1341,9 @@ function showDialog(response) {
 
             $(`#dialog-${response.statuspesan}-message`).dialog({
                 modal: true,
+                width: 'auto',   // Automatically adjust width
+                height: 'auto',
+                resizable: false,
                 buttons: [
                     {
                         text: "Ok",
@@ -1342,6 +1355,13 @@ function showDialog(response) {
                         },
                     },
                 ],
+                open: function() {
+                    // Adjust the dialog size after it is opened
+                    $(this).css({
+                        'max-width': maxWIdth,   // Set your desired maximum width here
+                    });
+                    $(this).dialog("option", "position", { my: "center", at: "center", of: window });
+                }
             });
 
             $(".ui-dialog-titlebar-close").find("p").remove();
@@ -1353,6 +1373,9 @@ function showDialog(response) {
 
         $("#dialog-warning-message").dialog({
             modal: true,
+            width: 'auto',   // Automatically adjust width
+            height: 'auto',
+            resizable: false,
             buttons: [
                 {
                     text: "Ok",
@@ -1362,6 +1385,13 @@ function showDialog(response) {
                     },
                 },
             ],
+            open: function() {
+                // Adjust the dialog size after it is opened
+                $(this).css({
+                    'max-width': maxWIdth,   // Set your desired maximum width here
+                });
+                $(this).dialog("option", "position", { my: "center", at: "center", of: window });
+            }
         });
         $(".ui-dialog-titlebar-close").find("p").remove();
     }
@@ -1466,8 +1496,8 @@ function showConfirmForce(message = "", Id = "") {
         modal: true,
         buttons: [
             {
-                id: "Force Edit",
-                text: "Force Edit",
+                id: "approval-kacab-force-edit",
+                text: "approval",
                 click: function () {
                     $(this).dialog("close");
                     console.log(Id);
@@ -1727,6 +1757,7 @@ function setSpaceBarCheckedHandler(table = null) {
                             for (var i = 0; i < selectedRows.length; i++) {
                                 if (selectedRows[i] == value) {
                                     selectedRows.splice(i, 1);
+                                    selectedbukti.splice(i, 1);
                                 }
                             }
 
@@ -1748,6 +1779,14 @@ function setSpaceBarCheckedHandler(table = null) {
                                 );
                             } else {
                                 selectedRows.push($checkbox.val());
+
+                                selectedbukti.push(
+                                    $(`#jqGrid tr#${selectedRowId}`)
+                                        .find(
+                                            `td[aria-describedby="jqGrid_nobukti"]`
+                                        )
+                                        .attr("title")
+                                );
                             }
                             $checkbox.parents("tr").addClass("bg-light-blue");
                         }
@@ -1828,10 +1867,9 @@ function reloadGrid() {
     $("#jqGrid").trigger("reloadGrid");
 }
 
-function preventNewTab(table){
-    showDialog('TIDAK PUNYA HAK UNTUK MENGAKSES '+table)
+function preventNewTab(table) {
+    showDialog("TIDAK PUNYA HAK UNTUK MENGAKSES " + table);
 }
-
 
 function elementPager() {
     let elPager = $(`
@@ -1950,7 +1988,7 @@ function filtersEditAll(dataColumn = []) {
         };
         // firstPage = false;
         getAll(1, 0, filterObject, dateFilter);
-        console.log(filters,'filter');
+        console.log(filters, "filter");
         // setTimeout(function () {
         //     totalInfoPage(totalPages);
         //     viewPageEdit(currentPage, $("#editAll tbody tr").length);
@@ -2031,12 +2069,12 @@ function bindKeyPagerEditAll(date) {
             getAll(parseInt(currentPage) - 1, rowCount, filterObject, date);
             $("#pagerInput").val(parseInt(currentPage) - 1);
         }
-        
+
         if (tglPengiriman) {
             setTimeout(function () {
                 viewPageEdit(10, lengthValue);
             }, 500);
-        }else{
+        } else {
             viewPageEdit();
         }
     });
@@ -2055,11 +2093,9 @@ function bindKeyPagerEditAll(date) {
             setTimeout(function () {
                 viewPageEdit(10, lengthValue);
             }, 500);
-        }else{
+        } else {
             viewPageEdit();
         }
-
-       
     });
 
     $("#lastPageButton").click(function (e) {
