@@ -292,7 +292,7 @@
         detailRow.find(`[name="absentrado[]"]`).val(detail.absentrado)
         detailRow.find(`[name="absentrado[]"]`).attr("data-current-value", detail.absentrado);
       }
-      if (detail.statusjeniskendaraan) {
+      if (detail.statusjeniskendaraan && detail.statusjeniskendaraannama) {
         detailRow.find(`[name="jeniskendaraan_id[]"]`).val(detail.statusjeniskendaraan)
         detailRow.find(`[name="jeniskendaraan[]"]`).val(detail.statusjeniskendaraannama)
         detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", detail.statusjeniskendaraannama);
@@ -461,7 +461,7 @@
 
       },
       error: error => {
-        reject(error)
+        showDialog(error.responseJSON)
       }
     }).always(() => {
       $('#processingLoader').addClass('d-none')
