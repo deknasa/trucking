@@ -315,9 +315,10 @@
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
               let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let bankpenerimaan = rowData.penerimaanbank_id
               let url = "{{route('penerimaanheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpenerimaan}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -351,7 +352,7 @@
               let tglsampai = rowData.tglsampaiheaderpenerimaangiroheader
               let url = "{{route('penerimaangiroheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -368,9 +369,10 @@
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
               let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let bankpengeluaran = rowData.pengeluaranbank_id
               let url = "{{route('pengeluaranheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpengeluaran}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -388,7 +390,7 @@
               let tglsampai = rowData.tglsampaiheadernotadebetheader
               let url = "{{route('notadebetheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -406,7 +408,7 @@
               let tglsampai = rowData.tglsampaiheadernotakreditheader
               let url = "{{route('notakreditheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -424,7 +426,7 @@
               let tglsampai = rowData.tglsampaiheadernotakreditheader
               let url = "{{route('notakreditheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }

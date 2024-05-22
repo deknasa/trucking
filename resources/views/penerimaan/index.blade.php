@@ -132,6 +132,10 @@
     @isset($request['tglsampai'])
     tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
+    
+    @isset($request['bank_id'])
+    $('#bankheader').val(`{{ $request['bank_id'] }}`).trigger('change')
+    @endisset
     setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
@@ -582,6 +586,7 @@
           permission()
           setHighlight($(this))
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
         }
       })
 
