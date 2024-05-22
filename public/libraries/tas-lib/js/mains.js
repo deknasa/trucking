@@ -1295,7 +1295,7 @@ function showSuccessDialog(statusText = "", message = "") {
 // 	$(".ui-dialog-titlebar-close").find("p").remove();
 // }
 
-function showDialog(response, maxWIdth = '600px') {
+function showDialog(response, maxWIdth = "600px") {
     $("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`);
@@ -1314,8 +1314,8 @@ function showDialog(response, maxWIdth = '600px') {
 
             $("#dialog-message").dialog({
                 modal: true,
-                width: 'auto',   // Automatically adjust width
-                height: 'auto',
+                width: "auto", // Automatically adjust width
+                height: "auto",
                 resizable: false,
                 buttons: [
                     {
@@ -1325,13 +1325,17 @@ function showDialog(response, maxWIdth = '600px') {
                         },
                     },
                 ],
-                open: function() {
+                open: function () {
                     // Adjust the dialog size after it is opened
                     $(this).css({
-                        'max-width': maxWIdth,   // Set your desired maximum width here
+                        "max-width": maxWIdth, // Set your desired maximum width here
                     });
-                    $(this).dialog("option", "position", { my: "center", at: "center", of: window });
-                }
+                    $(this).dialog("option", "position", {
+                        my: "center",
+                        at: "center",
+                        of: window,
+                    });
+                },
             });
             $(".ui-dialog-titlebar-close").find("p").remove();
         } else {
@@ -1341,8 +1345,8 @@ function showDialog(response, maxWIdth = '600px') {
 
             $(`#dialog-${response.statuspesan}-message`).dialog({
                 modal: true,
-                width: 'auto',   // Automatically adjust width
-                height: 'auto',
+                width: "auto", // Automatically adjust width
+                height: "auto",
                 resizable: false,
                 buttons: [
                     {
@@ -1355,13 +1359,17 @@ function showDialog(response, maxWIdth = '600px') {
                         },
                     },
                 ],
-                open: function() {
+                open: function () {
                     // Adjust the dialog size after it is opened
                     $(this).css({
-                        'max-width': maxWIdth,   // Set your desired maximum width here
+                        "max-width": maxWIdth, // Set your desired maximum width here
                     });
-                    $(this).dialog("option", "position", { my: "center", at: "center", of: window });
-                }
+                    $(this).dialog("option", "position", {
+                        my: "center",
+                        at: "center",
+                        of: window,
+                    });
+                },
             });
 
             $(".ui-dialog-titlebar-close").find("p").remove();
@@ -1373,8 +1381,8 @@ function showDialog(response, maxWIdth = '600px') {
 
         $("#dialog-warning-message").dialog({
             modal: true,
-            width: 'auto',   // Automatically adjust width
-            height: 'auto',
+            width: "auto", // Automatically adjust width
+            height: "auto",
             resizable: false,
             buttons: [
                 {
@@ -1385,13 +1393,17 @@ function showDialog(response, maxWIdth = '600px') {
                     },
                 },
             ],
-            open: function() {
+            open: function () {
                 // Adjust the dialog size after it is opened
                 $(this).css({
-                    'max-width': maxWIdth,   // Set your desired maximum width here
+                    "max-width": maxWIdth, // Set your desired maximum width here
                 });
-                $(this).dialog("option", "position", { my: "center", at: "center", of: window });
-            }
+                $(this).dialog("option", "position", {
+                    my: "center",
+                    at: "center",
+                    of: window,
+                });
+            },
         });
         $(".ui-dialog-titlebar-close").find("p").remove();
     }
@@ -2156,4 +2168,33 @@ function totalInfoPage() {
     $("#infoPage").append(`
     <span id="totalPage">of ${totalPages}</span>
 `);
+}
+
+function getQueryParameter() {
+    setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("nobukti") != null) {
+            
+            $('#gs_nobukti').val(urlParams.get("nobukti"))
+            $("#jqGrid")
+                .jqGrid("setGridParam", {
+                    postData: {
+                        filters: JSON.stringify({
+                            groupOp: "AND",
+                            rules: [
+                                {
+                                    field: "nobukti",
+                                    op: "cn",
+                                    data: urlParams.get("nobukti"),
+                                },
+                            ],
+                        }),
+                    },
+                    datatype: "json",
+                })
+                .trigger("reloadGrid");
+                
+            window.history.replaceState(null, '', window.location.origin + window.location.pathname);
+        }
+    }, 100);
 }

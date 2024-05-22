@@ -69,16 +69,16 @@
     let value = $(element).val();
 
     var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedbukti.push(valuebukti)
 
       $(element).parents('tr').addClass('bg-light-blue')
-      
+
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
       for (var i = 0; i < selectedRows.length; i++) {
@@ -90,16 +90,16 @@
       if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
-      
-      for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
-      }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
 
     }
 
@@ -107,7 +107,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
-    selectedbukti =[]
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -433,7 +433,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
 
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           activeGrid = grid
@@ -514,6 +514,8 @@
           permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
+
+          getQueryParameter()
         }
       })
 
@@ -658,7 +660,7 @@
 
                 }
               }
-            },            
+            },
           ],
         }]
 
