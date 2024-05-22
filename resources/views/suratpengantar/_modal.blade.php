@@ -850,7 +850,7 @@
 
     let qtyton = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
     let hargaTonTarif = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
-    let totalTarif = Math.round((qtyton * hargaTonTarif) / 100) * 100;
+    let totalTarif = Math.round(qtyton * hargaTonTarif);
     $(`#crudForm [name="omset"]`).val(totalTarif)
     initAutoNumeric($(`#crudForm [name="omset"]`))
   }
