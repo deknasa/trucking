@@ -140,7 +140,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('penerimaanheader', {
-        bank: $('#bankheader').val()
+        bank: $('#bankheader').val(),
+        proses: 'reload'
       })
       selectedRows = []
       selectedbukti = []
