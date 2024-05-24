@@ -1328,6 +1328,7 @@ function showDialog(response, maxWIdth = "600px") {
                 open: function () {
                     // Adjust the dialog size after it is opened
                     $(this).css({
+                        "min-width": '300px',
                         "max-width": maxWIdth, // Set your desired maximum width here
                     });
                     $(this).dialog("option", "position", {
@@ -1362,6 +1363,7 @@ function showDialog(response, maxWIdth = "600px") {
                 open: function () {
                     // Adjust the dialog size after it is opened
                     $(this).css({
+                        "min-width": '300px',
                         "max-width": maxWIdth, // Set your desired maximum width here
                     });
                     $(this).dialog("option", "position", {
@@ -1396,6 +1398,7 @@ function showDialog(response, maxWIdth = "600px") {
             open: function () {
                 // Adjust the dialog size after it is opened
                 $(this).css({
+                    "min-width": '300px',
                     "max-width": maxWIdth, // Set your desired maximum width here
                 });
                 $(this).dialog("option", "position", {
