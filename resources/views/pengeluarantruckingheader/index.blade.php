@@ -444,7 +444,19 @@
             label: 'NO BUKTI Pengeluaran Trucking',
             name: 'pengeluarantrucking_nobukti',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluaranheader
+              let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let url = "{{route('pengeluarantruckingheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }            
           },
           {
             label: 'KODE PERKIRAAN',
@@ -463,9 +475,10 @@
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
               let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let bankpengeluaran = rowData.pengeluaranbank_id
               let url = "{{route('pengeluaranheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpengeluaran}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }

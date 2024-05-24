@@ -26,7 +26,20 @@
             label: 'NO BUKTI TRIP',
             name: 'nobukti_trip',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarisuratpengantar
+              let tglsampai = rowData.tglsampaisuratpengantar
+              let url = "{{route('suratpengantar.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }            
+          }, 
           {
             label: 'TGL TRIP',
             name: 'tgl_trip',
@@ -41,6 +54,19 @@
             label: 'NO BUKTI RIC',
             name: 'nobuktirincian',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarigajisupirheader
+              let tglsampai = rowData.tglsampaigajisupirheader
+              let url = "{{route('gajisupirheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }              
           },
           {
             label: 'TGL RIC',

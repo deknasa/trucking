@@ -529,6 +529,7 @@ function checkboxHandler(element) {
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
