@@ -30,6 +30,9 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
+             if (value =="Total:") {
+              return value;
+             }
 
               return formattedValue[0].outerHTML
             },
