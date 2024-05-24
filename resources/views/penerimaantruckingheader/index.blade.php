@@ -424,7 +424,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobukti"]`).attr('title') ?? '';
           activeGrid = grid
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
@@ -505,6 +505,7 @@
           permission()
           $('#gs_').attr('disabled', false)
           setPermissionAcos()
+          getQueryParameter()
           setHighlight($(this))
         }
       })

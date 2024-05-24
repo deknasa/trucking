@@ -2179,25 +2179,23 @@ function getQueryParameter() {
         if (urlParams.get("nobukti") != null) {
             
             $('#gs_nobukti').val(urlParams.get("nobukti"))
-            $("#jqGrid")
-                .jqGrid("setGridParam", {
-                    postData: {
-                        filters: JSON.stringify({
-                            groupOp: "AND",
-                            rules: [
-                                {
-                                    field: "nobukti",
-                                    op: "cn",
-                                    data: urlParams.get("nobukti"),
-                                },
-                            ],
-                        }),
-                    },
-                    datatype: "json",
-                })
-                .trigger("reloadGrid");
+            $("#jqGrid").jqGrid("setGridParam", {
+                postData: {
+                    filters: JSON.stringify({
+                        groupOp: "AND",
+                        rules: [
+                            {
+                                field: "nobukti",
+                                op: "cn",
+                                data: urlParams.get("nobukti"),
+                            },
+                        ],
+                    }),
+                },
+                datatype: "json",
+            }).trigger("reloadGrid");
                 
             window.history.replaceState(null, '', window.location.origin + window.location.pathname);
         }
-    }, 100);
+    }, 1000);
 }
