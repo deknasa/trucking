@@ -773,7 +773,7 @@ select[readonly].select2-hidden-accessible + .select2-container {
 
 .link-color{
 	/* color: #e22b0b !important; */
-	color: #007bff;
+	color: #007bff !important;
 	text-decoration: underline;
 	background-color: rgba(0,0,0,0);
 }	
