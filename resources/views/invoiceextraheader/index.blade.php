@@ -320,7 +320,7 @@
               let tgldari = rowData.tgldariheaderpiutangheader
               let tglsampai = rowData.tglsampaiheaderpiutangheader
               let url = "{{route('piutangheader.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
             },
           },

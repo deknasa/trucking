@@ -17,6 +17,7 @@
   let triggerClickDetail
   let indexRowDetail
   let pageDetail = 0;
+
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}serviceoutdetail`,
@@ -28,6 +29,19 @@
             label: 'NO BUKTI SERVICE IN',
             name: 'servicein_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderserviceout
+              let tglsampai = rowData.tglsampaiheaderserviceout
+              let url = "{{route('serviceinheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'KETERANGAN',
@@ -76,7 +90,7 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
           sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
           sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
@@ -105,7 +119,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -118,24 +132,24 @@
         del: false,
       })
       .customPager()
-      
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}serviceoutdetail`,
       datatype: "json",
       postData: {
         serviceout_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

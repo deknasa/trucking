@@ -243,7 +243,7 @@
               let tglsampai = rowData.tglsampaiheaderserviceout
               let url = "{{route('serviceoutheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -435,6 +435,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
