@@ -697,6 +697,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
+          getQueryParameter()
           permission()
           setPermissionAcos()
           $('#gs_').attr('disabled', false)
