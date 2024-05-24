@@ -44,7 +44,7 @@
               let tglsampai = rowData.tglsampaiheaderpengeluarantruckingheader
               let url = "{{route('pengeluarantruckingheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
              return formattedValue[0].outerHTML
            }
@@ -120,7 +120,7 @@
           if (indexRowDetail > $(this).getDataIDs().length - 1) {
             indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
+          getQueryParameter()
 
           setHighlight($(this))
           if (data.attributes != undefined) {
@@ -134,6 +134,7 @@
               nominal: 0,
             }, true)
           }
+     
         }
       })
 

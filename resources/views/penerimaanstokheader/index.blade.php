@@ -621,6 +621,7 @@
           permission()
           setPermissionAcos()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
