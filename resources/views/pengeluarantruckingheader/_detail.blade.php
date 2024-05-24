@@ -1,4 +1,3 @@
-
 @push('scripts')
 <script>
   function loadDetailGrid() {
@@ -48,11 +47,37 @@
             label: 'NO BUKTI PENERIMAAN TRUCKING',
             name: 'penerimaantruckingheader_nobukti',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaantruckingheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaantruckingheader
+              let url = "{{route('penerimaantruckingheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NO SURAT PENGANTAR',
             name: 'suratpengantar_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarisuratpengantar
+              let tglsampai = rowData.tglsampaisuratpengantar
+              let url = "{{route('suratpengantar.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NOMINAL TAGIH',
@@ -70,11 +95,37 @@
             label: 'NO BUKTI PENGELUARAN STOK',
             name: 'pengeluaranstok_nobukti',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluaranstokheader
+              let tglsampai = rowData.tglsampaiheaderpengeluaranstokheader
+              let url = "{{route('pengeluaranstokheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }            
           },
           {
             label: 'NO BUKTI PENERIMAAN STOK',
             name: 'penerimaanstok_nobukti',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaanstokheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaanstokheader
+              let url = "{{route('penerimaanstokheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }             
           },
           {
             label: 'stok',
@@ -109,11 +160,37 @@
             label: 'NO orderan TRUCKING',
             name: 'orderantrucking_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderorderantrucking
+              let tglsampai = rowData.tglsampaiheaderorderantrucking
+              let url = "{{route('orderantrucking.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }            
           },
           {
             label: 'NO invoice',
             name: 'invoice_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderinvoiceheader
+              let tglsampai = rowData.tglsampaiheaderinvoiceheader
+              let url = "{{route('invoiceheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }             
           },
         ],
         autowidth: true,
@@ -194,7 +271,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -217,15 +294,15 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}pengeluarantruckingdetail`,
       datatype: "json",
       postData: {
         pengeluarantruckingheader_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

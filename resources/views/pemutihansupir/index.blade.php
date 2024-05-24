@@ -223,9 +223,10 @@ function checkboxHandler(element) {
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
               let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let bankpenerimaan = rowData.penerimaanbank_id
               let url = "{{route('penerimaanheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpenerimaan}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -238,11 +239,12 @@ function checkboxHandler(element) {
               if ((value == null) || (value == '')) {
                 return '';
               }
-              let tgldari = rowData.tgldariheaderpenerimaanheader
-              let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let tgldari = rowData.tgldariheaderpengeluaranheader
+              let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let bankpengeluaran = rowData.pengeluaranbank_id              
               let url = "{{route('pengeluaranheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpengeluaran}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -271,7 +273,7 @@ function checkboxHandler(element) {
               let tglsampai = rowData.tglsampaiheaderposting
               let url = "{{route('penerimaantruckingheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -288,7 +290,7 @@ function checkboxHandler(element) {
               let tglsampai = rowData.tglsampaiheadernonposting
               let url = "{{route('penerimaantruckingheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }

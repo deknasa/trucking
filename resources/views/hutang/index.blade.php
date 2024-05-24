@@ -504,6 +504,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
+          getQueryParameter()          
           permission()
           setHighlight($(this))
           $('#gs_').prop('disabled', false)

@@ -406,7 +406,7 @@
               let tglsampai = rowData.tglsampaiheadernobuktipenerimaanstok
               let url = "{{route('penerimaanstokheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -424,7 +424,7 @@
               let tglsampai = rowData.tglsampaiheaderpengeluaranstok
               let url = "{{route('pengeluaranstokheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -461,7 +461,7 @@
               let tglsampai = rowData.tglsampaiheaderhutangheader
               let url = "{{route('hutangheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
