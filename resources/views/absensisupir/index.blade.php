@@ -670,6 +670,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          getQueryParameter()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
