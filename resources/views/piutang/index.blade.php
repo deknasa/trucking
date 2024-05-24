@@ -68,7 +68,7 @@
   function checkboxHandler(element) {
     let value = $(element).val();
 
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
     $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
@@ -160,7 +160,7 @@
       $('#gs_').prop('checked', false)
     })
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `${apiUrl}piutangheader`,
         mtype: "GET",
@@ -513,6 +513,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
 
           getQueryParameter()

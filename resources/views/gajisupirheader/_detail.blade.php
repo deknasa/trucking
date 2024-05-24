@@ -16,19 +16,21 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         idPrefix: 'detail',
-        colModel: [
-          {
+        colModel: [{
             label: 'NO TRIP',
             name: 'suratpengantar_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheadersuratpengantar
               let tglsampai = rowData.tglsampaiheadersuratpengantar
               let url = "{{route('suratpengantar.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+
               return formattedValue[0].outerHTML
             },
           },
@@ -110,7 +112,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderritasi
@@ -242,7 +244,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -264,9 +266,9 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}gajisupirdetail`,
       datatype: "json",
       postData: {

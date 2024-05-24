@@ -595,6 +595,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_check').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })

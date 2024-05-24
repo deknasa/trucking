@@ -68,7 +68,7 @@
     // let valueid= $(element).parents('tr').find(`td[aria-describedby="jqGrid_id"]`).text();
     var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
     $("#jqGrid").jqGrid('setSelection', value, false);
-    
+
     onSelectRowExisting(value)
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
@@ -201,6 +201,19 @@
             label: 'JOB TRUCKING',
             name: 'jobtrucking',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariorderantrucking
+              let tglsampai = rowData.tglsampaiorderantrucking
+              let url = "{{route('orderantrucking.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NO TRIP',
@@ -271,6 +284,7 @@
             align: 'right',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
+            
           },
           {
             label: 'JARAK',
@@ -455,6 +469,18 @@
             label: 'GAJI SUPIR NO BUKTI',
             name: 'gajisupir_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarigajisupirheader
+              let tglsampai = rowData.tglsampaigajisupirheader
+              let url = "{{route('gajisupirheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }            
           },
           {
             label: 'STATUS GAJI SUPIR',
@@ -507,6 +533,19 @@
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariinvoiceheader
+              let tglsampai = rowData.tglsampaiinvoiceheader
+              let url = "{{route('invoiceheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+
           },
           {
             label: 'STATUS INVOICE',
@@ -926,6 +965,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
 
           if (data.attributes) {
