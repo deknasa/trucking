@@ -336,7 +336,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'edit')
+                                cekValidasidelete(selectedId, 'edit')
                             }
                             // editKategori(selectedId)
                         }
@@ -350,7 +350,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'delete')
+                                cekValidasidelete(selectedId, 'delete')
                             }
                         }
                     },
@@ -424,9 +424,25 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('kategori', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('kategori', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if ((!`{{ $myAuth->hasPermission('kategori', 'update') }}`) && (!`{{ $myAuth->hasPermission('kategori', 'updateuser') }}`)) {
+
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('kategori', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
+
 
             if (!`{{ $myAuth->hasPermission('kategori', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
