@@ -367,7 +367,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'EDIT')
+                                cekValidasidelete(selectedId, 'EDIT')
                             }
                         }
                     },
@@ -453,20 +453,26 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
             }
 
             if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'export') }}`) {

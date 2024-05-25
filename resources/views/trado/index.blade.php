@@ -168,7 +168,7 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
-                    },                    
+                    },
                     {
                         label: 'SUPIR',
                         name: 'supir_id',
@@ -184,7 +184,7 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
-                    },   
+                    },
                     {
                         label: 'STATUS AKTIF',
                         name: 'statusaktif',
@@ -851,7 +851,7 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
                         }
-                    },                    
+                    },
                     {
                         label: 'STATUS APP HISTORY TRADO MILIK SUPIR',
                         name: 'statusapprovalhistorytradomiliksupir',
@@ -920,8 +920,8 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
                         }
-                    },                          
-//                 
+                    },
+                    //                 
                     {
                         label: 'PHOTO STNK',
                         name: 'photostnk',
@@ -1334,7 +1334,7 @@
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
                                         // editTradoMilikMandor(selectedOne[1])
-                                        cekValidasihistory(selectedOne[1],'historyMandor')
+                                        cekValidasihistory(selectedOne[1], 'historyMandor')
                                     } else {
                                         showDialog(selectedOne[1])
                                     }
@@ -1348,7 +1348,7 @@
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
                                         // editTradoMilikSupir(selectedOne[1])
-                                        cekValidasihistory(selectedOne[1],'historySupir')
+                                        cekValidasihistory(selectedOne[1], 'historySupir')
 
                                     } else {
                                         showDialog(selectedOne[1])
@@ -1387,26 +1387,32 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('trado', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            // if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
-            //     $('#edit').attr('disabled', 'disabled')
-            // }
-
-            if ((!`{{ $myAuth->hasPermission('trado', 'update') }}`) && (!`{{ $myAuth->hasPermission('trado', 'updateuser') }}`) ) {
                 $('#edit').attr('disabled', 'disabled')
-            }
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('trado', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
 
+                // if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
+                //     $('#edit').attr('disabled', 'disabled')
+                // }
+
+                if ((!`{{ $myAuth->hasPermission('trado', 'update') }}`) && (!`{{ $myAuth->hasPermission('trado', 'updateuser') }}`)) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
+            }
 
             if (!`{{ $myAuth->hasPermission('trado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
             if (!`{{ $myAuth->hasPermission('trado', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
@@ -1669,7 +1675,7 @@
             });
         }
 
-        
+
 
         const setStatusApprovalOptions = function(relatedForm) {
             return new Promise((resolve, reject) => {
