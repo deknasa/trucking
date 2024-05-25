@@ -1634,7 +1634,7 @@
     $('.kolom_bbt').hide()
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').hide()
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -2823,6 +2823,8 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('#tbl_addRow').hide()
+    $('.tbl_aksi').hide()
     $('.cabang').hide()
 
   }

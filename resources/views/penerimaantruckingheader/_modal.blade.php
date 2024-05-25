@@ -60,7 +60,7 @@
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  karyawan <span class="text-danger">*</span></label>
+                  karyawan </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="karyawanHeaderId" name="karyawanheader_id">
@@ -329,26 +329,50 @@
       // if ($('#crudForm').data('action') == 'edit') {
       //   reloadGrid = 'reload'
       // }
+      if (KodePenerimaanId == 'PJP') {
 
-      let supirheader_id = $(`#crudForm [name="supirheader_id"]`).val()
+        let supirheader_id = $(`#crudForm [name="supirheader_id"]`).val()
 
-      getDataPinjaman(supirheader_id).then((response) => {
+        getDataPinjaman(supirheader_id).then((response) => {
 
-        $("#tablePinjaman")[0].p.selectedRowIds = [];
-        setTimeout(() => {
+          $("#tablePinjaman")[0].p.selectedRowIds = [];
+          setTimeout(() => {
 
-          $("#tablePinjaman")
-            .jqGrid("setGridParam", {
-              datatype: "local",
-              data: response.data,
-              originalData: response.data,
-              rowNum: response.data.length,
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
-        }, 100);
+            $("#tablePinjaman")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
 
-      });
+        });
+      }
+      if (KodePenerimaanId == 'PJPK') {
+
+        let karyawanheader_id = $(`#crudForm [name="karyawanheader_id"]`).val()
+
+        getDataPinjamanKaryawan(karyawanheader_id).then((response) => {
+
+          $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
+          setTimeout(() => {
+
+            $("#tablePinjamanKaryawan")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
+
+        });
+      }
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -568,7 +592,7 @@
           })
           data.push({
             name: 'karyawan_id[]',
-            value: form.find(`[name="karyawanheader_id"]`).val()
+            value: dataPinjaman.pinj_karyawanid
           })
           data.push({
             name: 'pjpk_id[]',
@@ -1020,7 +1044,7 @@
 
   function tampilanPJPK() {
     $('#btnReloadBbtGrid').parents('.row').hide()
-    $('#btnReloadPJP').parents('.row').hide()
+    $('#btnReloadPJP').parents('.row').show()
     $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -1824,6 +1848,14 @@
             totalSisa
           );
 
+          $("#tablePinjaman").jqGrid(
+            "setCell",
+            rowId,
+            "nominal",
+            0
+          );
+          setTotalNominal()
+          setTotalSisa()
 
           return true;
         },
@@ -1946,6 +1978,18 @@
             name: "id",
             hidden: true,
             search: false,
+          },
+          {
+            label: "KARYAWAN",
+            name: "pinj_karyawan",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            sortable: true,
+          },
+          {
+            label: "KARYAWAN_ID",
+            name: "pinj_karyawanid",
+            hidden: true,
+            search: false
           },
           {
             label: "no bukti pengeluaran TRUCKING",
@@ -2156,7 +2200,14 @@
             "sisa",
             totalSisa
           );
-
+          $("#tablePinjamanKaryawan").jqGrid(
+            "setCell",
+            rowId,
+            "nominal",
+            0
+          );
+          setTotalNominalKaryawan()
+          setTotalSisaKaryawan()
           return true;
         },
       });
@@ -2405,6 +2456,7 @@
 
   function getDataPinjamanKaryawan(karyawanId, id) {
     aksi = $('#crudForm').data('action')
+    karyawanId = (karyawanId == '') ? 0 : karyawanId;
     if (aksi == 'edit') {
       console.log(id)
       if (id != undefined) {
