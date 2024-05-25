@@ -364,7 +364,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'EDIT')
+                                cekValidasidelete(selectedId, 'EDIT')
                             }
                         }
                     },
@@ -451,20 +451,26 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
             }
 
             if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'export') }}`) {

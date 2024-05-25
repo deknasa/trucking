@@ -244,14 +244,14 @@
 
                     $.each(selectedRows, function(key, value) {
 
-$('#jqGrid tbody tr').each(function(row, tr) {
-    if ($(this).find(`td input:checkbox`).val() == value) {
-        $(this).find(`td input:checkbox`).prop('checked', true)
-        $(this).addClass('bg-light-blue')
-    }
-})
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
 
-});
+                    });
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -413,22 +413,26 @@ $('#jqGrid tbody tr').each(function(row, tr) {
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('absentrado', 'store') }}`) {
+
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('absentrado', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('absentrado', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('absentrado', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('absentrado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-
-            if (!`{{ $myAuth->hasPermission('absentrado', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('absentrado', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
-
             if (!`{{ $myAuth->hasPermission('absentrado', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }

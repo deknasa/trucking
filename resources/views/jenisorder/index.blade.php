@@ -407,20 +407,23 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('jenisorder', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('jenisorder', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('jenisorder', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('jenisorder', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
-
             if (!`{{ $myAuth->hasPermission('jenisorder', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('jenisorder', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('jenisorder', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
             }
             if (!`{{ $myAuth->hasPermission('jenisorder', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
