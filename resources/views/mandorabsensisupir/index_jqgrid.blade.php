@@ -125,6 +125,7 @@
         postData: {
           tglbukaabsensi: $('#tglbukaabsensi').val(),
           view:true,
+          from:'viewHistory',
         },
         // datatype: "local",
         data: {
@@ -133,223 +134,68 @@
           sortOrder: 'asc',
         },
         datatype: "json",
-        colModel: [{
-
-            label: 'id',
-            name: 'id',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
+        colModel: [
           {
-            label: 'trado_id',
-            name: 'trado_id',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'supir_id',
-            name: 'supir_id',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'absen_id',
-            name: 'absen_id',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'namasupir_old',
-            name: 'namasupir_old',
-            width: '50px',
-            search: false,
-            sortable: false,
-            hidden: true,
-            // formatter: (value, options, rowData) => {
-            //   return rowData.namasupir
-            // }
-          },
-          {
-            label: 'supir_id_old',
-            name: 'supir_id_old',
-            width: '50px',
-            search: false,
-            sortable: false,
-            hidden: true,
-           
-          },
-          {
-            label: 'TAMBAHAN TRADO',
+            label: 'status tambahan trado',
             name: 'statustambahantrado',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
-            label: 'supir serap',
+            label: 'status supir serap',
             name: 'statussupirserap',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
-            label: 'Trado',
-            name: 'kodetrado',
+            label: 'TRADO',
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'SUPIR',
+            name: 'supir',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
-            label: 'Supir',
-            name: 'namasupir',
-            editable: true,
-            editoptions: {
-              autocomplete: 'off',
-              class: 'supirtrado-lookup',
-              dataInit: function(element) {
-                $('.supirtrado-lookup').last().lookup({
-                  title: 'Supir Lookup',
-                  fileName: 'supir',
-                  beforeProcess: function(test) {
-                    this.postData = {
-                      Aktif: 'AKTIF',
-                    }
-                  },
-                  onSelectRow: (supir, el) => {
-                    el.val(supir.namasupir)
-                    el.data('currentValue', supir.namasupir)
-                    let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-                    $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', supir.id);
-
-                    $("#jqGrid").jqGrid('setCell', rowId, 'namasupir_old', supir.namasupir);
-                    $("#jqGrid").jqGrid('setCell', rowId, 'supir_id_old', supir.id);
-                    // $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', supir.namasupir);
-                  },
-                  onCancel: (element) => {
-                    element.val(element.data('currentValue'))
-                  },
-                  onClear: (element) => {
-                    element.val('')
-                    $("#jqGrid").jqGrid('setCell', rowId, 'namasupir_old', null);
-                    $("#jqGrid").jqGrid('setCell', rowId, 'supir_id_old', null);
-                  }
-                })
-              }
-            },
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-          },
-          
-          {
-            label: 'status',
-            name: 'absentrado',
-            editable: false,
-            editoptions: {
-              autocomplete: 'off',
-              class: 'statusabsentrado-lookup',
-              dataInit: function(element) {
-                let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-                let row_trado_id = $("#jqGrid").jqGrid('getCell', rowId, 'trado_id');
-                let row_supir_id = $("#jqGrid").jqGrid('getCell', rowId, 'supir_id');
-                let row_supirold_id = $("#jqGrid").jqGrid('getCell', rowId, 'supirold_id');
-                $('.statusabsentrado-lookup').last().lookup({
-                  title: 'Absen Trado Lookup',
-                  fileName: 'absentrado',
-                  beforeProcess: function(test) {
-                    this.postData = {
-                      Aktif: 'AKTIF',
-                      trado_id : row_trado_id,
-                      supir_id : row_supir_id,
-                      supirold_id : row_supirold_id,
-                      tglabsensi : $('#tglbukaabsensi').val(),
-                      dari : 'mandorabsensisupir',
-                    }
-                  },
-                  onSelectRow: (absentrado, el) => {
-                    el.val(absentrado.keterangan)
-                    el.data('currentValue', absentrado.keterangan)
-                    let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-                    $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', absentrado.id);
-
-                  },
-                  onCancel: (element) => {
-                    element.val(element.data('currentValue'))
-                  },
-                  onClear: (element) => {
-                    element.val('')
-
-                    let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-                    // setSupirEnableIndex(false,rowId)
-                    $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', null);
-                  }
-                })
-              }
-            },
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            label: 'STATUS',
+            name: 'status',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
           {
             label: 'jenis kendaraan',
-            name: 'statusjeniskendaraannama',
-            editable: false,
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+            name: 'statusjeniskendaraan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
-            label: 'jlh trip',
-            name: 'jlhtrip',
-            editable: false,
-            align: 'right',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2
+            label: 'KETERANGAN',
+            name: 'keterangan_detail',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
-            label: 'keterangan',
-            name: 'keterangan',
-            editable: false,
-            editoptions: {
-              autocomplete: 'off',
-              dataEvents: [{
-                type: "keyup",
-              }]
-            },
-            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
-          },
-          {
-            label: 'TGL BATAS',
-            name: 'tglbatas',
-            formatter: (value, options, rowData) => {
-              let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-              let data = value
-              if (!value) {
-                data = $('#tglbukaabsensi').val() +' 11:59:00'
-                $("#jqGrid").jqGrid('setCell', rowId, 'tglbatas', data);
-              }
-              return data;
-            },
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            // formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            formatter: (value, options, rowData) => {
-              let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-              let data = value
-              if (!value) {
-                $("#jqGrid").jqGrid('setCell', rowId, 'tglbukti', $('#tglbukaabsensi').val());
-                data = $('#tglbukaabsensi').val()
-              }
-              return data;
-            },
+            label: 'JAM',
+            name: 'jam',
+            formatter: 'date',
+            hidden: true,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            align: 'right',
-            // formatter: "date",
             formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+              srcformat: "H:i:s",
+              newformat: "H:i",
+              // userLocalTime : true
             }
           },
-          
+          {
+            label: 'UANG JALAN',
+            name: 'uangjalan',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'JLH TRIP',
+            name: 'jumlahtrip',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
         ],
 
         autowidth: true,
@@ -477,7 +323,7 @@
             }).trigger('reloadGrid')
 
           } else {
-            showDialog(error.statusText)
+            // showDialog( jqXHR.textStatus)
           }
         }
       })
