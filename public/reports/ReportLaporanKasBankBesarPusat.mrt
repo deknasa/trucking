@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b1b4ed86a9c3be17b00f93905888661a",
+  "ReportGuid": "eec0b0f9b29095e3887d57a943a7f8d0",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://server:8074/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1715678881000+0700)/",
+  "ReportChanged": "/Date(1716607696000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1313,7 +1313,7 @@
           "Border": ";;;;;;;solid:Black",
           "Brush": "solid:",
           "Condition": {
-            "Value": "{data.urut}"
+            "Value": "{data.tglbukti}"
           }
         },
         "4": {
@@ -1327,7 +1327,7 @@
           "Border": ";;;;;;;solid:Black",
           "Brush": "solid:",
           "Condition": {
-            "Value": "{data.tglbukti}"
+            "Value": "{data.urut}"
           }
         },
         "5": {
@@ -1745,7 +1745,7 @@
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "cb0f6f9f84d170271ec790e71e997944",
-              "ClientRectangle": "202,0,25,6.06",
+              "ClientRectangle": "198,0,29,6.06",
               "ComponentPlacement": "f.FooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
