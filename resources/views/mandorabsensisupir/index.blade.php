@@ -319,6 +319,10 @@
         $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.button-clear').attr('disabled', true)
         detailRow.find(`.delete-row`).attr('disabled', true);
       }
+      if (detail.uangjalan > 0) {
+        detailRow.find(`.delete-row`).attr('disabled', true);
+      }
+      
       if (detail.tidakadasupir == "readonly") {
         setSupirEnableIndex({supir:1}, index)
       }

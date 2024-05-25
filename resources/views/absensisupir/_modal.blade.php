@@ -98,7 +98,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colspan="7">
+                          <td colspan="5">
                             <h5 class="text-right font-weight-bold">TOTAL:</h5>
                           </td>
                           <td>
@@ -782,9 +782,9 @@
               detailRow.find(`[name="jeniskendaraan[]"]`).val(detail.statusjeniskendaraannama)
               detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", detail.statusjeniskendaraannama);
             }else{
-              detailRow.find(`[name="statusjeniskendaraan[]"]`).val(data.attributes.defaultJenis.id)
-              detailRow.find(`[name="jeniskendaraan[]"]`).val(data.attributes.defaultJenis.text)
-              detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", data.attributes.defaultJenis.text);
+              detailRow.find(`[name="statusjeniskendaraan[]"]`).val(response.attributes.defaultJenis.id)
+              detailRow.find(`[name="jeniskendaraan[]"]`).val(response.attributes.defaultJenis.text)
+              detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", response.attributes.defaultJenis.text);
             }
             // getabsentrado(detail.absen_id).then((response) => {
             //       setSupirEnableIndex(response, index)
