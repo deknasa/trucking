@@ -113,6 +113,12 @@
           align: 'left'
         },
         {
+          label: 'Omset',
+          name: 'omset',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
           label: 'Nominal Supir',
           name: 'nominalsupir',
           align: 'right',
