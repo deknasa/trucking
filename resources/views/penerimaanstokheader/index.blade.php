@@ -472,8 +472,28 @@
             align: 'left'
           },
           {
+            label: 'trado dari',
+            name: 'tradodari',
+            align: 'left'
+          },
+          {
+            label: 'gandengan dari',
+            name: 'gandengandari',
+            align: 'left'
+          },
+          {
             label: 'gudang ke',
             name: 'gudangke',
+            align: 'left'
+          },
+          {
+            label: 'trado ke',
+            name: 'tradoke',
+            align: 'left'
+          },
+          {
+            label: 'gandengan ke',
+            name: 'gandenganke',
             align: 'left'
           },
           {
