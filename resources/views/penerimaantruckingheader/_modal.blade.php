@@ -962,6 +962,55 @@
     }
   })
 
+  $(document).on("change", `[name=tglbukti]`, function(event) {
+
+    if (KodePenerimaanId == 'PJP') {
+      getDataPinjaman($('#crudForm [name=supirheader_id]').val()).then((response) => {
+
+        $("#tablePinjaman")[0].p.selectedRowIds = [];
+        setTimeout(() => {
+
+          $("#tablePinjaman")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+
+      });
+    }
+    if (KodePenerimaanId == 'PJPK') {
+      $('#tablePinjamanKaryawan').jqGrid("clearGridData");
+      $("#tablePinjamanKaryawan")
+        .jqGrid("setGridParam", {
+          selectedRowIds: []
+        })
+        .trigger("reloadGrid");
+
+      getDataPinjamanKaryawan($('#crudForm [name=karyawanheader_id]').val()).then((response) => {
+        $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
+        setTimeout(() => {
+
+          $("#tablePinjamanKaryawan")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+
+      });
+    }
+
+  })
+
   function setKodePenerimaan(kode) {
     KodePenerimaanId = kode;
     setTampilanForm();
@@ -1752,7 +1801,7 @@
         editableColumns: ["nominal"],
         selectedRowIds: [],
         onCellSelect: function(rowid, iCol, cellcontent, e) {
-          console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
+          // console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
         },
         afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
           let originalGridData = $("#tablePinjaman")
@@ -1770,7 +1819,6 @@
           } else {
             sisa = parseFloat(originalGridData.sisa) - nominal
           }
-          console.log(indexColumn)
           if (indexColumn == 9) {
 
             $("#tablePinjaman").jqGrid(
@@ -2125,7 +2173,6 @@
           } else {
             sisa = parseFloat(originalGridData.sisa) - nominal
           }
-          console.log(indexColumn)
           if (indexColumn == 5) {
 
             $("#tablePinjamanKaryawan").jqGrid(
@@ -2423,7 +2470,6 @@
     aksi = $('#crudForm').data('action')
     supirId = (supirId == '') ? 0 : supirId;
     if (aksi == 'edit') {
-      console.log(id)
       if (id != undefined) {
         url = `${apiUrl}penerimaantruckingheader/${id}/edit/getpengembalianpinjaman`
       } else {
@@ -2444,6 +2490,9 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
+        data: {
+          tglbukti: $('#crudForm').find("[name=tglbukti]").val()
+        },
         success: (response) => {
           resolve(response);
         },
@@ -2458,7 +2507,6 @@
     aksi = $('#crudForm').data('action')
     karyawanId = (karyawanId == '') ? 0 : karyawanId;
     if (aksi == 'edit') {
-      console.log(id)
       if (id != undefined) {
         url = `${apiUrl}penerimaantruckingheader/${id}/edit/getpengembalianpinjamankaryawan`
       } else {
@@ -2478,6 +2526,9 @@
         dataType: "JSON",
         headers: {
           Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          tglbukti: $('#crudForm').find("[name=tglbukti]").val()
         },
         success: (response) => {
           resolve(response);
@@ -2857,7 +2908,6 @@
                   })
                   .trigger("reloadGrid");
               }, 100);
-              console.log(response.data)
               initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(totalBayar))
 
             });
@@ -2887,7 +2937,6 @@
                   })
                   .trigger("reloadGrid");
               }, 100);
-              console.log(response.data)
               initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`).text(totalBayar))
 
             });

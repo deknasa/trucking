@@ -1006,10 +1006,10 @@
             name: 'tglsampai',
             value: form.find(`[name="tglsampai"]`).val()
           })
-           selectedRowsBLL = $(`#tableBSM`).getGridParam("selectedRowIds");
+          selectedRowsBLL = $(`#tableBSM`).getGridParam("selectedRowIds");
 
         } else {
-           selectedRowsBLL = $(`#table${KodePengeluaranId}`).getGridParam("selectedRowIds");
+          selectedRowsBLL = $(`#table${KodePengeluaranId}`).getGridParam("selectedRowIds");
 
           data.push({
             name: 'periode',
@@ -1492,6 +1492,65 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
+    }
+  })
+
+
+  $(document).on("change", `[name=tglbukti]`, function(event) {
+
+    if (KodePengeluaranId == 'TDE' && $('#crudForm [name=supirheader_id]').val() != '') {
+      $("#tableDeposito")[0].p.selectedRowIds = [];
+      $('#tableDeposito').jqGrid("clearGridData");
+      $("#tableDeposito")
+        .jqGrid("setGridParam", {
+          selectedRowIds: []
+        })
+        .trigger("reloadGrid");
+
+      getDataDeposito($('#crudForm [name=supirheader_id]').val()).then((response) => {
+
+        setTimeout(() => {
+
+          $("#tableDeposito")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+
+      });
+    }
+
+    if (KodePengeluaranId == 'TDEK' && $('#crudForm [name=karyawanheader_id]').val() != '') {
+
+      $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
+      $('#tableDepositoKaryawan').jqGrid("clearGridData");
+      $("#tableDepositoKaryawan")
+        .jqGrid("setGridParam", {
+          selectedRowIds: []
+        })
+        .trigger("reloadGrid");
+
+      getDataDepositoKaryawan($('#crudForm [name=karyawanheader_id]').val()).then((response) => {
+
+        setTimeout(() => {
+
+          $("#tableDepositoKaryawan")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+
+      });
     }
   })
 
@@ -4199,7 +4258,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          "supir": supirId,
+          supir: supirId,
+          tglbukti: $('#crudForm').find("[name=tglbukti]").val()
         },
         success: (response) => {
           resolve(response);
@@ -4677,7 +4737,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          "karyawan_id": karyawanId,
+          karyawan_id: karyawanId,
+          tglbukti: $('#crudForm').find("[name=tglbukti]").val()
         },
         success: (response) => {
           resolve(response);
