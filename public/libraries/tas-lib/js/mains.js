@@ -91,6 +91,12 @@ $(document).ready(function () {
 
     $.fn.modal.Constructor.Default.backdrop = "static";
 });
+$('#listMenuModal').on('show.bs.modal', function () {
+    $(this).data('bs.modal')._config.backdrop = true;
+});
+$('#listMenuModal').on('hidden.bs.modal', function () {
+    $(this).find('.modal-body').html('')
+});
 
 window.onbeforeunload = () => {
     $("#loader").removeClass("d-none");
