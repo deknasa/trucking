@@ -313,6 +313,7 @@
     let selectedKomisi = [];
     let selectedMakan = [];
     let selectedMakanBerjenjang = [];
+    let selectedExtraHeader = [];
     let selectedPP = [];
     let selectedPS = [];
     let selectedDeposito = [];
@@ -349,6 +350,7 @@
             selectedKomisi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text());
             selectedMakan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text());
             selectedMakanBerjenjang.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text());
+            selectedExtraHeader.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_biayaextraheader"]`).text());
             selectedGajiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text());
             selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text());
             selectedExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_extra"]`).text());
@@ -370,6 +372,7 @@
                     selectedKomisi.splice(i, 1);
                     selectedMakan.splice(i, 1);
                     selectedMakanBerjenjang.splice(i, 1);
+                    selectedExtraHeader.splice(i, 1);
                     selectedGajiSupir.splice(i, 1);
                     selectedGajiKenek.splice(i, 1);
                     selectedExtra.splice(i, 1);
@@ -390,6 +393,7 @@
         komisi = 0;
         makan = 0;
         berjenjang = 0;
+        extraheader = 0;
         gajisupir = 0;
         gajikenek = 0;
         extra = 0;
@@ -419,6 +423,9 @@
         });
         $.each(selectedMakanBerjenjang, function(index, item) {
             berjenjang = berjenjang + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedExtraHeader, function(index, item) {
+            extraheader = extraheader + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedGajiSupir, function(index, item) {
             gajisupir = gajisupir + parseFloat(item.replace(/,/g, ''))
@@ -453,6 +460,7 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text(makan))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(berjenjang))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextraheader"]`).text(extraheader))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajisupir))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajikenek))
         initAutoNumericMinus($('.footrow').find(`td[aria-describedby="rekapRincian_extra"]`).text(extra))
@@ -759,6 +767,7 @@
         selectedJalan = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedExtraHeader = [];
         selectedGajiKenek = [];
         selectedGajiSupir = [];
         selectedExtra = [];
@@ -935,6 +944,13 @@
                         align: "right",
                     },
                     {
+                        label: 'B. EXTRA',
+                        name: 'biayaextraheader',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
                         label: 'U. MAKAN BERJENJANG',
                         name: 'uangmakanberjenjang',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
@@ -970,9 +986,9 @@
                         align: "right",
                     },
                     {
-                        label: 'BIAYA EXTRA',
+                        label: 'BIAYA EXTRA (Trip)',
                         name: 'extra',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatter: currencyFormat,
                         align: "right",
                     },
@@ -1553,6 +1569,7 @@
                         selectedKomisi.push(detail.komisisupir)
                         selectedMakan.push(detail.uangmakanharian)
                         selectedMakanBerjenjang.push(detail.uangmakanberjenjang)
+                        selectedExtraHeader.push(detail.biayaextraheader)
                         selectedPP.push(detail.potonganpinjaman)
                         selectedPS.push(detail.potonganpinjamansemua)
                         selectedDeposito.push(detail.deposito)
@@ -1697,6 +1714,7 @@
                     selectedKomisi = response.data.map((data) => data.komisisupir)
                     selectedMakan = response.data.map((data) => data.uangmakanharian)
                     selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
+                    selectedExtraHeader = response.data.map((data) => data.biayaextraheader)
                     selectedPP = response.data.map((data) => data.potonganpinjaman)
                     selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                     selectedDeposito = response.data.map((data) => data.deposito)
@@ -1852,6 +1870,7 @@
         selectedKomisi = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedExtraHeader = [];
         selectedPP = [];
         selectedPS = [];
         selectedDeposito = [];
@@ -1870,6 +1889,7 @@
         selectedKomisi = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedExtraHeader = [];
         selectedPP = [];
         selectedPS = [];
         selectedDeposito = [];
@@ -1946,6 +1966,7 @@
                 selectedKomisi = response.data.map((data) => data.komisisupir)
                 selectedMakan = response.data.map((data) => data.uangmakanharian)
                 selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
+                selectedExtraHeader = response.data.map((data) => data.biayaextraheader)
                 selectedPP = response.data.map((data) => data.potonganpinjaman)
                 selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                 selectedDeposito = response.data.map((data) => data.deposito)

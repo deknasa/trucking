@@ -324,9 +324,9 @@
             formatter: currencyFormat,
           },
           {
-            label: 'Biaya Extra',
+            label: 'Biaya Extra (Trip)',
             name: 'biayaextra',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -385,6 +385,19 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
+          },
+          {
+            label: 'B. EXTRA',
+            name: 'biayaextraheader',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KET. BIAYA EXTRA',
+            name: 'keteranganextra',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            align: 'left'
           },
           {
             label: 'Nominal',
@@ -492,7 +505,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           loadDetailData(id)
           loadPotSemuaIndexData(nobukti)
@@ -581,6 +594,7 @@
               komisisupir: data.attributes.totalKomisiSupir,
               gajikenek: data.attributes.totalGajiKenek,
               biayaextra: data.attributes.totalBiayaExtra,
+              biayaextraheader: data.attributes.totalBiayaExtraHeader,
               uangjalan: data.attributes.totalUangJalan,
               bbm: data.attributes.totalBbm,
               potonganpinjaman: data.attributes.totalPotPinj,

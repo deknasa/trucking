@@ -472,6 +472,10 @@
             hitungSisa()
         })
 
+        $(document).on('input', `#crudForm [name="biayaextraheader"]`, function(event) {
+            hitungSisa()
+        })
+
         $(document).on('click', '#btnTampil', function(event) {
             event.preventDefault()
             let form = $('#crudForm')
@@ -806,6 +810,16 @@
                 })
             });
 
+            $('#crudForm').find(`[name="biayaextraheader"]`).each((index, element) => {
+                data.push({
+                    name: 'biayaextraheader',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="biayaextraheader"]`)[index])
+                })
+            })
+            data.push({
+                name: 'keteranganextra',
+                value: form.find(`[name="keteranganextra"]`).val()
+            })
             $('#crudForm').find(`[name="uangmakanharian"]`).each((index, element) => {
                 data.push({
                     name: 'uangmakanharian',
@@ -1250,6 +1264,7 @@
         initAutoNumeric($('#crudForm').find('[name=nomBBM]'))
         initAutoNumeric($('#crudForm').find('[name=nomPinjaman]'))
         initAutoNumeric($('#crudForm').find('[name=uangmakanharian]'))
+        initAutoNumeric($('#crudForm').find('[name=biayaextraheader]'))
 
         loadPotSemuaGrid()
         loadPotPribadiGrid()
@@ -2673,7 +2688,8 @@
         let subtotal = ($(`#crudForm [name="subtotal"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="subtotal"]`)[0]);
         let uangmakanharian = ($(`#crudForm [name="uangmakanharian"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[0]);
         let uangmakanjenjang = ($(`#crudForm [name="berjenjanguangmakan"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="berjenjanguangmakan"]`)[0]);
-        let total = subtotal + uangmakanharian + uangmakanjenjang;
+        let biayaextraheader = ($(`#crudForm [name="biayaextraheader"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="biayaextraheader"]`)[0]);
+        let total = subtotal + uangmakanharian + uangmakanjenjang + biayaextraheader;
 
 
         let uangjalan = AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[0]);
@@ -2720,6 +2736,7 @@
                     initAutoNumeric(form.find(`[name="subtotal"]`))
                     initAutoNumeric(form.find(`[name="uangjalan"]`))
                     initAutoNumeric(form.find(`[name="berjenjanguangmakan"]`))
+                    initAutoNumeric(form.find(`[name="biayaextraheader"]`))
                     initAutoNumeric(form.find(`[name="uangmakanharian"]`))
                     initAutoNumeric(form.find(`[name="deposito"]`))
                     initAutoNumeric(form.find(`[name="potonganpinjaman"]`))
@@ -3271,6 +3288,26 @@
                 </div>
                 <div class="col-12 col-md-9">
                     <input type="text" name="uangmakanharian" class="form-control text-right">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">
+                   biaya extra
+                  </label>
+                </div>
+                <div class="col-12 col-md-9">
+                    <input type="text" name="biayaextraheader" class="form-control text-right">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">
+                   keterangan extra
+                  </label>
+                </div>
+                <div class="col-12 col-md-9">
+                    <input type="text" name="keteranganextra" class="form-control">
                 </div>
             </div>
             <div class="row form-group">
