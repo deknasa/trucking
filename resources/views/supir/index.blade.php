@@ -1169,15 +1169,20 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList:[
+                    {
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL ',
+                        class: 'btn btn-purple btn-sm mr-1',
+                        // targetModal:'#listMenuModal',
+                        item:[
+                            {
                                 id: 'approvalBlackListSupir',
                                 text: "un/Approval Black List Supir",
+                                color: "btn-warning",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1192,6 +1197,8 @@
                             {
                                 id: 'approveun',
                                 text: "un/Approval Kacab",
+                                color: "btn-orange",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approval') }}`),
                                 onClick: () => {
                                     approve()
                                 }
@@ -1199,6 +1206,8 @@
                             {
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
+                                color: "btn-info",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`),
                                 onClick: () => {
                                     approvalNonAktif('supir')
                                 }
@@ -1206,6 +1215,8 @@
                             {
                                 id: 'approvalaktif',
                                 text: "Approval Aktif",
+                                color: "btn-danger",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`),
                                 onClick: () => {
                                     approvalAktif('supir')
                                 }
@@ -1213,6 +1224,8 @@
                             {
                                 id: 'approvalSupirLuarKota',
                                 text: "un/Approval Supir Luar Kota",
+                                color: "btn-info",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
                                         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1233,6 +1246,8 @@
                             {
                                 id: 'approvalSupirResign',
                                 text: "un/Approval Supir Resign",
+                                color: "btn-purple",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
                                         var selectedOne = selectedOnlyOne();
@@ -1247,6 +1262,8 @@
                             {
                                 id: 'approvalHistorySupirMilikMandor',
                                 text: "un/Approval History Supir Milik Mandor",
+                                color: "btn-success",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
                                         approvalHistorySupirMilikMandor();
@@ -1257,6 +1274,8 @@
                             {
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "un/Approval Supir Tanpa Keterangan/Gambar",
+                                color: "btn-warning",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
@@ -1266,64 +1285,192 @@
                                     }
                                 }
                             },
-                            // {
-                            //     id: 'approvalSupirKeterangan',
-                            //     text: "un/Approval Supir tanpa Keterangan",
-                            //     onClick: () => {
-                            //         // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
-                            //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            //             showDialog('Harap pilih salah satu record')
-                            //         } else {
-                            //             approvalSupirKeterangan(selectedId);
-                            //         }
-                            //         // }
-                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //     }
-                            // },
-                            // {
-                            //     id: 'approvalSupirGambar',
-                            //     text: "un/Approval Supir tanpa Gambar",
-                            //     onClick: () => {
-                            //         // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
-                            //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            //             showDialog('Harap pilih salah satu record')
-                            //         } else {
-                            //             approvalSupirGambar(selectedId);
-                            //         }
-                            //         // }
-                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //     }
-                            // },
-
                         ]
                     },
-
                     {
                         id: 'lainnya',
                         title: 'Lainnya',
                         caption: 'Lainnya',
                         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                        class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
-                            id: 'historyMandor',
-                            text: "History Supir Milik Mandor",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
-                                    var selectedOne = selectedOnlyOne();
-                                    if (selectedOne[0]) {
-                                        // editSupirMilikMandor(selectedOne[1])
-                                        cekValidasihistory(selectedOne[1], 'historyMandor')
-
-                                    } else {
-                                        showDialog(selectedOne[1])
+                        class: 'btn btn-secondary btn-sm mr-1',
+                        // targetModal:'#listMenuModal',
+                        item:[
+                            {
+                                id: 'historyMandor',
+                                text: "History Supir Milik Mandor",
+                                hidden :(!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+                                        var selectedOne = selectedOnlyOne();
+                                        if (selectedOne[0]) {
+                                            // editSupirMilikMandor(selectedOne[1])
+                                            cekValidasihistory(selectedOne[1], 'historyMandor')
+                                            
+                                        } else {
+                                            showDialog(selectedOne[1])
+                                        }
                                     }
-                                }
-                            }
-                        }, ],
+                                },
+                            }, 
+                        ]
+                        
                     }
-                ]
+                ],
+                // extndBtn: [{
+                //         id: 'approve',
+                //         title: 'Approve',
+                //         caption: 'Approve',
+                //         innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                //         class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                //         dropmenuHTML: [{
+                //                 id: 'approvalBlackListSupir',
+                //                 text: "un/Approval Black List Supir",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+                //                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //                         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //                             showDialog('Harap pilih salah satu record')
+                //                         } else {
+                //                             approvalBlackListSupir(selectedId)
+                //                         }
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approveun',
+                //                 text: "un/Approval Kacab",
+                //                 onClick: () => {
+                //                     approve()
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalnonaktif',
+                //                 text: "Approval Non Aktif",
+                //                 onClick: () => {
+                //                     approvalNonAktif('supir')
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalaktif',
+                //                 text: "Approval Aktif",
+                //                 onClick: () => {
+                //                     approvalAktif('supir')
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalSupirLuarKota',
+                //                 text: "un/Approval Supir Luar Kota",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+                //                         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //                         // if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //                         //     showDialog('Harap pilih salah satu record')
+                //                         // } else {
+                //                         //     approvalSupirLuarKota(selectedId)
+                //                         // }
+                //                         var selectedOne = selectedOnlyOne();
+                //                         if (selectedOne[0]) {
+                //                             approvalLuarKota(selectedOne[1])
+                //                         } else {
+                //                             showDialog(selectedOne[1])
+                //                         }
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalSupirResign',
+                //                 text: "un/Approval Supir Resign",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+                //                         var selectedOne = selectedOnlyOne();
+                //                         if (selectedOne[0]) {
+                //                             supirResign(selectedOne[1])
+                //                         } else {
+                //                             showDialog(selectedOne[1])
+                //                         }
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalHistorySupirMilikMandor',
+                //                 text: "un/Approval History Supir Milik Mandor",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+                //                         approvalHistorySupirMilikMandor();
+                //                     }
+                //                 }
+                //             },
+
+                //             {
+                //                 id: 'StoreApprovalTradoTanpa',
+                //                 text: "un/Approval Supir Tanpa Keterangan/Gambar",
+                //                 onClick: () => {
+                //                     var selectedOne = selectedOnlyOne();
+                //                     if (selectedOne[0]) {
+                //                         cekValidasiTanpa(selectedOne[1])
+                //                     } else {
+                //                         showDialog(selectedOne[1])
+                //                     }
+                //                 }
+                //             },
+                //             // {
+                //             //     id: 'approvalSupirKeterangan',
+                //             //     text: "un/Approval Supir tanpa Keterangan",
+                //             //     onClick: () => {
+                //             //         // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
+                //             //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //             //             showDialog('Harap pilih salah satu record')
+                //             //         } else {
+                //             //             approvalSupirKeterangan(selectedId);
+                //             //         }
+                //             //         // }
+                //             //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //     }
+                //             // },
+                //             // {
+                //             //     id: 'approvalSupirGambar',
+                //             //     text: "un/Approval Supir tanpa Gambar",
+                //             //     onClick: () => {
+                //             //         // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
+                //             //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //             //             showDialog('Harap pilih salah satu record')
+                //             //         } else {
+                //             //             approvalSupirGambar(selectedId);
+                //             //         }
+                //             //         // }
+                //             //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //     }
+                //             // },
+
+                //         ]
+                //     },
+
+                //     {
+                //         id: 'lainnya',
+                //         title: 'Lainnya',
+                //         caption: 'Lainnya',
+                //         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                //         class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+                //         dropmenuHTML: [{
+                //             id: 'historyMandor',
+                //             text: "History Supir Milik Mandor",
+                //             onClick: () => {
+                //                 if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+                //                     var selectedOne = selectedOnlyOne();
+                //                     if (selectedOne[0]) {
+                //                         // editSupirMilikMandor(selectedOne[1])
+                //                         cekValidasihistory(selectedOne[1], 'historyMandor')
+
+                //                     } else {
+                //                         showDialog(selectedOne[1])
+                //                     }
+                //                 }
+                //             }
+                //         }, ],
+                //     }
+                // ]
             })
 
         /* Append clear filter button */
@@ -1575,6 +1722,7 @@
 
 
         function approvalBlackListSupir(supirId) {
+            console.log('cvbn');
             event.preventDefault()
 
             let form = $('#crudForm')
