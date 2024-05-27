@@ -965,6 +965,13 @@
   $(document).on("change", `[name=tglbukti]`, function(event) {
 
     if (KodePenerimaanId == 'PJP') {
+      $("#tablePinjaman")[0].p.selectedRowIds = [];
+      $('#tablePinjaman').jqGrid("clearGridData");
+      $("#tablePinjaman")
+        .jqGrid("setGridParam", {
+          selectedRowIds: []
+        })
+        .trigger("reloadGrid");
       getDataPinjaman($('#crudForm [name=supirheader_id]').val()).then((response) => {
 
         $("#tablePinjaman")[0].p.selectedRowIds = [];

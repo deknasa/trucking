@@ -540,27 +540,27 @@
 
             if (dari != '' && sampai != '' && supirId != '') {
 
-                getDataPotPribadi(supirId).then((response) => {
-                    $("#tablePotPribadi")[0].p.selectedRowIds = [];
-                    if ($('#crudForm').data('action') == 'add') {
-                        selectedRowIdPP = [];
-                    } else {
-                        selectedRowIdPP = response.selectedId;
-                    }
-                    // setTimeout(() => {
+                // getDataPotPribadi(supirId).then((response) => {
+                //     $("#tablePotPribadi")[0].p.selectedRowIds = [];
+                //     if ($('#crudForm').data('action') == 'add') {
+                //         selectedRowIdPP = [];
+                //     } else {
+                //         selectedRowIdPP = response.selectedId;
+                //     }
+                //     // setTimeout(() => {
 
-                    $("#tablePotPribadi")
-                        .jqGrid("setGridParam", {
-                            datatype: "local",
-                            data: response.data,
-                            originalData: response.data,
-                            rowNum: response.data.length,
-                            selectedRowIds: selectedRowIdPP
-                        })
-                        .trigger("reloadGrid");
-                    // }, 100);
+                //     $("#tablePotPribadi")
+                //         .jqGrid("setGridParam", {
+                //             datatype: "local",
+                //             data: response.data,
+                //             originalData: response.data,
+                //             rowNum: response.data.length,
+                //             selectedRowIds: selectedRowIdPP
+                //         })
+                //         .trigger("reloadGrid");
+                //     // }, 100);
 
-                });
+                // });
 
                 getAllAbsensi(supirId, dari, sampai, aksi)
                     .then((response) => {
@@ -614,27 +614,27 @@
                     })
             }
 
-            getDataPotSemua().then((response) => {
-                $("#tablePotSemua")[0].p.selectedRowIds = [];
-                if ($('#crudForm').data('action') == 'add') {
-                    selectedRowId = [];
-                } else {
-                    selectedRowId = response.selectedId;
-                }
-                // setTimeout(() => {
+            // getDataPotSemua().then((response) => {
+            //     $("#tablePotSemua")[0].p.selectedRowIds = [];
+            //     if ($('#crudForm').data('action') == 'add') {
+            //         selectedRowId = [];
+            //     } else {
+            //         selectedRowId = response.selectedId;
+            //     }
+            //     // setTimeout(() => {
 
-                $("#tablePotSemua")
-                    .jqGrid("setGridParam", {
-                        datatype: "local",
-                        data: response.data,
-                        originalData: response.data,
-                        rowNum: response.data.length,
-                        selectedRowIds: selectedRowId
-                    })
-                    .trigger("reloadGrid");
-                // }, 100);
+            //     $("#tablePotSemua")
+            //         .jqGrid("setGridParam", {
+            //             datatype: "local",
+            //             data: response.data,
+            //             originalData: response.data,
+            //             rowNum: response.data.length,
+            //             selectedRowIds: selectedRowId
+            //         })
+            //         .trigger("reloadGrid");
+            //     // }, 100);
 
-            });
+            // });
             // selectAllRowsAbsensi(supirId, dari, sampai, aksi)
             // $.ajax({
             //     url: `${apiUrl}gajisupirheader/getuangjalan`,
@@ -1164,6 +1164,72 @@
         }
     })
 
+
+    $(document).on("change", `[name=tglbukti]`, function(event) {
+        $("#tablePotSemua")[0].p.selectedRowIds = [];
+        $('#tablePotSemua').jqGrid("clearGridData");
+        $("#tablePotSemua")
+            .jqGrid("setGridParam", {
+                selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        getDataPotSemua().then((response) => {
+            $("#tablePotSemua")[0].p.selectedRowIds = [];
+            if ($('#crudForm').data('action') == 'add') {
+                selectedRowId = [];
+            } else {
+                selectedRowId = response.selectedId;
+            }
+            // setTimeout(() => {
+
+            $("#tablePotSemua")
+                .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: selectedRowId
+                })
+                .trigger("reloadGrid");
+            // }, 100);
+            setTotalNominalPS()
+            hitungSisa()
+            setTotalSisaPotSemua()
+        });
+
+        if (supirId != '') {
+            $("#tablePotPribadi")[0].p.selectedRowIds = [];
+            $('#tablePotPribadi').jqGrid("clearGridData");
+            $("#tablePotPribadi")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            getDataPotPribadi(supirId).then((response) => {
+                if ($('#crudForm').data('action') == 'add') {
+                    selectedRowIdPP = [];
+                } else {
+                    selectedRowIdPP = response.selectedId;
+                }
+                // setTimeout(() => {
+
+                $("#tablePotPribadi")
+                    .jqGrid("setGridParam", {
+                        datatype: "local",
+                        data: response.data,
+                        originalData: response.data,
+                        rowNum: response.data.length,
+                        selectedRowIds: selectedRowIdPP
+                    })
+                    .trigger("reloadGrid");
+                // }, 100);
+
+                setTotalNominalPP()
+                hitungSisa()
+                setTotalSisaPotPribadi()
+            });
+        }
+    })
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
 
@@ -1950,7 +2016,6 @@
                         response.selectedId = selectedIdPS;
                         response.totalPS = totalPS;
 
-                        console.log(selectedIdPS)
                     }
                     resolve(response);
                 },
@@ -2317,7 +2382,7 @@
             id = $(`#crudForm`).find(`[name="id"]`).val()
             urlPotPribadi = `${apiUrl}gajisupirheader/${id}/${supirId}/edit/editpinjpribadi`
 
-        } else if (aksi == 'delete' || aksi =='view') {
+        } else if (aksi == 'delete' || aksi == 'view') {
             urlPotPribadi = `${apiUrl}gajisupirheader/${id}/${supirId}/delete/editpinjpribadi`
             attribut = 'disabled'
             forCheckbox = 'disabled'
@@ -2450,11 +2515,13 @@
     }
 
     function setTotalNominalPP() {
+        console.log('hitungtotalnominal');
         let nominalPPDetails = $(`#tablePotPribadi`).find(`td[aria-describedby="tablePotPribadi_nominalPP"]`)
         let nominalPP = 0
         selectedRowsPribadi = $("#tablePotPribadi").getGridParam("selectedRowIds");
         $.each(selectedRowsPribadi, function(index, value) {
             dataPinjaman = $("#tablePotPribadi").jqGrid("getLocalRow", value);
+            console.log('dataPinjaman ', dataPinjaman)
             nominals = (dataPinjaman.nominalPP == undefined || dataPinjaman.nominalPP == '') ? 0 : dataPinjaman.nominalPP;
             getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
             nominalPP = nominalPP + getNominal

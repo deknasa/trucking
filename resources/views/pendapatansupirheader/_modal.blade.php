@@ -259,29 +259,29 @@
                             showDialog(error.responseJSON)
                         }
                     })
-                if (isDeposito == 'YA') {
+                // if (isDeposito == 'YA') {
 
-                    getDataPinjaman().then((response) => {
-                        $("#tablePinjaman")[0].p.selectedRowIds = [];
-                        if ($('#crudForm').data('action') == 'add') {
-                            selectedRowId = [];
-                        } else {
-                            selectedRowId = response.selectedId;
-                        }
-                        setTimeout(() => {
+                //     getDataPinjaman().then((response) => {
+                //         $("#tablePinjaman")[0].p.selectedRowIds = [];
+                //         if ($('#crudForm').data('action') == 'add') {
+                //             selectedRowId = [];
+                //         } else {
+                //             selectedRowId = response.selectedId;
+                //         }
+                //         setTimeout(() => {
 
-                            $("#tablePinjaman")
-                                .jqGrid("setGridParam", {
-                                    datatype: "local",
-                                    data: response.data,
-                                    originalData: response.data,
-                                    rowNum: response.data.length,
-                                    selectedRowIds: selectedRowId
-                                })
-                                .trigger("reloadGrid");
-                        }, 100);
-                    });
-                }
+                //             $("#tablePinjaman")
+                //                 .jqGrid("setGridParam", {
+                //                     datatype: "local",
+                //                     data: response.data,
+                //                     originalData: response.data,
+                //                     rowNum: response.data.length,
+                //                     selectedRowIds: selectedRowId
+                //                 })
+                //                 .trigger("reloadGrid");
+                //         }, 100);
+                //     });
+                // }
             }
 
         })
@@ -294,7 +294,7 @@
             event.preventDefault()
             submit($(this).attr('id'))
         })
-        
+
         function submit(button) {
             event.preventDefault()
 
@@ -538,37 +538,37 @@
                                 tglsampai: dateFormat(response.data.tglsampaiheader)
                             }
                         }).trigger('reloadGrid');
-    
+
                         if (id == 0) {
                             $('#detail').jqGrid().trigger('reloadGrid')
                         }
                         if (response.data.grp == 'FORMAT') {
                             updateFormat(response.data)
                         }
-                    }else{
+                    } else {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
                         showSuccessDialog(response.message, response.data.nobukti)
-                        
+
                         $("#tableDeposito")[0].p.selectedRowIds = [];
                         $('#tableDeposito').jqGrid("clearGridData");
                         $("#tableDeposito")
-                        .jqGrid("setGridParam", {
-                            selectedRowIds: []
-                        })
-                        .trigger("reloadGrid");
-                        
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+
                         $("#tablePinjaman")[0].p.selectedRowIds = [];
                         $('#tablePinjaman').jqGrid("clearGridData");
                         $("#tablePinjaman")
-                        .jqGrid("setGridParam", {
-                            selectedRowIds: []
-                        })
-                        .trigger("reloadGrid");
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
                         createPendapatanSupir()
                     }
-                    
+
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -584,6 +584,39 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
+        }
+    })
+
+    $(document).on("change", `[name=tglbukti]`, function(event) {
+        if (isDeposito == 'YA') {
+            $("#tablePinjaman")[0].p.selectedRowIds = [];
+            $('#tablePinjaman').jqGrid("clearGridData");
+            $("#tablePinjaman")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            getDataPinjaman().then((response) => {
+                $("#tablePinjaman")[0].p.selectedRowIds = [];
+                if ($('#crudForm').data('action') == 'add') {
+                    selectedRowId = [];
+                } else {
+                    selectedRowId = response.selectedId;
+                }
+                setTimeout(() => {
+
+                    $("#tablePinjaman")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: selectedRowId
+                        })
+                        .trigger("reloadGrid");
+                }, 100);
+            });
+
         }
     })
 
@@ -612,34 +645,34 @@
     })
 
     function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'pendapatansupirheader'
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'pendapatansupirheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    })
-  }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     function createPendapatanSupir() {
         let form = $('#crudForm')
