@@ -368,6 +368,13 @@
             formatter: currencyFormat,
           },
           {
+            label: 'B. Extra',
+            name: 'biayaextraheader',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'POT. PINJAMAN',
             name: 'potonganpinjaman',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -637,6 +644,7 @@
               potonganpinjaman: data.attributes.totalPotPinj,
               potonganpinjamansemua: data.attributes.totalPotSemua,
               deposito: data.attributes.totalDeposito,
+              biayaextraheader: data.attributes.totalBiayaExtraHeader,
               uangmakanberjenjang: data.attributes.totalMakanBerjenjang,
               uangmakanharian: data.attributes.totalMakan,
               komisisupir: data.attributes.totalKomisiSupir,

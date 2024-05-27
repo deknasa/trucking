@@ -139,14 +139,14 @@
             align: 'left'
           },
           {
-            label: 'BIAYA EXTRA',
+            label: 'BIAYA EXTRA (TRIP)',
             name: 'biayaextra',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: currencyFormat,
             align: "right",
           },
           {
-            label: 'KET. BIAYA EXTRA',
+            label: 'KET. BIAYA EXTRA (TRIP)',
             name: 'keteranganbiayatambahan',
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             align: 'left',
