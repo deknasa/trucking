@@ -469,7 +469,7 @@ $.fn.customPager = function (option = {}) {
                                           .join("")
                                     : ""
                             }
-
+                            ${modalBtnList}
 							${extndBtn}
 						</div>
 					</div>
