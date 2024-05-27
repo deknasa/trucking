@@ -191,7 +191,7 @@ class LaporanKasBankController extends MyController
             $sheet->setCellValue("E$detail_start_row", $response_detail['debet']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['kredit']);
 
-            if ($response_detail['nobukti'] == '') {
+            if ($response_detail['nobukti'] == 'SALDO AWAL') {
                 $sheet->setCellValue('G' . $dataRow, $response_detail['saldo']);
             } else {
                 if ($dataRow > $detail_table_header_row + 1) {
