@@ -48,7 +48,8 @@
             </div>
 
 
-            <div class="table-responsive table-scroll">
+            <div class="overflow scroll-container mb-2">
+              <div class="table-container">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
                 <thead>
                   <tr>
@@ -78,6 +79,7 @@
                 </tfoot>
 
               </table>
+            </div>
             </div>
           </div>
           <div class="modal-footer justify-content-start">
