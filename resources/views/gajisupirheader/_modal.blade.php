@@ -540,27 +540,6 @@
 
             if (dari != '' && sampai != '' && supirId != '') {
 
-                // getDataPotPribadi(supirId).then((response) => {
-                //     $("#tablePotPribadi")[0].p.selectedRowIds = [];
-                //     if ($('#crudForm').data('action') == 'add') {
-                //         selectedRowIdPP = [];
-                //     } else {
-                //         selectedRowIdPP = response.selectedId;
-                //     }
-                //     // setTimeout(() => {
-
-                //     $("#tablePotPribadi")
-                //         .jqGrid("setGridParam", {
-                //             datatype: "local",
-                //             data: response.data,
-                //             originalData: response.data,
-                //             rowNum: response.data.length,
-                //             selectedRowIds: selectedRowIdPP
-                //         })
-                //         .trigger("reloadGrid");
-                //     // }, 100);
-
-                // });
 
                 getAllAbsensi(supirId, dari, sampai, aksi)
                     .then((response) => {
@@ -3479,6 +3458,34 @@
                 $('#crudForm [name=supir_id]').first().val(supir.id)
                 element.val(supir.namaalias)
                 element.data('currentValue', element.val())
+                $("#tablePotPribadi")[0].p.selectedRowIds = [];
+                $('#tablePotPribadi').jqGrid("clearGridData");
+                $("#tablePotPribadi")
+                    .jqGrid("setGridParam", {
+                        selectedRowIds: []
+                    })
+                    .trigger("reloadGrid");
+                getDataPotPribadi(supir.id).then((response) => {
+                    $("#tablePotPribadi")[0].p.selectedRowIds = [];
+                    if ($('#crudForm').data('action') == 'add') {
+                        selectedRowIdPP = [];
+                    } else {
+                        selectedRowIdPP = response.selectedId;
+                    }
+                    // setTimeout(() => {
+
+                    $("#tablePotPribadi")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: selectedRowIdPP
+                        })
+                        .trigger("reloadGrid");
+                    // }, 100);
+
+                });
 
             },
             onCancel: (element) => {
