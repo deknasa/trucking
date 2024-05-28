@@ -49,7 +49,7 @@
                 <input type="text" name="email" class="form-control">
               </div>
             </div>
-            <div class="row form-group sometimes">
+            <!-- <div class="row form-group sometimes">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   Password <span class="text-danger">*</span>
@@ -65,7 +65,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">

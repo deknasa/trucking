@@ -685,6 +685,33 @@
         }
     })
 
+    $(document).on("change", `[name=tglbukti]`, function(event) {
+        if ($('#crudForm').find(`[name="supir_id"]`).val() != '') {
+
+            $("#tablePengembalian")[0].p.selectedRowIds = [];
+            $('#tablePengembalian').jqGrid("clearGridData");
+            $("#tablePengembalian")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            getDataPengembalian($('#crudForm').find(`[name="supir_id"]`).val()).then((response) => {
+                setTimeout(() => {
+
+                    $("#tablePengembalian")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: []
+                        })
+                        .trigger("reloadGrid");
+                }, 100);
+
+            });
+        }
+    })
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
 
