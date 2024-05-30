@@ -383,16 +383,18 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [
                         {
                             id: 'approvalnonaktif',
                             text: "Approval Non Aktif",
+                            color:"btn-success",
+                            hidden:(!`{{ $myAuth->hasPermission('triptangki', 'approvalnonaktif') }}`),
                             onClick: () => {
                                 approvalNonAktif('triptangki')
                             }

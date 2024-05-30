@@ -550,15 +550,16 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -573,6 +574,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -609,11 +611,13 @@ function checkboxHandler(element) {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status PELUNASAN HUTANG",
+                text: "APPROVAL/UN Status PELUNASAN HUTANG",
+                color:'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) {
                     approve()
@@ -623,6 +627,8 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PELUNASAN HUTANG",
+                color:'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -637,7 +643,9 @@ function checkboxHandler(element) {
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PELUNASAN HUTANG",
+                text: "APPROVAL/UN Kirim Berkas PELUNASAN HUTANG",
+                color:'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

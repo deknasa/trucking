@@ -644,15 +644,17 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1',
+                    item: [{
                             id: 'approvalTanpaKlaim',
-                            text: ' UN/APPROVAL Tanpa Klaim',
+                            text: ' APPROVAL/UN Tanpa Klaim',
+                            color:'btn-success',
+                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalklaim') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 approvalTanpaKlaim(selectedId)
@@ -660,7 +662,9 @@
                         },
                         {
                             id: 'approvalReuse',
-                            text: ' UN/APPROVAL Reuse',
+                            text: ' APPROVAL/UN Reuse',
+                            color:'btn-info',
+                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalReuse') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 approvalReuse(selectedId)
@@ -669,6 +673,8 @@
                         {
                             id: 'approveun',
                             text: ' APPROVAL NON AKTIF',
+                            color:'btn-primary',
+                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 approvalNonAktif('stok')
@@ -677,6 +683,8 @@
                         {
                             id: 'approvalaktif',
                             text: ' APPROVAL AKTIF',
+                            color:'btn-purple',
+                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 approvalAktif('stok')

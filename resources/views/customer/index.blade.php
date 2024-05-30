@@ -546,15 +546,17 @@
                     },
 
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
                             id: 'approveun',
-                            text: "UN/APPROVAL Data",
+                            text: "APPROVAL/UN Data",
+                            color: "btn-success",
+                            hidden :(!`{{ $myAuth->hasPermission('customer', 'approval') }}`),
                             onClick: () => {
 
                                 approve()
@@ -564,6 +566,8 @@
                         {
                             id: 'approvalnonaktif',
                             text: "Approval Non Aktif",
+                            color: "btn-info",
+                            hidden :(!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`),
                             onClick: () => {
 
                                 approvenonaktif()
@@ -635,6 +639,7 @@
                 $('#report').attr('disabled', 'disabled')
             }
             let hakApporveCount = 0;
+            console.log(hakApporveCount);
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
                 hakApporveCount--

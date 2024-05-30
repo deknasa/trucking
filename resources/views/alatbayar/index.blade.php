@@ -465,7 +465,7 @@
                             },
                             {
                                 id: 'approveun',
-                                innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+                                innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
                                 class: 'btn btn-purple btn-sm mr-1',
                                 onClick: () => {
                                   approvalNonAktif('alatbayar')

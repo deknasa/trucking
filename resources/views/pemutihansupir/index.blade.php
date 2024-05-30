@@ -35,6 +35,7 @@
   let tgldariheader
   let tglsampaiheader
   let selectedRows = [];
+  let activeGrid
 
   let selectedbukti = [];
 
@@ -438,15 +439,16 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:"btn-success",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -459,6 +461,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:"btn-info",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -487,12 +490,51 @@ function checkboxHandler(element) {
               }
             }
           },
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PEMUTIHAN SUPIR",
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                    approvalBukaCetak(tglbukacetak, 'PEMUTIHANSUPIR', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas PEMUTIHAN SUPIR",
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PEMUTIHANSUPIR', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },            
+            ],
+          }
 
           // {
           //   id: 'approve',
           //   title: 'Approve',
           //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
           //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           //   dropmenuHTML: [{
           //     id: 'approval-buka-cetak',
@@ -558,48 +600,6 @@ function checkboxHandler(element) {
             }
           },
         ],
-        extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            // {
-            //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
-            //   onClick: () => {
-            //     approve()
-            //   }
-            // },
-            {
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PEMUTIHAN SUPIR",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-                  approvalBukaCetak(tglbukacetak, 'PEMUTIHANSUPIR', selectedRowsIndex, selectedbukti);
-
-                }
-              }
-            },
-            {
-              id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PEMUTIHAN SUPIR",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`) {
-                  let tglkirimberkas = $('#tgldariheader').val().split('-');
-                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
-
-                  approvalKirimBerkas(tglkirimberkas, 'PEMUTIHANSUPIR', selectedRowsIndex, selectedbukti);
-
-                }
-              }
-            },            
-          ],
-        }]
 
       })
 

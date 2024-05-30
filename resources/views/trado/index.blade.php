@@ -1199,15 +1199,17 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                        class: 'btn btn-purple btn-sm mr-1 ',
+                        item: [{
                                 id: 'approveun',
-                                text: "UN/APPROVAL Reminder Oli Mesin",
+                                text: "APPROVAL/UN Reminder Oli Mesin",
+                                color:"btn-success",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
 
@@ -1218,6 +1220,7 @@
                             {
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
+                                color:"btn-info",
                                 onClick: () => {
 
                                     approvalNonAktif('trado')
@@ -1226,7 +1229,9 @@
                             },
                             {
                                 id: 'approvalPersneling',
-                                text: "un/Approval Reminder Oli Persneling",
+                                text: "APPROVAL/UN Reminder Oli Persneling",
+                                color:"btn-primary",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
                                         approvalPersneling();
@@ -1236,7 +1241,9 @@
                             },
                             {
                                 id: 'approvalGardan',
-                                text: "un/Approval Reminder Oli Gardan",
+                                text: "APPROVAL/UN Reminder Oli Gardan",
+                                color:"btn-purple",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
                                         approvalGardan();
@@ -1246,7 +1253,9 @@
                             },
                             {
                                 id: 'approvalSaringanHawa',
-                                text: "un/Approval Reminder Oli Saringan Hawa",
+                                text: "APPROVAL/UN Reminder Oli Saringan Hawa",
+                                color:"btn-orange",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
                                         approvalSaringanHawa();
@@ -1256,7 +1265,9 @@
                             },
                             {
                                 id: 'StoreApprovalTradoTanpa',
-                                text: "un/Approval Trado Tanpa Keterangan/Gambar",
+                                text: "APPROVAL/UN Trado Tanpa Keterangan/Gambar",
+                                color:"btn-warning",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'StoreApprovalTradoTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
@@ -1268,7 +1279,9 @@
                             },
                             {
                                 id: 'approvalHistoryTradoMilikMandor',
-                                text: "un/Approval History Trado Milik Mandor",
+                                text: "APPROVAL/UN History Trado Milik Mandor",
+                                color:"btn-danger",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`) {
                                         approvalHistoryTradoMilikMandor();
@@ -1277,7 +1290,9 @@
                             },
                             {
                                 id: 'approvalHistoryTradoMilikSupir',
-                                text: "un/Approval History Trado Milik Supir",
+                                text: "APPROVAL/UN History Trado Milik Supir",
+                                color:"btn-success",
+                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`) {
                                         approvalHistoryTradoMilikSupir();
@@ -1286,7 +1301,7 @@
                             },
                             // {
                             //     id: 'approvalTradoGambar',
-                            //     text: "un/Approval Trado tanpa Gambar",
+                            //     text: "APPROVAL/UN Trado tanpa Gambar",
                             //     onClick: () => {
                             //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradogambar') }}`) {
                             //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1302,7 +1317,7 @@
                             // },
                             // {
                             //     id: 'approvalTradoKeterangan',
-                            //     text: "un/Approval Trado tanpa Keterangan",
+                            //     text: "APPROVAL/UN Trado tanpa Keterangan",
                             //     onClick: () => {
                             //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradoketerangan') }}`) {
                             //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1325,10 +1340,12 @@
                         title: 'Lainnya',
                         caption: 'Lainnya',
                         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                        class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        class: 'btn btn-secondary btn-sm mr-1 ',
+                        item: [{
                             id: 'historyMandor',
                             text: "History Trado Milik Mandor",
+                            color:"btn-success",
+                            hidden:(!`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`),
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`) {
                                     var selectedOne = selectedOnlyOne();
@@ -1343,6 +1360,8 @@
                         }, {
                             id: 'historySupir',
                             text: "History Trado Milik Supir",
+                            color:"btn-info",
+                            hidden:(!`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`),
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`) {
                                     var selectedOne = selectedOnlyOne();

@@ -726,15 +726,16 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -747,6 +748,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -778,12 +780,12 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
               // {
               //   id: 'approveun',
-              //   text: "UN/APPROVAL Status penerimaan",
+              //   text: "APPROVAL/UN Status penerimaan",
               //   onClick: () => {
               //     approve()
               //   }
@@ -791,6 +793,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENGELUARAN TRUCKING",
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -803,7 +807,9 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PENGELUARAN TRUCKING",
+                text: "APPROVAL/UN Kirim Berkas PENGELUARAN TRUCKING",
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

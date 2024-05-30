@@ -756,36 +756,40 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1',
+          item: [{
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak PROSES  GAJI SUPIR",
+              color:'btn-success',
+              hidden:(!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRows, selectedbukti);
 
                 }
               }
             },
             {
               id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PROSES  GAJI SUPIR",
+              text: "APPROVAL/UN Kirim Berkas PROSES  GAJI SUPIR",
+              color:'btn-info',
+              hidden:(!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`) {
                   let tglkirimberkas = $('#tgldariheader').val().split('-');
                   tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                  approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+                  approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRows, selectedbukti);
 
                 }
               }

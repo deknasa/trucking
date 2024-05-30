@@ -1174,13 +1174,13 @@
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL ',
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN ',
                         class: 'btn btn-purple btn-sm mr-1',
                         // targetModal:'#listMenuModal',
                         item:[
                             {
                                 id: 'approvalBlackListSupir',
-                                text: "un/Approval Black List Supir",
+                                text: "APPROVAL/UN Black List Supir",
                                 color: "btn-warning",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                                 onClick: () => {
@@ -1196,7 +1196,7 @@
                             },
                             {
                                 id: 'approveun',
-                                text: "un/Approval Kacab",
+                                text: "APPROVAL/UN Kacab",
                                 color: "btn-orange",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approval') }}`),
                                 onClick: () => {
@@ -1223,7 +1223,7 @@
                             },
                             {
                                 id: 'approvalSupirLuarKota',
-                                text: "un/Approval Supir Luar Kota",
+                                text: "APPROVAL/UN Supir Luar Kota",
                                 color: "btn-info",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`),
                                 onClick: () => {
@@ -1245,7 +1245,7 @@
                             },
                             {
                                 id: 'approvalSupirResign',
-                                text: "un/Approval Supir Resign",
+                                text: "APPROVAL/UN Supir Resign",
                                 color: "btn-purple",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`),
                                 onClick: () => {
@@ -1261,7 +1261,7 @@
                             },
                             {
                                 id: 'approvalHistorySupirMilikMandor',
-                                text: "un/Approval History Supir Milik Mandor",
+                                text: "APPROVAL/UN History Supir Milik Mandor",
                                 color: "btn-success",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`),
                                 onClick: () => {
@@ -1273,7 +1273,7 @@
 
                             {
                                 id: 'StoreApprovalTradoTanpa',
-                                text: "un/Approval Supir Tanpa Keterangan/Gambar",
+                                text: "APPROVAL/UN Supir Tanpa Keterangan/Gambar",
                                 color: "btn-warning",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`),
                                 onClick: () => {
@@ -1320,11 +1320,11 @@
                 //         id: 'approve',
                 //         title: 'Approve',
                 //         caption: 'Approve',
-                //         innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                //         innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                 //         class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
                 //         dropmenuHTML: [{
                 //                 id: 'approvalBlackListSupir',
-                //                 text: "un/Approval Black List Supir",
+                //                 text: "APPROVAL/UN Black List Supir",
                 //                 onClick: () => {
                 //                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
                 //                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1338,7 +1338,7 @@
                 //             },
                 //             {
                 //                 id: 'approveun',
-                //                 text: "un/Approval Kacab",
+                //                 text: "APPROVAL/UN Kacab",
                 //                 onClick: () => {
                 //                     approve()
                 //                 }
@@ -1359,7 +1359,7 @@
                 //             },
                 //             {
                 //                 id: 'approvalSupirLuarKota',
-                //                 text: "un/Approval Supir Luar Kota",
+                //                 text: "APPROVAL/UN Supir Luar Kota",
                 //                 onClick: () => {
                 //                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
                 //                         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1379,7 +1379,7 @@
                 //             },
                 //             {
                 //                 id: 'approvalSupirResign',
-                //                 text: "un/Approval Supir Resign",
+                //                 text: "APPROVAL/UN Supir Resign",
                 //                 onClick: () => {
                 //                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
                 //                         var selectedOne = selectedOnlyOne();
@@ -1393,7 +1393,7 @@
                 //             },
                 //             {
                 //                 id: 'approvalHistorySupirMilikMandor',
-                //                 text: "un/Approval History Supir Milik Mandor",
+                //                 text: "APPROVAL/UN History Supir Milik Mandor",
                 //                 onClick: () => {
                 //                     if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
                 //                         approvalHistorySupirMilikMandor();
@@ -1403,7 +1403,7 @@
 
                 //             {
                 //                 id: 'StoreApprovalTradoTanpa',
-                //                 text: "un/Approval Supir Tanpa Keterangan/Gambar",
+                //                 text: "APPROVAL/UN Supir Tanpa Keterangan/Gambar",
                 //                 onClick: () => {
                 //                     var selectedOne = selectedOnlyOne();
                 //                     if (selectedOne[0]) {
@@ -1415,7 +1415,7 @@
                 //             },
                 //             // {
                 //             //     id: 'approvalSupirKeterangan',
-                //             //     text: "un/Approval Supir tanpa Keterangan",
+                //             //     text: "APPROVAL/UN Supir tanpa Keterangan",
                 //             //     onClick: () => {
                 //             //         // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
                 //             //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1430,7 +1430,7 @@
                 //             // },
                 //             // {
                 //             //     id: 'approvalSupirGambar',
-                //             //     text: "un/Approval Supir tanpa Gambar",
+                //             //     text: "APPROVAL/UN Supir tanpa Gambar",
                 //             //     onClick: () => {
                 //             //         // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
                 //             //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

@@ -1057,15 +1057,17 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
               id: 'approvalBatalMuat',
-              text: "un/Approval Batal Muat",
+              text: "APPROVAL/UN Batal Muat",
+              color:'btn-success',
+              hidden:(!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1075,7 +1077,9 @@
             },
             {
               id: 'approvalEditTujuan',
-              text: "un/Approval Edit Surat Pengantar",
+              text: "APPROVAL/UN Edit Surat Pengantar",
+              color:'btn-info',
+              hidden:(!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1085,7 +1089,9 @@
             },
             {
               id: 'approvalTitipanEmkl',
-              text: "un/Approval Titipan EMKL",
+              text: "APPROVAL/UN Titipan EMKL",
+              color:'btn-primary',
+              hidden:(!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`),
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');

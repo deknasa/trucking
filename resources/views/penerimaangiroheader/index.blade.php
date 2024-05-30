@@ -578,15 +578,16 @@
 
             .customPager({
 
-                extndBtn: [{
+                modalBtnList: [{
                         id: 'report',
                         title: 'Report',
                         caption: 'Report',
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
-                        class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-                        dropmenuHTML: [{
+                        class: 'btn btn-info btn-sm mr-1',
+                        item: [{
                                 id: 'reportPrinterBesar',
                                 text: "Printer Lain(Faktur)",
+                                color:'btn-success',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -603,6 +604,7 @@
                             {
                                 id: 'reportPrinterKecil',
                                 text: "Printer Epson Seri LX(Faktur)",
+                                color:'btn-info',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -641,13 +643,14 @@
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                        class: 'btn btn-purple btn-sm mr-1',
+                        item: [{
                                 id: 'approveun',
-                                text: "UN/APPROVAL Status PENERIMAAN GIRO",
+                                text: "APPROVAL/UN Status PENERIMAAN GIRO",
+                                color:'btn-success',
+                                hidden:(!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`),
                                 onClick: () => {
-
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
                                         approve()
                                     }
@@ -656,6 +659,8 @@
                             {
                                 id: 'approval-buka-cetak',
                                 text: "Approval Buka Cetak PENERIMAAN GIRO",
+                                color:'btn-info',
+                                hidden:(!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
                                         let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -666,7 +671,9 @@
                             },
                             {
                                 id: 'approval-kirim-berkas',
-                                text: "Un/Approval Kirim Berkas PENERIMAAN GIRO",
+                                text: "APPROVAL/UN Kirim Berkas PENERIMAAN GIRO",
+                                color:'btn-primary',
+                                hidden:(!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalkirimberkas') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalkirimberkas') }}`) {
                                         let tglkirimberkas = $('#tgldariheader').val().split('-');

@@ -196,7 +196,7 @@
         form.find('#btnSubmitApprovalLuarKota').html(`<i class="fa fa-save"></i> Save`)
 
         form.find(`.sometimes`).show()
-        $('#crudModalApprovalLuarKotaTitle').text('Un/Approval Supir Luar Kota')
+        $('#crudModalApprovalLuarKotaTitle').text('APPROVAL/UN Supir Luar Kota')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 

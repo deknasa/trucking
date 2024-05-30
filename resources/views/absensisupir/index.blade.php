@@ -692,15 +692,17 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: "btn-warning",
+                // hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -745,11 +747,13 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approvalEdit',
-                text: "UN/APPROVAL Absensi Edit",
+                text: "APPROVAL/UN Absensi Edit",
+                color: "btn-success",
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -763,7 +767,9 @@
               },
               {
                 id: 'approvalTripInap',
-                text: "UN/APPROVAL Pengajuan Trip Inap",
+                text: "APPROVAL/UN Pengajuan Trip Inap",
+                color: "btn-info",
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`),
                 onClick: () => {
                   // if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`) {
                   // var selectedOne = selectedOnlyOne();                            
@@ -778,6 +784,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Absensi",
+                color: "btn-primary",
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -793,7 +801,9 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas Absensi",
+                text: "APPROVAL/UN Kirim Berkas Absensi",
+                color: "btn-orange",
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -810,7 +820,9 @@
 
               {
                   id: 'approvalabsensifinal',
-                  text: "un/Approval Absensi Final",
+                  text: "APPROVAL/UN Absensi Final",
+                  color: "btn-purple",
+                  hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`),
                   onClick: () => {
                       if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`) {
                         approvalFinalAbsensi();
@@ -826,10 +838,12 @@
             title: 'Lainnya',
             caption: 'Lainnya',
             innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-secondary btn-sm mr-1',
+            item: [{
                 id: 'cekAbsenTrado',
                 text: "Cek Absen Trado",
+                color: "btn-warning",
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -955,6 +969,7 @@
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
       }
+      console.log(hakApporveCount);
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

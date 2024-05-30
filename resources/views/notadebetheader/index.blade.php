@@ -637,15 +637,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -659,6 +660,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -691,11 +693,13 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status NOTA DEBET",
+                text: "APPROVAL/UN Status NOTA DEBET",
+                color:'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
                     approve()
@@ -705,6 +709,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak NOTA DEBET",
+                color:'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -717,7 +723,9 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas NOTA DEBET",
+                text: "APPROVAL/UN Kirim Berkas NOTA DEBET",
+                color:'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

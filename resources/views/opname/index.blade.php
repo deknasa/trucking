@@ -508,15 +508,16 @@
           },
 
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'report',
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportStokOpname',
                 text: 'report Stok Opname', //blank
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -529,6 +530,7 @@
               {
                 id: 'reportStokBukti',
                 text: 'report Stok Bukti',
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -541,6 +543,7 @@
               {
                 id: 'reportStokBaning',
                 text: "report Stok Banding",
+                color:'btn-primary',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -557,22 +560,11 @@
             title: 'Export',
             caption: 'Export',
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1  dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-warning btn-sm mr-1  ',
+            item: [{
                 id: 'exportStokBukti',
                 text: 'export Stok Bukti', //blank
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokOpname`)
-                  }
-                }
-              },
-              {
-                id: 'exportStokBukti',
-                text: 'export Stok Opname', //blank
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -583,8 +575,22 @@
                 }
               },
               {
+                id: 'exportStokOpname',
+                text: 'export Stok Opname', //blank
+                color:'btn-info',
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokOpname`)
+                  }
+                }
+              },
+              {
                 id: 'exportStokBaning',
                 text: "export Stok Banding",
+                color:'btn-primary',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -600,11 +606,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
-                text: ' UN/APPROVAL status',
+                text: ' APPROVAL/UN status',
                 onClick: () => {
                   if (!selectedRows.length) {
                     showDialog('Harap pilih salah satu record')
@@ -632,7 +638,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas OPNAME",
+                text: "APPROVAL/UN Kirim Berkas OPNAME",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
