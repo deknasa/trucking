@@ -37,6 +37,12 @@
           width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
         },
         {
+          label: 'Keterangan',
+          name: 'keterangan',
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
+        },
+        {
           label: 'nama terpusat',
           name: 'namaterpusat',
           width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
