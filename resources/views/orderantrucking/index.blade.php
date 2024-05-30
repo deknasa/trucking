@@ -627,15 +627,17 @@
           },
 
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-purple btn-sm mr-1  ',
+            item: [{
                 id: 'approveun',
                 text: "UN/APPROVAL status orderan trucking",
+                color:"btn-success",
+                hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
                     approve()
@@ -645,6 +647,8 @@
               {
                 id: 'approvalEditOrderanTrucking',
                 text: "un/Approval Edit orderan trucking",
+                color:"btn-info",
+                hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
                     approvalEditOrderanTrucking();
@@ -655,6 +659,8 @@
               {
                 id: 'approvalTanpaJob',
                 text: "un/Approval Tanpa Job EMKL",
+                color:"btn-primary",
+                hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`) {
                     approvalTanpaJobEMKL();
@@ -669,10 +675,11 @@
             title: 'Lainnya',
             caption: 'Lainnya',
             innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-secondary btn-sm mr-1  ',
+            item: [{
               id: 'updateNoContainer',
               text: "Update No Container",
+              color:"btn-success",
               onClick: () => {
                 var selectedOne = selectedOnlyOne();
                 if (selectedOne[0]) {

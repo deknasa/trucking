@@ -544,15 +544,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: "btn-success",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -567,6 +568,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: "btn-info",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -604,10 +606,12 @@
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
                 text: "UN/APPROVAL Status INVOICE",
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`),
                 onClick: () => {
 
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
@@ -618,6 +622,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak INVOICE",
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -633,6 +639,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "Un/Approval Kirim Berkas INVOICE",
+                color:'btn-primary',
+                hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -774,7 +782,7 @@
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
       hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`) {
         hakApporveCount--
         $('#approval-kirim-berkas').hide()
       }

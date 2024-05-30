@@ -42,6 +42,8 @@ class KartuStokController extends MyController
             'limit' => 0
         ];
 
+        dd($request->all());
+
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))

@@ -775,15 +775,16 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'report',
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: 'Printer Lain(Faktur)',
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -799,6 +800,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -833,10 +835,12 @@
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approvalEdit',
                 text: ' UN/APPROVAL status Edit',
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -851,6 +855,8 @@
               {
                 id: 'approvalEditKeterangan',
                 text: ' UN/APPROVAL status Edit Keterangan',
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -865,6 +871,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENGELUARAN STOK",
+                color:'btn-primary',
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -881,6 +889,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "Un/Approval Kirim Berkas PENGELUARAN STOK",
+                color:'btn-purple',
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

@@ -607,15 +607,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -630,6 +631,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -667,10 +669,12 @@
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-purple btn-sm mr-1  ',
+            item: [{
                 id: 'approveun',
                 text: "UN/APPROVAL Status penerimaan",
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
                     // console.log(selectedbukti )
@@ -681,6 +685,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak penerimaan",
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -693,6 +699,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "Un/Approval Kirim Berkas penerimaan",
+                color:'btn-primary',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

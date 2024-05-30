@@ -534,15 +534,17 @@
           },
 
         ],
-        extndBtn: [{
+        modalBtnList: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
           innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
+          class: 'btn btn-purple btn-sm mr-1',
+          item: [{
               id: 'approveun',
               text: "UN/APPROVAL Data",
+              color:'btn-success',
+              hidden:(!`{{ $myAuth->hasPermission('supplier', 'approval') }}`),
               onClick: () => {
 
                 if (`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
@@ -553,6 +555,8 @@
             {
               id: 'approvalnonaktif',
               text: "Approval Non Aktif",
+              color:'btn-info',
+              hidden:(!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {
 

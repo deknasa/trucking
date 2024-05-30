@@ -697,13 +697,13 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [
             // {
             //   id: 'approveun',
             //   text: "UN/APPROVAL Status penerimaan",
@@ -714,6 +714,8 @@
             {
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak GAJI SUPIR",
+              color: "btn-success",
+              hidden :(!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -727,6 +729,8 @@
             {
               id: 'approval-kirim-berkas',
               text: "Un/Approval Kirim Berkas GAJI SUPIR",
+              color: "btn-info",
+              hidden :(!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {
                   let tglkirimberkas = $('#tgldariheader').val().split('-');

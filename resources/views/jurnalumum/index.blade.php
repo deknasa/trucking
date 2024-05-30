@@ -448,15 +448,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -471,6 +472,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -508,10 +510,12 @@
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
                 text: "UN/APPROVAL Jurnal Umum",
+                color:'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
                     approve()
@@ -521,6 +525,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak JURNAL",
+                color:'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -532,6 +538,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "Un/Approval Kirim Berkas JURNAL",
+                color:'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -547,10 +555,11 @@
             title: 'Lainnya',
             caption: 'Lainnya',
             innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-secondary btn-sm mr-1 ',
+            item: [{
                 id: 'copy',
                 text: "COPY",
+                color:'btn-success',
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

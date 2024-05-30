@@ -454,15 +454,16 @@
                     },
 
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                     id: 'lainnya',
                     title: 'Lainnya',
                     caption: 'Lainnya',
                     innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                    class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
+                    class: 'btn btn-secondary btn-sm mr-1',
+                    item: [{
                             id: 'approvalnoncabang',
                             text: "Approval Tidak berlaku dicabang",
+                            color:'btn-success',
                             onClick: () => {
                                 approvalCabang()
                             }
@@ -470,6 +471,7 @@
                         {
                             id: 'approvalberlakudicabang',
                             text: "Approval berlaku dicabang",
+                            color:'btn-info',
                             onClick: () => {
                                 listCabang()
                             }

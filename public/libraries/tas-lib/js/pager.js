@@ -318,10 +318,11 @@ $.fn.customPager = function (option = {}) {
                     typeof element.id !== "undefined"
                         ? element.id
                         : `customButton_${index}`;
+                let hasItem = element.item ? '<i class="ml-1 fa fa-angle-up"></i>': ''
                 buttonElement.className = element.class;
-                buttonElement.innerHTML = element.innerHTML+'<i class="ml-1 fa fa-angle-up"></i>';
+                buttonElement.innerHTML = element.innerHTML+hasItem;
                 let targetModal = element.targetModal ?  element.targetModal :'#listMenuModal'
-                if (targetModal) {
+                if (targetModal && element.item) {
                     $(document).on(
                         "click",
                         `#${buttonElement.id}`,
@@ -364,6 +365,18 @@ $.fn.customPager = function (option = {}) {
                             });
                         }
                     );
+                }else{
+                    if (element.onClick) {
+                        $(document).on(
+                            "click",
+                            `#${buttonElement.id}`,
+                            function (event) {
+                                event.stopImmediatePropagation();
+
+                                element.onClick();
+                            }
+                        );
+                    }
                 }
                 modalBtnList += buttonElement.outerHTML;
             });

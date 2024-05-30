@@ -575,15 +575,16 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:"btn-success",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -596,6 +597,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:"btn-info",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -628,8 +630,8 @@
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
               // {
               //   id: 'approveun',
               //   text: "UN/APPROVAL Status penerimaan",
@@ -640,12 +642,14 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENERIMAAN TRUCKING",
+                color:"btn-success",
+                hidden:(!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                    approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+                    approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRows, selectedbukti);
 
                   }
                 }
@@ -653,12 +657,14 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "Un/Approval Kirim Berkas PENERIMAAN TRUCKING",
+                color:"btn-info",
+                hidden:(!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
                     tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
 
-                    approvalKirimBerkas(tglkirimberkas, 'PENERIMAANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+                    approvalKirimBerkas(tglkirimberkas, 'PENERIMAANTRUCKINGHEADER', selectedRows, selectedbukti);
 
                   }
                 }

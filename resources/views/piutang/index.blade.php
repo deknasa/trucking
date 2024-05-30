@@ -536,15 +536,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -557,6 +558,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -585,6 +587,52 @@
               }
             }
           },
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
+              // {
+              //   id: 'approveun',
+              //   text: "UN/APPROVAL Status penerimaan",
+              //   onClick: () => {
+              //     approve()
+              //   }
+              // },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PIUTANGHEADER",
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                    approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Un/Approval Kirim Berkas PIUTANGHEADER",
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PIUTANGHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
+            ],
+          }
           // {
           //   id: 'approve',
           //   title: 'Approve',
@@ -622,48 +670,6 @@
             }
           }
         }, ],
-        extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            // {
-            //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
-            //   onClick: () => {
-            //     approve()
-            //   }
-            // },
-            {
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PIUTANGHEADER",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-                  approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRowsIndex, selectedbukti);
-
-                }
-              }
-            },
-            {
-              id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PIUTANGHEADER",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`) {
-                  let tglkirimberkas = $('#tgldariheader').val().split('-');
-                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
-
-                  approvalKirimBerkas(tglkirimberkas, 'PIUTANGHEADER', selectedRowsIndex, selectedbukti);
-
-                }
-              }
-            },
-          ],
-        }]
 
       })
 
