@@ -509,11 +509,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1 ',
             item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Jurnal Umum",
+                text: "APPROVAL/UN Jurnal Umum",
                 color:'btn-success',
                 hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) ,
                 onClick: () => {
@@ -537,7 +537,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas JURNAL",
+                text: "APPROVAL/UN Kirim Berkas JURNAL",
                 color:'btn-primary',
                 hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) ,
                 onClick: () => {

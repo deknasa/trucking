@@ -631,11 +631,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1  ',
             item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL status orderan trucking",
+                text: "APPROVAL/UN status orderan trucking",
                 color:"btn-success",
                 hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`),
                 onClick: () => {
@@ -646,7 +646,7 @@
               },
               {
                 id: 'approvalEditOrderanTrucking',
-                text: "un/Approval Edit orderan trucking",
+                text: "APPROVAL/UN Edit orderan trucking",
                 color:"btn-info",
                 hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`),
                 onClick: () => {
@@ -658,7 +658,7 @@
               },
               {
                 id: 'approvalTanpaJob',
-                text: "un/Approval Tanpa Job EMKL",
+                text: "APPROVAL/UN Tanpa Job EMKL",
                 color:"btn-primary",
                 hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`),
                 onClick: () => {

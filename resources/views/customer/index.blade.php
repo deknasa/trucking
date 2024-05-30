@@ -554,7 +554,7 @@
                     class: 'btn btn-purple btn-sm mr-1 ',
                     item: [{
                             id: 'approveun',
-                            text: "UN/APPROVAL Data",
+                            text: "APPROVAL/UN Data",
                             color: "btn-success",
                             hidden :(!`{{ $myAuth->hasPermission('customer', 'approval') }}`),
                             onClick: () => {

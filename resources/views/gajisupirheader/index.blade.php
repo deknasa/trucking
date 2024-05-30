@@ -706,7 +706,7 @@
           item: [
             // {
             //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
+            //   text: "APPROVAL/UN Status penerimaan",
             //   onClick: () => {
             //     approve()
             //   }
@@ -728,7 +728,7 @@
             },
             {
               id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas GAJI SUPIR",
+              text: "APPROVAL/UN Kirim Berkas GAJI SUPIR",
               color: "btn-info",
               hidden :(!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {

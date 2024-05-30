@@ -751,7 +751,7 @@
             class: 'btn btn-purple btn-sm mr-1',
             item: [{
                 id: 'approvalEdit',
-                text: "UN/APPROVAL Absensi Edit",
+                text: "APPROVAL/UN Absensi Edit",
                 color: "btn-success",
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`),
                 onClick: () => {
@@ -767,7 +767,7 @@
               },
               {
                 id: 'approvalTripInap',
-                text: "UN/APPROVAL Pengajuan Trip Inap",
+                text: "APPROVAL/UN Pengajuan Trip Inap",
                 color: "btn-info",
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`),
                 onClick: () => {
@@ -801,7 +801,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas Absensi",
+                text: "APPROVAL/UN Kirim Berkas Absensi",
                 color: "btn-orange",
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
@@ -820,7 +820,7 @@
 
               {
                   id: 'approvalabsensifinal',
-                  text: "un/Approval Absensi Final",
+                  text: "APPROVAL/UN Absensi Final",
                   color: "btn-purple",
                   hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`),
                   onClick: () => {

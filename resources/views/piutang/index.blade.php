@@ -591,12 +591,12 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [
               // {
               //   id: 'approveun',
-              //   text: "UN/APPROVAL Status penerimaan",
+              //   text: "APPROVAL/UN Status penerimaan",
               //   onClick: () => {
               //     approve()
               //   }
@@ -618,7 +618,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PIUTANGHEADER",
+                text: "APPROVAL/UN Kirim Berkas PIUTANGHEADER",
                 color:'btn-info',
                 hidden:(!`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
@@ -637,11 +637,11 @@
           //   id: 'approve',
           //   title: 'Approve',
           //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
           //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           //   dropmenuHTML: [{
           //     id: 'approval-buka-cetak',
-          //     text: "un/Approval Buka Cetak Piutang",
+          //     text: "APPROVAL/UN Buka Cetak Piutang",
           //     onClick: () => {
           //       if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
           //         let tglbukacetak = $('#tgldariheader').val().split('-');

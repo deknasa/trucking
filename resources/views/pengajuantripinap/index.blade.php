@@ -483,11 +483,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
             dropmenuHTML: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Pengajuan Trip Inap",
+                text: "APPROVAL/UN Pengajuan Trip Inap",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
                     approve()
@@ -496,7 +496,7 @@
               },
               {
                 id: 'approval-batas-pengajuan',
-                text: "UN/APPROVAL Lewat Batas Pengajuan",
+                text: "APPROVAL/UN Lewat Batas Pengajuan",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengajuantripinap', 'approvalbataspengajuan') }}`) {
                     approveBatasPengajuan()

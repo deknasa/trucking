@@ -1203,11 +1203,11 @@
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                         class: 'btn btn-purple btn-sm mr-1 ',
                         item: [{
                                 id: 'approveun',
-                                text: "UN/APPROVAL Reminder Oli Mesin",
+                                text: "APPROVAL/UN Reminder Oli Mesin",
                                 color:"btn-success",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`),
                                 onClick: () => {
@@ -1229,7 +1229,7 @@
                             },
                             {
                                 id: 'approvalPersneling',
-                                text: "un/Approval Reminder Oli Persneling",
+                                text: "APPROVAL/UN Reminder Oli Persneling",
                                 color:"btn-primary",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`),
                                 onClick: () => {
@@ -1241,7 +1241,7 @@
                             },
                             {
                                 id: 'approvalGardan',
-                                text: "un/Approval Reminder Oli Gardan",
+                                text: "APPROVAL/UN Reminder Oli Gardan",
                                 color:"btn-purple",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`),
                                 onClick: () => {
@@ -1253,7 +1253,7 @@
                             },
                             {
                                 id: 'approvalSaringanHawa',
-                                text: "un/Approval Reminder Oli Saringan Hawa",
+                                text: "APPROVAL/UN Reminder Oli Saringan Hawa",
                                 color:"btn-orange",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`),
                                 onClick: () => {
@@ -1265,7 +1265,7 @@
                             },
                             {
                                 id: 'StoreApprovalTradoTanpa',
-                                text: "un/Approval Trado Tanpa Keterangan/Gambar",
+                                text: "APPROVAL/UN Trado Tanpa Keterangan/Gambar",
                                 color:"btn-warning",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'StoreApprovalTradoTanpa') }}`),
                                 onClick: () => {
@@ -1279,7 +1279,7 @@
                             },
                             {
                                 id: 'approvalHistoryTradoMilikMandor',
-                                text: "un/Approval History Trado Milik Mandor",
+                                text: "APPROVAL/UN History Trado Milik Mandor",
                                 color:"btn-danger",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`),
                                 onClick: () => {
@@ -1290,7 +1290,7 @@
                             },
                             {
                                 id: 'approvalHistoryTradoMilikSupir',
-                                text: "un/Approval History Trado Milik Supir",
+                                text: "APPROVAL/UN History Trado Milik Supir",
                                 color:"btn-success",
                                 hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`),
                                 onClick: () => {
@@ -1301,7 +1301,7 @@
                             },
                             // {
                             //     id: 'approvalTradoGambar',
-                            //     text: "un/Approval Trado tanpa Gambar",
+                            //     text: "APPROVAL/UN Trado tanpa Gambar",
                             //     onClick: () => {
                             //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradogambar') }}`) {
                             //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1317,7 +1317,7 @@
                             // },
                             // {
                             //     id: 'approvalTradoKeterangan',
-                            //     text: "un/Approval Trado tanpa Keterangan",
+                            //     text: "APPROVAL/UN Trado tanpa Keterangan",
                             //     onClick: () => {
                             //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradoketerangan') }}`) {
                             //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

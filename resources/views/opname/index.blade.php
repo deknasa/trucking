@@ -606,11 +606,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1 ',
             item: [{
                 id: 'approveun',
-                text: ' UN/APPROVAL status',
+                text: ' APPROVAL/UN status',
                 onClick: () => {
                   if (!selectedRows.length) {
                     showDialog('Harap pilih salah satu record')
@@ -638,7 +638,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas OPNAME",
+                text: "APPROVAL/UN Kirim Berkas OPNAME",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

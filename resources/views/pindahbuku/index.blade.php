@@ -498,7 +498,7 @@
         //   //   id: 'approve',
         //   //   title: 'Approve',
         //   //   caption: 'Approve',
-        //   //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+        //   //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
         //   //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
         //   //   item: [{
         //   //     id: 'approval-buka-cetak',
@@ -621,11 +621,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1 ',
             item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL pindah buku",
+                text: "APPROVAL/UN pindah buku",
                 color:'btn-success',
                 hidden:(!`{{ $myAuth->hasPermission('pindahbuku', 'approval') }}`),
                 onClick: () => {
@@ -651,7 +651,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PINDAH BUKU",
+                text: "APPROVAL/UN Kirim Berkas PINDAH BUKU",
                 color:'btn-primary',
                 hidden:(!`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`),
                 onClick: () => {

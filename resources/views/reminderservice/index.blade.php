@@ -338,7 +338,7 @@
           },
           {
             id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selrow')

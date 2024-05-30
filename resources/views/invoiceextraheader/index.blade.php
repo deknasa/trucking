@@ -594,11 +594,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status INVOICEEXTRA",
+                text: "APPROVAL/UN Status INVOICEEXTRA",
                 color: "btn-success",
                 hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`),
                 onClick: () => {
@@ -626,7 +626,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas INVOICEEXTRA",
+                text: "APPROVAL/UN Kirim Berkas INVOICEEXTRA",
                 color: "btn-primary",
                 hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`),
                 onClick: () => {

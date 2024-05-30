@@ -780,12 +780,12 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [
               // {
               //   id: 'approveun',
-              //   text: "UN/APPROVAL Status penerimaan",
+              //   text: "APPROVAL/UN Status penerimaan",
               //   onClick: () => {
               //     approve()
               //   }
@@ -807,7 +807,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PENGELUARAN TRUCKING",
+                text: "APPROVAL/UN Kirim Berkas PENGELUARAN TRUCKING",
                 color:'btn-info',
                 hidden:(!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`),
                 onClick: () => {

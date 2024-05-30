@@ -611,11 +611,11 @@ function checkboxHandler(element) {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status PELUNASAN HUTANG",
+                text: "APPROVAL/UN Status PELUNASAN HUTANG",
                 color:'btn-success',
                 hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) ,
                 onClick: () => {
@@ -643,7 +643,7 @@ function checkboxHandler(element) {
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PELUNASAN HUTANG",
+                text: "APPROVAL/UN Kirim Berkas PELUNASAN HUTANG",
                 color:'btn-primary',
                 hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) ,
                 onClick: () => {

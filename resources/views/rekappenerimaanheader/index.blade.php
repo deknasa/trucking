@@ -520,11 +520,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status REKAP PENERIMAAN",
+                text: "APPROVAL/UN Status REKAP PENERIMAAN",
                 color:'btn-success',
                 hidden:(!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`),
                 onClick: () => {
@@ -552,7 +552,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas REKAP PENERIMAAN",
+                text: "APPROVAL/UN Kirim Berkas REKAP PENERIMAAN",
                 color:'btn-primary',
                 hidden:(!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalkirimberkas') }}`),
                 onClick: () => {

@@ -752,7 +752,7 @@
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
           class: 'btn btn-purple btn-sm mr-1',
           item: [{
               id: 'approval-buka-cetak',
@@ -772,7 +772,7 @@
             },
             {
               id: 'approval-kirim-berkas',
-              text: "Un/Approval Kirim Berkas PROSES  GAJI SUPIR",
+              text: "APPROVAL/UN Kirim Berkas PROSES  GAJI SUPIR",
               color:'btn-info',
               hidden:(!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {

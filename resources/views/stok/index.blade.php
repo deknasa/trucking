@@ -648,11 +648,11 @@
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                     class: 'btn btn-purple btn-sm mr-1',
                     item: [{
                             id: 'approvalTanpaKlaim',
-                            text: ' UN/APPROVAL Tanpa Klaim',
+                            text: ' APPROVAL/UN Tanpa Klaim',
                             color:'btn-success',
                             hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalklaim') }}`),
                             onClick: () => {
@@ -662,7 +662,7 @@
                         },
                         {
                             id: 'approvalReuse',
-                            text: ' UN/APPROVAL Reuse',
+                            text: ' APPROVAL/UN Reuse',
                             color:'btn-info',
                             hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalReuse') }}`),
                             onClick: () => {

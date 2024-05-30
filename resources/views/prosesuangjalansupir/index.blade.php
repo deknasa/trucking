@@ -596,11 +596,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [{
                 id: 'approval',
-                text: "Un/Approval Proses Uang Jalan",
+                text: "APPROVAL/UN Proses Uang Jalan",
                 color:'btn-success',
                 hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approval') }}`),
                 onClick: () => {
@@ -626,7 +626,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas Proses Uang Jalan",
+                text: "APPROVAL/UN Kirim Berkas Proses Uang Jalan",
                 color:'btn-primary',
                 hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {

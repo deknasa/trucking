@@ -449,7 +449,7 @@
                     class: 'btn btn-purple btn-sm mr-1 ',
                     item: [{
                             id: 'approvalKoneksi',
-                            text: ' UN/APPROVAL KONEKSI',
+                            text: ' APPROVAL/UN KONEKSI',
                             color: "btn-success",
                             hidden :(!`{{ $myAuth->hasPermission('cabang', 'approvalKonensi') }}`),
                             onClick: () => {

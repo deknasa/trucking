@@ -640,7 +640,7 @@
             item: [
               // {
               //   id: 'approveun',
-              //   text: "UN/APPROVAL Status penerimaan",
+              //   text: "APPROVAL/UN Status penerimaan",
               //   onClick: () => {
               //     approve()
               //   }
@@ -662,7 +662,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas Hutang",
+                text: "APPROVAL/UN Kirim Berkas Hutang",
                 color: "btn-info",
                 hidden :(!`{{ $myAuth->hasPermission('hutangheader', 'approvalkirimberkas') }}`),
                 onClick: () => {

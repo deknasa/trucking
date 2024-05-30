@@ -299,7 +299,7 @@
           },
           {
             id: 'updatetanggalbatas',
-            innerHTML: '<i class="fas fa-check""></i> UPDATE TANGGAL BATAS',
+            innerHTML: '<i class="fas fa-check"></i> UPDATE TANGGAL BATAS',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               updatetanggalbatas()

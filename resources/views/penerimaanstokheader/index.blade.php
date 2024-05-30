@@ -776,11 +776,11 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1 ',
             item: [{
                 id: 'approvalEdit',
-                text: ' UN/APPROVAL status Edit',
+                text: ' APPROVAL/UN status Edit',
                 color:'btn-success',
                 hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`),
                 onClick: () => {
@@ -796,7 +796,7 @@
               },
               {
                 id: 'approvalEditKeterangan',
-                text: ' UN/APPROVAL status Edit Keterangan',
+                text: ' APPROVAL/UN status Edit Keterangan',
                 color:'btn-info',
                 hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`),
                 onClick: () => {
@@ -846,7 +846,7 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PENERIMAAN STOK",
+                text: "APPROVAL/UN Kirim Berkas PENERIMAAN STOK",
                 color:'btn-dark-blue',
                 hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`),
                 onClick: () => {

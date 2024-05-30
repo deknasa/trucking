@@ -494,7 +494,7 @@ function checkboxHandler(element) {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             item: [
               {
@@ -514,7 +514,7 @@ function checkboxHandler(element) {
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Un/Approval Kirim Berkas PEMUTIHAN SUPIR",
+                text: "APPROVAL/UN Kirim Berkas PEMUTIHAN SUPIR",
                 color:'btn-info',
                 hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`),
                 onClick: () => {
@@ -534,7 +534,7 @@ function checkboxHandler(element) {
           //   id: 'approve',
           //   title: 'Approve',
           //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
           //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           //   dropmenuHTML: [{
           //     id: 'approval-buka-cetak',
