@@ -47,18 +47,8 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="type_id">
-                <input type="text" name="type" data-target-name="type" id="type" class="form-control lg-form type-lookup">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  akuntansi <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
                 <input type="hidden" name="akuntansi_id">
-                <input type="text" name="akuntansi" data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
+                <input type="text" name="type" data-target-name="type" id="type" class="form-control lg-form type-lookup">
               </div>
             </div>
             <div class="row form-group">
