@@ -847,7 +847,7 @@
   function initLookup() {
     $('.type-lookup').lookupMaster({
       title: 'Type Akuntansi Lookup',
-      fileName: 'typeakuntansiMaster',
+      fileName: 'maintypeakuntansiMaster',
       typeSearch: 'ALL',
       searching: 1,
       beforeProcess: function(test) {
