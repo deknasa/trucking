@@ -418,6 +418,7 @@
         initLookup()
         initSelect2(form.find('.select2bs4'), true)
         initDatepicker()
+        rowCabangPusat()
     })
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
@@ -586,16 +587,6 @@
                             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                         }
 
-                        if (accessCabang == 'PUSAT') {
-                            $('.bankpelanggan').hide();
-                            $('.colspan').attr('colspan', 5)
-                            $('#detailList').css({
-                                width: '1200px'
-                            });
-                        } else {
-                            $('.bankpelanggan').show();
-                            $('.colspan').attr('colspan', 6)
-                        }
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
@@ -610,6 +601,18 @@
                         $('.modal-loader').addClass('d-none')
                     })
             })
+    }
+    function rowCabangPusat() {
+        if (accessCabang == 'PUSAT') {
+            $('.bankpelanggan').hide();
+            $('.colspan').attr('colspan', 5)
+            $('#detailList').css({
+                width: '1200px'
+            });
+        } else {
+            $('.bankpelanggan').show();
+            $('.colspan').attr('colspan', 6)
+        }
     }
 
     function editCoa(id) {
@@ -1230,6 +1233,7 @@
         detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
         initDatepicker()
         setRowNumbers()
+        rowCabangPusat()
     }
 
     function deleteRow(row) {
