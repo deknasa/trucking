@@ -730,7 +730,7 @@
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
-            <tr>
+            <tr class="index${index}">
               <td></td>
               <td>
                 <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
@@ -935,7 +935,10 @@
               $('.supir-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
             }
             if (detail.tidakadasupir == "readonly") {
-              setSupirEnableIndex({supir:1}, index)
+              setSupirEnableIndex({supir:1}, index,detail.supir_id)
+            }
+            if (detail.tgltrip) {
+              setRowDisable(index);
             }
           })
 
@@ -1211,13 +1214,15 @@
     })
   }
 
-  function setSupirEnableIndex(kodeabsensitrado, rowId) {
+  function setSupirEnableIndex(kodeabsensitrado, rowId,supir = false) {
     var supirText = $(`#supir_row_${rowId}`).parents('.input-group').children()
 
     if (kodeabsensitrado.supir) {
-      $(`#supir_row_${rowId}`).val('')
-      $(`#supir_id_row_${rowId}`).val('')
-
+      if (!supir) {
+        $(`#supir_row_${rowId}`).val('')
+        $(`#supir_id_row_${rowId}`).val('')
+        
+      }
       $(`#supir_id_row_${rowId}`).prop('readonly', true);
       $(`#supir_row_${rowId}`).prop('readonly', true);
       $(supirText[1]).attr('disabled', true)
@@ -1243,6 +1248,12 @@
 
 
   }
+
+  function setRowDisable(rowId) {
+    $(`.index${rowId} input`).attr('readonly', true);
+    $(`.index${rowId} button`).attr('disabled', true);
+  }
+
 
   function getabsentrado(id) {
     return new Promise((resolve, reject) => {
