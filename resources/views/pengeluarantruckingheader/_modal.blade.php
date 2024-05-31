@@ -671,7 +671,6 @@
 
     $(document).on('change', `[name=statusposting]`, function(event) {
       let statusposting_id = $('#crudForm').find('[name=statusposting]').val()
-      console.log('dari on change')
       if (parameterPosting == statusposting_id) {
         enabledKas(true);
       } else {
@@ -1372,16 +1371,19 @@
               $('#detail').jqGrid().trigger('reloadGrid')
             }
           } else {
-
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             let pengeluaranTruckingVal = $('#crudForm').find('[name="pengeluarantrucking"]').val();
+            let tgldariVal = $('#crudForm').find('[name="tgldari"]').val();
+            let tglsampaiVal = $('#crudForm').find('[name="tglsampai"]').val();
             let pengeluaranTruckingIdVal = $('#crudForm').find('[name="pengeluarantrucking_id"]').val();
             showSuccessDialog(response.message, response.data.nobukti)
             createPengeluaranTruckingHeader()
             $('#crudForm').find('input[type="text"]').not('[name="pengeluarantrucking"]').data('current-value', '')
             $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
             $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
+            $('#crudForm').find('[name="tgldari"]').val(tgldariVal)
+            $('#crudForm').find('[name="tglsampai"]').val(tglsampaiVal)
             $('#crudForm').find('[name=tglbukti]').focus()
             setTampilanForm()
 
@@ -6337,7 +6339,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" class="checkbox-jqgrid" name="sumbanganId[]" value="${rowData.id_detail}" ${disabled} onchange="checkboxSumbanganHandler(this)">`
+              return `<input type="checkbox" class="checkbox-jqgrid" name="sumbanganId[]" value="${rowData.id_detail}" ${disabled} onchange="checkboxSumbanganHandler(this)"><input type="hidden" name="nojobinv[]" value="${rowData.nojobtrucking_detail}" ${disabled}>`
             },
           },
           {
@@ -6423,9 +6425,9 @@
 
           setHighlight($(this))
 
-          $.each(selectedRowsSumbangan, function(key, value) {
+          $.each(selectedRowsSumbanganJobtrucking, function(key, value) {
             $(grid).find('tbody tr').each(function(row, tr) {
-              if ($(this).find(`td input:checkbox`).val() == value) {
+              if ($(this).find(`td input[name="nojobinv[]"]`).val() == value) {
                 $(this).addClass('bg-light-blue')
                 $(this).find(`td input:checkbox`).prop('checked', true)
               }
