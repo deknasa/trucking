@@ -326,6 +326,9 @@
       if (detail.tidakadasupir == "readonly") {
         setSupirEnableIndex({supir:1}, index)
       }
+      if (detail.tgltrip) {
+        setRowDisable(index);
+      }
 
       // supir
       // absentrado
@@ -595,6 +598,10 @@
       }
 
     }
+  }
+  function setRowDisable(rowId) {
+    $(`.index${rowId} input`).attr('readonly', true);
+    $(`.index${rowId} button`).attr('disabled', true);
   }
 
 </script>
