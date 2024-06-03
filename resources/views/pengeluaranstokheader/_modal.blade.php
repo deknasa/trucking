@@ -687,7 +687,7 @@
               $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[IdPengeluaran])
               $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
             }
-            showSuccessDialog(response.message, response.data.nobukti)
+            // showSuccessDialog(response.message, response.data.nobukti)
             createPengeluaranstokHeader();
           }
         },

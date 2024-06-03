@@ -161,7 +161,7 @@
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            showSuccessDialog(response.message)
+            // showSuccessDialog(response.message)
             createBukaAbsensi()
             $('#crudForm').find('[name=tglabsensi]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 

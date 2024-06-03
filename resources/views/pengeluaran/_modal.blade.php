@@ -391,7 +391,7 @@
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            showSuccessDialog(response.message, response.data.nobukti)
+            // showSuccessDialog(response.message, response.data.nobukti)
             let bankVal = $('#crudForm').find('[name="bank"]').val();
             let bankIdVal = $('#crudForm').find('[name="bank_id"]').val();
             let alatbayarVal = $('#crudForm').find('[name="alatbayar"]').val();

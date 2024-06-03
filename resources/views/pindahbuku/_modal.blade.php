@@ -273,7 +273,7 @@
 
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        showSuccessDialog(response.message, response.data.nobukti)
+                        // showSuccessDialog(response.message, response.data.nobukti)
                         createPindahBuku()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
                         let nominalEl = `<input type="text" name="nominal" class="form-control text-right">`

@@ -349,7 +349,7 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
-            showSuccessDialog(response.message, response.data.nobukti)
+            // showSuccessDialog(response.message, response.data.nobukti)
             $("#tablePengembalian")[0].p.selectedRowIds = [];
             $('#tablePengembalian').jqGrid("clearGridData");
             $("#tablePengembalian")

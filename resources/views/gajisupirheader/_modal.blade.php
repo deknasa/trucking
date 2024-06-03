@@ -1044,7 +1044,7 @@
 
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        showSuccessDialog(response.message, response.data.nobukti)
+                        // showSuccessDialog(response.message, response.data.nobukti)
                         createGajiSupirHeader()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
                         $("#rekapRincian")[0].p.selectedRowIds = [];
