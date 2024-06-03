@@ -242,7 +242,7 @@
             .jqGrid("setGridParam", {
               selectedRowIds: []
             })
-            showSuccessDialog(response.message, response.data.nobukti)
+            // showSuccessDialog(response.message, response.data.nobukti)
             createOpname();
           }
         },

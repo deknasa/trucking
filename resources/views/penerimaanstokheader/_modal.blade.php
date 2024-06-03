@@ -610,7 +610,7 @@
               $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
               $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
             }
-            showSuccessDialog(response.message, response.data.nobukti)
+            // showSuccessDialog(response.message, response.data.nobukti)
             createPenerimaanstokHeader();
           }
         },
