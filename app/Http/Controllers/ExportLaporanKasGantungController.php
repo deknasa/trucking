@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -22,12 +23,14 @@ class ExportLaporanKasGantungController extends MyController
 
     public function index(Request $request)
     {
-        $title = $this->title;
+        $title = $this->title;        
+        $bank = DB::table('bank')->where('tipe','KAS')->first();
         $data = [
             'pagename' => 'Menu Utama Export Laporan Kas Gantung',
+            'bank_id' => $bank->id,
+            'bank' => $bank->namabank
         ];
-
-        return view('exportlaporankasgantung.index', compact('title'));
+        return view('exportlaporankasgantung.index', compact('title','data'));
     }
 
     public function export(Request $request): void
@@ -44,7 +47,7 @@ class ExportLaporanKasGantungController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'exportlaporankasgantung/export', $detailParams);
-
+        // dd($header->json());
         $data = $header['data'];
 
         if(count($data) == 0){
