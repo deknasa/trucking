@@ -107,7 +107,8 @@ class PenerimaanHeaderController extends MyController
     {
         $detailParams = [
             'aktif' => 'AKTIF',
-            'format' => 'penerimaan'
+            'format' => 'penerimaan',
+            'limit' => 0
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
