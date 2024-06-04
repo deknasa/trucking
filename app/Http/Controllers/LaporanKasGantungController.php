@@ -39,6 +39,7 @@ class LaporanKasGantungController extends MyController
         $detailParams = [
             'periode' => $request->periode,
             'bank_id' => $request->bank_id,
+            'bank' => $request->bank,
         ];
 
         $header = Http::withHeaders(request()->header())
