@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -24,16 +25,20 @@ class LaporanKasGantungController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $bank = DB::table('bank')->where('tipe','KAS')->first();
         $data = [
             'pagename' => 'Menu Utama Laporan Kas Gantung',
+            'bank_id' => $bank->id,
+            'bank' => $bank->namabank
         ];
-        return view('laporankasgantung.index', compact('title'));
+        return view('laporankasgantung.index', compact('title','data'));
     }
 
     public function report(Request $request)
     {
         $detailParams = [
             'periode' => $request->periode,
+            'bank_id' => $request->bank_id,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -57,6 +62,7 @@ class LaporanKasGantungController extends MyController
     {
         $detailParams = [
             'periode' => $request->periode,
+            'bank_id' => $request->bank_id,
         ];
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
