@@ -93,9 +93,17 @@ $(document).ready(function () {
 });
 $('#listMenuModal').on('show.bs.modal', function () {
     $(this).data('bs.modal')._config.backdrop = true;
+    setTimeout(() =>
+    $('.modal-backdrop').addClass('custom-backdrop')
+    );
+    
+    
 });
 $('#listMenuModal').on('hidden.bs.modal', function () {
     $(this).find('.modal-body').html('')
+    setTimeout(() =>
+    $(".modal-backdrop").removeClass('custom-backdrop')
+    );
 });
 
 window.onbeforeunload = () => {
