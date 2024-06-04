@@ -114,7 +114,8 @@ class PengeluaranHeaderController extends MyController
     {
         $detailParams = [
             'aktif' => 'AKTIF',
-            'from' => 'pengeluaran'
+            'from' => 'pengeluaran',
+            'limit' => 0
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
