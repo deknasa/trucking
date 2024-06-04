@@ -1147,7 +1147,7 @@
           addRemoveLinks: true,
           dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
-          minFilesize: 100, // Set the minimum file size in kilobytes
+          minFilesize: 50, // Set the minimum file size in kilobytes
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
@@ -1156,7 +1156,7 @@
                 this.removeFile(file);
               }
               if (file.size < (this.options.minFilesize * 1024)) {
-                showDialog('ukuran file minimal 100 kb')
+                showDialog('ukuran file minimal 50 kb')
                 this.removeFile(file);
               }
             });
@@ -1187,7 +1187,7 @@
             addRemoveLinks: true,
             dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'image/*',
-            minFilesize: 100, // Set the minimum file size in kilobytes
+            minFilesize: 50, // Set the minimum file size in kilobytes
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
@@ -1196,7 +1196,7 @@
                   this.removeFile(file);
                 }
                 if (file.size < (this.options.minFilesize * 1024)) {
-                  showDialog('ukuran file minimal 100 kb')
+                  showDialog('ukuran file minimal 50 kb')
                   this.removeFile(file);
                 }
               });
