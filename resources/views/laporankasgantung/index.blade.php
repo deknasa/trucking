@@ -177,11 +177,11 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'LAP. KAS GANTUNG ' + new Date().getTime() + '.xlsx';
+                            link.download = 'LAP. KAS GANTUNG ' + bank + ' ' + new Date().getTime() + '.xlsx';
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -217,6 +217,7 @@
             });
         });
     }
+
     function initLookup() {
 
         $('.bank-lookup').lookup({

@@ -121,7 +121,7 @@
                         });
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = 'LAPORAN KAS GANTUNG ' + new Date().getTime() + '.xlsx';
+                        link.download = 'LAPORAN KAS GANTUNG ' + bank + ' '+ new Date().getTime() + '.xlsx';
                         link.click();
                     }
                 }
