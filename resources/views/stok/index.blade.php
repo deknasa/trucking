@@ -246,6 +246,9 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
+                            if (!value) {
+                                return ''
+                            }
                             let statusreuse = JSON.parse(value)
 
                             let formattedValue = $(`
@@ -257,6 +260,9 @@
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
+                            if (!rowObject.statusreuse) {
+                                return ''
+                            }
                             let statusreuse = JSON.parse(rowObject.statusreuse)
 
                             return ` title="${statusreuse.MEMO}"`

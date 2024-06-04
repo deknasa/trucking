@@ -756,11 +756,17 @@
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
-                    var selectedOne = selectedOnlyOne();
-                    if (selectedOne[0]) {
-                      approveEdit(selectedOne[1])
+                    // var selectedOne = selectedOnlyOne();
+                    // if (selectedOne[0]) {
+                    //   approveEdit(selectedOne[1])
+                    // } else {
+                    //   showDialog(selectedOne[1])
+                    // }
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
                     } else {
-                      showDialog(selectedOne[1])
+                      approveEdit()
                     }
                   }
                 }
@@ -1062,7 +1068,54 @@
     }
     getStatusEdit()
 
-    function approveEdit(id) {
+    function approveEdit() {
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+      if (approveEditRequest) {
+        approveEditRequest.abort();
+      }
+      approveEditRequest = $.ajax({
+        url: `${apiUrl}absensisupirheader/approvalEditAbsensi`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
+    function approveEditOld(id) {
       if (approveEditRequest) {
         approveEditRequest.abort();
       }

@@ -1252,3 +1252,7 @@ ul.mob-ul {
 .dropdown-extndbtn>li:last-child>a{
 	border: none;
 }
+
+.custom-backdrop {
+	opacity: 0 !important;
+}
