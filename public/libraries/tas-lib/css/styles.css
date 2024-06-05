@@ -116,8 +116,19 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	padding: 15px; 
 	padding-right: 5px; 
 } 
+.ui-jqgrid .ui-jqgrid-bdiv:not(.bdiv-lookup) {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    z-index: 101;
+    overscroll-behavior: auto !important;
+    /* height: 317px!important; */
+}
+
 .bdiv-lookup {
-	height: 300px!important;
+    height: 289px !important;
+    overscroll-behavior: contain !important;
 }
 
 .hidden {
@@ -1116,9 +1127,14 @@ span.textCard {
 		padding-right: 5px; 
 	} 
 		
-	.ui-jqgrid .ui-jqgrid-bdiv { 
-		height: 447px!important; 
-	}
+	
+    .ui-jqgrid .ui-jqgrid-bdiv:not(.bdiv-lookup) {
+        height: 447px !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        height: 250px !important;
+    }
 	
 	.loadingMessage {
         position: absolute;
@@ -1256,3 +1272,56 @@ ul.mob-ul {
 .custom-backdrop {
 	opacity: 0 !important;
 }
+#imageModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+#imageModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+#imageModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+#imageModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 80px);
+	border: 0;
+	border-radius: 0;
+	display: flex;
+    justify-content: center;
+}
+#imageModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+.imgPreview {
+    text-align: center; 
+}
+.imgPreview img {
+	height: auto;
+	width: 50%;
+  }
+  .zoom-controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+  }
+  
+  .zoom-icon {
+	cursor: pointer;
+  }
+  
+  input[type="range"] {
+	width: calc(100% - 48px); /* Adjust the width based on the space needed for icons */
+  }
+  
+  .other-controls {
+	width: 100%;
+  }
