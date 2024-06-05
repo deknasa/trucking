@@ -609,7 +609,7 @@
               statusAktif = form.find(`[name="statusaktif"]`).val()
               statusSistemTon = form.find(`[name="statussistemton"]`).val()
               statusPenyesuaianHarga = form.find(`[name="statuspenyesuaianharga"]`).val()
-              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
               let name = $('#crudForm').find(`[name]`).parents('.input-group')
               name.find('.button-clear').attr('disabled', true)
               name.children().find('.lookup-toggler').attr('disabled', true)
