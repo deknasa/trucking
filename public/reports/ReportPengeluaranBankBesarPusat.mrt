@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "c896072fe6b751ee1df99cae1d984489",
+  "ReportGuid": "779c4c3941d1ceb0bf18340ff281b830",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1717050474000+0700)/",
+  "ReportChanged": "/Date(1717654690000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1432,7 +1432,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,43,205,3.4",
+          "ClientRectangle": "0,43,205,4.3",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1445,7 +1445,7 @@
               "Name": "Text31",
               "Guid": "8c386f7e541ef11c41a439bb33dbdea9",
               "CanGrow": true,
-              "ClientRectangle": "5,0,40,3",
+              "ClientRectangle": "5,0,40,4.3",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1470,7 +1470,7 @@
               "Name": "Text53",
               "Guid": "e0b5d57c9c76383e047ae6447e90caba",
               "CanGrow": true,
-              "ClientRectangle": "97,0,74,3",
+              "ClientRectangle": "97,0,74,4.3",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1495,7 +1495,7 @@
               "Name": "Text55",
               "Guid": "5df9483698873eb5933eec0b1b57a0c7",
               "CanGrow": true,
-              "ClientRectangle": "173.5,0,27.3,3",
+              "ClientRectangle": "173.5,0,27.3,4.3",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1527,7 +1527,7 @@
               "Name": "Text25",
               "Guid": "376a3b1c57f679dc70f9bc250983d03f",
               "CanGrow": true,
-              "ClientRectangle": "74,0,18,3",
+              "ClientRectangle": "74,0,18,4.3",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1557,7 +1557,7 @@
               "Name": "Text23",
               "Guid": "9c09f8cf09efdbfbaf07e87c840fee36",
               "CanGrow": true,
-              "ClientRectangle": "48,0,24,3",
+              "ClientRectangle": "48,0,24,4.3",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
