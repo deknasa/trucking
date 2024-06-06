@@ -2196,6 +2196,8 @@
 
           tgltrip: $('#crudForm [name=tglbukti]').val(),
           Aktif: 'AKTIF',
+          from: 'listtrip',
+          trip_id: $('#crudForm [name=id]').val(),
           statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val()
         }
       },

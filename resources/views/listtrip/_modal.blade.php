@@ -748,7 +748,8 @@
                         $('#crudForm [name=upah]').attr('readonly', false)
                         kotaUpahZona()
                         setJobReadOnly()
-
+                        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+              
                         $('#crudForm').find('[name=statusjeniskendaraan]').attr('disabled', 'disabled').css({
                             background: '#fff'
                         })
@@ -1647,6 +1648,8 @@
                 this.postData = {
                     tgltrip: $('#crudForm [name=tglbukti]').val(),
                     Aktif: 'AKTIF',
+                    from: 'listtrip',
+                    trip_id:  $('#crudForm [name=id]').val(),
                     statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val()
                 }
             },
