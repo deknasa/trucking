@@ -16,10 +16,10 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Bulan<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="bulan" class="form-control datepicker">
+                                    <input type="text" name="periode" class="form-control datepicker">
                                 </div>
                             </div>
                         </div>
@@ -37,6 +37,10 @@
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </button>
                             </div>
                         </div>
@@ -69,65 +73,86 @@
 
 
     $(document).ready(function() {
-        $('#crudForm').find('[name=bulan]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
-        $(".datepicker").datepicker({
-    dateFormat: "mm-yy",
-    changeMonth: true,
-    changeYear: true,
-    showButtonPanel: true,
-    onClose: function(dateText, inst) {
-      $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-    }
-  });
-//   $('.datepicker').focus(function() {
-//     $(".ui-datepicker-calendar").hide();
-//     $("#ui-datepicker-div").position({
-//       my: "center top",
-//       at: "center bottom",
-//       of: $(this)
-//     });
-//   });
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+        $('.datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                showOn: "button",
+                dateFormat: 'mm-yy',
+                onClose: function(dateText, inst) {
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+                }
+            }).siblings(".ui-datepicker-trigger")
+            .wrap(
+                `
+			<div class="input-group-append">
+			</div>
+		`
+            )
+            .addClass("btn btn-easyui text-easyui-dark").html(`
+			<i class="fa fa-calendar-alt"></i>
+		`);
 
-  $('.datepicker').on('change', function() {
-    var month = $(this).datepicker('getDate').getMonth() + 1;
-    var year = $(this).datepicker('getDate').getFullYear();
-  });
 
-  $('#crudForm').on('submit', function(e) {
-    e.preventDefault();
-  bulan = $('[name=bulan]').val();
-  
-   
-  });
-  
-        // initSelect2($('#crudForm').find('[name=bulan]'), false)
-        // initSelect2($('#crudForm').find('[name=sampai]'), false)
 
-        // setStatusApprovalOptions($('#crudForm'))
-        // setTabelOptions($('#crudForm'))
-        // $('#crudForm').find('[name=bulan]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
-
-        
         if (!`{{ $myAuth->hasPermission('laporanaruskas', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporanaruskas', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
+
 
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
-        let bulan = $('#crudForm').find('[name=bulan]').val()
+        let periode = $('#crudForm').find('[name=periode]').val()
 
-        if (bulan != '' && sampai != '') {
+        if (periode != '') {
 
-            window.open(`{{ route('laporanaruskas.report') }}?sampai=${sampai}&bulan=${bulan}`)
+            window.open(`{{ route('laporanaruskas.report') }}?periode=${periode}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
+    $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
 
+        let periode = $('#crudForm').find('[name=periode]').val()
 
+        $.ajax({
+            url: `{{ route('laporanaruskas.export') }}?periode=${periode}`,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    if (response !== undefined) {
+                        var blob = new Blob([response], {
+                            type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = `LAPORAN ARUS KAS/BANK  ${new Date().getTime()}.xlsx`;
+                        link.click();
+                    }
+                }
+                
+                $('#processingLoader').addClass('d-none')
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
+            }
+        })
+    })
 
+   
 </script>
 @endpush()
 @endsection

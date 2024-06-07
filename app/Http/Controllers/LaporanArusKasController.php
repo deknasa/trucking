@@ -15,13 +15,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class LaporanArusKasController extends MyController
 {
-    public $title = 'Laporan Arus Kas';
+    public $title = 'Laporan Arus Kas / Bank';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Arus Kas',
+            'pagename' => 'Menu Utama Laporan Arus Kas / Bank',
         ];
         return view('laporanaruskas.index', compact('title'));
     }
@@ -29,7 +29,7 @@ class LaporanArusKasController extends MyController
     public function report(Request $request)
     {
         $detailParams = [
-            'bulan' => $request->bulan,
+            'periode' => $request->periode,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -40,5 +40,10 @@ class LaporanArusKasController extends MyController
         $data = $header['data'];
         $user = Auth::user();
         return view('reports.laporanaruskas', compact('data', 'user', 'detailParams'));
+    }
+
+    public function export(Request $request): void
+    {
+
     }
 }
