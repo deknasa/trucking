@@ -1595,6 +1595,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('laporansaldoinventorylama', LaporanSaldoInventoryLamaController::class);
 
     Route::get('laporanaruskas/report', [LaporanArusKasController::class, 'report'])->name('laporanaruskas.report');
+    Route::get('laporanaruskas/export', [LaporanArusKasController::class, 'export'])->name('laporanaruskas.export');
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
     Route::resource('laporanaruskas', LaporanArusKasController::class);
 
