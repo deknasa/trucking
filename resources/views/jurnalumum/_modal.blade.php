@@ -47,15 +47,15 @@
             </div>
 
             <div class="table-responsive table-scroll">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1150px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">NAMA PERKIRAAN (DEBET)</th>
-                    <th width="5%">NAMA PERKIRAAN (KREDIT)</th>
-                    <th width="5%">KETERANGAN</th>
-                    <th width="6%">NOMINAL</th>
-                    <th width="2%" class="tbl_aksi">Aksi</th>
+                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th width="8%">NAMA PERKIRAAN (DEBET)</th>
+                    <th width="8%">NAMA PERKIRAAN (KREDIT)</th>
+                    <th width="5%">NOMINAL</th>
+                    <th width="10%">KETERANGAN</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -63,15 +63,17 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4">
+                    <td></td>
+                    <td class="tbl_aksi">
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                    <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
+                    <td></td>
                   </tr>
                 </tfoot>
               </table>
@@ -208,7 +210,7 @@
       })
       data.push({
         name: 'limit',
-        value: limit
+        value: $('#jqGrid').jqGrid('getGridParam', 'postData').limit
       })
       data.push({
         name: 'button',
@@ -265,6 +267,7 @@
           if (button == 'btnSubmit') {
 
             id = response.data.id
+            console.log('id', id)
             $('#crudModal').modal('hide')
             $('#crudModal').find('#crudForm').trigger('reset')
 
@@ -710,6 +713,9 @@
             let detailRow = $(`
               <tr>
               <td></td>
+              <td class="tbl_aksi">
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
                 <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
@@ -719,12 +725,10 @@
                 <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
               </td>
               <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">   
-              </td><td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
               </td>
-              <td class="tbl_aksi">
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">   
               </td>
               </tr>
             `)
@@ -807,6 +811,9 @@
     let detailRow = $(`
       <tr>
         <td></td>
+        <td class="tbl_aksi">
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+        </td>
         <td>
           <input type="hidden" name="coadebet_detail[]">
           <input type="text" name="ketcoadebet_detail[]"  class="form-control coadebet-lookup">
@@ -816,12 +823,10 @@
           <input type="text" name="ketcoakredit_detail[]"  class="form-control coakredit-lookup">
         </td>
         <td>
-          <input type="text" name="keterangan_detail[]" class="form-control">   
-        </td><td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
-        <td class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+        <td>
+          <input type="text" name="keterangan_detail[]" class="form-control">   
         </td>
       </tr>
     `)
@@ -836,6 +841,7 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          limits: 50,
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -860,6 +866,7 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          limits: 50,
         }
       },
       onSelectRow: (akunpusat, element) => {
