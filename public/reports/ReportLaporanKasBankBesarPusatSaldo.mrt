@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e25cad4369498d0c5344007ccab53335",
+  "ReportGuid": "096ff1557ec4fc89414011407814f915",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1717496413000+0700)/",
+  "ReportChanged": "/Date(1717819844000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -518,7 +518,8 @@
               "Text": {
                 "Value": "{data.judul}"
               },
-              "Font": "Tahoma;10;Bold;",
+              "HorAlignment": "Center",
+              "Font": "Tahoma;11;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1688,6 +1689,18 @@
               "Guid": "cb0f6f9f84d170271ec790e71e997944",
               "ClientRectangle": "202,0,25,6.06",
               "ComponentPlacement": "f.FooterBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "DataType": "Numeric",
+                  "Item": "Expression",
+                  "Expression": {
+                    "Value": "{Sum(data.debet) == 0}"
+                  },
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1716,6 +1729,17 @@
               "Guid": "731e7bb600ab69d7f68b1f523defcf78",
               "ClientRectangle": "228.5,0,25,6",
               "ComponentPlacement": "f.FooterBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Item": "Expression",
+                  "Expression": {
+                    "Value": "{Sum(data.kredit) == 0}"
+                  },
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },

@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4ef786395514871bce9afb4fd2f8404e",
+  "ReportGuid": "badc5afc2ce159c099d4831a4a6e1da6",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1717064063000+0700)/",
+  "ReportChanged": "/Date(1717820843000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -518,7 +518,8 @@
               "Text": {
                 "Value": "{data.judul}"
               },
-              "Font": "Tahoma;10;Bold;",
+              "HorAlignment": "Center",
+              "Font": "Tahoma;11;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1376,6 +1377,16 @@
               "CanGrow": true,
               "ClientRectangle": "178.5,0,23,6",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "DataType": "Numeric",
+                  "Column": "data.kredit",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1410,6 +1421,14 @@
                   "Condition": "NotEqualTo",
                   "Column": "data.urutdetail",
                   "Value1": "1.0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "DataType": "Numeric",
+                  "Column": "data.totaldebet",
+                  "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
                 }
@@ -1450,6 +1469,14 @@
                   "Value1": "1.0",
                   "Enabled": false,
                   "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "DataType": "Numeric",
+                  "Column": "data.totalkredit",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
                 }
               },
               "Interaction": {
@@ -1480,6 +1507,16 @@
               "CanGrow": true,
               "ClientRectangle": "153.5,0,23,6",
               "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "DataType": "Numeric",
+                  "Column": "data.debet",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1607,10 +1644,6 @@
               "TextOptions": {
                 "WordWrap": true
               },
-              "TextFormat": {
-                "Ident": "StiDateFormatService",
-                "StringFormat": "dd/MM/yyyy"
-              },
               "Type": "DataColumn"
             }
           },
@@ -1639,6 +1672,17 @@
               "Guid": "cb0f6f9f84d170271ec790e71e997944",
               "ClientRectangle": "198,0,29,6.06",
               "ComponentPlacement": "f.FooterBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Item": "Expression",
+                  "Expression": {
+                    "Value": "{Sum(data.debet) == 0}"
+                  },
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1667,6 +1711,17 @@
               "Guid": "731e7bb600ab69d7f68b1f523defcf78",
               "ClientRectangle": "228.5,0,25,6",
               "ComponentPlacement": "f.FooterBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Item": "Expression",
+                  "Expression": {
+                    "Value": "{Sum(data.kredit) == 0}"
+                  },
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
