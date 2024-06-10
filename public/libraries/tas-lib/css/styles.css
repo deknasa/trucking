@@ -1325,3 +1325,8 @@ ul.mob-ul {
   .other-controls {
 	width: 100%;
   }
+
+  .form-control[readonly] {
+    pointer-events: none;
+}
+

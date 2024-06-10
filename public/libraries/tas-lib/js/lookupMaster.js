@@ -30,7 +30,7 @@ let keydownIndex = true;
 
 let isKeyDown = false;
 let isLookupOpen = true;
-
+let offsetWindow;
 $.fn.lookupMaster = function (options) {
     let defaults = {
         title: null,
@@ -68,8 +68,11 @@ $.fn.lookupMaster = function (options) {
         ).insertAfter(element);
 
         if (settings.onClear) {
+            // $(
+            //     '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>'
+            // )
             $(
-                '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>'
+                '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>'
             )
                 .appendTo(inputGroupAppend)
                 .click(function () {
@@ -197,7 +200,7 @@ $.fn.lookupMaster = function (options) {
         let bottomSelected = 11;
         let topSelected = 0;
         // let indexRowSelect = 1;
-
+        offsetWindow = window.pageYOffset
         settings.beforeProcess();
         settings.onShowLookup();
 
@@ -572,6 +575,7 @@ $.fn.lookupMaster = function (options) {
                         },
                     });
                 }
+                window.scrollTo(0, windowOffset);
             }
         );
 
@@ -625,6 +629,7 @@ $.fn.lookupMaster = function (options) {
                 activeLookupElement = null;
             }
         });
+        windowOffset = window.pageYOffset - 250;
     }
 
   
