@@ -91,19 +91,13 @@ $(document).ready(function () {
 
     $.fn.modal.Constructor.Default.backdrop = "static";
 });
-$('#listMenuModal').on('show.bs.modal', function () {
-    $(this).data('bs.modal')._config.backdrop = true;
-    setTimeout(() =>
-    $('.modal-backdrop').addClass('custom-backdrop')
-    );
-    
-    
+$("#listMenuModal").on("show.bs.modal", function () {
+    $(this).data("bs.modal")._config.backdrop = true;
+    setTimeout(() => $(".modal-backdrop").addClass("custom-backdrop"));
 });
-$('#listMenuModal').on('hidden.bs.modal', function () {
-    $(this).find('.modal-body').html('')
-    setTimeout(() =>
-    $(".modal-backdrop").removeClass('custom-backdrop')
-    );
+$("#listMenuModal").on("hidden.bs.modal", function () {
+    $(this).find(".modal-body").html("");
+    setTimeout(() => $(".modal-backdrop").removeClass("custom-backdrop"));
 });
 
 window.onbeforeunload = () => {
@@ -151,6 +145,12 @@ function initAutoNumeric(elements = null, options = null) {
     } else {
         $.each(elements, (index, element) => {
             new AutoNumeric(element, option);
+            if ($(element).is("input")) {
+                $(element).attr({
+                    pattern: "d*",
+                    inputmode: "numeric",
+                });
+            }
         });
     }
 }
@@ -390,6 +390,8 @@ function removeTags(str) {
  * Set Home, End, PgUp, PgDn
  * to move grid page
  */
+let topSelected = 0;
+let bottomSelected = 12;
 function setCustomBindKeys(grid) {
     setSidebarBindKeys();
 
@@ -539,6 +541,29 @@ function setCustomBindKeys(grid) {
                             $(activeGrid)
                                 .resetSelection()
                                 .setSelection(gridIds[currentIndex - 1]);
+
+                            var selInRow = $(activeGrid).getGridParam("selrow");
+
+                            indexRowSelect = $(activeGrid).jqGrid(
+                                "getInd",
+                                selInRow
+                            );
+
+                            var currentRowHeight =
+                                $(activeGrid).getGridParam("rowHeight") || 26;
+
+                            var currentScrollTop = $(activeGrid)
+                                .closest(".ui-jqgrid-bdiv")
+                                .scrollTop();
+                            var recordScrollUp =
+                                $(activeGrid).getGridParam("reccount") - 10;
+                            if (indexRowSelect < recordScrollUp) {
+                                $(activeGrid)
+                                    .closest(".ui-jqgrid-bdiv")
+                                    .scrollTop(
+                                        currentScrollTop - currentRowHeight - 2
+                                    );
+                            }
                         }
                     }
                     if (40 === e.keyCode) {
@@ -546,10 +571,30 @@ function setCustomBindKeys(grid) {
                             $(activeGrid)
                                 .resetSelection()
                                 .setSelection(gridIds[currentIndex + 1]);
-                        } else {
-                            $(".ui-jqgrid-bdiv").animate({
-                                scrollTop: 10,
-                            });
+                            var currentRowHeight =
+                                $(activeGrid).getGridParam("rowHeight") || 26;
+
+                            var selInRow = $(activeGrid).getGridParam("selrow");
+                            indexRowSelect = $(activeGrid).jqGrid(
+                                "getInd",
+                                selInRow
+                            );
+
+                            var currentScrollTop = $(activeGrid)
+                                .closest(".ui-jqgrid-bdiv")
+                                .scrollTop();
+
+                            var recordsAll =
+                                $(activeGrid).getGridParam("records");
+                            if (
+                                indexRowSelect > 12
+                            ) {
+                                $(activeGrid)
+                                    .closest(".ui-jqgrid-bdiv")
+                                    .scrollTop(
+                                        currentScrollTop + currentRowHeight + 2
+                                    );
+                            }
                         }
                     }
                     if (13 === e.keyCode) {
@@ -1342,7 +1387,7 @@ function showDialog(response, maxWIdth = "600px") {
                 open: function () {
                     // Adjust the dialog size after it is opened
                     $(this).css({
-                        "min-width": '300px',
+                        "min-width": "300px",
                         "max-width": maxWIdth, // Set your desired maximum width here
                     });
                     $(this).dialog("option", "position", {
@@ -1377,7 +1422,7 @@ function showDialog(response, maxWIdth = "600px") {
                 open: function () {
                     // Adjust the dialog size after it is opened
                     $(this).css({
-                        "min-width": '300px',
+                        "min-width": "300px",
                         "max-width": maxWIdth, // Set your desired maximum width here
                     });
                     $(this).dialog("option", "position", {
@@ -1412,7 +1457,7 @@ function showDialog(response, maxWIdth = "600px") {
             open: function () {
                 // Adjust the dialog size after it is opened
                 $(this).css({
-                    "min-width": '300px',
+                    "min-width": "300px",
                     "max-width": maxWIdth, // Set your desired maximum width here
                 });
                 $(this).dialog("option", "position", {
@@ -1863,6 +1908,7 @@ function setSpaceBarCheckedHandler2() {
                             for (var i = 0; i < selectedRowsIndex.length; i++) {
                                 if (selectedRowsIndex[i] == value) {
                                     selectedRowsIndex.splice(i, 1);
+                                    selectedbukti.splice(i, 1);
                                 }
                             }
 
@@ -1876,6 +1922,13 @@ function setSpaceBarCheckedHandler2() {
                         } else {
                             $checkbox.prop("checked", true);
                             selectedRowsIndex.push($checkbox.val());
+                            selectedbukti.push(
+                                $(`#jqGrid tr#${selectedRowId}`)
+                                    .find(
+                                        `td[aria-describedby="jqGrid_nobukti"]`
+                                    )
+                                    .attr("title")
+                            );
                             $checkbox.parents("tr").addClass("bg-light-blue");
                         }
                         event.preventDefault();
@@ -2191,25 +2244,30 @@ function getQueryParameter() {
     setTimeout(() => {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get("nobukti") != null) {
-            
-            $('#gs_nobukti').val(urlParams.get("nobukti"))
-            $("#jqGrid").jqGrid("setGridParam", {
-                postData: {
-                    filters: JSON.stringify({
-                        groupOp: "AND",
-                        rules: [
-                            {
-                                field: "nobukti",
-                                op: "cn",
-                                data: urlParams.get("nobukti"),
-                            },
-                        ],
-                    }),
-                },
-                datatype: "json",
-            }).trigger("reloadGrid");
-                
-            window.history.replaceState(null, '', window.location.origin + window.location.pathname);
+            $("#gs_nobukti").val(urlParams.get("nobukti"));
+            $("#jqGrid")
+                .jqGrid("setGridParam", {
+                    postData: {
+                        filters: JSON.stringify({
+                            groupOp: "AND",
+                            rules: [
+                                {
+                                    field: "nobukti",
+                                    op: "cn",
+                                    data: urlParams.get("nobukti"),
+                                },
+                            ],
+                        }),
+                    },
+                    datatype: "json",
+                })
+                .trigger("reloadGrid");
+
+            window.history.replaceState(
+                null,
+                "",
+                window.location.origin + window.location.pathname
+            );
         }
     }, 1000);
 }
