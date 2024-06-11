@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "c030d2b0d9169907e17dc6b2291a4f83",
+  "ReportGuid": "dd9bdb59697a71fc7c75bef2cf8e9098",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1717655750000+0700)/",
+  "ReportChanged": "/Date(1718093666000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -230,7 +230,7 @@
               "Ident": "StiText",
               "Name": "Text2",
               "CanGrow": true,
-              "ClientRectangle": "4.03,0,198,8",
+              "ClientRectangle": "4.03,0.06,198,8",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -239,8 +239,7 @@
               "Text": {
                 "Value": "{pindahbuku.judul}"
               },
-              "HorAlignment": "Center",
-              "Font": "Tahoma;10;Bold;",
+              "Font": "Tahoma;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -251,21 +250,20 @@
               "Name": "Text29",
               "Guid": "c510137e016cbcfaeaa2c74052410c9b",
               "CanGrow": true,
-              "ClientRectangle": "55.88,5,100,6",
+              "ClientRectangle": "4.03,3.5,152,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pindahbuku.judulLaporan}"
+                "Value": "{ToUpperCase(pindahbuku.judulLaporan)}"
               },
-              "HorAlignment": "Center",
-              "Font": "Tahoma;10;Bold;",
+              "Font": "Tahoma;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "2": {
               "Ident": "StiText",
@@ -1229,7 +1227,7 @@
               "Guid": "d3b5bf365e9e2efa5d90bb608e0ac05e",
               "CanGrow": true,
               "ClientRectangle": "174,24,28,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1249,7 +1247,7 @@
               "Name": "Text17",
               "Guid": "8ff07649ce6e842fa6a14a4c3ef5e945",
               "ClientRectangle": "137,9,19.8,7",
-              "ComponentPlacement": "pf.PageFooterBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1269,7 +1267,7 @@
               "Name": "Text4",
               "Guid": "61ad78aaaf7513203ca09b6f5f9dc079",
               "ClientRectangle": "126,24,41.8,5",
-              "ComponentPlacement": "pf.PageFooterBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

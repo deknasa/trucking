@@ -88,21 +88,17 @@ class LaporanKasBankController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
-        $sheet->setCellValue('A2', $namacabang);
-        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A2:G2');
 
-        $sheet->setCellValue('A3', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A2', $data[0]['judulLaporan'] . ' - ' . $namacabang);
+        $sheet->mergeCells('A2:B2');
+        $sheet->setCellValue('A3', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         $sheet->mergeCells('A3:B3');
-        $sheet->setCellValue('A4', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A4', 'Buku Kas/Bank : ' . $request->bank);
         $sheet->mergeCells('A4:B4');
-        $sheet->setCellValue('A5', 'Buku Kas/Bank : ' . $request->bank);
-        $sheet->mergeCells('A5:B5');
 
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3:B3")->getFont()->setBold(true);
         $sheet->getStyle("A4:B4")->getFont()->setBold(true);
-        $sheet->getStyle("A5:B5")->getFont()->setBold(true);
 
         $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 2;
