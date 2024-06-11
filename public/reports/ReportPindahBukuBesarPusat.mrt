@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "dd9bdb59697a71fc7c75bef2cf8e9098",
+  "ReportGuid": "a9f555ecbce36b0d201772ddc4c4f468",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPindahBukuBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718093666000+0700)/",
+  "ReportChanged": "/Date(1718098262000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -239,7 +239,8 @@
               "Text": {
                 "Value": "{pindahbuku.judul}"
               },
-              "Font": "Tahoma;9;Bold;",
+              "HorAlignment": "Center",
+              "Font": "Tahoma;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -250,7 +251,7 @@
               "Name": "Text29",
               "Guid": "c510137e016cbcfaeaa2c74052410c9b",
               "CanGrow": true,
-              "ClientRectangle": "4.03,3.5,152,6",
+              "ClientRectangle": "4.03,3.5,198,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -259,7 +260,8 @@
               "Text": {
                 "Value": "{ToUpperCase(pindahbuku.judulLaporan)}"
               },
-              "Font": "Tahoma;9;Bold;",
+              "HorAlignment": "Center",
+              "Font": "Tahoma;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
