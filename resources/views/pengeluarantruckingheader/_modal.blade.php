@@ -3074,6 +3074,8 @@
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
     KodePengeluaranId = ''
+    sortnameSumbangan = 'noinvoice_detail';
+    sortorderSumbangan = 'asc';
   })
 
   function removeEditingBy(id) {
@@ -6376,8 +6378,8 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameSumbangan,
-        sortorder: sortorderSumbangan,
+        sortname: 'noinvoice_detail',
+        sortorder: 'asc',
         page: pageSumbangan,
         viewrecords: true,
         prmNames: {
@@ -6532,7 +6534,9 @@
           tgldari: $('#crudForm').find('[name=tgldari]').val(),
           tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
           limit: 0,
-          proses: 'reload'
+          proses: 'reload',
+          sortIndex: 'noinvoice_detail',
+          sortOrder: 'asc'
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
