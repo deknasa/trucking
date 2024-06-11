@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "efcd59fa423c8097f2860fd53762b704",
+  "ReportGuid": "f9c0f5d7f1f9d3d15f08aa4dda270efd",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranKasBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718093423000+0700)/",
+  "ReportChanged": "/Date(1718098211000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -290,7 +290,8 @@
               "Text": {
                 "Value": "{pengeluaran.judul}"
               },
-              "Font": "Tahoma;9;Bold;",
+              "HorAlignment": "Center",
+              "Font": "Tahoma;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -447,7 +448,8 @@
               "Text": {
                 "Value": "{ToUpperCase(pengeluaran.judulLaporan)} {ToUpperCase(pengeluaran.bank_id)}"
               },
-              "Font": "Tahoma;9;Bold;",
+              "HorAlignment": "Center",
+              "Font": "Tahoma;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
