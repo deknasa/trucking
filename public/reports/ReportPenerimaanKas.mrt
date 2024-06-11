@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "93cfb7c5538acac0f04438bfc7f982be",
+  "ReportGuid": "3829f71ab99d8fe6e9938baf8267fd4a",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanKas.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718086190000+0700)/",
+  "ReportChanged": "/Date(1718089492000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -138,18 +138,24 @@
             "Type": "System.String"
           },
           "13": {
+            "Name": "cabang",
+            "NameInSource": "cabang",
+            "Alias": "cabang",
+            "Type": "System.String"
+          },
+          "14": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "15": {
+          "16": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -291,10 +297,29 @@
           "Components": {
             "0": {
               "Ident": "StiText",
+              "Name": "Text2",
+              "CanGrow": true,
+              "ClientRectangle": "4.06,0.06,197.87,6.1",
+              "ComponentPlacement": "ph.PageHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "MaxNumberOfLines": 6,
+              "Text": {
+                "Value": "{penerimaan.judul}"
+              },
+              "Font": "Tahoma;9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
+            },
+            "1": {
+              "Ident": "StiText",
               "Name": "Text29",
               "Guid": "c510137e016cbcfaeaa2c74052410c9b",
               "CanGrow": true,
-              "ClientRectangle": "2.03,5,200,6",
+              "ClientRectangle": "4.03,3.87,198,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -303,14 +328,13 @@
               "Text": {
                 "Value": "{ToUpperCase(penerimaan.judulLaporan)}  {ToUpperCase(penerimaan.bank_id)}"
               },
-              "HorAlignment": "Center",
-              "Font": "Tahoma;10;Bold;",
+              "Font": "Tahoma;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "1": {
+            "2": {
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "4193b28079590c7c20c42bac24d7d2ac",
@@ -329,7 +353,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "2": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "8bdc82f2568931c00ee6b62cd32e1e1d",
@@ -348,7 +372,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "3": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text16",
               "Guid": "06932b450000a7cace13d3968dec857b",
@@ -374,7 +398,7 @@
               "ShrinkFontToFitMinimumSize": 5,
               "Type": "DataColumn"
             },
-            "4": {
+            "5": {
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "0e61261f996e6bf35fd048b4a2be759e",
@@ -393,7 +417,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "5": {
+            "6": {
               "Ident": "StiText",
               "Name": "Text8",
               "Guid": "a200f0aa78f8298bc4b6190080bddcfe",
@@ -411,11 +435,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:Black"
             },
-            "6": {
+            "7": {
               "Ident": "StiText",
               "Name": "Text1",
               "Guid": "cd3635be25f631ea9556789f18076381",
-              "ClientRectangle": "4.06,7,24,6",
+              "ClientRectangle": "4.08,6.92,25.63,6.1",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -429,26 +453,6 @@
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
-            },
-            "7": {
-              "Ident": "StiText",
-              "Name": "Text2",
-              "CanGrow": true,
-              "ClientRectangle": "2.03,0.06,200,6",
-              "ComponentPlacement": "ph.PageHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{penerimaan.judul}"
-              },
-              "HorAlignment": "Center",
-              "Font": "Tahoma;10;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "DataColumn"
             },
             "8": {
               "Ident": "StiText",
