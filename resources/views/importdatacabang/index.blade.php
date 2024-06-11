@@ -161,6 +161,9 @@
             headers: {
             Authorization: `Bearer ${accessToken}`
             },
+            data:{
+                transferCoa: 'YA'  
+            },
             success: response => {
             response.data.forEach(cabang => {
                 let option = new Option(cabang.namacabang, cabang.id)
