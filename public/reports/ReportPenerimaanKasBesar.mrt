@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "cc555185f5ef907e20bc28eb7c6027e6",
+  "ReportGuid": "a40d4fc9940485317f1e247df804178f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanKasBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718089438000+0700)/",
+  "ReportChanged": "/Date(1718158754000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -138,24 +138,18 @@
             "Type": "System.String"
           },
           "13": {
-            "Name": "cabang",
-            "NameInSource": "cabang",
-            "Alias": "cabang",
-            "Type": "System.String"
-          },
-          "14": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "15": {
+          "14": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "16": {
+          "15": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -928,7 +922,7 @@
               "Guid": "b1906f0f0a142991917574e12f5cd6e3",
               "PrintOn": "OnlyLastPage",
               "CanGrow": true,
-              "ClientRectangle": "6,0,18,4",
+              "ClientRectangle": "6,0.02,18,4",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1068,7 +1062,7 @@
               "Name": "Text41",
               "Guid": "034dc0a8d5c9f5e8844ba14a4dd34eaf",
               "CanGrow": true,
-              "ClientRectangle": "173.86,22.5,26.08,4.06",
+              "ClientRectangle": "173.86,23,26.08,4.06",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
