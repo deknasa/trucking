@@ -330,7 +330,7 @@
                       $i = 1;
 
                       foreach ($data['combokirimberkas'] as $status) :
-                        echo "$status[param]:$status[parameter]";
+                        echo "$status[id]:$status[parameter]";
                         if ($i !== count($data['combokirimberkas'])) {
                           echo ";";
                         }
@@ -402,6 +402,12 @@
             label: 'supplier',
             name: 'supplier',
             align: 'left'
+          },
+          {
+            label: 'nominal',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'supir',
