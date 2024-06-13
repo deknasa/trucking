@@ -326,9 +326,9 @@
       if (detail.tidakadasupir == "readonly") {
         setSupirEnableIndex({supir:1}, index)
       }
-      if (detail.tgltrip) {
-        setRowDisable(index);
-      }
+      // if (detail.tgltrip) {
+      //   setRowDisable(index);
+      // }
 
       // supir
       // absentrado
