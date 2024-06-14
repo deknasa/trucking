@@ -762,6 +762,7 @@
       $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
         $("#tableInvoice")[0].p.selectedRowIds = [];
+        $('#tableInvoice').jqGrid("clearGridData");
         if ($('#crudForm').data('action') == 'add') {
           selectedRowId = [];
         } else {
@@ -920,9 +921,9 @@
             sortable: true,
           },
           {
-            label: "TARIF",
+            label: "TUJUAN",
             name: "tarif_id",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : sm_dekstop_1,
             sortable: true,
           },
           {
