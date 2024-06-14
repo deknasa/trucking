@@ -2,7 +2,7 @@
 <script>
     let nobuktiSearchDetail = ''
   function loadDetailGrid(nobukti) {
-    let sortnameDetail = 'nobukti'
+    let sortnameDetail = 'id'
     let sortorderDetail = 'asc'
     let totalRecordDetail
     let limitDetail

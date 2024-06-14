@@ -139,11 +139,7 @@
                     proses: 'reload'
                 },
             }).trigger('reloadGrid');
-            if ($('#status').find(":selected").val() == 592) {
-                $('#edittgl').show();
-            } else {
-                $('#edittgl').hide();
-            }
+           
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
@@ -554,7 +550,7 @@
                     {
                         id: 'edittgl',
                         innerHTML: '<i class="fa fa-pen"></i> EDIT TGL JATUH TEMPO',
-                        class: 'btn btn-success hidden btn-sm mr-1',
+                        class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             $('#tglJatuhTempoModal').data('action', 'edittgl')
                             $('#tglJatuhTempoModal').modal('show')
