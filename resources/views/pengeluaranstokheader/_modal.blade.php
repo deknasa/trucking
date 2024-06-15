@@ -679,6 +679,7 @@
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             if ($('#kodepengeluaranheader').val() != '') {
+              createPengeluaranstokHeader()
               let IdPengeluaran = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
               setKodePengeluaran(listKodePengeluaran[IdPengeluaran]);
               setIsDateAvailable($('#kodepengeluaranheader').val())
@@ -686,9 +687,9 @@
               $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[IdPengeluaran])
               $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[IdPengeluaran])
               $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
+            }else{
+              createPengeluaranstokHeader();
             }
-            // showSuccessDialog(response.message, response.data.nobukti)
-            createPengeluaranstokHeader();
           }
         },
         error: error => {
