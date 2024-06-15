@@ -575,7 +575,7 @@
           let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          loadDetailData(id)
+          loadDetailData(id,nobukti)
           loadHutangData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
         },
