@@ -172,7 +172,7 @@
     loadGlobalSearch($('#detail'))
   }
 
-  function loadDetailData(id) {
+  function loadDetailData(id ,nobukti) {
         abortGridLastRequest($('#detail'))
 
         $('#detail').setGridParam({
@@ -180,6 +180,7 @@
       datatype: "json",
       postData: {
         penerimaanstokheader_id: id,
+        nobukti: nobukti,
       },
       page:1
     }).trigger('reloadGrid')

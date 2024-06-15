@@ -602,16 +602,18 @@
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             if ($('#kodepenerimaanheader').val() != '') {
+              createPenerimaanstokHeader();
               let index = listIdPenerimaan.indexOf($('#kodepenerimaanheader').val());
               setKodePenerimaan(listKodePenerimaan[index]);
               setIsDateAvailable($('#kodepenerimaanheader').val())
-      
+
               $('#crudForm').find(`[name="penerimaanstok"]`).val(listKodePenerimaan[index])
               $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
               $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
+            }else{
+              createPenerimaanstokHeader();
             }
             // showSuccessDialog(response.message, response.data.nobukti)
-            createPenerimaanstokHeader();
           }
         },
         error: error => {
