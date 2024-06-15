@@ -238,7 +238,7 @@
 
 
     $(document).on('change', `#table_body [name="tgljatuhtempo[]"]`, function() {
-      if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+      if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO' || $(`#crudForm [name="alatbayar"]`).val() == 'CHECK') {
         $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val());
       }
     });
@@ -1224,7 +1224,7 @@
   }
 
   function enableTglJatuhTempo(el) {
-    if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+    if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO' || $(`#crudForm [name="alatbayar"]`).val() == 'CHECK') {
       el.find(`[name="tgljatuhtempo[]"]`).addClass('datepicker')
       el.find(`[name="tgljatuhtempo[]"]`).attr('readonly', false)
       initDatepicker()

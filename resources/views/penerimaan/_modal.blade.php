@@ -122,7 +122,7 @@
                             </div>
                         </div>--}}
 
-                        <div class="table-responsive table-scroll">
+                        <div class="table-container">
                             <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
                                 <thead>
                                     <tr>
