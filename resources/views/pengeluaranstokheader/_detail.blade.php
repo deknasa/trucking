@@ -251,13 +251,14 @@
     loadGlobalSearch($('#detail'))
   }
 
-  function loadDetailData(id) {
+  function loadDetailData(id,nobukti) {
         abortGridLastRequest($('#detail'))
 
         $('#detail').setGridParam({
       url: `${apiUrl}pengeluaranstokdetail`,
       datatype: "json",
       postData: {
+        nobukti: nobukti,
         pengeluaranstokheader_id: id
       },
       page: 1

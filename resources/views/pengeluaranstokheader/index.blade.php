@@ -602,8 +602,9 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: onSelectRowFunction =function(id) {
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
 
-          loadDetailData(id)
+          loadDetailData(id,nobukti)
           activeGrid = grid
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
           page = grid.jqGrid('getGridParam', 'page')
@@ -611,7 +612,6 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           let pengeluaranstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaranstok"]`).attr('title') ?? '';
-          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           let statuspotong = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_statuspotongretur"]`).attr('title') ?? '';
           let penerimaan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobukti"]`).attr('title') ?? '';
           let hutangbayar = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutangbayar_nobukti"]`).attr('title') ?? '';
