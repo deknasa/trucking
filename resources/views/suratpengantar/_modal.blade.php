@@ -339,6 +339,14 @@
                     </select>
                   </div>
                 </div>
+                <div class="form-group statustolakan">
+                  <label class="col-sm-12 col-form-label">STATUS TOLAKAN <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statustolakan" class="form-control select2bs4">
+                      <option value="">-- PILIH STATUS TOLAKAN --</option>
+                    </select>
+                  </div>
+                </div>
 
                 <div class="form-group nobukti_tripasal">
                   <label class="col-sm-12 col-form-label">TRIP ASAL</label>
@@ -483,11 +491,80 @@
     </form>
   </div>
 </div>
+<div class="modal modal-fullscreen" id="crudModalTolakan" tabindex="-1" aria-labelledby="crudModalTolakanLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="#" id="crudFormTolakan">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTolakanTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
+        <form action="" method="post">
+          <div class="modal-body">
+
+            <div class="form-group ">
+              <label class="col-sm-12 col-form-label">NO TRANSAKSI </label>
+              <div class="col-sm-12">
+                <input type="text" name="nobuktitrans" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-group ">
+              <label class="col-sm-12 col-form-label">JOB TRUCKING </label>
+              <div class="col-sm-12">
+                <input type="text" name="jobtruckingtrans" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-group statustolakan">
+              <label class="col-sm-12 col-form-label">STATUS TOLAKAN <span class="text-danger">*</span></label>
+              <div class="col-sm-12">
+                <select name="statustolakan" class="form-control select2bs4">
+                  <option value="">-- PILIH STATUS TOLAKAN --</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group ">
+              <label class="col-sm-12 col-form-label">OMSET <span class="text-danger">*</span></label>
+              <div class="col-sm-12">
+                <input type="text" name="omsettolakan" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-12 col-form-label">Nominal Peralihan</label>
+              <div class="col-md-12">
+                <input type="text" name="nominalperalihantolakan" class="form-control text-right">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <input type="text" name="persentaseperalihantolakan" class="form-control">
+                <div class="input-group-append">
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-start">
+            <button type="button" id="btnSubmitTolakan" class="btn btn-primary">
+              <i class="fa fa-save"></i>
+              Save
+            </button>
+            <button class="btn btn-secondary" data-dismiss="modal">
+              <i class="fa fa-times"></i>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>
 @push('scripts')
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let modalBodyTolakan = $('#crudModalTolakan').find('.modal-body').html()
   var isAllowEdited;
   let statuscontainerId
   let jenisorderId
@@ -516,9 +593,9 @@
   $(document).ready(function() {
     $('.nobukti_tripasal').hide()
 
-    // $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
-    //   setPersentase()
-    // })
+    $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
+      setPersentase()
+    })
     $(document).on('input', `#crudForm [name="persentaseperalihan"]`, function(event) {
       setNominal()
     })
@@ -591,50 +668,58 @@
     //   initAutoNumeric($(`#crudForm [name="totalton"]`))
     //   console.log(total)
     // })
+    $(document).on('change', '#crudForm [name="statustolakan"]', function(event) {
+      let status = $(`#crudForm [name="statustolakan"] option:selected`).text()
+      if (status == 'APPROVAL') {
+        $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
+        $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', false)
+      } else if (status == 'NON APPROVAL') {
+        $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
+        $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', true)
+      }
+    })
 
     $(document).on('change', '#statusperalihan', function(event) {
       let status = $("#statusperalihan option:selected").text()
-      console.log('before', isShow)
 
       if (!isShow) {
-        console.log('isshow', isShow)
         if (status == 'PERALIHAN') {
-          // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
+          $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
           $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', false)
-          $(`#crudForm [name="nominalperalihan"]`).remove()
-          $(`#persentaseInputGroup`).remove()
+          //   $(`#crudForm [name="nominalperalihan"]`).remove()
+          //   $(`#persentaseInputGroup`).remove()
 
-          $('#nominalPeralihanDiv').append(`
-        <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
-        `)
-          $('#persentasePeralihanDiv').append(`
-          <div class="input-group" id="persentaseInputGroup">
-            <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control">
-            <div class="input-group-append">
-              <span class="input-group-text">%</span>
-            </div>
-          </div>
-        `)
-          initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
+          //   $('#nominalPeralihanDiv').append(`
+          // <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
+          // `)
+          //   $('#persentasePeralihanDiv').append(`
+          //   <div class="input-group" id="persentaseInputGroup">
+          //     <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control">
+          //     <div class="input-group-append">
+          //       <span class="input-group-text">%</span>
+          //     </div>
+          //   </div>
+          // `)
+          //   initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
         } else if (status == 'BUKAN PERALIHAN') {
-          // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
+          $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
           $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', true)
 
-          $(`#crudForm [name="nominalperalihan"]`).remove()
-          $(`#persentaseInputGroup`).remove()
+          //   $(`#crudForm [name="nominalperalihan"]`).remove()
+          //   $(`#persentaseInputGroup`).remove()
 
-          $('#nominalPeralihanDiv').append(`
-        <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
-        `)
-          $('#persentasePeralihanDiv').append(`
-          <div class="input-group" id="persentaseInputGroup">
-            <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control" readonly>
-            <div class="input-group-append">
-              <span class="input-group-text">%</span>
-            </div>
-          </div>
-        `)
-          initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
+          //   $('#nominalPeralihanDiv').append(`
+          // <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
+          // `)
+          //   $('#persentasePeralihanDiv').append(`
+          //   <div class="input-group" id="persentaseInputGroup">
+          //     <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control" readonly>
+          //     <div class="input-group-append">
+          //       <span class="input-group-text">%</span>
+          //     </div>
+          //   </div>
+          // `)
+          //   initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
         }
       }
     })
@@ -720,13 +805,13 @@
       //   data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]:not([disabled])`)[index])
       // })
 
-      if ($("#statusperalihan option:selected").text() == 'PERALIHAN') {
-        // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
-        // })
+      // if ($("#statusperalihan option:selected").text() == 'PERALIHAN') {
+      // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
+      data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
+      // })
 
-        data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
-      }
+      data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
+      // }
       // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
       data.filter((row) => row.name === 'hargapertontarif')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
       data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
@@ -998,26 +1083,18 @@
     let omset = $(`#crudForm [name="omset"]`).val()
     let total = 0
 
-    // const autoNumericInstance = AutoNumeric.getAutoNumericElement($(`#crudForm [name="persentaseperalihan"]`));
-    // AutoNumeric.isManagedByAutoNumeric(domElementOrSelector);
-    // if (autoNumericInstance) {
-    //   autoNumericInstance.destroy();
-    // }
-    total = (AutoNumeric.getNumber(nominalDetails[0]) / omset) * 100;
-    console.log(total)
-    new AutoNumeric($(`#crudForm [name="persentaseperalihan"]`)[0]).set(total)
-    // initAutoNumeric($(`#crudForm [name="persentaseperalihan"]`).val(total))
+    total = (AutoNumeric.getNumber(nominalDetails[0]) / parseFloat(omset.replace(/,/g, ''))) * 100;
+    let getPersentase = AutoNumeric.getAutoNumericElement($(`#crudForm [name="persentaseperalihan"]`)[0]);
+    getPersentase.set(total)
   }
 
   function setNominal() {
     let persentase = $(`#crudForm [name="persentaseperalihan"]`)
     let omset = $(`#crudForm [name="omset"]`).val()
-    // console.log(omset,(AutoNumeric.getNumber(persentase[0]) / 100) * omset)
 
     totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * parseFloat(omset.replace(/,/g, ''));
-    // $(`#crudForm [name="nominalperalihan"]`).val(totalPersentase)
-    new AutoNumeric($(`#crudForm [name="nominalperalihan"]`)[0]).set(totalPersentase)
-    // initAutoNumeric($(`#crudForm [name="nominalperalihan"]`).val(totalPersentase))
+    let getNominal = AutoNumeric.getAutoNumericElement($(`#crudForm [name="nominalperalihan"]`)[0]);
+    getNominal.set(totalPersentase)
   }
 
   function setTotal() {
@@ -1109,6 +1186,7 @@
       .all([
         setStatusJenisKendaraanOptions(form),
         setStatusLongTripOptions(form),
+        setStatusTolakanOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
@@ -1171,6 +1249,7 @@
         setStatusJenisKendaraanOptions(form),
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
+        setStatusTolakanOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
@@ -1216,6 +1295,7 @@
         setStatusJenisKendaraanOptions(form),
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
+        setStatusTolakanOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
@@ -1311,6 +1391,44 @@
             let option = new Option(statusPeralihan.text, statusPeralihan.id)
 
             relatedForm.find('[name=statusperalihan]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setStatusTolakanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statustolakan]').empty()
+      relatedForm.find('[name=statustolakan]').append(
+        new Option('-- PILIH STATUS TOLAKAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grpand",
+              "op": "cn",
+              "data": "STATUS APPROVAL"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusTolakan => {
+            let option = new Option(statusTolakan.text, statusTolakan.id)
+            relatedForm.find('[name=statustolakan]').append(option).trigger('change')
           });
 
           resolve()
@@ -2902,5 +3020,160 @@
   //   }
   // })
   // }
+  function approvalTolakan(id) {
+    event.preventDefault()
+    let formTolakan = $('#crudFormTolakan')
+
+    $('.modal-loader').removeClass('d-none')
+    formTolakan.trigger('reset')
+    formTolakan.find('#btnSubmitTolakan').html(`
+    <i class="fa fa-save"></i>
+    Save
+    `)
+    formTolakan.data('action', 'tolakan')
+    $('#crudModalTolakanTitle').text('approval/un tolakan')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    Promise
+      .all([
+        setStatusTolakanOptions(formTolakan)
+      ])
+      .then(() => {
+
+        showTolakan(formTolakan, id)
+          .then(() => {
+            $('#crudModalTolakan').modal('show')
+          }).catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
+  function showTolakan(form, Id) {
+    return new Promise((resolve, reject) => {
+
+      $.ajax({
+        url: `${apiUrl}suratpengantar/${Id}/getTolakan`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(value)
+            } else {
+              element.val(value)
+            }
+
+          })
+          initAutoNumeric(form.find(`[name="omsettolakan"]`))
+          initAutoNumeric(form.find(`[name="nominalperalihantolakan"]`))
+          initAutoNumeric(form.find(`[name="persentaseperalihantolakan"]`))
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  $('#crudModalTolakan').on('shown.bs.modal', () => {
+    let form = $('#crudFormTolakan')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+    initSelect2(form.find('.select2bs4'), true)
+  })
+  $('#crudModalTolakan').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
+    $('#crudModalTolakan').find('.modal-body').html(modalBodyTolakan)
+    initDatepicker('datepickerIndex')
+  })
+
+
+  $(document).on('input', `#crudFormTolakan [name="persentaseperalihantolakan"]`, function(event) {
+    setNominalTolakan()
+  })
+
+  $(document).on('input', `#crudFormTolakan [name="nominalperalihantolakan"]`, function(event) {
+    setPersentaseTolakan()
+  })
+
+  function setNominalTolakan() {
+    let persentase = $(`#crudFormTolakan [name="persentaseperalihantolakan"]`)
+    let omset = $(`#crudFormTolakan [name="omsettolakan"]`).val()
+
+    totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * parseFloat(omset.replace(/,/g, ''));
+    let getNominal = AutoNumeric.getAutoNumericElement($(`#crudFormTolakan [name="nominalperalihantolakan"]`)[0]);
+    getNominal.set(totalPersentase)
+  }
+
+  function setPersentaseTolakan() {
+    let nominalDetails = $(`#crudFormTolakan [name="nominalperalihantolakan"]`)
+    let omset = $(`#crudFormTolakan [name="omsettolakan"]`).val()
+    let total = 0
+
+    total = (AutoNumeric.getNumber(nominalDetails[0]) / parseFloat(omset.replace(/,/g, ''))) * 100;
+    let getPersentase = AutoNumeric.getAutoNumericElement($(`#crudFormTolakan [name="persentaseperalihantolakan"]`)[0]);
+    getPersentase.set(total)
+  }
+
+  $(document).on('click', `#btnSubmitTolakan`, function(event) {
+    event.preventDefault()
+
+    let data = $('#crudFormTolakan').serializeArray()
+    data.filter((row) => row.name === 'nominalperalihantolakan')[0].value = AutoNumeric.getNumber($(`#crudFormTolakan [name="nominalperalihantolakan"]`)[0])
+    // })
+
+    data.filter((row) => row.name === 'persentaseperalihantolakan')[0].value = AutoNumeric.getNumber($(`#crudFormTolakan [name="persentaseperalihantolakan"]`)[0])
+
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+    $.ajax({
+      url: `${apiUrl}suratpengantar/approvalTolakan`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: data,
+      success: response => {
+
+        $('#crudModalTolakan').modal('hide')
+        $('#crudModalTolakan').find('#crudFormTolakan').trigger('reset')
+        selectedRows = []
+        selectedbukti = []
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+
+      },
+      error: error => {
+        console.log('postdata ', error)
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          setErrorMessages($('#crudFormTolakan'), error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  })
 </script>
 @endpush()

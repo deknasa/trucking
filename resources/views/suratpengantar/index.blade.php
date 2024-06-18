@@ -284,7 +284,7 @@
             align: 'right',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
-            
+
           },
           {
             label: 'JARAK',
@@ -480,7 +480,7 @@
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
-            }            
+            }
           },
           {
             label: 'STATUS GAJI SUPIR',
@@ -603,6 +603,53 @@
             label: 'MANDOR SUPIR',
             name: 'mandorsupir_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+          },
+          {
+            label: 'STATUS TOLAKAN',
+            name: 'statustolakan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combotolakan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combotolakan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusTolakan = JSON.parse(value)
+              if (!statusTolakan) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusTolakan.WARNA}; color: #fff;">
+                  <span>${statusTolakan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusTolakan = JSON.parse(rowObject.statustolakan)
+              if (!statusTolakan) {
+                return ` title=""`
+              }
+              return ` title="${statusTolakan.MEMO}"`
+            }
           },
           {
             label: 'GUDANG SAMA',
@@ -1066,8 +1113,8 @@
           item: [{
               id: 'approvalBatalMuat',
               text: "APPROVAL/UN Batal Muat",
-              color:'btn-success',
-              hidden:(!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`),
+              color: 'btn-success',
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1078,8 +1125,8 @@
             {
               id: 'approvalEditTujuan',
               text: "APPROVAL/UN Edit Surat Pengantar",
-              color:'btn-info',
-              hidden:(!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`),
+              color: 'btn-info',
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1090,8 +1137,8 @@
             {
               id: 'approvalTitipanEmkl',
               text: "APPROVAL/UN Titipan EMKL",
-              color:'btn-primary',
-              hidden:(!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`),
+              color: 'btn-primary',
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`),
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -1099,6 +1146,22 @@
                 selectednobukti = celValue
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
                   approvalTitipanEmkl(selectedId, selectednobukti);
+                }
+              }
+            },
+            {
+              id: 'approvalTolakan',
+              text: "APPROVAL/UN Tolakan",
+              color: 'btn-warning',
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`) {
+                  var selectedOne = selectedOnlyOne();
+                  if (selectedOne[0]) {
+                    approvalTolakan(selectedOne[1]);
+                  } else {
+                    showDialog(selectedOne[1])
+                  }
                 }
               }
             },
