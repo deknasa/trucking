@@ -2919,9 +2919,9 @@
             // showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&nobukti=${nobukti}&printer=reportPrinterBesar`)
             } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&nobukti=${nobukti}&printer=reportPrinterKecil`)
             }
             if (Aksi == 'EDIT') {
               editPenerimaanstokHeader(Id)
