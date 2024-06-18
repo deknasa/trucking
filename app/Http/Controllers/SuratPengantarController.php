@@ -33,6 +33,7 @@ class SuratPengantarController extends MyController
         $data = [
             'combolongtrip' => $this->comboList('list', 'STATUS LONGTRIP', 'STATUS LONGTRIP'),
             'comboeditsp' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combotolakan' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combotitipan' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'comboperalihan' => $this->comboList('list', 'STATUS PERALIHAN', 'STATUS PERALIHAN'),
             'comboritasiomset' => $this->comboList('list', 'STATUS RITASI OMSET', 'STATUS RITASI OMSET'),
