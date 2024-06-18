@@ -1017,7 +1017,6 @@
       })
     }
     function approvalBukaTglBatasPG() {
-      console.log(selectedRows);
       event.preventDefault()
       
       let form = $('#crudForm')
@@ -1033,6 +1032,7 @@
         },
         data: {
           Id: selectedRows,
+          nobukti:selectedbukti,
         },
         success: response => {
           $('#crudForm').trigger('reset')
