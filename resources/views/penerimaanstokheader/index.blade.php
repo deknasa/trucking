@@ -565,6 +565,7 @@
         onSelectRow: onSelectRowFunction =function(id) {
           let penerimaanstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaanstok"]`).attr('title') ?? '';
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+          loadDetailData(id,nobukti)
           if (penerimaanstok == "SPB" || penerimaanstok == "SPBS") {
             nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutang_nobukti"]`).attr('title') ?? '';
           }
@@ -575,7 +576,7 @@
           let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          loadDetailData(id,nobukti)
+          
           loadHutangData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
         },
