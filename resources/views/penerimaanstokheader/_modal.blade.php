@@ -2929,6 +2929,9 @@
             if (Aksi == 'DELETE') {
               deletePenerimaanstokHeader(Id)
             }
+            if (Aksi == 'VIEW') {
+              viewPenerimaanstokHeader(Id)
+            }
           }
         } else {
           showDialog(response)

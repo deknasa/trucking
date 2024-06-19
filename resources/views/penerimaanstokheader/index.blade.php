@@ -713,10 +713,14 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                viewPenerimaanstokHeader(selectedId)
+                // viewPenerimaanstokHeader(selectedId)
+                cekValidasi(selectedId, 'VIEW', selectednobukti)
               }
             }
           },

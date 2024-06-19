@@ -11,6 +11,7 @@
       postData: {
         penerimaanstokheader_id: `{!! $penerimaanstokheader_id ?? '' !!}`, //dari klaim
         pengeluaranstokheader_id: `{!! $pengeluaranstokheader_id ?? '' !!}`,
+        penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
         from: `{!! $from ?? '' !!}`,
         stok_id: `{!! $stok_id ?? '' !!}`,
