@@ -3066,6 +3066,7 @@
     removeEditingBy($('#crudForm').find('[name=id]').val())
     selectedRows = []
     penerimaanstokheader = ''
+    penerimaanstokheader_nobukti = ''
     pengeluaranstokheader = ''
     clearSelectedRowsSumbangan()
     clearSelectedRowsOTOK()
@@ -5499,6 +5500,7 @@
 
               pengeluaranstokheader = detail.pengeluaranstokheader_id
               penerimaanstokheader = detail.penerimaanstokheader_id
+              penerimaanstokheader_nobukti = detail.penerimaanstok_nobukti
               if (detail.pengeluaranstok_nobukti) {
                 initAutoNumeric(detailRow.find(`[name="qty[]"]`))
                 initAutoNumeric(detailRow.find(`[name="totalharga[]"]`))
@@ -5654,6 +5656,7 @@
                 },
                 onSelectRow: (stok, element) => {
                   penerimaanstokheader = stok.id
+                  penerimaanstokheader_nobukti = stok.nobukti
                   element.val(stok.nobukti)
 
                   lookupSelectedSpkPG(index, 'PG')
@@ -5682,12 +5685,14 @@
                 title: 'stok Lookup',
                 fileName: 'pengeluaranstokdetail',
                 beforeProcess: function(test) {
+                  console.log(detail.penerimaanstokheader_nobukti,'5686');
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
                     cabang: statuscabang,
                     url: urlTNL,
                     token: tokenTNL,
                     penerimaanstokheader_id: detail.penerimaanstokheader_id,
+                    penerimaanstokheader_nobukti: detail.penerimaanstokheader_nobukti,
                     pengeluaranstokheader_id: detail.pengeluaranstokheader_id,
                     from: 'klaim',
                     stok_id: detail.stok_id
@@ -5930,6 +5935,7 @@
 
   let pengeluaranstokheader = '';
   let penerimaanstokheader = '';
+  let penerimaanstokheader_nobukti = '';
 
   function addRow() {
 
@@ -6127,6 +6133,7 @@
       },
       onSelectRow: (stok, element) => {
         penerimaanstokheader = stok.id
+        penerimaanstokheader_nobukti = stok.nobukti
         element.val(stok.nobukti)
 
         lookupSelectedSpkPG(row, 'PG')
@@ -6149,6 +6156,7 @@
         // element.parents('td').find(`[name="stok_id[]"]`).val('')
         element.val('')
         penerimaanstokheader = ''
+        penerimaanstokheader_nobukti = ''
         element.data('currentValue', element.val())
         enabledLookupSpkPG(row)
       }
@@ -6203,9 +6211,11 @@
       fileName: 'pengeluaranstokdetail',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
+        console.log(penerimaanstokheader_nobukti,'6210');
         this.postData = {
           cabang: statuscabang,
           penerimaanstokheader_id: penerimaanstokheader,
+          penerimaanstokheader_nobukti: penerimaanstokheader_nobukti,
           pengeluaranstokheader_id: pengeluaranstokheader,
           url: urlTNL,
           token: tokenTNL,
