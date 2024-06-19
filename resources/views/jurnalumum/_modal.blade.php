@@ -974,6 +974,9 @@
           let detailRow = $(`
               <tr>
               <td></td>
+              <td class="tbl_aksi">
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
                 <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
@@ -981,14 +984,11 @@
               <td>
                 <input type="hidden" name="coakredit_detail[]">
                 <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
-              </td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">   
               </td><td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
               </td>
-              <td class="tbl_aksi">
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">   
               </td>
               </tr>
             `)
