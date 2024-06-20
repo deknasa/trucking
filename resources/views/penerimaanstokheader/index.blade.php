@@ -7,7 +7,7 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
       {{-- @if ($kodepenerimaan['id'] === "1") selected @endif --}}
-      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} ({{$kodepenerimaan['kodepenerimaan']}}) </option>
       {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
 
@@ -319,7 +319,7 @@
             }
           },
           {
-            label: 'STATUS KIRIM BERKAS',
+            label: 'statusapprovalpindahgudangspk_id',
             name: 'statuskirimberkas',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
@@ -470,6 +470,83 @@
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
+            }
+          },
+          {
+            label: 'approval PG spk',
+            name: 'statusapprovalpindahgudangspk',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS APPROVAL',
+                    subgrp: 'STATUS APPROVAL'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.id,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ``
+              }
+              let apppgspk = JSON.parse(value)
+              if (!apppgspk) {
+                return ``
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${apppgspk.WARNA}; color: #fff;">
+                  <span>${apppgspk.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject) {
+                return ` title=""`
+              }
+              let apppgspk = JSON.parse(rowObject.statusapprovalpindahgudangspk)
+              if (!apppgspk) {
+                return ` title=""`
+              }
+              return ` title="${apppgspk.MEMO}"`
             }
           },
           {
