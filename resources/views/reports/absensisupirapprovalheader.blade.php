@@ -48,7 +48,7 @@
       if (printer['tipe'] == 'reportPrinterBesar') {
         report.loadFile(`{{ asset('public/reports/ReportAbsensiSupirApprovalBesar.mrt') }}`)
       } else {
-        report.loadFile(`{{ asset('public/reports/ReportAbsensiSupirApprovalBesar.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportAbsensiSupirApproval.mrt') }}`)
       }
 
       report.dictionary.dataSources.clear()
