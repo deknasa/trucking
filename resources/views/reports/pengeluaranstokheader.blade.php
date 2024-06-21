@@ -75,6 +75,10 @@
             //korv
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORVBesar.mrt') }}`)
             break;
+          case '513':
+            //afkir
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokAFKIRBesar.mrt') }}`)
+            break;
           default:
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPKBesar.mrt') }}`)
             break;
@@ -104,6 +108,10 @@
           case '386':
             //korv
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORV.mrt') }}`)
+            break;
+          case '513':
+            //afkir
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokAFKIR.mrt') }}`)
             break;
           default:
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
