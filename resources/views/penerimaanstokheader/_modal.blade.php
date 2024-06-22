@@ -1665,11 +1665,11 @@
                   </td>  
 
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="calculate(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="cal(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>
 
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
                   
                   <td class="data_tbl tbl_qtyterpakai">
@@ -1686,10 +1686,6 @@
                   
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-
-                  <td class="data_tbl tbl_nominaldiscount">
-                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_nominaldiscount">
@@ -1772,6 +1768,12 @@
         setTampilanForm()
         if ((KodePenerimaanId === listKodePenerimaan[7]) || (KodePenerimaanId === listKodePenerimaan[8])) {
           $('#addRow').hide()
+          $('.tbl_aksi').hide()
+          if(KodePenerimaanId === listKodePenerimaan[8]){
+            $('.tbl_persentase').hide()
+            $('.tbl_nominaldiscount').hide()
+            $('.colspan').attr('colspan', 5);
+          }
         } else {
           $('#addRow').show()
         }

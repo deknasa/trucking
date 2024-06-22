@@ -2429,7 +2429,7 @@
   }
 
 
-  function getSpb(detail_id) {
+  function getSpb(detail_id,nobukti) {
     resetRow()
     $.ajax({
       url: `${apiUrl}penerimaanstokdetail`,
@@ -2440,6 +2440,7 @@
       },
       data: {
         penerimaanstokheader_id: detail_id,
+        penerimaanstokheader_nobukti: nobukti,
         pengeluaranstok_id: $('#pengeluaranstokId').val(),
       },
       success: response => {
@@ -2952,7 +2953,7 @@
         element.data('currentValue', element.val())
         penerimaanOrServicein('penerimaan')
         if (kodePengeluaranStok == listKodePengeluaran[1]) {
-          getSpb(penerimaan.id)
+          getSpb(penerimaan.id,penerimaan.nobukti)
         }
       },
       beforeProcess: function(test) {

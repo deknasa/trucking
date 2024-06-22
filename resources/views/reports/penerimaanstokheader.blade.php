@@ -85,8 +85,12 @@
             //KORV
             report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORVBesar.mrt') }}`)
             break;
+          case '394':
+            //SPBP
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBPBesar.mrt') }}`)
+            break;
           default:
-            report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPBBesar.mrt') }}`)
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBBesar.mrt') }}`)
             break;
         }
       } else {
@@ -127,8 +131,12 @@
             //KORV
             report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORV.mrt') }}`)
             break;
+          case '394':
+            //SPBP
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBP.mrt') }}`)
+            break;
           default:
-            report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPB.mrt') }}`)
             break;
         }
       }
