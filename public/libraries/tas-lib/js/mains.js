@@ -150,6 +150,9 @@ function initAutoNumeric(elements = null, options = null) {
                     pattern: "d*",
                     inputmode: "numeric",
                 });
+                $(element).on("click", function () {
+                    $(this).select();
+                });
             }
         });
     }
@@ -586,9 +589,7 @@ function setCustomBindKeys(grid) {
 
                             var recordsAll =
                                 $(activeGrid).getGridParam("records");
-                            if (
-                                indexRowSelect > 12
-                            ) {
+                            if (indexRowSelect > 12) {
                                 $(activeGrid)
                                     .closest(".ui-jqgrid-bdiv")
                                     .scrollTop(
