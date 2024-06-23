@@ -421,7 +421,13 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('shipper', 'store') }}`) {
+
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+              if (!`{{ $myAuth->hasPermission('shipper', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
 
@@ -429,13 +435,17 @@
         $('#edit').attr('disabled', 'disabled')
       }
 
+      if (!`{{ $myAuth->hasPermission('shipper', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+      
+
+            }      
+
       if (!`{{ $myAuth->hasPermission('shipper', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('shipper', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
 
       if (!`{{ $myAuth->hasPermission('shipper', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')

@@ -478,21 +478,29 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('bank', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('bank', 'show') }}`) {
-                $('#view').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('bank', 'update') }}`) {
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('bank', 'store') }}`) {
+                $('#add').attr('disabled', 'disabled')
+                }               
+                if (!`{{ $myAuth->hasPermission('bank', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
 
             if (!`{{ $myAuth->hasPermission('bank', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
+            }                
             }
+
+
+            if (!`{{ $myAuth->hasPermission('bank', 'show') }}`) {
+                $('#view').attr('disabled', 'disabled')
+            }
+
+
             if (!`{{ $myAuth->hasPermission('bank', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }

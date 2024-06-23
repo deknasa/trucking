@@ -584,21 +584,30 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
+
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
+                $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
+                $('#edit').attr('disabled', 'disabled')
+                }
+
+                  if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
+                $('#delete').attr('disabled', 'disabled')
+                }                
             }
+
 
             if (!`{{ $myAuth->hasPermission('akunpusat', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('akunpusat', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')

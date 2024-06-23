@@ -460,20 +460,29 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('penerima', 'store') }}`) {
+            if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('penerima', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
             if (!`{{ $myAuth->hasPermission('penerima', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
 
+            if (!`{{ $myAuth->hasPermission('penerima', 'destroy') }}`) {
+                $('#delete').attr('disabled', 'disabled')
+            }
+
+            }
+
+
             if (!`{{ $myAuth->hasPermission('penerima', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerima', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('penerima', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')

@@ -405,7 +405,12 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('akuntansi', 'store') }}`) {
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+              if (!`{{ $myAuth->hasPermission('akuntansi', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
 
@@ -416,6 +421,10 @@
       if (!`{{ $myAuth->hasPermission('akuntansi', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
+
+      
+            }
+
       if (!`{{ $myAuth->hasPermission('akuntansi', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }

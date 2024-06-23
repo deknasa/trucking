@@ -403,14 +403,14 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('bankpelanggan', 'store') }}`) {
+            if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('bankpelanggan', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
-
-            if (!`{{ $myAuth->hasPermission('bankpelanggan', 'show') }}`) {
-                $('#view').attr('disabled', 'disabled')
-            }
-
             if (!`{{ $myAuth->hasPermission('bankpelanggan', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
@@ -418,12 +418,19 @@
             if (!`{{ $myAuth->hasPermission('bankpelanggan', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
             }
+
+            }            
+
+            if (!`{{ $myAuth->hasPermission('bankpelanggan', 'show') }}`) {
+                $('#view').attr('disabled', 'disabled')
+            }
+
             if (!`{{ $myAuth->hasPermission('bankpelanggan', 'export') }}`) {
-                $('#delete').attr('disabled', 'disabled')
+                $('#export').attr('disabled', 'disabled')
             }
 
             if (!`{{ $myAuth->hasPermission('bankpelanggan', 'report') }}`) {
-                $('#delete').attr('disabled', 'disabled')
+                $('#report').attr('disabled', 'disabled')
             }
             if (!`{{ $myAuth->hasPermission('bankpelanggan', 'approvalnonaktif') }}`) {
                 $('#approveun').hide()
