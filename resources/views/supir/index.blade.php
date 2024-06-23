@@ -1854,9 +1854,27 @@
 
 
     function permission() {
-        if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
+
+        if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+
+                if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
             $('#add').attr('disabled', 'disabled')
         }
+
+        if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`)) {
+            $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
+            $('#delete').attr('disabled', 'disabled')
+        }
+        
+            }        
+
 
         if (!`{{ $myAuth->hasPermission('supir', 'show') }}`) {
             $('#view').attr('disabled', 'disabled')
@@ -1866,13 +1884,7 @@
         //     $('#edit').attr('disabled', 'disabled')
         // }
 
-        if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`)) {
-            $('#edit').attr('disabled', 'disabled')
-        }
 
-        if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
-            $('#delete').attr('disabled', 'disabled')
-        }
         if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
             $('#export').attr('disabled', 'disabled')
         }

@@ -649,7 +649,12 @@
     }
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+              if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
 
@@ -657,13 +662,16 @@
         $('#edit').attr('disabled', 'disabled')
       }
 
+      if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+            }
+
       if (!`{{ $myAuth->hasPermission('tarif', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
       if (!`{{ $myAuth->hasPermission('tarif', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }

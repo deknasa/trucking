@@ -678,12 +678,14 @@
     })
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('upahsupir', 'store') }}`) {
-        $('#add').attr('disabled', 'disabled')
-      }
 
-      if (!`{{ $myAuth->hasPermission('upahsupir', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+              if (!`{{ $myAuth->hasPermission('upahsupir', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
       }
 
       if (!`{{ $myAuth->hasPermission('upahsupir', 'update') }}`) {
@@ -693,6 +695,15 @@
       if (!`{{ $myAuth->hasPermission('upahsupir', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
+            
+            }      
+
+
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
+
+
 
       if (!`{{ $myAuth->hasPermission('upahsupir', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
