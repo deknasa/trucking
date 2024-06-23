@@ -598,12 +598,13 @@
 
     function permission() {
 
-      if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+              if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('supplier', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
       }
 
       if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
@@ -613,6 +614,13 @@
       if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
+
+    }      
+
+      if (!`{{ $myAuth->hasPermission('supplier', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
+
 
       if (!`{{ $myAuth->hasPermission('supplier', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')

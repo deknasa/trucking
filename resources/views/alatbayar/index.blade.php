@@ -502,26 +502,34 @@
                     .parent().addClass('px-1')
 
                 function permission() {
-                    if (!`{{ $myAuth->hasPermission('alatbayar', 'store') }}`) {
+                    if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('alatbayar', 'store') }}`) {
                         $('#add').attr('disabled', 'disabled')
-                    }
-
-                    if (!`{{ $myAuth->hasPermission('alatbayar', 'show') }}`) {
-                        $('#view').attr('disabled', 'disabled')
-                    }
+                    } 
                     if (!`{{ $myAuth->hasPermission('alatbayar', 'update') }}`) {
                         $('#edit').attr('disabled', 'disabled')
                     }
 
                     if (!`{{ $myAuth->hasPermission('alatbayar', 'destroy') }}`) {
                         $('#delete').attr('disabled', 'disabled')
+                    }                        
+            }
+
+
+                    if (!`{{ $myAuth->hasPermission('alatbayar', 'show') }}`) {
+                        $('#view').attr('disabled', 'disabled')
                     }
+
                     if (!`{{ $myAuth->hasPermission('alatbayar', 'export') }}`) {
-                        $('#delete').attr('disabled', 'disabled')
+                        $('#export').attr('disabled', 'disabled')
                     }
 
                     if (!`{{ $myAuth->hasPermission('alatbayar', 'report') }}`) {
-                        $('#delete').attr('disabled', 'disabled')
+                        $('#report').attr('disabled', 'disabled')
                     }
                     if (!`{{ $myAuth->hasPermission('alatbayar', 'approvalnonaktif') }}`) {
                         $('#approveun').hide()

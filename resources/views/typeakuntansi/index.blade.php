@@ -417,12 +417,14 @@
 
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('typeakuntansi', 'store') }}`) {
+
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+              if (!`{{ $myAuth->hasPermission('typeakuntansi', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
-      }
-      
-      if (!`{{ $myAuth->hasPermission('typeakuntansi', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
       }
 
       if (!`{{ $myAuth->hasPermission('typeakuntansi', 'update') }}`) {
@@ -432,6 +434,14 @@
       if (!`{{ $myAuth->hasPermission('typeakuntansi', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
+
+    }
+
+      
+      if (!`{{ $myAuth->hasPermission('typeakuntansi', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
+
       if (!`{{ $myAuth->hasPermission('typeakuntansi', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }

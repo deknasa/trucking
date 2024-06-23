@@ -420,7 +420,13 @@
 
     function permission() {
 
-      if (!`{{ $myAuth->hasPermission('maintypeakuntansi', 'store') }}`) {
+      if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+
+              if (!`{{ $myAuth->hasPermission('maintypeakuntansi', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
 
@@ -431,6 +437,11 @@
       if (!`{{ $myAuth->hasPermission('maintypeakuntansi', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
+
+
+            }
+
+
       if (!`{{ $myAuth->hasPermission('maintypeakuntansi', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }

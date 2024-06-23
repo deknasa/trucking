@@ -303,6 +303,11 @@
                     .parent().addClass('px-1')
 
                     function permission() {
+                        if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
                 if (!`{{ $myAuth->hasPermission('harilibur', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -311,6 +316,14 @@
                     $('#edit').attr('disabled', 'disabled')
                 }
 
+                if (!`{{ $myAuth->hasPermission('harilibur', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                } }
+
+            }
+
+                    
+
                 if (!`{{ $myAuth->hasPermission('harilibur', 'export') }}`) {
                     $('#export').attr('disabled', 'disabled')
                 }
@@ -318,9 +331,6 @@
                     $('#report').attr('disabled', 'disabled')
                 }
 
-                if (!`{{ $myAuth->hasPermission('harilibur', 'destroy') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
-                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {
