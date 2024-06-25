@@ -21,6 +21,7 @@ class CabangController extends MyController
             'pagename' => 'Menu Utama Cabang',
             'combo' => $this->combo('list','STATUS AKTIF','STATUS AKTIF'),
             'koneksi' => $this->combo('list','STATUS KONEKSI','STATUS KONEKSI'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('cabang.index', compact('title', 'data'));

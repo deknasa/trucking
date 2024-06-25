@@ -450,7 +450,7 @@
                     item: [{
                             id: 'approvalKoneksi',
                             text: ' APPROVAL/UN KONEKSI',
-                            color: "btn-success",
+                            color: `<?php echo $data['listbtn']->btn->approvalkoneksi; ?>`,
                             hidden :(!`{{ $myAuth->hasPermission('cabang', 'approvalKonensi') }}`),
                             onClick: () => {
                                 var selectedOne = selectedOnlyOne();
@@ -464,7 +464,7 @@
                         {
                             id: 'approvalnonaktif',
                             text: "Approval Non Aktif",
-                            color: "btn-info",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
                             hidden :(!`{{ $myAuth->hasPermission('cabang', 'approvalnonaktif') }}`),
                             onClick: () => {
                                 approvalNonAktif('cabang')

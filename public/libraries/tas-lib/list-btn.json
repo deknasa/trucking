@@ -1,0 +1,12 @@
+{
+    "btn" : {
+        "approvalbukacetak"  : "btn-info",
+        "approvaldata" : "btn-purple",
+        "approvalkirimberkas" : "btn-warning",
+        "reportPrinterBesar" : "btn-success",
+        "reportPrinterKecil" : "btn-info",
+        "approvalkoneksi" : "btn-warning",
+        "approvalnonaktif" : "btn-success"
+    } 
+
+}
