@@ -18,6 +18,15 @@ class MyController extends Controller
         config()->set('app.trucking_api_tnl',$domainTNL);
         config()->set('app.emkl_api_url',$domainEmkl);
     }
+
+    public function getListBtn()
+    {
+        $path = getenv('BTN_FILE');
+        $json_data = file_get_contents($path);
+
+        $data = json_decode($json_data);
+        return $data;
+    }
     public $httpHeaders = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
@@ -95,6 +104,4 @@ class MyController extends Controller
 
         $writer->save('php://output');
     }
-
-    
 }
