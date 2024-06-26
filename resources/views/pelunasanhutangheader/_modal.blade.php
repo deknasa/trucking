@@ -2233,6 +2233,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          from:'pelunasanhutangheader'
         }
       },
       onSelectRow: (supplier, element) => {
