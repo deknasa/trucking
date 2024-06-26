@@ -553,7 +553,7 @@
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color: "btn-success",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -568,7 +568,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
-                color: "btn-info",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -610,7 +610,7 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status INVOICE",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`),
                 onClick: () => {
 
@@ -622,7 +622,7 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak INVOICE",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`) {
@@ -639,7 +639,7 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas INVOICE",
-                color:'btn-primary',
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`) {

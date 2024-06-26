@@ -15,6 +15,7 @@ class TripTangkiController extends MyController
 
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('triptangki.index', compact('title', 'data'));

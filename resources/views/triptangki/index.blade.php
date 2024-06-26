@@ -393,7 +393,7 @@
                         {
                             id: 'approvalnonaktif',
                             text: "Approval Non Aktif",
-                            color:"btn-success",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
                             hidden:(!`{{ $myAuth->hasPermission('triptangki', 'approvalnonaktif') }}`),
                             onClick: () => {
                                 approvalNonAktif('triptangki')

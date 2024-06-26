@@ -542,7 +542,7 @@
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color: "btn-success",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -557,7 +557,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
-                color: "btn-info",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -598,8 +598,8 @@
             class: 'btn btn-purple btn-sm mr-1',
             item: [{
                 id: 'approveun',
-                text: "APPROVAL/UN Status INVOICEEXTRA",
-                color: "btn-success",
+                text: "APPROVAL/UN Status INVOICE EXTRA",
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
@@ -609,8 +609,8 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "Approval Buka Cetak INVOICEEXTRA",
-                color: "btn-info",
+                text: "Approval Buka Cetak INVOICE EXTRA",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`) {
@@ -626,8 +626,8 @@
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "APPROVAL/UN Kirim Berkas INVOICEEXTRA",
-                color: "btn-primary",
+                text: "APPROVAL/UN Kirim Berkas INVOICE EXTRA",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`) {
