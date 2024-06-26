@@ -273,55 +273,6 @@
             }
           },
           {
-            label: 'STATUS KIRIM BERKAS',
-            name: 'statuskirimberkas',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combokirimberkas'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combokirimberkas'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-                                `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusKirimBerkas = JSON.parse(value)
-              if (!statusKirimBerkas) {
-                return ``
-              }
-              let formattedValue = $(`
-                                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
-                                <span>${statusKirimBerkas.SINGKATAN}</span>
-                                </div>
-                            `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
-              if (!statusKirimBerkas) {
-                return ` title=""`
-              }
-              return ` title="${statusKirimBerkas.MEMO}"`
-            }
-          },
-          {
             label: 'NO BUKTI',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -498,6 +449,55 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'STATUS KIRIM BERKAS',
+            name: 'statuskirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokirimberkas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokirimberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                                `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKirimBerkas = JSON.parse(value)
+              if (!statusKirimBerkas) {
+                return ``
+              }
+              let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
+                                <span>${statusKirimBerkas.SINGKATAN}</span>
+                                </div>
+                            `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
+              if (!statusKirimBerkas) {
+                return ` title=""`
+              }
+              return ` title="${statusKirimBerkas.MEMO}"`
             }
           },
           {
