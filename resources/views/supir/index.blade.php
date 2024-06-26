@@ -1181,7 +1181,7 @@
                             {
                                 id: 'approvalBlackListSupir',
                                 text: "APPROVAL/UN Black List Supir",
-                                color: "btn-warning",
+                                color: `<?php echo $data['listbtn']->btn->approvalblacklist; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
@@ -1197,7 +1197,7 @@
                             {
                                 id: 'approveun',
                                 text: "APPROVAL/UN Kacab",
-                                color: "btn-orange",
+                                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approval') }}`),
                                 onClick: () => {
                                     approve()
@@ -1206,7 +1206,7 @@
                             {
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
-                                color: "btn-info",
+                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`),
                                 onClick: () => {
                                     approvalNonAktif('supir')
@@ -1215,7 +1215,7 @@
                             {
                                 id: 'approvalaktif',
                                 text: "Approval Aktif",
-                                color: "btn-danger",
+                                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`),
                                 onClick: () => {
                                     approvalAktif('supir')
@@ -1224,7 +1224,7 @@
                             {
                                 id: 'approvalSupirLuarKota',
                                 text: "APPROVAL/UN Supir Luar Kota",
-                                color: "btn-info",
+                                color: `<?php echo $data['listbtn']->btn->approvalsupirluarkota; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
@@ -1246,7 +1246,7 @@
                             {
                                 id: 'approvalSupirResign',
                                 text: "APPROVAL/UN Supir Resign",
-                                color: "btn-purple",
+                                color: `<?php echo $data['listbtn']->btn->approvalresign; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
@@ -1262,7 +1262,7 @@
                             {
                                 id: 'approvalHistorySupirMilikMandor',
                                 text: "APPROVAL/UN History Supir Milik Mandor",
-                                color: "btn-success",
+                                color: `<?php echo $data['listbtn']->btn->approvalhistorysupirmilikmandor; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
@@ -1274,7 +1274,7 @@
                             {
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "APPROVAL/UN Supir Tanpa Keterangan/Gambar",
-                                color: "btn-warning",
+                                color: `<?php echo $data['listbtn']->btn->approvaltanpaketerangan; ?>`,
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
@@ -1299,6 +1299,7 @@
                                 id: 'historyMandor',
                                 text: "History Supir Milik Mandor",
                                 hidden :(!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`),
+                                color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
                                         var selectedOne = selectedOnlyOne();

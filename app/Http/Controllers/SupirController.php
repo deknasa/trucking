@@ -168,6 +168,7 @@ class SupirController extends MyController
             'statusblacklist' => $this->comboStatusAktif('list','BLACKLIST SUPIR','BLACKLIST SUPIR'),
             'combopostingtnl' => $this->comboStatusAktif('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
             'statusapprovalhistorysupirmilikmandor' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn()
 
         ];
 

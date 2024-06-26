@@ -448,7 +448,7 @@ function checkboxHandler(element) {
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color:"btn-success",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -461,7 +461,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
-                color:"btn-info",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -500,7 +500,7 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PEMUTIHAN SUPIR",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
@@ -515,7 +515,7 @@ function checkboxHandler(element) {
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PEMUTIHAN SUPIR",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`) {

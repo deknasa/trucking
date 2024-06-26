@@ -463,7 +463,7 @@
                     item: [{
                             id: 'approvalnoncabang',
                             text: "Approval Tidak berlaku dicabang",
-                            color:'btn-success',
+                            color: `<?php echo $data['listbtn']->btn->approvaltidakberlaku; ?>`,
                             onClick: () => {
                                 approvalCabang()
                             }
@@ -471,7 +471,7 @@
                         {
                             id: 'approvalberlakudicabang',
                             text: "Approval berlaku dicabang",
-                            color:'btn-info',
+                            color: `<?php echo $data['listbtn']->btn->approvalberlaku; ?>`,
                             onClick: () => {
                                 listCabang()
                             }

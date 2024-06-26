@@ -636,7 +636,7 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN status orderan trucking",
-                color:"btn-success",
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                 hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
@@ -647,7 +647,7 @@
               {
                 id: 'approvalEditOrderanTrucking',
                 text: "APPROVAL/UN Edit orderan trucking",
-                color:"btn-info",
+                color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
                 hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
@@ -659,7 +659,7 @@
               {
                 id: 'approvalTanpaJob',
                 text: "APPROVAL/UN Tanpa Job EMKL",
-                color:"btn-primary",
+                color: `<?php echo $data['listbtn']->btn->approvaltanpajob; ?>`,
                 hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`) {
@@ -679,7 +679,7 @@
             item: [{
               id: 'updateNoContainer',
               text: "Update No Container",
-              color:"btn-success",
+              color: `<?php echo $data['listbtn']->btn->updatenocontainer; ?>`,
               onClick: () => {
                 var selectedOne = selectedOnlyOne();
                 if (selectedOne[0]) {

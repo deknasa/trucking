@@ -555,7 +555,7 @@
                     item: [{
                             id: 'approveun',
                             text: "APPROVAL/UN Data",
-                            color: "btn-success",
+                            color: `<?php echo $combo['listbtn']->btn->approvaldata; ?>`,
                             hidden :(!`{{ $myAuth->hasPermission('customer', 'approval') }}`),
                             onClick: () => {
 
@@ -566,7 +566,7 @@
                         {
                             id: 'approvalnonaktif',
                             text: "Approval Non Aktif",
-                            color: "btn-info",
+                            color: `<?php echo $combo['listbtn']->btn->approvalnonaktif; ?>`,
                             hidden :(!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`),
                             onClick: () => {
 

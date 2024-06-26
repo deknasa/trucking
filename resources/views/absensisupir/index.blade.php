@@ -701,7 +701,7 @@
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color: "btn-warning",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 // hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -715,6 +715,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -752,7 +753,7 @@
             item: [{
                 id: 'approvalEdit',
                 text: "APPROVAL/UN Absensi Edit",
-                color: "btn-success",
+                color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
@@ -774,7 +775,7 @@
               {
                 id: 'approvalTripInap',
                 text: "APPROVAL/UN Pengajuan Trip Inap",
-                color: "btn-info",
+                color: `<?php echo $data['listbtn']->btn->approvalpengajuantripinap; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`),
                 onClick: () => {
                   // if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`) {
@@ -790,7 +791,7 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Absensi",
-                color: "btn-primary",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
@@ -808,7 +809,7 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas Absensi",
-                color: "btn-orange",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
@@ -827,7 +828,7 @@
               {
                   id: 'approvalabsensifinal',
                   text: "APPROVAL/UN Absensi Final",
-                  color: "btn-purple",
+                  color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                   hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`),
                   onClick: () => {
                       if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`) {
@@ -848,7 +849,7 @@
             item: [{
                 id: 'cekAbsenTrado',
                 text: "Cek Absen Trado",
-                color: "btn-warning",
+                color: `<?php echo $data['listbtn']->btn->cekabsentrado; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {

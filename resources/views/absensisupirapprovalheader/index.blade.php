@@ -615,7 +615,7 @@
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color: "btn-warning",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 // hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -629,6 +629,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -674,7 +675,7 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Absensi SUpir Approval",
-                color: "btn-success",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
@@ -689,7 +690,7 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas Absensi Supir Approval",
-                color: "btn-info",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`) {

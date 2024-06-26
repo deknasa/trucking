@@ -41,6 +41,7 @@ class SuratPengantarController extends MyController
             'combobatalmuat' => $this->comboList('list', 'STATUS BATAL MUAT', 'STATUS BATAL MUAT'),
             'combogajisupir' => $this->comboList('list', 'STATUS SUDAH BUKA', 'STATUS SUDAH BUKA'),
             'comboinvoice' => $this->comboList('list', 'STATUS SUDAH BUKA', 'STATUS SUDAH BUKA'),
+            'listbtn' => $this->getListBtn()
         ];
 
         $data = array_merge(
