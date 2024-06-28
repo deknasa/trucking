@@ -10,6 +10,8 @@
     loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup', {
       penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
       stok_id: `{!! $stok_id ?? '' !!}`,
+      trado_id: `{!! $trado_id ?? '' !!}`,
+      gandengan_id: `{!! $gandengan_id ?? '' !!}`,
       cabang: `{!! $cabang ?? '' !!}`,
       // filters: `{!! $filters ?? '' !!}`
       supplier_id: `{!! $supplier_id ?? '' !!}`,
@@ -30,6 +32,8 @@
       postData: {
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         stok_id: `{!! $stok_id ?? '' !!}`,
+        trado_id: `{!! $trado_id ?? '' !!}`,
+        gandengan_id: `{!! $gandengan_id ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
         supplier_id: `{!! $supplier_id ?? '' !!}`,
@@ -101,6 +105,16 @@
         {
           label: 'no bukti Hutang',
           name: 'hutang_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'trado dari',
+          name: 'tradodari',
+          align: 'left'
+        },
+        {
+          label: 'gandengan dari',
+          name: 'gandengandari',
           align: 'left'
         },
         {
