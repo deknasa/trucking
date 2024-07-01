@@ -113,13 +113,20 @@ class LaporanArusKasController extends MyController
 
         $detail_start_row = 5;
         if (is_array($data) || is_iterable($data)) {
+            $startSelisihAwal = '';
+            $endSelisihAwal = '';
+            $startSelisihAkhir = '';
+            $endSelisihAkhir = '';
+            $startSaldoAwal = '';
+            $startSaldoAkhir = '';
+
             foreach ($groupedData as $jenisarus => $group) {
                 $sheet->setCellValue("A$detail_start_row", $jenisarus)->getStyle("A$detail_start_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_start_row")->applyFromArray($styleArray2)->getFont()->setUnderline(true);
                 $sheet->getStyle("B$detail_start_row")->applyFromArray($styleArray2);
                 $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray2);
                 $detail_start_row++;
-                if($jenisarus == 'ARUS KAS/BANK MASUK'){
+                if ($jenisarus == 'ARUS KAS/BANK MASUK') {
                     $sheet->setCellValue("A$detail_start_row", 'SALDO AWAL')->getStyle("A$detail_start_row")->getFont()->setBold(true);
                 }
                 $sheet->getStyle("A$detail_start_row")->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
@@ -128,6 +135,12 @@ class LaporanArusKasController extends MyController
                 $sheet->setCellValue("C$detail_start_row", $saldo['nominalakhir'])->getStyle("C$detail_start_row")->getFont()->setBold(true);
                 $sheet->getStyle("B$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getStyle("C$detail_start_row")->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                if ($startSaldoAwal == '') {
+                    $startSaldoAwal = "B$detail_start_row";
+                }
+                if ($startSaldoAkhir == '') {
+                    $startSaldoAkhir = "C$detail_start_row";
+                }
                 $detail_start_row++;
 
                 foreach ($group as $type => $row) {
@@ -155,9 +168,32 @@ class LaporanArusKasController extends MyController
                 $sheet->setCellValue("C$detail_start_row", "=SUM($akhirCell:C$detail_start_row)")->getStyle("C$detail_start_row")->getFont()->setBold(true);
                 $sheet->getStyle("B$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-                
+                if ($startSelisihAwal == '') {
+                    $startSelisihAwal = "B$detail_start_row";
+                } else {
+                    $endSelisihAwal = "B$detail_start_row";
+                }
+                if ($startSelisihAkhir == '') {
+                    $startSelisihAkhir = "C$detail_start_row";
+                } else {
+                    $endSelisihAkhir = "C$detail_start_row";
+                }
                 $detail_start_row++;
             }
+
+            $rowSelisisih = $detail_start_row;
+            $sheet->setCellValue("A$detail_start_row", "SELISIH ARUS KAS/BANK MASUK DAN KELUAR")->getStyle("A$detail_start_row")->getFont()->setBold(true);
+            $sheet->setCellValue("B$detail_start_row", "=$startSelisihAwal+$endSelisihAwal")->getStyle("A$detail_start_row")->getFont()->setBold(true);
+            $sheet->setCellValue("C$detail_start_row", "=$startSelisihAkhir+$endSelisihAkhir")->getStyle("A$detail_start_row")->getFont()->setBold(true);
+            $sheet->getStyle("B$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+            $detail_start_row++;
+            
+            $sheet->setCellValue("A$detail_start_row", "SISA SALDO KAS/BANK")->getStyle("A$detail_start_row")->getFont()->setBold(true);
+            $sheet->setCellValue("B$detail_start_row", "=$startSaldoAwal+B$rowSelisisih")->getStyle("A$detail_start_row")->getFont()->setBold(true);
+            $sheet->setCellValue("C$detail_start_row", "=$startSaldoAkhir+C$rowSelisisih")->getStyle("A$detail_start_row")->getFont()->setBold(true);
+            $sheet->getStyle("B$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
         }
 
         $sheet->getColumnDimension('B')->setAutoSize(true);

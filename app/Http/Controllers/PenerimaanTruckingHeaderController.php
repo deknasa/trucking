@@ -16,7 +16,8 @@ class PenerimaanTruckingHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         $combo = $this->comboKodepenerimaan();
         $comboKodepenerimaan = $combo['data'];

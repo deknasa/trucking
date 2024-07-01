@@ -30,6 +30,7 @@ class OrderanTruckingController extends MyController
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'comboapprovaledit' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'comboapprovaltanpajob' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn()
         ];
 
         $data = array_merge(

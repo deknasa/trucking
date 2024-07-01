@@ -659,7 +659,7 @@
                     item: [{
                             id: 'approvalTanpaKlaim',
                             text: ' APPROVAL/UN Tanpa Klaim',
-                            color:'btn-success',
+                            color: `<?php echo $data['listbtn']->btn->approvaltanpaklaim; ?>`,
                             hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalklaim') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -669,7 +669,7 @@
                         {
                             id: 'approvalReuse',
                             text: ' APPROVAL/UN Reuse',
-                            color:'btn-info',
+                            color: `<?php echo $data['listbtn']->btn->approvalreuse; ?>`,
                             hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalReuse') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -679,7 +679,7 @@
                         {
                             id: 'approveun',
                             text: ' APPROVAL NON AKTIF',
-                            color:'btn-primary',
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
                             hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -689,7 +689,7 @@
                         {
                             id: 'approvalaktif',
                             text: ' APPROVAL AKTIF',
-                            color:'btn-purple',
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
                             hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`),
                             onClick: () => {
                                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

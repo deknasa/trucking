@@ -19,7 +19,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
         
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
-            'comboapproval' => $this->comboApproval('list')
+            'comboapproval' => $this->comboApproval('list'),
+            'listbtn' => $this->getListBtn()
 
         ];
 

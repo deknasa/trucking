@@ -543,7 +543,7 @@
           item: [{
               id: 'approveun',
               text: "APPROVAL/UN Data",
-              color:'btn-success',
+              color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
               hidden:(!`{{ $myAuth->hasPermission('supplier', 'approval') }}`),
               onClick: () => {
 
@@ -555,7 +555,7 @@
             {
               id: 'approvalnonaktif',
               text: "Approval Non Aktif",
-              color:'btn-info',
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
               hidden:(!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {

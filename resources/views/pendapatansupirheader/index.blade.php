@@ -553,7 +553,7 @@ function checkboxHandler(element) {
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -568,7 +568,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -610,7 +610,7 @@ function checkboxHandler(element) {
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status PENDAPATAN SUPIR",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`) {
@@ -621,7 +621,7 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENDAPATAN SUPIR",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalbukacetak') }}`) {
@@ -638,7 +638,7 @@ function checkboxHandler(element) {
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PENDAPATAN SUPIR",
-                color:'btn-primary',
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`) {

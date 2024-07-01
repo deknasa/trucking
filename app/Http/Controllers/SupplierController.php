@@ -18,6 +18,7 @@ class SupplierController extends MyController
             'combodaftarharga' => $this->comboList('list', 'STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combopostingtnl' => $this->comboList('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('supplier.index', compact('title', 'data'));

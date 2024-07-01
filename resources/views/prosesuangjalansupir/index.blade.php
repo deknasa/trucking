@@ -550,7 +550,7 @@
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -563,7 +563,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -601,7 +601,7 @@
             item: [{
                 id: 'approval',
                 text: "APPROVAL/UN Proses Uang Jalan",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approval') }}`),
                 onClick: () => {
                   approvalData()
@@ -610,7 +610,7 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Proses Uang Jalan",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`) {
@@ -627,7 +627,7 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas Proses Uang Jalan",
-                color:'btn-primary',
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
                 hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`) {

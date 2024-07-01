@@ -309,6 +309,61 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	background-color: #dd4a00;
 	/* background-color:  #25588f; */
 }
+.btn-black {
+	background-color: #343a40;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-black:hover {
+	color: #fff !important;
+	background-color: #313840;
+	/* background-color:  #25588f; */
+}
+.btn-slateblue {
+	background-color: #436685;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-slateblue:hover {
+	color: #fff !important;
+	background-color: #346590;
+	/* background-color:  #25588f; */
+}
+.btn-burnt {
+	background-color: #8A3324;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-burnt:hover {
+	color: #fff !important;
+	background-color: #753024;
+	/* background-color:  #25588f; */
+}
+.btn-blueberry {
+	background-color: #241571;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-blueberry:hover {
+	color: #fff !important;
+	background-color: #211463;
+	/* background-color:  #25588f; */
+}
+.btn-seagreen {
+	background-color: #2E8B57;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-seagreen:hover {
+	color: #fff !important;
+	background-color: #275d3f;
+	/* background-color:  #25588f; */
+}
 
 .modal-lookup .modal-dialog {
 	width: 95vw;

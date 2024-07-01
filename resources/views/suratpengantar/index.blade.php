@@ -1113,7 +1113,7 @@
           item: [{
               id: 'approvalBatalMuat',
               text: "APPROVAL/UN Batal Muat",
-              color: 'btn-success',
+              color: `<?php echo $data['listbtn']->btn->approvalbatalmuat; ?>`,
               hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
@@ -1125,7 +1125,7 @@
             {
               id: 'approvalEditTujuan',
               text: "APPROVAL/UN Edit Surat Pengantar",
-              color: 'btn-info',
+              color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
               hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
@@ -1137,7 +1137,7 @@
             {
               id: 'approvalTitipanEmkl',
               text: "APPROVAL/UN Titipan EMKL",
-              color: 'btn-primary',
+              color: `<?php echo $data['listbtn']->btn->approvaltitipanemkl; ?>`,
               hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`),
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1152,7 +1152,7 @@
             {
               id: 'approvalTolakan',
               text: "APPROVAL/UN Tolakan",
-              color: 'btn-warning',
+              color: `<?php echo $data['listbtn']->btn->approvaltolakan; ?>`,
               hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`) {

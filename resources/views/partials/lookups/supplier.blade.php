@@ -10,6 +10,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
       },
       idPrefix: 'supplierLookup',
       colModel: [{

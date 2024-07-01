@@ -151,11 +151,11 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                {{-- </div>
               </div>
 
               <div class="col-12">
-                <div class="row">
+                <div class="row"> --}}
                   <div class="form-group col-md-6">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-4">
@@ -2805,6 +2805,7 @@
       },
       onClear: (element) => {
         element.val('')
+        $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())
         enabledKorDisable()
       }
@@ -2833,6 +2834,7 @@
       },
       onClear: (element) => {
         element.val('')
+        $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())
         enabledKorDisable()
       }
@@ -2989,7 +2991,11 @@
       beforeProcess: function(test) {
         var supplierId = $(`#supplierId`).val();
         var pengeluaranstokId = $(`#pengeluaranstokId`).val();
+        var tradoId = $(`#tradoId`).val()
+        var gandenganId = $(`#gandenganId`).val()
         this.postData = {
+          trado_id: tradoId,
+          gandengan_id: gandenganId,
           supplier_id: supplierId,
           pengeluaranstok_id: pengeluaranstokId
         }

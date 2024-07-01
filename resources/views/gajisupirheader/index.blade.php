@@ -729,7 +729,7 @@
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak GAJI SUPIR",
               color: "btn-success",
-              hidden :(!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`),
+              color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -743,7 +743,7 @@
             {
               id: 'approval-kirim-berkas',
               text: "APPROVAL/UN Kirim Berkas GAJI SUPIR",
-              color: "btn-info",
+              color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
               hidden :(!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {

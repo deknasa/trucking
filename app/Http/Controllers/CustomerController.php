@@ -27,6 +27,7 @@ class CustomerController extends MyController
             'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
             'jenisemkl' => $this->getJenisEmkl(),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('customer.index', compact('title', 'combo'));
