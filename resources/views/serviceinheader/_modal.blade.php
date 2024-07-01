@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
                                 <input type="hidden" name="trado_id">
-                                <input type="text" name="trado" class="form-control trado-lookup">
+                                <input type="text" id="trado" name="trado" class="form-control trado-lookup">
                             </div>
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
@@ -185,7 +185,7 @@
             event.preventDefault()
             submit($(this).attr('id'))
         })
-        
+
 
         function submit(button) {
             event.preventDefault()
@@ -268,9 +268,9 @@
                     $('#crudModal').find('#crudForm').trigger('reset')
                     if (button == 'btnSubmit') {
                         id = response.data.id
-    
+
                         $('#crudModal').modal('hide')
-    
+
                         $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
                         $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                         $('#jqGrid').jqGrid('setGridParam', {
@@ -280,15 +280,15 @@
                                 tglsampai: dateFormat(response.data.tglsampaiheader)
                             }
                         }).trigger('reloadGrid');
-    
+
                         if (id == 0) {
                             $('#detail').jqGrid().trigger('reloadGrid')
                         }
                         if (response.data.grp == 'FORMAT') {
                             updateFormat(response.data)
                         }
-                        
-                    }else{
+
+                    } else {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -843,6 +843,36 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        // $('.trado-lookup').lookupMaster({
+        //     title: 'trado Lookup',
+        //     fileName: 'tradoMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'trado_id',
+        //             searchText: 'trado-lookup',
+        //             title: 'Trado',
+        //             typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (trado, element) => {
+        //         $('#crudForm [name=trado_id]').first().val(trado.id)
+        //         element.val(trado.kodetrado)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=trado_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
 
         $(`.status-lookup`).lookupMaster({
             title: 'STATUS SERVICE OUT Lookup',

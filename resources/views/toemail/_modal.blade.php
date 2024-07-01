@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-8 col-md-10">
                                 <input type="hidden" name="reminderemail_id">
-                                <input type="text" name="reminderemail" class="form-control reminderemail-lookup">
+                                <input type="text" id="reminderemail" name="reminderemail" class="form-control reminderemail-lookup">
                             </div>
                         </div>
 
@@ -84,8 +84,8 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let isEditTgl
-    var data_id 
-    
+    var data_id
+
     $(document).ready(function() {
 
         $('#btnSubmit').click(function(event) {
@@ -241,7 +241,7 @@
                 id: id,
                 aksi: 'BATAL',
                 table: 'toemail'
-                
+
             },
             success: response => {
                 $("#crudModal").modal("hide")
@@ -250,7 +250,7 @@
                 if (error.status === 422) {
                     $('.is-invalid').removeClass('is-invalid')
                     $('.invalid-feedback').remove()
-                    
+
                     setErrorMessages(form, error.responseJSON.errors);
                 } else {
                     showDialog(error.responseJSON)
@@ -470,7 +470,7 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
-            data:{
+            data: {
                 aksi: Aksi,
             },
             success: response => {
@@ -484,7 +484,7 @@
                     if (Aksi == 'DELETE') {
                         deleteToEmail(Id)
                     }
-                }    
+                }
             }
         })
     }
@@ -582,6 +582,36 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        // $('.reminderemail-lookup').lookupMaster({
+        //     title: 'pengeluaran stok Lookup',
+        //     fileName: 'reminderemailMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'reminderemail_id',
+        //             searchText: 'reminderemail-lookup',
+        //             title: 'Pengeluaran Stok',
+        //             typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (reminderemail, element) => {
+        //         $('#crudForm [name=reminderemail_id]').first().val(reminderemail.id)
+        //         element.val(reminderemail.keterangan)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=reminderemail_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
 
     }
     const setTglBukti = function(form) {

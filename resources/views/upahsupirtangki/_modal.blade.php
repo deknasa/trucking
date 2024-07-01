@@ -32,7 +32,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="tariftangki_id">
-                <input type="text" name="tariftangki" class="form-control tariftangki-lookup">
+                <input type="text" id="tariftangki" name="tariftangki" class="form-control tariftangki-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -1465,6 +1465,38 @@
         $('#crudForm [name=tariftangki_id]').val('')
       }
     })
+
+    // $('.tariftangki-lookup').lookupMaster({
+    //   title: 'tarif tangki Lookup',
+    //   fileName: 'tariftangkiMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'tariftangki_id',
+    //       searchText: 'tariftangki-lookup',
+    //       title: 'Tarif Tangki',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (tarif, element) => {
+    //     $('#crudForm [name=penyesuaian]').first().val(tarif.penyesuaian)
+    //     $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
+    //     $('#crudForm [name=kotasampai]').first().val(tarif.tujuan)
+    //     $('#crudForm [name=tariftangki_id]').first().val(tarif.id)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=tariftangki_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
   }
 </script>
 @endpush()

@@ -34,7 +34,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="user_id">
-                <input type="text" name="user" class="form-control user-lookup">
+                <input type="text" id="user" name="user" class="form-control user-lookup">
               </div>
             </div>
 
@@ -355,6 +355,36 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.user-lookup').lookupMaster({
+    //   title: 'user Lookup',
+    //   fileName: 'userMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       searching: 1,
+    //       valueName: 'user_id',
+    //       searchText: 'user-lookup',
+    //       title: 'User',
+    //       typeSearch: 'ALL',
+    //       role: 'MANDOR',
+    //     }
+    //   },
+    //   onSelectRow: (user, element) => {
+    //     $('#crudForm [name=user_id]').first().val(user.id)
+    //     element.val(user.name)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=user_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
   }
 </script>
 @endpush()

@@ -79,7 +79,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="pelanggan_id">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                <input type="text" id="pelanggan" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
             <div class="row form-group" style="display:none;">
@@ -1264,6 +1264,35 @@
         element.data('currentValue', element.val())
       }
     })
+    // $('.pelanggan-lookup').lookupMaster({
+    //   title: 'pelanggan Lookup',
+    //   fileName: 'pelangganMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'pelanggan_id',
+    //       searchText: 'pelanggan-lookup',
+    //       title: 'pelanggan',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (pelanggan, element) => {
+    //     $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+    //     element.val(pelanggan.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=pelanggan_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     $('.tarifrincian-lookup').lookup({
       title: 'Tarif Rincian Lookup',
       fileName: 'tarifrincian',

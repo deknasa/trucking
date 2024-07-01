@@ -1258,6 +1258,7 @@
         element.data('currentValue', element.val())
       }
     })
+
     $('.upahsupir-lookup').lookup({
       title: 'upah supir tangki Lookup',
       fileName: 'upahsupirtangki',
@@ -1290,6 +1291,41 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.upahsupir-lookup').lookupMaster({
+    //   title: 'upah supir tangki Lookup',
+    //   fileName: 'upahsupirMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'upahsupir_id',
+    //       searchText: 'upahsupir-lookup',
+    //       title: 'Upah Supir Tangki',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (upahsupir, element) => {
+    //     $('#crudForm [name=upahsupirtangki_id]').first().val(upahsupir.id)
+    //     // element.val(upahsupir.keterangan)
+    //     $('#crudForm [name=penyesuaianupah]').val(upahsupir.penyesuaian)
+    //     $('#crudForm [name=dari]').val(upahsupir.kotadari_id)
+    //     $('#crudForm [name=sampai]').val(upahsupir.kotasampai_id)
+    //     element.val(`${upahsupir.kotadari_id} - ${upahsupir.kotasampai_id}`)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=upahsupirtangki_id]').first().val('')
+    //     clearUpahSupir()
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
   }
 
   function clearUpahSupir() {

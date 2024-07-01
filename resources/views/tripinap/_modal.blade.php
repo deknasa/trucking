@@ -45,7 +45,7 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="suratpengantar_nobukti" id="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
+                                <input type="text" id="suratpengantar_nobukti" name="suratpengantar_nobukti" id="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
                             </div>
                         </div>
 
@@ -644,6 +644,7 @@
                 element.data('currentValue', element.val())
             }
         })
+
         $('.supir-lookup').lookupMaster({
             title: 'supir Lookup',
             fileName: 'supirMaster',
@@ -672,6 +673,7 @@
                 element.data('currentValue', element.val())
             }
         })
+
         $('.suratpengantar-lookup').lookupMaster({
             title: 'Surat Pengantar Lookup',
             fileName: 'suratpengantartripinap',
@@ -707,6 +709,37 @@
             }
         })
 
+        // $('.suratpengantar-lookup').lookupMaster({
+        //     title: 'surat pengantar Lookup',
+        //     fileName: 'suratpengantartripinapMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'suratpengantar_nobukti',
+        //             searchText: 'suratpengantar-lookup',
+        //             title: 'surat pengantar',
+        //             typeSearch: 'ALL',
+        //             from: 'tripinap',
+        //             tglabsensi: $('#crudForm [name=tglabsensi]').first().val(),
+        //             trado_id: $('#crudForm [name=trado_id]').first().val(),
+        //             supir_id: $('#crudForm [name=supir_id]').first().val(),
+        //         }
+        //     },
+        //     onSelectRow: (suratpengantar, element) => {
+        //         element.val(suratpengantar.nobukti)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
 
         $('.absensisupirdetail-lookup').lookupMaster({
             title: 'Trado Lookup',
