@@ -1,7 +1,7 @@
 <table id="kerusakanLookup" class="lookup-grid" style="width: 100%;"></table>
 <script>
 $('#kerusakanLookup').jqGrid({
-  url: `{{ config('app.api_url') . 'kerusakan' }}`,
+        url: `{{ config('app.api_url') . 'kerusakan' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

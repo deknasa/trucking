@@ -42,7 +42,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="penerimaantrucking_id">
-                <input type="text" name="penerimaantrucking" class="form-control penerimaantrucking-lookup">
+                <input type="text" name="penerimaantrucking" id="penerimaantrucking" class="form-control penerimaantrucking-lookup">
               </div>
             </div>
 
@@ -3741,6 +3741,39 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.penerimaantrucking-lookup').lookupMaster({
+    //   title: 'Penerimaan Trucking Lookup',
+    //   fileName: 'penerimaantruckingMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       roleInput: 'role',
+    //       isLookup: true,
+    //       searching: 1,
+    //       valueName: 'penerimaantrucking_id',
+    //       searchText: 'penerimaantrucking-lookup',
+    //       title: 'penerimaan trucking',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (penerimaantrucking, element) => {
+    //     setKodePenerimaan(penerimaantrucking.kodepenerimaan)
+    //     $('#crudForm [name=penerimaantrucking_id]').first().val(penerimaantrucking.id)
+    //     element.val(penerimaantrucking.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.val('')
+    //     $(`#crudForm [name="penerimaantrucking_id"]`).first().val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',

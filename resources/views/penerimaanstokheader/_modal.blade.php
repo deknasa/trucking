@@ -38,7 +38,7 @@
                     <label class="col-form-label">penerimaan stok <span class="text-danger">*</span> </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="penerimaanstok" class="form-control penerimaanstok-lookup">
+                    <input type="text" name="penerimaanstok" id="penerimaanstok" class="form-control penerimaanstok-lookup">
                     <input type="text" id="penerimaanstokId" name="penerimaanstok_id" hidden readonly>
                   </div>
                 </div>
@@ -3326,6 +3326,40 @@
       }
 
     })
+
+    // $('.penerimaanstok-lookup').lookupMaster({
+    //   title: 'penerimaan stok Lookup',
+    //   fileName: 'penerimaanstokMaster',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       roleInput: 'role',
+    //       isLookup: true,
+    //       searching: 1,
+    //       valueName: 'penerimaanstok_id',
+    //       searchText: 'penerimaanstok-lookup',
+    //       title: 'penerimaan stok',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (penerimaanstok, element) => {
+    //     setKodePenerimaan(penerimaanstok.kodepenerimaan)
+    //     setIsDateAvailable(penerimaanstok.id)
+
+    //     element.val(penerimaanstok.kodepenerimaan)
+    //     $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.val('')
+    //     $(`#${element[0]['name']}Id`).val('')
+    //     element.data('currentValue', element.val())
+    //   }
+
+    // })
 
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',

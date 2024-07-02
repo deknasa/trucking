@@ -583,7 +583,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="karyawan_id[]" class="form-control">
-                                <input type="text" name="karyawan[]" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
+                                <input type="text" name="karyawan[]"  id="karyawan"data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
                             </td>
 
                             <td>
@@ -628,7 +628,7 @@
                             }
                         })
 
-
+                       
                     })
                     setRowNumbers()
                     if (form.data('action') === 'delete') {
@@ -680,7 +680,7 @@
             <td></td>
             <td>
                 <input type="hidden" name="karyawan_id[]" class="form-control">
-                <input type="text" name="karyawan[]" class="form-control karyawan-lookup">
+                <input type="text" name="karyawan[]" id="karyawan" class="form-control karyawan-lookup">
             </td>
 
             <td>

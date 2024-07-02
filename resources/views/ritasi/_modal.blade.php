@@ -40,7 +40,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="statusritasi_id">
-                <input type="text" name="statusritasi" class="form-control dataritasi-lookup">
+                <input type="text" name="statusritasi" id="dataritasi" class="form-control dataritasi-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -732,6 +732,37 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.dataritasi-lookup').lookupMaster({
+    //   title: 'Data Ritasi Lookup',
+    //   fileName: 'dataritasiMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       title: 'data ritasi',
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'dataritasi_id',
+    //       searchText: 'dataritasi-lookup',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (dataRitasi, element) => {
+    //     $('#crudForm [name=statusritasi_id]').first().val(dataRitasi.id)
+    //     element.val(dataRitasi.statusritasi)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=statusritasi_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
   }
 
