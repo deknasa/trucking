@@ -2187,6 +2187,12 @@
       }
     }
     if (form.data('action') !== 'add') {
+
+      $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+        background: '#fff'
+      })
+      let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+      tglbukti.find('button').attr('disabled', true)
       let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
       let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children()
       let pengeluaranstok_nobukti = $('#crudForm').find(`[name="pengeluaranstok_nobukti"]`).parents('.input-group').children()

@@ -302,7 +302,7 @@
                           <label class="col-form-label">Stok <span class="text-danger">*</span> </label>
                         </div>
                         <div class="col-12 col-sm-9 col-md-8">
-                          <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup">
+                          <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup-afkir">
                           <input type="text" class="detailstokId" id="detail_stok_id" name="detail_stok_id[]" readonly hidden>
                         </div>
                       </div>
@@ -1002,6 +1002,11 @@
     initSelect2($('#statuspotongretur'), true)
     initSelect2($(`#statusban`), true)
     if (form.data('action') !== 'add') {
+      $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+        background: '#fff'
+      })
+      let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+      tglbukti.find('button').attr('disabled', true)
       let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group')
       pengeluaranstok.children().attr('readonly', true)
       pengeluaranstok.children().find('.lookup-toggler').attr('disabled', true)
@@ -2839,7 +2844,7 @@
       }
     })    
 
-    $(`.stok-lookup`).lookup({
+    $(`.stok-lookup-afkir`).lookup({
       title: 'stok Lookup',
       fileName: 'stok',
       beforeProcess: function(test) {
