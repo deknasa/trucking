@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-  <table id="tradoLookup<?= $id ?>" class="lookup-grid"></table>
+  <table id="supplierLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-  <table id="tradoLookup" class="lookup-grid"></table>
+  <table id="supplierLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
   <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#tradoLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#supplierLookup{{ isset($id) ? $id : null }} `)
 
 
   var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -44,180 +44,195 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
       {
-        label: 'NO POLISI',
-        name: 'kodetrado',
+        label: 'nama',
+        name: 'namasupplier',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
-
     ];
   } else {
     column = [{
-        label: 'ID',
-        name: 'id',
-        width: '50px',
+        label: "ID",
+        name: "id",
+        width: "50px",
+        hidden: true,
+        sortable: false,
         search: false,
-        hidden: true
       },
       {
-        label: 'KETERANGAN',
-        name: 'keterangan',
+        label: 'nama',
+        name: 'namasupplier',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
-        label: 'NO POLISI',
-        name: 'kodetrado',
+        label: 'nama kontak',
+        name: 'namakontak',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
-        label: 'KM AWAL',
-        name: 'kmawal',
-        align: 'right',
-        formatter: currencyFormat,
+        label: 'alamat',
+        name: 'alamat',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
-        label: 'KM GANTI OLI AKHIR',
-        name: 'kmakhirgantioli',
-        align: 'right',
-        formatter: currencyFormat,
+        label: 'kota',
+        name: 'kota',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
-        label: 'MEREK',
-        name: 'merek',
+        label: 'kode pos',
+        name: 'kodepos',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
-        label: 'NO RANGKA',
-        name: 'norangka',
+        label: 'no telepon (1)',
+        name: 'notelp1',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
-        label: 'NO MESIN',
-        name: 'nomesin',
+        label: 'no telepon (2)',
+        name: 'notelp2',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
-        label: 'NAMA',
-        name: 'nama',
+        label: 'email',
+        name: 'email',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
-        label: 'NO STNK',
-        name: 'nostnk',
-      },
-      {
-        label: 'ALAMAT STNK',
-        name: 'alamatstnk',
-      },
-      {
-        label: 'MODIFIED BY',
-        name: 'modifiedby',
-      },
-      {
-        label: 'CREATED AT',
-        name: 'created_at',
-        align: 'right',
-        formatter: "date",
-        formatoptions: {
-          srcformat: "ISO8601Long",
-          newformat: "d-m-Y H:i:s"
+        label: 'status aktif',
+        name: 'statusaktif',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        formatter: (value, options, rowData) => {
+          let statusAktif = JSON.parse(value)
+
+          let formattedValue = $(`
+                    <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+                      <span>${statusAktif.SINGKATAN}</span>
+                    </div>
+                  `)
+
+          return formattedValue[0].outerHTML
+        },
+        cellattr: (rowId, value, rowObject) => {
+          let statusAktif = JSON.parse(rowObject.statusaktif)
+
+          return ` title="${statusAktif.MEMO}"`
         }
       },
       {
-        label: 'TGL SERVICE OPNAME',
-        name: 'tglserviceopname',
-        formatter: "date",
-        formatoptions: {
-          srcformat: "ISO8601Long",
-          newformat: "d-m-Y"
+        label: 'web',
+        name: 'web',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      }, 
+      {
+        label: 'nama pemilik',
+        name: 'namapemilik',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'jenis usaha',
+        name: 'jenisusaha',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'top',
+        name: 'top',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'bank',
+        name: 'bank',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'rekening bank',
+        name: 'rekeningbank',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'nama rekening',
+        name: 'namarekening',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'jabatan',
+        name: 'jabatan',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: 'status daftar harga',
+        name: 'statusdaftarharga',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        formatter: (value, options, rowData) => {
+          let statusDaftarHarga = JSON.parse(value)
+
+          let formattedValue = $(`
+                    <div class="badge" style="background-color: ${statusDaftarHarga.WARNA}; color: ${statusDaftarHarga.WARNATULISAN};">
+                      <span>${statusDaftarHarga.SINGKATAN}</span>
+                    </div>
+                  `)
+
+          return formattedValue[0].outerHTML
+        },
+        cellattr: (rowId, value, rowObject) => {
+          let statusDaftarHarga = JSON.parse(rowObject.statusdaftarharga)
+
+          return ` title="${statusDaftarHarga.MEMO}"`
         }
       },
       {
-        label: 'TGL PAJAK STNK',
-        name: 'tglpajakstnk',
+        label: 'kategori usaha',
+        name: 'kategoriusaha',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
+      {
+        label: "Modified By",
+        name: "modifiedby",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+      },
+      {
+        label: "Created At",
+        name: "created_at",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
-          newformat: "d-m-Y"
-        }
-      },
-      {
-        label: 'TGL GANTI AKI AKHIR',
-        name: 'tglgantiakiterakhir',
-        formatter: "date",
-        formatoptions: {
-          srcformat: "ISO8601Long",
-          newformat: "d-m-Y"
-        }
-      },
-      {
-        label: 'TIPE',
-        name: 'tipe',
-      },
-      {
-        label: 'JENIS',
-        name: 'jenis',
-      },
-      {
-        label: 'ISI SILINDER',
-        name: 'isisilinder',
-      },
-      {
-        label: 'WARNA',
-        name: 'warna',
-      },
-      {
-        label: 'BAHAN BAKAR',
-        name: 'jenisbahanbakar',
-      },
-      {
-        label: 'JLH SUMBU',
-        name: 'jumlahsumbu',
-      },
-      {
-        label: 'JLH RODA',
-        name: 'jumlahroda',
-      },
-      {
-        label: 'MODEL',
-        name: 'model',
-      },
-      {
-        label: 'BPKB',
-        name: 'nobpkb',
-      },
-      {
-        label: 'MANDOR',
-        name: 'mandor_id',
-      },
-      {
-        label: 'JLH BAN SERAP',
-        name: 'jumlahbanserap',
-      },
-      {
-        label: 'PLUS BORONGAN',
-        name: 'nominalplusborongan',
+          newformat: "d-m-Y H:i:s",
+        },
         align: 'right',
-        formatter: currencyFormat,
+      },
+      {
+        label: "Updated At",
+        name: "updated_at",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y H:i:s",
+        },
+        align: 'right',
       },
     ]
   }
 
   selector.jqGrid({
-    url: `{!! $url ?? config('app.api_url')  !!}` + 'trado',
+    url: `{{ config('app.api_url') . 'supplier' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
-      trado_id: `{!! $trado_id ?? '' !!}`,
-      cabang: `{!! $cabang ?? '' !!}`,
-      penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
-      supirserap: `{!! $supirserap ?? '' !!}`,
-      tglabsensi: `{!! $tglabsensi ?? '' !!}`,
-      tradodarike: `{!! $tradodarike ?? '' !!}`,
-      tradodari_id: `{!! $tradodari_id ?? '' !!}`,
-      tradoke_id: `{!! $tradoke_id ?? '' !!}`,
+      roleinput: `{!! $roleInput ?? '' !!}`,
+      isLookup: `{!! $isLookup ?? '' !!}`,
     },
-    idPrefix: 'tradoLookup',
+    idPrefix: 'supplierLookup',
     colModel: column,
     height: 350,
     fixed: true,
     rownumbers: false,
     rownumWidth: 0,
+    rowNum: `{!! $limit ?? 11 !!}`,
     rowList: [10, 20, 50, 0],
     sortable: true,
     sortname: 'id',
@@ -255,94 +270,69 @@ $idLookup = isset($id) ? $id : null;
       postData.sort_indexes = [postData.sort_index];
       postData.sort_orders = [postData.sort_order];
 
-      console.log('serialize')
       var colModel = $(this).jqGrid("getGridParam", "colModel"),
         l = colModel.length,
         i,
         rules = [],
         searchValue = $(searchText).val(),
         cm;
-      currentValue = $(searchText).data('currentValue')
 
-      if (!currentValue) {
+      input = $(searchText).data('input')
+
+      if (input) {
         var typeSearch = `{{ $typeSearch ?? '' }}`
+
         if (typeSearch === 'ALL') {
+
           for (i = 0; i < l; i++) {
             cm = colModel[i];
 
-            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+            if (cm.search !== false && (cm.stype === undefined || cm.stype ===
+                "text")) {
               rules.push({
                 field: cm.name,
                 op: "cn",
                 data: searchValue.toUpperCase(),
               });
+
+
               postData.filters = JSON.stringify({
                 groupOp: "OR",
                 rules: rules,
               });
             }
+
           }
+
+          // $(searchText).focus()
+
           postData.searching = searching;
           postData.searchText = searchText;
+
         } else {
           cm = colModel[searching];
 
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchValue.toUpperCase(),
-            });
+          if (cm.search !== false && (cm.stype === undefined || cm.stype ===
+              "text")) {
+
             postData.filters = JSON.stringify({
               groupOp: "AND",
-              rules: rules,
+              rules: [{
+                field: cm.name,
+                op: "cn",
+                data: $(searchText).val().toUpperCase()
+              }]
             });
+
             $(searchText).focus()
           }
+
           postData.searching = searching;
           postData.searchText = searchText;
         }
-      } else {
-        $(searchText).on("input", function(event) {
-          var typeSearch = `{{ $typeSearch ?? '' }}`
-          if (typeSearch === 'ALL') {
-            for (i = 0; i < l; i++) {
-              cm = colModel[i];
-              if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
 
-                postData.filters = JSON.stringify({
-                  groupOp: "OR",
-                  rules: [{
-                    field: cm.name,
-                    op: "cn",
-                    data: $(searchText).val().toUpperCase()
-                  }]
-                });
-              }
-            }
-            postData.searching = searching;
-            postData.searchText = searchText;
-          } else {
-            cm = colModel[searching];
-
-            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
-
-              postData.filters = JSON.stringify({
-                groupOp: "AND",
-                rules: [{
-                  field: cm.name,
-                  op: "cn",
-                  data: $(searchText).val().toUpperCase()
-                }]
-              });
-              $(searchText).focus()
-            }
-            postData.searching = searching;
-            postData.searchText = searchText;
-          }
-          delete postData.sort_index;
-          delete postData.sort_order;
-        })
+        delete postData.sort_index;
+        delete postData.sort_order;
       }
 
       return postData;

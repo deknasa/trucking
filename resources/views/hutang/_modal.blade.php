@@ -43,7 +43,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="supplier_id">
-                <input type="text" name="supplier" class="form-control supplier-lookup">
+                <input type="text" id="supplier" name="supplier" class="form-control supplier-lookup">
               </div>
             </div>
 
@@ -865,6 +865,36 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.supplier-lookup').lookupMaster({
+    //   title: 'supplier Lookup',
+    //   fileName: 'supplierMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'supplier_id',
+    //       searchText: 'supplier-lookup',
+    //       title: 'Supplier',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (supplier, element) => {
+    //     $('#crudForm [name=supplier_id]').first().val(supplier.id)
+    //     element.val(supplier.namasupplier)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=supplier_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
   }
   const setTglBukti = function(form) {

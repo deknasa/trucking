@@ -30,16 +30,14 @@
                 </div>
               </div>
             </div>
-
             <div class="row">
-
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">pengeluaran stok <span class="text-danger">*</span> </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
+                    <input type="text" id="pengeluaranstok" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
                     <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" readonly hidden>
                   </div>
                 </div>
@@ -535,7 +533,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
       event.preventDefault()
 
@@ -656,9 +654,9 @@
           $('#kodepengeluaranheader').val(response.data.pengeluaranstok_id).trigger('change')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             id = response.data.id
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -670,11 +668,11 @@
               },
               page: response.data.page
             }).trigger('reloadGrid')
-  
+
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -683,11 +681,11 @@
               let IdPengeluaran = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
               setKodePengeluaran(listKodePengeluaran[IdPengeluaran]);
               setIsDateAvailable($('#kodepengeluaranheader').val())
-      
+
               $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[IdPengeluaran])
               $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[IdPengeluaran])
               $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
-            }else{
+            } else {
               createPengeluaranstokHeader();
             }
           }
@@ -1099,8 +1097,8 @@
       ])
       .then(() => {
         if (selectedRows.length > 0) {
-           clearSelectedRows()
-         }
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         // addRow()
         initRowcreate()
@@ -1145,28 +1143,28 @@
         setStatusBanDetailOptions(form),
         setStatusBanOptions(form)
       ])
-      .then((showPengeluaranStok)=>{
+      .then((showPengeluaranStok) => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
-        .then((showPengeluaranStok) => {
-  
-          let data = showPengeluaranStok;
-          if (selectedRows.length > 0) {
-             clearSelectedRows()
-           }
-          $('#crudModal').modal('show')
-          if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
-            form.find('[name]').attr('readonly', 'readonly')
-            form.find('[name=id]').prop('disabled', false)
-            form.find('[name="detail_keterangan[]"]').prop('readonly', false)
-  
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            name.attr('readonly', true)
-            name.find('.lookup-toggler').attr('disabled', true)
-  
-            $('.tbl_aksi').hide()
-          }
-  
-        })
+          .then((showPengeluaranStok) => {
+
+            let data = showPengeluaranStok;
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
+            $('#crudModal').modal('show')
+            if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
+              form.find('[name]').attr('readonly', 'readonly')
+              form.find('[name=id]').prop('disabled', false)
+              form.find('[name="detail_keterangan[]"]').prop('readonly', false)
+
+              let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+              name.attr('readonly', true)
+              name.find('.lookup-toggler').attr('disabled', true)
+
+              $('.tbl_aksi').hide()
+            }
+
+          })
       })
       .catch((error) => {
         console.log(error);
@@ -1224,8 +1222,8 @@
           })
           .then(() => {
             if (selectedRows.length > 0) {
-               clearSelectedRows()
-             }
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -1294,8 +1292,8 @@
           })
           .then(() => {
             if (selectedRows.length > 0) {
-               clearSelectedRows()
-             }
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
@@ -1524,6 +1522,7 @@
       }
     })
   }
+
   function getVulkanAfkir(stok_id) {
     $.ajax({
       url: `${apiUrl}stok/${stok_id}/getvulkan`,
@@ -1634,7 +1633,7 @@
       fileName: 'stok',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
-        if (kodePengeluaranStok == listKodePengeluaran[0]) {//spk
+        if (kodePengeluaranStok == listKodePengeluaran[0]) { //spk
           idpengeluaranstok = $(`#pengeluaranstokId`).val();
         }
         cekKelompok(row);
@@ -1709,7 +1708,7 @@
           $(`#detail_qty_oli${row}`).show()
           $(`#qtytestlookup${row}`).show()
           $(`#detail_qty${row}`).hide()
-          console.log(`#qtytestlookup${row}`,`detail_qty${row}`);
+          console.log(`#qtytestlookup${row}`, `detail_qty${row}`);
           dataStatusOli.forEach(statusOli => {
             let option = new Option(statusOli.text, statusOli.id)
 
@@ -2266,8 +2265,7 @@
                   $(`#detail_qty_oli${id}`).hide()
                   $(`#qtytestlookup${id}`).hide()
                   $(`#detail_qty${id}`).show()
-                }
-                else{
+                } else {
                   $(`#detail_qty_oli${id}`).show()
                   $(`#qtytestlookup${id}`).show()
                   $(`#detail_qty${id}`).hide()
@@ -2298,7 +2296,7 @@
                     KelompokId: KelompokId,
                     StokId: StokId,
                     isLookup: true
-                    
+
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -2361,7 +2359,7 @@
                   element.data('currentValue', element.val())
                   dataStatusOli.forEach(statusOli => {
                     let option = new Option(statusOli.text, statusOli.id)
-          
+
                     elStatusOli.append(option).trigger('change')
                   });
                 }
@@ -2429,7 +2427,7 @@
   }
 
 
-  function getSpb(detail_id,nobukti) {
+  function getSpb(detail_id, nobukti) {
     resetRow()
     $.ajax({
       url: `${apiUrl}penerimaanstokdetail`,
@@ -2575,11 +2573,11 @@
       let detailstokId = $('.detailstokId')
 
       KelompokId = $(detailstokKelompok).val();
-      StokId = $(detailstokId[0]).val();      
+      StokId = $(detailstokId[0]).val();
     }
   }
 
-  function cekValidasi(Id, Aksi,nobukti) {
+  function cekValidasi(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstokheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -2664,6 +2662,39 @@
         element.data('currentValue', element.val())
       }
     })
+    // $('.pengeluaranstok-lookup').lookupMaster({
+    //   title: 'pengeluaran stok Lookup',
+    //   fileName: 'pengeluaranstokMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'pengeluaranstok_id',
+    //       searchText: 'pengeluaranstok-lookup',
+    //       title: 'Pengeluaran Stok',
+    //       typeSearch: 'ALL',
+    //       roleInput: 'role',
+    //       isLookup: true
+    //     }
+    //   },
+    //   onSelectRow: (pengeluaranstok, element) => {
+    //     $('#crudForm [name=pengeluaranstok_id]').first().val(pengeluaranstok.id)
+    //     element.val(pengeluaranstok.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=pengeluaranstok_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+
     $('.supir-lookup').lookup({
       title: 'supir Lookup',
       fileName: 'supir',
@@ -2837,7 +2868,7 @@
         element.data('currentValue', element.val())
         enabledKorDisable()
       }
-    })    
+    })
 
     $(`.stok-lookup`).lookup({
       title: 'stok Lookup',
@@ -2856,8 +2887,8 @@
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
         getVulkanAfkir(stok.id)
-        
-        
+
+
         getJlhHari(stok.id)
 
         element.data('currentValue', element.val())
@@ -2875,7 +2906,6 @@
 
       }
     })
-
 
     $(`.pengeluarantrucking-lookup`).lookup({
       title: 'pengeluaran trucking Lookup',
@@ -2955,7 +2985,7 @@
         element.data('currentValue', element.val())
         penerimaanOrServicein('penerimaan')
         if (kodePengeluaranStok == listKodePengeluaran[1]) {
-          getSpb(penerimaan.id,penerimaan.nobukti)
+          getSpb(penerimaan.id, penerimaan.nobukti)
         }
       },
       beforeProcess: function(test) {

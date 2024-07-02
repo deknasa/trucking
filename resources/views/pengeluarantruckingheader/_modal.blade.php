@@ -42,7 +42,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="pengeluarantrucking_id">
-                <input type="text" name="pengeluarantrucking" class="form-control pengeluarantrucking-lookup">
+                <input type="text" id="pengeluarantrucking" name="pengeluarantrucking" class="form-control pengeluarantrucking-lookup">
               </div>
             </div>
 
@@ -8609,6 +8609,37 @@
         element.data('currentValue', element.val())
       }
     })
+    // $('.pengeluarantrucking-lookup').lookupMaster({
+    //   title: 'pengeluaran trucking Lookup',
+    //   fileName: 'pengeluarantruckingMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'pengeluarantrucking_id',
+    //       searchText: 'pengeluarantrucking-lookup',
+    //       title: 'Pengeluaran Trucking',
+    //       typeSearch: 'ALL',
+    //       roleInput: 'role',
+    //       isLookup: true
+    //     }
+    //   },
+    //   onSelectRow: (pengeluarantrucking, element) => {
+    //     $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
+    //     element.val(pengeluarantrucking.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=pengeluarantrucking_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
