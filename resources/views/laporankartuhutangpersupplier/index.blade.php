@@ -40,12 +40,12 @@
                             <label class="col-12 col-sm-1 col-form-label mt-2">SUPPLIER</label>
                             <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="supplierdari_id">
-                                <input type="text" name="supplierdari" class="form-control supplierdari-lookup">
+                                <input type="text" id="supplierdari" name="supplierdari" class="form-control supplierdari-lookup">
                             </div>
                             <h5 class="col-sm-1 mt-3 text-center">s/d</h5>
                             <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="suppliersampai_id">
-                                <input type="text" name="suppliersampai" class="form-control suppliersampai-lookup">
+                                <input type="text" id="suppliersampai" name="suppliersampai" class="form-control suppliersampai-lookup">
                             </div>
                         </div>
 
@@ -237,12 +237,20 @@
     }
 
     function initLookup() {
-        $('.supplierdari-lookup').lookup({
+
+        $('.supplierdari-lookup').lookupMaster({
             title: 'Supplier Lookup',
-            fileName: 'supplier',
+            fileName: 'supplierMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'supplierdari_id',
+                    searchText: 'supplierdari-lookup',
+                    title: 'Supplier Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -254,18 +262,25 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=supplierdari_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="supplierdari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
-        });
+        })
 
-        $('.suppliersampai-lookup').lookup({
+        $('.suppliersampai-lookup').lookupMaster({
             title: 'Supplier Lookup',
-            fileName: 'supplier',
+            fileName: 'supplierMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'suppliersampai_id',
+                    searchText: 'suppliersampai-lookup',
+                    title: 'Supplier Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -277,8 +292,8 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=suppliersampai_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="suppliersampai_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })

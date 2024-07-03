@@ -45,7 +45,8 @@ $idLookup = isset($id) ? $id : null;
 
       {
         label: 'JENIS ORDER',
-        name: 'kodejenisorder',
+        name: 'keterangan',
+        width: width
       },
 
     ];

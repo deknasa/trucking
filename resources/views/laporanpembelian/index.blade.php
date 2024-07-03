@@ -30,21 +30,20 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPPLIER<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="supplierdari_id">
-                                <input type="text" name="supplierdari" class="form-control supplierdari-lookup">
+                                <input type="text" id="supplierdari" name="supplierdari" class="form-control supplierdari-lookup">
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="suppliersampai_id">
-                                <input type="text" name="suppliersampai" class="form-control suppliersampai-lookup">
+                                <input type="text" id="suppliersampai" name="suppliersampai" class="form-control suppliersampai-lookup">
                             </div>
                         </div>
 
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">STATUS<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <select name="status" id="status" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
+                                <input type="hidden" name="status" id="status">
+                                <input type="text" id="status" name="statusnama" class="form-control status-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -89,8 +88,6 @@
 
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=status]'), false)
-        setLaporanPembelian($('#crudForm'))
 
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
@@ -103,7 +100,7 @@
             'change');
 
         initLookup()
-        
+
         if (!`{{ $myAuth->hasPermission('laporanpembelian', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -172,7 +169,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -243,12 +240,20 @@
     }
 
     function initLookup() {
-        $('.supplierdari-lookup').lookup({
+
+        $('.supplierdari-lookup').lookupMaster({
             title: 'Supplier Lookup',
-            fileName: 'supplier',
+            fileName: 'supplierMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'supplierdari_id',
+                    searchText: 'supplierdari-lookup',
+                    title: 'Supplier Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -260,11 +265,76 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=supplierdari_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="supplierdari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
-        });
+        })
+
+        $('.suppliersampai-lookup').lookupMaster({
+            title: 'Supplier Lookup',
+            fileName: 'supplierMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'suppliersampai_id',
+                    searchText: 'suppliersampai-lookup',
+                    title: 'Supplier Lookup',
+                    typeSearch: 'ALL',
+                }
+            },
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=suppliersampai_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=suppliersampai_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
+        $('.status-lookup').lookupMaster({
+            title: 'Status Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'LAPORAN PEMBELIAN',
+                    subgrp: 'LAPORAN PEMBELIAN',
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'status_id',
+                    searchText: 'status-lookup',
+                    title: 'Status Lookup',
+                    typeSearch: 'ALL',
+                    singleColumn: true,
+                    hideLabel: true,
+                }
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=status]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=status]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
 
         function getCekReport() {
             return new Promise((resolve, reject) => {
@@ -323,73 +393,6 @@
                 });
             });
         }
-
-
-        $('.suppliersampai-lookup').lookup({
-            title: 'Supplier Lookup',
-            fileName: 'supplier',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-                }
-            },
-            onSelectRow: (supplier, element) => {
-                $('#crudForm [name=suppliersampai_id]').first().val(supplier.id)
-                element.val(supplier.namasupplier)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                element.val('')
-                $(`#crudForm [name="suppliersampai_id"]`).first().val('')
-                element.data('currentValue', element.val())
-            }
-        })
-    }
-
-    const setLaporanPembelian = function(relatedForm) {
-        // return new Promise((resolve, reject) => {
-        // relatedForm.find('[name=approve]').empty()
-        relatedForm.find('[name=status]').append(
-            new Option('-- PILIH STATUS KEMBALI --', '', false, true)
-        ).trigger('change')
-
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'LAPORAN PEMBELIAN'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'LAPORAN PEMBELIAN'
-        })
-        $.ajax({
-            url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: data,
-            success: response => {
-
-                response.data.forEach(laporanPembelian => {
-                    let option = new Option(laporanPembelian.text, laporanPembelian.text)
-                    relatedForm.find('[name=status]').append(option).trigger('change')
-                });
-
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
-            }
-        })
-        // })
     }
 </script>
 @endpush()
