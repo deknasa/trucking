@@ -17,6 +17,8 @@
         ritasidarike: `{!! $RitasiDariKe ?? '' !!}`,
         zonadari_id: `{!! $zonadari_id ?? '' !!}`,
         zonasampai_id: `{!! $zonasampai_id ?? '' !!}`,
+        upahSupirDariKe: `{!! $upahSupirDariKe ?? '' !!}`,
+        upahSupirKotaDari: `{!! $upahSupirKotaDari ?? '' !!}`,
       },         
       idPrefix: 'kotaLookup',
       colModel: [{
