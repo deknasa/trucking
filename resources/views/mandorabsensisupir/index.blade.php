@@ -252,7 +252,7 @@
         
         <td>
           <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
-          <input type="text" name="absentrado[]"  data-current-value="" class="form-control  absentrado-lookup-${index}" value="">
+          <input type="text" name="absentrado[]"  data-current-value="" id="absentrado-${index}" class="form-control  absentrado-lookup-${index}" value="">
         </td>
         <td>
           <input type="hidden" name="jeniskendaraan_id[]" value="">
@@ -539,6 +539,49 @@
         setSupirEnableIndex(false, index)
       }
     })
+
+    // $(`.absentrado-lookup-${rowLookup}`).last().lookupMaster({
+    //   title: 'Absen Trado Lookup',
+    //   fileName: 'absentradoMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   detail: true,
+    //   miniSize: true,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       trado_id: detail.trado_id,
+    //       supir_id: detail.supir_id,
+    //       supirold_id: detail.supir_id_old,
+    //       tglabsensi: $('#tglbukaabsensi').val(),
+    //       dari: 'mandorabsensisupir',
+    //       valueName: `absen_id`,
+    //       typeSearch: 'ALL',
+    //       searching: 1,
+    //       searchText: `absentrado-${index}`,
+    //       title: 'ABSEN TRADO'
+    //     }
+    //   },
+    //   onSelectRow: (absentrado, element) => {
+    //     getabsentrado(absentrado.id).then((response) => {
+    //       setSupirEnableIndex(response, index)
+    //     }).catch(() => {
+    //       setSupirEnableIndex(false, index)
+    //     })
+    //     element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
+    //     element.val(absentrado.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="absen_id[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     setSupirEnableIndex(false, index)
+    //   }
+    // })
     $(`.jeniskendaraan-lookup-${rowLookup}`).last().lookupMaster({
       title: 'Jenis Kendaraan',
       fileName: 'parameterMaster',

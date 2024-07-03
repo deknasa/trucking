@@ -72,7 +72,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="alatbayar_id">
-                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
               </div>
             </div>
 
@@ -984,6 +984,38 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.alatbayar-lookup').lookupMaster({
+    //   title: 'Alat Bayar Lookup',
+    //   fileName: 'alatbayarMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     // const bank_ID=0        
+    //     this.postData = {
+    //       bank_Id: bankId,
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'alatbayar_id',
+    //       searchText: 'alatbayar-lookup',
+    //       title: 'alat bayar',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (alatbayar, element) => {
+    //     $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+    //     element.val(alatbayar.namaalatbayar)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $(`#crudForm [name="alatbayar_id"]`).first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
