@@ -39,12 +39,12 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">CUSTOMER (DARI)</label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="agendari_id">
-                                <input type="text" name="agendari" class="form-control agendari-lookup">
+                                <input type="text" id="agendari" name="agendari" class="form-control agendari-lookup">
                             </div>
                             <h5 class="col-sm-1 mt-3 text-center">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="agensampai_id">
-                                <input type="text" name="agensampai" class="form-control agensampai-lookup">
+                                <input type="text" id="agensampai" name="agensampai" class="form-control agensampai-lookup">
                             </div>
                         </div>
 
@@ -233,12 +233,20 @@
     }
 
     function initLookup() {
-        $('.agendari-lookup').lookup({
+
+        $('.agendari-lookup').lookupMaster({
             title: 'Customer Lookup',
-            fileName: 'agen',
+            fileName: 'agenMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'agendari_id',
+                    searchText: 'agendari-lookup',
+                    title: 'Customer Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (agen, element) => {
@@ -250,18 +258,25 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=agendari_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="agendari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
-        });
+        })
 
-        $('.agensampai-lookup').lookup({
+        $('.agensampai-lookup').lookupMaster({
             title: 'Customer Lookup',
-            fileName: 'agen',
+            fileName: 'agenMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'agensampai_id',
+                    searchText: 'agensampai-lookup',
+                    title: 'Customer Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (agen, element) => {
@@ -273,8 +288,8 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=agensampai_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="agensampai_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })

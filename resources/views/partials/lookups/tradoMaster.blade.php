@@ -179,6 +179,15 @@ $idLookup = isset($id) ? $id : null;
         name: 'nobpkb',
       },
       {
+        label: 'SUPIR',
+        name: 'supir_id',
+      },
+      {
+        label: 'SUPIRID',
+        name: 'supirid',
+        hidden: true
+      },
+      {
         label: 'MANDOR',
         name: 'mandor_id',
       },

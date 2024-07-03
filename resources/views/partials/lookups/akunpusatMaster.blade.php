@@ -141,12 +141,6 @@ $idLookup = isset($id) ? $id : null;
         align: 'left',
       },
       {
-        label: 'KODE PERKIRAAN',
-        name: 'coa',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left',
-      },
-      {
         label: 'NAMA',
         name: 'keterangancoa',
         align: 'left',

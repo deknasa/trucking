@@ -27,7 +27,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Kas/Bank<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" class="form-control bank-lookup">
+                                <input type="text" id="bank" name="bank" class="form-control bank-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -152,9 +152,21 @@
 
     function initLookup() {
 
-        $('.bank-lookup').lookup({
+        $('.bank-lookup').lookupMaster({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'bank_id',
+                    searchText: 'bank-lookup',
+                    title: 'bank Lookup',
+                    typeSearch: 'ALL',
+                }
+            },
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)
