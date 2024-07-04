@@ -196,6 +196,20 @@
                 </select>
               </div>
             </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS LANGSIR
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="statuslangsir">
+                <input type="text" name="statuslangsirnama" id="statuslangsirnama" class="form-control lg-form statuslangsir-lookup">
+              </div>
+            </div>
+
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -1445,6 +1459,10 @@
             if (index == 'tarifimport') {
               element.data('currentValue', value)
             }
+             // TAMBAH INI
+             if (index == 'statuslangsirnama') {
+              element.data('current-value', value)
+            }
             // if(!parent && aksiEdit == true){
             //   console.log('tru kaaa')
             //   if (index == 'tujuan' || index == 'penyesuaian' || index == 'kotadari' || index == 'kotasampai' || index == 'zona' || index == 'parent' || index == 'tarif') {
@@ -2278,6 +2296,40 @@
         $('#crudForm [name=tarifimport_id]').val('')
       }
     })
+
+    $(`.statuslangsir-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS langsir',
+          subgrp: 'STATUS langsir',
+          searching: 1,
+          valueName: `statuslangsir`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status langsir'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statuslangsir]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = $('#crudForm [name=statuslangsir]').first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()

@@ -85,329 +85,373 @@
 
   $(document).ready(function() {
     setTampilanIndex()
+    function createColModel() {
+      return [
+        {
+          label: '',
+          name: 'check',
+          width: 30,
+          align: 'center',
+          sortable: false,
+          clear: false,
+          stype: 'input',
+          searchable: false,
+          searchoptions: {
+            type: 'checkbox',
+            clearSearch: false,
+            dataInit: function(element) {
+              $(element).removeClass('form-control')
+              $(element).parent().addClass('text-center')
+    
+              $(element).on('click', function() {
+    
+                $(element).attr('disabled', true)
+                if ($(this).is(':checked')) {
+                  selectAllRows()
+                } else {
+                  clearSelectedRows()
+                }
+              })
+    
+            }
+          },
+          formatter: (value, rowOptions, rowData) => {
+            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+          },
+        },
+        {
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'PARENT',
+          name: 'parent_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left'
+        },
+        {
+          label: 'TARIF',
+          name: 'tarif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left'
+        },
+        {
+          label: 'DARI',
+          name: 'kotadari_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left'
+        },
+        {
+          label: 'TUJUAN',
+          name: 'kotasampai_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left'
+        },
+        {
+          label: 'PENYESUAIAN',
+          name: 'penyesuaian',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+          align: 'left'
+        },
+        {
+          label: 'ZONA DARI',
+          name: 'zonadari_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left'
+        },
+        {
+          label: 'ZONA SAMPAI',
+          name: 'zonasampai_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left'
+        },
+        {
+          label: 'JARAK',
+          name: 'jarak',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          align: 'right',
+        },
+        {
+          label: 'JARAK FULL/EMPTY',
+          name: 'jarakfullempty',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+          align: 'right',
+        },
+        {
+          label: 'ZONA',
+          name: 'zona_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left'
+        },
+        {
+          label: 'STATUS',
+          name: 'statusaktif',
+          stype: 'select',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          searchoptions: {
+            value: `<?php
+                    $i = 1;
+    
+                    foreach ($data['combo'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combo'])) {
+                        echo ";";
+                      }
+                      $i++;
+                    endforeach
+    
+                    ?>
+          `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            if (!value) {
+              return ''
+            }
+            let statusAktif = JSON.parse(value)
+    
+            let formattedValue = $(`
+              <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+                <span>${statusAktif.SINGKATAN}</span>
+              </div>
+            `)
+    
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            if (!rowObject.statusaktif) {
+              return ''
+            }
+            let statusAktif = JSON.parse(rowObject.statusaktif)
+    
+            return ` title="${statusAktif.MEMO}"`
+          }
+        },
+        {
+          label: 'STATUS UPAH ZONA',
+          name: 'statusupahzona',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          stype: 'select',
+          searchoptions: {
+            value: `<?php
+                    $i = 1;
+    
+                    foreach ($data['combo'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combo'])) {
+                        echo ";";
+                      }
+                      $i++;
+                    endforeach
+    
+                    ?>
+          `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            if (!value) {
+              return ''
+            }
+            let statusUpahZona = JSON.parse(value)
+    
+            let formattedValue = $(`
+              <div class="badge" style="background-color: ${statusUpahZona.WARNA}; color: #fff;">
+                <span>${statusUpahZona.SINGKATAN}</span>
+              </div>
+            `)
+    
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            if (!rowObject.statusupahzona) {
+              return ''
+            }
+            let statusUpahZona = JSON.parse(rowObject.statusupahzona)
+    
+            return ` title="${statusUpahZona.MEMO}"`
+          }
+        },
+        {
+          label: 'TGL MULAI BERLAKU',
+          name: 'tglmulaiberlaku',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+    
+        {
+          label: 'Keterangan',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+          name: 'keterangan',
+        },
+        {
+          label: 'STATUS POSTING TNL',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          name: 'statuspostingtnl',
+          width: 230,
+          stype: 'select',
+          searchoptions: {
+            value: `<?php
+                    $i = 1;
+    
+                    foreach ($data['combopostingtnl'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combopostingtnl'])) {
+                        echo ";";
+                      }
+                      $i++;
+                    endforeach
+    
+                    ?>
+          `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusPostingTnl = JSON.parse(value)
+            if (!statusPostingTnl) {
+              return ''
+            }
+    
+            let formattedValue = $(`
+              <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
+                <span>${statusPostingTnl.SINGKATAN}</span>
+              </div>
+            `)
+    
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            if (!rowObject.statuspostingtnl) {
+              return ` title=""`
+            }
+            let statusPostingTnl = JSON.parse(rowObject.statuspostingtnl)
+            return ` title="${statusPostingTnl.MEMO}"`
+          }
+        },
+    
+        {
+          label: 'MAP',
+          name: 'gambar',
+          align: 'center',
+          search: false,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+    
+          formatter: (value, row) => {
+            let images = []
+    
+            if (value) {
+              let files = JSON.parse(value)
+    
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src =
+                  `${apiUrl}upahsupir/${encodeURI(file)}/small`
+    
+                images.push(image.outerHTML)
+              });
+    
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}upahsupir/no-image/small`
+              return image.outerHTML
+            }
+          }
+        },
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left'
+        },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          align: 'right',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+      ];
+    }
+    function getSavedColumnOrder() {
+      return JSON.parse(localStorage.getItem(`tas${window.location.href}`));
+    }
+    // Menyimpan urutan kolom ke local storage
+    function saveColumnOrder() {
+      var colOrder = $("#jqGrid").jqGrid("getGridParam", "colModel").map(function(col) {
+        return col.name;
+      });
+      localStorage.setItem(`tas${window.location.href}`, JSON.stringify(colOrder));
+    }
+    // Mengatur ulang urutan colModel berdasarkan urutan yang disimpan
+    function reorderColModel(colModel, colOrder) {
+      if (!colOrder) return colModel;
+      var orderedColModel = [];
+      colOrder.forEach(function(colName) {
+        var col = colModel.find(function(c) {
+          return c.name === colName;
+        });
+        if (col) orderedColModel.push(col);
+      });
+      return orderedColModel;
+    }
+    var colModel = createColModel();
+    var savedColOrder = getSavedColumnOrder();
+    var orderedColModel = reorderColModel(colModel, savedColOrder);
+    
+
+    
     $("#jqGrid").jqGrid({
         url: `${apiUrl}upahsupir`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [{
-            label: '',
-            name: 'check',
-            width: 30,
-            align: 'center',
-            sortable: false,
-            clear: false,
-            stype: 'input',
-            searchable: false,
-            searchoptions: {
-              type: 'checkbox',
-              clearSearch: false,
-              dataInit: function(element) {
-                $(element).removeClass('form-control')
-                $(element).parent().addClass('text-center')
-
-                $(element).on('click', function() {
-
-                  $(element).attr('disabled', true)
-                  if ($(this).is(':checked')) {
-                    selectAllRows()
-                  } else {
-                    clearSelectedRows()
-                  }
-                })
-
-              }
-            },
-            formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
-            },
-          },
-          {
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'PARENT',
-            name: 'parent_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
-            label: 'TARIF',
-            name: 'tarif',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left'
-          },
-          {
-            label: 'DARI',
-            name: 'kotadari_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left'
-          },
-          {
-            label: 'TUJUAN',
-            name: 'kotasampai_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left'
-          },
-          {
-            label: 'PENYESUAIAN',
-            name: 'penyesuaian',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-            align: 'left'
-          },
-          {
-            label: 'ZONA DARI',
-            name: 'zonadari_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left'
-          },
-          {
-            label: 'ZONA SAMPAI',
-            name: 'zonasampai_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left'
-          },
-          {
-            label: 'JARAK',
-            name: 'jarak',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            align: 'right',
-          },
-          {
-            label: 'JARAK FULL/EMPTY',
-            name: 'jarakfullempty',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
-            align: 'right',
-          },
-          {
-            label: 'ZONA',
-            name: 'zona_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left'
-          },
-          {
-            label: 'STATUS',
-            name: 'statusaktif',
-            stype: 'select',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combo'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusAktif = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusAktif = JSON.parse(rowObject.statusaktif)
-
-              return ` title="${statusAktif.MEMO}"`
-            }
-          },
-          {
-            label: 'STATUS UPAH ZONA',
-            name: 'statusupahzona',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combo'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusUpahZona = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusUpahZona.WARNA}; color: #fff;">
-                  <span>${statusUpahZona.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusUpahZona = JSON.parse(rowObject.statusupahzona)
-
-              return ` title="${statusUpahZona.MEMO}"`
-            }
-          },
-          {
-            label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-
-          {
-            label: 'Keterangan',
-            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
-            name: 'keterangan',
-          },
-          {
-            label: 'STATUS POSTING TNL',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            name: 'statuspostingtnl',
-            width: 230,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combopostingtnl'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combopostingtnl'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusPostingTnl = JSON.parse(value)
-              if (!statusPostingTnl) {
-                return ''
-              }
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
-                  <span>${statusPostingTnl.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusPostingTnl = JSON.parse(rowObject.statuspostingtnl)
-              if (!statusPostingTnl) {
-                return ` title=""`
-              }
-              return ` title="${statusPostingTnl.MEMO}"`
-            }
-          },
-
-          {
-            label: 'MAP',
-            name: 'gambar',
-            align: 'center',
-            search: false,
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-
-            formatter: (value, row) => {
-              let images = []
-
-              if (value) {
-                let files = JSON.parse(value)
-
-                files.forEach(file => {
-                  if (file == '') {
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src =
-                    `${apiUrl}upahsupir/${encodeURI(file)}/small`
-
-                  images.push(image.outerHTML)
-                });
-
-                return images.join(' ')
-              } else {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}upahsupir/no-image/small`
-                return image.outerHTML
-              }
-            }
-          },
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-        ],
+        colModel: orderedColModel,
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -646,6 +690,12 @@
 
         ]
       })
+      $("thead tr.ui-jqgrid-labels").sortable({
+        stop: function(event, ui) {
+          saveColumnOrder();
+          console.log("Column order updated!");
+        }
+      });
 
     /* Append clear filter button */
     loadClearFilter($('#jqGrid'))
