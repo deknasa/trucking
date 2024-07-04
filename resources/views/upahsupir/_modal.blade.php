@@ -196,6 +196,20 @@
                 </select>
               </div>
             </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS LANGSIR
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="statuslangsir">
+                <input type="text" name="statuslangsirnama" id="statuslangsirnama" class="form-control lg-form statuslangsir-lookup">
+              </div>
+            </div>
+
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -232,7 +246,7 @@
                 </select>
               </div>
             </div> --}}
-            <div class="row form-group statussimpankandang" id="simpanKandang">
+            {{-- <div class="row form-group statussimpankandang" id="simpanKandang">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS SIMPAN KANDANG <span class="text-danger">*</span>
@@ -243,20 +257,9 @@
                   <option value="">-- PILIH STATUS SIMPAN KANDANG --</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
 
-            <div class="row form-group statuspostingtnl">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  STATUS POSTING TNL <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statuspostingtnl" class="form-control select2bs4" z-index="6">
-                  <option value="">-- PILIH STATUS POSTING TNL --</option>
-                </select>
-              </div>
-            </div>
+           
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -726,9 +729,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusSimpanKandangOptions(form),
         setStatusUpahZonaOptions(form),
-        setStatusPostingTnlOptions(form),
+        
         setTampilan(form),
         getMaxLength(form)
       ])
@@ -776,7 +778,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusUpahZonaOptions(form),
-        setStatusPostingTnlOptions(form),
+        
         setTampilan(form),
         getMaxLength(form)
       ])
@@ -834,7 +836,7 @@
               name.children().find('.lookup-toggler').attr('disabled', false)
 
             }
-            $('#simpanKandang').hide()
+            // $('#simpanKandang').hide()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -864,7 +866,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        
         setTampilan(form),
         getMaxLength(form)
       ])
@@ -882,7 +884,7 @@
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
 
 
-            $('#simpanKandang').hide()
+            // $('#simpanKandang').hide()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -913,7 +915,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        
         setTampilan(form),
         getMaxLength(form)
       ])
@@ -949,7 +951,7 @@
             name.find('.lookup-toggler').attr('disabled', true)
             $(".dz-hidden-input").prop("disabled", true);
 
-            $('#simpanKandang').hide()
+            // $('#simpanKandang').hide()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -999,45 +1001,49 @@
     })
   }
 
-  const setStatusPostingTnlOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuspostingtnl]').empty()
-      relatedForm.find('[name=statuspostingtnl]').append(
-        new Option('-- PILIH POSTING TNL --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS POSTING TNL"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statuspostingTnl => {
-            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
-
-            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
-          });
-
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  /**
+   * 
+   const setStatusPostingTnlOptions = function(relatedForm) {
+     return new Promise((resolve, reject) => {
+       relatedForm.find('[name=statuspostingtnl]').empty()
+       relatedForm.find('[name=statuspostingtnl]').append(
+         new Option('-- PILIH POSTING TNL --', '', false, true)
+       ).trigger('change')
+ 
+       $.ajax({
+         url: `${apiUrl}parameter`,
+         method: 'GET',
+         dataType: 'JSON',
+         headers: {
+           Authorization: `Bearer ${accessToken}`
+         },
+         data: {
+           filters: JSON.stringify({
+             "groupOp": "AND",
+             "rules": [{
+               "field": "grp",
+               "op": "cn",
+               "data": "STATUS POSTING TNL"
+             }]
+           })
+         },
+         success: response => {
+           response.data.forEach(statuspostingTnl => {
+             let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+ 
+             relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+           });
+ 
+           resolve()
+         },
+         error: error => {
+           reject(error)
+         }
+       })
+     })
+   }
+   * 
+  */
 
   function cekValidasidelete(Id, aksi) {
     $.ajax({
@@ -1308,6 +1314,7 @@
     })
   }
 
+  /*
   const setStatusSimpanKandangOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statussimpankandang]').empty()
@@ -1348,6 +1355,7 @@
       })
     })
   }
+  */
 
   const setStatusUpahZonaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -1406,7 +1414,7 @@
             delete response.data['parent_id'];
             delete response.data['parent'];
             delete response.data['penyesuaian'];
-            delete response.data['statuspostingtnl'];
+            // delete response.data['statuspostingtnl'];
             delete response.data['tglmulaiberlaku'];
             delete response.data['tarif'];
             delete response.data['tarif_id'];
@@ -1431,11 +1439,11 @@
               element.val(value)
             }
 
-            if (index == 'statuspostingtnl') {
-              if (!parent) {
-                element.prop('disabled', true)
-              }
-            }
+            // if (index == 'statuspostingtnl') {
+            //   if (!parent) {
+            //     element.prop('disabled', true)
+            //   }
+            // }
             if (index == 'tarif') {
               element.data('currentValue', value)
             }
@@ -1450,6 +1458,10 @@
             }
             if (index == 'tarifimport') {
               element.data('currentValue', value)
+            }
+             // TAMBAH INI
+             if (index == 'statuslangsirnama') {
+              element.data('current-value', value)
             }
             // if(!parent && aksiEdit == true){
             //   console.log('tru kaaa')
@@ -2013,7 +2025,7 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          upahSupirDariKe:'dari',
           Aktif: 'AKTIF',
         }
       },
@@ -2038,7 +2050,8 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          upahSupirDariKe:'ke',
+          upahSupirKotaDari:$('#crudForm [name=kotadari_id]').first().val(),
           Aktif: 'AKTIF',
         }
       },
@@ -2283,6 +2296,40 @@
         $('#crudForm [name=tarifimport_id]').val('')
       }
     })
+
+    $(`.statuslangsir-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS langsir',
+          subgrp: 'STATUS langsir',
+          searching: 1,
+          valueName: `statuslangsir`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status langsir'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statuslangsir]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = $('#crudForm [name=statuslangsir]').first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()
