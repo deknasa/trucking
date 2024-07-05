@@ -23,11 +23,27 @@ class LaporanKasBankController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Laporan Kas/Bank',
+            'defaultperiode' => $this->defaultperiode(),
         ];
 
-        return view('laporankasbank.index', compact('title'));
+        return view('laporankasbank.index', compact('title','data'));
     }
 
+    public function defaultperiode()
+    {
+
+        $status = [
+            'grp' => "PERIODE DATA",
+            'subgrp' => "PERIODE DATA",
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getdegfault', $status);
+
+        return $response['data'];
+    }
     public function report(Request $request)
     {
         $detailParams = [
