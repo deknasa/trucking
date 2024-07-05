@@ -36,6 +36,15 @@
                             </div>
                         </div>
                         <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">PERIODE DATA<span class="text-danger">*</span></label>
+                            <div class="col-sm-4 mt-2">
+                                <div class="input-group">
+                                    <input type="hidden" value="{{$data['defaultperiode']['id']}}" name="periodedata_id">
+                                    <input type="text" id="periodedata" value="{{$data['defaultperiode']['text']}}" name="periodedata" class="form-control periodedata-lookup">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-6 mt-4">
                                 <div class="btn-group dropup  scrollable-menu">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" id="btnPreview">
@@ -100,9 +109,11 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
+        let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
         getCekReport().then((response) => {
-            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&printer=reportPrinterBesar`)
+            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}&printer=reportPrinterBesar`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -123,9 +134,11 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
+        let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
         getCekReport().then((response) => {
-            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&printer=reportPrinterKecil`)
+            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}&printer=reportPrinterKecil`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -147,8 +160,11 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
+        let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        let periodedata = $('#crudForm').find('[name=periodedata]').val()
+
         $.ajax({
-            url: `{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`,
+            url: `{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
             type: 'GET',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -193,6 +209,8 @@
                     sampai: $('#crudForm').find('[name=sampai]').val(),
                     bank: $('#crudForm').find('[name=bank]').val(),
                     bank_id: $('#crudForm').find('[name=bank_id]').val(),
+                    periodedata: $('#crudForm').find('[name=periodedata]').val(),
+                    periodedata_id: $('#crudForm').find('[name=periodedata_id]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
@@ -220,6 +238,8 @@
                     sampai: $('#crudForm').find('[name=sampai]').val(),
                     bank: $('#crudForm').find('[name=bank]').val(),
                     bank_id: $('#crudForm').find('[name=bank_id]').val(),
+                    periodedata: $('#crudForm').find('[name=periodedata]').val(),
+                    periodedata_id: $('#crudForm').find('[name=periodedata_id]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
@@ -263,6 +283,40 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        $(`.periodedata-lookup`).lookupMaster({
+            title: 'PERIODE DATA Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                url: `${apiUrl}parameter/combo`,
+                grp: 'PERIODE DATA',
+                subgrp: 'PERIODE DATA',
+                searching: 1,
+                valueName: `periodedata_id`,
+                searchText: `periodedata-lookup`,
+                singleColumn: true,
+                hideLabel: true,
+                title: 'PERIODE DATA'
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=periodedata_id]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                let status_id_input = $('#crudForm [name=periodedata_id]').first();
+                status_id_input.val('');
+                element.val('');
+                element.data('currentValue', element.val());
+            },
+        });
     }
 </script>
 @endpush()
