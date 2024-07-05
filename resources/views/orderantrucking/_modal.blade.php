@@ -82,6 +82,16 @@
                 <input type="text" id="pelanggan" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NO GANDENGAN / CHASIS  <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="gandengan_id">
+                <input type="text" id="gandengan" name="gandengan" class="form-control gandengan-lookup">
+              </div>
+            </div>
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -200,6 +210,7 @@
   var isAllowEdited;
   let orderemklshipper
   var jenisKendaraanTangki;
+  var isTangki = false;
 
 
   $(document).ready(function() {
@@ -906,12 +917,16 @@
             if (index == 'nojobemkl2') {
               element.data('current-value', value)
             }
+            if (index == 'gandengan') {
+              element.data('current-value', value)
+            }
 
             if (index == 'agen_id') {
               getagentas(form, value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
             }
           })
           if (jenisKendaraanTangki == response.data.statusjeniskendaraan) {
+            isTangki = true
             let container = $('#crudForm').find(`[name="container"]`).parents('.form-group').hide()
             let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.form-group').hide()
             let nojobemkl = $('#crudForm').find(`[name="nojobemkl"]`).parents('.form-group').hide()
@@ -1261,6 +1276,42 @@
       onClear: (element) => {
         $('#crudForm [name=pelanggan_id]').first().val('')
         element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.gandengan-lookup').lookup({
+      title: 'Gandengan Lookup',
+      fileName: 'gandengan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        var jeniskendaraan = '';
+        if (isTangki) {
+          jeniskendaraan = jenisKendaraanTangki
+        }
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          statusjeniskendaraan: jeniskendaraan,
+        }
+      },
+      onSelectRow: (gandengan, element) => {
+        $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+        if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+          gandenganId = gandengan.id
+        }
+        element.val(gandengan.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=gandengan_id]').first().val('')
+        element.val('')
+        if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+          gandenganId = 0
+        }
         element.data('currentValue', element.val())
       }
     })
