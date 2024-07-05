@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "8b4cdc3da5d8152cf32b83eec92a4cb6",
+  "ReportGuid": "c11c2ae694107f76d6c088ad845525d0",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranKasBesarPusat.mrt",
+  "ReportFile": "http://server:8074/trucking/public/reports/ReportPengeluaranKasBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718099593000+0700)/",
+  "ReportChanged": "/Date(1720151263000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1318,7 +1318,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "Type": "DataColumn"
             },
             "1": {
@@ -1344,7 +1344,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "Type": "DataColumn"
             },
             "2": {
@@ -1371,7 +1371,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "TextFormat": {
                 "Ident": "StiNumberFormatService",
                 "NegativePattern": 1,

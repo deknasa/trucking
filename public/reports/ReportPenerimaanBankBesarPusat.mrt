@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "84bd06e3671ec367ea03f558042c6f19",
+  "ReportGuid": "b049868539385033572a754900c13a20",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanBankBesarPusat.mrt",
+  "ReportFile": "http://server:8074/trucking/public/reports/ReportPenerimaanBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718099608000+0700)/",
+  "ReportChanged": "/Date(1720151657000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1549,7 +1549,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "Type": "DataColumn"
             },
             "1": {
@@ -1575,7 +1575,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "Type": "DataColumn"
             },
             "2": {
@@ -1602,7 +1602,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "TextFormat": {
                 "Ident": "StiNumberFormatService",
                 "NegativePattern": 1,
@@ -1634,7 +1634,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "Type": "DataColumn"
             },
             "4": {
@@ -1660,7 +1660,7 @@
                 "WordWrap": true
               },
               "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
+              "ShrinkFontToFitMinimumSize": 8,
               "Type": "DataColumn"
             },
             "5": {
