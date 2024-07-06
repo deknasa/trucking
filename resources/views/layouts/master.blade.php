@@ -747,7 +747,8 @@
 
       let data = {
         tgldari: $('#tgldariheader').val(),
-        tglsampai: $('#tglsampaiheader').val()
+        tglsampai: $('#tglsampaiheader').val(),
+        proses: 'reload'
       }
       data = {
         ...data,

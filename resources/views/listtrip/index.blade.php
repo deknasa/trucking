@@ -111,6 +111,11 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+          },
+          {
             label: 'SHIPPER',
             name: 'pelanggan_id',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
