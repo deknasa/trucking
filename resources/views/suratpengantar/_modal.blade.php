@@ -58,20 +58,29 @@
                     </select>
                   </div>
                 </div>
-                <div class="form-group statusupahzona">
-                  <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <select name="statusupahzona" class="form-control select2bs4" id="statusupahzona">
-                      <option value="">-- PILIH STATUS UPAH ZONA --</option>
-                    </select>
-                  </div>
-                </div>
 
-                <div class="form-group statuskandang">
+                <!-- <div class="form-group statuskandang">
                   <label class="col-sm-12 col-form-label">STATUS KANDANG <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statuskandang" class="form-control select2bs4" id="statuskandang">
                       <option value="">-- PILIH STATUS KANDANG--</option>
+                    </select>
+                  </div>
+                </div> -->
+                <div class="form-group statuslangsir">
+                  <label class="col-sm-12 col-form-label">STATUS LANGSIR</label>
+                  <div class="col-sm-12">
+                    <select name="statuslangsir" class="form-control select2bs4" id="statuslangsir">
+                      <option value="">-- PILIH STATUS LANGSIR--</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group statuspenyesuaian">
+                  <label class="col-sm-12 col-form-label">STATUS PENYESUAIAN <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statuspenyesuaian" class="form-control select2bs4" id="statuspenyesuaian">
+                      <option value="">-- PILIH STATUS PENYESUAIAN--</option>
                     </select>
                   </div>
                 </div>
@@ -103,7 +112,14 @@
                     <input type="text" name="container" class="form-control container-lookup">
                   </div>
                 </div>
-                <div class="form-group ">
+
+                <div id="tripasalpulanglongtrip">
+
+                </div>
+                <div id="kotaLongtrip">
+
+                </div>
+                <div class="form-group upahsupir">
                   <label class="col-sm-12 col-form-label">UPAH SUPIR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="upah_id">
@@ -111,18 +127,10 @@
                   </div>
                 </div>
 
-                <div class="form-group ">
+                <div class="form-group penyesuaian">
                   <label class="col-sm-12 col-form-label">PENYESUAIAN</label>
                   <div class="col-sm-12">
                     <input type="text" name="penyesuaian" class="form-control" readonly>
-                  </div>
-                </div>
-
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">DARI <span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <input type="hidden" name="dari_id">
-                    <input type="text" name="dari" class="form-control kotadari-lookup" readonly>
                   </div>
                 </div>
 
@@ -143,11 +151,24 @@
                   </div>
                 </div> -->
 
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">SAMPAI <span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <input type="hidden" name="sampai_id">
-                    <input type="text" name="sampai" class="form-control kotasampai-lookup" readonly>
+                <div id="tripasalpulanglongtrip">
+
+                </div>
+                <div id="kotaTrip">
+                  <div class="form-group dari">
+                    <label class="col-sm-12 col-form-label">DARI <span class="text-danger">*</span></label>
+                    <div class="col-sm-12">
+                      <input type="hidden" name="dari_id">
+                      <input type="text" name="dari" class="form-control kotadari-lookup" readonly>
+                    </div>
+                  </div>
+
+                  <div class="form-group sampai">
+                    <label class="col-sm-12 col-form-label">SAMPAI <span class="text-danger">*</span></label>
+                    <div class="col-sm-12">
+                      <input type="hidden" name="sampai_id">
+                      <input type="text" name="sampai" class="form-control kotasampai-lookup" readonly>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group ">
@@ -347,11 +368,12 @@
                     </select>
                   </div>
                 </div>
-
-                <div class="form-group nobukti_tripasal">
-                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                <div id="tripasal">
+                  <div class="form-group nobukti_tripasal">
+                    <label class="col-sm-12 col-form-label">TRIP ASAL</label>
+                    <div class="col-sm-12">
+                      <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -583,6 +605,7 @@
   let isShow = false
   let upahId = 0
   let editUpahZona
+  let editStatusPenyesuaian
   let indexDetail = 0
   let isTripAsal = true;
   let isPulangLongtrip;
@@ -594,7 +617,9 @@
     $('.nobukti_tripasal').hide()
 
     $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
-      setPersentase()
+      if ($(`#crudForm [name="statuslongtrip"]`).val() != 65) {
+        setPersentase()
+      }
     })
     $(document).on('input', `#crudForm [name="persentaseperalihan"]`, function(event) {
       setNominal()
@@ -794,6 +819,10 @@
           name: 'statusupahzona',
           value: editUpahZona
         })
+        data.push({
+          name: 'statuspenyesuaian',
+          value: editStatusPenyesuaian
+        })
       }
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
@@ -824,6 +853,10 @@
       data.push({
         name: 'statusjeniskendaraan',
         value: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val()
+      })
+      data.push({
+        name: 'statuslongtrip',
+        value: $('#crudForm').find(`[name="statuslongtrip"]`).val()
       })
       data.push({
         name: 'sortIndex',
@@ -984,9 +1017,15 @@
       $('.gudang').show()
       $('.hargaton').hide()
       $('.qtyton').hide()
-      $('.gandengan').hide()
+      if (accessCabang != 'MEDAN') {
+        $('.gandengan').hide()
+      }
       $('.triptangki').hide()
       $('.gandengan').find('label').text('No GANDENGAN / CHASIS')
+      if (accessCabang == 'MEDAN') {
+        let textDanger = $(`<span class="text-danger">*</span>`)
+        textDanger.appendTo($('.gandengan').find('label'))
+      }
       let upahsupir = $('#crudForm [name=upah]')
 
       upahsupir.val('')
@@ -1006,9 +1045,19 @@
       // clearTripAsal()
       isPulangLongtrip = false;
     }
+    moveKotaUpah(statuslongtrip)
     enableTripAsalLongTrip()
     console.log('berubah longtrip')
     clearUpahSupir()
+  })
+
+  $(document).on('change', `#crudForm [name="statuspenyesuaian"]`, function(event) {
+    if ($(`#crudForm [name="statuspenyesuaian"]`).val() != '') {
+      $('#crudForm [name=upah]').data('currentValue', '')
+      $('#crudForm [name=upah]').val('')
+      $('#crudForm [name=upah_id]').val('')
+      clearUpahSupir()
+    }
   })
 
 
@@ -1191,8 +1240,9 @@
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
-        setStatusUpahZonaOptions(form),
-        setStatusKandangOptions(form),
+        // setStatusKandangOptions(form),
+        setStatusPenyesuaianOptions(form),
+        setStatusLangsirOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1207,17 +1257,27 @@
             $('#crudForm').find('[name=statusjeniskendaraan]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
+            $('#crudForm').find('[name=statuslongtrip]').attr('disabled', 'disabled')
+            $('#crudForm').find('[name=statuslangsir]').attr('disabled', 'disabled')
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             inputReadOnly()
             editValidasi(isAllowEdited);
 
-            if (statusJenisKendaran == 'TANGKI') {
+            // if (statusJenisKendaran == 'TANGKI') {
 
-              $('#crudForm [name=jobtrucking]').attr('readonly', true)
-              $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').hide()
-              $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
+            $('#crudForm [name=jobtrucking]').attr('readonly', true)
+            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').hide()
+            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
+            // }
+
+            if (accessCabang == 'MEDAN') {
+              $('#crudForm [name=gandengan]').attr('readonly', true)
+              $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
+              $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
             }
+
+            moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -1253,8 +1313,9 @@
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
-        setStatusUpahZonaOptions(form),
-        setStatusKandangOptions(form),
+        // setStatusKandangOptions(form),
+        setStatusPenyesuaianOptions(form),
+        setStatusLangsirOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1264,6 +1325,7 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -1299,7 +1361,8 @@
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
-        setStatusUpahZonaOptions(form),
+        setStatusPenyesuaianOptions(form),
+        setStatusLangsirOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1322,6 +1385,7 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -1598,8 +1662,8 @@
   }
   const setStatusKandangOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuskandan]').empty()
-      relatedForm.find('[name=statuskandan]').append(
+      relatedForm.find('[name=statuskandang]').empty()
+      relatedForm.find('[name=statuskandang]').append(
         new Option('-- PILIH STATUS KANDANG --', '', false, true)
       ).trigger('change')
 
@@ -1634,6 +1698,84 @@
       })
     })
   }
+  const setStatusPenyesuaianOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspenyesuaian]').empty()
+      relatedForm.find('[name=statuspenyesuaian]').append(
+        new Option('-- PILIH STATUS PENYESUAIAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS PENYESUAIAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusPenyesuaian => {
+            let option = new Option(statusPenyesuaian.text, statusPenyesuaian.id)
+            relatedForm.find('[name=statuspenyesuaian]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setStatusLangsirOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuslangsir]').empty()
+      relatedForm.find('[name=statuslangsir]').append(
+        new Option('-- PILIH STATUS LANGSIR --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS LANGSIR"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusLangsir => {
+            let option = new Option(statusLangsir.text, statusLangsir.id)
+
+            relatedForm.find('[name=statuslangsir]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
 
   const setStatusUpahZonaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -1802,7 +1944,7 @@
           if (parseInt(response.data.persentaseperalihan) > 0) {
             $('#crudForm ').find(`[name="persentaseperalihan"]`).prop('readonly', false)
           }
-          kotaUpahZona()
+          // kotaUpahZona()
           statusUpahZona = response.data.statusupahzona
           containerId = response.data.container_id
           statuscontainerId = response.data.statuscontainer_id
@@ -1902,6 +2044,7 @@
           } else {
             if ((jenisorder_id == 2 && statuscontainer_id == 1) || (jenisorder_id == 3 && statuscontainer_id == 1) || (jenisorder_id == 1 && statuscontainer_id == 2) || (jenisorder_id == 1 && statuscontainer_id == 1) || (jenisorder_id == 4 && statuscontainer_id == 2)) {
               $('.nobukti_tripasal').show()
+              $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
               isPulangLongtrip = false;
             } else {
 
@@ -2206,6 +2349,7 @@
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
+        clearUpahSupir()
         // if (statuscontainer.kodestatuscontainer != 'FULL EMPTY') {
         enableTripAsalLongTrip()
         // }
@@ -2246,31 +2390,38 @@
           statusUpahZona: statusUpahZona,
           tglbukti: $('#crudForm [name=tglbukti]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val(),
+          dari_id: $('#crudForm [name=dari_id]').val(),
+          sampai_id: $('#crudForm [name=sampai_id]').val(),
+          statuspenyesuaian: $('#crudForm [name=statuspenyesuaian]').val(),
+          statusperalihan: $('#crudForm [name=statusperalihan]').val(),
+          statuslangsir: $('#crudForm [name=statuslangsir]').val(),
+          nobukti_tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
+
           statusjeniskendaraan: statusJenisKendaran
         }
       },
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upah_id]').val(upahsupir.upah_id)
-        if (selectedUpahZona == 'NON UPAH ZONA') {
+        // if (selectedUpahZona == 'NON UPAH ZONA') {
 
-          $('#crudForm [name=tarifrincian_id]').val(upahsupir.tarif_id)
-          $('#crudForm [name=tarifrincian]').val(upahsupir.tarif)
-          $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
-          $('#crudForm [name=dari_id]').val(upahsupir.kotadari_id)
-          $('#crudForm [name=dari]').val(upahsupir.kotadari)
-          $('#crudForm [name=sampai_id]').val(upahsupir.kotasampai_id)
-          $('#crudForm [name=sampai]').val(upahsupir.kotasampai)
-          kotadariId = upahsupir.kotadari_id
-          kotasampaiId = upahsupir.kotasampai_id
+        $('#crudForm [name=tarifrincian_id]').val(upahsupir.tarif_id)
+        $('#crudForm [name=tarifrincian]').val(upahsupir.tarif)
+        $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
+        $('#crudForm [name=dari_id]').val(upahsupir.kotadari_id)
+        $('#crudForm [name=dari]').val(upahsupir.kotadari)
+        $('#crudForm [name=sampai_id]').val(upahsupir.kotasampai_id)
+        $('#crudForm [name=sampai]').val(upahsupir.kotasampai)
+        kotadariId = upahsupir.kotadari_id
+        kotasampaiId = upahsupir.kotasampai_id
 
-          element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
-        } else {
-          zonadariId = upahsupir.zonadari_id
-          zonasampaiId = upahsupir.zonasampai_id
+        element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
+        // } else {
+        //   zonadariId = upahsupir.zonadari_id
+        //   zonasampaiId = upahsupir.zonasampai_id
 
-          element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
-          kotaUpahZona()
-        }
+        //   element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
+        //   kotaUpahZona()
+        // }
         nominalSupir = parseFloat(upahsupir.nominalsupir.replace(/,/g, ""));
         let nominalKenek = parseFloat(upahsupir.nominalkenek.replace(/,/g, ""));
         let nominalKomisi = parseFloat(upahsupir.nominalkomisi.replace(/,/g, ""));
@@ -2597,7 +2748,7 @@
 
     if (container_id.val() == '' && statuscontainer_id.val() == '' && jenisorder_id.val() == '') {
       upahSupirReadOnly()
-      kotaUpahZona()
+      // kotaUpahZona()
     } else {
       if (container_id.val() == '') {
         upahSupirReadOnly()
@@ -2607,7 +2758,7 @@
         upahSupirReadOnly()
       } else {
 
-        kotaUpahZona()
+        // kotaUpahZona()
         upahsupir.attr('readonly', false)
         upahsupir.parents('.input-group').find('.button-clear').attr('disabled', false)
         upahsupir.parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
@@ -2626,16 +2777,19 @@
 
   function clearUpahSupir() {
 
-    $('#crudForm [name=dari_id]').val('')
-    $('#crudForm [name=sampai_id]').val('')
-    $('#crudForm [name=dari]').val('')
-    $('#crudForm [name=sampai]').val('')
+    if ($('#crudForm [name=statuslangsir]').val() != 79) {
+      $('#crudForm [name=dari_id]').val('')
+      $('#crudForm [name=sampai_id]').val('')
+      $('#crudForm [name=dari]').val('')
+      $('#crudForm [name=sampai]').val('')
+    }
     $('#crudForm [name=tarifrincian_id]').val('')
     $('#crudForm [name=tarifrincian]').val('')
     $('#crudForm [name=penyesuaian]').val('')
   }
 
   function kotaUpahZona() {
+    console.log('kotaupahzona')
     let kotadari_id = $('#crudForm [name=dari]')
     let kotasampai_id = $('#crudForm [name=sampai]')
 
@@ -2703,15 +2857,19 @@
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group')
     let supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
     let upah = $('#crudForm').find(`[name="upah"]`).parents('.input-group')
+    let dari = $('#crudForm').find(`[name="dari"]`).parents('.input-group')
+    let sampai = $('#crudForm').find(`[name="sampai"]`).parents('.input-group')
     let statuscontainer = $('#crudForm').find(`[name="statuscontainer"]`).parents('.input-group')
 
     if (!edit) {
 
       editUpahZona = $('#crudForm').find(`[name="statusupahzona"]`).val()
+      editStatusPenyesuaian = $('#crudForm').find(`[name="statuspenyesuaian"]`).val()
       $('#crudForm').find(`[name="statusupahzona"]`).prop('disabled', 'disabled')
-      jobtrucking.find('.button-clear').attr('disabled', true)
-      jobtrucking.find('input').attr('readonly', true)
-      jobtrucking.children().find('.lookup-toggler').attr('disabled', true)
+      $('#crudForm').find(`[name="statuspenyesuaian"]`).prop('disabled', 'disabled')
+      // jobtrucking.find('.button-clear').attr('disabled', true)
+      // jobtrucking.find('input').attr('readonly', true)
+      // jobtrucking.children().find('.lookup-toggler').attr('disabled', true)
       trado.find('.button-clear').attr('disabled', true)
       trado.find('input').attr('readonly', true)
       trado.children().find('.lookup-toggler').attr('disabled', true)
@@ -2729,9 +2887,10 @@
     } else {
       console.log("true");
       $('#crudForm').find(`[name="statusupahzona"]`).prop('disabled', false)
-      jobtrucking.find('.button-clear').attr('disabled', false)
-      jobtrucking.find('input').attr('readonly', false)
-      jobtrucking.children().find('.lookup-toggler').attr('disabled', false)
+      $('#crudForm').find(`[name="statuspenyesuaian"]`).prop('disabled', false)
+      // jobtrucking.find('.button-clear').attr('disabled', false)
+      // jobtrucking.find('input').attr('readonly', false)
+      // jobtrucking.children().find('.lookup-toggler').attr('disabled', false)
       trado.find('.button-clear').attr('disabled', false)
       trado.find('input').attr('readonly', false)
       trado.children().find('.lookup-toggler').attr('disabled', false)
@@ -2756,6 +2915,8 @@
     let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
     let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
     let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    let dari = $('#crudForm').find(`[name="dari"]`)
+    let sampai = $('#crudForm').find(`[name="sampai"]`)
     pelanggan.find('.button-clear').attr('disabled', true)
     pelanggan.find('input').attr('readonly', true)
     pelanggan.children().find('.lookup-toggler').attr('disabled', true)
@@ -2768,10 +2929,18 @@
     jenisorder.find('.button-clear').attr('disabled', true)
     jenisorder.find('input').attr('readonly', true)
     jenisorder.children().find('.lookup-toggler').attr('disabled', true)
+    dari.parents('.input-group').find('.input-group-append').hide()
+    dari.parents('.input-group').find('.button-clear').hide()
+    sampai.parents('.input-group').find('.input-group-append').hide()
+    sampai.parents('.input-group').find('.button-clear').hide()
   }
 
 
   function getTarifOmset(id, contId) {
+    if (id == '') {
+      id = 0
+    }
+    console.log('idtarifomset', id)
     $.ajax({
       url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
       method: 'GET',
@@ -2792,6 +2961,8 @@
           $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
           initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
           setNominal()
+        } else {
+          initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
         }
       },
       error: error => {
@@ -3000,6 +3171,61 @@
         clearTripAsal()
         isPulangLongtrip = false;
       }
+    }
+  }
+
+  function moveKotaUpah(statuslongtrip) {
+    let kotadari_id = $('#crudForm [name=dari]')
+    let kotasampai_id = $('#crudForm [name=sampai]')
+    if (statuslongtrip == 65) {
+      $(".nobukti_tripasal").appendTo("#tripasalpulanglongtrip");
+      $('.nobukti_tripasal').show()
+      $('[name=nobukti_tripasal]').val('')
+      $('[name=nobukti_tripasal]').data('currentValue', '')
+      kotadari_id.attr('readonly', true)
+      kotasampai_id.attr('readonly', false)
+      kotadari_id.parents('.input-group').find('.input-group-append').hide()
+      kotadari_id.parents('.input-group').find('.button-clear').hide()
+      kotasampai_id.parents('.input-group').find('.input-group-append').show()
+      kotasampai_id.parents('.input-group').find('.button-clear').show()
+      $(".dari").appendTo("#kotaLongtrip");
+      $(".sampai").appendTo("#kotaLongtrip");
+      $(".upahsupir").appendTo("#kotaTrip");
+      $(".penyesuaian").appendTo("#kotaTrip");
+    }
+
+    if (statuslongtrip == 66) {
+      $('[name=nobukti_tripasal]').val('')
+      $('[name=nobukti_tripasal]').data('currentValue', '')
+      kotadari_id.attr('readonly', true)
+      kotasampai_id.attr('readonly', true)
+      kotadari_id.parents('.input-group').find('.input-group-append').hide()
+      kotadari_id.parents('.input-group').find('.button-clear').hide()
+      kotasampai_id.parents('.input-group').find('.input-group-append').hide()
+      kotasampai_id.parents('.input-group').find('.button-clear').hide()
+      $(".dari").appendTo("#kotaTrip");
+      $(".sampai").appendTo("#kotaTrip");
+      $(".upahsupir").appendTo("#kotaLongtrip");
+      $(".penyesuaian").appendTo("#kotaLongtrip");
+      $(".nobukti_tripasal").appendTo("#tripasal");
+    }
+
+  }
+
+  function moveKotaLangsir(statuslangsir) {
+    let kotadari_id = $('#crudForm [name=dari]')
+    let kotasampai_id = $('#crudForm [name=sampai]')
+    if (statuslangsir == 79) {
+      kotadari_id.attr('readonly', false)
+      kotasampai_id.attr('readonly', false)
+      kotadari_id.parents('.input-group').find('.input-group-append').show()
+      kotadari_id.parents('.input-group').find('.button-clear').show()
+      kotasampai_id.parents('.input-group').find('.input-group-append').show()
+      kotasampai_id.parents('.input-group').find('.button-clear').show()
+      $(".dari").appendTo("#kotaLongtrip");
+      $(".sampai").appendTo("#kotaLongtrip");
+      $(".upahsupir").appendTo("#kotaTrip");
+      $(".penyesuaian").appendTo("#kotaTrip");
     }
   }
   // function setDummyOption() {

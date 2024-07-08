@@ -75,6 +75,11 @@
           hidden: true
         },
         {
+          label: 'statusgerobak',
+          name: 'statusgerobak',
+          hidden: true
+        },
+        {
           label: 'nominalplusborongan',
           name: 'nominalplusborongan',
           hidden: true,

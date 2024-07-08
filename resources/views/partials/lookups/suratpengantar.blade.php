@@ -27,6 +27,8 @@
         agen_id: `{!! $agen_id ?? '' !!}`,
         upah_id: `{!! $upah_id ?? '' !!}`,
         pelanggan_id: `{!! $pelanggan_id ?? '' !!}`,
+        gandengan_id: `{!! $gandengan_id ?? '' !!}`,
+        dari_id: `{!! $dari_id ?? '' !!}`,
         gudangsama: `{!! $gudangsama ?? '' !!}`,
         longtrip: `{!! $longtrip ?? '' !!}`,
         isGudangSama: `{!! $isGudangSama ?? '' !!}`,
@@ -69,9 +71,20 @@
           width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
         },
         {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
+          label: 'PELANGGANID',
+          name: 'pelangganid',
+          hidden: true,
+          search: false
+        },
+        {
+          label: 'JENIS ORDER',
+          name: 'jenisorder_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+        },
+        {
+          label: 'FULL/EMPTY',
+          name: 'statuscontainer_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'DARI',
@@ -82,6 +95,17 @@
           label: 'SAMPAI',
           name: 'sampai_id',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'SAMPAIID',
+          name: 'sampaiid',
+          hidden: true,
+          search: false
+        },
+        {
+          label: 'CUSTOMER',
+          name: 'agen_id',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
         },
         {
           label: 'CONTAINER',
@@ -99,11 +123,6 @@
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
-          label: 'FULL/EMPTY',
-          name: 'statuscontainer_id',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-        },
-        {
           label: 'NO POLISI',
           name: 'trado_id',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
@@ -112,6 +131,11 @@
           label: 'SUPIR',
           name: 'supir_id',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'GANDENGAN',
+          name: 'gandengan_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
         },
         {
           label: 'TRADO ID',
@@ -124,6 +148,17 @@
           name: 'supirlookup',
           hidden: true,
           search: false
+        },
+        {
+          label: 'GANDENGAN ID',
+          name: 'gandenganid',
+          hidden: true,
+          search: false
+        },
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
         },
         {
           label: 'NOJOB',
@@ -224,16 +259,6 @@
             decimalSeparator: ',',
             thousandsSeparator: '.'
           }
-        },
-        {
-          label: 'CUSTOMER',
-          name: 'agen_id',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
-        },
-        {
-          label: 'JENIS ORDER',
-          name: 'jenisorder_id',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
         },
         {
           label: 'STATUS PERALIHAN',

@@ -19,7 +19,13 @@
         statuskandang_id: `{!! $statuskandang_Id ?? '' !!}`,
         statusupahzona: `{!! $statusUpahZona ?? '' !!}`,
         tglbukti: `{!! $tglbukti ?? '' !!}`,
-        longtrip: `{!! $longtrip ?? '' !!}`
+        longtrip: `{!! $longtrip ?? '' !!}`,
+        dari_id: `{!! $dari_id ?? '' !!}`,
+        sampai_id: `{!! $sampai_id ?? '' !!}`,
+        statuspenyesuaian: `{!! $statuspenyesuaian ?? '' !!}`,
+        statusperalihan: `{!! $statusperalihan ?? '' !!}`,
+        statuslangsir: `{!! $statuslangsir ?? '' !!}`,
+        nobukti_tripasal: `{!! $nobukti_tripasal ?? '' !!}`
       },
       idPrefix: 'upahSupirRincianLookup',
       colModel: [{
