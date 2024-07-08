@@ -48,6 +48,7 @@ class LaporanDepositoSupirController extends MyController
     {
         $detailParams = [
             'sampai' => $request->sampai,
+            'periodedata_id' => $request->periodedata_id,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -65,6 +66,7 @@ class LaporanDepositoSupirController extends MyController
     {
         $detailParams = [
             'sampai' => $request->sampai,
+            'periodedata_id' => $request->periodedata_id,
         ];
 
         $header = Http::withHeaders(request()->header())
