@@ -28,7 +28,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">NO POL</label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="trado_id">
-                                <input type="text" name="trado" class="form-control trado-lookup">
+                                <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -36,9 +36,8 @@
                                 <label class="col-form-label">Status <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-sm-4">
-                                <select name="status" id="status" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="all">{SEMUA}</option>
-                                </select>
+                                <input type="hidden" name="status">
+                                <input type="text" name="statusnama" id="statusnama" class="form-control lg-form status-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -97,8 +96,8 @@
         $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
 
         initLookup()
-        initSelect2($('#crudForm').find('[name=status]'), false)
-        setStatusOptions($('#crudForm'))
+        // initSelect2($('#crudForm').find('[name=status]'), false)
+        // setStatusOptions($('#crudForm'))
 
         $(document).on('click', "#btnTampil", function() {
             $('#jqGrid').jqGrid('setGridParam', {
@@ -375,12 +374,17 @@
     }
 
     function initLookup() {
-        $('.trado-lookup').lookup({
+        $('.trado-lookup').lookupMaster({
             title: 'Trado Lookup',
-            fileName: 'trado',
+            fileName: 'tradoMaster',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'trado_id',
+                    searchText: 'trado-lookup',
+                    title: 'trado lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {
@@ -397,6 +401,41 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        $(`.status-lookup`).lookupMaster({
+            title: 'status Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                url: `${apiUrl}parameter/combo`,
+                grp: 'STATUS OLI',
+                subgrp: 'STATUS OLI',
+                searching: 1,
+                valueName: `status`,
+                searchText: `status-lookup`,
+                singleColumn: true,
+                hideLabel: true,
+                title: 'status Lookup'
+                };
+            },
+            onSelectRow: (status, element) => {
+                let elId = element.data('targetName')
+                $(`#crudForm [name=${elId}]`).first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                let elId = element.data('targetName')
+                $(`#crudForm [name=${elId}]`).first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            },
+        });
     }
 </script>
 @endpush()
