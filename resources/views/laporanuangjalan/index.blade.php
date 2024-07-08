@@ -46,12 +46,12 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="supirdari_id">
-                                <input type="text" name="supirdari" class="form-control supirdari-lookup">
+                                <input type="text" name="supirdari" id="supirdari" class="form-control supirdari-lookup">
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="supirsampai_id">
-                                <input type="text" name="supirsampai" class="form-control supirsampai-lookup">
+                                <input type="text" name="supirsampai" id="supirsampai" class="form-control supirsampai-lookup">
                             </div>
 
                         </div>
@@ -75,9 +75,8 @@
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">STATUS<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <select name="status" id="status" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
+                                <input type="hidden" name="status">
+                                <input type="text" name="statusnama" data-target-name="jenis" id="statusnama" class="form-control lg-form status-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -122,7 +121,7 @@
 
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=status]'), false)
+        // initSelect2($('#crudForm').find('[name=status]'), false)
         setStatusKembali($('#crudForm'))
 
         initDatepicker()
@@ -204,12 +203,17 @@
     })
 
     function initLookup() {
-        $('.supirdari-lookup').lookup({
+        $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirMaster',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'supirdari_id',
+                    searchText: 'supirdari-lookup',
+                    title: 'supir lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -227,12 +231,17 @@
             }
         });
 
-        $('.supirsampai-lookup').lookup({
+        $('.supirsampai-lookup').lookupMaster({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirMaster',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'supirsampai_id',
+                    searchText: 'supirsampai-lookup',
+                    title: 'supir lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -249,6 +258,41 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        $(`.status-lookup`).lookupMaster({
+            title: 'status Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                url: `${apiUrl}parameter/combo`,
+                grp: 'STATUS KEMBALI',
+                subgrp: 'STATUS KEMBALI',
+                searching: 1,
+                valueName: `jenis`,
+                searchText: `jenis-lookup`,
+                singleColumn: true,
+                hideLabel: true,
+                title: 'status Lookup'
+                };
+            },
+            onSelectRow: (status, element) => {
+                let elId = element.data('targetName')
+                $(`#crudForm [name=${elId}]`).first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                let elId = element.data('targetName')
+                $(`#crudForm [name=${elId}]`).first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            },
+        });
     }
 
     const setStatusKembali = function(relatedForm) {

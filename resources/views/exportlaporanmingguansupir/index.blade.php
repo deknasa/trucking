@@ -32,7 +32,7 @@
                                 <div class="col-sm-4 mt-2">
                                     <div class="input-group">
                                         <input type="hidden" name="tradodari_id">
-                                        <input type="text" name="tradodari" class="form-control tradodari-lookup">
+                                        <input type="text" name="tradodari" id="tradodari" class="form-control tradodari-lookup">
                                     </div>
                                 </div>
                                 <div class="col-sm-1 mt-2">
@@ -41,7 +41,7 @@
                                 <div class="col-sm-4 mt-2">
                                     <div class="input-group">
                                         <input type="hidden" name="tradosampai_id">
-                                        <input type="text" name="tradosampai" class="form-control tradosampai-lookup">
+                                        <input type="text" name="tradosampai" id="tradosampai" class="form-control tradosampai-lookup">
                                     </div>
                                 </div>
                             </div>
@@ -179,12 +179,19 @@
             }
 
             function initLookup() {
-                $('.tradodari-lookup').lookup({
+                $('.tradodari-lookup').lookupMaster({
                     title: 'Trado Lookup',
-                    fileName: 'trado',
+                    fileName: 'tradoMaster',
+                    typeSearch: 'ALL',
+                    searching: 1,
                     beforeProcess: function(test) {
                         this.postData = {
                             Aktif: 'AKTIF',
+                            searching: 1,
+                            valueName: 'tradodari_id',
+                            searchText: 'tradodari-lookup',
+                            title: 'trado dari',
+                            typeSearch: 'ALL',
                         }
                     },  
                     onSelectRow: (trado, element) => {
@@ -202,12 +209,19 @@
                     }
                 })
 
-                $('.tradosampai-lookup').lookup({
+                $('.tradosampai-lookup').lookupMaster({
                     title: 'Trado Lookup',
-                    fileName: 'trado',
+                    fileName: 'tradoMaster',
+                    typeSearch: 'ALL',
+                    searching: 1,
                     beforeProcess: function(test) {
                         this.postData = {
                             Aktif: 'AKTIF',
+                            searching: 1,
+                            valueName: 'tradosampai_id',
+                            searchText: 'tradosampai-lookup',
+                            title: 'trado sampai',
+                            typeSearch: 'ALL',
                         }
                     },  
                     onSelectRow: (trado, element) => {

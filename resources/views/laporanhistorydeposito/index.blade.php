@@ -15,7 +15,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="supirdari_id">
-                                <input type="text" name="supirdari" class="form-control supirdari-lookup">
+                                <input type="text" name="supirdari" id="supirdari" class="form-control supirdari-lookup">
                             </div>
                         </div>
 
@@ -137,12 +137,17 @@
     })
 
     function initLookup() {
-        $('.supirdari-lookup').lookup({
+        $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirMaster',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
+                    searching: 1,
+                    valueName: 'supirdari_id',
+                    searchText: 'supirdari-lookup',
+                    title: 'supir dari',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
