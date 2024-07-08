@@ -290,6 +290,9 @@
             <div id="detail-btu-section">
               <table id="tableBTU"></table>
             </div>
+            <div id="detail-btt-section">
+              <table id="tableBTT"></table>
+            </div>
             <div id="detail-bpt-section">
               <table id="tableBPT"></table>
             </div>
@@ -959,7 +962,7 @@
             value: dataPelunasanBBM.id
           })
         })
-      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS" || KodePengeluaranId == "BTK" || KodePengeluaranId == "BTB") {
+      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BTT" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM" || KodePengeluaranId == "BLS" || KodePengeluaranId == "BTK" || KodePengeluaranId == "BTB") {
         data = []
 
         data.push({
@@ -1603,6 +1606,9 @@
       case 'BTU': //listKodePengeluaran[11]:
         tampilanBTU()
         break;
+      case 'BTT': //listKodePengeluaran[11]:
+        tampilanBTT()
+        break;
       case 'BPT': //listKodePengeluaran[12]:
         tampilanBPT()
         break;
@@ -1660,6 +1666,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -1713,6 +1720,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -1768,6 +1776,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -1836,6 +1845,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -1884,6 +1894,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -1922,6 +1933,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -1980,6 +1992,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2034,6 +2047,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2093,6 +2107,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2156,6 +2171,7 @@
     $('#detail-bll-section').show()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2239,6 +2255,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').show()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2320,6 +2337,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').show()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2377,6 +2395,89 @@
     }
   }
 
+
+  function tampilanBTT() {
+    $('#detailList tbody').html('')
+    // enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
+    $('[name=statusposting]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('[name=tgldari]').prop('disabled', true)
+    $('[name=tglsampai]').prop('disabled', true)
+    $('[name=periode]').parents('.form-group').show()
+    $('[name=periode]').prop('disabled', false)
+    $('#detail-bll-section').hide()
+    $('#detail-bln-section').hide()
+    $('#detail-btu-section').hide()
+    $('#detail-btt-section').show()
+    $('#detail-bpt-section').hide()
+    $('#detail-bgs-section').hide()
+    $('#detail-bit-section').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
+    $('#detail-default-section').parents('.card').hide()
+    $('#detail-tde-section').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_karyawan_id').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 2);
+    $('#tbl_addRow').hide()
+    $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
+    $('.cabang').hide()
+    // $('.colmn-offset').hide()
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+    loadBTTGrid()
+    if ($('#crudForm').data('action') == 'add') {
+
+      getDataBiayaLapangan().then((response) => {
+        let selectedIdBtt = []
+
+        $.each(response.data, (index, value) => {
+          selectedIdBtt.push(value.id)
+        })
+        $('#tableBTT').jqGrid("clearGridData");
+        setTimeout(() => {
+
+          $("#tableBTT")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: selectedIdBtt
+            })
+            .trigger("reloadGrid");
+        }, 100);
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBTT_nominal"]`).text(0))
+
+      });
+    }
+  }
+
   function tampilanBPT() {
     $('#detailList tbody').html('')
     // enabledKas(true);
@@ -2401,6 +2502,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').show()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2483,6 +2585,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').show()
     $('#detail-bit-section').hide()
@@ -2563,6 +2666,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').show()
@@ -2647,6 +2751,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2764,6 +2869,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -2861,6 +2967,7 @@
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
     $('#detail-btu-section').hide()
+    $('#detail-btt-section').hide()
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
@@ -5262,6 +5369,37 @@
 
             });
 
+          } else if (kodepengeluaran === "BTT") {
+
+            getDataBiayaLapangan().then((response) => {
+
+              let selectedIdBtt = []
+              let totalBiaya = 0
+
+              $.each(response.data, (index, value) => {
+                selectedIdBtt.push(value.id)
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
+                  totalBiaya += parseFloat(value.nominal)
+                }
+              })
+              $('#tableBTT').jqGrid("clearGridData");
+              setTimeout(() => {
+
+                $("#tableBTT")
+                  .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: selectedIdBtt
+                  })
+                  .trigger("reloadGrid");
+                initAutoNumeric($('#tableBTT tbody tr').find(`td[aria-describedby="tableBTT_nominal"]`))
+              }, 100);
+              initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBTT_nominal"]`).text(totalBiaya))
+
+            });
+
           } else if (kodepengeluaran === "BPT") {
 
             getDataBiayaLapangan().then((response) => {
@@ -5685,7 +5823,7 @@
                 title: 'stok Lookup',
                 fileName: 'pengeluaranstokdetail',
                 beforeProcess: function(test) {
-                  console.log(detail.penerimaanstokheader_nobukti,'5686');
+                  console.log(detail.penerimaanstokheader_nobukti, '5686');
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
                     cabang: statuscabang,
@@ -6211,7 +6349,7 @@
       fileName: 'pengeluaranstokdetail',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
-        console.log(penerimaanstokheader_nobukti,'6210');
+        console.log(penerimaanstokheader_nobukti, '6210');
         this.postData = {
           cabang: statuscabang,
           penerimaanstokheader_id: penerimaanstokheader,
@@ -7154,6 +7292,176 @@
     // loadGlobalSearch($('#tableDeposito'))
   }
 
+  function loadBTTGrid() {
+    $("#tableBTT")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "supir_id",
+            name: "supir_id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "SUPIR",
+            name: "supirbiaya",
+            sortable: true,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+          },
+          {
+            label: "NOMINAL",
+            name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                console.log('here', id)
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tableBTT")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tableBTT").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+                  localRow.nominal = event.target.value;
+
+                  let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+
+                  if (nominal < 0) {
+                    showDialog('NOMINAL tidak boleh minus')
+                    $("#tableBTT").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "nominal",
+                      0
+                    );
+                    // nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  }
+                  setTotalNominalBiaya('tableBTT')
+                  // nominalDetails = $(`#tableBTU tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableBTU_nominal"]`)
+                  // ttlBayar = 0
+                  // $.each(nominalDetails, (index, nominalDetail) => {
+                  //   ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                  //   ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                  //   ttlBayar += ttlBayars
+                  // });
+                  // ttlBayar += nominal
+                  // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBTU_nominal"]`).text(ttlBayar))
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "KETERANGAN",
+            name: "keteranganbll",
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+            sortable: false,
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let localRow = $("#tableBTT").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.keteranganbll = event.target.value;
+                }
+              }, ]
+            }
+          },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["nominal"],
+        selectedRowIds: [],
+        // onCellSelect: function(rowid, iCol, cellcontent, e) {
+        //   console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
+        // },
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tableBTT")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tableBTT").jqGrid("getLocalRow", rowId);
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTotalNominalBiaya('tableBTT')
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tableBTT").jqGrid("getLocalRow", rowId);
+
+          $("#tableBTT").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tableBTT'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tableDeposito'))
+  }
+
   function setTotalNominalBiaya(table) {
     let nominalDetails = $(`#${table}`).find(`td[aria-describedby="${table}_nominal"]`)
     let nominal = 0
@@ -7184,6 +7492,24 @@
       $('#tableBTU').jqGrid('saveCell', value, 4); //keterangan
     })
   })
+
+  $(document).on('click', '#resetdatafilter_tableBTT', function(event) {
+    selectedRowsBtt = $("#tableBTT").getGridParam("selectedRowIds");
+    $.each(selectedRowsBtt, function(index, value) {
+      $('#tableBTT').jqGrid('saveCell', value, 5); //emptycell
+      $('#tableBTT').jqGrid('saveCell', value, 3); //nominal
+      $('#tableBTT').jqGrid('saveCell', value, 4); //keterangan
+    })
+
+  });
+  $(document).on('click', '#gbox_tableBTT .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsBtt = $("#tableBTT").getGridParam("selectedRowIds");
+    $.each(selectedRowsBtt, function(index, value) {
+      $('#tableBTT').jqGrid('saveCell', value, 5); //emptycell
+      $('#tableBTT').jqGrid('saveCell', value, 3); //nominal
+      $('#tableBTT').jqGrid('saveCell', value, 4); //keterangan
+    })
+  })  
   // TABLE BPT
   function loadBPTGrid() {
     $("#tableBPT")
