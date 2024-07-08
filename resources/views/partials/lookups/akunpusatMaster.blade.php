@@ -45,14 +45,14 @@ $idLookup = isset($id) ? $id : null;
       },
       {
         label: 'KODE TIPE',
-        name: 'kodetype',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        name: 'coa',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'AKUNTANSI',
-        name: 'akuntansi',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        name: 'keterangancoa',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         align: 'left'
       },
 
