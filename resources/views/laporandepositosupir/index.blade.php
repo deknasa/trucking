@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row"  style="display:none;">
                             <label class="col-12 col-sm-2 col-form-label mt-2">PERIODE DATA<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">

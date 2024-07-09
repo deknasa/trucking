@@ -51,6 +51,8 @@ class LaporanKasBankController extends MyController
             'sampai' => $request->sampai,
             'bank_id' => $request->bank_id,
             'bank' => $request->bank,
+            'periodedata_id' => $request->periodedata_id,
+            'periodedata' => $request->periodedata,
         ];
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
@@ -84,6 +86,8 @@ class LaporanKasBankController extends MyController
             'sampai' => $request->sampai,
             'bank_id' => $request->bank_id,
             'bank' => $request->bank,
+            'periodedata_id' => $request->periodedata_id,
+            'periodedata' => $request->periodedata,
         ];
 
         $header = Http::withHeaders(request()->header())
