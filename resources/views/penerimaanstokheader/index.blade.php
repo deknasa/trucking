@@ -342,7 +342,7 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            hidden: true
+            hidden: true,
             align: 'left'
           },
           {
