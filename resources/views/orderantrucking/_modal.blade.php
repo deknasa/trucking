@@ -82,7 +82,7 @@
                 <input type="text" id="pelanggan" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group gandengan">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   NO GANDENGAN / CHASIS  <span class="text-danger">*</span></label>
@@ -352,6 +352,9 @@
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
     orederan_id = $('#crudForm').find('[name=id]').val();
+    if (accessCabang != 'MEDAN') {
+        $('.gandengan').hide()
+      }
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
