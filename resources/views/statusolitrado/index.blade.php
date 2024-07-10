@@ -36,7 +36,7 @@
                                 <label class="col-form-label">Status <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-sm-4">
-                                <input type="hidden" name="status">
+                                <input type="hidden" id="status" name="status">
                                 <input type="text" name="statusnama" id="statusnama" class="form-control lg-form status-lookup">
                             </div>
                         </div>
@@ -422,7 +422,7 @@
             },
             onSelectRow: (status, element) => {
                 let elId = element.data('targetName')
-                $(`#crudForm [name=${elId}]`).first().val(status.id)
+                $(`#crudForm [name=status`).first().val(status.id)
                 element.val(status.text)
                 element.data('currentValue', element.val())
             },
@@ -431,7 +431,7 @@
             },
             onClear: (element) => {
                 let elId = element.data('targetName')
-                $(`#crudForm [name=${elId}]`).first().val('')
+                $(`#crudForm [name=status`).first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             },
