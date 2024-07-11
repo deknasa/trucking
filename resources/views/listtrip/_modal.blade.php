@@ -863,6 +863,12 @@
                             $('#crudForm [name=pelanggan]').parents('.input-group').find('.button-clear').hide()
                             $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
                             $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
+                            if($('#crudForm [name=dari]').val() == 'KANDANG'){
+                                $('#crudForm [name=pelanggan]').parents('.input-group').find('.input-group-append').show()
+                                $('#crudForm [name=pelanggan]').parents('.input-group').find('.button-clear').show()
+                                $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
+                                $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+                            }
 
                         }
                         if ($('#crudForm [name=statuslongtrip]').val() == 65) {
@@ -1754,6 +1760,7 @@
                     trado_id: $('#crudForm [name=trado_id]').val(),
                     gandengan_id: $('#crudForm [name=gandengan_id]').val(),
                     dari_id: $('#crudForm [name=dari_id]').val(),
+                    sampai_id: $('#crudForm [name=sampai_id]').val(),
                     gudangsama: $('#crudForm [name=statusgudangsama]').val(),
                     longtrip: $('#crudForm [name=statuslongtrip]').val(),
                     idTrip: $('#crudForm [name=id]').val(),
@@ -1776,6 +1783,14 @@
                             $('#crudForm [name=upah]').val('')
                             $('#crudForm [name=upah]').data('currentValue', '')
                         }
+                    }
+
+                    if ($('#crudForm [name=dari]').val() == 'KANDANG') {
+                        $('#crudForm [name=jobtrucking]').attr('hidden', false)
+                        $('#crudForm [name=labeljobtrucking]').attr('hidden', false)
+                        $('#crudForm [name=jobtrucking]').attr('readonly', true)
+                        $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').hide()
+                        $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
                     }
                 }
 
@@ -1815,6 +1830,14 @@
                             $('#crudForm [name=upah]').val('')
                             $('#crudForm [name=upah]').data('currentValue', '')
                         }
+                    }
+                    
+                    if ($('#crudForm [name=dari]').val() == 'KANDANG') {
+                        $('#crudForm [name=jobtrucking]').attr('hidden', false)
+                        $('#crudForm [name=labeljobtrucking]').attr('hidden', false)
+                        $('#crudForm [name=jobtrucking]').attr('readonly', false)
+                        $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').show()
+                        $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').show()
                     }
                 }
 
@@ -1881,6 +1904,7 @@
                     statuscontainer_id: $('#crudForm [name=statuscontainer_id]').val(),
                     tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
                     tglbukti: $('#crudForm [name=tglbukti]').val(),
+                    dari_id: $('#crudForm [name=dari_id]').val(),
                     isPulangLongtrip: isPulangLongtrip
                 }
             },
