@@ -1555,6 +1555,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('exportrincianmingguan/index', [ExportRincianMingguanController::class, 'index']);
     Route::resource('exportrincianmingguan', ExportRincianMingguanController::class);
 
+    Route::get('exportlaporankasharian/report', [ExportLaporanKasHarianController::class, 'report'])->name('exportlaporankasharian.report');
     Route::get('exportlaporankasharian/export', [ExportLaporanKasHarianController::class, 'export'])->name('exportlaporankasharian.export');
     Route::get('exportlaporankasharian/index', [ExportLaporanKasHarianController::class, 'index']);
     Route::resource('exportlaporankasharian', ExportLaporanKasHarianController::class);

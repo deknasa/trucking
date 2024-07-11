@@ -33,6 +33,10 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
+                                <button type="button" id="btnPreview" class="btn btn-info ">
+                                    <i class="fas fa-print"></i>
+                                    Report
+                                </button>
                                 <button type="button" id="btnExport" class="btn btn-warning ">
                                     <i class="fas fa-file-export"></i>
                                     Export
@@ -97,8 +101,40 @@
         if (!`{{ $myAuth->hasPermission('exportlaporankasharian', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('exportlaporankasharian', 'report') }}`) {
+            $('#btnPreview').attr('disabled', 'disabled')
+        }
     })
 
+    $(document).on('click', `#btnPreview`, function(event) {
+         let periode = $('#crudForm').find('[name=periode]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+        var kasbank
+        var norek
+        if (bank_id == 1) {
+            kasbank = 'KAS HARIAN';
+            norek = '';
+        } else {
+            kasbank = 'BANK';
+            norek = `( ${bank} )`;
+        }
+        getCekReport().then((response) => {
+            window.open(`{{ route('exportlaporankasharian.report') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`)
+
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+
+            }
+        })
+
+    })
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
@@ -147,6 +183,30 @@
         })
     })
 
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}exportlaporankasharian/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    periode : $('#crudForm').find('[name=periode]').val(),
+                    bank_id : $('#crudForm').find('[name=bank_id]').val(),
+                    bank : $('#crudForm').find('[name=bank]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
    
 
 

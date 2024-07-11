@@ -665,6 +665,40 @@ class ExportLaporanKasHarianController extends MyController
         $writer->save('php://output');
     }
 
+
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'periode' => $request->periode,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank
+        ];
+        if ($request->bank_id == 1) {
+            $kasbank = 'KAS HARIAN';
+            $norek = '';
+        } else {
+            $kasbank = 'BANK';
+            $norek = '(' . $request->bank . ')';
+        }
+        // dd(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
+
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'exportlaporankasharian/report', $detailParams);
+            $data = $header['dataDua'];
+            // dd($data);
+        if (count($data) == 0) {
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $tandatangan = $header['tandatangan'];
+        $cabang['cabang'] = session('cabang');
+        $user = Auth::user();
+        $detailParams['tglcetak'] = date("d-m-Y H:i:s");
+        return view('reports.rekaplaporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'cabang','tandatangan'));
+    }
+
     public function tgl_indo($tanggal)
     {
         $bulan = array(
