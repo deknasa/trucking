@@ -140,6 +140,8 @@
         $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
             fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             multiColumnSize: true,
             extendSize: md_extendSize_1,
             beforeProcess: function(test) {
