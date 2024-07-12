@@ -216,10 +216,11 @@
                     }
                     let trado_id = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_trado_id"]`).attr('title') ?? '';
                     let nopol = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nopol"]`).attr('title') ?? '';
+                    let status = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_status"]`).attr('title') ?? '';
                     console.log('onseelc' ,trado_id);
                     tradoHeader = trado_id
                     tradoHeaderKode = nopol
-                    loadDetailData(trado_id)
+                    loadDetailData(trado_id,status)
                 },
                 loadComplete: function(data) {
 
