@@ -337,6 +337,7 @@ Route::get('reset-password/success', [ResetPasswordController::class, 'success']
 
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
 
+Route::get('statusolitrado/exportdetail', [StatusOliTradoController::class, 'exportdetail'])->name('statusolitrado.exportdetail');
 
 Route::get('stokpusat/tokenjkt', [StokPusatController::class, 'tokenJkt']);
 Route::get('stokpusat/tokenjkttnl', [StokPusatController::class, 'tokenJktTnl']);
@@ -1655,6 +1656,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('reminderstok/index', [ReminderStokController::class, 'index']);
     Route::resource('reminderstok', ReminderStokController::class);
     Route::get('statusolitrado/export', [StatusOliTradoController::class, 'export'])->name('statusolitrado.export');
+    // Route::get('statusolitrado/exportdetail', [StatusOliTradoController::class, 'exportdetail'])->name('statusolitrado.exportdetail');
     Route::get('statusolitrado/index', [StatusOliTradoController::class, 'index']);
     Route::resource('statusolitrado', StatusOliTradoController::class);
 

@@ -61,7 +61,15 @@
             <table id="jqGrid"></table>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <table id="detail"></table>
+        </div>
+    </div>
 </div>
+
+<!-- Detail -->
+@include('statusolitrado._detail')
 
 @push('scripts')
 <script>
@@ -80,6 +88,8 @@
     let autoNumericElements = []
     let rowNum = 10
     let hasDetail = false
+    let activeGrid = null
+    let tradoHeader = ''
 
     $(document).ready(function() {
         initDatepicker()
@@ -109,6 +119,7 @@
                 },
             }).trigger('reloadGrid');
         })
+        loadDetailGrid()
 
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}statusolitrado`,
@@ -123,6 +134,11 @@
                         align: 'right',
                         width: '50px',
                         search: false,
+                        hidden: true
+                    },
+                    {
+                        label: 'trado_id',
+                        name: 'trado_id',
                         hidden: true
                     },
                     {
@@ -198,6 +214,12 @@
                     if (indexRow >= limit) {
                         indexRow = (indexRow - limit * (page - 1))
                     }
+                    let trado_id = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_trado_id"]`).attr('title') ?? '';
+                    let nopol = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nopol"]`).attr('title') ?? '';
+                    console.log('onseelc' ,trado_id);
+                    tradoHeader = trado_id
+                    tradoHeaderKode = nopol
+                    loadDetailData(trado_id)
                 },
                 loadComplete: function(data) {
 
