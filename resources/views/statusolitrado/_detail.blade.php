@@ -257,7 +257,7 @@
     loadGlobalSearch($('#detail'))
   }
 
-  function loadDetailData(trado_id) {
+  function loadDetailData(trado_id,status) {
     abortGridLastRequest($('#detail'))
     // console.log(tradoHeader);
     $('#detail').setGridParam({
@@ -265,6 +265,7 @@
       datatype: "json",
       postData: {
         trado_id: trado_id,
+        status: status,
       },
       page:1
     }).trigger('reloadGrid')
