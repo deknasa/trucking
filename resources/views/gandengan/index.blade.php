@@ -77,14 +77,23 @@
         })
     }
 
-    $(document).ready(function() {
-        $("#jqGrid").jqGrid({
-                url: `${apiUrl}gandengan`,
-                mtype: "GET",
-                styleUI: 'Bootstrap4',
-                iconSet: 'fontAwesome',
-                datatype: "json",
-                colModel: [{
+    let OptionSeacrhStatusAktif = `<?php
+            $i = 1;
+
+            foreach ($data['combo'] as $status) :
+                echo "$status[param]:$status[parameter]";
+                if ($i !== count($data['combo'])) {
+                    echo ';';
+                }
+                $i++;
+            endforeach;
+
+            ?>
+            `
+
+        $(document).ready(function() {
+                function createColModel() {
+                    return [{
                         label: '',
                         name: '',
                         width: 30,
@@ -164,19 +173,7 @@
                         width: 100,
                         stype: 'select',
                         searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['combo'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['combo'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-
-                                    ?>
-            `,
+                            value:OptionSeacrhStatusAktif,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -228,7 +225,25 @@
                         align: 'right',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
-                ],
+                ];
+                }
+
+
+                let colModelDefault;
+
+                if (typeof createColModelUser === 'function') {
+                    colModelDefault = createColModelUser();
+                } else {
+                    colModelDefault = createColModel();
+                }
+
+        $("#jqGrid").jqGrid({
+                url: `${apiUrl}gandengan`,
+                mtype: "GET",
+                styleUI: 'Bootstrap4',
+                iconSet: 'fontAwesome',
+                datatype: "json",
+                colModel: colModelDefault,
                 autowidth: true,
                 shrinkToFit: false,
                 height: 350,
@@ -653,6 +668,8 @@
             });
         }
     })
+</script>
+<script src="{{ asset('userPreferences/userPreferences_' . auth()->user()->id . '.js?version=' . date('YmdHis')) }}">
 </script>
 @endpush()
 @endsection
