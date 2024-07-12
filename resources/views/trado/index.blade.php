@@ -1228,6 +1228,16 @@
                                 }
                             },
                             {
+                                id: 'approvalaktif',
+                                text: "Approval  Aktif",
+                                color:"btn-info",
+                                onClick: () => {
+
+                                    approvalAktif('trado')
+
+                                }
+                            },                            
+                            {
                                 id: 'approvalPersneling',
                                 text: "APPROVAL/UN Reminder Oli Persneling",
                                 color:"btn-primary",
@@ -1449,6 +1459,12 @@
             if (!`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`) {
                 hakApporveCount--
                 $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
