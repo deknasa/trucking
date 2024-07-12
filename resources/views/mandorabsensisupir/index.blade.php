@@ -43,7 +43,7 @@
               <th width="8%">tambahan trado</th>
               <th width="12%">Supir</th>
               <th width="10%">Status</th>
-              <th width="10%">Jenis Kendaraan</th>
+              <th width="10%" class="kolom-jeniskendaraan">Jenis Kendaraan</th>
               <th width="8%">jlh trip</th>
               <th width="15%">Keterangan</th>
               <th width="6%">tgl batas</th>
@@ -227,6 +227,7 @@
   function setTableMandoAbsensi(data) {
     $('#detailList tbody').html('')
     let tradosupir = data.attributes.tradosupir
+    let activeKolomJenisKendaraan = data.attributes.activeKolomJenisKendaraan
     $.each(data.data, (index, detail) => {
       let detailRow = $(`
       <tr id="row${detail.id}" class="trow row_id${detail.id} index${index}">
@@ -254,7 +255,7 @@
           <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
           <input type="text" name="absentrado[]"  data-current-value="" id="absentrado-${index}" class="form-control  absentrado-lookup-${index}" value="">
         </td>
-        <td>
+        <td class='kolom-jeniskendaraan'>
           <input type="hidden" name="jeniskendaraan_id[]" value="">
           <input type="text" name="jeniskendaraan[]"  data-current-value="" id="jeniskendaraan-${index}" class="form-control  jeniskendaraan-lookup-${index}" value="">
         </td>
@@ -318,6 +319,10 @@
         $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
         $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.button-clear').attr('disabled', true)
         detailRow.find(`.delete-row`).attr('disabled', true);
+      }
+
+      if (!activeKolomJenisKendaraan) {
+        $(`.kolom-jeniskendaraan`).hide()
       }
       if (detail.uangjalan > 0) {
         detailRow.find(`.delete-row`).attr('disabled', true);
