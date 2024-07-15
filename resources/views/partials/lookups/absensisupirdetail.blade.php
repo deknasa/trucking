@@ -92,6 +92,8 @@
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           formatter: currencyFormat,
           align: "right",
+          hidden: true,
+          search: false
         },
         {
           label: 'TRADO - SUPIR',

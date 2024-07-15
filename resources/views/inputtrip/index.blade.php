@@ -395,6 +395,7 @@
           $('#crudForm [name=dari]').data('currentValue', '')
           $('#crudForm [name=sampai]').data('currentValue', '')
           $('#crudForm [name=tarifrincian]').data('currentValue', '')
+          setPulangLongtrip('', 'clear')
           createSuratPengantar()
 
         },
