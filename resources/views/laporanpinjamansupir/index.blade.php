@@ -70,7 +70,7 @@
 
     $(document).ready(function() {
         // initSelect2($('#crudForm').find('[name=jenis]'), false)
-        setJenisKaryawanOptions($('#crudForm'))
+        // setJenisKaryawanOptions($('#crudForm'))
 
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

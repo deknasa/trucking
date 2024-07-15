@@ -140,13 +140,17 @@
         $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
             fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            multiColumnSize: true,
+            extendSize: md_extendSize_1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
                     searching: 1,
                     valueName: 'supirdari_id',
                     searchText: 'supirdari-lookup',
-                    title: 'supir dari',
+                    title: 'supir lookup',
                     typeSearch: 'ALL',
                 }
             },

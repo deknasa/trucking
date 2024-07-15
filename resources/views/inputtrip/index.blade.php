@@ -1572,6 +1572,7 @@
           trado_id: $('#crudForm [name=trado_id]').val(),
           gandengan_id: $('#crudForm [name=gandengan_id]').val(),
           dari_id: $('#crudForm [name=dari_id]').val(),
+          sampai_id: $('#crudForm [name=sampai_id]').val(),
           gudangsama: $('#crudForm [name=statusgudangsama]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val(),
           isGudangSama: isGudangSama
@@ -1583,15 +1584,23 @@
         if ($('#crudForm [name=statusgudangsama]').val() == 205) {
 
           if ($('#crudForm [name=dari]').val() != 'KANDANG') {
-
-            $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
-            $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
-            setJobTruckingFromTripAsal()
-
             if ($('#crudForm [name=statuslongtrip]').val() == 66) {
+
+              $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
+              $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
+              setJobTruckingFromTripAsal()
+
               setPulangLongtrip(suratpengantar, 'select')
               clearUpahSupir()
             }
+          }
+
+          if ($('#crudForm [name=dari]').val() == 'KANDANG') {
+            $('#crudForm [name=jobtrucking]').attr('hidden', false)
+            $('#crudForm [name=labeljobtrucking]').attr('hidden', false)
+            $('#crudForm [name=jobtrucking]').attr('readonly', true)
+            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').hide()
+            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
           }
         }
         if ($('#crudForm [name=statuslongtrip]').val() == 65) {
@@ -1602,6 +1611,10 @@
           $('#crudForm [name=gandengan]').attr('readonly', true)
           $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
           $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
+
+          $('#crudForm [name=upah_id]').val('')
+          $('#crudForm [name=upah]').val('')
+          $('#crudForm [name=upah]').data('currentValue', '')
         }
       },
       onCancel: (element) => {
@@ -1612,14 +1625,21 @@
           if ($('#crudForm [name=dari]').val() != 'KANDANG') {
             $('#crudForm [name=jobtrucking]').val('')
             $('#crudForm [name=jobtrucking]').data('currentValue', '')
-            $('#crudForm [name=jobtrucking]').attr('readonly', false)
-            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').show()
-            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').show()
-
             if ($('#crudForm [name=statuslongtrip]').val() == 66) {
+              $('#crudForm [name=jobtrucking]').attr('readonly', false)
+              $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').show()
+              $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').show()
+
               setPulangLongtrip('', 'clear')
               clearUpahSupir()
             }
+          }
+          if ($('#crudForm [name=dari]').val() == 'KANDANG') {
+            $('#crudForm [name=jobtrucking]').attr('hidden', false)
+            $('#crudForm [name=labeljobtrucking]').attr('hidden', false)
+            $('#crudForm [name=jobtrucking]').attr('readonly', false)
+            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.input-group-append').hide()
+            $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
           }
         }
         if ($('#crudForm [name=statuslongtrip]').val() == 65) {
@@ -1630,6 +1650,10 @@
           $('#crudForm [name=gandengan]').attr('readonly', false)
           $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
           $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+
+          $('#crudForm [name=upah_id]').val('')
+          $('#crudForm [name=upah]').val('')
+          $('#crudForm [name=upah]').data('currentValue', '')
         }
         element.val('')
         element.data('currentValue', element.val())
@@ -1681,6 +1705,7 @@
           tarif_id: $('#crudForm [name=tarifrincian_id]').val(),
           tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
           tglbukti: $('#crudForm [name=tglbukti]').val(),
+          dari_id: $('#crudForm [name=dari_id]').val(),
           isPulangLongtrip: isPulangLongtrip
         }
       },
@@ -1921,12 +1946,19 @@
         getInfoTrado(tradoId)
         if (accessCabang == 'MEDAN') {
           if (absensi.statusgerobak == 246) {
+            if ($('#crudForm [name=nobukti_tripasal]').val() == '') {
+              $('#crudForm [name=gandengan]').val('')
+              $('#crudForm [name=gandengan_id]').val('')
+            }
             $('.gandengan').hide()
           } else {
             $('.gandengan').show()
-            $('#crudForm [name=gandengan]').attr('readonly', false)
-            $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
-            $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+
+            if ($('#crudForm [name=nobukti_tripasal]').val() == '') {
+              $('#crudForm [name=gandengan]').attr('readonly', false)
+              $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
+              $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+            }
           }
         }
         // clearTripAsal()
@@ -1945,9 +1977,14 @@
         $('.tableInfo').hide()
         if (accessCabang == 'MEDAN') {
           $('.gandengan').show()
-          $('#crudForm [name=gandengan]').attr('readonly', false)
-          $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
-          $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+
+          if ($('#crudForm [name=nobukti_tripasal]').val() == '') {
+            $('#crudForm [name=gandengan]').val('')
+            $('#crudForm [name=gandengan_id]').val('')
+            $('#crudForm [name=gandengan]').attr('readonly', false)
+            $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
+            $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+          }
         }
       }
     })

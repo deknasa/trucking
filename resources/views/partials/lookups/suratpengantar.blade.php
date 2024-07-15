@@ -29,6 +29,7 @@
         pelanggan_id: `{!! $pelanggan_id ?? '' !!}`,
         gandengan_id: `{!! $gandengan_id ?? '' !!}`,
         dari_id: `{!! $dari_id ?? '' !!}`,
+        sampai_id: `{!! $sampai_id ?? '' !!}`,
         gudangsama: `{!! $gudangsama ?? '' !!}`,
         longtrip: `{!! $longtrip ?? '' !!}`,
         isGudangSama: `{!! $isGudangSama ?? '' !!}`,

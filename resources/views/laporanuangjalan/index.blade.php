@@ -206,6 +206,8 @@
         $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
             fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -234,6 +236,8 @@
         $('.supirsampai-lookup').lookupMaster({
             title: 'Supir Lookup',
             fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

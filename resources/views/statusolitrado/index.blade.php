@@ -400,6 +400,8 @@
         $('.trado-lookup').lookupMaster({
             title: 'Trado Lookup',
             fileName: 'tradoMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

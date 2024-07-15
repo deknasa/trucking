@@ -28,6 +28,19 @@ let lg_mobile_2 = "600px";
 let lg_mobile_3 = "650px";
 let lg_mobile_4 = "700px";
 
+let sm_extendSize_1 = 50;
+let sm_extendSize_2 = 100;
+let sm_extendSize_3 = 150;
+let sm_extendSize_4 = 200;
+let md_extendSize_1 = 250;
+let md_extendSize_2 = 300;
+let md_extendSize_3 = 350;
+let md_extendSize_4 = 400;
+let lg_extendSize_1 = 450;
+let lg_extendSize_2 = 500;
+let lg_extendSize_3 = 550;
+let lg_extendSize_4 = 600;
+
 $(document).ready(function () {
     setFormats();
     startTime();

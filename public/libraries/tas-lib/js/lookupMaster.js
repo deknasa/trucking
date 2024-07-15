@@ -42,6 +42,8 @@ $.fn.lookupMaster = function (options) {
         totalRow: null,
         alignRightMobile: null,
         alignRight: null,
+        multiColumnSize: null,
+        extendSize: null,
         searching: null,
         disabledIsUsed: null,
         postData: {},
@@ -294,19 +296,26 @@ $.fn.lookupMaster = function (options) {
                     }
                 } else {
                     if (detectDeviceType() == "desktop") {
-                        lookupContainer = $(
-                            '<div id="lookup-' +
-                                getId +
-                                '" style="position: absolute; box-shadow: 10px 10px 5px 12px lightblue; border:1px; background-color: #fff;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%;  width: ' +
-                                width +
-                                'px; max-height: 300px;  overscroll-behavior: contain!important;"></div>'
-                        ).insertAfter(element);
+                        let multiColumnSize = settings.multiColumnSize;
+                        let extend = settings.extendSize;
+                        let sizeExtend = width + extend;
+                      
+                        const commonStyles = 'position: absolute; box-shadow: 10px 10px 5px 12px lightblue; border:1px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; max-height: 300px; overscroll-behavior: contain!important;';
+                        
+                        if (multiColumnSize) {
+                            lookupContainer = $(
+                                `<div id="lookup-${getId}" style="${commonStyles} width: ${sizeExtend}px;"></div>`
+                            ).insertAfter(element);
+                        } else {
+                            lookupContainer = $(
+                                `<div id="lookup-${getId}" style="${commonStyles} width: ${width}px;"></div>`
+                            ).insertAfter(element);
+                        }
 
                         if (alignRight) {
                             $(`#lookup-${getId}`).css("right", "0");
                         }
                     } else if (detectDeviceType() == "mobile") {
-                        
                         lookupContainer = $(
                             '<div id="lookup-' +
                                 getId +
