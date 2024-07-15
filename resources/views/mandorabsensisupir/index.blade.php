@@ -224,6 +224,7 @@
     })
   }
       
+  // <input type="text" name="namasupir[]" data-current-value="" id="namasupir" class="form-control supir-editable supir-lookup-${index}" id="supir_row_${index}" value="">  
   function setTableMandoAbsensi(data) {
     $('#detailList tbody').html('')
     let tradosupir = data.attributes.tradosupir
@@ -248,7 +249,7 @@
           <input type="hidden" name="supir_id_old[]" id="supir_old_id_row_${index}" value="${detail.supir_id_old}">
 
           <input type="hidden" name="supir_id[]" id="supir_id_row_${index}">
-          <input type="text" name="namasupir[]" data-current-value="" id="namasupir" class="form-control supir-editable supir-lookup-${index}" id="supir_row_${index}" value="">
+          <input type="text" name="namasupir[]" data-current-value="" class="form-control supir-editable supir-lookup-${index}" id="supir_row_${index}" value="">
         </td>
         
         <td>
@@ -485,46 +486,14 @@
   function initLookupDetail(index, detailRow, detail) {
     let rowLookup = index;
 
-    // $(`.supir-lookup-${rowLookup}`).last().lookup({
-    //   title: 'Supir Lookup',
-    //   fileName: 'supir',
-    //   beforeProcess: function(test) {
-    //     this.postData = {
-    //       Aktif: 'AKTIF',
-    //     }
-    //   },
-    //   onSelectRow: (supir, element) => {
-    //     element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-        
-    //     element.val(supir.namasupir)
-    //     element.data('currentValue', element.val())
-    //   },
-    //   onCancel: (element) => {
-    //     element.val(element.data('currentValue'))
-    //     console.log(element.data('currentValue'));
-    //   },
-    //   onClear: (element) => {
-    //     element.parents('td').find(`[name="supir_id[]"]`).val('')
-    //     element.val('')
-    //     element.data('currentValue', element.val())
-    //   }
-    // })
-
-    $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
-      title: 'Jenis Kendaraan',
-      fileName: 'supirMaster',
-      typeSearch: 'ALL',
-      searching: 1,
-      beforeProcess: function() {
+    $(`.supir-lookup-${rowLookup}`).last().lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `namasupir_${index}`,
-          searchText: `supir-lookup-${rowLookup}`,
-          title: 'SUPIR LOOKUP'
-        };
+        }
       },
-      
       onSelectRow: (supir, element) => {
         element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         
@@ -541,6 +510,38 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
+    //   title: 'Jenis Kendaraan',
+    //   fileName: 'supirMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function() {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: `namasupir_${index}`,
+    //       searchText: `supir-lookup-${rowLookup}`,
+    //       title: 'SUPIR LOOKUP'
+    //     };
+    //   },
+      
+    //   onSelectRow: (supir, element) => {
+    //     element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+        
+    //     element.val(supir.namasupir)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //     console.log(element.data('currentValue'));
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="supir_id[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     
     $(`.absentrado-lookup-${rowLookup}`).last().lookup({
       title: 'Absen Trado Lookup',
@@ -656,6 +657,8 @@
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
     var supirText = $(`.supir-lookup-${rowId}`).parents('.input-group').children()
+    // $(supirText).find('.button-clear').prop('disabled', false)
+    // $(supirText).find('.lookup-toggler').prop('disabled', false)
     if (kodeabsensitrado.supir) {
       // console.log(kodeabsensitrado);
       $(`#supir_id_row_${rowId}`).val("");
