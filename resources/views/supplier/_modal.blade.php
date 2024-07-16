@@ -1106,6 +1106,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          levelCoa: '3',
           searching: 1,
           valueName: 'akunpusat_id',
           searchText: 'akunpusat-lookup',
