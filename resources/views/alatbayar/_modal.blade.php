@@ -56,9 +56,8 @@
                   STATUS LANGSUNG CAIR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuslangsungcair" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS LANGSUNG CAIR --</option>
-                </select>
+                <input type="hidden" name="statuslangsungcair">
+                <input type="text" name="statuslangsungcairnama" id="statuslangsungcairnama" class="form-control lg-form statuslangsungcair-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -67,9 +66,8 @@
                   STATUS DEFAULT <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusdefault" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS DEFAULT --</option>
-                </select>
+                <input type="hidden" name="statusdefault">
+                <input type="text" name="statusdefaultnama" id="statusdefaultnama" class="form-control lg-form statusdefault-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -78,12 +76,9 @@
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
-
-
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -93,7 +88,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="bank_id">
-                <input type="text" name="bank" class="form-control bank-lookup">
+                <input type="text" id="bank" name="bank" class="form-control bank-lookup">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -249,7 +244,6 @@
     }
 
     initLookup()
-    initSelect2(form.find('.select2bs4'), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -306,9 +300,9 @@
 
     Promise
       .all([
-        setLangsungCairOptions(form),
-        setDefaultOptions(form),
-        setStatusAktifOptions(form),
+        // setLangsungCairOptions(form),
+        // setDefaultOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -347,9 +341,9 @@
 
     Promise
       .all([
-        setLangsungCairOptions(form),
-        setDefaultOptions(form),
-        setStatusAktifOptions(form),
+        // setLangsungCairOptions(form),
+        // setDefaultOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -387,9 +381,9 @@
 
     Promise
       .all([
-        setLangsungCairOptions(form),
-        setDefaultOptions(form),
-        setStatusAktifOptions(form),
+        // setLangsungCairOptions(form),
+        // setDefaultOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -428,9 +422,9 @@
 
     Promise
       .all([
-        setLangsungCairOptions(form),
-        setDefaultOptions(form),
-        setStatusAktifOptions(form),
+        // setLangsungCairOptions(form),
+        // setDefaultOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -516,127 +510,127 @@
 
 
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setDefaultOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusdefault]').empty()
-      relatedForm.find('[name=statusdefault]').append(
-        new Option('-- PILIH STATUS DEFAULT --', '', false, true)
-      ).trigger('change')
+  // const setDefaultOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusdefault]').empty()
+  //     relatedForm.find('[name=statusdefault]').append(
+  //       new Option('-- PILIH STATUS DEFAULT --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS DEFAULT"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusDefault => {
-            if (statusDefault.grp == 'STATUS DEFAULT') {
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS DEFAULT"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusDefault => {
+  //           if (statusDefault.grp == 'STATUS DEFAULT') {
 
-              let option = new Option(statusDefault.text, statusDefault.id)
+  //             let option = new Option(statusDefault.text, statusDefault.id)
 
-              relatedForm.find('[name=statusdefault]').append(option).trigger('change')
-            }
-          });
+  //             relatedForm.find('[name=statusdefault]').append(option).trigger('change')
+  //           }
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setLangsungCairOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuslangsungcair]').empty()
-      relatedForm.find('[name=statuslangsungcair]').append(
-        new Option('-- PILIH STATUS LANGSUNG CAIR --', '', false, true)
-      ).trigger('change')
+  // const setLangsungCairOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statuslangsungcair]').empty()
+  //     relatedForm.find('[name=statuslangsungcair]').append(
+  //       new Option('-- PILIH STATUS LANGSUNG CAIR --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS LANGSUNG CAIR"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusLangsunggCair => {
-            let option = new Option(statusLangsunggCair.text, statusLangsunggCair.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS LANGSUNG CAIR"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusLangsunggCair => {
+  //           let option = new Option(statusLangsunggCair.text, statusLangsunggCair.id)
 
-            relatedForm.find('[name=statuslangsungcair]').append(option).trigger('change')
-          });
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //           relatedForm.find('[name=statuslangsungcair]').append(option).trigger('change')
+  //         });
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
@@ -692,6 +686,15 @@
             if (index == 'keterangancoa') {
               element.data('current-value', value)
             }
+            if (index == 'statuslansungcairnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusdefaultnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -708,9 +711,39 @@
   }
 
   function initLookup() {
-    $('.bank-lookup').lookup({
+    // $('.bank-lookup').lookup({
+    //   title: 'Bank Lookup',
+    //   fileName: 'bank',
+    //   onSelectRow: (bank, element) => {
+    //     $('#crudForm [name=bank_id]').first().val(bank.id)
+    //     element.val(bank.namabank)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=bank_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+    $('.bank-lookup').lookupMaster({
       title: 'Bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'bank_id',
+          searchText: 'bank-lookup',
+          title: 'Bank Lookup',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
@@ -725,6 +758,7 @@
         element.data('currentValue', element.val())
       }
     })
+    
     $('.coa-lookup').lookup({
       title: 'COA Lookup',
       fileName: 'akunpusat',
@@ -742,6 +776,108 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.statuslangsungcair-lookup`).lookupMaster({
+      title: 'Status Lansung Cair Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS LANGSUNG CAIR',
+          subgrp: 'STATUS LANGSUNG CAIR',
+          searching: 1,
+          valueName: `statuslansungcair`,
+          searchText: `statuslansungcair-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Lansung Cair',
+        };
+      },
+      onSelectRow: (statuslansungcair, element) => {
+        $('#crudForm [name=statuslansungcair]').first().val(statuslansungcair.id)
+        element.val(statuslansungcair.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statuslansungcair"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusdefault-lookup`).lookupMaster({
+      title: 'Status Default Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS DEFAULT',
+          subgrp: 'STATUS DEFAULT',
+          searching: 1,
+          valueName: `statusdefault`,
+          searchText: `statusdefault-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Default'
+        };
+      },
+      onSelectRow: (statusdefault, element) => {
+        $('#crudForm [name=statusdefault]').first().val(statusdefault.id)
+        element.val(statusdefault.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusdefault"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function cekValidasidelete(Id, aksi) {

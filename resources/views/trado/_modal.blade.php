@@ -109,9 +109,8 @@
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">STATUS ABSENSI SUPIR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <select name="statusabsensisupir" class="form-control select2bs4">
-                      <option value="">-- PILIH STATUS ABSENSI SUPIR --</option>
-                    </select>
+                    <input type="hidden" name="statusabsensisupir">
+                    <input type="text" name="statusabsensisupirnama" id="statusabsensisupirnama" class="form-control lg-form statusabsensisupir-lookup">
                   </div>
                 </div>
               </div>
@@ -180,25 +179,22 @@
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <select name="statusjenisplat" class="form-control select2bs4">
-                      <option value="">-- PILIH JENIS PLAT --</option>
-                    </select>
+                    <input type="hidden" name="statusjenisplat">
+                    <input type="text" name="statusjenisplatnama" id="statusjenisplatnama" class="form-control lg-form statusjenisplat-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <select name="statusaktif" class="form-control select2bs4">
-                      <option value="">-- PILIH STATUS AKTIF --</option>
-                    </select>
+                    <input type="hidden" name="statusaktif">
+                    <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">STATUS GEROBAK <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <select name="statusgerobak" class="form-control select2bs4">
-                      <option value="">-- PILIH STATUS GEROBAK --</option>
-                    </select>
+                    <input type="hidden" name="statusgerobak">
+                    <input type="text" name="statusgerobaknama" id="statusgerobaknama" class="form-control lg-form statusgerobak-lookup">
                   </div>
                 </div>
 
@@ -416,6 +412,7 @@
       dropzone.removeAllFiles()
     })
   })
+
   function removeEditingBy(id) {
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
@@ -428,7 +425,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'trado'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -437,7 +434,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -445,7 +442,7 @@
       },
     })
   }
-  
+
 
   function cekValidasihistory(Id, Aksi) {
     $.ajax({
@@ -475,7 +472,7 @@
     })
   }
 
-  function cekValidasi(Id,Aksi) {
+  function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}trado/${Id}/cekValidasi`,
       method: 'POST',
@@ -492,12 +489,12 @@
           showDialog(response.message['keterangan'])
         } else {
           // deleteKaryawan(Id)
-          if (Aksi=="EDIT") {
+          if (Aksi == "EDIT") {
             editTrado(Id)
-          }else if (Aksi=="DELETE"){
+          } else if (Aksi == "DELETE") {
             deleteTrado(Id)
           }
-            
+
         }
         // var kondisi = response.kondisi
         // if (kondisi == true) {
@@ -529,10 +526,10 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusJenisPlatOptions(form),
-        setStatusGerobak(form),
-        setStatusAbsensiSupir(form),
+        // setStatusAktifOptions(form),
+        // setStatusJenisPlatOptions(form),
+        // setStatusGerobak(form),
+        // setStatusAbsensiSupir(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -590,12 +587,12 @@
     initDropzone(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2(form.find(`
-      [name="statusaktif"],
-      [name="statusjenisplat"],
-      [name="statusgerobak"],
-      [name="statusabsensisupir"]
-    `), true)
+    // initSelect2(form.find(`
+    //   [name="statusaktif"],
+    //   [name="statusjenisplat"],
+    //   [name="statusgerobak"],
+    //   [name="statusabsensisupir"]
+    // `), true)
 
     form.find('[name]').removeAttr('disabled')
   }
@@ -621,10 +618,10 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusJenisPlatOptions(form),
-        setStatusGerobak(form),
-        setStatusAbsensiSupir(form),
+        // setStatusAktifOptions(form),
+        // setStatusJenisPlatOptions(form),
+        // setStatusGerobak(form),
+        // setStatusAbsensiSupir(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -688,10 +685,10 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusJenisPlatOptions(form),
-        setStatusGerobak(form),
-        setStatusAbsensiSupir(form),
+        // setStatusAktifOptions(form),
+        // setStatusJenisPlatOptions(form),
+        // setStatusGerobak(form),
+        // setStatusAbsensiSupir(form),
         getMaxLength(form)
 
       ])
@@ -760,10 +757,10 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusJenisPlatOptions(form),
-        setStatusGerobak(form),
-        setStatusAbsensiSupir(form),
+        // setStatusAktifOptions(form),
+        // setStatusJenisPlatOptions(form),
+        // setStatusGerobak(form),
+        // setStatusAbsensiSupir(form),
         getMaxLength(form)
 
       ])
@@ -844,7 +841,21 @@
               element.val(value)
             }
 
+            if (index == 'statusabsensisupir') {
+              element.data('current-value', value)
+            }
 
+            if (index == 'statusjenisplat') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statusgerobak') {
+              element.data('current-value', value)
+            }
           })
           if (response.data.kodetrado_readonly != '') {
             form.find(`[name="kodetrado"]`).attr(response.data.kodetrado_readonly, true)
@@ -933,6 +944,142 @@
         }
       })
     }
+
+    $(`.statusabsensisupir-lookup`).lookupMaster({
+      title: 'Status Absensi Supir Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS ABSENSI SUPIR',
+          subgrp: 'STATUS ABSENSI SUPIR',
+          searching: 1,
+          valueName: `statusabsensisupir`,
+          searchText: `statusabsensisupir-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Absensi Supir'
+        };
+      },
+      onSelectRow: (statusabsensisupir, element) => {
+        $('#crudForm [name=statusabsensisupir]').first().val(statusabsensisupir.id)
+        element.val(statusabsensisupir.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusabsensisupir"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusjenisplat-lookup`).lookupMaster({
+      title: 'Status Jenis Plat Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'JENIS PLAT',
+          subgrp: 'JENIS PLAT',
+          searching: 1,
+          valueName: `statusjenisplat`,
+          searchText: `statusjenisplat-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Jenis Plat'
+        };
+      },
+      onSelectRow: (statusjenisplat, element) => {
+        $('#crudForm [name=statusjenisplat]').first().val(statusjenisplat.id)
+        element.val(statusjenisplat.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusjenisplat"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusgerobak-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS GEROBAK',
+          subgrp: 'STATUS GEROBAK',
+          searching: 1,
+          valueName: `statusgerobak`,
+          searchText: `statusgerobak-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Gerobak'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusgerobak]').first().val(status.id)
+        element.val(statusgerobak.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusgerobak"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function handleImageClick(event) {
@@ -1053,169 +1200,169 @@
   }
 
 
-  const setStatusGerobak = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusgerobak]').empty()
-      relatedForm.find('[name=statusgerobak]').append(
-        new Option('-- PILIH STATUS GEROBAK --', '', false, true)
-      ).trigger('change')
+  // const setStatusGerobak = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusgerobak]').empty()
+  //     relatedForm.find('[name=statusgerobak]').append(
+  //       new Option('-- PILIH STATUS GEROBAK --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS GEROBAK"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(jenisPlat => {
-            let option = new Option(jenisPlat.text, jenisPlat.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS GEROBAK"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(jenisPlat => {
+  //           let option = new Option(jenisPlat.text, jenisPlat.id)
 
-            relatedForm.find('[name=statusgerobak]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusgerobak]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setStatusAbsensiSupir = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusabsensisupir]').empty()
-      relatedForm.find('[name=statusabsensisupir]').append(
-        new Option('-- PILIH STATUS ABSENSI SUPIR --', '', false, true)
-      ).trigger('change')
+  // const setStatusAbsensiSupir = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusabsensisupir]').empty()
+  //     relatedForm.find('[name=statusabsensisupir]').append(
+  //       new Option('-- PILIH STATUS ABSENSI SUPIR --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS ABSENSI SUPIR"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(jenisPlat => {
-            let option = new Option(jenisPlat.text, jenisPlat.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS ABSENSI SUPIR"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(jenisPlat => {
+  //           let option = new Option(jenisPlat.text, jenisPlat.id)
 
-            relatedForm.find('[name=statusabsensisupir]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusabsensisupir]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setStatusJenisPlatOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusjenisplat]').empty()
-      relatedForm.find('[name=statusjenisplat]').append(
-        new Option('-- PILIH JENIS PLAT --', '', false, true)
-      ).trigger('change')
+  // const setStatusJenisPlatOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusjenisplat]').empty()
+  //     relatedForm.find('[name=statusjenisplat]').append(
+  //       new Option('-- PILIH JENIS PLAT --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "JENIS PLAT"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(jenisPlat => {
-            let option = new Option(jenisPlat.text, jenisPlat.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "JENIS PLAT"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(jenisPlat => {
+  //           let option = new Option(jenisPlat.text, jenisPlat.id)
 
-            relatedForm.find('[name=statusjenisplat]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusjenisplat]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -1384,8 +1531,6 @@
       $(this).removeAttr('disabled')
     })
   }
-
-
 
   function approvalSaringanHawa(id) {
     event.preventDefault()
@@ -1558,7 +1703,6 @@
     })
 
   }
-
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {

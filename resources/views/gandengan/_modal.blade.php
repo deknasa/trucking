@@ -668,6 +668,18 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'trado') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'container') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {

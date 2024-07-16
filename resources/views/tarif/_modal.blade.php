@@ -150,13 +150,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-
-                </select>
-                <!-- <input type="hidden" name="statusaktif_id" class="filled-row">
-                <input type="text" name="statusaktif_name" id="statusaktif_name" class="form-control lg-form statusaktif-lookup filled-row" autocomplete="off"> -->
-
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
             <div class="row form-group statussistemton">
@@ -166,14 +161,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH SISTEM TON --</option>
-
-                </select>
-
-                <!-- <input type="hidden" name="statussistemton_id" class="filled-row">
-                <input type="text" name="statussistemton_name" id="statussistemton_name" class="form-control lg-form statussistemton-lookup filled-row" autocomplete="off"> -->
-
+                <input type="hidden" name="statussistemton">
+                <input type="text" name="statussistemtonnama" id="statussistemtonnama" class="form-control lg-form statussistemton-lookup">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -549,9 +538,9 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
+        // setStatusSistemTonOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
@@ -596,8 +585,8 @@
     Promise
       .all([
         // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form),
+        // setStatusSistemTonOptions(form),
+        // setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
@@ -684,8 +673,8 @@
     Promise
       .all([
         // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form),
+        // setStatusSistemTonOptions(form),
+        // setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
@@ -729,8 +718,8 @@
     Promise
       .all([
         // setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form),
+        // setStatusSistemTonOptions(form),
+        // setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
         getMaxLength(form)
@@ -893,45 +882,45 @@
   }
 
 
-  const setStatusSistemTonOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statussistemton]').empty()
-      relatedForm.find('[name=statussistemton]').append(
-        new Option('-- PILIH SISTEM TON --', '', false, true)
-      ).trigger('change')
+  // const setStatusSistemTonOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statussistemton]').empty()
+  //     relatedForm.find('[name=statussistemton]').append(
+  //       new Option('-- PILIH SISTEM TON --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "SISTEM TON"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statussistemTon => {
-            let option = new Option(statussistemTon.text, statussistemTon.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "SISTEM TON"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statussistemTon => {
+  //           let option = new Option(statussistemTon.text, statussistemTon.id)
 
-            relatedForm.find('[name=statussistemton]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statussistemton]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
   const setStatusPostingTnlOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -973,45 +962,45 @@
     })
   }
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
   function showTarif(form, tarifId, parent = false) {
     return new Promise((resolve, reject) => {
@@ -1061,6 +1050,12 @@
               element.data('current-value', value)
             }
             if (index == 'upahsupir') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statussistemtonnama') {
               element.data('current-value', value)
             }
             if (!parent) {
@@ -1132,72 +1127,6 @@
   }
 
   function initLookup() {
-    $('.statusaktif-lookup').lookupMaster({
-      title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
-      beforeProcess: function(test) {
-        this.postData = {
-          url: `${apiUrl}parameter/combo`,
-          grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF',
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'statusaktif_id',
-          searchText: 'statusaktif-lookup',
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif',
-          typeSearch: 'ALL',
-        }
-      },
-      onSelectRow: (statusaktif, element) => {
-        $('#crudForm [name=statusaktif_id]').first().val(statusaktif.id)
-        element.val(statusaktif.text)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=statusaktif_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-    $('.statussistemton-lookup').lookupMaster({
-      title: 'Sistem Ton Lookup',
-      fileName: 'parameterMaster',
-      beforeProcess: function(test) {
-        this.postData = {
-          url: `${apiUrl}parameter/combo`,
-          grp: 'SISTEM TON',
-          subgrp: 'SISTEM TON',
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'statussistemton_id',
-          searchText: 'statussistemton-lookup',
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Sistem Ton',
-          typeSearch: 'ALL',
-        }
-      },
-      onSelectRow: (sistemTon, element) => {
-        $('#crudForm [name=statussistemton_id]').first().val(sistemTon.id)
-        element.val(sistemTon.text)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=statussistemton_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
     $('.statuspenyesuaianharga-lookup').lookupMaster({
       title: 'Penyesuaian Harga Lookup',
       fileName: 'parameterMaster',
@@ -1286,7 +1215,6 @@
         element.data('currentValue', element.val())
       }
     })
-
     $('.kota-lookup').lookupMaster({
       title: 'Kota Lookup',
       fileName: 'kotaMaster',
@@ -1322,8 +1250,6 @@
         element.data('currentValue', element.val())
       }
     })
-
-
     $('.zona-lookup').lookupMaster({
       title: 'Zona Lookup',
       fileName: 'zonaMaster',
@@ -1339,7 +1265,7 @@
           searchText: 'zona-lookup',
           singleColumn: '',
           hideLabel: '',
-          title: 'zona',
+          title: 'zona Lookup',
           typeSearch: 'ALL',
         }
       },
@@ -1357,7 +1283,6 @@
         element.data('currentValue', element.val())
       }
     })
-
     $('.jenisorder-lookup').lookupMaster({
       title: 'Jenis Order Lookup',
       fileName: 'jenisorderMaster',
@@ -1389,7 +1314,6 @@
         element.data('currentValue', element.val())
       }
     })
-
     $('.parent-lookup').lookupMaster({
       title: 'Tarif Lookup',
       fileName: 'tarifMaster',
@@ -1471,7 +1395,7 @@
     })
 
     $(`.statuslangsir-lookup`).lookupMaster({
-      title: 'Status Aktif Lookup',
+      title: 'Status Langsir Lookup',
       fileName: 'parameterMaster',
       typeSearch: 'ALL',
       searching: 1,
@@ -1490,6 +1414,38 @@
       },
       onSelectRow: (status, element) => {
         $('#crudForm [name=statuslangsir]').first().val(status.id)
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = $('#crudForm [name=statuslangsir]').first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    })
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
         element.val(status.text)
         element.data('currentValue', element.val())
       },
@@ -1497,7 +1453,41 @@
         element.val(element.data('currentValue'));
       },
       onClear: (element) => {
-        let status_id_input = $('#crudForm [name=statuslangsir]').first();
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statussistemton-lookup`).lookupMaster({
+      title: 'Status Sistem Ton Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'SISTEM TON',
+          subgrp: 'SISTEM TON',
+          searching: 1,
+          valueName: `statussistemton`,
+          searchText: `statussistemton-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Sistem Ton'
+        };
+      },
+      onSelectRow: (statussistemton, element) => {
+        $('#crudForm [name=statussistemton]').first().val(statussistemton.id)
+        element.val(statussistemton.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statussistemton"]`).first();
         status_id_input.val('');
         element.val('');
         element.data('currentValue', element.val());

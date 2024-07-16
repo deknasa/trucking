@@ -57,9 +57,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -207,8 +206,8 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    
-    initSelect2(form.find('.select2bs4'), true)
+    initLookup()
+    // initSelect2(form.find('.select2bs4'), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -229,7 +228,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'container'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -238,7 +237,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -247,7 +246,7 @@
     })
   }
 
-  function cekValidasi(Id,Aksi) {
+  function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}container/${Id}/cekValidasi`,
       method: 'POST',
@@ -257,7 +256,7 @@
       },
       data: {
         accessTokenTnl: accessTokenTnl,
-        aksi:Aksi
+        aksi: Aksi
       },
       success: response => {
         var kondisi = response.kondisi
@@ -265,9 +264,9 @@
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          if (Aksi=="edit") {
+          if (Aksi == "edit") {
             editContainer(Id)
-          }else if (Aksi=="delete"){
+          } else if (Aksi == "delete") {
             deleteContainer(Id)
           }
         }
@@ -299,7 +298,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -334,7 +333,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -372,7 +371,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -410,7 +409,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -453,30 +452,30 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}container/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}container/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
@@ -488,46 +487,6 @@
         resolve()
       })
     }
-  }
-
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
-
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
-
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
   }
 
   function showContainer(form, mekanikId) {
@@ -547,6 +506,10 @@
               element.val(value).trigger('change')
             } else {
               element.val(value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
             }
           })
 
@@ -596,6 +559,42 @@
         }
       })
     })
+  }
+
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()

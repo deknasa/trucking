@@ -20,7 +20,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="parent_id">
-                <input type="text" name="parent" class="form-control upahsupirtangki-lookup">
+                <input type="text" id="parent" name="parent" class="form-control upahsupirtangki-lookup">
               </div>
             </div>
 
@@ -43,7 +43,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="kotadari_id">
-                <input type="text" name="kotadari" class="form-control kotadari-lookup">
+                <input type="text" id="kotadari" name="kotadari" class="form-control kotadari-lookup">
               </div>
             </div>
 
@@ -92,9 +92,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-control select2bs4">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -364,7 +363,7 @@
     }
 
 
-    initSelect2(form.find('.select2bs4'), true)
+    // initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
     initLookup()
   })
@@ -444,7 +443,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -486,7 +485,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -561,7 +560,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -608,7 +607,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -881,49 +880,6 @@
     }
   }
 
-
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
-
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
-
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
-
-
   function showUpahSupir(form, userId, parent = null) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
@@ -965,6 +921,23 @@
             if (index == 'tariftangki') {
               element.data('currentValue', value)
             }
+
+            if (index == 'parent') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'kotaupahsupir') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'kotadari') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+
             // if(!parent && aksiEdit == true){
             //   console.log('tru kaaa')
             //   if (index == 'tujuan' || index == 'penyesuaian' || index == 'kotadari' || index == 'kotasampai' || index == 'zona' || index == 'parent' || index == 'tarif') {
@@ -1311,20 +1284,79 @@
 
 
   function initLookup() {
-    $('.upahsupirtangki-lookup').lookup({
-      title: 'upah supir tangki Lookup',
-      fileName: 'upahsupirtangki',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
+    // $('.upahsupirtangki-lookup').lookup({
+    //   title: 'upah supir tangki Lookup',
+    //   fileName: 'upahsupirtangki',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
 
+    //       Aktif: 'AKTIF',
+    //       isParent: true
+    //     }
+    //   },
+    //   onSelectRow: (upahsupir, element) => {
+    //     // console.log(element);
+
+    //     $('#crudForm [name=parent_id]').first().val(upahsupir.id)
+    //     $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
+
+    //     $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
+    //     $('#crudForm [name=kotasampai_id]').val('')
+    //     $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
+    //     // $('#kotaupahsupir').prop('disabled', false)
+    //     // $('#kotaupahsupir').parent('.input-group').show()
+    //     $('#kotatarif').prop('type', 'hidden')
+    //     $('#kotatarif').prop('disabled', true).hide()
+
+    //     element.data('currentValue', element.val())
+    //     upahSupirKota = upahsupir.kotasampai_id;
+    //     // Menghapus nilai autonumeric pada input jarak
+    //     // $('#crudForm [name=jarak]').autoNumeric('remove')
+    //     let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
+    //     let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
+
+    //     if (autoNumericInstance) {
+    //       autoNumericInstance.remove(); // Hapus efek AutoNumeric
+    //     }
+
+
+    //     let form = $('#crudForm')
+    //     showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
+    //       initDropzone('edit', upahsupir)
+    //       element.val(upahSupirKota)
+    //       element.data('currentValue', element.val())
+    //     })
+
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=parent_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+
+    //   }
+    // })
+
+    $('.upahsupirtangki-lookup').lookupMaster({
+      title: 'Upah Supir Tangki Lookup',
+      fileName: 'upahsupirtangkiMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'upahsupirtangki_id',
+          searchText: 'upahsupirtangki-lookup',
+          title: 'Upah Supir Tangki Lookup',
+          typeSearch: 'ALL',
           isParent: true
         }
       },
       onSelectRow: (upahsupir, element) => {
-        // console.log(element);
-
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
 
@@ -1336,17 +1368,19 @@
         $('#kotatarif').prop('type', 'hidden')
         $('#kotatarif').prop('disabled', true).hide()
 
+
+        // element.val(upahsupir.keterangan)
         element.data('currentValue', element.val())
+
         upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
         // $('#crudForm [name=jarak]').autoNumeric('remove')
         let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
-       let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
-       
+        let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
+
         if (autoNumericInstance) {
           autoNumericInstance.remove(); // Hapus efek AutoNumeric
         }
-        
 
         let form = $('#crudForm')
         showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
@@ -1354,7 +1388,6 @@
           element.val(upahSupirKota)
           element.data('currentValue', element.val())
         })
-
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1363,23 +1396,27 @@
         $('#crudForm [name=parent_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
-
       }
     })
 
-    $('.kotadari-lookup').lookup({
-      title: 'Kota Dari Lookup',
-      fileName: 'kota',
+    $('.kotadari-lookup').lookupMaster({
+      title: 'kota Dari Lookup',
+      fileName: 'kotaMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kotadari_id',
+          searchText: 'kotadari-lookup',
+          title: 'Kota Dari Lookup',
+          typeSearch: 'ALL',
         }
       },
-      onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotadari_id]').first().val(kota.id)
-        element.val(kota.kodekota)
+      onSelectRow: (kotadari, element) => {
+        $('#crudForm [name=kotadari_id]').first().val(kotadari.id)
+        element.val(kotadari.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1392,19 +1429,24 @@
       }
     })
 
-    $('.kotasampai-lookup').lookup({
+    $('.kotasampai-lookup').lookupMaster({
       title: 'Kota Tujuan Lookup',
-      fileName: 'kota',
+      fileName: 'kotaMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kotasampai_id',
+          searchText: 'kotasampai-lookup',
+          title: 'Kota Tujuan Lookup',
+          typeSearch: 'ALL',
         }
       },
-      onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
-        element.val(kota.kodekota)
+      onSelectRow: (kotasampai, element) => {
+        $('#crudForm [name=kotasampai_id]').first().val(kotasampai.id)
+        element.val(kotasampai.keterangan)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1412,38 +1454,84 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
-        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.val('')
         element.data('currentValue', element.val())
       }
     })
 
-    $('.tariftangki-lookup').lookup({
-      title: 'Tarif Tangki Lookup',
-      fileName: 'tariftangki',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
+    // $('.tariftangki-lookup').lookup({
+    //   title: 'Tarif Tangki Lookup',
+    //   fileName: 'tariftangki',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
 
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (tarif, element) => {
+    //     $('#crudForm').find(`[name=penyesuaian]`).val(tarif.penyesuaian)
+    //     $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
+    //     $('#crudForm [name=kotasampai]').val(tarif.tujuan)
+    //     $('#crudForm [name=kotasampai]').data('currentValue', tarif.tujuan)
+    //     $('#crudForm [name=tariftangki_id]').first().val(tarif.id)
+    //     // $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
+    //     // $('#kotaupahsupir').prop('readonly', true)
+    //     // $('#kotaupahsupir').parent('.input-group').hide()
+    //     $('#kotatarif').prop('type', 'text')
+    //     $('#kotatarif').show()
+    //     // $('#kotatarif').prop('readonly', true).show()
+
+    //     $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
+    //     $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
+    //     // element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
+    //     element.val(tarif.tujuanpenyesuaian)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
+    //     $('#crudForm [name=kotasampai_id]').val('')
+    //     $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
+    //     $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
+    //     $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
+    //     // $('#kotaupahsupir').prop('disabled', false)
+    //     // $('#kotaupahsupir').parent('.input-group').show()
+    //     $('#kotatarif').prop('type', 'hidden')
+    //     $('#kotatarif').prop('disabled', true).hide()
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     $('#crudForm [name=tariftangki_id]').val('')
+    //   }
+    // })
+
+    $('.tariftangki-lookup').lookupMaster({
+      title: 'Tarif Tangki Lookup',
+      fileName: 'tariftangkiMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'tariftangki_id',
+          searchText: 'tariftangki-lookup',
+          title: 'Tarif Tangki Lookup',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (tarif, element) => {
-        $('#crudForm').find(`[name=penyesuaian]`).val(tarif.penyesuaian)
+        $('#crudForm [name=penyesuaian]').first().val(tarif.penyesuaian)
         $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
-        $('#crudForm [name=kotasampai]').val(tarif.tujuan)
-        $('#crudForm [name=kotasampai]').data('currentValue', tarif.tujuan)
+        $('#crudForm [name=kotasampai]').first().val(tarif.tujuan)
         $('#crudForm [name=tariftangki_id]').first().val(tarif.id)
-        // $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
-        // $('#kotaupahsupir').prop('readonly', true)
-        // $('#kotaupahsupir').parent('.input-group').hide()
         $('#kotatarif').prop('type', 'text')
         $('#kotatarif').show()
-        // $('#kotatarif').prop('readonly', true).show()
 
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
-        // element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
         element.val(tarif.tujuanpenyesuaian)
         element.data('currentValue', element.val())
       },
@@ -1456,8 +1544,6 @@
         $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
-        // $('#kotaupahsupir').prop('disabled', false)
-        // $('#kotaupahsupir').parent('.input-group').show()
         $('#kotatarif').prop('type', 'hidden')
         $('#kotatarif').prop('disabled', true).hide()
         element.val('')
@@ -1466,37 +1552,39 @@
       }
     })
 
-    // $('.tariftangki-lookup').lookupMaster({
-    //   title: 'tarif tangki Lookup',
-    //   fileName: 'tariftangkiMaster',
-    //   typeSearch: 'ALL',
-    //   searching: 1,
-    //   beforeProcess: function(test) {
-    //     this.postData = {
-    //       Aktif: 'AKTIF',
-    //       searching: 1,
-    //       valueName: 'tariftangki_id',
-    //       searchText: 'tariftangki-lookup',
-    //       title: 'Tarif Tangki',
-    //       typeSearch: 'ALL',
-    //     }
-    //   },
-    //   onSelectRow: (tarif, element) => {
-    //     $('#crudForm [name=penyesuaian]').first().val(tarif.penyesuaian)
-    //     $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
-    //     $('#crudForm [name=kotasampai]').first().val(tarif.tujuan)
-    //     $('#crudForm [name=tariftangki_id]').first().val(tarif.id)
-    //     element.data('currentValue', element.val())
-    //   },
-    //   onCancel: (element) => {
-    //     element.val(element.data('currentValue'))
-    //   },
-    //   onClear: (element) => {
-    //     $('#crudForm [name=tariftangki_id]').first().val('')
-    //     element.val('')
-    //     element.data('currentValue', element.val())
-    //   }
-    // })
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()

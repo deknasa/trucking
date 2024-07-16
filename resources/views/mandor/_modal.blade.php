@@ -46,9 +46,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
 
@@ -218,9 +217,9 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    
+
     initLookup()
-    initSelect2(form.find('.select2bs4'), true)
+    // initSelect2(form.find('.select2bs4'), true)
 
     $('#multiple')
       .select2({
@@ -234,6 +233,7 @@
     removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
   function removeEditingBy(id) {
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
@@ -246,7 +246,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'mandor'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -255,7 +255,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -282,7 +282,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setUserOptions(form),
         getMaxLength(form)
       ])
@@ -318,7 +318,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setUserOptions(form),
         getMaxLength(form)
       ])
@@ -357,7 +357,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setUserOptions(form),
         getMaxLength(form)
       ])
@@ -396,7 +396,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setUserOptions(form),
         getMaxLength(form)
       ])
@@ -429,30 +429,30 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}mandor/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}mandor/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
@@ -525,6 +525,10 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
           response.detail.forEach((user) => {
             userIds.push(user.user_id)
@@ -576,7 +580,7 @@
     })
   }
 
-  function cekValidasi(Id,Aksi) {
+  function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}mandor/${Id}/cekValidasi`,
       method: 'POST',
@@ -593,9 +597,9 @@
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          if (Aksi=="edit") {
+          if (Aksi == "edit") {
             editMandor(Id)
-          }else if (Aksi=="delete"){
+          } else if (Aksi == "delete") {
             deleteMandor(Id)
           }
         }
@@ -629,6 +633,39 @@
       }
     })
 
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
 
