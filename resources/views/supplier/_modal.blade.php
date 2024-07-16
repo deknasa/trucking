@@ -183,7 +183,7 @@
               <div class="col-8 col-md-9">
                 <div class="input-group">
                   <input type="hidden" name="coa">
-                  <input type="text" name="ketcoa" class="form-control akunpusat-lookup">
+                  <input type="text" id="ketcoa" name="ketcoa" class="form-control akunpusat-lookup">
                 </div>
               </div>
             </div>
@@ -202,9 +202,8 @@
             <div class="form-group row">
               <label class="col-sm-3 col-md-3 col-form-label">STATUS DAFTAR HARGA<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-9">
-                <select name="statusdaftarharga" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS DAFTAR HARGA --</option>
-                </select>
+                <input type="hidden" name="statusdaftarharga">
+                <input type="text" name="statusdaftarharganama" id="statusdaftarharganama" class="form-control lg-form statusdaftarharga-lookup">
               </div>
             </div>
 
@@ -257,9 +256,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
 
@@ -297,7 +295,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   let dataMaxLength = []
-  var data_id 
+  var data_id
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -416,13 +414,12 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    initSelect2(form.find('.select2bs4'), true)
     initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    removeEditingBy(data_id)    
+    removeEditingBy(data_id)
 
     $('#crudModal').find('.modal-body').html(modalBody)
   })
@@ -479,7 +476,7 @@
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
         // setTampilan(form),
-        getMaxLength(form)        
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -616,70 +613,70 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}supplier/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-              if (index == 'kodepos') {
-                form.find(`[name=kodepos]`).attr('maxlength', 50)
-              }
-              if (index == 'namakontak') {
-                form.find(`[name=namakontak]`).attr('maxlength', 150)
-              }
-              if (index == 'notelp1') {
-                form.find(`[name=notelp1]`).attr('maxlength', 13)
-              }
-              if (index == 'notelp2') {
-                form.find(`[name=notelp2]`).attr('maxlength', 13)
-              }
-              if (index == 'namarekening') {
-                form.find(`[name=namarekening]`).attr('maxlength', 150)
-              }
-              if (index == 'jabatan') {
-                form.find(`[name=jabatan]`).attr('maxlength', 150)
-              }
-              if (index == 'kategoriusaha') {
-                form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
-              }
-              if (index == 'rekeningbank') {
-                form.find(`[name=rekeningbank]`).attr('maxlength', 150)
-              }
-              if (index == 'email') {
-                form.find(`[name=email]`).attr('maxlength', 50)
-              }
-              if (index == 'web') {
-                form.find(`[name=web]`).attr('maxlength', 50)
-              }
-              if (index == 'namapemilik') {
-                form.find(`[name=namapemilik]`).attr('maxlength', 150)
-              }
-              if (index == 'jenisusaha') {
-                form.find(`[name=jenisusaha]`).attr('maxlength', 150)
-              }
-              if (index == 'bank') {
-                form.find(`[name=bank]`).attr('maxlength', 150)
-              }
+        $.ajax({
+          url: `${apiUrl}supplier/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+                if (index == 'kodepos') {
+                  form.find(`[name=kodepos]`).attr('maxlength', 50)
+                }
+                if (index == 'namakontak') {
+                  form.find(`[name=namakontak]`).attr('maxlength', 150)
+                }
+                if (index == 'notelp1') {
+                  form.find(`[name=notelp1]`).attr('maxlength', 13)
+                }
+                if (index == 'notelp2') {
+                  form.find(`[name=notelp2]`).attr('maxlength', 13)
+                }
+                if (index == 'namarekening') {
+                  form.find(`[name=namarekening]`).attr('maxlength', 150)
+                }
+                if (index == 'jabatan') {
+                  form.find(`[name=jabatan]`).attr('maxlength', 150)
+                }
+                if (index == 'kategoriusaha') {
+                  form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
+                }
+                if (index == 'rekeningbank') {
+                  form.find(`[name=rekeningbank]`).attr('maxlength', 150)
+                }
+                if (index == 'email') {
+                  form.find(`[name=email]`).attr('maxlength', 50)
+                }
+                if (index == 'web') {
+                  form.find(`[name=web]`).attr('maxlength', 50)
+                }
+                if (index == 'namapemilik') {
+                  form.find(`[name=namapemilik]`).attr('maxlength', 150)
+                }
+                if (index == 'jenisusaha') {
+                  form.find(`[name=jenisusaha]`).attr('maxlength', 150)
+                }
+                if (index == 'bank') {
+                  form.find(`[name=bank]`).attr('maxlength', 150)
+                }
 
-              if (index == 'kota') {
-                form.find(`[name=kota]`).attr('maxlength', 150)
+                if (index == 'kota') {
+                  form.find(`[name=kota]`).attr('maxlength', 150)
+                }
               }
-            }
-          })
-          dataMaxLength = response.data
-          form.attr('has-maxlength', true)
-          resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-         }
+            })
+            dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
         })
       })
     } else {
@@ -690,48 +687,48 @@
             form.find(`[name=${index}]`).attr('maxlength', value)
 
             if (index == 'kodepos') {
-                form.find(`[name=kodepos]`).attr('maxlength', 50)
-              }
-              if (index == 'namakontak') {
-                form.find(`[name=namakontak]`).attr('maxlength', 150)
-              }
-              if (index == 'notelp1') {
-                form.find(`[name=notelp1]`).attr('maxlength', 13)
-              }
-              if (index == 'notelp2') {
-                form.find(`[name=notelp2]`).attr('maxlength', 13)
-              }
-              if (index == 'namarekening') {
-                form.find(`[name=namarekening]`).attr('maxlength', 150)
-              }
-              if (index == 'jabatan') {
-                form.find(`[name=jabatan]`).attr('maxlength', 150)
-              }
-              if (index == 'kategoriusaha') {
-                form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
-              }
-              if (index == 'rekeningbank') {
-                form.find(`[name=rekeningbank]`).attr('maxlength', 150)
-              }
-              if (index == 'email') {
-                form.find(`[name=email]`).attr('maxlength', 50)
-              }
-              if (index == 'web') {
-                form.find(`[name=web]`).attr('maxlength', 50)
-              }
-              if (index == 'namapemilik') {
-                form.find(`[name=namapemilik]`).attr('maxlength', 150)
-              }
-              if (index == 'jenisusaha') {
-                form.find(`[name=jenisusaha]`).attr('maxlength', 150)
-              }
-              if (index == 'bank') {
-                form.find(`[name=bank]`).attr('maxlength', 150)
-              }
+              form.find(`[name=kodepos]`).attr('maxlength', 50)
+            }
+            if (index == 'namakontak') {
+              form.find(`[name=namakontak]`).attr('maxlength', 150)
+            }
+            if (index == 'notelp1') {
+              form.find(`[name=notelp1]`).attr('maxlength', 13)
+            }
+            if (index == 'notelp2') {
+              form.find(`[name=notelp2]`).attr('maxlength', 13)
+            }
+            if (index == 'namarekening') {
+              form.find(`[name=namarekening]`).attr('maxlength', 150)
+            }
+            if (index == 'jabatan') {
+              form.find(`[name=jabatan]`).attr('maxlength', 150)
+            }
+            if (index == 'kategoriusaha') {
+              form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
+            }
+            if (index == 'rekeningbank') {
+              form.find(`[name=rekeningbank]`).attr('maxlength', 150)
+            }
+            if (index == 'email') {
+              form.find(`[name=email]`).attr('maxlength', 50)
+            }
+            if (index == 'web') {
+              form.find(`[name=web]`).attr('maxlength', 50)
+            }
+            if (index == 'namapemilik') {
+              form.find(`[name=namapemilik]`).attr('maxlength', 150)
+            }
+            if (index == 'jenisusaha') {
+              form.find(`[name=jenisusaha]`).attr('maxlength', 150)
+            }
+            if (index == 'bank') {
+              form.find(`[name=bank]`).attr('maxlength', 150)
+            }
 
-              if (index == 'kota') {
-                form.find(`[name=kota]`).attr('maxlength', 150)
-              }
+            if (index == 'kota') {
+              form.find(`[name=kota]`).attr('maxlength', 150)
+            }
           }
         })
         resolve()
@@ -1045,6 +1042,14 @@
             if (index == 'ketcoa') {
               element.data('current-value', value)
             }
+
+            if (index == 'statusdaftarharganama') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -1059,7 +1064,7 @@
     })
   }
 
-  function cekValidasidelete(Id,aksi) {
+  function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}supplier/${Id}/cekValidasi`,
       method: 'POST',
@@ -1067,7 +1072,7 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      data:{
+      data: {
         aksi: aksi,
       },
       success: response => {
@@ -1081,9 +1086,9 @@
         if (error == true) {
           showDialog(response.message)
         } else {
-          if (aksi=="edit") {
+          if (aksi == "edit") {
             editSupplier(Id)
-          }else if (aksi=="delete"){
+          } else if (aksi == "delete") {
             deleteSupplier(Id)
           }
         }
@@ -1092,19 +1097,24 @@
   }
 
   function initLookup() {
-    $('.akunpusat-lookup').lookup({
+
+    $('.akunpusat-lookup').lookupMaster({
       title: 'Akun Pusat Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-          levelCoa: '3',
           Aktif: 'AKTIF',
-          Supplier: 'Supplier',
+          searching: 1,
+          valueName: 'akunpusat_id',
+          searchText: 'akunpusat-lookup',
+          title: 'Akun Pusat Lookup',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
-        $('#crudForm [name=coa]').val(akunpusat.coa)
+        $('#crudForm [name=coa]').first().val(akunpusat.coa)
         element.val(akunpusat.kodeket)
         element.data('currentValue', element.val())
       },
@@ -1112,11 +1122,79 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=coa]').val('')
+        $('#crudForm [name=coa]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.statusdaftarharga-lookup`).lookupMaster({
+      title: 'Status Daftar Harga Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS DAFTAR HARGA',
+          subgrp: 'STATUS DAFTAR HARGA',
+          searching: 1,
+          valueName: `statusdaftarharga`,
+          searchText: `statusdaftarharga-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Daftar Harga'
+        };
+      },
+      onSelectRow: (statusdaftarharga, element) => {
+        $('#crudForm [name=statusdaftarharga]').first().val(statusdaftarharga.id)
+        element.val(statusdaftarharga.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusdaftarharga"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()

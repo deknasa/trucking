@@ -119,12 +119,9 @@
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
-
-
               <div class="col-12 col-sm-9 col-md-9">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -146,8 +143,8 @@
 
 @push('scripts')
 <script>
-    let dataMaxLength = []
-    var data_id 
+  let dataMaxLength = []
+  var data_id
 
 
   let hasFormBindKeys = false
@@ -183,7 +180,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      }) 
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -270,13 +267,12 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    initSelect2(form.find('.select2bs4'), true)
-
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    removeEditingBy(data_id)     
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -387,6 +383,41 @@
     })
   }
 
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+  }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
@@ -547,36 +578,36 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
 
-      $.ajax({
-        url: `${apiUrl}shipper/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-              if (index == 'kodepos') {
-                form.find(`[name=${index}]`).attr('maxlength', 5)
+        $.ajax({
+          url: `${apiUrl}shipper/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+                if (index == 'kodepos') {
+                  form.find(`[name=${index}]`).attr('maxlength', 5)
+                }
+                if (index == 'telp') {
+                  form.find(`[name=${index}]`).attr('maxlength', 13)
+                }
               }
-              if (index == 'telp') {
-                form.find(`[name=${index}]`).attr('maxlength', 13)
-              }
-            }
-          })
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-     })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
@@ -584,15 +615,15 @@
             form.find(`[name=${index}]`).attr('maxlength', value)
 
             if (index == 'kodepos') {
-                form.find(`[name=${index}]`).attr('maxlength', 5)
-              }
-              if (index == 'telp') {
-                form.find(`[name=${index}]`).attr('maxlength', 13)
-              }
+              form.find(`[name=${index}]`).attr('maxlength', 5)
+            }
+            if (index == 'telp') {
+              form.find(`[name=${index}]`).attr('maxlength', 13)
+            }
           }
         })
         resolve()
-      })  
+      })
     }
   }
 
@@ -613,6 +644,10 @@
               element.val(value).trigger('change')
             } else {
               element.val(value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
             }
           })
           if (form.data('action') === 'delete') {
@@ -674,7 +709,7 @@
 
   }
 
-  function cekValidasidelete(Id,aksi) {
+  function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}shipper/${Id}/cekValidasi`,
       method: 'POST',
@@ -682,7 +717,7 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      data:{
+      data: {
         aksi: aksi,
       },
       success: response => {
@@ -697,9 +732,9 @@
         if (error == true) {
           showDialog(response.message)
         } else {
-          if (aksi=="edit") {
+          if (aksi == "edit") {
             editPelanggan(Id)
-          }else if (aksi=="delete"){
+          } else if (aksi == "delete") {
             deletePelanggan(Id)
           }
         }

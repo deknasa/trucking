@@ -214,7 +214,6 @@
 
     initLookup()
     initDatepicker()
-    initSelect2(form.find('.select2bs4'), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -236,7 +235,7 @@
         aksi: 'BATAL',
         table: 'kategori'
         
-      },
+      }, 
       success: response => {
         $("#crudModal").modal("hide")
       },
@@ -545,7 +544,7 @@
   function initLookup() {
 
     $('.subkelompok-lookup').lookupMaster({
-      title: 'Subkelompok Lookup',
+      title: 'Sub kelompok Lookup',
       fileName: 'subkelompokMaster',
       typeSearch: 'ALL',
       searching: 1,

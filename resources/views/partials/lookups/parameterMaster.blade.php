@@ -128,6 +128,8 @@ $idLookup = isset($id) ? $id : null;
         postData: {
             grp: `{!! $grp ?? '' !!}`,
             subgrp: `{!! $subgrp ?? '' !!}`,
+            filters: `{!! $filters ?? '' !!}`,
+
         },
         idPrefix: 'parameterLookup',
         colModel: column,

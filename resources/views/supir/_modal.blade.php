@@ -80,9 +80,8 @@
                       STATUS POSTING TNL <span class="text-danger">*</span></label>
                   </div>
                   <div class="col-12 col-md-10">
-                    <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
-                      <option value="">-- PILIH STATUS POSTING TNL --</option>
-                    </select>
+                    <input type="hidden" name="statuspostingtnl">
+                    <input type="text" name="statuspostingtnlnama" id="statuspostingtnlnama" class="form-control lg-form statuspostingtnl-lookup">
                   </div>
                 </div>
               </div>
@@ -125,9 +124,8 @@
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                   <div class="col-sm-10">
-                    <select name="statusaktif" class="form-control select2bs4" style="width: 100%;">
-                      <option value="">-- PILIH STATUS AKTIF --</option>
-                    </select>
+                    <input type="hidden" name="statusaktif">
+                    <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
                   </div>
                 </div>
 
@@ -460,7 +458,7 @@
     //   activeGrid = null
 
     //   getMaxLength(form)
-    //   initLookup()
+    // initLookup()
   })
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
@@ -583,8 +581,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -630,7 +628,7 @@
     initDropzonePdf(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2(form.find('.select2bs4'), true)
+    // initSelect2(form.find('.select2bs4'), true)
     form.find('[name]').removeAttr('disabled')
   }
 
@@ -653,8 +651,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -665,7 +663,7 @@
             initDropzonePdf(form.data('action'), supir)
             initLookup()
             initDatepicker()
-            initSelect2(form.find('.select2bs4'), true)
+            // initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
             form.find('[name=statuspostingtnl]').prop('disabled', true)
           })
@@ -710,8 +708,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -771,8 +769,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -835,6 +833,14 @@
               element.val(dateFormat(value))
             } else {
               element.val(value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statuspostingtnlnama') {
+              element.data('current-value', value)
             }
           })
           if (response.data.noktp_readonly != '') {
@@ -949,6 +955,74 @@
         }
       })
     }
+
+    $(`.statuspostingtnl-lookup`).lookupMaster({
+      title: 'Status Posting TNL Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS POSTING TNL',
+          subgrp: 'STATUS POSTING TNL',
+          searching: 1,
+          valueName: `statuspostingtnl`,
+          searchText: `statuspostingtnl-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Posting TNL'
+        };
+      },
+      onSelectRow: (statuspostingtnl, element) => {
+        $('#crudForm [name=statuspostingtnl]').first().val(statuspostingtnl.id)
+        element.val(statuspostingtnl.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statuspostingtnl"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (statusaktif, element) => {
+        $('#crudForm [name=statusaktif]').first().val(statusaktif.id)
+        element.val(statusaktif.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function handlePDFClick(event) {
@@ -1208,86 +1282,87 @@
   }
 
 
-  const setStatusPostingTnlOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuspostingtnl]').empty()
-      relatedForm.find('[name=statuspostingtnl]').append(
-        new Option('-- PILIH POSTING TNL --', '', false, true)
-      ).trigger('change')
+  // const setStatusPostingTnlOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statuspostingtnl]').empty()
+  //     relatedForm.find('[name=statuspostingtnl]').append(
+  //       new Option('-- PILIH POSTING TNL --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS POSTING TNL"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statuspostingTnl => {
-            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS POSTING TNL"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statuspostingTnl => {
+  //           let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
 
-            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
+
   const setTampilan = function(relatedForm) {
     return new Promise((resolve, reject) => {
       let data = [];

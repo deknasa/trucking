@@ -52,9 +52,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -200,10 +199,7 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    
-    initSelect2(form.find(`
-      [name="statusaktif"]
-    `), true)
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -224,7 +220,7 @@
         id: id,
         aksi: 'BATAL',
         table: 'jenistrado'
-        
+
       },
       success: response => {
         $("#crudModal").modal("hide")
@@ -233,7 +229,7 @@
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          
+
           setErrorMessages(form, error.responseJSON.errors);
         } else {
           showDialog(error.responseJSON)
@@ -402,37 +398,37 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}jenistrado/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}jenistrado/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
             form.find(`[name=${index}]`).attr('maxlength', value)
 
-   
+
           }
         })
         resolve()
@@ -498,6 +494,10 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
           resolve()
         },
@@ -538,7 +538,7 @@
     })
   }
 
-  function cekValidasi(Id,Aksi) {
+  function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}jenistrado/${Id}/cekValidasi`,
       method: 'POST',
@@ -554,15 +554,50 @@
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          if (Aksi=="EDIT") {
+          if (Aksi == "EDIT") {
             editJenisTrado(Id)
-          }else if (Aksi=="DELETE"){
+          } else if (Aksi == "DELETE") {
             deleteJenisTrado(Id)
           }
         }
 
       }
     })
+  }
+
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusaktif]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()
