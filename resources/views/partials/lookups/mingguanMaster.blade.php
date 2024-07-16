@@ -104,6 +104,7 @@ $idLookup = isset($id) ? $id : null;
         datatype: "json",
         postData: {
             aktif: `{!! $Aktif ?? '' !!}`,
+            bulan: `01-{!! $bulan ?? '' !!}`,
         },
         idPrefix: 'mingguanLookup',
         colModel: column,

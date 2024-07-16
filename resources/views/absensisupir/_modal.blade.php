@@ -56,7 +56,7 @@
                           <th width="10%">Supir</th>
                           <th width="10%" class="uangjalan">Uang Jalan</th>
                           <th width="16%">Keterangan</th>
-                          <th width="10%">jenis kendaraan</th>
+                          <th width="10%" class="kolom-jeniskendaraan">jenis kendaraan</th>
                           <th width="10%">Status</th>
                           <th width="6%">jlh trip</th>
                           <th width="8%">tgl batas</th>
@@ -586,6 +586,10 @@
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
 
+            if (!activeKolomJenisKendaraan) {
+              $(`.kolom-jeniskendaraan`).hide()
+            }
+
             if (isTradoMilikSupir == 'YA') {
 
               form.find(`[name="supir[]"]`).prop('readonly', true)
@@ -755,7 +759,7 @@
               <td>
                 <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
               </td>
-              <td>
+              <td class='kolom-jeniskendaraan'>
                 <input type="hidden" name="statusjeniskendaraan[]" value="">
                 <input type="text" name="jeniskendaraan[]"  data-current-value="" id="jeniskendaraan-${index}" class="form-control  jeniskendaraan-lookup" value="">
               </td>
