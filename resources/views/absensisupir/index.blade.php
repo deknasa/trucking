@@ -71,6 +71,7 @@
   let absensiTangki;
   let tgldariheader
   let tglsampaiheader
+  let activeKolomJenisKendaraan
   let isTradoMilikSupir = ''
   let selectedRows = [];
   let selectedbukti = [];
@@ -155,6 +156,7 @@
     loadRekapAbsenTradoGrid()
     loadKasGantungGrid()
     setTradoMilikSupir()
+    GetActiveKolomJenisKendaraan()
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
@@ -976,7 +978,7 @@
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
       }
-      console.log(hakApporveCount);
+      // console.log(hakApporveCount);
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -1276,6 +1278,23 @@
       },
       success: response => {
         isTradoMilikSupir = $.trim(response.text)
+      }
+    })
+  }
+  function GetActiveKolomJenisKendaraan() {
+    $.ajax({
+      url: `${apiUrl}absensisupirheader/getStatusJeniskendaraan`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+     
+      success: response => {
+        activeKolomJenisKendaraan = response.activeKolomJenisKendaraan
+        if (!activeKolomJenisKendaraan) {
+          $("#detail").jqGrid("hideCol", `statusjeniskendaraan`);
+        }
       }
     })
   }
