@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" >
+                        <div class="row" hidden >
                             <label class="col-12 col-sm-2 col-form-label mt-2">PERIODE DATA<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
@@ -85,11 +85,12 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
-        let periodedata = $('#crudForm').find('[name=periodedata]').val()
+        // let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        // let periodedata = $('#crudForm').find('[name=periodedata]').val()
         if (sampai != '') {
 
-            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`)
+            // window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`)
+            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -99,12 +100,13 @@
         $('#processingLoader').removeClass('d-none')
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
-        let periodedata = $('#crudForm').find('[name=periodedata]').val()
+        // let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        // let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
         if (sampai != '') {
             $.ajax({
-                url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
+                // url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
+                url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}`,
                 type: 'GET',
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
