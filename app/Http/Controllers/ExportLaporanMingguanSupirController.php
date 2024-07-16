@@ -512,7 +512,7 @@ class ExportLaporanMingguanSupirController extends MyController
                     $rowIndex++;
                     $rowIndex++; // Move to the next row
                 }
-                $sheet->setCellValue("C$rowIndex", $nopol);
+                $sheet->setCellValue("B$rowIndex", $nopol);
                 $rowIndex++;
 
                 // Store the starting row index of the current group

@@ -2097,7 +2097,7 @@
           typeSearch: 'ALL',
         }
       },
-      onSelectRow: (subkelompok, element) => {
+      onSelectRow: (tarif, element) => {
         $('#crudForm').find(`[name=penyesuaian]`).val(tarif.penyesuaian)
         $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
         $('#crudForm [name=kotasampai]').val(tarif.tujuan)
