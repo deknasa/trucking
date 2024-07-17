@@ -863,7 +863,7 @@
                             $('#crudForm [name=pelanggan]').parents('.input-group').find('.button-clear').hide()
                             $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
                             $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
-                            if($('#crudForm [name=dari]').val() == 'KANDANG'){
+                            if ($('#crudForm [name=dari]').val() == 'KANDANG') {
                                 $('#crudForm [name=pelanggan]').parents('.input-group').find('.input-group-append').show()
                                 $('#crudForm [name=pelanggan]').parents('.input-group').find('.button-clear').show()
                                 $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
@@ -1134,7 +1134,7 @@
                                     <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                                 </td>
                             </tr>
-                        `)
+                            `)
                             detailRow.find(`[name="jenisritasi_id[]"]`).val(detail.jenisritasi_id)
                             detailRow.find(`[name="jenisritasi[]"]`).val(detail.jenisritasi)
                             detailRow.find(`[name="ritasidari_id[]"]`).val(detail.ritasidari_id)
@@ -1145,7 +1145,7 @@
                             $('#ritasiList tbody').append(detailRow)
                             $(`.ritasidari-lookup`).last().lookup({
                                 title: 'RITASI DARI Lookup',
-                                fileName: 'kota',
+                                fileName: 'upahritasirincian',
                                 beforeProcess: function() {
                                     console.log(this)
                                     this.postData = {
@@ -1174,7 +1174,7 @@
 
                             $(`.ritasike-lookup`).last().lookup({
                                 title: 'RITASI KE Lookup',
-                                fileName: 'kota',
+                                fileName: 'upahritasirincian',
                                 beforeProcess: function(test) {
                                     this.postData = {
                                         Aktif: 'AKTIF',
@@ -1238,15 +1238,28 @@
 
                                 }
                             })
+                            if (detail.jenisritasi_id == 3) {
+                                detailRow.find(`[name="ritasidari[]"]`).prop('readonly', false)
+                                detailRow.find(`[name="ritasike[]"]`).prop('readonly', false)
+                                let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
+                                ritDari.find('.button-clear').attr('disabled', false)
+                                ritDari.children().find('.lookup-toggler').attr('disabled', false)
 
-                            let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
-                            ritDari.find('.button-clear').attr('disabled', true)
-                            ritDari.children().find('.lookup-toggler').attr('disabled', true)
+                                let ritKe = detailRow.find(`[name="ritasike[]"]`).parents('.input-group')
+                                ritKe.find('.button-clear').attr('disabled', false)
+                                ritKe.children().find('.lookup-toggler').attr('disabled', false)
 
-                            let ritKe = detailRow.find(`[name="ritasike[]"]`).parents('.input-group')
-                            ritKe.find('.button-clear').attr('disabled', true)
-                            ritKe.children().find('.lookup-toggler').attr('disabled', true)
+                            } else {
 
+                                let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
+                                ritDari.find('.button-clear').attr('disabled', true)
+                                ritDari.children().find('.lookup-toggler').attr('disabled', true)
+
+                                let ritKe = detailRow.find(`[name="ritasike[]"]`).parents('.input-group')
+                                ritKe.find('.button-clear').attr('disabled', true)
+                                ritKe.children().find('.lookup-toggler').attr('disabled', true)
+
+                            }
                             indexRitasi = index
 
                         })
@@ -1801,7 +1814,7 @@
                     $('#crudForm [name=gandengan]').val(suratpengantar.gandengan_id)
                     $('#crudForm [name=gandengan]').attr('readonly', true)
                     $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
-                    $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide() 
+                    $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
                     $('#crudForm [name=upah_id]').val('')
                     $('#crudForm [name=upah]').val('')
                     $('#crudForm [name=upah]').data('currentValue', '')
@@ -1831,7 +1844,7 @@
                             $('#crudForm [name=upah]').data('currentValue', '')
                         }
                     }
-                    
+
                     if ($('#crudForm [name=dari]').val() == 'KANDANG') {
                         $('#crudForm [name=jobtrucking]').attr('hidden', false)
                         $('#crudForm [name=labeljobtrucking]').attr('hidden', false)
@@ -2660,7 +2673,7 @@
 
         $(`.ritasidari-lookup`).last().lookup({
             title: 'RITASI DARI Lookup',
-            fileName: 'kota',
+            fileName: 'upahritasirincian',
             beforeProcess: function() {
                 console.log(this)
                 this.postData = {
@@ -2689,7 +2702,7 @@
 
         $(`.ritasike-lookup`).last().lookup({
             title: 'RITASI KE Lookup',
-            fileName: 'kota',
+            fileName: 'upahritasirincian',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

@@ -2402,7 +2402,7 @@
 
     $(`.ritasidari-lookup`).last().lookup({
       title: 'RITASI DARI Lookup',
-      fileName: 'kota',
+      fileName: 'upahritasirincian',
       beforeProcess: function() {
         console.log(this)
         this.postData = {
@@ -2431,7 +2431,7 @@
 
     $(`.ritasike-lookup`).last().lookup({
       title: 'RITASI KE Lookup',
-      fileName: 'kota',
+      fileName: 'upahritasirincian',
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
