@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "1ee52977614b8891f589cefa13e5037c",
+  "ReportGuid": "222903f95401a6cfacc2d64a240a97dc",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaanStokSPBBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStokSPB.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718954174000+0700)/",
+  "ReportChanged": "/Date(1721197410000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -389,13 +389,13 @@
             "Name": "tgldariheadernobuktipenerimaanstok",
             "NameInSource": "tgldariheadernobuktipenerimaanstok",
             "Alias": "tgldariheadernobuktipenerimaanstok",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "6": {
             "Name": "tglsampaiheadernobuktipenerimaanstok",
             "NameInSource": "tglsampaiheadernobuktipenerimaanstok",
             "Alias": "tglsampaiheadernobuktipenerimaanstok",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "7": {
             "Name": "pengeluaranstok_nobukti",
@@ -611,7 +611,7 @@
             "Name": "parrenttglbukti",
             "NameInSource": "parrenttglbukti",
             "Alias": "parrenttglbukti",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "43": {
             "Name": "statuscetak_id",
@@ -1642,7 +1642,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,123,204,3",
+          "ClientRectangle": "0,117.5,204,3",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2820,7 +2820,7 @@
       "Margins": {
         "Left": 13,
         "Right": 23,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }

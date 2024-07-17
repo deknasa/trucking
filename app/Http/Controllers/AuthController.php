@@ -157,45 +157,45 @@ class AuthController extends MyController
             } else {
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
                 $linkUrlTas = strtolower($linkUrl->text); //http://tasjkt.kozow.com:8074/trucking-api/public/api/
-                if ($linkUrlTas != '') {
-                    $tokenUrlTas = Http::withHeaders([
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json'
-                    ])->post($linkUrlTas . 'token', [
-                        'user' => 'ADMIN',
-                        'password' => getenv('PASSWORD_TNL'),
-                        'ipclient' => '',
-                        'ipserver' => '',
-                        'latitude' => '',
-                        'longitude' => '',
-                        'browser' => '',
-                        'os' => '',
-                    ]);
-                }
+                // if ($linkUrlTas != '') {
+                //     $tokenUrlTas = Http::withHeaders([
+                //         'Content-Type' => 'application/json',
+                //         'Accept' => 'application/json'
+                //     ])->post($linkUrlTas . 'token', [
+                //         'user' => 'ADMIN',
+                //         'password' => getenv('PASSWORD_TNL'),
+                //         'ipclient' => '',
+                //         'ipserver' => '',
+                //         'latitude' => '',
+                //         'longitude' => '',
+                //         'browser' => '',
+                //         'os' => '',
+                //     ]);
+                // }
             }
 
             $isPostingTNL = DB::table('parameter')->where('grp', 'STATUS POSTING TNL')->where('text', 'POSTING TNL')->first();
             $tokenTNL = '';
             // dd(config('app.trucking_api_tnl') . 'token');
-            if ($isPostingTNL->default == 'YA') {
+            // if ($isPostingTNL->default == 'YA') {
 
-                // dd(config('app.trucking_api_tnl') . 'token');
-                $credentials['user'] = 'ADMIN';
-                $credentials['password'] = config('app.password_tnl');
-                $credentials['ipclient'] = $request->ip();
-                $credentials['ipserver'] = $cekIp['data']['ipserver'];
-                $credentials['latitude'] = $lat;
-                $credentials['longitude'] = $long;
-                $credentials['browser'] = $this->get_client_browser();
-                $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
-                $getTokenTNL = Http::withHeaders([
-                    'Accept' => 'application/json'
-                ])->withOptions(['verify' => false])
-                    ->post(config('app.trucking_api_tnl') . 'token', $credentials);
-                // dd($getTokenTNL->json());
+            //     // dd(config('app.trucking_api_tnl') . 'token');
+            //     $credentials['user'] = 'ADMIN';
+            //     $credentials['password'] = config('app.password_tnl');
+            //     $credentials['ipclient'] = $request->ip();
+            //     $credentials['ipserver'] = $cekIp['data']['ipserver'];
+            //     $credentials['latitude'] = $lat;
+            //     $credentials['longitude'] = $long;
+            //     $credentials['browser'] = $this->get_client_browser();
+            //     $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
+            //     $getTokenTNL = Http::withHeaders([
+            //         'Accept' => 'application/json'
+            //     ])->withOptions(['verify' => false])
+            //         ->post(config('app.trucking_api_tnl') . 'token', $credentials);
+            //     // dd($getTokenTNL->json());
 
-                $tokenTNL = $getTokenTNL['access_token'];
-            }
+            //     $tokenTNL = $getTokenTNL['access_token'];
+            // }
             // dd($credentialsEmkl);
             // dd(config('app.emkl_api_url'));
             // dump(config('app.emkl_api_url') . 'oauth/token');
@@ -208,18 +208,18 @@ class AuthController extends MyController
 
             // dd(config('app.emkl_api_url') . 'token');
 
-            $credentials['user'] = 'ADMIN';
-            $credentials['password'] = config('app.password_emkl');
-            $credentials['ipclient'] = $request->ip();
-            $credentials['ipserver'] = $cekIp['data']['ipserver'];
-            $credentials['latitude'] = $lat;
-            $credentials['longitude'] = $long;
-            $credentials['browser'] = $this->get_client_browser();
-            $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
-            $tokenEmkl = Http::withHeaders([
-                'Accept' => 'application/json'
-            ])->withOptions(['verify' => false])
-                ->post(config('app.emkl_api_url') . 'token', $credentials);
+            // $credentials['user'] = 'ADMIN';
+            // $credentials['password'] = config('app.password_emkl');
+            // $credentials['ipclient'] = $request->ip();
+            // $credentials['ipserver'] = $cekIp['data']['ipserver'];
+            // $credentials['latitude'] = $lat;
+            // $credentials['longitude'] = $long;
+            // $credentials['browser'] = $this->get_client_browser();
+            // $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
+            // $tokenEmkl = Http::withHeaders([
+            //     'Accept' => 'application/json'
+            // ])->withOptions(['verify' => false])
+            //     ->post(config('app.emkl_api_url') . 'token', $credentials);
 
 
 
@@ -232,7 +232,7 @@ class AuthController extends MyController
             session(['link_url' => strtolower($linkUrl->text)]);
 
             if ($parametercabang->text != 'PUSAT') {
-                session(['access_token_emkl' => $tokenEmkl['access_token']]);
+                // session(['access_token_emkl' => $tokenEmkl['access_token']]);
             }
 
             // dd($tokenEmkl['access_token']);

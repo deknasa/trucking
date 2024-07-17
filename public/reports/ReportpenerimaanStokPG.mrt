@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "1bdfd390321bbbf511b45bbefc8681ee",
+  "ReportGuid": "20af7594068ec4901a72aa755b112cb0",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportpenerimaanStokPGBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportpenerimaanStokPG.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718857201000+0700)/",
+  "ReportChanged": "/Date(1721197356000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -590,150 +590,162 @@
             "Type": "System.String"
           },
           "39": {
+            "Name": "statusapprovalpindahgudangspk",
+            "NameInSource": "statusapprovalpindahgudangspk",
+            "Alias": "statusapprovalpindahgudangspk",
+            "Type": "System.String"
+          },
+          "40": {
             "Name": "statuskirimberkas",
             "NameInSource": "statuskirimberkas",
             "Alias": "statuskirimberkas",
             "Type": "System.String"
           },
-          "40": {
+          "41": {
             "Name": "statusedit",
             "NameInSource": "statusedit",
             "Alias": "statusedit",
             "Type": "System.String"
           },
-          "41": {
+          "42": {
             "Name": "parrenttglbukti",
             "NameInSource": "parrenttglbukti",
             "Alias": "parrenttglbukti",
             "Type": "System.String"
           },
-          "42": {
+          "43": {
             "Name": "statuscetak_id",
             "NameInSource": "statuscetak_id",
             "Alias": "statuscetak_id",
             "Type": "System.String"
           },
-          "43": {
+          "44": {
+            "Name": "statusapprovalpindahgudangspk_id",
+            "NameInSource": "statusapprovalpindahgudangspk_id",
+            "Alias": "statusapprovalpindahgudangspk_id",
+            "Type": "System.String"
+          },
+          "45": {
             "Name": "statuskirimberkas_id",
             "NameInSource": "statuskirimberkas_id",
             "Alias": "statuskirimberkas_id",
             "Type": "System.String"
           },
-          "44": {
+          "46": {
             "Name": "statusedit_id",
             "NameInSource": "statusedit_id",
             "Alias": "statusedit_id",
             "Type": "System.String"
           },
-          "45": {
+          "47": {
             "Name": "statuseditketerangan_id",
             "NameInSource": "statuseditketerangan_id",
             "Alias": "statuseditketerangan_id",
             "Type": "System.String"
           },
-          "46": {
+          "48": {
             "Name": "tgldariheaderhutangheader",
             "NameInSource": "tgldariheaderhutangheader",
             "Alias": "tgldariheaderhutangheader",
             "Type": "System.String"
           },
-          "47": {
+          "49": {
             "Name": "tglsampaiheaderhutangheader",
             "NameInSource": "tglsampaiheaderhutangheader",
             "Alias": "tglsampaiheaderhutangheader",
             "Type": "System.String"
           },
-          "48": {
+          "50": {
             "Name": "tgldariheaderpengeluaranstok",
             "NameInSource": "tgldariheaderpengeluaranstok",
             "Alias": "tgldariheaderpengeluaranstok",
             "Type": "System.String"
           },
-          "49": {
+          "51": {
             "Name": "tglsampaiheaderpengeluaranstok",
             "NameInSource": "tglsampaiheaderpengeluaranstok",
             "Alias": "tglsampaiheaderpengeluaranstok",
             "Type": "System.String"
           },
-          "50": {
+          "52": {
             "Name": "kelompok_id",
             "NameInSource": "kelompok_id",
             "Alias": "kelompok_id",
             "Type": "System.String"
           },
-          "51": {
+          "53": {
             "Name": "stok_id",
             "NameInSource": "stok_id",
             "Alias": "stok_id",
             "Type": "System.String"
           },
-          "52": {
+          "54": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "53": {
+          "55": {
             "Name": "pengeluaranstok_nobukti_proses",
             "NameInSource": "pengeluaranstok_nobukti_proses",
             "Alias": "pengeluaranstok_nobukti_proses",
             "Type": "System.String"
           },
-          "54": {
+          "56": {
             "Name": "nominal",
             "NameInSource": "nominal",
             "Alias": "nominal",
             "Type": "System.String"
           },
-          "55": {
+          "57": {
             "Name": "details",
             "NameInSource": "details",
             "Alias": "details",
             "Type": "System.String"
           },
-          "56": {
+          "58": {
             "Name": "user",
             "NameInSource": "user",
             "Alias": "user",
             "Type": "System.String"
           },
-          "57": {
+          "59": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
             "Type": "System.String"
           },
-          "58": {
+          "60": {
             "Name": "column",
             "NameInSource": "column",
             "Alias": "column",
             "Type": "System.String"
           },
-          "59": {
+          "61": {
             "Name": "value",
             "NameInSource": "value",
             "Alias": "value",
             "Type": "System.Decimal"
           },
-          "60": {
+          "62": {
             "Name": "columnDari",
             "NameInSource": "columnDari",
             "Alias": "columnDari",
             "Type": "System.String"
           },
-          "61": {
+          "63": {
             "Name": "valueDari",
             "NameInSource": "valueDari",
             "Alias": "valueDari",
             "Type": "System.String"
           },
-          "62": {
+          "64": {
             "Name": "columnKe",
             "NameInSource": "columnKe",
             "Alias": "columnKe",
             "Type": "System.String"
           },
-          "63": {
+          "65": {
             "Name": "valueKe",
             "NameInSource": "valueKe",
             "Alias": "valueKe",
@@ -1443,7 +1455,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,123,204,3",
+          "ClientRectangle": "0,117.5,204,3",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2371,7 +2383,7 @@
       "Margins": {
         "Left": 13,
         "Right": 23,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }
