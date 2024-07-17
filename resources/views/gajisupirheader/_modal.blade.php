@@ -1324,6 +1324,8 @@
                     .then(() => {
                         if (isJenisTangki != 'YA') {
                             $('.statusjeniskendaraan').hide()
+                            $('.biayaextraheader').hide()
+                            $('.keteranganextraheader').hide()
                         }
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
@@ -1376,6 +1378,8 @@
                         // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                         if (isJenisTangki != 'YA') {
                             $('.statusjeniskendaraan').hide()
+                            $('.biayaextraheader').hide()
+                            $('.keteranganextraheader').hide()
                         }
                         form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
                         form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1415,6 +1419,8 @@
                         }
                         if (isJenisTangki != 'YA') {
                             $('.statusjeniskendaraan').hide()
+                            $('.biayaextraheader').hide()
+                            $('.keteranganextraheader').hide()
                         }
                         $('#crudModal').modal('show')
                         form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -1461,6 +1467,8 @@
                         }
                         if (isJenisTangki != 'YA') {
                             $('.statusjeniskendaraan').hide()
+                            $('.biayaextraheader').hide()
+                            $('.keteranganextraheader').hide()
                         }
                         $('#crudModal').modal('show')
                         form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -3336,7 +3344,7 @@
                     <input type="text" name="uangmakanharian" class="form-control text-right">
                 </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group biayaextraheader">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
                    biaya extra
@@ -3346,7 +3354,7 @@
                     <input type="text" name="biayaextraheader" class="form-control text-right">
                 </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group keteranganextraheader">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
                    keterangan extra
