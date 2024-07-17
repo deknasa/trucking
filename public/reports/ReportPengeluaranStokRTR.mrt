@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "0bdd90206e1aec6374c874d99b0988bb",
+  "ReportGuid": "9ea2f608025c3fb76d484e1716644c54",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportPengeluaranStokRTR.mrt",
+  "ReportFile": "ReportPengeluaranStokRTR.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718876023000+0700)/",
+  "ReportChanged": "/Date(1721197965000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1493,7 +1493,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,123.97,204,2.03",
+          "ClientRectangle": "0,118.47,204,2.03",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2598,7 +2598,7 @@
       "Margins": {
         "Left": 13,
         "Right": 23,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }

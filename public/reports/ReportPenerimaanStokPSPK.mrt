@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4bd1d7a46189f653bc72a35c329fbf9a",
+  "ReportGuid": "98b295ce3a34299e4037cb7447249572",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaanStokKORBesar.mrt",
+  "ReportFile": "ReportPenerimaanStokPSPK.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718959636000+0700)/",
+  "ReportChanged": "/Date(1721197700000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1408,7 +1408,7 @@
           "Name": "PageFooterBand2",
           "Guid": "3a42b72ca16552886f799c3dc3b6ba53",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,123,204,3",
+          "ClientRectangle": "0,117.5,204,3",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2509,7 +2509,7 @@
       "Margins": {
         "Left": 13,
         "Right": 23,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }
