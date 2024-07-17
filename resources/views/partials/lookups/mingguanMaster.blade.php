@@ -43,31 +43,14 @@ $idLookup = isset($id) ? $id : null;
 
         }, ];
     } else {
-        column = [{
-                label: 'Minggu',
-                name: 'fKode',
-                align: 'left',
-                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-
-            },
-            {
-                label: 'Tahun',
-                name: 'fTahun',
-                align: 'left',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            },
+        column = [
             {
                 label: 'Minggu Ke',
                 name: 'fMingguKe',
                 align: 'left',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
             },
-            {
-                label: 'Bulan Ke',
-                name: 'fBulanKe',
-                align: 'left',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            },
+            
             {
                 label: 'Tgl Dari',
                 name: 'fTglDr',
@@ -91,6 +74,25 @@ $idLookup = isset($id) ? $id : null;
                 },
                 width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
 
+            },
+            {
+                label: 'Minggu',
+                name: 'fKode',
+                align: 'left',
+                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+
+            },
+            {
+                label: 'Tahun',
+                name: 'fTahun',
+                align: 'left',
+                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            },
+{
+                label: 'Bulan Ke',
+                name: 'fBulanKe',
+                align: 'left',
+                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             },
         ]
     }

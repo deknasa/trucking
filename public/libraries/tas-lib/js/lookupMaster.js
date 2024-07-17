@@ -63,29 +63,48 @@ $.fn.lookupMaster = function (options) {
 
         element.data("hasLookup", true);
 
-        element.wrap('<div class="input-group"></div>');
-
-        let inputGroupAppend = $(
-            '<div class="input-group-append"></div>'
-        ).insertAfter(element);
-
-        if (settings.onClear) {
-            // $(
-            //     '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>'
-            // )
-            $(
-                '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>'
-            )
-                .appendTo(inputGroupAppend)
-                .click(function () {
-                    handleOnClear(element);
-                });
+        element.wrap('<div class="input-group"></div>')
+        .after(`
+        ${
+            settings.onClear
+                ? `<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>`
+                : ``
         }
+        <div class="input-group-append">
+				<button class="btn btn-easyui lookup-toggler" type="button">
+					<i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px"></i>
+				</button>
+			</div>
+        `)
 
-        $(
-            `<button class="btn btn-easyui lookup-toggler" type="button"><i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px;"></i></button>`
-        )
-            .appendTo(inputGroupAppend)
+        // let inputGroupAppend = $(
+        //     '<div class="input-group-append"></div>'
+        // ).insertAfter(element);
+
+        // if (settings.onClear) {
+        //     // $(
+        //     //     '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>'
+        //     // )
+        //     $(
+        //         '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>'
+        //     )
+        //         .appendTo(inputGroupAppend)
+        //         .click(function () {
+        //             handleOnClear(element);
+        //         });
+        // }
+
+        element.siblings(".button-clear").click(function () {
+			handleOnClear(element);
+		});
+        // $(
+        //     `<button class="btn btn-easyui lookup-toggler" type="button"><i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px;"></i></button>`
+        // )
+        //     .appendTo(inputGroupAppend)
+
+        element
+            .siblings(".input-group-append")
+			.find(".lookup-toggler")
             .click(async function () {
                 event.preventDefault();
                 
