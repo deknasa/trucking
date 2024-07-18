@@ -27,6 +27,7 @@ class UpahSupirController extends MyController
             'comboupahzona' => $this->comboCetak('list', 'STATUS UPAH ZONA', 'STATUS UPAH ZONA'),
             'comboluarkota' => $this->comboLuarKota('list'),
             'combopostingtnl' => $this->combocetak('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
+            'listbtn' => $this->getListBtn(),
         ];
 
         return view('upahsupir.index', compact('title', 'data'));
