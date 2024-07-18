@@ -553,17 +553,65 @@
               $('#importModal').modal('show')
             }
           },
+          
+          // {
+          //   id: 'approve',
+          //   innerHTML: '<i class="fas fa-check"></i> APPROVAL AKTIF',
+          //   class: 'btn btn-purple btn-sm mr-1',
+          //   onClick: () => {
+
+          //     approvalAktif('tarif')
+
+          //   }
+          // },
+          // {
+          //   id: 'approveun',
+          //   innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
+          //   class: 'btn btn-purple btn-sm mr-1',
+          //   onClick: () => {
+
+          //     approvalNonAktif('tarif')
+
+          //   }
+          // },
+        ],
+        modalBtnList:[
           {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-
-              approvalNonAktif('tarif')
-
-            }
-          },
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [
+              {
+                id: 'approval',
+                text: "APPROVAL AKTIF",
+                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`) {
+                    approvalAktif('tarif')
+                    
+                  }
+                }
+              },
+              {
+                id: 'approveun',
+                text: "APPROVAL NON AKTIF",
+                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
+                    approvalNonAktif('tarif')
+                  }
+                }
+              },
+              
+            ],
+          }
         ]
+        
+
       })
 
     /* Append clear filter button */
@@ -681,9 +729,22 @@
       if (!`{{ $myAuth->hasPermission('tarif', 'import') }}`) {
         $('#import').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
+
+      let hakApporveCount = 0;
+      
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`) {
+          hakApporveCount--
+        $('#approval').hide()
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
+          hakApporveCount--
+        $('#approveun').hide()
+      }
+      if (hakApporveCount < 1) {
+            $('#approve').hide()
+        }
     }
 
     $('#importModal').on('shown.bs.modal', function() {

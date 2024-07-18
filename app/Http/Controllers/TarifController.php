@@ -27,6 +27,7 @@ class TarifController extends MyController
             'comboton' => $this->combocetak('list', 'SISTEM TON', 'SISTEM TON'),
             'combopenyesuaianharga' => $this->combocetak('list', 'PENYESUAIAN HARGA', 'PENYESUAIAN HARGA'),
             'combopostingtnl' => $this->combocetak('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('tarif.index', compact('title', 'data'));
