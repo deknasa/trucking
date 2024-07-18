@@ -208,18 +208,18 @@ class AuthController extends MyController
 
             // dd(config('app.emkl_api_url') . 'token');
 
-            // $credentials['user'] = 'ADMIN';
-            // $credentials['password'] = config('app.password_emkl');
-            // $credentials['ipclient'] = $request->ip();
-            // $credentials['ipserver'] = $cekIp['data']['ipserver'];
-            // $credentials['latitude'] = $lat;
-            // $credentials['longitude'] = $long;
-            // $credentials['browser'] = $this->get_client_browser();
-            // $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
-            // $tokenEmkl = Http::withHeaders([
-            //     'Accept' => 'application/json'
-            // ])->withOptions(['verify' => false])
-            //     ->post(config('app.emkl_api_url') . 'token', $credentials);
+            $credentials['user'] = 'ADMIN';
+            $credentials['password'] = config('app.password_emkl');
+            $credentials['ipclient'] = $request->ip();
+            $credentials['ipserver'] = $cekIp['data']['ipserver'];
+            $credentials['latitude'] = $lat;
+            $credentials['longitude'] = $long;
+            $credentials['browser'] = $this->get_client_browser();
+            $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
+            $tokenEmkl = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.emkl_api_url') . 'token', $credentials);
 
 
 
@@ -232,7 +232,7 @@ class AuthController extends MyController
             session(['link_url' => strtolower($linkUrl->text)]);
 
             if ($parametercabang->text != 'PUSAT') {
-                // session(['access_token_emkl' => $tokenEmkl['access_token']]);
+                session(['access_token_emkl' => $tokenEmkl['access_token']]);
             }
 
             // dd($tokenEmkl['access_token']);
