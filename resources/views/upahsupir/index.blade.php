@@ -677,17 +677,41 @@
               $('#importModal').modal('show')
             }
           },
+        ],
+        modalBtnList:[
           {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-
-              approvalNonAktif('upahsupir')
-
-            }
-          },
-
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [
+              {
+                id: 'approval',
+                text: "APPROVAL AKTIF",
+                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+                    approvalAktif('upahsupir')
+                    
+                  }
+                }
+              },
+              {
+                id: 'approveun',
+                text: "APPROVAL NON AKTIF",
+                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+                    approvalNonAktif('upahsupir')
+                  }
+                }
+              },
+              
+            ],
+          }
         ]
       })
       $("thead tr.ui-jqgrid-labels").sortable({
@@ -765,9 +789,22 @@
       if (!`{{ $myAuth->hasPermission('upahsupir', 'import') }}`) {
         $('#import').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
+      
+      let hakApporveCount = 0;
+      
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+          hakApporveCount--
+        $('#approval').hide()
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+          hakApporveCount--
+        $('#approveun').hide()
+      }
+      if (hakApporveCount < 1) {
+            $('#approve').hide()
+        }
     }
 
     $('#rangeTglModal').on('shown.bs.modal', function() {
