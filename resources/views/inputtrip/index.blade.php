@@ -2349,7 +2349,12 @@
           element.parents('tr').find(`td [name="ritasike[]"]`).val(response.data.sampai).data('currentValue', response.data.sampai)
         } else {
 
-
+          element.parents('tr').find(`td [name="ritasidari[]"]`).val('')
+          element.parents('tr').find(`td [name="ritasidari_id[]"]`).val('')
+          element.parents('tr').find(`td [name="ritasidari[]"]`).val('').data('currentValue', '')
+          element.parents('tr').find(`td [name="ritasike[]"]`).val('')
+          element.parents('tr').find(`td [name="ritasike_id[]"]`).val('')
+          element.parents('tr').find(`td [name="ritasike[]"]`).val('').data('currentValue', '')
           let ritDari = element.parents('tr').find(`td [name="ritasidari[]"]`).parents('.input-group')
           ritDari.find('.button-clear').attr('disabled', false)
           ritDari.attr('readonly', false)
@@ -2375,7 +2380,7 @@
 
   function addRow() {
     let detailRow = $(`
-      <tr>
+      <tr id="${index}">
         <td></td>
         <td>
           <input type="hidden" name="jenisritasi_id[]" id="jenisritasi_id_${index}">
@@ -2402,7 +2407,7 @@
 
     $(`.ritasidari-lookup`).last().lookup({
       title: 'RITASI DARI Lookup',
-      fileName: 'upahritasirincian',
+      fileName: 'kota',
       beforeProcess: function() {
         console.log(this)
         this.postData = {
@@ -2431,7 +2436,7 @@
 
     $(`.ritasike-lookup`).last().lookup({
       title: 'RITASI KE Lookup',
-      fileName: 'upahritasirincian',
+      fileName: 'kota',
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -2509,6 +2514,8 @@
 
   function deleteRow(row) {
     let countRow = $('.delete-row').parents('tr').length
+    jenisritasiid = row.find(`td [name="jenisritasi[]"]`).attr("id")
+    delete dataRitasiId[jenisritasiid];
     row.remove()
     index--
     if (countRow <= 1) {
