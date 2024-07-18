@@ -1145,7 +1145,7 @@
                             $('#ritasiList tbody').append(detailRow)
                             $(`.ritasidari-lookup`).last().lookup({
                                 title: 'RITASI DARI Lookup',
-                                fileName: 'upahritasirincian',
+                                fileName: 'kota',
                                 beforeProcess: function() {
                                     console.log(this)
                                     this.postData = {
@@ -1174,7 +1174,7 @@
 
                             $(`.ritasike-lookup`).last().lookup({
                                 title: 'RITASI KE Lookup',
-                                fileName: 'upahritasirincian',
+                                fileName: 'kota',
                                 beforeProcess: function(test) {
                                     this.postData = {
                                         Aktif: 'AKTIF',
@@ -2673,7 +2673,7 @@
 
         $(`.ritasidari-lookup`).last().lookup({
             title: 'RITASI DARI Lookup',
-            fileName: 'upahritasirincian',
+            fileName: 'kota',
             beforeProcess: function() {
                 console.log(this)
                 this.postData = {
@@ -2702,7 +2702,7 @@
 
         $(`.ritasike-lookup`).last().lookup({
             title: 'RITASI KE Lookup',
-            fileName: 'upahritasirincian',
+            fileName: 'kota',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
