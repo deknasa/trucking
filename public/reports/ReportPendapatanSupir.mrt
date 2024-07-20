@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e82e75c1014a00e56dcc9de2c8109d89",
+  "ReportGuid": "1aabeeb6f75c3b24867512d3617a43cd",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPendapatanSupir.mrt",
+  "ReportFile": "ReportPendapatanSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1706688941000+0700)/",
+  "ReportChanged": "/Date(1721450983000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1153,7 +1153,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand2",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,262.08,205,4.32",
+          "ClientRectangle": "0,256.58,205,4.32",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2492,7 +2492,7 @@
       "Margins": {
         "Left": 1,
         "Right": 10,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }
