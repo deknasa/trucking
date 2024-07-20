@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "73841ab830cfde7fffb9ed4d926ecfec",
+  "ReportGuid": "f5d7c1ce472daa11b7416404640fbfe7",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPiutangBesar.mrt",
+  "ReportFile": "ReportPiutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1719033075000+0700)/",
+  "ReportChanged": "/Date(1721443952000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -765,7 +765,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,122,204,4",
+          "ClientRectangle": "0,116.5,204,4",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1582,7 +1582,7 @@
       "Margins": {
         "Left": 13,
         "Right": 23,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }

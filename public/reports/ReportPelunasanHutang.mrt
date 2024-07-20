@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e61167ceb6ea0e829a1cdb3601553104",
+  "ReportGuid": "ea54efedb572fa16f78731e65045ae86",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPelunasanHutangBesar.mrt",
+  "ReportFile": "ReportPelunasanHutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1719031810000+0700)/",
+  "ReportChanged": "/Date(1721443921000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -868,7 +868,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,123,204,3",
+          "ClientRectangle": "0,117.5,204,3",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2130,7 +2130,7 @@
       "Margins": {
         "Left": 13,
         "Right": 23,
-        "Top": 10,
+        "Top": 15.5,
         "Bottom": 3
       }
     }
