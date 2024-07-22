@@ -78,7 +78,7 @@
       loadDataAbsensiMandor('mandorabsensisupirhistory', {
         tglbukaabsensi: $('#tglbukaabsensi').val(),
         sortIndex: 'kodetrado',
-        view:true,
+        view: true,
       })
     })
 
@@ -124,8 +124,8 @@
         iconSet: 'fontAwesome',
         postData: {
           tglbukaabsensi: $('#tglbukaabsensi').val(),
-          view:true,
-          from:'viewHistory',
+          view: true,
+          from: 'viewHistory',
         },
         // datatype: "local",
         data: {
@@ -134,7 +134,49 @@
           sortOrder: 'asc',
         },
         datatype: "json",
-        colModel: [
+        colModel: [{
+            label: 'STATUS TRIP',
+            name: 'statustrip',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ';';
+                        }
+                        $i++;
+                      endforeach;
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusTrip = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusTrip.WARNA}; color: ${statusTrip.WARNATULISAN};">
+                  <span>${statusTrip.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusTrip = JSON.parse(rowObject.statustrip)
+
+              return ` title="${statusTrip.MEMO}"`
+            }
+          },
           {
             label: 'status tambahan trado',
             name: 'statustambahantrado',
@@ -223,7 +265,7 @@
           total: 'attributes.total',
           records: 'attributes.records',
         },
-        
+
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
           setGridLastRequest($(this), jqXHR)
@@ -291,11 +333,11 @@
               });
             }
             if (firstTime) {
-            $.each(data.data, (index, absensi) => {
-              pushToObject(absensi.id, null, null)
-            })
-            firstTime = false
-            }else{
+              $.each(data.data, (index, absensi) => {
+                pushToObject(absensi.id, null, null)
+              })
+              firstTime = false
+            } else {
               $.each(data.data, (index, absensi) => {
                 if (!absensi.memo) {
                   // console.log(dataAbsensi.hasOwnProperty(String(absensi.id)),absensi.id);
@@ -450,7 +492,7 @@
           limit: 0,
           sortIndex: 'trado_id',
           sortOrder: 'asc',
-          view:true,
+          view: true,
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -465,7 +507,7 @@
       })
     }
 
-   
+
 
   })
 
@@ -476,9 +518,9 @@
     cekValidasi(tradoId, supirId, 'deleteFromAll', id)
   })
 
-  
 
-  
+
+
 
   function isEditing() {
     // if (jQuery.isEmptyObject(dataAbsensi)) {

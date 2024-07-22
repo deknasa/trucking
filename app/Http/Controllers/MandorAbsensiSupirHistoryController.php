@@ -24,8 +24,8 @@ class MandorAbsensiSupirHistoryController extends MyController
 
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
+            'grp' => 'TIDAK ADA TRIP',
+            'subgrp' => 'TIDAK ADA TRIP',
         ];
 
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
