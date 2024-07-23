@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "42f2324e8157d677733403cb45e4f866",
+  "ReportGuid": "31ba6672e594b83c284c1a5f9d3f7562",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportNotaDebetBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportNotaKreditBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1719036393000+0700)/",
+  "ReportChanged": "/Date(1721722979000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -206,9 +206,7 @@
           "0": "combo"
         },
         "NameInSource": "notadebet_combo",
-        "Alias": "notadebet",
-        "ParentSource": "notadebet",
-        "ChildSource": "notadebet_combo"
+        "Alias": "notadebet"
       },
       "2": {
         "Name": "notakredit",
@@ -1023,7 +1021,7 @@
               "ReferenceToGuid": "628082fcc9d1f70c97d9dd403ee896c2"
             }
           },
-          "DataSourceName": "penerimaan_details",
+          "DataSourceName": "notakredit_detail",
           "Sort": {
             "0": "ASC",
             "1": "FNInvoice",
@@ -1433,7 +1431,7 @@
             "26": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive7",
-              "ClientRectangle": "46,0.2,0,0",
+              "ClientRectangle": "44,0.2,0,0",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1443,7 +1441,7 @@
             "27": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive7",
-              "ClientRectangle": "46,5,0,0",
+              "ClientRectangle": "44,5,0,0",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1453,7 +1451,7 @@
             "28": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive13",
-              "ClientRectangle": "163.93,0.2,0,0",
+              "ClientRectangle": "164,0.2,0,0",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1463,7 +1461,7 @@
             "29": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive13",
-              "ClientRectangle": "163.93,5,0,0",
+              "ClientRectangle": "164,5,0,0",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1697,7 +1695,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive1",
           "Guid": "e4d6921291cda8e5306e556f16c95fb7",
-          "ClientRectangle": "46,50.5,0.254,4.8",
+          "ClientRectangle": "44,50.5,0.254,4.8",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1757,7 +1755,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive6",
           "Guid": "9986c7dfe151b94cba6d25bcfbdef648",
-          "ClientRectangle": "163.93,50.5,0.254,4.8",
+          "ClientRectangle": "164,50.5,0.254,4.8",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
