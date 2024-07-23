@@ -29,43 +29,45 @@
     let autoNumericElements = []
     let rowNum = 10
     let selectedRows = [];
-    
+
     function checkboxHandler(element) {
-      let value = $(element).val();
-      if (element.checked) {
-        selectedRows.push($(element).val())
-        $(element).parents('tr').addClass('bg-light-blue')
-      } else {
-        $(element).parents('tr').removeClass('bg-light-blue')
-        for (var i = 0; i < selectedRows.length; i++) {
-          if (selectedRows[i] == value) {
-            selectedRows.splice(i, 1);
-          }
+        let value = $(element).val();
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                }
+            }
         }
-      }
     }
+
     function clearSelectedRows() {
-      selectedRows = []
-      $('#gs_').prop('checked', false);
-      $('#jqGrid').trigger('reloadGrid')
+        selectedRows = []
+        $('#gs_').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
     }
+
     function selectAllRows() {
-      $.ajax({
-        url: `${apiUrl}penerima`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
-        },
-        success: (response) => {
-          selectedRows = response.data.map((penerima) => penerima.id)
-          $('#jqGrid').trigger('reloadGrid')
-        }
-      })
+        $.ajax({
+            url: `${apiUrl}penerima`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((penerima) => penerima.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
     }
 
     $(document).ready(function() {
@@ -75,8 +77,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [
-                    {
+                colModel: [{
                         label: '',
                         name: '',
                         width: 30,
@@ -374,7 +375,7 @@
                                 showDialog('Harap pilih salah satu record')
                             } else {
                                 // editPenerima(selectedId)
-                                cekValidasidelete(selectedId,'edit')
+                                cekValidasidelete(selectedId, 'edit')
 
                             }
                         }
@@ -388,7 +389,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId,'delete')
+                                cekValidasidelete(selectedId, 'delete')
                             }
                         }
                     },
@@ -398,7 +399,7 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            
+
                             viewPenerima(selectedId)
                         }
                     },
@@ -421,16 +422,39 @@
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-                          approvalNonAktif('penerima')
-                        }
-                    },
-                ]
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('penerima', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('penerima', 'approvalaktif') }}`) {
+                                    approvalAktif('penerima')
+
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('penerima', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('penerima', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('penerima')
+                                }
+                            }
+                        },
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -466,23 +490,20 @@
                 $('#delete').attr('disabled', 'disabled')
             } else {
                 if (!`{{ $myAuth->hasPermission('penerima', 'store') }}`) {
-                $('#add').attr('disabled', 'disabled')
-            }
-            if (!`{{ $myAuth->hasPermission('penerima', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('penerima', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
 
-            if (!`{{ $myAuth->hasPermission('penerima', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
+                if (!`{{ $myAuth->hasPermission('penerima', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
-
-            }
-
 
             if (!`{{ $myAuth->hasPermission('penerima', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-
 
             if (!`{{ $myAuth->hasPermission('penerima', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
@@ -491,8 +512,21 @@
             if (!`{{ $myAuth->hasPermission('penerima', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('penerima', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('penerima', 'approvalnonaktif') }}`) {
-                $('#approveun').hide()
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

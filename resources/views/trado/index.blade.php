@@ -1208,8 +1208,8 @@
                         item: [{
                                 id: 'approveun',
                                 text: "APPROVAL/UN Reminder Oli Mesin",
-                                color:"btn-success",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`),
+                                color: "btn-success",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
 
@@ -1218,30 +1218,32 @@
                                 }
                             },
                             {
-                                id: 'approvalnonaktif',
-                                text: "Approval Non Aktif",
-                                color:"btn-info",
+                                id: 'approvalaktif',
+                                text: "APPROVAL AKTIF",
+                                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalaktif') }}`),
                                 onClick: () => {
-
-                                    approvalNonAktif('trado')
-
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalaktif') }}`) {
+                                        approvalAktif('trado')
+                                    }
                                 }
                             },
                             {
-                                id: 'approvalaktif',
-                                text: "Approval  Aktif",
-                                color:"btn-info",
+                                id: 'approvalnonaktif',
+                                text: "Approval Non Aktif",
+                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`),
                                 onClick: () => {
-
-                                    approvalAktif('trado')
-
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`) {
+                                        approvalNonAktif('trado')
+                                    }
                                 }
-                            },                            
+                            },
                             {
                                 id: 'approvalPersneling',
                                 text: "APPROVAL/UN Reminder Oli Persneling",
-                                color:"btn-primary",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`),
+                                color: "btn-primary",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
                                         approvalPersneling();
@@ -1252,8 +1254,8 @@
                             {
                                 id: 'approvalGardan',
                                 text: "APPROVAL/UN Reminder Oli Gardan",
-                                color:"btn-purple",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`),
+                                color: "btn-purple",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
                                         approvalGardan();
@@ -1264,8 +1266,8 @@
                             {
                                 id: 'approvalSaringanHawa',
                                 text: "APPROVAL/UN Reminder Oli Saringan Hawa",
-                                color:"btn-orange",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`),
+                                color: "btn-orange",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
                                         approvalSaringanHawa();
@@ -1276,8 +1278,8 @@
                             {
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "APPROVAL/UN Trado Tanpa Keterangan/Gambar",
-                                color:"btn-warning",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'StoreApprovalTradoTanpa') }}`),
+                                color: "btn-warning",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'StoreApprovalTradoTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
@@ -1290,8 +1292,8 @@
                             {
                                 id: 'approvalHistoryTradoMilikMandor',
                                 text: "APPROVAL/UN History Trado Milik Mandor",
-                                color:"btn-danger",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`),
+                                color: "btn-danger",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`) {
                                         approvalHistoryTradoMilikMandor();
@@ -1301,8 +1303,8 @@
                             {
                                 id: 'approvalHistoryTradoMilikSupir',
                                 text: "APPROVAL/UN History Trado Milik Supir",
-                                color:"btn-success",
-                                hidden:(!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`),
+                                color: "btn-success",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`) {
                                         approvalHistoryTradoMilikSupir();
@@ -1354,8 +1356,8 @@
                         item: [{
                             id: 'historyMandor',
                             text: "History Trado Milik Mandor",
-                            color:"btn-success",
-                            hidden:(!`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`),
+                            color: "btn-success",
+                            hidden: (!`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`),
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`) {
                                     var selectedOne = selectedOnlyOne();
@@ -1370,8 +1372,8 @@
                         }, {
                             id: 'historySupir',
                             text: "History Trado Milik Supir",
-                            color:"btn-info",
-                            hidden:(!`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`),
+                            color: "btn-info",
+                            hidden: (!`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`),
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`) {
                                     var selectedOne = selectedOnlyOne();

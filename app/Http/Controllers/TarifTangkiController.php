@@ -21,6 +21,7 @@ class TarifTangkiController extends MyController
         $data = [
             'combo' => $this->combocetak('list', 'STATUS AKTIF', 'STATUS AKTIF'),
             'combopenyesuaianharga' => $this->combocetak('list', 'PENYESUAIAN HARGA', 'PENYESUAIAN HARGA'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('tariftangki.index', compact('title', 'data'));

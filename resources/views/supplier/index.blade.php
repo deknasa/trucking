@@ -485,7 +485,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'edit')
+                cekValidasidelete(selectedId, 'edit')
                 // editSupplier(selectedId)
               }
             }
@@ -499,7 +499,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'delete')
+                cekValidasidelete(selectedId, 'delete')
               }
             }
           },
@@ -544,7 +544,7 @@
               id: 'approveun',
               text: "APPROVAL/UN Data",
               color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
-              hidden:(!`{{ $myAuth->hasPermission('supplier', 'approval') }}`),
+              hidden: (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`),
               onClick: () => {
 
                 if (`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
@@ -553,14 +553,25 @@
               }
             },
             {
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('supplier', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('supplier', 'approvalaktif') }}`) {
+                  approvalAktif('supplier')
+
+                }
+              }
+            },
+            {
               id: 'approvalnonaktif',
               text: "Approval Non Aktif",
               color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-              hidden:(!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`),
+              hidden: (!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {
-
-                  approvenonaktif()
+                  approvenonaktif('supplier')
                 }
 
               }
@@ -599,23 +610,23 @@
     function permission() {
 
       if (cabangTnl == 'YA') {
-                $('#add').attr('disabled', 'disabled')
-                $('#edit').attr('disabled', 'disabled')
-                $('#delete').attr('disabled', 'disabled')
-            } else {
-              if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
-      }
+      } else {
+        if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
 
-    }      
+        if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+
+      }
 
       if (!`{{ $myAuth->hasPermission('supplier', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
@@ -634,12 +645,17 @@
         $('#approval').addClass('ui-disabled')
       }
 
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
         hakApporveCount--
         $('#approveun').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+        hakApporveCount--
+        $('#approvalaktif').hide()
       }
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {

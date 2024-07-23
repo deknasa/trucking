@@ -15,7 +15,8 @@ class PengeluaranStokController extends MyController
         $title = $this->title;
         $data = [
             'combohitungstok' => $this->comboList('list','STATUS HITUNG STOK','STATUS HITUNG STOK'),
-            'combo' => $this->comboList('list','STATUS AKTIF','STATUS AKTIF')
+            'combo' => $this->comboList('list','STATUS AKTIF','STATUS AKTIF'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('pengeluaranstok.index', compact('title','data'));

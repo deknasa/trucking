@@ -553,28 +553,28 @@
                     innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                     class: 'btn btn-purple btn-sm mr-1 ',
                     item: [{
-                            id: 'approveun',
-                            text: "APPROVAL/UN Data",
-                            color: `<?php echo $combo['listbtn']->btn->approvaldata; ?>`,
-                            hidden :(!`{{ $myAuth->hasPermission('customer', 'approval') }}`),
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $combo['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('customer', 'approvalaktif') }}`),
                             onClick: () => {
+                                if (`{{ $myAuth->hasPermission('customer', 'approvalaktif') }}`) {
+                                    approvalAktif('customer')
 
-                                approve()
-
+                                }
                             }
                         },
                         {
                             id: 'approvalnonaktif',
-                            text: "Approval Non Aktif",
+                            text: "APPROVAL NON AKTIF",
                             color: `<?php echo $combo['listbtn']->btn->approvalnonaktif; ?>`,
-                            hidden :(!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`),
+                            hidden: (!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`),
                             onClick: () => {
-
-                                approvenonaktif()
-
+                                if (`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('customer')
+                                }
                             }
                         },
-
                     ],
                 }]
             })
@@ -621,19 +621,19 @@
                 $('#delete').attr('disabled', 'disabled')
             } else {
                 if (!`{{ $myAuth->hasPermission('customer', 'store') }}`) {
-                $('#add').attr('disabled', 'disabled')
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('customer', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('customer', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
+
+
             }
-
-            if (!`{{ $myAuth->hasPermission('customer', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('customer', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
-
-
-            }            
 
             if (!`{{ $myAuth->hasPermission('customer', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
@@ -647,23 +647,21 @@
             if (!`{{ $myAuth->hasPermission('customer', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
             let hakApporveCount = 0;
-            console.log(hakApporveCount);
+
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
                 hakApporveCount--
-                $('#approveun').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                $('#approvalaktif').hide()
             }
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`) {
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
                 hakApporveCount--
                 $('#approvalnonaktif').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
                 $('#approve').hide()
-                //   $('#approve').attr('disabled', 'disabled')
             }
         }
 

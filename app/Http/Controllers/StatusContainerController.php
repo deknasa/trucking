@@ -19,8 +19,8 @@ class StatusContainerController extends MyController
         $title = $this->title;
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'listbtn' => $this->getListBtn()
         ];
-
         return view('statuscontainer.index', compact('title', 'combo'));
     }
 

@@ -358,18 +358,40 @@
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('gudang', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('gudang', 'approvalaktif') }}`) {
+                                    approvalAktif('gudang')
 
-                            approvalNonAktif('gudang')
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('gudang', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('gudang', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('gudang')
+                                }
+                            }
+                        },
 
-                        }
-                    },
-                ]
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -428,8 +450,21 @@
             if (!`{{ $myAuth->hasPermission('gudang', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('gudang', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('gudang', 'approvalnonaktif') }}`) {
-                $('#approveun').hide()
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

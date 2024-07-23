@@ -186,12 +186,12 @@
                                                 id: row.text,
                                                 text: row.text
                                             }));
-                                            
+
                                             formattedResponse.unshift({
                                                 id: 'ALL',
                                                 text: 'ALL'
                                             });
-                                            
+
                                             return {
                                                 results: formattedResponse
                                             };
@@ -204,29 +204,29 @@
                             if (!value) {
                                 return ''
                             }
-                          let statusApproval = JSON.parse(value)
-            
-                          if (statusApproval == null) {
-                            return '';
-                          }
-            
-                          let formattedValue = $(`
+                            let statusApproval = JSON.parse(value)
+
+                            if (statusApproval == null) {
+                                return '';
+                            }
+
+                            let formattedValue = $(`
                             <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
                               <span>${statusApproval.SINGKATAN}</span>
                             </div>
                           `)
-            
-                          return formattedValue[0].outerHTML
+
+                            return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
                             if (!rowObject.statusapproval) {
                                 return ''
                             }
-                          let statusApproval = JSON.parse(rowObject.statusapproval)
-                          if (statusApproval == null) {
-                            return '';
-                          }
-                          return ` title="${statusApproval.MEMO}"`
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
+                            if (statusApproval == null) {
+                                return '';
+                            }
+                            return ` title="${statusApproval.MEMO}"`
                         }
                     },
                     {
@@ -1169,20 +1169,18 @@
                         }
                     },
                 ],
-                modalBtnList:[
-                    {
+                modalBtnList: [{
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
                         innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN ',
                         class: 'btn btn-purple btn-sm mr-1',
                         // targetModal:'#listMenuModal',
-                        item:[
-                            {
+                        item: [{
                                 id: 'approvalBlackListSupir',
                                 text: "APPROVAL/UN Black List Supir",
                                 color: `<?php echo $data['listbtn']->btn->approvalblacklist; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1198,34 +1196,39 @@
                                 id: 'approveun',
                                 text: "APPROVAL/UN Kacab",
                                 color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approval') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approval') }}`),
                                 onClick: () => {
                                     approve()
-                                }
-                            },
-                            {
-                                id: 'approvalnonaktif',
-                                text: "Approval Non Aktif",
-                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`),
-                                onClick: () => {
-                                    approvalNonAktif('supir')
                                 }
                             },
                             {
                                 id: 'approvalaktif',
                                 text: "Approval Aktif",
                                 color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`),
                                 onClick: () => {
-                                    approvalAktif('supir')
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`) {
+                                        approvalAktif('supir')
+
+                                    }
+                                }
+                            },
+                            {
+                                id: 'approvalnonaktif',
+                                text: "Approval Non Aktif",
+                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
+                                        approvalNonAktif('supir')
+                                    }
                                 }
                             },
                             {
                                 id: 'approvalSupirLuarKota',
                                 text: "APPROVAL/UN Supir Luar Kota",
                                 color: `<?php echo $data['listbtn']->btn->approvalsupirluarkota; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
                                         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1247,7 +1250,7 @@
                                 id: 'approvalSupirResign',
                                 text: "APPROVAL/UN Supir Resign",
                                 color: `<?php echo $data['listbtn']->btn->approvalresign; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
                                         var selectedOne = selectedOnlyOne();
@@ -1263,7 +1266,7 @@
                                 id: 'approvalHistorySupirMilikMandor',
                                 text: "APPROVAL/UN History Supir Milik Mandor",
                                 color: `<?php echo $data['listbtn']->btn->approvalhistorysupirmilikmandor; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
                                         approvalHistorySupirMilikMandor();
@@ -1275,7 +1278,7 @@
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "APPROVAL/UN Supir Tanpa Keterangan/Gambar",
                                 color: `<?php echo $data['listbtn']->btn->approvaltanpaketerangan; ?>`,
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`),
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
@@ -1294,27 +1297,25 @@
                         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
                         class: 'btn btn-secondary btn-sm mr-1',
                         // targetModal:'#listMenuModal',
-                        item:[
-                            {
-                                id: 'historyMandor',
-                                text: "History Supir Milik Mandor",
-                                hidden :(!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`),
-                                color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
-                                onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
-                                        var selectedOne = selectedOnlyOne();
-                                        if (selectedOne[0]) {
-                                            // editSupirMilikMandor(selectedOne[1])
-                                            cekValidasihistory(selectedOne[1], 'historyMandor')
-                                            
-                                        } else {
-                                            showDialog(selectedOne[1])
-                                        }
+                        item: [{
+                            id: 'historyMandor',
+                            text: "History Supir Milik Mandor",
+                            hidden: (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`),
+                            color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        // editSupirMilikMandor(selectedOne[1])
+                                        cekValidasihistory(selectedOne[1], 'historyMandor')
+
+                                    } else {
+                                        showDialog(selectedOne[1])
                                     }
-                                },
-                            }, 
-                        ]
-                        
+                                }
+                            },
+                        }, ]
+
                     }
                 ],
                 // extndBtn: [{
@@ -1856,21 +1857,21 @@
 
     function permission() {
 
-     
 
-                if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
+
+        if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
             $('#add').attr('disabled', 'disabled')
-                }
+        }
 
-                        if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`)) {
-                            $('#edit').attr('disabled', 'disabled')
-                        }
+        if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`)) {
+            $('#edit').attr('disabled', 'disabled')
+        }
 
-                        if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
-                            $('#delete').attr('disabled', 'disabled')
-                        }
-        
-                 
+        if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
+            $('#delete').attr('disabled', 'disabled')
+        }
+
+
 
 
         if (!`{{ $myAuth->hasPermission('supir', 'show') }}`) {
@@ -1896,6 +1897,12 @@
             hakApporveCount--
             $('#approvalBlackListSupir').hide()
             // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`) {
+            hakApporveCount--
+            $('#approvalaktif').hide()
         }
 
         hakApporveCount++

@@ -30,6 +30,7 @@ class MainAkunPusatController extends MyController
             'comboparent' => $this->comboList('list', 'STATUS PARENT', 'STATUS PARENT'),
             'comboneraca' => $this->comboList('list', 'STATUS NERACA', 'STATUS NERACA'),
             'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('mainakunpusat.index', compact('title', 'data'));

@@ -361,7 +361,7 @@
                                 viewTripTangki(selectedId)
                             }
                         }
-                    },                  
+                    },
                     {
                         id: 'report',
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -389,16 +389,30 @@
                     caption: 'Approve',
                     innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                     class: 'btn btn-purple btn-sm mr-1 ',
-                    item: [
-                        {
-                            id: 'approvalnonaktif',
-                            text: "Approval Non Aktif",
-                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-                            hidden:(!`{{ $myAuth->hasPermission('triptangki', 'approvalnonaktif') }}`),
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('triptangki', 'approvalaktif') }}`),
                             onClick: () => {
-                                approvalNonAktif('triptangki')
+                                if (`{{ $myAuth->hasPermission('triptangki', 'approvalaktif') }}`) {
+                                    approvalAktif('triptangki')
+
+                                }
                             }
                         },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('triptangki', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('triptangki', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('triptangki')
+                                }
+                            }
+                        },
+
                     ],
                 }]
             })
@@ -449,16 +463,21 @@
             if (!`{{ $myAuth->hasPermission('triptangki', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+            
             let hakApporveCount = 0;
+
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('triptangki', 'approvalnonaktif') }}`) {
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
                 hakApporveCount--
                 $('#approvalnonaktif').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
                 $('#approve').hide()
-                // $('#approve').attr('disabled', 'disabled')
             }
         }
 

@@ -24,7 +24,8 @@ class UpahRitasiController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
-            'comboluarkota' => $this->comboLuarKota('list')
+            'comboluarkota' => $this->comboLuarKota('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('upahritasi.index', compact('title', 'data'));

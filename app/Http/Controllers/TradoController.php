@@ -97,7 +97,7 @@ class TradoController extends MyController
             $data = [
                 'total' => $response['attributes']['totalPages'],
                 'records' => $response['attributes']['totalRows'],
-                'rows' => $rows
+                'rows' => $rows,
             ];
 
             return response($data);
@@ -116,6 +116,7 @@ class TradoController extends MyController
             'statusabsensisupir' => $this->comboStatusAktif('list','STATUS ABSENSI SUPIR','STATUS ABSENSI SUPIR'),
             'statusapprovalhistorytradomilikmandor' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
             'statusapprovalhistorytradomiliksupir' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn(),
         ];
 
    

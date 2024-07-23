@@ -584,7 +584,7 @@
             class: 'btn btn-purple btn-sm mr-1 ',
             item: [
               {
-                id: 'approval',
+                id: 'approvalaktif',
                 text: "APPROVAL AKTIF",
                 color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`),
@@ -596,7 +596,7 @@
                 }
               },
               {
-                id: 'approveun',
+                id: 'approvalnonaktif',
                 text: "APPROVAL NON AKTIF",
                 color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
                 hidden :(!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`),
@@ -606,7 +606,6 @@
                   }
                 }
               },
-              
             ],
           }
         ]
@@ -735,12 +734,12 @@
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`) {
           hakApporveCount--
-        $('#approval').hide()
+        $('#approvalaktif').hide()
       }
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
           hakApporveCount--
-        $('#approveun').hide()
+        $('#approvalnonaktif').hide()
       }
       if (hakApporveCount < 1) {
             $('#approve').hide()

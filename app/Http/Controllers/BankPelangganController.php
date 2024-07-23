@@ -27,13 +27,11 @@ class BankPelangganController extends MyController
 
     public function index(Request $request)
     {
-   
         $title = $this->title;
-        
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
-
         return view('bankpelanggan.index', compact('title', 'data'));
     }
 

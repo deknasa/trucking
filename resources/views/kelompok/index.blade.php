@@ -366,18 +366,39 @@
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('kelompok', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('kelompok', 'approvalaktif') }}`) {
+                                    approvalAktif('kelompok')
 
-                            approvalNonAktif('kelompok')
-
-                        }
-                    },
-                ]
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('kelompok', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('kelompok', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('kelompok')
+                                }
+                            }
+                        },
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -426,21 +447,30 @@
                     $('#delete').attr('disabled', 'disabled')
                 }
             }
-
             if (!`{{ $myAuth->hasPermission('kelompok', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-
-
-
             if (!`{{ $myAuth->hasPermission('kelompok', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
             if (!`{{ $myAuth->hasPermission('kelompok', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('kelompok', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('kelompok', 'approvalnonaktif') }}`) {
-                $('#approveun').hide()
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

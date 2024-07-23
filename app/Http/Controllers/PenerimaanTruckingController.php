@@ -16,6 +16,7 @@ class PenerimaanTruckingController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
 

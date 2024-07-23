@@ -677,23 +677,26 @@
                             }
                         },
                         {
-                            id: 'approveun',
-                            text: ' APPROVAL NON AKTIF',
-                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`),
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`),
                             onClick: () => {
-                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                approvalNonAktif('stok')
+                                if (`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`) {
+                                    approvalAktif('stok')
+
+                                }
                             }
                         },
                         {
-                            id: 'approvalaktif',
-                            text: ' APPROVAL AKTIF',
-                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
-                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`),
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`),
                             onClick: () => {
-                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                approvalAktif('stok')
+                                if (`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('stok')
+                                }
                             }
                         },
                     ],
@@ -782,7 +785,7 @@
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`) {
                 hakApporveCount--
-                $('#approveun').hide()
+                $('#approvalnonaktif').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++

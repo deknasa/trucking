@@ -85,9 +85,9 @@
 
   $(document).ready(function() {
     setTampilanIndex()
+
     function createColModel() {
-      return [
-        {
+      return [{
           label: '',
           name: 'check',
           width: 30,
@@ -102,9 +102,9 @@
             dataInit: function(element) {
               $(element).removeClass('form-control')
               $(element).parent().addClass('text-center')
-    
+
               $(element).on('click', function() {
-    
+
                 $(element).attr('disabled', true)
                 if ($(this).is(':checked')) {
                   selectAllRows()
@@ -112,7 +112,7 @@
                   clearSelectedRows()
                 }
               })
-    
+
             }
           },
           formatter: (value, rowOptions, rowData) => {
@@ -195,7 +195,7 @@
           searchoptions: {
             value: `<?php
                     $i = 1;
-    
+
                     foreach ($data['combo'] as $status) :
                       echo "$status[param]:$status[parameter]";
                       if ($i !== count($data['combo'])) {
@@ -203,7 +203,7 @@
                       }
                       $i++;
                     endforeach
-    
+
                     ?>
           `,
             dataInit: function(element) {
@@ -218,13 +218,13 @@
               return ''
             }
             let statusAktif = JSON.parse(value)
-    
+
             let formattedValue = $(`
               <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                 <span>${statusAktif.SINGKATAN}</span>
               </div>
             `)
-    
+
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
@@ -232,7 +232,7 @@
               return ''
             }
             let statusAktif = JSON.parse(rowObject.statusaktif)
-    
+
             return ` title="${statusAktif.MEMO}"`
           }
         },
@@ -244,7 +244,7 @@
           searchoptions: {
             value: `<?php
                     $i = 1;
-    
+
                     foreach ($data['combo'] as $status) :
                       echo "$status[param]:$status[parameter]";
                       if ($i !== count($data['combo'])) {
@@ -252,7 +252,7 @@
                       }
                       $i++;
                     endforeach
-    
+
                     ?>
           `,
             dataInit: function(element) {
@@ -267,13 +267,13 @@
               return ''
             }
             let statusUpahZona = JSON.parse(value)
-    
+
             let formattedValue = $(`
               <div class="badge" style="background-color: ${statusUpahZona.WARNA}; color: #fff;">
                 <span>${statusUpahZona.SINGKATAN}</span>
               </div>
             `)
-    
+
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
@@ -281,7 +281,7 @@
               return ''
             }
             let statusUpahZona = JSON.parse(rowObject.statusupahzona)
-    
+
             return ` title="${statusUpahZona.MEMO}"`
           }
         },
@@ -295,7 +295,7 @@
             newformat: "d-m-Y"
           }
         },
-    
+
         {
           label: 'Keterangan',
           width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
@@ -310,7 +310,7 @@
           searchoptions: {
             value: `<?php
                     $i = 1;
-    
+
                     foreach ($data['combopostingtnl'] as $status) :
                       echo "$status[param]:$status[parameter]";
                       if ($i !== count($data['combopostingtnl'])) {
@@ -318,7 +318,7 @@
                       }
                       $i++;
                     endforeach
-    
+
                     ?>
           `,
             dataInit: function(element) {
@@ -333,13 +333,13 @@
             if (!statusPostingTnl) {
               return ''
             }
-    
+
             let formattedValue = $(`
               <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
                 <span>${statusPostingTnl.SINGKATAN}</span>
               </div>
             `)
-    
+
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
@@ -350,20 +350,20 @@
             return ` title="${statusPostingTnl.MEMO}"`
           }
         },
-    
+
         {
           label: 'MAP',
           name: 'gambar',
           align: 'center',
           search: false,
           width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-    
+
           formatter: (value, row) => {
             let images = []
-    
+
             if (value) {
               let files = JSON.parse(value)
-    
+
               files.forEach(file => {
                 if (file == '') {
                   file = 'no-image'
@@ -373,10 +373,10 @@
                 image.height = 25
                 image.src =
                   `${apiUrl}upahsupir/${encodeURI(file)}/small`
-    
+
                 images.push(image.outerHTML)
               });
-    
+
               return images.join(' ')
             } else {
               let image = new Image()
@@ -417,6 +417,7 @@
         },
       ];
     }
+
     function getSavedColumnOrder() {
       return JSON.parse(localStorage.getItem(`tas${window.location.href}`));
     }
@@ -442,9 +443,9 @@
     var colModel = createColModel();
     var savedColOrder = getSavedColumnOrder();
     var orderedColModel = reorderColModel(colModel, savedColOrder);
-    
 
-    
+
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}upahsupir`,
         mtype: "GET",
@@ -678,48 +679,45 @@
             }
           },
         ],
-        modalBtnList:[
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-            class: 'btn btn-purple btn-sm mr-1 ',
-            item: [
-              {
-                id: 'approval',
-                text: "APPROVAL AKTIF",
-                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`),
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
-                    approvalAktif('upahsupir')
-                    
-                  }
+        modalBtnList: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
+              id: 'approval',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+                  approvalAktif('upahsupir')
+
                 }
-              },
-              {
-                id: 'approveun',
-                text: "APPROVAL NON AKTIF",
-                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`),
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
-                    approvalNonAktif('upahsupir')
-                  }
+              }
+            },
+            {
+              id: 'approveun',
+              text: "APPROVAL NON AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+                  approvalNonAktif('upahsupir')
                 }
-              },
-              
-            ],
-          }
-        ]
+              }
+            },
+
+          ],
+        }]
       })
-      $("thead tr.ui-jqgrid-labels").sortable({
-        stop: function(event, ui) {
-          saveColumnOrder();
-          console.log("Column order updated!");
-        }
-      });
+    $("thead tr.ui-jqgrid-labels").sortable({
+      stop: function(event, ui) {
+        saveColumnOrder();
+        console.log("Column order updated!");
+      }
+    });
 
     /* Append clear filter button */
     loadClearFilter($('#jqGrid'))
@@ -754,57 +752,51 @@
     function permission() {
 
       if (cabangTnl == 'YA') {
-                $('#add').attr('disabled', 'disabled')
-                $('#edit').attr('disabled', 'disabled')
-                $('#delete').attr('disabled', 'disabled')
-            } else {
-              if (!`{{ $myAuth->hasPermission('upahsupir', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('upahsupir', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('upahsupir', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('upahsupir', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('upahsupir', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('upahsupir', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+
       }
-            
-            }      
-
-
       if (!`{{ $myAuth->hasPermission('upahsupir', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
-
-
-
       if (!`{{ $myAuth->hasPermission('upahsupir', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
-
       if (!`{{ $myAuth->hasPermission('upahsupir', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
       if (!`{{ $myAuth->hasPermission('upahsupir', 'import') }}`) {
         $('#import').attr('disabled', 'disabled')
       }
-      
+
       let hakApporveCount = 0;
-      
+
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
-          hakApporveCount--
+        hakApporveCount--
         $('#approval').hide()
       }
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
-          hakApporveCount--
+        hakApporveCount--
         $('#approveun').hide()
       }
       if (hakApporveCount < 1) {
-            $('#approve').hide()
-        }
+        $('#approve').hide()
+      }
     }
 
     $('#rangeTglModal').on('shown.bs.modal', function() {

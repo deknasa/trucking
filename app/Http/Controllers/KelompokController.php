@@ -24,6 +24,7 @@ class KelompokController extends MyController
         
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('kelompok.index', compact('title', 'data'));

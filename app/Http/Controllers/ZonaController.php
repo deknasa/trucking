@@ -24,6 +24,7 @@ class ZonaController extends MyController
        
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('zona.index', compact('title' , 'data'));
