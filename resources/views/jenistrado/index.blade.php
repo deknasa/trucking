@@ -370,17 +370,39 @@
                             $('#rangeModal').modal('show')
                         }
                     },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('jenistrado', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('jenistrado', 'approvalaktif') }}`) {
+                                    approvalAktif('jenistrado')
 
-                            approvalNonAktif('jenistrado')
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('jenistrado', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('jenistrado', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('jenistrado')
+                                }
+                            }
+                        },
 
-                        }
-                    },
-                ]
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -439,8 +461,21 @@
             if (!`{{ $myAuth->hasPermission('jenistrado', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('jenistrado', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('jenistrado', 'approvalnonaktif') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

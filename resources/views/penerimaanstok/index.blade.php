@@ -441,43 +441,64 @@
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-
-                            approvalNonAktif('penerimaanstok')
-
-                        }
-                    },
-
+                    }
                 ],
                 modalBtnList: [{
-                    id: 'lainnya',
-                    title: 'Lainnya',
-                    caption: 'Lainnya',
-                    innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                    class: 'btn btn-secondary btn-sm mr-1',
-                    item: [{
-                            id: 'approvalnoncabang',
-                            text: "Approval Tidak berlaku dicabang",
-                            color: `<?php echo $data['listbtn']->btn->approvaltidakberlaku; ?>`,
-                            onClick: () => {
-                                approvalCabang()
+                        id: 'approve',
+                        title: 'Approve',
+                        caption: 'Approve',
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                        class: 'btn btn-purple btn-sm mr-1 ',
+                        item: [{
+                                id: 'approvalaktif',
+                                text: "APPROVAL AKTIF",
+                                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('penerimaanstok', 'approvalaktif') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('penerimaanstok', 'approvalaktif') }}`) {
+                                        approvalAktif('penerimaanstok')
+
+                                    }
+                                }
+                            },
+                            {
+                                id: 'approvalnonaktif',
+                                text: "APPROVAL NON AKTIF",
+                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('penerimaanstok', 'approvalnonaktif') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('penerimaanstok', 'approvalnonaktif') }}`) {
+                                        approvalNonAktif('penerimaanstok')
+                                    }
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        id: 'lainnya',
+                        title: 'Lainnya',
+                        caption: 'Lainnya',
+                        innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                        class: 'btn btn-secondary btn-sm mr-1',
+                        item: [{
+                                id: 'approvalnoncabang',
+                                text: "Approval Tidak berlaku dicabang",
+                                color: `<?php echo $data['listbtn']->btn->approvaltidakberlaku; ?>`,
+                                onClick: () => {
+                                    approvalCabang()
+                                }
+                            },
+                            {
+                                id: 'approvalberlakudicabang',
+                                text: "Approval berlaku dicabang",
+                                color: `<?php echo $data['listbtn']->btn->approvalberlaku; ?>`,
+                                onClick: () => {
+                                    listCabang()
+                                }
                             }
-                        },
-                        {
-                            id: 'approvalberlakudicabang',
-                            text: "Approval berlaku dicabang",
-                            color: `<?php echo $data['listbtn']->btn->approvalberlaku; ?>`,
-                            onClick: () => {
-                                listCabang()
-                            }
-                        }
-                    ]
-                }, ]
+                        ]
+                    }
+                ]
             })
 
         /* Append clear filter button */
@@ -538,8 +559,20 @@
                 $('#report').attr('disabled', 'disabled')
             }
 
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('penerimaanstok', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('penerimaanstok', 'approvalnonaktif') }}`) {
-                $('#approveun').hide()
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

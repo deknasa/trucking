@@ -23,6 +23,7 @@ class SatuanController extends MyController
 
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('satuan.index', compact('title','data'));

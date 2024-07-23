@@ -24,6 +24,7 @@ class GudangController extends MyController
         
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('gudang.index', compact('title', 'data'));

@@ -20,6 +20,7 @@ class PenerimaController extends MyController
         $data = [
             'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
             'combokaryawan' => $this->comboList('list', 'STATUS KARYAWAN', 'STATUS KARYAWAN'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('penerima.index', compact('title','data'));

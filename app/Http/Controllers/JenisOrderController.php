@@ -24,6 +24,7 @@ class JenisOrderController extends MyController
         
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('jenisorder.index', compact('title', 'data'));

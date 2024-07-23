@@ -19,7 +19,8 @@ class GandenganController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Gandengan',
-            'combo' => $this->combo('list')
+            'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn(),
         ];
 
         return view('gandengan.index', compact('title', 'data'));

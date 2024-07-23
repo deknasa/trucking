@@ -17,6 +17,7 @@ class UpahSupirTangkiController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('upahsupirtangki.index', compact('title', 'data'));

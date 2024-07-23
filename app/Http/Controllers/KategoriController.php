@@ -22,7 +22,8 @@ class KategoriController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Kategori',
-            'combo' => $this->comboStatusAktif('list')
+            'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('kategori.index', compact('title','data'));

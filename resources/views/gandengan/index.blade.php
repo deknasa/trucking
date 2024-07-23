@@ -78,164 +78,164 @@
     }
 
     let OptionSeacrhStatusAktif = `<?php
-            $i = 1;
+                                    $i = 1;
 
-            foreach ($data['combo'] as $status) :
-                echo "$status[param]:$status[parameter]";
-                if ($i !== count($data['combo'])) {
-                    echo ';';
-                }
-                $i++;
-            endforeach;
+                                    foreach ($data['combo'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combo'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
 
-            ?>
+                                    ?>
             `
 
-        $(document).ready(function() {
-                function createColModel() {
-                    return [{
-                        label: '',
-                        name: '',
-                        width: 30,
-                        align: 'center',
-                        sortable: false,
-                        clear: false,
-                        stype: 'input',
-                        searchable: false,
-                        searchoptions: {
-                            type: 'checkbox',
-                            clearSearch: false,
-                            dataInit: function(element) {
-                                $(element).removeClass('form-control')
-                                $(element).parent().addClass('text-center')
+    $(document).ready(function() {
+        function createColModel() {
+            return [{
+                    label: '',
+                    name: '',
+                    width: 30,
+                    align: 'center',
+                    sortable: false,
+                    clear: false,
+                    stype: 'input',
+                    searchable: false,
+                    searchoptions: {
+                        type: 'checkbox',
+                        clearSearch: false,
+                        dataInit: function(element) {
+                            $(element).removeClass('form-control')
+                            $(element).parent().addClass('text-center')
 
-                                $(element).on('click', function() {
+                            $(element).on('click', function() {
 
-                                    $(element).attr('disabled', true)
-                                    if ($(this).is(':checked')) {
-                                        selectAllRows()
-                                    } else {
-                                        clearSelectedRows()
-                                    }
-                                })
+                                $(element).attr('disabled', true)
+                                if ($(this).is(':checked')) {
+                                    selectAllRows()
+                                } else {
+                                    clearSelectedRows()
+                                }
+                            })
 
-                            }
-                        },
-                        formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
-                        },
-                    }, {
-                        label: 'ID',
-                        name: 'id',
-                        align: 'right',
-                        width: '70px',
-                        search: false,
-                        hidden: true
+                        }
                     },
-                    {
-                        label: 'GANDENGAN',
-                        name: 'kodegandengan',
-                        align: 'left',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+                    formatter: (value, rowOptions, rowData) => {
+                        return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
                     },
-                    {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left',
-                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
+                }, {
+                    label: 'ID',
+                    name: 'id',
+                    align: 'right',
+                    width: '70px',
+                    search: false,
+                    hidden: true
+                },
+                {
+                    label: 'GANDENGAN',
+                    name: 'kodegandengan',
+                    align: 'left',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+                },
+                {
+                    label: 'KETERANGAN',
+                    name: 'keterangan',
+                    align: 'left',
+                    width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
+                },
+                {
+                    label: 'NO POLISI',
+                    name: 'trado',
+                    align: 'left',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
+                },
+                {
+                    label: 'Container',
+                    name: 'container',
+                    align: 'left',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
+                },
+                {
+                    label: 'JLH BAN',
+                    name: 'jumlahroda',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
+                },
+                {
+                    label: 'JLH BAN SERAP',
+                    name: 'jumlahbanserap',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
+                },
+                {
+                    label: 'Status',
+                    name: 'statusaktif',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
+                    width: 100,
+                    stype: 'select',
+                    searchoptions: {
+                        value: OptionSeacrhStatusAktif,
+                        dataInit: function(element) {
+                            $(element).select2({
+                                width: 'resolve',
+                                theme: "bootstrap4"
+                            });
+                        }
                     },
-                    {
-                        label: 'NO POLISI',
-                        name: 'trado',
-                        align: 'left',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
-                    },
-                    {
-                        label: 'Container',
-                        name: 'container',
-                        align: 'left',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
-                    },
-                    {
-                        label: 'JLH BAN',
-                        name: 'jumlahroda',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
-                    },
-                    {
-                        label: 'JLH BAN SERAP',
-                        name: 'jumlahbanserap',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
-                    },
-                    {
-                        label: 'Status',
-                        name: 'statusaktif',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
-                        width: 100,
-                        stype: 'select',
-                        searchoptions: {
-                            value:OptionSeacrhStatusAktif,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusAktif = JSON.parse(value)
+                    formatter: (value, options, rowData) => {
+                        let statusAktif = JSON.parse(value)
 
-                            let formattedValue = $(`
+                        let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
 
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusAktif = JSON.parse(rowObject.statusaktif)
-
-                            return ` title="${statusAktif.MEMO}"`
-                        }
+                        return formattedValue[0].outerHTML
                     },
-                    {
-                        label: 'MODIFIED BY',
-                        name: 'modifiedby',
-                        align: 'left',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                    cellattr: (rowId, value, rowObject) => {
+                        let statusAktif = JSON.parse(rowObject.statusaktif)
+
+                        return ` title="${statusAktif.MEMO}"`
+                    }
+                },
+                {
+                    label: 'MODIFIED BY',
+                    name: 'modifiedby',
+                    align: 'left',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                },
+                {
+                    label: 'UPDATED AT',
+                    name: 'updated_at',
+                    formatter: "date",
+                    formatoptions: {
+                        srcformat: "ISO8601Long",
+                        newformat: "d-m-Y H:i:s"
                     },
-                    {
-                        label: 'UPDATED AT',
-                        name: 'updated_at',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y H:i:s"
-                        },
-                        align: 'right',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-                    }, {
-                        label: 'CREATED AT',
-                        name: 'created_at',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y H:i:s"
-                        },
-                        align: 'right',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    align: 'right',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                }, {
+                    label: 'CREATED AT',
+                    name: 'created_at',
+                    formatter: "date",
+                    formatoptions: {
+                        srcformat: "ISO8601Long",
+                        newformat: "d-m-Y H:i:s"
                     },
-                ];
-                }
+                    align: 'right',
+                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                },
+            ];
+        }
 
 
-                let colModelDefault;
+        let colModelDefault;
 
-                if (typeof createColModelUser === 'function') {
-                    colModelDefault = createColModelUser();
-                } else {
-                    colModelDefault = createColModel();
-                }
+        if (typeof createColModelUser === 'function') {
+            colModelDefault = createColModelUser();
+        } else {
+            colModelDefault = createColModel();
+        }
 
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}gandengan`,
@@ -418,17 +418,38 @@
                             $('#rangeModal').modal('show')
                         }
                     },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('gandengan', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('gandengan', 'approvalaktif') }}`) {
+                                    approvalAktif('gandengan')
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('gandengan', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('gandengan', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('gandengan')
+                                }
+                            }
+                        },
 
-                            approvalNonAktif('gandengan')
-
-                        }
-                    },
-                ]
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -493,8 +514,20 @@
             if (!`{{ $myAuth->hasPermission('gandengan', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('gandengan', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('gandengan', 'approvalnonaktif') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

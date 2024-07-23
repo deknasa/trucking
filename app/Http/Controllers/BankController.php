@@ -30,7 +30,8 @@ class BankController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Bank',
-            'combo' => $this->comboStatusAktif('list')
+            'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('bank.index', compact('title','data'));

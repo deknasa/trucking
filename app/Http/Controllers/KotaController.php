@@ -22,6 +22,7 @@ class KotaController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('kota.index', compact('title', 'data'));

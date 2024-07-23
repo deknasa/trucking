@@ -17,7 +17,8 @@ class SubKelompokController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combo' => $this->comboStatusAktif('list')
+            'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('subkelompok.index', compact('title','data'));
     }

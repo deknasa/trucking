@@ -476,18 +476,40 @@
               $('#importModal').find('button:submit').html(`Update Harga`)
               $('#importModal').modal('show')
             }
-          },
-          {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
+          }
+        ],
+        modalBtnList: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('upahritasi', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('upahritasi', 'approvalaktif') }}`) {
+                  approvalAktif('upahritasi')
 
-              approvalNonAktif('upahritasi')
+                }
+              }
+            },
+            {
+              id: 'approvalnonaktif',
+              text: "APPROVAL NON AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`) {
+                  approvalNonAktif('upahritasi')
+                }
+              }
+            },
 
-            }
-          },
-        ]
+          ],
+        }]
       })
 
     /* Append clear filter button */
@@ -542,8 +564,21 @@
       if (!`{{ $myAuth->hasPermission('upahritasi', 'updateharga') }}`) {
         $('#approvalEdit').attr('disabled', 'disabled')
       }
+
+      let hakApporveCount = 0;
+
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('upahritasi', 'approvalaktif') }}`) {
+        hakApporveCount--
+        $('#approvalaktif').hide()
+      }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
+        hakApporveCount--
+        $('#approvalnonaktif').hide()
+      }
+      if (hakApporveCount < 1) {
+        $('#approve').hide()
       }
     }
 

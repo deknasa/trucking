@@ -366,18 +366,40 @@
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('jenisorder', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('jenisorder', 'approvalaktif') }}`) {
+                                    approvalAktif('jenisorder')
 
-                            approvalNonAktif('jenisorder')
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('jenisorder', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('jenisorder', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('jenisorder')
+                                }
+                            }
+                        },
 
-                        }
-                    },
-                ]
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -431,8 +453,21 @@
             if (!`{{ $myAuth->hasPermission('jenisorder', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            if (!`{{ $myAuth->hasPermission('jenisorder', 'approvalnonaktif') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

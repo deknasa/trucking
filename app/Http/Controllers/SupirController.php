@@ -169,7 +169,6 @@ class SupirController extends MyController
             'combopostingtnl' => $this->comboStatusAktif('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
             'statusapprovalhistorysupirmilikmandor' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
             'listbtn' => $this->getListBtn()
-
         ];
 
         return view('supir.index', compact('title','data'));
