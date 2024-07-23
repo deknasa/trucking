@@ -10,6 +10,7 @@
     let triggerClickDetail
     let indexRowDetail
     let pageDetail = 0;
+    var stokIdSpb;
 
     $("#detailSPB").jqGrid({
         datatype: 'local',
@@ -98,7 +99,7 @@
         },
         viewrecords: true,
         postData: {
-          stok_id: masterStokId
+          stok_id: stokIdSpb
         },
         jsonReader: {
           root: 'data',
@@ -171,16 +172,16 @@
     loadGlobalSearch($('#detailSPB'))
   }
 
-  function loadSPBData(supplier_id) {
-    console.log(masterStokId);
+  function loadSPBData(stok_id) {
+    // console.log(masterSupplierId);
     abortGridLastRequest($('#detailSPB'))
-    // console.log(tradoHeader);
+    stokIdSpb = stok_id
     $('#detailSPB').setGridParam({
-      url: `${apiUrl}penerimaanstokdetail/supplier/${supplier_id}`,
+      url: `${apiUrl}penerimaanstokdetail/supplier/${masterSupplierId}`,
       datatype: "json",
       page:1,
       postData: {
-        stok_id: masterStokId
+        stok_id: stok_id
       },
     }).trigger('reloadGrid')
   }

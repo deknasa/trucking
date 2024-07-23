@@ -8,12 +8,27 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  
+  <div class="row">
+    <div class="col-12">
+      <table id="detailstok"></table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table id="detailSPB"></table>
+    </div>
+  </div>
+  
+
 </div>
 
 </div>
 </div>
 
 @include('supplier._modal')
+@include('supplier._detailstok')
+@include('supplier._detailSPB')
 
 @push('scripts')
 <script>
@@ -22,6 +37,7 @@
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
+  let masterSupplierId =""
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
@@ -57,7 +73,8 @@
 
 
   $(document).ready(function() {
-
+    loadStokGrid()
+    loadSPBGrid()
     // setTampilanIndex()
     $("#jqGrid").jqGrid({
         url: `${apiUrl}supplier`,
@@ -386,6 +403,10 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+//           loadStokGrid
+// loadSPBGrid
+          loadStokData(id)
+          masterSupplierId = id
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
