@@ -3226,6 +3226,17 @@
       $(".sampai").appendTo("#kotaLongtrip");
       $(".upahsupir").appendTo("#kotaTrip");
       $(".penyesuaian").appendTo("#kotaTrip");
+    } else {
+      if ($('#crudForm [name=statuslongtrip]').val() == 65) {
+        if (isAllowEdited) {
+          kotasampai_id.parents('.input-group').find('.input-group-append').show()
+          kotasampai_id.parents('.input-group').find('.button-clear').show()
+        } else {
+
+          kotadari_id.attr('readonly', true)
+          kotasampai_id.attr('readonly', true)
+        }
+      }
     }
   }
   // function setDummyOption() {
