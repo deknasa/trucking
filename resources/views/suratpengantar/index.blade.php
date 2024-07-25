@@ -1165,6 +1165,22 @@
                 }
               }
             },
+            {
+              id: 'approvalBiayaExtra',
+              text: "APPROVAL/UN Biaya Extra",
+              color: `<?php echo $data['listbtn']->btn->approvalbiayaextra; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`) {
+                  var selectedOne = selectedOnlyOne();
+                  if (selectedOne[0]) {
+                    approvalBiayaExtra(selectedOne[1]);
+                  } else {
+                    showDialog(selectedOne[1])
+                  }
+                }
+              }
+            },
           ],
         }]
 
@@ -1317,6 +1333,12 @@
         $('#approvalTolakan').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`) {
+        hakApporveCount--
+        $('#approvalBiayaExtra').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
       if (hakApporveCount < 1) {
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
@@ -1461,6 +1483,44 @@
         data: {
           Id: selectedbukti,
           table: 'surat pengantar'
+        },
+        success: response => {
+          clearSelectedRows()
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
+    function approvalBiayaExtra(id) {
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
+      $.ajax({
+        url: `${apiUrl}suratpengantar/biayaextra`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedbukti,
+          table: 'suratpengantar'
         },
         success: response => {
           clearSelectedRows()

@@ -323,6 +323,7 @@
         tol = 0;
         upahRitasi = 0;
         biayaExtra = 0;
+        biayaExtraSupir = 0;
         $.each(selectedRowIds, (index, value) => {
             dataTrip = $("#rekapRincian").jqGrid("getLocalRow", value);
             let selectedGaji = dataTrip.gajisupir
@@ -331,6 +332,7 @@
             let selectedTol = dataTrip.tolsupir
             let selectedUpahRitasi = dataTrip.upahritasi
             let selectedBiayaExtra = dataTrip.biayaextra
+            let selectedBiayaExtraSupir = dataTrip.biayaextrasupir_nominal
 
             gajiSupir = gajiSupir + parseFloat(selectedGaji)
             gajiKenek = gajiKenek + parseFloat(selectedKenek)
@@ -338,11 +340,12 @@
             tol = tol + parseFloat(selectedTol)
             upahRitasi = upahRitasi + parseFloat(selectedUpahRitasi)
             biayaExtra = biayaExtra + parseFloat(selectedBiayaExtra)
+            biayaExtraSupir = biayaExtraSupir + parseFloat(selectedBiayaExtraSupir)
         })
         if (komisiGajiKenek == 'YA') {
-            subtotal = gajiSupir + tol + upahRitasi + biayaExtra
+            subtotal = gajiSupir + tol + upahRitasi + biayaExtra + biayaExtraSupir
         } else {
-            subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
+            subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra + biayaExtraSupir
         }
         initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
@@ -351,6 +354,7 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text(upahRitasi))
         initAutoNumericMinus($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text(tol))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextrasupir_nominal"]`).text(biayaExtraSupir))
         hitungSisa()
     }
 
@@ -743,6 +747,18 @@
                 data.push({
                     name: 'rincian_statusritasi[]',
                     value: dataTrip.statusritasi
+                })
+                data.push({
+                    name: 'rincian_biayaextrasupir_nobukti[]',
+                    value: dataTrip.biayaextrasupir_nobukti
+                })
+                data.push({
+                    name: 'rincian_biayaextrasupir_nominal[]',
+                    value: parseFloat(dataTrip.biayaextrasupir_nominal)
+                })
+                data.push({
+                    name: 'rincian_biayaextrasupir_keterangan[]',
+                    value: dataTrip.biayaextrasupir_keterangan
                 })
                 data.push({
                     name: 'rincian_ritasi[]',
@@ -1330,6 +1346,15 @@
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
                         }
+                        if (jenisTambahan == 'RITASI') {
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+                        } else {
+                            $("#rekapRincian").jqGrid("hideCol", `ritasi_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `upahritasi`);
+                            $("#rekapRincian").jqGrid("hideCol", `statusritasi`);
+                        }
                         $('#crudModal').modal('show')
                         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
                         $('#crudForm').find('[name=tglbuktiDeposito]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -1372,6 +1397,15 @@
 
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
+                        }
+                        if (jenisTambahan == 'RITASI') {
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+                        } else {
+                            $("#rekapRincian").jqGrid("hideCol", `ritasi_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `upahritasi`);
+                            $("#rekapRincian").jqGrid("hideCol", `statusritasi`);
                         }
                         $('#crudModal').modal('show')
                         // form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -1416,6 +1450,15 @@
                     .then(() => {
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
+                        }
+                        if (jenisTambahan == 'RITASI') {
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+                        } else {
+                            $("#rekapRincian").jqGrid("hideCol", `ritasi_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `upahritasi`);
+                            $("#rekapRincian").jqGrid("hideCol", `statusritasi`);
                         }
                         if (isJenisTangki != 'YA') {
                             $('.statusjeniskendaraan').hide()
@@ -1464,6 +1507,15 @@
 
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
+                        }
+                        if (jenisTambahan == 'RITASI') {
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
+                            $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+                        } else {
+                            $("#rekapRincian").jqGrid("hideCol", `ritasi_nobukti`);
+                            $("#rekapRincian").jqGrid("hideCol", `upahritasi`);
+                            $("#rekapRincian").jqGrid("hideCol", `statusritasi`);
                         }
                         if (isJenisTangki != 'YA') {
                             $('.statusjeniskendaraan').hide()
@@ -3143,6 +3195,25 @@
                     {
                         label: 'STATUS RITASI',
                         name: 'statusritasi',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left'
+                    },
+                    {
+                        label: 'NO BUKTI B. EXT SUPIR',
+                        name: 'biayaextrasupir_nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left'
+                    },
+                    {
+                        label: 'NOMINAL B. EXT SUPIR',
+                        name: 'biayaextrasupir_nominal',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'KET. B. EXT SUPIR',
+                        name: 'biayaextrasupir_keterangan',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },

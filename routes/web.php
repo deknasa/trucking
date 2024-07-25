@@ -297,6 +297,7 @@ use App\Http\Controllers\LaporanKartuPiutangPerPlgDetailController;
 use App\Http\Controllers\LaporanPemotonganPinjamanPerEBSController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
+use App\Http\Controllers\BiayaExtraSupirHeaderController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 
@@ -1771,6 +1772,9 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('upahsupirtangki/report', [UpahSupirTangkiController::class, 'report'])->name('upahsupirtangki.report');
     Route::get('upahsupirtangki/index', [UpahSupirTangkiController::class, 'index']);
     Route::resource('upahsupirtangki', UpahSupirTangkiController::class);
+
+    Route::get('biayaextrasupirheader/index', [BiayaExtraSupirHeaderController::class, 'index']);
+    Route::resource('biayaextrasupirheader', BiayaExtraSupirHeaderController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
