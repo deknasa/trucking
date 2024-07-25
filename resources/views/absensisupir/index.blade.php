@@ -1294,6 +1294,7 @@
         activeKolomJenisKendaraan = response.activeKolomJenisKendaraan
         if (!activeKolomJenisKendaraan) {
           $("#detail").jqGrid("hideCol", `statusjeniskendaraan`);
+          $("#dataTidakLengkapGrid").jqGrid("hideCol", `statusjeniskendaraan`);
         }
       }
     })
