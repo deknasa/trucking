@@ -31,6 +31,7 @@
         "updatenocontainer": "btn-success",
         "approvalbatalmuat": "btn-danger",
         "approvaltitipanemkl": "btn-primary",
-        "approvaltolakan": "btn-warning"
+        "approvaltolakan": "btn-warning",
+        "approvalbiayaextra": "btn-info"
     }
 }
