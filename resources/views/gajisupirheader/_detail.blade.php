@@ -121,7 +121,7 @@
               let tgldari = rowData.tgldariheaderritasi
               let tglsampai = rowData.tglsampaiheaderritasi
               let url = "{{route('ritasi.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
             },
           },
@@ -151,6 +151,35 @@
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             align: 'left',
             width: '300px'
+          },
+          {
+            label: 'NO BUKTI B. EXT. SUPIR',
+            name: 'biayaextrasupir_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderbiayaextrasupir
+              let tglsampai = rowData.tglsampaiheaderbiayaextrasupir
+              let url = "{{route('biayaextrasupirheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
+          },
+          {
+            label: 'NOMINAL B. EXT SUPIR',
+            name: 'biayaextrasupir_nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
+            label: 'KET. B. EXT SUPIR',
+            name: 'biayaextrasupir_keterangan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'left'
           },
           {
             label: 'TOTAL',
@@ -233,6 +262,7 @@
               biayaextra: data.attributes.totalBiayaExtra,
               uangmakanberjenjang: data.attributes.totalUangMakanBerjenjang,
               total: data.attributes.total,
+              biayaextrasupir_nominal: data.attributes.totalBiayaExtraSupirNominal,
             }, true)
           }
         }

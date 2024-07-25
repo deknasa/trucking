@@ -79,7 +79,7 @@
   let tglsampaiheader
   let selectedRowsIndex = [];
   let nobuktiRicForSearching = '';
-
+  let jenisTambahan = '';
   let selectedbukti = [];
 
   function checkboxHandlerIndex(element) {
@@ -162,6 +162,7 @@
     loadPotPribadiIndexGrid()
     loadDepositoGrid()
     loadBBMGrid()
+    getJenisTambahan()
     loadAbsensiGrid()
 
     @isset($request['tgldari'])
@@ -744,7 +745,7 @@
               id: 'approval-kirim-berkas',
               text: "APPROVAL/UN Kirim Berkas GAJI SUPIR",
               color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-              hidden :(!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`),
+              hidden: (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {
                   let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -828,6 +829,34 @@
       }
     }
   })
+
+  function getJenisTambahan() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'GAJI SUPIR',
+        subgrp: 'JENIS TAMBAHAN'
+      },
+      success: response => {
+        jenisTambahan = response.text
+
+        if (jenisTambahan == 'RITASI') {
+          $("#detail").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+          $("#detail").jqGrid("hideCol", `biayaextrasupir_nominal`);
+          $("#detail").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+        } else {
+          $("#detail").jqGrid("hideCol", `ritasi_nobukti`);
+          $("#detail").jqGrid("hideCol", `upahritasi`);
+          $("#detail").jqGrid("hideCol", `statusritasi`);
+        }
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

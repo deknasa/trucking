@@ -124,6 +124,12 @@
             hidden: true
           },
           {
+            label: 'DARI',
+            name: 'kotadari_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left'
+          },
+          {
             label: 'TUJUAN',
             name: 'kotasampai_id',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,

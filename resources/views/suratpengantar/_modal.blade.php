@@ -456,9 +456,9 @@
                 </div>
 
 
-                <h3 class="text-center">Biaya Tambahan</h3>
+                <h3 class="text-center biayatambahan">Biaya Tambahan</h3>
 
-                <div class="row">
+                <div class="row biayatambahan">
                   <div class="col-12">
                     <div class="table-responsive">
                       <table id="detailList" class="table table-bordered table-bindkeys" style="width: 800;">

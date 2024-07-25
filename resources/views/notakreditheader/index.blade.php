@@ -323,14 +323,14 @@
             align: 'left',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
-              // if ((value == null) ||( value == '')) {
-              //   return '';
-              // }
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
               let tgldari = rowData.tgldariheaderpelunasanpiutangheader
               let tglsampai = rowData.tglsampaiheaderpelunasanpiutangheader
               let url = "{{route('pelunasanpiutangheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
