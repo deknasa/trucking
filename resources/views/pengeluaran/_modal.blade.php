@@ -533,7 +533,7 @@
           setPenerimaOptions(form),
         ])
         .then(() => {
-          if (bankId == 3) {
+          if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
             $('.bmt').show()
           } else {
             $('.bmt').hide()
@@ -561,7 +561,7 @@
         .then(() => {
           showDefault(form)
             .then(() => {
-              if (bankId == 3) {
+              if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
                 $('.bmt').show()
               } else {
                 $('.bmt').hide()
@@ -1028,7 +1028,7 @@
             }
           })
 
-          if (bankId == 3) {
+          if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
             $('.bmt').show()
           } else {
             $('.bmt').hide()
@@ -1419,7 +1419,7 @@
 
         bankId = bank.id
 
-        if (bankId == 3) {
+        if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
           $('.bmt').show()
         } else {
           $('.bmt').hide()
@@ -1518,7 +1518,7 @@
             `)
 
           detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val($(`#crudForm [name="tglbukti"]`).val())
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
           detailRow.find(`[name="coadebet[]"]`).val(detail.coakredit)
@@ -1527,7 +1527,7 @@
 
           initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val($(`#crudForm [name="tglbukti"]`).val())
           $('#detailList>#table_body').append(detailRow)
 
           setTotal();
