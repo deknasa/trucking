@@ -223,9 +223,12 @@ class LaporanDepositoSupirController extends MyController
         
         //total
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+        $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
         
+        $totalnomdeposito = "=SUM(C7:C" . ($detail_start_row-2) . ")";
+        $sheet->setCellValue("C$total_start_row", $totalnomdeposito)->getStyle("C$total_start_row")->applyFromArray($style_number);
+
         $totalnomdeposito = "=SUM(D7:D" . ($detail_start_row-2) . ")";
         $sheet->setCellValue("D$total_start_row", $totalnomdeposito)->getStyle("D$total_start_row")->applyFromArray($style_number);
 
@@ -247,6 +250,7 @@ class LaporanDepositoSupirController extends MyController
             }
             // $sheet->setCellValue('F' . $detail_start_row, "=C$detail_start_row+D$detail_start_row-E$detail_start_row")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         }
+        $sheet->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
