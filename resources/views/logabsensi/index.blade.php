@@ -22,7 +22,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'karyawan'
+    let sortname = 'id'
     let sortorder = 'asc'
     let autoNumericElements = []
     let indexRow = 0;
@@ -83,7 +83,7 @@
                     {
                         label: 'LOG WAKTU',
                         name: 'logwaktu',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                         align: 'left'
                     },
 
