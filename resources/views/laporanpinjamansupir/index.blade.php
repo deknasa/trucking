@@ -165,7 +165,7 @@
             searching: 1,
             beforeProcess: function() {
                 this.postData = {
-                url: `${apiUrl}parameter/combo`,
+                url: `${apiUrl}parameter/combo?semua=SEMUA`,
                 grp: 'STATUS POSTING',
                 subgrp: 'STATUS POSTING',
                 searching: 1,
