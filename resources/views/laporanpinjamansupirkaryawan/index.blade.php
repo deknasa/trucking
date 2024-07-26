@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Jenis Pinjaman<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Jenis Pinjaman<span class="text-danger"></span></label>
                             <div class="col-sm-4 mt-2">
                                 <select name="jenis" id="jenis" class="form-select select2bs4" style="width: 100%;">
 
@@ -89,7 +89,7 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (jenis != '' && sampai != '') {
+        if (sampai != '') {
             $('#processingLoader').removeClass('d-none')
             $.ajax({
                 url: `{{ route('laporanpinjamansupirkaryawan.report') }}`,
@@ -127,7 +127,7 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (jenis != '' && sampai != '') {
+        if (sampai != '') {
             $('#processingLoader').removeClass('d-none')
 
             $.ajax({

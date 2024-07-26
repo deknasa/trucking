@@ -120,7 +120,7 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (jenis != '' && sampai != '') {
+        if ( sampai != '') {
             $('#processingLoader').removeClass('d-none')
             
             $.ajax({
@@ -165,7 +165,7 @@
             searching: 1,
             beforeProcess: function() {
                 this.postData = {
-                url: `${apiUrl}parameter/combo?semua=SEMUA`,
+                url: `${apiUrl}parameter/combo`,
                 grp: 'STATUS POSTING',
                 subgrp: 'STATUS POSTING',
                 searching: 1,
