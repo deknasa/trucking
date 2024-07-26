@@ -883,6 +883,80 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
+            label: 'APP. BIAYA EXTRA',
+            name: 'statusapprovalbiayaextra',
+            stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboeditsp'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboeditsp'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusbiayaextra = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusbiayaextra.WARNA}; color: #fff;">
+                  <span>${statusbiayaextra.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusapprovalbiayaextra) {
+                return ` title=""`
+              }
+              let statusbiayaextra = JSON.parse(rowObject.statusapprovalbiayaextra)
+              return ` title="${statusbiayaextra.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL APP B. EXTRA',
+            name: 'tglapprovalbiayaextra',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APP B. EXTRA',
+            name: 'userapprovalbiayaextra',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TGL BATAS B. EXTRA',
+            name: 'tglbatasapprovalbiayaextra',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
