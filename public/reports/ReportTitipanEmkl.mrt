@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2ec5743bb57777ae88b6bd831c4c7dcb",
+  "ReportGuid": "8df5a881c54e9be6903a6c38c2ce3682",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportTitipanEmkl.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1712368520000+0700)/",
+  "ReportChanged": "/Date(1722056876000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1382,6 +1382,177 @@
             }
           },
           "DataSourceName": "data"
+        },
+        "4": {
+          "Ident": "StiGroupFooterBand",
+          "Name": "GroupFooterBand1",
+          "ClientRectangle": "0,9.01,21.3,0.76",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiShape",
+              "Name": "Shape8",
+              "Guid": "61f468fda04e18fbe246659b4d45e811",
+              "ClientRectangle": "0.2,0,21,0.2",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
+              },
+              "Font": ";;Italic;",
+              "HorAlignment": "Right",
+              "VertAlignment": "Top"
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text31",
+              "Guid": "f402dbb7a9bbee201fc40050c06a2888",
+              "ClientRectangle": "0.23,0.13,2.4,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Sub Total :"
+              },
+              "VertAlignment": "Center",
+              "Font": ";;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text32",
+              "Guid": "5d8dd5462ddc45722aa737245a36d15e",
+              "ClientRectangle": "17.79,0.13,3.23,0.6",
+              "ComponentPlacement": "gf.GroupFooterBand2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(data.nominal)}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiCurrencyFormatService",
+                "GroupSeparator": ",",
+                "State": "NegativePattern, CurrencySymbol",
+                "Symbol": ""
+              },
+              "Type": "Expression"
+            }
+          }
+        },
+        "5": {
+          "Ident": "StiFooterBand",
+          "Name": "FooterBand1",
+          "ClientRectangle": "0,10.57,21.3,0.86",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text33",
+              "Guid": "2d6982c48061d8b9b9a6b5a20603b18c",
+              "ClientRectangle": "0.2,0.11,2.4,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Grand Total :"
+              },
+              "VertAlignment": "Center",
+              "Font": ";;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "1": {
+              "Ident": "StiShape",
+              "Name": "Shape9",
+              "Guid": "d89056f5e71e792e2bede950ebf4edb7",
+              "ClientRectangle": "0.2,0,21,0.2",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
+              },
+              "Font": ";;Italic;",
+              "HorAlignment": "Right",
+              "VertAlignment": "Top"
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text34",
+              "Guid": "fde6a1241daa40232a5e7ee5cf198581",
+              "ClientRectangle": "17.79,0.13,3.23,0.6",
+              "ComponentPlacement": "gf.GroupFooterBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(data.nominal)}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiCurrencyFormatService",
+                "GroupSeparator": ",",
+                "State": "NegativePattern, CurrencySymbol",
+                "Symbol": ""
+              },
+              "Type": "Expression"
+            },
+            "3": {
+              "Ident": "StiShape",
+              "Name": "Shape10",
+              "Guid": "84fcf50a59333d10b475d1a04951216e",
+              "ClientRectangle": "0.2,0.6,21,0.2",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
+              },
+              "Font": ";;Italic;",
+              "HorAlignment": "Right",
+              "VertAlignment": "Top"
+            }
+          }
         }
       },
       "PaperSize": "Letter",
