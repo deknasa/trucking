@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
-  <!--  <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
+  <!-- <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
@@ -28,6 +28,7 @@
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
 
+      var formatcetak = gajisupirs.formatcetak
       var statuscetak = gajisupirs.statuscetak_id
       var sudahcetak = gajisupirs['combo']['id']
       if (statuscetak == sudahcetak) {
@@ -36,15 +37,19 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-      //  options.appearance.fullScreenMode = true
+      // var options = new Stimulsoft.Designer.StiDesignerOptions()
+      // options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportGajisupir.mrt') }}`)
+      if (formatcetak == 'FORMAT 1') {
+        report.loadFile(`{{ asset('public/reports/ReportGajisupir.mrt') }}`)
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportGajisupirFormat2.mrt') }}`)
+      }
 
       report.dictionary.dataSources.clear()
 
