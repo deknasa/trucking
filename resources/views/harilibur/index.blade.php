@@ -503,10 +503,9 @@
                     });
                 }
 
-
-
-
             })
+
+          
         </script>
     @endpush()
 @endsection
