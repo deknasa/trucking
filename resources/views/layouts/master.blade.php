@@ -103,7 +103,7 @@
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
-  
+
   <!-- Modal for report and export -->
   <div class="modal fade" id="listMenuModal" tabindex="-1" aria-labelledby="listMenuModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -1040,9 +1040,9 @@
       })
 
     }
-   
-    window.addEventListener('unload', function(e) {
-        removeEditingBy($('#crudForm').find('[name=id]').val())
+
+    window.addEventListener('beforeunload', function(e) {
+      removeEditingBy($('#crudForm').find('[name=id]').val())
     });
    
   </script>

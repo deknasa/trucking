@@ -444,7 +444,7 @@
     }
     getMaxLength(form)
     rowCabangPusat()
-    
+
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
@@ -467,33 +467,68 @@
   })
 
   function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'pengeluaranheader'
+    // $.ajax({
+    //   url: `{{ config('app.api_url') }}bataledit`,
+    //   method: 'POST',
+    //   dataType: 'JSON',
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`
+    //   },
+    //   data: {
+    //     id: id,
+    //     aksi: 'BATAL',
+    //     table: 'pengeluaranheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
+    //   },
+    //   success: response => {
+    //     $("#crudModal").modal("hide")
+    //   },
+    //   error: error => {
+    //     if (error.status === 422) {
+    //       $('.is-invalid').removeClass('is-invalid')
+    //       $('.invalid-feedback').remove()
+
+    //       setErrorMessages(form, error.responseJSON.errors);
+    //     } else {
+    //       showDialog(error.responseJSON)
+    //     }
+    //   },
+    // })
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pengeluaranheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
         if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.responseJSON)
+          showDialog(error.responseJSON);
         }
-      },
-    })
+      })
   }
 
   function setTotal() {
@@ -569,7 +604,7 @@
               if (selectedRows.length > 0) {
                 clearSelectedRows()
               }
-              $('#crudModal').modal('show')                            
+              $('#crudModal').modal('show')
               addRow()
               enableTglJatuhTempo(form)
             })
@@ -1290,7 +1325,19 @@
         $('#crudForm').trigger('reset')
         $('#crudModal').modal('hide')
 
-        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        $('#jqGrid').jqGrid('setGridParam', {
+          postData: {
+            proses: 'reload',
+            tgldari: $('#tgldariheader').val(),
+            tglsampai: $('#tglsampaiheader').val(),
+            bank: $('#bankheader').val(),
+            page: page,
+            limit: limit,
+            sortIndex: $('#jqGrid').getGridParam().sortname,
+            sortOrder: $('#jqGrid').getGridParam().sortorder,
+            filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+          }
+        }).trigger('reloadGrid');
         selectedRows = []
         selectedbukti = []
         $('#gs_').prop('checked', false)
@@ -1337,20 +1384,21 @@
     }
   }
 
-  
+
   function rowCabangPusat() {
-    if (accessCabang == 'PUSAT') {;
-          $('.tbl_noinvoice').hide();
-          $('.tbl_bank').hide();
-          $('#colspan-2').attr('colspan', 2);
-          $('#detailList').css({
-                  width: '1200px'
-                });
-        }else{
-          $('.tbl_noinvoice').show();
-          $('.tbl_bank').show();
-          $('#colspan-2').attr('colspan', 4);
-        }
+    if (accessCabang == 'PUSAT') {
+      ;
+      $('.tbl_noinvoice').hide();
+      $('.tbl_bank').hide();
+      $('#colspan-2').attr('colspan', 2);
+      $('#detailList').css({
+        width: '1200px'
+      });
+    } else {
+      $('.tbl_noinvoice').show();
+      $('.tbl_bank').show();
+      $('#colspan-2').attr('colspan', 4);
+    }
   }
 
   function initLookup() {
