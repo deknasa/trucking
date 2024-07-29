@@ -272,6 +272,7 @@ use App\Http\Controllers\ExportLaporanMingguanSupirController;
 use App\Http\Controllers\LaporanKartuHutangPrediksiController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 use App\Http\Controllers\LaporanSupirLebihDariTradoController;
+use App\Http\Controllers\LaporanSupplierBandingStokController;
 use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\ProsesUangJalanSupirDetailController;
 use App\Http\Controllers\ProsesUangJalanSupirHeaderController;
@@ -1590,6 +1591,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporansaldoinventory/report', [LaporanSaldoInventoryController::class, 'report'])->name('laporansaldoinventory.report');
     Route::get('laporansaldoinventory/index', [LaporanSaldoInventoryController::class, 'index']);
     Route::resource('laporansaldoinventory', LaporanSaldoInventoryController::class);
+    
+    // Route::get('laporansaldoinventory/export', [LaporanSaldoInventoryController::class, 'export'])->name('laporansaldoinventory.export');
+    Route::get('laporansupplierbandingstok/report', [LaporanSupplierBandingStokController::class, 'report'])->name('laporansupplierbandingstok.report');
+    Route::get('laporansupplierbandingstok/index', [LaporanSupplierBandingStokController::class, 'index']);
+    Route::resource('laporansupplierbandingstok', LaporanSupplierBandingStokController::class);
 
     Route::get('laporansaldoinventorylama/export', [LaporanSaldoInventoryLamaController::class, 'export'])->name('laporansaldoinventorylama.export');
     Route::get('laporansaldoinventorylama/report', [LaporanSaldoInventoryLamaController::class, 'report'])->name('laporansaldoinventorylama.report');
