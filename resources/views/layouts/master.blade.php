@@ -1040,10 +1040,11 @@
       })
 
     }
-    
-    window.addEventListener('beforeunload', function(e) {
+   
+    window.addEventListener('unload', function(e) {
         removeEditingBy($('#crudForm').find('[name=id]').val())
     });
+   
   </script>
 </body>
 
