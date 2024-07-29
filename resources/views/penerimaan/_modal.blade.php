@@ -251,8 +251,8 @@
             event.preventDefault()
             submit($(this).attr('id'))
         })
-        
-        function submit(button) { 
+
+        function submit(button) {
             event.preventDefault()
             let method
             let url
@@ -309,7 +309,7 @@
                 name: 'button',
                 value: button
             })
-            
+
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
             let bankheader = data.find(item => item.name === "bank_id").value
@@ -353,9 +353,9 @@
                         id = response.data.id
                         $('#crudModal').modal('hide')
                         penerimaanGiro = ''
-                        
+
                         $('#bankheader').val(response.data.bank_id).trigger('change')
-                        
+
                         // $('.select2').select2({
                         //     width: 'resolve',
                         //     theme: "bootstrap4"
@@ -370,14 +370,14 @@
                                 tglsampai: dateFormat(response.data.tglsampaiheader)
                             }
                         }).trigger('reloadGrid');
-                        
+
                         if (id == 0) {
                             $('#detail').jqGrid().trigger('reloadGrid')
                         }
                         if (response.data.grp == 'FORMAT') {
                             updateFormat(response.data)
                         }
-                    }else{
+                    } else {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -428,33 +428,69 @@
     })
 
     function removeEditingBy(id) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}bataledit`,
-            method: 'POST',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: {
-                id: id,
-                aksi: 'BATAL',
-                table: 'penerimaanheader'
+        // $.ajax({
+        //     url: `{{ config('app.api_url') }}bataledit`,
+        //     method: 'POST',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessToken}`
+        //     },
+        //     data: {
+        //         id: id,
+        //         aksi: 'BATAL',
+        //         table: 'penerimaanheader'
 
-            },
-            success: response => {
-                $("#crudModal").modal("hide")
-            },
-            error: error => {
+        //     },
+        //     success: response => {
+        //         $("#crudModal").modal("hide")
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
+
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
+
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'penerimaanheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
                 if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
                     setErrorMessages(form, error.responseJSON.errors);
                 } else {
-                    showDialog(error.responseJSON)
+                    showDialog(error.responseJSON);
                 }
-            },
-        })
+            })
     }
 
     function setTotal() {
@@ -602,6 +638,7 @@
                     })
             })
     }
+
     function rowCabangPusat() {
         if (accessCabang == 'PUSAT') {
             $('.bankpelanggan').hide();
@@ -1281,7 +1318,19 @@
 
                 $('#crudModal').modal('hide')
 
-                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                $('#jqGrid').jqGrid('setGridParam', {
+                    postData: {
+                        proses: 'reload',
+                        tgldari: $('#tgldariheader').val(),
+                        tglsampai: $('#tglsampaiheader').val(),
+                        bank: $('#bankheader').val(),
+                        page: page,
+                        limit: limit,
+                        sortIndex: $('#jqGrid').getGridParam().sortname,
+                        sortOrder: $('#jqGrid').getGridParam().sortorder,
+                        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                    }
+                }).trigger('reloadGrid');
                 selectedRows = []
                 selectedbukti = []
                 $('#gs_').prop('checked', false)
