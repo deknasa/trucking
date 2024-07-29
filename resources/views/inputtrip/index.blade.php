@@ -2464,7 +2464,7 @@
 
     $('.dataritasi-lookup').last().lookup({
       title: 'Data Ritasi Lookup',
-      fileName: 'dataritasi',
+      fileName: 'upahritasiTrip',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2473,10 +2473,15 @@
         }
       },
       onSelectRow: (dataRitasi, element) => {
-        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
-        element.val(dataRitasi.statusritasi)
+        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.jenisritasi_id)
+        element.val(dataRitasi.jenisritasi)
         element.data('currentValue', element.val())
-        getKotaRitasi(dataRitasi.statusritasi_id, element, element.attr("id"))
+        // getKotaRitasi(dataRitasi.statusritasi_id, element, element.attr("id"))
+
+        element.parents('tr').find(`td [name="ritasidari_id[]"]`).val(dataRitasi.ritasidari_id)
+        element.parents('tr').find(`td [name="ritasidari[]"]`).val(dataRitasi.ritasidari).data('currentValue', dataRitasi.ritasidari).attr("readonly", true)
+        element.parents('tr').find(`td [name="ritasike_id[]"]`).val(dataRitasi.ritasike_id)
+        element.parents('tr').find(`td [name="ritasike[]"]`).val(dataRitasi.ritasike).data('currentValue', dataRitasi.ritasike).attr("readonly", true)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

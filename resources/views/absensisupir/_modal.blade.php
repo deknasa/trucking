@@ -635,6 +635,9 @@
             }
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+            if (!activeKolomJenisKendaraan) {
+              $(`.kolom-jeniskendaraan`).hide()
+            }
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -701,6 +704,10 @@
             name.attr('disabled', true)
             name.find('.lookup-toggler').remove()
             nameFind.find('button.button-clear').remove()
+
+            if (!activeKolomJenisKendaraan) {
+              $(`.kolom-jeniskendaraan`).hide()
+            }
           })
           .catch((error) => {
             showDialog(error.responseJSON)
