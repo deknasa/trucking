@@ -2125,10 +2125,10 @@
     $('.tbl_stok_id').show()
     $('.tbl_pengeluaranstokheader_nobukti').show()
     $('.tbl_qty').show()
-    $('.tbl_aksi').hide()
+    $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 6);
     $('.kolom_bbt').hide()
-    $('#tbl_addRow').hide()
+    $('#tbl_addRow').show()
     $('th.tbl_nominal').text('Nominal tagih')
     $('.tbl_tagihklaim').show()
     $('.colmn-offset2').hide()
