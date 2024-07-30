@@ -2246,7 +2246,12 @@
         this.postData = {
 
           Aktif: 'AKTIF',
-          kotaZona: zonasampaiId
+          kotaZona: zonasampaiId,
+          isLookup: 1,
+          url: `${apiUrl}kota/getlongtrip`,
+          statuslongtrip: $('#crudForm [name=statuslongtrip]').val(),
+          dari_id: $('#crudForm [name=dari_id]').val(),
+          from: 'inputtrip'
         }
       },
       onSelectRow: (kota, element) => {
@@ -2435,7 +2440,7 @@
           getDataUpahSupir()
           getTarifOmset(upahsupir.tarif_id, containerId)
         }
-        clearTripAsal()
+        // clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2452,7 +2457,7 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
-        clearTripAsal()
+        // clearTripAsal()
       }
     })
 
@@ -2778,10 +2783,13 @@
   function clearUpahSupir() {
 
     if ($('#crudForm [name=statuslangsir]').val() != 79) {
-      $('#crudForm [name=dari_id]').val('')
-      $('#crudForm [name=sampai_id]').val('')
-      $('#crudForm [name=dari]').val('')
-      $('#crudForm [name=sampai]').val('')
+      if ($('#crudForm [name=statuslongtrip]').val() != 65) {
+
+        $('#crudForm [name=dari_id]').val('')
+        $('#crudForm [name=sampai_id]').val('')
+        $('#crudForm [name=dari]').val('')
+        $('#crudForm [name=sampai]').val('')
+      }
     }
     $('#crudForm [name=tarifrincian_id]').val('')
     $('#crudForm [name=tarifrincian]').val('')

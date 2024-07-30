@@ -1945,7 +1945,12 @@
                 this.postData = {
 
                     Aktif: 'AKTIF',
-                    kotaZona: zonasampaiId
+                    kotaZona: zonasampaiId,
+                    isLookup: 1,
+                    url: `${apiUrl}kota/getlongtrip`,
+                    statuslongtrip: $('#crudForm [name=statuslongtrip]').val(),
+                    dari_id: $('#crudForm [name=dari_id]').val(),
+                    from: 'inputtrip'
                 }
             },
             onSelectRow: (kota, element) => {
