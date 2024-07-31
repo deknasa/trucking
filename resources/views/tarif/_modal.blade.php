@@ -1414,7 +1414,8 @@
       },
       onSelectRow: (status, element) => {
         $('#crudForm [name=statuslangsir]').first().val(status.id)
-
+        element.val(status.text)
+        element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'));
