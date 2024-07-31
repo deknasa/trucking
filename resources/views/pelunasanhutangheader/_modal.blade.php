@@ -255,7 +255,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
 
       let method
@@ -403,6 +403,10 @@
         name: 'button',
         value: button
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -442,7 +446,7 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -452,8 +456,8 @@
                 tglsampai: dateFormat(response.data.tglsampaiheader)
               }
             }).trigger('reloadGrid');
-  
-  
+
+
             $('#detailList tbody').html('')
             $('#nominalHutang').html('')
             $('#sisaHutang').html('')
@@ -463,18 +467,18 @@
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             // showSuccessDialog(response.message, response.data.nobukti)
-            
+
             $("#tableHutang")[0].p.selectedRowIds = [];
             $('#tableHutang').jqGrid("clearGridData");
             $("#tableHutang")
-            .jqGrid("setGridParam", {
-              selectedRowIds: []
-            })
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
             createPelunasanHutangHeader();
           }
         },
@@ -559,33 +563,41 @@
   })
 
   function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'pelunasanhutangheader'
+    let formData = new FormData();
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pelunasanhutangheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
         if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.responseJSON)
+          showDialog(error.responseJSON);
         }
-      },
-    })
+      })
   }
 
   function setBayar() {
@@ -656,7 +668,7 @@
     }
     $('#crudForm').find(`[name=tglcair]`).attr('readonly', true)
     $('#crudForm').find(`[name=tglcair]`).parent('.input-group').find('.input-group-append').hide()
-    
+
     form.find(`[name="alatbayar"]`).prop('readonly', true)
     form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
     form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
@@ -708,11 +720,11 @@
           form.find(`[name="bank"]`).prop('readonly', false)
           form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
           form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
-         
+
           form.find(`[name="alatbayar"]`).prop('readonly', false)
           form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
           form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
-         
+
           form.find(`[name="supplier"]`).prop('readonly', true)
           form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
           form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
@@ -726,7 +738,7 @@
           form.find(`[name="alatbayar"]`).prop('readonly', true)
           form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
           form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
-          
+
           form.find(`[name="supplier"]`).prop('readonly', false)
           form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
           form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
@@ -1085,7 +1097,7 @@
               if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'view') {
                 disabled = 'disabled'
               }
-              if ($('#crudForm').data('action') == 'edit' && statusApproval == '3'){
+              if ($('#crudForm').data('action') == 'edit' && statusApproval == '3') {
                 disabled = 'disabled'
               }
               return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHutangHandler(this, ${rowData.id})">`;
@@ -1378,11 +1390,11 @@
               return $(this)
                 .find(`tr input[value=${rowData.id}]`)
                 .is(":checked");
-            }else{//edit
-              if (statusApproval != '3') {//edit dan tidak approval
+            } else { //edit
+              if (statusApproval != '3') { //edit dan tidak approval
                 return $(this)
-                .find(`tr input[value=${rowData.id}]`)
-                .is(":checked");
+                  .find(`tr input[value=${rowData.id}]`)
+                  .is(":checked");
               }
             }
           }
@@ -2233,7 +2245,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          from:'pelunasanhutangheader'
+          from: 'pelunasanhutangheader'
         }
       },
       onSelectRow: (supplier, element) => {
