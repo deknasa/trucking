@@ -1253,6 +1253,19 @@
               data.filter((row) => row.name === 'qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qty[]"]`)[index])
             }
           })
+          
+          if (KodePengeluaranId == "PJT") {
+            data.filter((row) => row.name === 'supirheader_id')[0].value = $(`#crudForm [name="supir_id[]"]`).val()
+            data.filter((row) => row.name === 'supirheader')[0].value = $(`#crudForm [name="supir[]"]`).val()
+            data.filter((row) => row.name === 'karyawanheader_id')[0].value = 0
+            data.filter((row) => row.name === 'karyawanheader')[0].value = ''
+          }
+          if (KodePengeluaranId == "PJK") {
+            data.filter((row) => row.name === 'karyawanheader_id')[0].value = $(`#crudForm [name="karyawan_id[]"]`).val()
+            data.filter((row) => row.name === 'karyawanheader')[0].value = $(`#crudForm [name="karyawan[]"]`).val()
+            data.filter((row) => row.name === 'supirheader_id')[0].value = 0
+            data.filter((row) => row.name === 'supirheader')[0].value = ''
+          }
         }
 
 
