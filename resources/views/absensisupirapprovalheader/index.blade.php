@@ -682,7 +682,7 @@
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                    approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', selectedRowsIndex, selectedbukti);
+                    approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', selectedRows, selectedbukti);
 
                   }
                 }
@@ -697,7 +697,7 @@
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
                     tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
 
-                    approvalKirimBerkas(tglkirimberkas, 'ABSENSISUPIRAPPROVALHEADER', selectedRowsIndex, selectedbukti);
+                    approvalKirimBerkas(tglkirimberkas, 'ABSENSISUPIRAPPROVALHEADER', selectedRows, selectedbukti);
 
                   }
                 }

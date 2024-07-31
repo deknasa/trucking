@@ -85,7 +85,7 @@
             <div class="row form-group gandengan">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NO GANDENGAN / CHASIS  <span class="text-danger">*</span></label>
+                  NO GANDENGAN / CHASIS <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="gandengan_id">
@@ -353,8 +353,8 @@
     initDatepicker()
     orederan_id = $('#crudForm').find('[name=id]').val();
     if (accessCabang != 'MEDAN') {
-        $('.gandengan').hide()
-      }
+      $('.gandengan').hide()
+    }
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -365,33 +365,41 @@
   })
 
   function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'orderantrucking'
+    let formData = new FormData();
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'orderantrucking');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
         if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.responseJSON)
+          showDialog(error.responseJSON);
         }
-      },
-    })
+      })
   }
 
   function createOrderanTrucking() {
@@ -872,8 +880,8 @@
         jenisKendaraanTangki = response.data[0].id;
       }
     })
-    }
-    
+  }
+
 
   function showOrderanTrucking(form, orderanTruckingId) {
     return new Promise((resolve, reject) => {
@@ -1083,7 +1091,7 @@
   }
 
 
-  function getagentas(form ,id, statusapproval, tglbatas) {
+  function getagentas(form, id, statusapproval, tglbatas) {
     $.ajax({
       url: `${apiUrl}orderantrucking/${id}/getagentas`,
       method: 'GET',
@@ -1161,7 +1169,7 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
-          orderemklshipper : orderemklshipper
+          orderemklshipper: orderemklshipper
         }
       },
       onSelectRow: (orderanemkl, element) => {
@@ -1192,7 +1200,7 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
-          orderemklshipper : orderemklshipper
+          orderemklshipper: orderemklshipper
         }
       },
       onSelectRow: (orderanemkl, element) => {
@@ -1217,7 +1225,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          Invoice: 'UTAMA',          
+          Invoice: 'UTAMA',
         }
 
       },
@@ -1225,7 +1233,7 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
-        getagentas($('#crudForm'),agen.id)
+        getagentas($('#crudForm'), agen.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
