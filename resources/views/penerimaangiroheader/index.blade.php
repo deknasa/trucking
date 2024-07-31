@@ -587,7 +587,7 @@
                         item: [{
                                 id: 'reportPrinterBesar',
                                 text: "Printer Lain(Faktur)",
-                                color:'btn-success',
+                                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -604,7 +604,7 @@
                             {
                                 id: 'reportPrinterKecil',
                                 text: "Printer Epson Seri LX(Faktur)",
-                                color:'btn-info',
+                                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {

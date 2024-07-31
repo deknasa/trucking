@@ -18,6 +18,7 @@ class JurnalUmumHeaderController extends MyController
         $data = [            
             'comboapproval' => $this->comboApproval('list'),
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('jurnalumum.index', compact('title','data'));
     }
