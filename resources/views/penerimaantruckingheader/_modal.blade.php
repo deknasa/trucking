@@ -1089,6 +1089,11 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    
+    $('#crudModal').find(`#crudForm [name="supir[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="supir_id[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="karyawandetail[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="karyawan_id[]"]`).val('')
     $('.colspan').attr('colspan', 2);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -1160,6 +1165,8 @@
   }
 
   function tampilanDPO() {
+    $('#crudModal').find(`#crudForm [name="karyawandetail[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="karyawan_id[]"]`).val('')
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('#btnReloadPJP').parents('.row').hide()
     $('#detailList').show()
@@ -1185,6 +1192,9 @@
   }
 
   function tampilanDPOK() {
+    
+    $('#crudModal').find(`#crudForm [name="supir[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="supir_id[]"]`).val('')
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('#btnReloadPJP').parents('.row').hide()
     $('#detailList').show()
@@ -1229,7 +1239,16 @@
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
     $('.colmn-offset').hide()
-
+    $('#tablePinjamanKaryawan').jqGrid("clearGridData").trigger("reloadGrid");
+    $('#tablePinjaman').jqGrid("clearGridData").trigger("reloadGrid");
+    $('[name=supirheader_id]').val('')
+    $('[name=supir]').val('')
+    $('[name=karyawanheader_id]').val('')
+    $('[name=karyawan]').val('')
+    setTotalNominalKaryawan()
+    setTotalSisaKaryawan()
+    setTotalNominal()
+    setTotalSisa()
   }
 
   $('#crudModal').on('shown.bs.modal', () => {
