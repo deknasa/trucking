@@ -26,6 +26,7 @@ class PengeluaranHeaderController extends MyController
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
             'combokirimberkas' => $this->comboCetak('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
             'combobank' => $this->comboBank(),
+            'listbtn' => $this->getListBtn()
         ];
         
         $data = array_merge(compact('title', 'data'),

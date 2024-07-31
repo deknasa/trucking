@@ -27,6 +27,7 @@ class PenerimaanGiroHeaderController extends MyController
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combocetak' => $this->comboApproval('list', 'STATUSCETAK', 'STATUSCETAK'),
             'combokirimberkas' => $this->comboApproval('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
+            'listbtn' => $this->getListBtn()
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]

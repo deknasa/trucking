@@ -364,7 +364,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           activeGrid = grid
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
@@ -473,7 +473,7 @@
             item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
-                color:'btn-success',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -486,7 +486,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
-                color:'btn-info',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -532,8 +532,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak KAS GANTUNG",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('kasgantungheader', 'approvalbukacetak') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('kasgantungheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('kasgantungheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');

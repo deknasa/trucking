@@ -23,6 +23,7 @@ class PindahBukuController extends MyController
         $data = [            
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
             'comboapproval' => $this->comboCetak('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('pindahbuku.index', compact('title', 'data'));
     }

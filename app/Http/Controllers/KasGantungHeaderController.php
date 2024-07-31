@@ -24,6 +24,7 @@ class KasGantungHeaderController extends MyController
         $title = $this->title;
         $data = [
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]

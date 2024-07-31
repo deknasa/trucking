@@ -28,6 +28,7 @@ class PenerimaanHeaderController extends MyController
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
             'combokirimberkas' => $this->comboList('list', 'STATUSKIRIMBERKAS', 'STATUSKIRIMBERKAS'),
             'combobank' => $this->comboBank(),
+            'listbtn' => $this->getListBtn()
         ];
 
         $data = array_merge(
