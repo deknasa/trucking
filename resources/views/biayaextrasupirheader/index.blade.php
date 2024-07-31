@@ -120,6 +120,70 @@
             formatter: currencyFormat,
           },
           {
+            label: 'GAJI SUPIR NO BUKTI',
+            name: 'gajisupir_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderric
+              let tglsampai = rowData.tglsampaiheaderric
+              let url = "{{route('gajisupirheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+          },
+          {
+            label: 'STATUS GAJI SUPIR',
+            name: 'statusgajisupir',
+            stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combogajisupir'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combogajisupir'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusGajisupir = JSON.parse(value)
+              if (!statusGajisupir) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusGajisupir.WARNA}; color: #fff;">
+                  <span>${statusGajisupir.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusGajisupir = JSON.parse(rowObject.statusgajisupir)
+              if (!statusGajisupir) {
+                return ` title=""`
+              }
+              return ` title="${statusGajisupir.MEMO}"`
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

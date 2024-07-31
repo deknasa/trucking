@@ -985,6 +985,10 @@
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
@@ -1271,33 +1275,41 @@
     })
 
     function removeEditingBy(id) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}bataledit`,
-            method: 'POST',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: {
-                id: id,
-                aksi: 'BATAL',
-                table: 'gajisupirheader'
+        let formData = new FormData();
 
-            },
-            success: response => {
-                $("#crudModal").modal("hide")
-            },
-            error: error => {
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'gajisupirheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
                 if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
                     setErrorMessages(form, error.responseJSON.errors);
                 } else {
-                    showDialog(error.responseJSON)
+                    showDialog(error.responseJSON);
                 }
-            },
-        })
+            })
     }
 
     function createGajiSupirHeader() {
