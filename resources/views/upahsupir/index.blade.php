@@ -663,9 +663,43 @@
               // } else {
               //   window.open(`{{ route('upahsupir.export') }}?id=${selectedId}`)
               // }
-              $('#formRangeTgl').data('action', 'export')
-              $('#rangeTglModal').find('button:submit').html(`Export`)
-              $('#rangeTglModal').modal('show')
+              // $('#formRangeTgl').data('action', 'export')
+              // $('#rangeTglModal').find('button:submit').html(`Export`)
+              // $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahsupir.export') }}`,
+                type: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = `LAPORAN UPAH SUPIR ${new Date().getTime()}.xlsx`;
+                      link.click();
+                    }
+                  }
+
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
           {
