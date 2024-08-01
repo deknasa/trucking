@@ -249,9 +249,10 @@
       submit($(this).attr('id'))
     })
     $('#btnSaveAdd').click(function(event) {
-        event.preventDefault()
-        submit($(this).attr('id'))
+      event.preventDefault()
+      submit($(this).attr('id'))
     })
+
     function submit(button) {
       event.preventDefault()
 
@@ -390,6 +391,10 @@
         value: limit
       })
       data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
       })
@@ -441,7 +446,7 @@
 
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -451,36 +456,36 @@
                 tglsampai: dateFormat(response.data.tglsampaiheader)
               }
             }).trigger('reloadGrid');
-  
+
             if (id == 0) {
               $('#detail').jqGrid().trigger('reloadGrid')
             }
-  
+
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
 
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             // showSuccessDialog(response.message, response.data.nobukti)
-            
+
             $("#posting")[0].p.selectedRowIds = [];
             $('#posting').jqGrid("clearGridData");
             $("#posting")
-            .jqGrid("setGridParam", {
+              .jqGrid("setGridParam", {
                 selectedRowIds: []
-            })
-            .trigger("reloadGrid");
-            
+              })
+              .trigger("reloadGrid");
+
             $("#nonposting")[0].p.selectedRowIds = [];
             $('#nonposting').jqGrid("clearGridData");
             $("#nonposting")
-            .jqGrid("setGridParam", {
+              .jqGrid("setGridParam", {
                 selectedRowIds: []
-            })
-            .trigger("reloadGrid");
+              })
+              .trigger("reloadGrid");
             createPemutihanSupir()
           }
 
@@ -539,33 +544,42 @@
   })
 
   function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'pemutihansupirheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pemutihansupirheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
         if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.responseJSON)
+          showDialog(error.responseJSON);
         }
-      },
-    })
+      })
   }
 
 
@@ -1205,7 +1219,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-          Aktif: 'AKTIF',
+          // Aktif: 'AKTIF',
         }
       },
       onSelectRow: (supir, element) => {

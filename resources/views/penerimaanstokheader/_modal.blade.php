@@ -66,7 +66,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
@@ -476,7 +476,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
       event.preventDefault()
 
@@ -540,6 +540,10 @@
         name: 'button',
         value: button
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let penerimaanheader_id = $('#penerimaanstokId').val()
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -579,9 +583,9 @@
           $('#kodepenerimaanheader').val(response.data.penerimaanstok_id).trigger('change')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             id = response.data.id
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -593,11 +597,11 @@
               },
               page: response.data.page
             }).trigger('reloadGrid')
-  
+
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -610,7 +614,7 @@
               $('#crudForm').find(`[name="penerimaanstok"]`).val(listKodePenerimaan[index])
               $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
               $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
-            }else{
+            } else {
               createPenerimaanstokHeader();
             }
             // showSuccessDialog(response.message, response.data.nobukti)
@@ -1257,7 +1261,7 @@
         // if (KodePenerimaanId === listKodePenerimaan[2]) {
         //   $('#addRow').hide()
         // } else {
-          $('#addRow').show()
+        $('#addRow').show()
         // }
       },
       error: error => {
@@ -1769,7 +1773,7 @@
         if ((KodePenerimaanId === listKodePenerimaan[7]) || (KodePenerimaanId === listKodePenerimaan[8])) {
           $('#addRow').hide()
           $('.tbl_aksi').hide()
-          if(KodePenerimaanId === listKodePenerimaan[8]){
+          if (KodePenerimaanId === listKodePenerimaan[8]) {
             $('.tbl_persentase').hide()
             $('.tbl_nominaldiscount').hide()
             $('.colspan').attr('colspan', 5);
@@ -2232,33 +2236,43 @@
   })
 
   function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'penerimaanstokheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
+
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'penerimaanstokheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
         if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.responseJSON)
+          showDialog(error.responseJSON);
         }
-      },
-    })
+      })
   }
 
 
@@ -2852,7 +2866,7 @@
     new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
     sumary();
   }
-  
+
   function calculate_nominal(id) {
     qty = $(`#detail_qty${id}`)[0];
     nominaldiscount = $(`#detail_nominaldiscount${id}`)[0];
@@ -2868,7 +2882,7 @@
     discSatuan = nominaldiscount / qty;
     satuanSetelahDiscount = (total_sebelum / qty) - discSatuan;
     harga = satuanSetelahDiscount;
-    discount  = (nominaldiscount / total_sebelum)*100;
+    discount = (nominaldiscount / total_sebelum) * 100;
 
     elPersentaseDiscount = AutoNumeric.getAutoNumericElement($(`#detail_persentasediscount${id}`)[0]);
     elPersentaseDiscount.set(discount);
@@ -3161,7 +3175,7 @@
 
 
             setRowNumbers()
-            let row = id ;
+            let row = id;
             $(`#detail_stok_${id}`).lookup({
               title: 'stok Lookup',
               fileName: 'stok',
@@ -3529,8 +3543,8 @@
         this.postData = {
           Aktif: 'AKTIF',
           penerimaanstok_id: penerimaanstokId,
-          tradodari_id:$('#crudForm').find(`[id="tradodariId"] `).val(),
-          tradodarike: 'ke',          
+          tradodari_id: $('#crudForm').find(`[id="tradodariId"] `).val(),
+          tradodarike: 'ke',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3557,7 +3571,7 @@
         this.postData = {
           Aktif: 'AKTIF',
           penerimaanstok_id: penerimaanstokId,
-          gandengandari_id:$('#crudForm').find(`[id="gandengandariId"] `).val(),
+          gandengandari_id: $('#crudForm').find(`[id="gandengandariId"] `).val(),
           gandengandarike: 'ke',
         }
       },
@@ -3584,7 +3598,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          gudangdari_id:$('#crudForm').find(`[id="gudangdariId"] `).val(),
+          gudangdari_id: $('#crudForm').find(`[id="gudangdariId"] `).val(),
           gudangdarike: 'ke',
           Aktif: 'AKTIF',
         }
@@ -3611,7 +3625,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          tradoke_id:$('#crudForm').find(`[id="tradokeId"] `).val(),
+          tradoke_id: $('#crudForm').find(`[id="tradokeId"] `).val(),
           Aktif: 'AKTIF',
           tradodarike: 'dari',
         }
@@ -3640,7 +3654,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          gandenganke_id:$('#crudForm').find(`[id="gandengankeId"] `).val(),
+          gandenganke_id: $('#crudForm').find(`[id="gandengankeId"] `).val(),
           Aktif: 'AKTIF',
           gandengandarike: 'dari',
         }
@@ -3669,7 +3683,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          gudangke_id:$('#crudForm').find(`[id="gudangkeId"] `).val(),
+          gudangke_id: $('#crudForm').find(`[id="gudangkeId"] `).val(),
           gudangdarike: 'dari',
           Aktif: 'AKTIF',
         }
