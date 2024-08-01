@@ -469,6 +469,10 @@
                 name: 'limit',
                 value: limit
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
 
             data.push({
                 name: 'tgldariheader',
@@ -653,33 +657,33 @@
         formData.append('table', 'pendapatansupirheader');
 
         fetch(`{{ config('app.api_url') }}removeedit`, {
-            method: 'POST',
-            headers: {
-            'Authorization': `Bearer ${accessToken}`
-            },
-            body: formData,
-            keepalive: true
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
 
-        })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            $("#crudModal").modal("hide");
-        })
-        .catch(error => {
-            // Handle error
-            if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid');
-            $('.invalid-feedback').remove();
-            setErrorMessages(form, error.responseJSON.errors);
-            } else {
-            showDialog(error.responseJSON);
-            }
-        })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
     }
 
     function createPendapatanSupir() {
