@@ -524,9 +524,28 @@
               // $('#rangeModal').find('button:submit').html(`Report`)
               // $('#rangeModal').modal('show')
 
-              $('#formRangeTgl').data('action', 'report')
-              $('#rangeTglModal').find('button:submit').html(`Report`)
-              $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('tarif.report') }}`,
+                method: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                success: function(response) {
+                  $('#processingLoader').addClass('d-none')
+                  // Handle the success response
+                  var newWindow = window.open('', '_blank');
+                  newWindow.document.open();
+                  newWindow.document.write(response);
+                  newWindow.document.close();
+                },
+                error: function(xhr, status, error) {
+                 
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              });
             }
           },
           {
@@ -537,9 +556,40 @@
               // $('#rangeModal').data('action', 'export')
               // $('#rangeModal').find('button:submit').html(`Export`)
               // $('#rangeModal').modal('show')
-              $('#formRangeTgl').data('action', 'export')
-              $('#rangeTglModal').find('button:submit').html(`Export`)
-              $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('tarif.export') }}`,
+                type: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = `LAPORAN TARIF ${new Date().getTime()}.xlsx`;
+                      link.click();
+                    }
+                  }
+
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
 
@@ -553,7 +603,7 @@
               $('#importModal').modal('show')
             }
           },
-          
+
           // {
           //   id: 'approve',
           //   innerHTML: '<i class="fas fa-check"></i> APPROVAL AKTIF',
@@ -575,41 +625,38 @@
           //   }
           // },
         ],
-        modalBtnList:[
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-            class: 'btn btn-purple btn-sm mr-1 ',
-            item: [
-              {
-                id: 'approvalaktif',
-                text: "APPROVAL AKTIF",
-                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`),
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`) {
-                    approvalAktif('tarif')
-                    
-                  }
+        modalBtnList: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`) {
+                  approvalAktif('tarif')
+
                 }
-              },
-              {
-                id: 'approvalnonaktif',
-                text: "APPROVAL NON AKTIF",
-                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`),
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
-                    approvalNonAktif('tarif')
-                  }
+              }
+            },
+            {
+              id: 'approvalnonaktif',
+              text: "APPROVAL NON AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
+                  approvalNonAktif('tarif')
                 }
-              },
-            ],
-          }
-        ]
-        
+              }
+            },
+          ],
+        }]
+
 
       })
 
@@ -697,23 +744,23 @@
 
     function permission() {
       if (cabangTnl == 'YA') {
-                $('#add').attr('disabled', 'disabled')
-                $('#edit').attr('disabled', 'disabled')
-                $('#delete').attr('disabled', 'disabled')
-            } else {
-              if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('tarif', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
-      }
+      } else {
+        if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
 
-            }
+        if (!`{{ $myAuth->hasPermission('tarif', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+
+      }
 
       if (!`{{ $myAuth->hasPermission('tarif', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
@@ -730,20 +777,20 @@
       }
 
       let hakApporveCount = 0;
-      
+
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`) {
-          hakApporveCount--
+        hakApporveCount--
         $('#approvalaktif').hide()
       }
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
-          hakApporveCount--
+        hakApporveCount--
         $('#approvalnonaktif').hide()
       }
       if (hakApporveCount < 1) {
-            $('#approve').hide()
-        }
+        $('#approve').hide()
+      }
     }
 
     $('#importModal').on('shown.bs.modal', function() {
