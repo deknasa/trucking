@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="" method="post">
-                        <input type="text" name="id" class="form-control" hidden>
+                        <input type="hidden" name="id">
 
 
                         <div class="form-group">
