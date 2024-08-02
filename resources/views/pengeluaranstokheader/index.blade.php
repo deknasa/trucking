@@ -7,7 +7,7 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
       {{-- @if ($kodepengeluaran['id'] === "1") selected @endif --}}
-      <option value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+      <option value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}}({{$kodepengeluaran['kodepengeluaran']}}) </option>
       {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
       @endforeach
     </select>
