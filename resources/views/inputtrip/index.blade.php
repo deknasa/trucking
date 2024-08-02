@@ -2479,7 +2479,7 @@
         }
       },
       onSelectRow: (dataRitasi, element) => {
-        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.statusritasi_id)
+        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
         element.val(dataRitasi.statusritasi)
         element.data('currentValue', element.val())
         getKotaRitasi(dataRitasi.statusritasi_id, element, element.attr("id"))
