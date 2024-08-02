@@ -197,11 +197,13 @@ class UpahRitasiController extends MyController
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
             $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle("A1")->getFont()->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:H1');
 
             $sheet->setCellValue('A2', 'Laporan Upah Ritasi');
             $sheet->getStyle("A2")->getFont()->setSize(12);
+            $sheet->getStyle("A2")->getFont()->setBold(true);
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A2:H2');
 
