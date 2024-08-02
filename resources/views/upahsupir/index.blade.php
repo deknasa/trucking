@@ -665,7 +665,7 @@
                   newWindow.document.close();
                 },
                 error: function(xhr, status, error) {
-                 
+
                   $('#processingLoader').addClass('d-none')
                   showDialog('TIDAK ADA DATA')
                 }
@@ -940,7 +940,11 @@
           if (kondisi == false) {
             $('#formImport').trigger('reset')
             $('#importModal').modal('hide')
-            $('#jqGrid').jqGrid().trigger('reloadGrid');
+            $('#jqGrid').jqGrid('setGridParam', {
+              postData: {
+                proses: 'reload',
+              }
+            }).trigger('reloadGrid');
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
