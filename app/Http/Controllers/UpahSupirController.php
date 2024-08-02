@@ -354,7 +354,7 @@ class UpahSupirController extends MyController
 
                 $alphabets = range('A', 'Z');
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
@@ -372,17 +372,17 @@ class UpahSupirController extends MyController
                 $sheet->getStyle("T$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("U$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("V$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("W$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                // $sheet->getStyle("W$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 foreach ($header_columns as $data_columns_index => $data_column) {
-                    if ($data_columns_index == 4) {
-                        $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
-                        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
-                            $tgl
-                        );
-                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
-                    } else {
-                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
-                    }
+                    // if ($data_columns_index == 4) {
+                    //     $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
+                    //     $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                    //         $tgl
+                    //     );
+                    //     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                    // } else {
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    // }
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
                 }
                 $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
