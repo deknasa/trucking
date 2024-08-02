@@ -274,10 +274,22 @@ class SuratPengantarController extends MyController
         $data = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'suratpengantar/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
-        $suratpengantar = $data['data'];
-        $params = $data['parameter'];
-        return view('reports.suratpengantar', compact('suratpengantar', 'params'));
+            ->get(config('app.api_url') . 'suratpengantar/export', [
+                'limit' => $request->limit,
+                'tgldari' => $request->tgldari,
+                'tglsampai' => $request->tglsampai,
+                'filters' => $request->filters
+            ]);
+
+        if ($data->successful()) {
+            $suratpengantar = $data['data']['data'];
+            $params = $data['data']['parameter'];
+            $params['tgldari'] = $request->tgldari;
+            $params['tglsampai'] = $request->tglsampai;
+            return view('reports.suratpengantar', compact('suratpengantar', 'params'));
+        } else {
+            return response()->json($data->json(), $data->status());
+        }
     }
 
     public function export(Request $request): void
@@ -286,16 +298,21 @@ class SuratPengantarController extends MyController
         $data_header = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'suratpengantar/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+            ->get(config('app.api_url') . 'suratpengantar/export', [
+                'limit' => $request->limit,
+                'tgldari' => $request->tgldari,
+                'tglsampai' => $request->tglsampai,
+                'filters' => $request->filters
+            ])['data'];
         $suratPengantar = $data_header['data'];
 
         // $tglDari = $suratPengantar[0]['tgldari'];
-        $timeStamp = strtotime($request->dari);
+        $timeStamp = strtotime($request->tgldari);
         $datetglDari = date('d-m-Y', $timeStamp);
         $periodeDari = $datetglDari;
 
         // $tglSampai = $suratPengantar[0]['tglsampai'];
-        $timeStamp = strtotime($request->sampai);
+        $timeStamp = strtotime($request->tglsampai);
         $datetglSampai = date('d-m-Y', $timeStamp);
         $periodeSampai = $datetglSampai;
 
