@@ -62,7 +62,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JARAK <span class="text-danger">*</span>
+                  JARAK <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
