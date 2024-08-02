@@ -192,16 +192,16 @@
               return ` title="${statusAktif.MEMO}"`
             }
           },
-          {
-            label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku',
-            formatter: "date",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
+          // {
+          //   label: 'TGL MULAI BERLAKU',
+          //   name: 'tglmulaiberlaku',
+          //   formatter: "date",
+          //   width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           // {
           //   label: 'TGL AKHIR BERLAKU',
           //   name: 'tglakhirberlaku',

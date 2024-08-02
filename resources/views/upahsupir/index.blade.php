@@ -285,16 +285,16 @@
             return ` title="${statusUpahZona.MEMO}"`
           }
         },
-        {
-          label: 'TGL MULAI BERLAKU',
-          name: 'tglmulaiberlaku',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
+        // {
+        //   label: 'TGL MULAI BERLAKU',
+        //   name: 'tglmulaiberlaku',
+        //   width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        //   formatter: "date",
+        //   formatoptions: {
+        //     srcformat: "ISO8601Long",
+        //     newformat: "d-m-Y"
+        //   }
+        // },
 
         {
           label: 'Keterangan',
