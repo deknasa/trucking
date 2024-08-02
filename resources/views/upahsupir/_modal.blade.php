@@ -209,7 +209,7 @@
             </div>
 
 
-            <div class="row form-group">
+            <div class="row form-group"  style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   TGL MULAI BERLAKU <span class="text-danger">*</span>
