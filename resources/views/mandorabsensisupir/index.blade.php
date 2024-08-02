@@ -47,7 +47,7 @@
               <th width="8%">jlh trip</th>
               <th width="15%">Keterangan</th>
               <th width="6%">tgl batas</th>
-              <th width="4%">Aksi</th>
+              <th width="4%" class="kolom-aksi">Aksi</th>
             </tr>
             <tr class="filters">
             </tr>
@@ -270,7 +270,7 @@
         <td>
           <input type="text" class="form-control autonumeric" name="tglbatas[]" value="${detail.tglbatas}" disabled></input>
         </td>
-        <td>
+        <td class="kolom-aksi">
           <button data-trado="${detail.trado_id}" data-supir="${detail.supir_id}" data-id="${detail.id}" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i> Delete</button>
         </td>
        
@@ -343,7 +343,7 @@
       pushToObject(detail.id,null,null)
 
     })
-    
+    readonlyAllTable(data.attributes.readonly)
     setRowNumbers()
   }
 
@@ -486,46 +486,14 @@
   function initLookupDetail(index, detailRow, detail) {
     let rowLookup = index;
 
-    $(`.supir-lookup-${rowLookup}`).last().lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (supir, element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-        
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-        console.log(element.data('currentValue'));
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    // $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
-    //   title: 'Jenis Kendaraan',
-    //   fileName: 'supirMaster',
-    //   typeSearch: 'ALL',
-    //   searching: 1,
-    //   beforeProcess: function() {
+    // $(`.supir-lookup-${rowLookup}`).last().lookup({
+    //   title: 'Supir Lookup',
+    //   fileName: 'supir',
+    //   beforeProcess: function(test) {
     //     this.postData = {
     //       Aktif: 'AKTIF',
-    //       searching: 1,
-    //       valueName: `namasupir_${index}`,
-    //       searchText: `supir-lookup-${rowLookup}`,
-    //       title: 'SUPIR LOOKUP'
-    //     };
+    //     }
     //   },
-      
     //   onSelectRow: (supir, element) => {
     //     element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         
@@ -542,6 +510,38 @@
     //     element.data('currentValue', element.val())
     //   }
     // })
+
+    $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
+      title: 'Jenis Kendaraan',
+      fileName: 'supirMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: `namasupir_${index}`,
+          searchText: `supir-lookup-${rowLookup}`,
+          title: 'SUPIR LOOKUP'
+        };
+      },
+      
+      onSelectRow: (supir, element) => {
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+        
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+        console.log(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="supir_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
     
     $(`.absentrado-lookup-${rowLookup}`).last().lookup({
       title: 'Absen Trado Lookup',
@@ -684,6 +684,24 @@
   function setRowDisable(rowId) {
     $(`.index${rowId} input`).attr('readonly', true);
     $(`.index${rowId} button`).attr('disabled', true);
+  }
+  
+  function readonlyAllTable(params) {
+    $(`#btnSubmitAbsen`).attr('disabled', false)
+    $(`.kolom-aksi`).show()
+    if (params) {
+      let name = $('#detailList tbody').find(`[name]`).parents('.input-group').children()
+      let nameFind = $('#detailList tbody').find(`[name]`).parents('.input-group')
+      name.attr('disabled', true)
+      name.find('.lookup-toggler').remove()
+      nameFind.find('button.button-clear').remove()
+      $('#detailList tbody').find('[name]').attr('disabled', 'disabled').css({
+        background: '#fff'
+      })
+      $(`.kolom-aksi`).hide()
+      $(`#btnSubmitAbsen`).attr('disabled', true)
+    }
+
   }
 
 </script>
