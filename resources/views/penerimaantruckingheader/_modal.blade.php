@@ -333,6 +333,7 @@
 
         let supirheader_id = $(`#crudForm [name="supirheader_id"]`).val()
 
+        $('#tablePinjaman').jqGrid("clearGridData");
         getDataPinjaman(supirheader_id).then((response) => {
 
           $("#tablePinjaman")[0].p.selectedRowIds = [];
@@ -355,6 +356,7 @@
 
         let karyawanheader_id = $(`#crudForm [name="karyawanheader_id"]`).val()
 
+        $('#tablePinjamanKaryawan').jqGrid("clearGridData");
         getDataPinjamanKaryawan(karyawanheader_id).then((response) => {
 
           $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
@@ -713,7 +715,20 @@
         $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
           data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
         })
+        if (KodePenerimaanId === "DPO") {
+          data.filter((row) => row.name === 'supirheader_id')[0].value = $(`#crudForm [name="supir_id[]"]`).val()
+          data.filter((row) => row.name === 'supir')[0].value = $(`#crudForm [name="supir[]"]`).val()
+          data.filter((row) => row.name === 'karyawanheader_id')[0].value = 0
+          data.filter((row) => row.name === 'karyawan')[0].value = ''
+        }
+        if (KodePenerimaanId === "DPOK") {
+          data.filter((row) => row.name === 'karyawanheader_id')[0].value = $(`#crudForm [name="karyawan_id[]"]`).val()
+          data.filter((row) => row.name === 'karyawan')[0].value = $(`#crudForm [name="karyawandetail[]"]`).val()
+          data.filter((row) => row.name === 'supirheader_id')[0].value = 0
+          data.filter((row) => row.name === 'supir')[0].value = ''
 
+
+        }
         // data.push({
         //   name: 'nominal[]',
         //   value: AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[row])
@@ -1074,6 +1089,11 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    
+    $('#crudModal').find(`#crudForm [name="supir[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="supir_id[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="karyawandetail[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="karyawan_id[]"]`).val('')
     $('.colspan').attr('colspan', 2);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -1145,6 +1165,8 @@
   }
 
   function tampilanDPO() {
+    $('#crudModal').find(`#crudForm [name="karyawandetail[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="karyawan_id[]"]`).val('')
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('#btnReloadPJP').parents('.row').hide()
     $('#detailList').show()
@@ -1170,6 +1192,9 @@
   }
 
   function tampilanDPOK() {
+    
+    $('#crudModal').find(`#crudForm [name="supir[]"]`).val('')
+    $('#crudModal').find(`#crudForm [name="supir_id[]"]`).val('')
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('#btnReloadPJP').parents('.row').hide()
     $('#detailList').show()
@@ -1214,7 +1239,16 @@
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
     $('.colmn-offset').hide()
-
+    $('#tablePinjamanKaryawan').jqGrid("clearGridData").trigger("reloadGrid");
+    $('#tablePinjaman').jqGrid("clearGridData").trigger("reloadGrid");
+    $('[name=supirheader_id]').val('')
+    $('[name=supir]').val('')
+    $('[name=karyawanheader_id]').val('')
+    $('[name=karyawan]').val('')
+    setTotalNominalKaryawan()
+    setTotalSisaKaryawan()
+    setTotalNominal()
+    setTotalSisa()
   }
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -3608,9 +3642,11 @@
         $(`#crudForm [name="supirheader_id"]`).last().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
+
+        $("#tablePinjaman")[0].p.selectedRowIds = [];
+        $('#tablePinjaman').jqGrid("clearGridData");
         getDataPinjaman(supir.id).then((response) => {
 
-          $("#tablePinjaman")[0].p.selectedRowIds = [];
           setTimeout(() => {
 
             $("#tablePinjaman")

@@ -285,16 +285,16 @@
             return ` title="${statusUpahZona.MEMO}"`
           }
         },
-        {
-          label: 'TGL MULAI BERLAKU',
-          name: 'tglmulaiberlaku',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
+        // {
+        //   label: 'TGL MULAI BERLAKU',
+        //   name: 'tglmulaiberlaku',
+        //   width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        //   formatter: "date",
+        //   formatoptions: {
+        //     srcformat: "ISO8601Long",
+        //     newformat: "d-m-Y"
+        //   }
+        // },
 
         {
           label: 'Keterangan',
@@ -645,9 +645,31 @@
               //   window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
               // }
 
-              $('#formRangeTgl').data('action', 'report')
-              $('#rangeTglModal').find('button:submit').html(`Report`)
-              $('#rangeTglModal').modal('show')
+              // $('#formRangeTgl').data('action', 'report')
+              // $('#rangeTglModal').find('button:submit').html(`Report`)
+              // $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahsupir.report') }}`,
+                method: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                success: function(response) {
+                  $('#processingLoader').addClass('d-none')
+                  // Handle the success response
+                  var newWindow = window.open('', '_blank');
+                  newWindow.document.open();
+                  newWindow.document.write(response);
+                  newWindow.document.close();
+                },
+                error: function(xhr, status, error) {
+                 
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              });
             }
           },
           {
@@ -663,9 +685,43 @@
               // } else {
               //   window.open(`{{ route('upahsupir.export') }}?id=${selectedId}`)
               // }
-              $('#formRangeTgl').data('action', 'export')
-              $('#rangeTglModal').find('button:submit').html(`Export`)
-              $('#rangeTglModal').modal('show')
+              // $('#formRangeTgl').data('action', 'export')
+              // $('#rangeTglModal').find('button:submit').html(`Export`)
+              // $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahsupir.export') }}`,
+                type: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = `LAPORAN UPAH SUPIR ${new Date().getTime()}.xlsx`;
+                      link.click();
+                    }
+                  }
+
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
           {

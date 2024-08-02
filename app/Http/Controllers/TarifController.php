@@ -239,7 +239,10 @@ class TarifController extends MyController
         $get = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarif/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai);
+            ->get(config('app.api_url') . 'tarif/listpivot', [
+                'limit' => $request->limit,
+                'filters' => $request->filters
+            ]);
 
         if ($get['data'] == null) {
             echo "<script>window.close();</script>";
@@ -348,12 +351,18 @@ class TarifController extends MyController
         $tarif_detail = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarif/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai);
+            ->get(config('app.api_url') . 'tarif/listpivot', [
+                'limit' => $request->limit,
+                'filters' => $request->filters
+            ]);
+        if ($tarif_detail->successful()) {
+            $tarif_details = $tarif_detail['data'];
 
-        $tarif_details = $tarif_detail['data'];
+            $judul = $tarif_detail['judul'];
 
-        $judul = $tarif_detail['judul'];
-
-        return view('reports.tarif', compact('tarif_details', 'judul'));
+            return view('reports.tarif', compact('tarif_details', 'judul'));
+        } else {
+            return response()->json($tarif_detail->json(), $tarif_detail->status());
+        }
     }
 }

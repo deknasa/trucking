@@ -262,20 +262,22 @@ class UpahSupirController extends MyController
     public function report(Request $request)
     {
 
-        $detailParams = [
-            'forReport' => true,
-            'upahsupir_id' => $request->id
-        ];
-
         $upahsupir_detail = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'upahsupir/export?dari=' . $request->dari . '&sampai=' . $request->sampai);
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'upahsupir/export', [
+                'limit' => $request->limit,
+                'filters' => $request->filters
+            ]);
 
-        $upahsupir_details = $upahsupir_detail['data'];
-        $judul = $upahsupir_detail['judul'];
+        if ($upahsupir_detail->successful()) {
+            $upahsupir_details = $upahsupir_detail['data'];
+            $judul = $upahsupir_detail['judul'];
 
-        return view('reports.upahsupir', compact('upahsupir_details', 'judul'));
+            return view('reports.upahsupir', compact('upahsupir_details', 'judul'));
+        } else {
+            return response()->json($upahsupir_detail->json(), $upahsupir_detail->status());
+        }
     }
 
     public function export(Request $request): void
@@ -283,8 +285,10 @@ class UpahSupirController extends MyController
         $get = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahsupir/export?dari=' . $request->dari . '&sampai=' . $request->sampai);
-
+            ->get(config('app.api_url') . 'upahsupir/export', [
+                'limit' => $request->limit,
+                'filters' => $request->filters
+            ]);
         if ($get == null) {
             echo "<script>window.close();</script>";
         } else {
@@ -369,9 +373,16 @@ class UpahSupirController extends MyController
                 $sheet->getStyle("U$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("V$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("W$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-
                 foreach ($header_columns as $data_columns_index => $data_column) {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    if ($data_columns_index == 4) {
+                        $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
+                        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                            $tgl
+                        );
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                    } else {
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    }
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
                 }
                 $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);

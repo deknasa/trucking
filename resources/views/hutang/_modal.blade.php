@@ -50,36 +50,36 @@
 
             <div class="overflow scroll-container mb-2">
               <div class="table-container">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
-                <thead>
-                  <tr>
-                    <th scope="col" width="1%">No</th>
-                    <th scope="col" width="55%">Keterangan</th>
-                    <th scope="col" width="18%">Tgl Jatuh Tempo</th>
-                    <th scope="col" width="25%">Total</th>
-                    <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body">
+                <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
+                  <thead>
+                    <tr>
+                      <th scope="col" width="1%">No</th>
+                      <th scope="col" width="55%">Keterangan</th>
+                      <th scope="col" width="18%">Tgl Jatuh Tempo</th>
+                      <th scope="col" width="25%">Total</th>
+                      <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table_body">
 
-                </tbody>
-                <tfoot>
-                  <tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
 
-                    <td colspan="3">
-                      <h5 class="font-weight-bold">TOTAL :</h5>
-                    </td>
-                    <td>
-                      <h5 id="total" class="text-right font-weight-bold"></h5>
-                    </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
+                      <td colspan="3">
+                        <h5 class="font-weight-bold">TOTAL :</h5>
+                      </td>
+                      <td>
+                        <h5 id="total" class="text-right font-weight-bold"></h5>
+                      </td>
+                      <td class="tbl_aksi">
+                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                      </td>
+                    </tr>
+                  </tfoot>
 
-              </table>
-            </div>
+                </table>
+              </div>
             </div>
           </div>
           <div class="modal-footer justify-content-start">
@@ -180,7 +180,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
       event.preventDefault()
 
@@ -287,7 +287,7 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-  
+
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
@@ -297,15 +297,15 @@
                 tglsampai: dateFormat(response.data.tglsampaiheader)
               }
             }).trigger('reloadGrid');
-  
+
             if (id == 0) {
               $('#detailGrid').jqGrid().trigger('reloadGrid')
             }
-  
+
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -361,34 +361,43 @@
   })
 
   function removeEditingBy(id) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}bataledit`,
-      method: 'POST',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: id,
-        aksi: 'BATAL',
-        table: 'hutangheader'
 
-      },
-      success: response => {
-        $("#crudModal").modal("hide")
-      },
-      error: error => {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'hutangheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
         if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.responseJSON)
+          showDialog(error.responseJSON);
         }
-      },
-    })
-  }  
+      })
+  }
 
   function setTotal() {
     let nominalDetails = $(`#detailList [name="total_detail[]"]`)

@@ -282,12 +282,50 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     tradoLookup = ''
     supirLookup = ''
     initDatepicker('datepickerIndex')
   })
 
+  function removeEditingBy(id) {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'ritasi');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
   function createRitasi() {
     let form = $('#crudForm')
 

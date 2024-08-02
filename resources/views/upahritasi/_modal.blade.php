@@ -62,7 +62,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JARAK <span class="text-danger">*</span>
+                  JARAK <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -98,7 +98,7 @@
                 <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   TGL MULAI BERLAKU <span class="text-danger">*</span>
@@ -135,7 +135,7 @@
               </div>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive" style="display: none">
               <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1000px">
                 <thead>
                   <tr>

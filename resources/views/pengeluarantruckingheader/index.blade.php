@@ -400,8 +400,8 @@
               if ((value == null) || (value == '')) {
                 return '';
               }
-              let tgldari = rowData.tgldariheaderpengeluaranheader
-              let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let tgldari = rowData.tgldariheaderpengeluarantruckingheader
+              let tglsampai = rowData.tglsampaiheaderpengeluarantruckingheader
               let url = "{{route('pengeluarantruckingheader.index')}}"
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
