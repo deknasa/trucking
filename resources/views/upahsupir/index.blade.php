@@ -645,9 +645,31 @@
               //   window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
               // }
 
-              $('#formRangeTgl').data('action', 'report')
-              $('#rangeTglModal').find('button:submit').html(`Report`)
-              $('#rangeTglModal').modal('show')
+              // $('#formRangeTgl').data('action', 'report')
+              // $('#rangeTglModal').find('button:submit').html(`Report`)
+              // $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahsupir.report') }}`,
+                method: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                success: function(response) {
+                  $('#processingLoader').addClass('d-none')
+                  // Handle the success response
+                  var newWindow = window.open('', '_blank');
+                  newWindow.document.open();
+                  newWindow.document.write(response);
+                  newWindow.document.close();
+                },
+                error: function(xhr, status, error) {
+                 
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              });
             }
           },
           {
