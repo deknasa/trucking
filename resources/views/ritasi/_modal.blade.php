@@ -621,6 +621,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          tglbukti: $('#crudForm [name=tglbukti]').val()
         }
       },
       onSelectRow: (suratpengantar, element) => {
