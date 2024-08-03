@@ -5,6 +5,11 @@
 @push('scripts')
 <script>
   setRangeLookup()
+  tglheader = `{!! $tglbukti ?? '' !!}`;
+  if (tglheader != '') {
+    $('#rangeHeaderLookup').find('[name=tgldariheaderlookup]').val(tglheader).trigger('change');
+    $('#rangeHeaderLookup').find('[name=tglsampaiheaderlookup]').val(tglheader).trigger('change');
+  }
   initDatepicker()
   $(document).on('click', '#btnReloadLookup', function(event) {
     loadDataHeaderLookup('suratpengantar', 'suratpengantarLookup')
