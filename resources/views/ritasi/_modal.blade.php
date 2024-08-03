@@ -621,6 +621,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          from: 'ritasi',
           tglbukti: $('#crudForm [name=tglbukti]').val()
         }
       },
