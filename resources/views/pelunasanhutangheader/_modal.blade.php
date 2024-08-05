@@ -1551,7 +1551,6 @@
       .find((row) => row.id == rowId);
 
     editableColumns.forEach((editableColumn) => {
-
       if (!isChecked) {
         for (var i = 0; i < selectedRowIds.length; i++) {
           if (selectedRowIds[i] == rowId) {
@@ -1560,7 +1559,10 @@
         }
         sisa = 0
         if ($('#crudForm').data('action') == 'edit') {
-          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
+          
+          let originBayar = (originalGridData.bayar == undefined) ? 0 : parseFloat(originalGridData.bayar)
+          let originPotongan = (originalGridData.potongan == undefined) ? 0 : parseFloat(originalGridData.potongan)
+          sisa = (parseFloat(originalGridData.sisa) + originBayar + originPotongan)
         } else {
           sisa = originalGridData.sisa
         }
@@ -1596,7 +1598,9 @@
           // } else {
           //   localRow.bayar = originalGridData.sisa
           // }
-          localRow.bayar = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
+          let originBayar = (originalGridData.bayar == undefined) ? 0 : parseFloat(originalGridData.bayar)
+          let originPotongan = (originalGridData.potongan == undefined) ? 0 : parseFloat(originalGridData.potongan)
+          localRow.bayar = (parseFloat(originalGridData.sisa) + originBayar + originPotongan)
         } else {
           localRow.bayar = originalGridData.sisa
         }
@@ -2252,6 +2256,8 @@
         $('#crudForm [name=supplier_id]').first().val(supplier.id)
         element.val(supplier.namasupplier)
         element.data('currentValue', element.val())
+        $('#btnSubmit').prop('disabled', true)
+        $('#btnSaveAdd').prop('disabled', true)
 
         $('#tableHutang').jqGrid("clearGridData");
         $("#tableHutang")
@@ -2259,10 +2265,15 @@
             selectedRowIds: []
           })
           .trigger("reloadGrid");
+
+        setTotalSisa()
+        setTotalBayar()
+        setTotalPotongan()
+        setAllTotal()
+
         getDataHutang(supplier.id).then((response) => {
 
           $("#tableHutang")[0].p.selectedRowIds = [];
-          console.log('before', $("#tableHutang").jqGrid('getGridParam', 'selectedRowIds'))
           setTimeout(() => {
 
             $("#tableHutang")
@@ -2274,6 +2285,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });

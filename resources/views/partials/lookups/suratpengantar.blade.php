@@ -11,7 +11,7 @@
     $('#rangeHeaderLookup').find('[name=tglsampaiheaderlookup]').val(tglheader).trigger('change');
   }
   from = `{!! $from ?? '' !!}`;
-  if (from == 'ritasi') {
+  if (from == 'ritasi' || from == 'biayaextrasupir') {
     $('#rangeHeaderLookup').parents('.card').hide()
   }else{
     $('#rangeHeaderLookup').parents('.card').show()
