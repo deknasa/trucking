@@ -2703,15 +2703,22 @@
         topAgen = agen.top
         setTOP()
         // getPiutang(agen.id)
+        $('#btnSubmit').prop('disabled', true)
+        $('#btnSaveAdd').prop('disabled', true)
         $('#tablePelunasan').jqGrid("clearGridData");
         $("#tablePelunasan")
           .jqGrid("setGridParam", {
             selectedRowIds: []
           })
           .trigger("reloadGrid");
-        getDataPelunasan(agen.id).then((response) => {
+          
+        setTotalBayar()
+        setTotalPotongan()
+        setTotalLebihBayar()
+        setTotalNominal()
+        setTotalSisa()
 
-          console.log('before', $("#tablePelunasan").jqGrid('getGridParam', 'selectedRowIds'))
+        getDataPelunasan(agen.id).then((response) => {
 
           $("#tablePelunasan")[0].p.selectedRowIds = [];
           setTimeout(() => {
@@ -2725,6 +2732,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });
