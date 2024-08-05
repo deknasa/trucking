@@ -3013,10 +3013,13 @@
     $('.cabang').hide()
     $('#tableDeposito').jqGrid("clearGridData");
     $('#tableDepositoKaryawan').jqGrid("clearGridData");
-    $('[name=supirheader_id]').val('')
-    $('[name=supirheader]').val('')
-    $('[name=karyawanheader_id]').val('')
-    $('[name=karyawanheader]').val('')
+    if ($('#crudForm').data('action') == 'add') {
+
+      $('[name=supirheader_id]').val('')
+      $('[name=supirheader]').val('')
+      $('[name=karyawanheader_id]').val('')
+      $('[name=karyawanheader]').val('')
+    }
     setTotalNominalDeposito()
     setTotalSisaDeposito()
     setTotalNominalDepositoKaryawan()
