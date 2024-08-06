@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a1364c52bd33bbaf68eebba9ef2a7fb1",
+  "ReportGuid": "cddd86bf127c6e1ee60aa2b47c575e4d",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportRekapPengeluaran.mrt",
+  "ReportFile": "ReportRekapPengeluaran.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1721889258000+0700)/",
+  "ReportChanged": "/Date(1722590630000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -887,7 +887,7 @@
         "3": {
           "Ident": "StiReportSummaryBand",
           "Name": "ReportSummaryBand1",
-          "ClientRectangle": "0,54.8,204,27.72",
+          "ClientRectangle": "0,54.8,204,29.72",
           "ComponentPlacement": "rs.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1403,6 +1403,56 @@
                 "Ident": "StiInteraction"
               },
               "ReferenceToGuid": "fdbab79ad3bb66fa3d2bcda612d25e20"
+            },
+            "34": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive1",
+              "ClientRectangle": "4.06,28.01,0,0",
+              "ComponentPlacement": "p.Page1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "5c65cddf82808645103ee1c49063365b"
+            },
+            "35": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive2",
+              "ClientRectangle": "24.38,28.01,0,0",
+              "ComponentPlacement": "p.Page1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "2262893790874a27af90372003ff1205"
+            },
+            "36": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive3",
+              "ClientRectangle": "44.45,28.01,0,0",
+              "ComponentPlacement": "p.Page1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "6ae2213bdd603ebf0b68c942113c8a73"
+            },
+            "37": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive4",
+              "ClientRectangle": "64.26,28.01,0,0",
+              "ComponentPlacement": "p.Page1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "e14fcaafb96a759f742f6ddac3056530"
+            },
+            "38": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive10",
+              "ClientRectangle": "84.33,28.01,0,0",
+              "ComponentPlacement": "p.Page1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "fdbab79ad3bb66fa3d2bcda612d25e20"
             }
           },
           "PrintAtBottom": true
@@ -1598,56 +1648,6 @@
           },
           "StartCap": ";;;",
           "EndCap": ";;;"
-        },
-        "20": {
-          "Ident": "StiEndPointPrimitive",
-          "Name": "EndPointPrimitive1",
-          "ClientRectangle": "4.06,82.81,0,0",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "ReferenceToGuid": "5c65cddf82808645103ee1c49063365b"
-        },
-        "21": {
-          "Ident": "StiEndPointPrimitive",
-          "Name": "EndPointPrimitive2",
-          "ClientRectangle": "24.38,82.81,0,0",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "ReferenceToGuid": "2262893790874a27af90372003ff1205"
-        },
-        "22": {
-          "Ident": "StiEndPointPrimitive",
-          "Name": "EndPointPrimitive3",
-          "ClientRectangle": "44.45,82.81,0,0",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "ReferenceToGuid": "6ae2213bdd603ebf0b68c942113c8a73"
-        },
-        "23": {
-          "Ident": "StiEndPointPrimitive",
-          "Name": "EndPointPrimitive4",
-          "ClientRectangle": "64.26,82.81,0,0",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "ReferenceToGuid": "e14fcaafb96a759f742f6ddac3056530"
-        },
-        "24": {
-          "Ident": "StiEndPointPrimitive",
-          "Name": "EndPointPrimitive10",
-          "ClientRectangle": "84.33,82.81,0,0",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "ReferenceToGuid": "fdbab79ad3bb66fa3d2bcda612d25e20"
         }
       },
       "PageWidth": 240,

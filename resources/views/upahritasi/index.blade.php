@@ -448,12 +448,28 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('upahritasi.report') }}?id=${selectedId}`)
-              }
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahritasi.report') }}`,
+                method: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                success: function(response) {
+                  $('#processingLoader').addClass('d-none')
+                  // Handle the success response
+                  var newWindow = window.open('', '_blank');
+                  newWindow.document.open();
+                  newWindow.document.write(response);
+                  newWindow.document.close();
+                },
+                error: function(xhr, status, error) {
+                 
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              });
             }
           },
           {
@@ -469,8 +485,40 @@
               // } else {
               //   window.open(`{{ route('upahritasi.export') }}?id=${selectedId}`)
               // }
-              $('#rangeTglModal').find('button:submit').html(`Export`)
-              $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahritasi.export') }}`,
+                type: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = `LAPORAN UPAH RITASI ${new Date().getTime()}.xlsx`;
+                      link.click();
+                    }
+                  }
+
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
           {

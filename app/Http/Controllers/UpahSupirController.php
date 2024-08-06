@@ -350,45 +350,96 @@ class UpahSupirController extends MyController
 
             // LOOPING DETAIL
             $total = 0;
+            $alphabets = range('A', 'Z');
+            // foreach ($header_columns as $data_columns_index => $data_column) {
+            //     // dd( $data_columns_index,$data_column, $upahsupir[$data_columns_index][$data_column['index']]);
+            //     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $upahsupir[$data_columns_index][$data_column['index']]);
+            //     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+                
+            //     $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("M$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("O$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("P$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("Q$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("R$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("S$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("T$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("U$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            //     $sheet->getStyle("V$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            // }
             foreach ($upahsupir as $response_index => $response_detail) {
-
-                $alphabets = range('A', 'Z');
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("M$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("O$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("P$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("Q$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("R$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("S$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("T$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("U$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("V$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("W$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                foreach ($header_columns as $data_columns_index => $data_column) {
-                    if ($data_columns_index == 4) {
-                        $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
-                        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
-                            $tgl
-                        );
-                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
-                    } else {
-                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
-                    }
-                    $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
-                }
+                
+                $sheet->setCellValue("A$detail_start_row", $response_detail['dari']);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['tujuan']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['penyesuaian']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['jarak'])->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("E$detail_start_row", $response_detail['20_FULL EMPTY'])->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("F$detail_start_row", $response_detail['20_FULL'])->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("G$detail_start_row", $response_detail['20_EMPTY'])->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("H$detail_start_row", $response_detail['40_FULL EMPTY'])->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("I$detail_start_row", $response_detail['40_FULL'])->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("J$detail_start_row", $response_detail['40_EMPTY'])->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("K$detail_start_row", $response_detail['2X20_FULL EMPTY'])->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("L$detail_start_row", $response_detail['2X20_FULL'])->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("M$detail_start_row", $response_detail['2X20_EMPTY'])->getStyle("M$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("N$detail_start_row", $response_detail['Liter_20_FULL EMPTY'])->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("O$detail_start_row", $response_detail['Liter_20_FULL'])->getStyle("O$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("P$detail_start_row", $response_detail['Liter_20_EMPTY'])->getStyle("P$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("Q$detail_start_row", $response_detail['Liter_40_FULL EMPTY'])->getStyle("Q$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("R$detail_start_row", $response_detail['Liter_40_FULL'])->getStyle("R$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("S$detail_start_row", $response_detail['Liter_40_EMPTY'])->getStyle("S$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("T$detail_start_row", $response_detail['Liter_2X20_FULL EMPTY'])->getStyle("T$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("U$detail_start_row", $response_detail['Liter_2X20_FULL'])->getStyle("U$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->setCellValue("V$detail_start_row", $response_detail['Liter_2X20_EMPTY'])->getStyle("V$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                // $sheet->getStyle("W$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                // foreach ($header_columns as $data_columns_index => $data_column) {
+                //     dd( $data_columns_index,$data_column, $upahsupir[$data_column['index']]);
+                //     // if ($data_columns_index == 4) {
+                //     //     $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
+                //     //     $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                //     //         $tgl
+                //     //     );
+                //     //     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                //     // } else {
+                //     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                //     // }
+                    // $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+                // }
                 $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
                 $detail_start_row++;
             }
 
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+            $sheet->getColumnDimension('J')->setAutoSize(true);
+            $sheet->getColumnDimension('K')->setAutoSize(true);
+            $sheet->getColumnDimension('L')->setAutoSize(true);
+            $sheet->getColumnDimension('M')->setAutoSize(true);
+            $sheet->getColumnDimension('N')->setAutoSize(true);
+            $sheet->getColumnDimension('O')->setAutoSize(true);
+            $sheet->getColumnDimension('P')->setAutoSize(true);
+            $sheet->getColumnDimension('Q')->setAutoSize(true);
+            $sheet->getColumnDimension('R')->setAutoSize(true);
+            $sheet->getColumnDimension('S')->setAutoSize(true);
+            $sheet->getColumnDimension('T')->setAutoSize(true);
+            $sheet->getColumnDimension('U')->setAutoSize(true);
+            $sheet->getColumnDimension('V')->setAutoSize(true);
             $writer = new Xlsx($spreadsheet);
             $filename = 'Data Upah Supir  ' . date('dmYHis');
             header('Content-Type: application/vnd.ms-excel');

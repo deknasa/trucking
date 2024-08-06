@@ -161,15 +161,21 @@ class UpahRitasiController extends MyController
         $upahritasi_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahritasirincian', $detailParams);
+            ->get(config('app.api_url') . 'upahritasi/export', [
+                'limit' => $request->limit,
+                'filters' => $request->filters
+            ]);
+
+        if ($upahritasi_detail->successful()) {
+
+            $upahritasi_details = $upahritasi_detail['data'];
+            $judul = $upahritasi_detail['judul'];
 
 
-
-        $upahritasi_details = $upahritasi_detail['data'];
-
-        $user = $upahritasi_detail->json()['user'];
-
-        return view('reports.upahritasi', compact('upahritasi_details', 'user'));
+            return view('reports.upahritasi', compact('upahritasi_details', 'judul'));
+        } else {
+            return response()->json($upahritasi_detail->json(), $upahritasi_detail->status());
+        }
     }
 
     public function export(Request $request): void
@@ -178,7 +184,10 @@ class UpahRitasiController extends MyController
         $upahritasi = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahritasi/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+            ->get(config('app.api_url') . 'upahritasi/export', [
+                'limit' => $request->limit,
+                'filters' => $request->filters
+            ])['data'];
 
         if ($upahritasi == null) {
             echo "<script>window.close();</script>";
@@ -188,12 +197,14 @@ class UpahRitasiController extends MyController
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
             $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle("A1")->getFont()->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:H1');
 
             $sheet->setCellValue('A2', 'Laporan Upah Ritasi');
             $sheet->getStyle("A2")->getFont()->setSize(12);
-            $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+            $sheet->getStyle("A2")->getFont()->setBold(true);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A2:H2');
 
             $header_start_row = 3;
@@ -242,12 +253,11 @@ class UpahRitasiController extends MyController
             foreach ($upahritasi as $response_index => $response_detail) {
 
                 $alphabets = range('A', 'Z');
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_columns_index == 3) {
