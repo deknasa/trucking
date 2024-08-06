@@ -329,11 +329,18 @@
       // if ($('#crudForm').data('action') == 'edit') {
       //   reloadGrid = 'reload'
       // }
+      $('#btnSubmit').prop('disabled', true)
+      $('#btnSaveAdd').prop('disabled', true)
       if (KodePenerimaanId == 'PJP') {
 
         let supirheader_id = $(`#crudForm [name="supirheader_id"]`).val()
 
         $('#tablePinjaman').jqGrid("clearGridData");
+
+        setTotalNominal()
+        setTotalSisa()
+        setTotalPinjaman()
+        setTotalBayarPinjaman()
         getDataPinjaman(supirheader_id).then((response) => {
 
           $("#tablePinjaman")[0].p.selectedRowIds = [];
@@ -348,6 +355,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });
@@ -357,6 +366,9 @@
         let karyawanheader_id = $(`#crudForm [name="karyawanheader_id"]`).val()
 
         $('#tablePinjamanKaryawan').jqGrid("clearGridData");
+
+        setTotalNominalKaryawan()
+        setTotalSisaKaryawan()
         getDataPinjamanKaryawan(karyawanheader_id).then((response) => {
 
           $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
@@ -371,6 +383,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });
@@ -984,6 +998,9 @@
   $(document).on("change", `[name=tglbukti]`, function(event) {
 
     if (KodePenerimaanId == 'PJP') {
+      $('#btnSubmit').prop('disabled', true)
+      $('#btnSaveAdd').prop('disabled', true)
+
       $("#tablePinjaman")[0].p.selectedRowIds = [];
       $('#tablePinjaman').jqGrid("clearGridData");
       $("#tablePinjaman")
@@ -991,6 +1008,11 @@
           selectedRowIds: []
         })
         .trigger("reloadGrid");
+
+      setTotalNominal()
+      setTotalSisa()
+      setTotalPinjaman()
+      setTotalBayarPinjaman()
       getDataPinjaman($('#crudForm [name=supirheader_id]').val()).then((response) => {
 
         $("#tablePinjaman")[0].p.selectedRowIds = [];
@@ -1005,11 +1027,15 @@
               selectedRowIds: []
             })
             .trigger("reloadGrid");
+          $('#btnSubmit').prop('disabled', false)
+          $('#btnSaveAdd').prop('disabled', false)
         }, 100);
 
       });
     }
     if (KodePenerimaanId == 'PJPK') {
+      $('#btnSubmit').prop('disabled', true)
+      $('#btnSaveAdd').prop('disabled', true)
       $('#tablePinjamanKaryawan').jqGrid("clearGridData");
       $("#tablePinjamanKaryawan")
         .jqGrid("setGridParam", {
@@ -1017,6 +1043,8 @@
         })
         .trigger("reloadGrid");
 
+      setTotalNominalKaryawan()
+      setTotalSisaKaryawan()
       getDataPinjamanKaryawan($('#crudForm [name=karyawanheader_id]').val()).then((response) => {
         $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
         setTimeout(() => {
@@ -1030,6 +1058,8 @@
               selectedRowIds: []
             })
             .trigger("reloadGrid");
+          $('#btnSubmit').prop('disabled', false)
+          $('#btnSaveAdd').prop('disabled', false)
         }, 100);
 
       });
@@ -1089,7 +1119,7 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
-    
+
     $('#crudModal').find(`#crudForm [name="supir[]"]`).val('')
     $('#crudModal').find(`#crudForm [name="supir_id[]"]`).val('')
     $('#crudModal').find(`#crudForm [name="karyawandetail[]"]`).val('')
@@ -1192,7 +1222,7 @@
   }
 
   function tampilanDPOK() {
-    
+
     $('#crudModal').find(`#crudForm [name="supir[]"]`).val('')
     $('#crudModal').find(`#crudForm [name="supir_id[]"]`).val('')
     $('#btnReloadBbtGrid').parents('.row').hide()
@@ -1241,10 +1271,12 @@
     $('.colmn-offset').hide()
     $('#tablePinjamanKaryawan').jqGrid("clearGridData").trigger("reloadGrid");
     $('#tablePinjaman').jqGrid("clearGridData").trigger("reloadGrid");
-    $('[name=supirheader_id]').val('')
-    $('[name=supir]').val('')
-    $('[name=karyawanheader_id]').val('')
-    $('[name=karyawan]').val('')
+    if ($('#crudForm').data('action') == 'add') {
+      $('[name=supirheader_id]').val('')
+      $('[name=supir]').val('')
+      $('[name=karyawanheader_id]').val('')
+      $('[name=karyawan]').val('')
+    }
     setTotalNominalKaryawan()
     setTotalSisaKaryawan()
     setTotalNominal()
@@ -2919,6 +2951,7 @@
             }
             if (kodepenerimaan === "PJP") {
               if (index == 'supir') {
+                element.val(value)
                 element.data('current-value', value).prop('readonly', true)
                 element.parent('.input-group').find('.button-clear').remove()
                 element.parent('.input-group').find('.input-group-append').remove()
@@ -2934,7 +2967,6 @@
               element.data('current-value', value)
             }
           })
-
           if (kodepenerimaan === "PJP") {
 
             getDataPinjaman(response.data.supirheader_id, id).then((response) => {
@@ -3643,8 +3675,15 @@
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
 
+        $('#btnSubmit').prop('disabled', true)
+        $('#btnSaveAdd').prop('disabled', true)
         $("#tablePinjaman")[0].p.selectedRowIds = [];
         $('#tablePinjaman').jqGrid("clearGridData");
+
+        setTotalNominal()
+        setTotalSisa()
+        setTotalPinjaman()
+        setTotalBayarPinjaman()
         getDataPinjaman(supir.id).then((response) => {
 
           setTimeout(() => {
@@ -3658,6 +3697,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });
@@ -3684,6 +3725,8 @@
         $(`#crudForm [name="karyawanheader_id"]`).last().val(karyawan.id)
         element.val(karyawan.namakaryawan)
         element.data('currentValue', element.val())
+        $('#btnSubmit').prop('disabled', true)
+        $('#btnSaveAdd').prop('disabled', true)
         $('#tablePinjamanKaryawan').jqGrid("clearGridData");
         $("#tablePinjamanKaryawan")
           .jqGrid("setGridParam", {
@@ -3691,6 +3734,8 @@
           })
           .trigger("reloadGrid");
 
+        setTotalNominalKaryawan()
+        setTotalSisaKaryawan()
         getDataPinjamanKaryawan(karyawan.id).then((response) => {
           $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
           setTimeout(() => {
@@ -3704,6 +3749,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });

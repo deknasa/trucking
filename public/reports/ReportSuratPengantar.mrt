@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a4cb4c04b02952daa28e3ae1cadf6b2e",
+  "ReportGuid": "323d0659c0736b5728223a9f6f9e83a1",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportSuratPengantar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1705294944000+0700)/",
+  "ReportChanged": "/Date(1722588687000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -202,24 +202,12 @@
             "Type": "System.String"
           },
           "29": {
-            "Name": "tgldari",
-            "NameInSource": "tgldari",
-            "Alias": "tgldari",
-            "Type": "System.DateTime"
-          },
-          "30": {
-            "Name": "tglsampai",
-            "NameInSource": "tglsampai",
-            "Alias": "tglsampai",
-            "Type": "System.DateTime"
-          },
-          "31": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "32": {
+          "30": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
@@ -243,6 +231,18 @@
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "tgldari",
+            "NameInSource": "tgldari",
+            "Alias": "tgldari",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "tglsampai",
+            "NameInSource": "tglsampai",
+            "Alias": "tglsampai",
             "Type": "System.String"
           }
         },
@@ -1087,7 +1087,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{suratpengantar.tgldari}"
+                "Value": "{params.tgldari}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
@@ -1112,7 +1112,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{suratpengantar.tglsampai}"
+                "Value": "{params.tglsampai}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
