@@ -229,7 +229,7 @@
         $('.jenisorder-lookup').lookupMaster({
             title: 'Jenis Order Lookup',
             fileName: 'jenisorderMaster',
-            typeSearch: 'ALL',
+            // typeSearch: 'ALL',
             searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
@@ -238,7 +238,7 @@
                     valueName: 'jenisorder_id',
                     searchText: 'jenisorder-lookup',
                     title: 'Jenis Order Lookup',
-                    typeSearch: 'ALL',
+                    // typeSearch: 'ALL',
                     singleColumn : true,
                     hideLabel: true,
                 }
