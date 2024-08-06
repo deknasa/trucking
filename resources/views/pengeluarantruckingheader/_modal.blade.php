@@ -109,22 +109,22 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  supir <span class="text-danger">*</span></label>
+                  karyawan <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" id="supirheaderId" name="supirheader_id">
-                <input type="text" name="supirheader" class="form-control supirheader-lookup">
+                <input type="hidden" id="karyawanheaderId" name="karyawanheader_id">
+                <input type="text" name="karyawanheader" class="form-control karyawanheader-lookup">
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  karyawan <span class="text-danger">*</span></label>
+                  supir <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" id="karyawanheaderId" name="karyawanheader_id">
-                <input type="text" name="karyawanheader" class="form-control karyawanheader-lookup">
+                <input type="hidden" id="supirheaderId" name="supirheader_id">
+                <input type="text" name="supirheader" class="form-control supirheader-lookup">
               </div>
             </div>
 
@@ -146,6 +146,19 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="gandenganHaeaderId" name="gandenganheader_id">
                 <input type="text" name="gandengan" class="form-control gandenganheader-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group statustanpabukti">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  approval klaim tanpa bukti <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statustanpabukti" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH CABANG --</option>
+                </select>
               </div>
             </div>
 
@@ -596,6 +609,10 @@
         tokenTNL = accessToken
 
       }
+    })
+    $(document).on('change', `[name="statustanpabukti"]`, function(event) {
+      klaimTanpaNobukti()
+      console.log($(`#crudForm [name="statustanpabukti"]`).val());
     })
 
     function rangeInvoice() {
@@ -1675,6 +1692,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1728,6 +1746,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1784,6 +1803,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').show()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
@@ -1837,6 +1857,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -1886,6 +1907,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').show()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -1936,6 +1958,7 @@
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
@@ -1995,6 +2018,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
@@ -2048,6 +2072,7 @@
     $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -2105,7 +2130,8 @@
     $('#btnReloadSumbanganGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=statusposting]').parents('.form-group').hide()
-    $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').show()
+    $('[name=statustanpabukti]').parents('.form-group').show()
     $('[name=agen_id]').parents('.form-group').hide()
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -2175,6 +2201,7 @@
     $('[name=agen_id]').parents('.form-group').hide()
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -2260,6 +2287,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2342,6 +2370,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2425,6 +2454,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2507,6 +2537,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2590,6 +2621,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2671,6 +2703,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2753,6 +2786,7 @@
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
@@ -2812,6 +2846,7 @@
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
@@ -2872,6 +2907,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2968,6 +3004,7 @@
     $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
@@ -3013,14 +3050,43 @@
     $('.cabang').hide()
     $('#tableDeposito').jqGrid("clearGridData");
     $('#tableDepositoKaryawan').jqGrid("clearGridData");
-    $('[name=supirheader_id]').val('')
-    $('[name=supirheader]').val('')
-    $('[name=karyawanheader_id]').val('')
-    $('[name=karyawanheader]').val('')
+    // $('[name=supirheader_id]').val('')
+    // $('[name=supirheader]').val('')
+    // $('[name=karyawanheader_id]').val('')
+    // $('[name=karyawanheader]').val('')
     setTotalNominalDeposito()
     setTotalSisaDeposito()
     setTotalNominalDepositoKaryawan()
     setTotalSisaDepositoKaryawan()
+  }
+
+  function klaimTanpaNobukti() {
+    let statustanpabukti = $(`#crudForm [name="statustanpabukti"]`).val();
+    if (statustanpabukti == 4) {// statustanpabukti NON APPROVAL (HARUS ADA SPK/PG)
+      
+      $('.stok-lookup').parents('.input-group').show()
+      $('.stok-lookup-master').parents('.input-group').hide()
+  
+      $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).attr('readonly', false)
+      $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',false)
+      $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
+      
+      $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).attr('readonly', false)
+      $($('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',false)
+      $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
+    }else{
+      
+      $('.stok-lookup-master').parents('.input-group').show()
+      $('.stok-lookup').parents('.input-group').hide()
+  
+      $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).attr('readonly', true)
+      $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',true)
+      $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+  
+      $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).attr('readonly', true)
+      $($('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',true)
+      $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+    }
   }
 
   $(document).on('click', '.checkItem', function(event) {
@@ -3173,6 +3239,7 @@
     initSelect2(form.find(`[name="statusposting"]`), true)
     // initSelect2(form.find(`[name="postingpinjaman"]`), true)
     initSelect2(form.find(`[name="statuscabang"]`), true)
+    initSelect2(form.find(`[name="statustanpabukti"]`), true)
     if (form.data('action') == 'add') {
       form.find('#btnSaveAdd').show()
 
@@ -3305,6 +3372,7 @@
     Promise
       .all([
         setStatusPostingOptions(form),
+        setStatusTanpaBuktiOptions(form),
         // setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
@@ -3318,6 +3386,7 @@
           clearSelectedRowsIndex()
         }
         $('#crudModal').modal('show')
+        $('#crudModal').find("[name=statustanpabukti]").val(4).trigger('change')
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -3350,6 +3419,7 @@
         setTglBukti(form),
         setStatusBiayaTitipanOptions(),
         setStatusPostingOptions(form),
+        setStatusTanpaBuktiOptions(form),
         // setPostingPinjamanOptions(form),
         setStatusCabangOptions(form),
         setTampilan(form),
@@ -3373,6 +3443,12 @@
             }
 
             if (KodePengeluaranId === "KLAIM") {
+              klaimTanpaNobukti()
+              if (form.find(`[name="karyawanheader"]`).val() != '') {
+                selectedSupirKaryawan('karyawan')
+              }else{
+                selectedSupirKaryawan('supir')
+              }
               if (form.find(`[name="trado"]`).val() != '') {
                 lookupSelected(`trado`)
               } else {
@@ -3424,6 +3500,7 @@
     Promise
       .all([
         setStatusPostingOptions(form),
+        setStatusTanpaBuktiOptions(form),
         // setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
@@ -3449,6 +3526,12 @@
 
 
             if (KodePengeluaranId === "KLAIM") {
+              klaimTanpaNobukti()
+              if (form.find(`[name="karyawanheader"]`).val() != '') {
+                selectedSupirKaryawan('karyawan')
+              }else{
+                selectedSupirKaryawan('supir')
+              }
               if (form.find(`[name="trado"]`).val() != '') {
                 lookupSelected(`trado`)
               } else {
@@ -3504,6 +3587,7 @@
       .all([
         setTglBukti(form),
         setStatusPostingOptions(form),
+        setStatusTanpaBuktiOptions(form),
         // setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
@@ -5089,6 +5173,9 @@
             } else {
               element.val(value)
             }
+            if(index == "karyawanheader"){
+              element.data('current-value', value)
+            }
 
             if (kodepengeluaran === "TDE") {
               if (index == 'supirheader') {
@@ -5601,6 +5688,7 @@
                     <td class="data_tbl tbl_stok_id">
                       <input type="hidden" id="stok_id_${index}" name="stok_id[]">
                       <input type="text" id="stok_${index}" name="stok[]" data-current-value="${detail.stok}" class="form-control stok-lookup">
+                      <input type="text" id="stok_${indexRow}_master" name="stok_master[]" class="form-control stok-lookup-master">
                     </td>
                     <td class="data_tbl tbl_qty">
                       <input type="text" id="qty_${index}" name="qty[]" class="form-control autonumeric qty"> 
@@ -5650,6 +5738,7 @@
               detailRow.find(`[name="penerimaanstok_nobukti[]"]`).val(detail.penerimaanstok_nobukti)
               detailRow.find(`[name="stok_id[]"]`).val(detail.stok_id)
               detailRow.find(`[name="stok[]"]`).val(detail.stok)
+              detailRow.find(`[name="stok_master[]"]`).val(detail.stok)
               detailRow.find(`[name="qty[]"]`).val(detail.qty)
               detailRow.find(`[name="harga[]"]`).val(detail.harga)
               detailRow.find(`[name="totalharga[]"]`).val(detail.total)
@@ -5853,56 +5942,57 @@
                   enabledLookupSpkPG(row)
                 }
               })
-              $('.stok-lookup').last().lookup({
-                title: 'stok Lookup',
-                fileName: 'pengeluaranstokdetail',
-                beforeProcess: function(test) {
-                  console.log(detail.penerimaanstokheader_nobukti, '5686');
-                  // var levelcoa = $(`#levelcoa`).val();
-                  this.postData = {
-                    cabang: statuscabang,
-                    url: urlTNL,
-                    token: tokenTNL,
-                    penerimaanstokheader_id: detail.penerimaanstokheader_id,
-                    penerimaanstokheader_nobukti: detail.penerimaanstokheader_nobukti,
-                    pengeluaranstokheader_id: detail.pengeluaranstokheader_id,
-                    from: 'klaim',
-                    stok_id: detail.stok_id
-                  }
-                },
-                onSelectRow: (stok, element) => {
-                  element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
-                  element.val(stok.stok)
-                  element.data('currentValue', element.val())
-                  console.log(stok.qty);
-                  detailRow.find(`[name="qty[]"]`).val(stok.qty);
-                  detailRow.find(`[name="harga[]"]`).val(stok.harga);
-                  // new AutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':stok.qty})
-                  initAutoNumeric(detailRow.find(`[name="harga[]"]`))
-                  // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
-                  totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
-                  new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
+              // $('.stok-lookup').last().lookup({
+              //   title: 'stok Lookup',
+              //   fileName: 'pengeluaranstokdetail',
+              //   beforeProcess: function(test) {
+              //     console.log(detail.penerimaanstokheader_nobukti, '5686');
+              //     // var levelcoa = $(`#levelcoa`).val();
+              //     this.postData = {
+              //       cabang: statuscabang,
+              //       url: urlTNL,
+              //       token: tokenTNL,
+              //       penerimaanstokheader_id: detail.penerimaanstokheader_id,
+              //       penerimaanstokheader_nobukti: detail.penerimaanstokheader_nobukti,
+              //       pengeluaranstokheader_id: detail.pengeluaranstokheader_id,
+              //       from: 'klaim',
+              //       stok_id: detail.stok_id
+              //     }
+              //   },
+              //   onSelectRow: (stok, element) => {
+              //     element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
+              //     element.val(stok.stok)
+              //     element.data('currentValue', element.val())
+              //     console.log(stok.qty);
+              //     detailRow.find(`[name="qty[]"]`).val(stok.qty);
+              //     detailRow.find(`[name="harga[]"]`).val(stok.harga);
+              //     // new AutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':stok.qty})
+              //     initAutoNumeric(detailRow.find(`[name="harga[]"]`))
+              //     // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
+              //     totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
+              //     new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
 
 
 
 
-                },
-                onCancel: (element) => {
-                  element.val(element.data('currentValue'))
-                },
-                onClear: (element) => {
-                  detailRow.find(`[name="harga[]"]`).val('');
-                  detailRow.find(`[name="qty[]"]`).val('');
-                  // console.log(detailRow.find(`[name="qty[]"]`));
-                  detailRow.find(`[name="nominal[]"]`).val('');
-                  // initAutoNumeric(detailRow.find(`[name="qty[]"]`))
+              //   },
+              //   onCancel: (element) => {
+              //     element.val(element.data('currentValue'))
+              //   },
+              //   onClear: (element) => {
+              //     detailRow.find(`[name="harga[]"]`).val('');
+              //     detailRow.find(`[name="qty[]"]`).val('');
+              //     // console.log(detailRow.find(`[name="qty[]"]`));
+              //     detailRow.find(`[name="nominal[]"]`).val('');
+              //     // initAutoNumeric(detailRow.find(`[name="qty[]"]`))
 
-                  setTotal();
-                  element.parents('td').find(`[name="stok_id[]"]`).val('')
-                  element.val('')
-                  element.data('currentValue', element.val())
-                }
-              })
+              //     setTotal();
+              //     element.parents('td').find(`[name="stok_id[]"]`).val('')
+              //     element.val('')
+              //     element.data('currentValue', element.val())
+              //   }
+              // })
+              stokLookupDetail(indexRow);
 
               $('.penerimaantruckingheader-lookup').last().lookup({
                 title: 'Penerimaan Trucking Lookup',
@@ -6148,9 +6238,10 @@
         <td class="data_tbl tbl_stok_id">
           <input id="stok_id_${indexRow}" type="hidden" name="stok_id[]">
           <input id="stok_${indexRow}" type="text" name="stok[]"  class="form-control stok-lookup">
+          <input id="stok_${indexRow}_master" type="text" name="stok_master[]"  class="form-control stok-lookup-master">
         </td>
         <td class="data_tbl tbl_qty">
-          <input id="qty_${indexRow}" type="text" name="qty[]" class="form-control text-right qty"> 
+          <input id="qty_${indexRow}" type="text" name="qty[]" class="form-control text-right qty autonumeric"> 
         </td>
 
         <td class="data_tbl tbl_penerimaantruckingheader">
@@ -6377,53 +6468,56 @@
         enabledLookupSpkPG(row)
       }
     })
+    initAutoNumeric(detailRow.find('.autonumeric'))
 
-    $('.stok-lookup').last().lookup({
-      title: 'stok Lookup',
-      fileName: 'pengeluaranstokdetail',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        console.log(penerimaanstokheader_nobukti, '6210');
-        this.postData = {
-          cabang: statuscabang,
-          penerimaanstokheader_id: penerimaanstokheader,
-          penerimaanstokheader_nobukti: penerimaanstokheader_nobukti,
-          pengeluaranstokheader_id: pengeluaranstokheader,
-          url: urlTNL,
-          token: tokenTNL,
-          from: 'klaim',
-        }
-      },
-      onSelectRow: (stok, element) => {
-        element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
-        element.val(stok.stok)
-        element.data('currentValue', element.val())
-        console.log(row, stok.qty, stok.harga)
-        $(`#qty_${row}`).val(stok.qty)
-        initAutoNumeric($(`#qty_${row}`), {
-          'maximumValue': stok.qty
-        })
-        totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
-        new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
-        new AutoNumeric($(`#harga_${row}`)[0]).set(stok.harga)
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        //  new AutoNumeric($(`#qty_${row}`)[0]).set(0);
-        //  $(`#qty_${row}`).val('');
-        //  new AutoNumeric($(`#harga_${row}`)[0]).set(0);
-        $(`#harga_${row}`).val('');
-        //  new AutoNumeric($(`#nominal_${row}`)[0]).set(0);
-        $(`#nominal_${row}`).val('');
-        setTotal();
-        element.parents('td').find(`[name="stok_id[]"]`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
+    // $('.stok-lookup').last().lookup({
+    //   title: 'stok Lookup',
+    //   fileName: 'pengeluaranstokdetail',
+    //   // fileName: lookupStok,
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     // console.log(penerimaanstokheader_nobukti, lookupStok);
+    //     this.postData = {
+    //       cabang: statuscabang,
+    //       penerimaanstokheader_id: penerimaanstokheader,
+    //       penerimaanstokheader_nobukti: penerimaanstokheader_nobukti,
+    //       pengeluaranstokheader_id: pengeluaranstokheader,
+    //       url: urlTNL,
+    //       token: tokenTNL,
+    //       from: 'klaim',
+    //       openStok : lookupStok
+    //     }
+    //   },
+    //   onSelectRow: (stok, element) => {
+    //     element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
+    //     element.val(stok.stok)
+    //     element.data('currentValue', element.val())
+    //     console.log(row, stok.qty, stok.harga)
+    //     $(`#qty_${row}`).val(stok.qty)
+    //     initAutoNumeric($(`#qty_${row}`), {
+    //       'maximumValue': stok.qty
+    //     })
+    //     totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
+    //     new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
+    //     new AutoNumeric($(`#harga_${row}`)[0]).set(stok.harga)
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     //  new AutoNumeric($(`#qty_${row}`)[0]).set(0);
+    //     //  $(`#qty_${row}`).val('');
+    //     //  new AutoNumeric($(`#harga_${row}`)[0]).set(0);
+    //     $(`#harga_${row}`).val('');
+    //     //  new AutoNumeric($(`#nominal_${row}`)[0]).set(0);
+    //     $(`#nominal_${row}`).val('');
+    //     setTotal();
+    //     element.parents('td').find(`[name="stok_id[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+    stokLookupDetail(indexRow);
     $('.penerimaantruckingheader-lookup').last().lookup({
       title: 'Penerimaan Trucking Lookup',
       fileName: 'penerimaantruckingheader',
@@ -6447,10 +6541,90 @@
       }
     })
 
-    initAutoNumeric(detailRow.find('.autonumeric'))
     setTampilanForm()
     setRowNumbers()
     indexRow++
+    klaimTanpaNobukti()
+  }
+
+  function stokLookupDetail(rowId){
+    let row = rowId
+    $('.stok-lookup').last().lookup({
+      title: 'stok Lookup',
+      fileName: 'pengeluaranstokdetail',
+      beforeProcess: function(test) {
+        this.postData = {
+          cabang: statuscabang,
+          penerimaanstokheader_id: penerimaanstokheader,
+          penerimaanstokheader_nobukti: penerimaanstokheader_nobukti,
+          pengeluaranstokheader_id: pengeluaranstokheader,
+          url: urlTNL,
+          token: tokenTNL,
+          from: 'klaim',
+        }
+      },
+      onSelectRow: (stok, element) => {
+        element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
+        element.val(stok.stok)
+        element.data('currentValue', element.val())
+        // console.log(row, stok.qty, stok.harga)
+        // $(`#qty_${row}`).val(stok.qty)
+        qty_ell = AutoNumeric.getAutoNumericElement($(`#qty_${row}`)[0])
+        qty_ell.set(stok.qty,{
+          'maximumValue': stok.qty
+        })
+        totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
+        new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
+        new AutoNumeric($(`#harga_${row}`)[0]).set(stok.harga)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        //  new AutoNumeric($(`#qty_${row}`)[0]).set(0);
+        //  $(`#qty_${row}`).val('');
+        //  new AutoNumeric($(`#harga_${row}`)[0]).set(0);
+        $(`#harga_${row}`).val('');
+        //  new AutoNumeric($(`#nominal_${row}`)[0]).set(0);
+        $(`#nominal_${row}`).val('');
+        setTotal();
+        element.parents('td').find(`[name="stok_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.stok-lookup-master').last().lookup({
+      title: 'stok Lookup',
+      fileName: 'stok',
+      beforeProcess: function(test) {
+        this.postData = {
+          cabang: statuscabang,
+          penerimaanstokheader_id: penerimaanstokheader,
+          penerimaanstokheader_nobukti: penerimaanstokheader_nobukti,
+          pengeluaranstokheader_id: pengeluaranstokheader,
+          url: urlTNL,
+          token: tokenTNL,
+          from: 'klaim',
+        }
+      },
+      onSelectRow: (stok, element) => {
+        element.parents('td').find(`[name="stok_id[]"]`).val(stok.id)
+        element.val(stok.namastok)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+     
+        $(`#harga_${row}`).val('');
+        $(`#nominal_${row}`).val('');
+        setTotal();
+        element.parents('td').find(`[name="stok_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
   }
 
   function checkboxHandler(element) {
@@ -8885,6 +9059,32 @@
     }
   }
 
+  function selectedSupirKaryawan(el){
+    switch (el) {
+      case 'supir':
+
+        $('#crudForm').find(`[name="karyawanheader"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="karyawanheader"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="karyawanheader"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#karyawanheaderId').attr('disabled', true);
+      break;
+      case 'karyawan':
+        $('#crudForm').find(`[name="supirheader"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="supirheader"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="supirheader"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#supirheaderId').attr('disabled', true);
+
+        $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#gandenganHaeaderId').attr('disabled', true);
+        $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#tradoHaeaderId').attr('disabled', true);
+      break;
+    }
+  }
   function enabledKorDisable() {
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
@@ -8892,6 +9092,16 @@
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#gandenganHaeaderId').attr('disabled', false);
+  }
+
+  function enabledSupirKaryawan() {
+    $('#crudForm').find(`[name="karyawanheader"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="karyawanheader"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#karyawanheaderId').attr('disabled', false);
+    $('#crudForm').find(`[name="supirheader"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="supirheader"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#supirheaderId').attr('disabled', false);
+    enabledKorDisable()
   }
 
   function getMaxLength(form) {
@@ -9085,37 +9295,42 @@
         $(`#supirheaderId`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
+        selectedSupirKaryawan('supir')
+        if (KodePengeluaranId != "KLAIM") {
 
-        $("#tableDeposito")[0].p.selectedRowIds = [];
-        $('#tableDeposito').jqGrid("clearGridData");
-        $("#tableDeposito")
-          .jqGrid("setGridParam", {
-            selectedRowIds: []
-          })
-          .trigger("reloadGrid");
+          $("#tableDeposito")[0].p.selectedRowIds = [];
+          $('#tableDeposito').jqGrid("clearGridData");
+          $("#tableDeposito")
+            .jqGrid("setGridParam", {
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+  
+          getDataDeposito(supir.id).then((response) => {
+  
+            console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
+            setTimeout(() => {
+  
+              $("#tableDeposito")
+                .jqGrid("setGridParam", {
+                  datatype: "local",
+                  data: response.data,
+                  originalData: response.data,
+                  rowNum: response.data.length,
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            }, 100);
+  
+          });
+        }
 
-        getDataDeposito(supir.id).then((response) => {
-
-          console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
-          setTimeout(() => {
-
-            $("#tableDeposito")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                rowNum: response.data.length,
-                selectedRowIds: []
-              })
-              .trigger("reloadGrid");
-          }, 100);
-
-        });
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        enabledSupirKaryawan()
         $(`#supirheaderId`).val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -9137,36 +9352,42 @@
         element.val(karyawan.namakaryawan)
         element.data('currentValue', element.val())
 
-        $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
-        $('#tableDepositoKaryawan').jqGrid("clearGridData");
-        $("#tableDepositoKaryawan")
-          .jqGrid("setGridParam", {
-            selectedRowIds: []
-          })
-          .trigger("reloadGrid");
-
-        getDataDepositoKaryawan(karyawan.id).then((response) => {
-
-          console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
-          setTimeout(() => {
-
-            $("#tableDepositoKaryawan")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                rowNum: response.data.length,
-                selectedRowIds: []
-              })
-              .trigger("reloadGrid");
-          }, 100);
-
-        });
+        selectedSupirKaryawan('karyawan')
+        $('#crudModal').find("[name=statustanpabukti]").val(3).trigger('change')
+        klaimTanpaNobukti()
+        if (KodePengeluaranId != "KLAIM") {
+          $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
+          $('#tableDepositoKaryawan').jqGrid("clearGridData");
+          $("#tableDepositoKaryawan")
+            .jqGrid("setGridParam", {
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+  
+          getDataDepositoKaryawan(karyawan.id).then((response) => {
+  
+            console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+            setTimeout(() => {
+  
+              $("#tableDepositoKaryawan")
+                .jqGrid("setGridParam", {
+                  datatype: "local",
+                  data: response.data,
+                  originalData: response.data,
+                  rowNum: response.data.length,
+                  selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            }, 100);
+  
+          });
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        enabledSupirKaryawan()
         $(`#karyawanheaderId`).val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -9328,6 +9549,40 @@
             if (statusPosting.text === "POSTING") {
               parameterPosting = statusPosting.id
             }
+          });
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setStatusTanpaBuktiOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statustanpabukti]').empty()
+      relatedForm.find('[name=statustanpabukti]').append(
+        new Option('-- PILIH STATUS BUKTI --', '', false, true)
+      ).trigger('change')
+      $.ajax({
+        url: `${apiUrl}parameter/combo`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          grp: 'STATUS APPROVAL',
+          subgrp: 'STATUS APPROVAL',
+        },
+        success: response => {
+          response.data.forEach(statustanpabukti => {
+            let option = new Option(statustanpabukti.text, statustanpabukti.id)
+            relatedForm.find('[name=statustanpabukti]').append(option).trigger('change')
+            if (statustanpabukti.text === "NON APPROVAL") {
+              parameterPosting = statustanpabukti.id
+            }
+            
           });
           resolve()
         },
