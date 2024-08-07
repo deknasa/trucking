@@ -2722,10 +2722,12 @@
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+        var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
         cekKelompok(row);
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+          nobukti : nobukti,
           Aktif: 'AKTIF',
           KelompokId: KelompokId,
           StokId: StokId,
