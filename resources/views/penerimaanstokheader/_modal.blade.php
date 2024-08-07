@@ -2738,7 +2738,9 @@
         element.val(stok.namastok)
 
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
         satuanEl.val(stok.satuan);
+        iddetailEl.val(stok.iddetail);
 
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
@@ -2751,7 +2753,9 @@
       },
       onClear: (element) => {
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
         satuanEl.val('');
+        iddetailEl.val(0);
 
         element.val('')
         element.data('currentValue', element.val())
