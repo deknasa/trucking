@@ -3066,6 +3066,7 @@
                     </td>
                     
                     <td>
+                      <input name="id_detail" hidden value="${detail.id}">
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                       <input type="text" id="detailstokId_${id}_old" value="${detail.stok_id}" readonly hidden name="detail_stok_id_old[]">
@@ -3182,10 +3183,12 @@
               beforeProcess: function(test) {
                 var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
                 var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+                var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
                 cekKelompok(row);
                 this.postData = {
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+                  nobukti : nobukti,
                   Aktif: 'AKTIF',
                   isLookup: true
                 }
