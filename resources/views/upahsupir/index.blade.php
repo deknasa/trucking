@@ -690,7 +690,7 @@
               // $('#rangeTglModal').modal('show')
               $('#processingLoader').removeClass('d-none')
               $.ajax({
-                url: `{{ route('upahsupir.export') }}`,
+                url: `{{ config('app.api_url') }}upahsupir/export`,
                 type: 'GET',
                 data: {
                   limit: 0,
