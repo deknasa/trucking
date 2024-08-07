@@ -407,7 +407,8 @@
                         <label class="col-form-label">keterangan</label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-10">
-                        <input type="text" name="detail_keterangan[]" style="" class="form-control">
+                        {{-- <input type="text" name="detail_keterangan[]" style="" class="form-control"> --}}
+                        <textarea rows="1" placeholder="" name="detail_keterangan[]" class="form-control"></textarea>
 
                       </div>
                     </div>
@@ -1582,7 +1583,7 @@
                     </select>
                   </td>
                   <td>
-                    <input type="text"  name="detail_keterangan[]" id="detail_keterangan${index}" style="" class="form-control">                    
+                    <textarea rows="1" placeholder="" name="detail_keterangan[]" id="detail_keterangan${index}" class="form-control"></textarea>
                   </td>
                   <td class="data_tbl tbl_qty">
                     <div id="qtytestlookup${index}" style="display:none;" >
@@ -2084,7 +2085,7 @@
           }
           $('#detailList tbody').html('')
 
-          if (listKodePengeluaran[1] == response.data.pengeluaranstok) {
+          if (listKodePengeluaran[1] == response.data.pengeluaranstok) {//rtr
             $.each(response.detail, (id, detail) => {
               let detailRow = $(`
                 <tr class="trow">
@@ -2101,7 +2102,7 @@
                         <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${index}">
                       </td>   
                       <td>
-                        <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                        <textarea rows="1" placeholder="" name="detail_keterangan[]" class="form-control"></textarea>
                       </td>
                       <td class="data_tbl tbl_qty" >
                         <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
@@ -2168,7 +2169,7 @@
               index = id;
             })
 
-          } else if (listKodePengeluaran[6] == response.data.pengeluaranstok) {
+          } else if (listKodePengeluaran[6] == response.data.pengeluaranstok) {//afkir
 
             form.find(`[name="detail_stok[]"]`).val(response.detail[0].stok)
             form.find(`[name="detail_stok_id[]"]`).val(response.detail[0].stok_id)
@@ -2205,7 +2206,7 @@
                         </select>                 
                       </td>
                       <td>
-                        <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                        <textarea rows="1" placeholder="" name="detail_keterangan[]" class="form-control"></textarea>
                       </td>
                       <td class="data_tbl tbl_qty">
                         <div id="qtytestlookup${id}" style="display:none;" >
@@ -2479,7 +2480,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${index}">
                   </td>   
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea rows="1" placeholder="" name="detail_keterangan[]" class="form-control"></textarea>
                   </td>
                   <td class="data_tbl tbl_qty" >
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
