@@ -961,6 +961,9 @@
             }
             if (detail.tidakadasupir == "readonly") {
               setSupirEnableIndex({supir:1}, index,detail.supir_id)
+            } else if (detail.jlhtrip >0) {
+              // console.log(detail.jlhtrip,index,detail.supir);
+              setSupirEnableIndex({supir:1}, index,detail.supir_id)
             }
             if (detail.tgltrip) {
               setRowDisable(index);
