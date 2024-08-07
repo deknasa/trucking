@@ -1039,7 +1039,7 @@
                                 <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
                             </td>
                             <td>
-                                <input type="text" name="keterangan_detail[]"  class="form-control" ${readOnly}>
+                                <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control" ${readOnly}></textarea>
                             </td>
                             <td>
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
@@ -1196,7 +1196,7 @@
           <input type="text" name="ketcoakredit[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
+          <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
@@ -1540,7 +1540,7 @@
                                 <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup" readonly>
                             </td>
                             <td>
-                                <input type="text" name="keterangan_detail[]"  class="form-control" readonly>
+                                <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control" readonly></textarea>
                             </td>
                             <td>
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  readonly> 

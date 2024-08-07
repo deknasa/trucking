@@ -1196,10 +1196,12 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
               cekKelompok(id);
               this.postData = {
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+                nobukti : nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
                 StokId: StokId,
@@ -1372,10 +1374,12 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
               cekKelompok(row);
               this.postData = {
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+                nobukti : nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
                 StokId: StokId,
@@ -1468,6 +1472,7 @@
               </td>
               
               <td>
+                <input name="id_detail[]" hidden value="${detail.id}">
                 <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                 <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                 <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}"  readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -1552,10 +1557,12 @@
         beforeProcess: function(test) {
           var penerimaanstokId = $(`#penerimaanstokId`).val();
           var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+          var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
           cekKelompok(row);
           this.postData = {
             penerimaanstok_id: penerimaanstokId,
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+            nobukti : nobukti,
             Aktif: 'AKTIF',
             KelompokId: KelompokId,
             StokId: StokId,
@@ -1809,6 +1816,7 @@
                   </td>
                   
                   <td>
+                    <input name="id_detail[]" hidden value="${detail.id}">
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -2644,7 +2652,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" class="form-control detail_satuan_${index}">
                   </td> 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -3077,7 +3085,7 @@
                       <input type="text" disabled name="detail_satuan[]" id=""   class="form-control detail_satuan_${id}">
                     </td> 
                     <td>
-                      <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                      <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                     </td>
                     
                     <td class="data_tbl tbl_penerimaanstok_nobukti">
