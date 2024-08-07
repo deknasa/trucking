@@ -27,7 +27,7 @@ class Menu
     }
 
     $string .= '</ul>';
-
+    // dd($string);
     return $string;
   }
 
@@ -53,7 +53,7 @@ class Menu
     }
 
     $string .= $hasParent ? '</ul>' : '';
-
+    // dd($string);
     return $string;
   }
 

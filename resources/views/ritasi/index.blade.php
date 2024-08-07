@@ -69,7 +69,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
-            label: 'TGL BUKTI',
+            label: 'TGL TRIP',
             name: 'tglbukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
