@@ -2635,6 +2635,7 @@
                   </td>
                   
                   <td>
+                    <input name="id_detail[]" hidden value="0">
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${index}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
