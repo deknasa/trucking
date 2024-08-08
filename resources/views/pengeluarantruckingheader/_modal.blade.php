@@ -605,8 +605,8 @@
         urlTNL = apiTruckingTnlUrl
         tokenTNL = accessTokenTnl
       } else {
-        urlTNL = apiUrl
-        tokenTNL = accessToken
+      urlTNL = apiUrl
+      tokenTNL = accessToken
 
       }
     })
@@ -1271,18 +1271,18 @@
             }
           })
 
-          if (KodePengeluaranId == "PJT") {
-            data.filter((row) => row.name === 'supirheader_id')[0].value = $(`#crudForm [name="supir_id[]"]`).val()
-            data.filter((row) => row.name === 'supirheader')[0].value = $(`#crudForm [name="supir[]"]`).val()
-            data.filter((row) => row.name === 'karyawanheader_id')[0].value = 0
-            data.filter((row) => row.name === 'karyawanheader')[0].value = ''
-          }
-          if (KodePengeluaranId == "PJK") {
-            data.filter((row) => row.name === 'karyawanheader_id')[0].value = $(`#crudForm [name="karyawan_id[]"]`).val()
-            data.filter((row) => row.name === 'karyawanheader')[0].value = $(`#crudForm [name="karyawan[]"]`).val()
-            data.filter((row) => row.name === 'supirheader_id')[0].value = 0
-            data.filter((row) => row.name === 'supirheader')[0].value = ''
-          }
+          // if (KodePengeluaranId == "PJT") {
+          //   data.filter((row) => row.name === 'supirheader_id')[0].value = $(`#crudForm [name="supir_id[]"]`).val()
+          //   data.filter((row) => row.name === 'supirheader')[0].value = $(`#crudForm [name="supir[]"]`).val()
+          //   data.filter((row) => row.name === 'karyawanheader_id')[0].value = 0
+          //   data.filter((row) => row.name === 'karyawanheader')[0].value = ''
+          // }
+          // if (KodePengeluaranId == "PJK") {
+          //   data.filter((row) => row.name === 'karyawanheader_id')[0].value = $(`#crudForm [name="karyawan_id[]"]`).val()
+          //   data.filter((row) => row.name === 'karyawanheader')[0].value = $(`#crudForm [name="karyawan[]"]`).val()
+          //   data.filter((row) => row.name === 'supirheader_id')[0].value = 0
+          //   data.filter((row) => row.name === 'supirheader')[0].value = ''
+          // }
         }
 
 
@@ -3066,29 +3066,29 @@
 
   function klaimTanpaNobukti() {
     let statustanpabukti = $(`#crudForm [name="statustanpabukti"]`).val();
-    if (statustanpabukti == 4) {// statustanpabukti NON APPROVAL (HARUS ADA SPK/PG)
-      
+    if (statustanpabukti == 4) { // statustanpabukti NON APPROVAL (HARUS ADA SPK/PG)
+
       $('.stok-lookup').parents('.input-group').show()
       $('.stok-lookup-master').parents('.input-group').hide()
-  
+
       $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).attr('readonly', false)
-      $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',false)
+      $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled', false)
       $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
-      
+
       $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).attr('readonly', false)
-      $($('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',false)
+      $($('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled', false)
       $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
-    }else{
-      
+    } else {
+
       $('.stok-lookup-master').parents('.input-group').show()
       $('.stok-lookup').parents('.input-group').hide()
-  
+
       $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).attr('readonly', true)
-      $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',true)
+      $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled', true)
       $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-  
+
       $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).attr('readonly', true)
-      $($('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled',true)
+      $($('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled', true)
       $('#crudForm').find(`[name="penerimaanstok_nobukti[]"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
     }
   }
@@ -3450,7 +3450,7 @@
               klaimTanpaNobukti()
               if (form.find(`[name="karyawanheader"]`).val() != '') {
                 selectedSupirKaryawan('karyawan')
-              }else{
+              } else {
                 selectedSupirKaryawan('supir')
               }
               if (form.find(`[name="trado"]`).val() != '') {
@@ -3533,7 +3533,7 @@
               klaimTanpaNobukti()
               if (form.find(`[name="karyawanheader"]`).val() != '') {
                 selectedSupirKaryawan('karyawan')
-              }else{
+              } else {
                 selectedSupirKaryawan('supir')
               }
               if (form.find(`[name="trado"]`).val() != '') {
@@ -5177,7 +5177,7 @@
             } else {
               element.val(value)
             }
-            if(index == "karyawanheader"){
+            if (index == "karyawanheader") {
               element.data('current-value', value)
             }
 
@@ -6551,7 +6551,7 @@
     klaimTanpaNobukti()
   }
 
-  function stokLookupDetail(rowId){
+  function stokLookupDetail(rowId) {
     let row = rowId
     $('.stok-lookup').last().lookup({
       title: 'stok Lookup',
@@ -6574,7 +6574,7 @@
         // console.log(row, stok.qty, stok.harga)
         // $(`#qty_${row}`).val(stok.qty)
         qty_ell = AutoNumeric.getAutoNumericElement($(`#qty_${row}`)[0])
-        qty_ell.set(stok.qty,{
+        qty_ell.set(stok.qty, {
           'maximumValue': stok.qty
         })
         totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
@@ -6620,7 +6620,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-     
+
         $(`#harga_${row}`).val('');
         $(`#nominal_${row}`).val('');
         setTotal();
@@ -9063,7 +9063,7 @@
     }
   }
 
-  function selectedSupirKaryawan(el){
+  function selectedSupirKaryawan(el) {
     switch (el) {
       case 'supir':
 
@@ -9071,7 +9071,7 @@
         $('#crudForm').find(`[name="karyawanheader"]`).parents('.input-group').children().attr('disabled', true)
         $('#crudForm').find(`[name="karyawanheader"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
         $('#karyawanheaderId').attr('disabled', true);
-      break;
+        break;
       case 'karyawan':
         $('#crudForm').find(`[name="supirheader"]`).attr('disabled', true)
         $('#crudForm').find(`[name="supirheader"]`).parents('.input-group').children().attr('disabled', true)
@@ -9086,9 +9086,10 @@
         $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
         $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
         $('#tradoHaeaderId').attr('disabled', true);
-      break;
+        break;
     }
   }
+
   function enabledKorDisable() {
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
@@ -9302,6 +9303,8 @@
         selectedSupirKaryawan('supir')
         if (KodePengeluaranId != "KLAIM") {
 
+          $('#btnSubmit').prop('disabled', true)
+          $('#btnSaveAdd').prop('disabled', true)
           $("#tableDeposito")[0].p.selectedRowIds = [];
           $('#tableDeposito').jqGrid("clearGridData");
           $("#tableDeposito")
@@ -9309,12 +9312,12 @@
               selectedRowIds: []
             })
             .trigger("reloadGrid");
-  
+
           getDataDeposito(supir.id).then((response) => {
-  
+
             console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
             setTimeout(() => {
-  
+
               $("#tableDeposito")
                 .jqGrid("setGridParam", {
                   datatype: "local",
@@ -9324,8 +9327,11 @@
                   selectedRowIds: []
                 })
                 .trigger("reloadGrid");
+
+                $('#btnSubmit').prop('disabled', false)
+                $('#btnSaveAdd').prop('disabled', false)
             }, 100);
-  
+
           });
         }
 
@@ -9360,6 +9366,9 @@
         $('#crudModal').find("[name=statustanpabukti]").val(3).trigger('change')
         klaimTanpaNobukti()
         if (KodePengeluaranId != "KLAIM") {
+          
+          $('#btnSubmit').prop('disabled', true)
+          $('#btnSaveAdd').prop('disabled', true)
           $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
           $('#tableDepositoKaryawan').jqGrid("clearGridData");
           $("#tableDepositoKaryawan")
@@ -9367,12 +9376,12 @@
               selectedRowIds: []
             })
             .trigger("reloadGrid");
-  
+
           getDataDepositoKaryawan(karyawan.id).then((response) => {
-  
+
             console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
             setTimeout(() => {
-  
+
               $("#tableDepositoKaryawan")
                 .jqGrid("setGridParam", {
                   datatype: "local",
@@ -9382,8 +9391,11 @@
                   selectedRowIds: []
                 })
                 .trigger("reloadGrid");
+                
+              $('#btnSubmit').prop('disabled', false)
+              $('#btnSaveAdd').prop('disabled', false)
             }, 100);
-  
+
           });
         }
       },
@@ -9583,10 +9595,10 @@
           response.data.forEach(statustanpabukti => {
             let option = new Option(statustanpabukti.text, statustanpabukti.id)
             relatedForm.find('[name=statustanpabukti]').append(option).trigger('change')
-            if (statustanpabukti.text === "NON APPROVAL") {
-              parameterPosting = statustanpabukti.id
-            }
-            
+            // if (statustanpabukti.text === "NON APPROVAL") {
+            //   parameterPosting = statustanpabukti.id
+            // }
+
           });
           resolve()
         },
@@ -9675,6 +9687,7 @@
           limit: 0
         },
         success: response => {
+          console.log('respone', response.data)
           $.each(response.data, (index, data) => {
             listIdPengeluaran[index] = data.id;
             listKodePengeluaran[index] = data.kodepengeluaran;

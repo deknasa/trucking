@@ -771,6 +771,8 @@
       url = `${invId}/getAllEdit`
     }
 
+    $('#btnSubmit').prop('disabled', true)
+    $('#btnSaveAdd').prop('disabled', true)
     if ($('#crudForm').find(`[name="agen_id"]`).val() != '') {
       $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
@@ -792,6 +794,8 @@
               selectedRowIds: selectedRowId
             })
             .trigger("reloadGrid");
+          $('#btnSubmit').prop('disabled', false)
+          $('#btnSaveAdd').prop('disabled', false)
         }, 100);
 
       });
@@ -1460,7 +1464,7 @@
           }
           // getEdit(invId, aksi)
           // $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
-          $('#crudForm').find("[name=statusjeniskendaraan]").prop('disabled', true);
+          // $('#crudForm').find("[name=statusjeniskendaraan]").prop('disabled', true);
           $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
           $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           // loadInvoiceGrid();
