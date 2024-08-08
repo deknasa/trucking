@@ -308,6 +308,8 @@
     let kotasampaiId
     let pilihKotaDariId = 0;
     let pilihKotaSampaiId = 0;
+    let pilihKotaDariRitasiId = 0;
+    let pilihKotaSampaiRitasiId = 0;
     let containerId
     let tradoId
     let pelangganId
@@ -1160,12 +1162,12 @@
                                         Aktif: 'AKTIF',
                                         DataRitasi: dataRitasiId[`jenisritasi_${index}`],
                                         RitasiDariKe: 'dari',
-                                        pilihkota_id: pilihKotaSampaiId
+                                        pilihkota_id: pilihKotaSampaiRitasiId
                                     }
                                 },
                                 onSelectRow: (kota, element) => {
                                     element.parents('td').find(`[name="ritasidari_id[]"]`).val(kota.id)
-                                    pilihKotaDariId = kota.id
+                                    pilihKotaDariRitasiId = kota.id
                                     element.val(kota.kodekota)
                                     element.data('currentValue', element.val())
                                 },
@@ -1174,7 +1176,7 @@
                                 },
                                 onClear: (element) => {
                                     element.parents('td').find(`[name="ritasidari_id[]"]`).val('')
-                                    pilihKotaDariId = 0
+                                    pilihKotaDariRitasiId = 0
                                     element.val('')
                                     element.data('currentValue', element.val())
                                 }
@@ -1188,12 +1190,12 @@
                                         Aktif: 'AKTIF',
                                         DataRitasi: dataRitasiId[`jenisritasi_${index}`],
                                         RitasiDariKe: 'ke',
-                                        pilihkota_id: pilihKotaDariId
+                                        pilihkota_id: pilihKotaDariRitasiId
                                     }
                                 },
                                 onSelectRow: (kota, element) => {
                                     element.parents('td').find(`[name="ritasike_id[]"]`).val(kota.id)
-                                    pilihKotaSampaiId = kota.id
+                                    pilihKotaSampaiRitasiId = kota.id
                                     element.val(kota.kodekota)
                                     element.data('currentValue', element.val())
                                 },
@@ -1202,7 +1204,7 @@
                                 },
                                 onClear: (element) => {
                                     element.parents('td').find(`[name="ritasike_id[]"]`).val('')
-                                    pilihKotaSampaiId = 0
+                                    pilihKotaSampaiRitasiId = 0
                                     element.val('')
                                     element.data('currentValue', element.val())
                                 }
@@ -1955,7 +1957,7 @@
                     Aktif: 'AKTIF',
                     kotaZona: zonasampaiId,
                     isLookup: 1,
-                    url: `${apiUrl}kota/getlongtrip`,
+                    url: ($('#crudForm [name=statuslongtrip]').val() == 65) ? `${apiUrl}kota/getlongtrip` : `${apiUrl}kota`,
                     statuslongtrip: $('#crudForm [name=statuslongtrip]').val(),
                     dari_id: $('#crudForm [name=dari_id]').val(),
                     from: 'inputtrip'
@@ -2693,12 +2695,12 @@
                     Aktif: 'AKTIF',
                     DataRitasi: dataRitasiId[`jenisritasi_${indexRitasi}`],
                     RitasiDariKe: 'dari',
-                    pilihkota_id: pilihKotaSampaiId
+                    pilihkota_id: pilihKotaSampaiRitasiId
                 }
             },
             onSelectRow: (kota, element) => {
                 element.parents('td').find(`[name="ritasidari_id[]"]`).val(kota.id)
-                pilihKotaDariId = kota.id
+                pilihKotaDariRitasiId = kota.id
                 element.val(kota.kodekota)
                 element.data('currentValue', element.val())
             },
@@ -2707,7 +2709,7 @@
             },
             onClear: (element) => {
                 element.parents('td').find(`[name="ritasidari_id[]"]`).val('')
-                pilihKotaDariId = 0
+                pilihKotaDariRitasiId = 0
                 element.val('')
                 element.data('currentValue', element.val())
             }
@@ -2721,12 +2723,12 @@
                     Aktif: 'AKTIF',
                     DataRitasi: dataRitasiId[`jenisritasi_${indexRitasi}`],
                     RitasiDariKe: 'ke',
-                    pilihkota_id: pilihKotaDariId
+                    pilihkota_id: pilihKotaDariRitasiId
                 }
             },
             onSelectRow: (kota, element) => {
                 element.parents('td').find(`[name="ritasike_id[]"]`).val(kota.id)
-                pilihKotaSampaiId = kota.id
+                pilihKotaSampaiRitasiId = kota.id
                 element.val(kota.kodekota)
                 element.data('currentValue', element.val())
             },
@@ -2735,7 +2737,7 @@
             },
             onClear: (element) => {
                 element.parents('td').find(`[name="ritasike_id[]"]`).val('')
-                pilihKotaSampaiId = 0
+                pilihKotaSampaiRitasiId = 0
                 element.val('')
                 element.data('currentValue', element.val())
             }

@@ -2256,7 +2256,7 @@
           Aktif: 'AKTIF',
           kotaZona: zonasampaiId,
           isLookup: 1,
-          url: `${apiUrl}kota/getlongtrip`,
+          url: ($('#crudForm [name=statuslongtrip]').val() == 65) ? `${apiUrl}kota/getlongtrip` : `${apiUrl}kota`,
           statuslongtrip: $('#crudForm [name=statuslongtrip]').val(),
           dari_id: $('#crudForm [name=dari_id]').val(),
           from: 'inputtrip'
