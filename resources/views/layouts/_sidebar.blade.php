@@ -34,7 +34,7 @@
 
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        {!! (new \App\Helpers\Menu)->printRecursiveMenu(session('menus'), false, $currentMenu) !!}
+        {!! (new \App\Helpers\Menu)->print_menu() !!}
       </ul>
     </nav>
 

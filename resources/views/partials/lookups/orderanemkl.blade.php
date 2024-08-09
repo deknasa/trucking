@@ -38,6 +38,13 @@
 
 @push('scripts')
 <script>
+  todayEmkl = new Date();
+
+  // mendapatkan tanggal pertama di bulan ini
+  firstDayEmkl = new Date(todayEmkl.getFullYear(), todayEmkl.getMonth(), 1);
+  formattedFirstDayEmkl = $.datepicker.formatDate('mm-yy', firstDayEmkl);
+  $('[name=bulanjob]').val(formattedFirstDayEmkl).trigger('change');
+
   $('.datepicker')
     .datepicker({
       changeMonth: true,
@@ -58,20 +65,28 @@
     <i class="fa fa-calendar-alt"></i>
   `);
   jobEmkl = $('#crudForm [name=nojobemkl]').val()
-  Promise.all([
-    getTglJob(jobEmkl),
-    showDefault()
-  ]).then((response) => {
-    loadOrderanEmkl()
-  })
+  // Promise.all([
+  //   getTglJob(jobEmkl),
+  //   showDefault()
+  // ]).then((response) => {
+  //   loadOrderanEmkl()
+  // })
   $('#btnPreview').click(function(event) {
     loadOrderanEmkl()
   })
   $('#orderanemklLookup')
     .jqGrid({
+      url: `${apiUrl}orderanemkl`,
+      mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
-      datatype: 'local',
+      datatype: "json",
+      postData: {
+        container_id: `{!! $container_Id ?? '' !!}`,
+        jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,
+        bulanjob: $('[name=bulanjob]').val(),
+      },
       idPrefix: 'orderanemklLookup',
       colModel: [{
           label: 'NO JOB',
@@ -148,9 +163,14 @@
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
+      loadBeforeSend: function(jqXHR) {
+        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+        setGridLastRequest($(this), jqXHR)
+      },
       loadComplete: function(data) {
         let isShowShipper = (`{!! $orderemklshipper ?? '' !!}`)
-        if(isShowShipper == 'TIDAK'){
+        if (isShowShipper == 'TIDAK') {
           $("#orderanemklLookup").jqGrid("hideCol", 'pelanggan');
         }
         changeJqGridRowListText()
@@ -206,6 +226,7 @@
     .customPager()
   loadGlobalSearch($('#orderanemklLookup'))
   loadClearFilter($('#orderanemklLookup'))
+
   setbulanJobOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=bulanjob]').empty()
@@ -213,11 +234,11 @@
         new Option('-- PILIH BULAN1 JOB --', '', false, true)
       ).trigger('change')
       $.ajax({
-        url: `${apiEmklUrl}orderanemkl/getBulanJob`,
+        url: `${apiUrl}orderanemkl/getBulanJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          Authorization: `Bearer ${accessTokenEmkl}`
+          Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           response.data.forEach(bulanJob => {
@@ -251,11 +272,11 @@
   function getTglJob(job) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: `${apiEmklUrl}orderanemkl/getTglJob`,
+        url: `${apiUrl}orderanemkl/getTglJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          Authorization: `Bearer ${accessTokenEmkl}`
+          Authorization: `Bearer ${accessToken}`
         },
         crossDomain: true,
         data: {
@@ -282,7 +303,7 @@
 
     $('#orderanemklLookup')
       .jqGrid('setGridParam', {
-        url: `${apiEmklUrl}orderanemkl`,
+        url: `${apiUrl}orderanemkl`,
         mtype: "GET",
         datatype: "json",
         postData: {
@@ -290,9 +311,10 @@
           jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
           aktif: `{!! $Aktif ?? '' !!}`,
           bulanjob: $('[name=bulanjob]').val(),
+          proses: 'reload'
         },
         loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenEmkl}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
       }).trigger('reloadGrid');
   }

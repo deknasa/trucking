@@ -12,11 +12,11 @@ class MyController extends Controller
         $domain =request()->getScheme().'://'.request()->getHttpHost().env('API_PATH_URL');
         $domainApp =request()->getScheme().'://'.request()->getHttpHost().env('APP_PATH');
         $domainTNL =request()->getScheme().'://'.request()->getHttpHost().env('TRUCKING_API_PATH_TNL');
-        $domainEmkl =request()->getScheme().'://'.request()->getHttpHost().env('EMKL_API_PATH_URL');
+        // $domainEmkl =request()->getScheme().'://'.request()->getHttpHost().env('EMKL_API_PATH_URL');
         config()->set('app.api_url',$domain);
         config()->set('app.url',$domainApp);
         config()->set('app.trucking_api_tnl',$domainTNL);
-        config()->set('app.emkl_api_url',$domainEmkl);
+        // config()->set('app.emkl_api_url',$domainEmkl);
     }
 
     public function getListBtn()

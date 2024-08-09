@@ -601,14 +601,14 @@
 
     $(document).on('change', `[name="statuscabang"]`, function(event) {
       statuscabang = $(`[name="statuscabang"] option:selected`).text()
-      if (statuscabang == 'TNL') {
-        urlTNL = apiTruckingTnlUrl
-        tokenTNL = accessTokenTnl
-      } else {
+      // if (statuscabang == 'TNL') {
+      //   urlTNL = apiTruckingTnlUrl
+      //   tokenTNL = accessTokenTnl
+      // } else {
       urlTNL = apiUrl
       tokenTNL = accessToken
 
-      }
+      // }
     })
     $(document).on('change', `[name="statustanpabukti"]`, function(event) {
       klaimTanpaNobukti()
@@ -9328,8 +9328,8 @@
                 })
                 .trigger("reloadGrid");
 
-                $('#btnSubmit').prop('disabled', false)
-                $('#btnSaveAdd').prop('disabled', false)
+              $('#btnSubmit').prop('disabled', false)
+              $('#btnSaveAdd').prop('disabled', false)
             }, 100);
 
           });
@@ -9366,7 +9366,7 @@
         $('#crudModal').find("[name=statustanpabukti]").val(3).trigger('change')
         klaimTanpaNobukti()
         if (KodePengeluaranId != "KLAIM") {
-          
+
           $('#btnSubmit').prop('disabled', true)
           $('#btnSaveAdd').prop('disabled', true)
           $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
@@ -9391,7 +9391,7 @@
                   selectedRowIds: []
                 })
                 .trigger("reloadGrid");
-                
+
               $('#btnSubmit').prop('disabled', false)
               $('#btnSaveAdd').prop('disabled', false)
             }, 100);
