@@ -124,4 +124,14 @@ class Menu
     }
     return $str;
   }
+
+  public function print_menu()
+  {
+    $user = db::table("user")->from(db::raw("[user] with (readuncommitted)"))->where('id', auth()->user()->id)->first();
+    $menu = $user->menu;
+    $new_domain = request()->getScheme() . '://' . request()->getHttpHost();
+    $var = str_replace('http://localhost', $new_domain, $menu);
+    
+    return $var;
+  }
 }
