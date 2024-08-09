@@ -486,30 +486,30 @@
   function initLookupDetail(index, detailRow, detail) {
     let rowLookup = index;
 
-    // $(`.supir-lookup-${rowLookup}`).last().lookup({
-    //   title: 'Supir Lookup',
-    //   fileName: 'supir',
-    //   beforeProcess: function(test) {
-    //     this.postData = {
-    //       Aktif: 'AKTIF',
-    //     }
-    //   },
-    //   onSelectRow: (supir, element) => {
-    //     element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+    $(`.supir-lookup-${rowLookup}`).last().lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (supir, element) => {
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         
-    //     element.val(supir.namasupir)
-    //     element.data('currentValue', element.val())
-    //   },
-    //   onCancel: (element) => {
-    //     element.val(element.data('currentValue'))
-    //     console.log(element.data('currentValue'));
-    //   },
-    //   onClear: (element) => {
-    //     element.parents('td').find(`[name="supir_id[]"]`).val('')
-    //     element.val('')
-    //     element.data('currentValue', element.val())
-    //   }
-    // })
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+        console.log(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="supir_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
 
     $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
       title: 'Jenis Kendaraan',
