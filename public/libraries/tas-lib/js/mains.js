@@ -50,6 +50,7 @@ $(document).ready(function () {
     initSelect2();
     initAutoNumeric();
     initDisabled();
+    activeUrl()
 
     /* Remove autocomplete */
     $("input").attr("autocomplete", "off");
@@ -74,6 +75,37 @@ $(document).ready(function () {
 
         sidebarIsOpen = false;
     });
+
+    function activeUrl() {
+        const myArray = window.location.href.split("/")
+        const pathLink = myArray[4].split("?")[0]
+        let dynamicId = `link-${pathLink}`
+        
+        // Find the element by the dynamic ID
+        var activeElement = $('#' + dynamicId);
+    
+        if (activeElement.length) {
+          // Add 'active' class to the element
+          activeElement.addClass('active');
+          var topNavItem = activeElement.closest('.nav-item').parents('.nav-item').last();
+
+          // Iterate over all parent elements up to the main sidebar
+          activeElement.parents('.nav-item').each(function() {
+            // Add 'menu-open' class to the parent 'nav-item'
+            $(this).addClass('menu-open');
+    
+            // Add 'active' class to the parent link
+            if(topNavItem[0] == $(this)[0]){
+                $(this).children('a.nav-link').addClass('active');
+            // }else{
+            //     $(this).children('a.nav-link').addClass('active-parrent');
+            }
+          });
+        //   activeElement.removeClass('active-parrent');
+        //   topNavItem.children('a.nav-link').addClass('active');
+
+        }
+    }
 
     $(document).on("click", ".toggle-password", function (event) {
         $(this).toggleClass("fa-eye fa-eye-slash");
