@@ -534,29 +534,29 @@
       //     }
       //   })
 
-      $.ajax({
-        url: `${apiUrl}error/geterrors`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          kodeerror: "PSB"
-        },
-        success: response => {
-          // console.log(response.keterangan);
-          pleaseSelectARow = response.keterangan;
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
+      // $.ajax({
+      //   url: `${apiUrl}error/geterrors`,
+      //   method: 'GET',
+      //   dataType: 'JSON',
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}`
+      //   },
+      //   data: {
+      //     kodeerror: "PSB"
+      //   },
+      //   success: response => {
+      //     // console.log(response.keterangan);
+      //     pleaseSelectARow = response.keterangan;
+      //   },
+      //   error: error => {
+      //     if (error.status === 422) {
+      //       $('.is-invalid').removeClass('is-invalid')
+      //       $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
-          }
-        }
-      })
+      //       setErrorMessages(form, error.responseJSON.errors);
+      //     }
+      //   }
+      // })
     })
 
     $(document).on('collapsed.lte.pushmenu', () => {

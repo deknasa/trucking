@@ -116,11 +116,11 @@
       },
       loadBeforeSend: function(jqXHR) {
         cab = `{!! $cabang ?? '' !!}`;
-        if (cab == 'TNL') {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
-        } else {
+        // if (cab == 'TNL') {
+        //   jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        // } else {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-        }
+        // }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {

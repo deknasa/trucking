@@ -725,7 +725,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     from: 'biayaextrasupir',
-                    tglbukti: $('#crudForm [name=tglbukti]').val()
+                    // tglbukti: $('#crudForm [name=tglbukti]').val()
                 }
             },
             onSelectRow: (suratpengantar, element) => {

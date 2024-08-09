@@ -1971,6 +1971,8 @@
                 initAutoNumeric($('#crudForm [name=uangjalan]'))
                 element.val(supir.supir)
                 element.data('currentValue', element.val())
+                $('#btnSubmit').prop('disabled', true)
+                $('#btnSaveAdd').prop('disabled', true)
                 $('#tablePengembalian').jqGrid("clearGridData");
                 $("#tablePengembalian")[0].p.selectedRowIds = [];
                 $('#crudForm [name=keterangandeposit]').val("DEPOSITO SUPIR " + supir.supir)
@@ -1993,6 +1995,8 @@
                                 selectedRowIds: []
                             })
                             .trigger("reloadGrid");
+                        $('#btnSubmit').prop('disabled', false)
+                        $('#btnSaveAdd').prop('disabled', false)
                     }, 100);
 
                 });

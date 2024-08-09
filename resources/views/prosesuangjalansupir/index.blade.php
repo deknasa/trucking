@@ -36,7 +36,6 @@
 @include('prosesuangjalansupir._modal')
 <!-- Detail -->
 @include('prosesuangjalansupir._detail')
-@include('prosesuangjalansupir._transfer')
 
 @push('scripts')
 <script>

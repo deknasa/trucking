@@ -37,6 +37,14 @@
           align: 'left',
           width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
         },
+         {
+          label: 'iddetail',
+          name: 'iddetail',
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
+          search: false,
+          hidden: true
+        },
         {
           label: 'Keterangan',
           name: 'keterangan',

@@ -593,6 +593,9 @@
 
     $(document).on("change", `[name=tglbukti]`, function(event) {
         if (isDeposito == 'YA') {
+
+            $('#btnSubmit').prop('disabled', true)
+            $('#btnSaveAdd').prop('disabled', true)
             $("#tablePinjaman")[0].p.selectedRowIds = [];
             $('#tablePinjaman').jqGrid("clearGridData");
             $("#tablePinjaman")
@@ -618,6 +621,9 @@
                             selectedRowIds: selectedRowId
                         })
                         .trigger("reloadGrid");
+
+                    $('#btnSubmit').prop('disabled', false)
+                    $('#btnSaveAdd').prop('disabled', false)
                 }, 100);
             });
 

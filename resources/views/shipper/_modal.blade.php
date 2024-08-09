@@ -43,7 +43,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  nama kontak <span class="text-danger">*</span>
+                  nama kontak <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -55,7 +55,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  NO TELEPON/HANDPHONE <span class="text-danger">*</span>
+                  NO TELEPON/HANDPHONE <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -65,7 +65,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  alamat (1) <span class="text-danger">*</span>
+                  alamat (1) <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -85,7 +85,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  kota <span class="text-danger">*</span>
+                  kota <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">

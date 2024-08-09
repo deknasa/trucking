@@ -1569,6 +1569,7 @@
                   </td>
                   
                   <td>
+                    <input name="id_detail[]" hidden value="${detail.id}">
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${index}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -1655,6 +1656,7 @@
         if (kodePengeluaranStok == listKodePengeluaran[0]) { //spk
           idpengeluaranstok = $(`#pengeluaranstokId`).val();
         }
+        var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
         cekKelompok(row);
         this.postData = {
 
@@ -1663,6 +1665,7 @@
           pengeluaranstok_id: idpengeluaranstok,
           penerimaanstokheader_nobukti: nobuktipenerimaan,
           KelompokId: KelompokId,
+          nobukti : nobukti,          
           StokId: StokId,
           isLookup: true
           // },
@@ -1679,6 +1682,9 @@
 
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
         satuanEl.val(stok.satuan);
+        let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+        iddetailEl.val(stok.iddetail);
+
 
         setKorv(row, stok.id);
         let service = stok.servicerutin_text;
@@ -2094,6 +2100,7 @@
                       </td>
                       
                       <td>
+                        <input name="id_detail[]" hidden value="${detail.id}">
                         <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                         <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                         <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -2193,6 +2200,7 @@
                       </td>
                       
                       <td>
+                        <input name="id_detail[]" hidden value="${detail.id}">
                         <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                         <input type="text" id="detailstokId_${id}" data-current-value="${detail.stok}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                         <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -2308,10 +2316,12 @@
                 fileName: 'stok',
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
+                  var nobukti = $('#crudModal').find(`[name=nobukti]`).val();                  
                   cekKelompok(id);
                   this.postData = {
                     pengeluaranstok_id: $(pengeluaranstokId).val(),
                     Aktif: 'AKTIF',
+                    nobukti : nobukti,                    
                     KelompokId: KelompokId,
                     StokId: StokId,
                     isLookup: true
@@ -2323,6 +2333,8 @@
 
                   let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
                   satuanEl.val(stok.satuan);
+                  let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+                  iddetailEl.val(stok.iddetail);                  
 
                   parent = element.closest('td');
                   parent.children('.detailstokId').val(stok.id)
@@ -2374,6 +2386,8 @@
                 onClear: (element) => {
                   let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
                   satuanEl.val('');
+                  let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+                  iddetailEl.val(0);                  
                   element.val('')
                   element.data('currentValue', element.val())
                   dataStatusOli.forEach(statusOli => {
@@ -2472,6 +2486,7 @@
                   </td>
                   
                   <td>
+                    <input name="id_detail[]" hidden value="${detail.id}">
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" readonly class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -2903,6 +2918,7 @@
         element.val(stok.namastok)
         let satuanEl = $(`#detail_satuan_id`);
         satuanEl.val(stok.satuan);
+        
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
         getVulkanAfkir(stok.id)
@@ -2919,6 +2935,8 @@
       onClear: (element) => {
         let satuanEl = $(`#detail_satuan_id`);
         satuanEl.val('');
+        let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+        iddetailEl.val(0);        
         element.val('')
         element.data('currentValue', element.val())
         $(`#detail_stok_id`).val('')

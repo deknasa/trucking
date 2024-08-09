@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -58,5 +59,15 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'userrole');
+    }
+    
+    public function isUserPusat()
+    {
+        $cabang = DB::table('cabang')->select('id')->where('namacabang', 'PUSAT')->first();
+        $user = auth()->user();
+        $userPusat = $this->where('cabang_id',$cabang->id)->where('id',$user->id)->first();
+
+        if ($userPusat)  return true;
+        return false;
     }
 }
