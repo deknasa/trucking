@@ -511,37 +511,37 @@
       }
     })
 
-    $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
-      title: 'Jenis Kendaraan',
-      fileName: 'supirMaster',
-      typeSearch: 'ALL',
-      searching: 1,
-      beforeProcess: function() {
-        this.postData = {
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `namasupir_${index}`,
-          searchText: `supir-lookup-${rowLookup}`,
-          title: 'SUPIR LOOKUP'
-        };
-      },
+    // $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
+    //   title: 'Jenis Kendaraan',
+    //   fileName: 'supirMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function() {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: `namasupir_${index}`,
+    //       searchText: `supir-lookup-${rowLookup}`,
+    //       title: 'SUPIR LOOKUP'
+    //     };
+    //   },
       
-      onSelectRow: (supir, element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+    //   onSelectRow: (supir, element) => {
+    //     element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-        console.log(element.data('currentValue'));
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    //     element.val(supir.namasupir)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //     console.log(element.data('currentValue'));
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="supir_id[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     
     $(`.absentrado-lookup-${rowLookup}`).last().lookup({
       title: 'Absen Trado Lookup',
