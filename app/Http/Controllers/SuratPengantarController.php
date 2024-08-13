@@ -450,6 +450,11 @@ class SuratPengantarController extends MyController
                 'index' => 'noseal',
             ],
             [
+                'label' => 'TOTAL OMSET',
+                'index' => 'totalomset',
+                'format' => 'currency'
+            ],
+            [
                 'label' => 'GAJI SUPIR',
                 'index' => 'gajisupir',
                 'format' => 'currency'
@@ -494,16 +499,17 @@ class SuratPengantarController extends MyController
                 'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
             ]
         ];
-        $sheet->getStyle("A$detail_table_header_row:AA$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:AB$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:AB$detail_table_header_row")->getFont()->setBold(true);
 
         if (is_iterable($suratPengantar)) {
             $gajisupir = 0;
             foreach ($suratPengantar as $response_index => $response_detail) {
-                foreach ($columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                    $sheet->getStyle("A$detail_table_header_row:AA$detail_table_header_row")->getFont()->setBold(true);
-                    $sheet->getStyle("A$detail_table_header_row:AA$detail_table_header_row")->getAlignment()->setHorizontal('center');
-                }
+                // foreach ($columns as $detail_columns_index => $detail_column) {
+                //     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                //     $sheet->getStyle("A$detail_table_header_row:AA$detail_table_header_row")->getFont()->setBold(true);
+                //     $sheet->getStyle("A$detail_table_header_row:AA$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                // }
                 $response_detail['gajisupirs'] = number_format((float) $response_detail['gajisupir'], '2', '.', ',');
 
                 $tglTrip = $response_detail["tglbukti"];
@@ -542,13 +548,18 @@ class SuratPengantarController extends MyController
                 $sheet->setCellValue("X$detail_start_row", $response_detail['mandortrado_id']);
                 $sheet->setCellValue("Y$detail_start_row", $response_detail['mandorsupir_id']);
                 $sheet->setCellValue("Z$detail_start_row", $response_detail['noseal']);
-                $sheet->setCellValue("AA$detail_start_row", $response_detail['gajisupirs']);
+                $sheet->setCellValue("AA$detail_start_row", $response_detail['totalomset']);
+                $sheet->setCellValue("AB$detail_start_row", $response_detail['gajisupir']);
 
                 $sheet->getStyle("H$detail_start_row")->getAlignment()->setWrapText(true);
                 $sheet->getColumnDimension('H')->setWidth(50);
 
                 $sheet->getStyle("A$detail_start_row:Z$detail_start_row")->applyFromArray($styleArray);
                 $sheet->getStyle("AA$detail_start_row")->applyFromArray($style_number);
+                $sheet->getStyle("AB$detail_start_row")->applyFromArray($style_number);
+
+                $sheet->getStyle("AA$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("AB$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                 $gajisupir += $response_detail['gajisupir'];
                 $detail_start_row++;
@@ -556,7 +567,11 @@ class SuratPengantarController extends MyController
             $total_start_row = $detail_start_row;
             $sheet->mergeCells('A' . $total_start_row . ':Z' . $total_start_row);
             $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':Z' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-            $sheet->setCellValue("AA$total_start_row", number_format((float) $gajisupir, '2', '.', ','))->getStyle("AA$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->setCellValue("AA$total_start_row", "=SUM(AA8:AA" . ($detail_start_row - 1) . ")")->getStyle("AA$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->setCellValue("AB$total_start_row", "=SUM(AB8:AB" . ($detail_start_row - 1) . ")")->getStyle("AB$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+            $sheet->getStyle("AA$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("AB$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         }
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
@@ -585,6 +600,7 @@ class SuratPengantarController extends MyController
         $sheet->getColumnDimension('Y')->setAutoSize(true);
         $sheet->getColumnDimension('Z')->setAutoSize(true);
         $sheet->getColumnDimension('AA')->setAutoSize(true);
+        $sheet->getColumnDimension('AB')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Surat Pengantar' . date('dmYHis');
