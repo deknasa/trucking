@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -26,7 +27,7 @@ class LaporanKasBankController extends MyController
             'defaultperiode' => $this->defaultperiode(),
         ];
 
-        return view('laporankasbank.index', compact('title','data'));
+        return view('laporankasbank.index', compact('title', 'data'));
     }
 
     public function defaultperiode()
@@ -185,7 +186,13 @@ class LaporanKasBankController extends MyController
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
         $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-
+        $cabang = DB::table('parameter')->from(db::raw("parameter a with (readuncommitted)"))
+            ->select(
+                'a.text as keterangan'
+            )
+            ->where('grp', 'CABANG')
+            ->where('subgrp', 'CABANG')
+            ->first();
         // LOOPING DETAIL
         $dataRow = $detail_table_header_row + 2;
         $previousRow = $dataRow - 1; // Initialize the previous row number
@@ -195,13 +202,15 @@ class LaporanKasBankController extends MyController
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
-            // $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
-            // $sheet->setCellValue("A$detail_start_row", $dateValue);
-            // $sheet->getStyle("A$detail_start_row")
-            //     ->getNumberFormat()
-            //     ->setFormatCode('dd-mm-yyyy');
-            $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+            if ($cabang == 'PUSAT') {
+                $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+            } else {
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+                $sheet->setCellValue("A$detail_start_row", $dateValue);
+                $sheet->getStyle("A$detail_start_row")
+                    ->getNumberFormat()
+                    ->setFormatCode('dd-mm-yyyy');
+            }
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
