@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "16981fd2a00043209985766b0844f2c6",
+  "ReportGuid": "fc57de01b1d5d9b54cecbf13cae70459",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1718096279000+0700)/",
+  "ReportChanged": "/Date(1723539061000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,96 +28,102 @@
         "Alias": "data",
         "Columns": {
           "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
             "Name": "urut",
             "NameInSource": "urut",
             "Alias": "urut",
             "Type": "System.String"
           },
-          "1": {
+          "2": {
             "Name": "urutdetail",
             "NameInSource": "urutdetail",
             "Alias": "urutdetail",
             "Type": "System.String"
           },
-          "2": {
+          "3": {
             "Name": "keterangancoa",
             "NameInSource": "keterangancoa",
             "Alias": "keterangancoa",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "namabank",
             "NameInSource": "namabank",
             "Alias": "namabank",
             "Type": "System.String"
           },
-          "4": {
+          "5": {
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
-          "5": {
+          "6": {
             "Name": "nobukti",
             "NameInSource": "nobukti",
             "Alias": "nobukti",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "keterangan",
             "NameInSource": "keterangan",
             "Alias": "keterangan",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "debet",
             "NameInSource": "debet",
             "Alias": "debet",
             "Type": "System.String"
           },
-          "8": {
+          "9": {
             "Name": "kredit",
             "NameInSource": "kredit",
             "Alias": "kredit",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
             "Name": "totaldebet",
             "NameInSource": "totaldebet",
             "Alias": "totaldebet",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "totalkredit",
             "NameInSource": "totalkredit",
             "Alias": "totalkredit",
             "Type": "System.String"
           },
-          "11": {
+          "12": {
             "Name": "saldo",
             "NameInSource": "saldo",
             "Alias": "saldo",
             "Type": "System.String"
           },
-          "12": {
+          "13": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "13": {
+          "14": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "15": {
+          "16": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
@@ -272,28 +278,28 @@
             "Type": "System.String"
           },
           "2": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "4": {
+          "3": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "5": {
+          "4": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
+          },
+          "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
           },
           "6": {
             "Name": "pivot",
@@ -370,30 +376,36 @@
             "Type": "System.String"
           },
           "9": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "11": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "12": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
+          "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
           "13": {
+            "Name": "menu",
+            "NameInSource": "menu",
+            "Alias": "menu",
+            "Type": "System.String"
+          },
+          "14": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -429,6 +441,18 @@
             "Name": "bank",
             "NameInSource": "bank",
             "Alias": "bank",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "periodedata_id",
+            "NameInSource": "periodedata_id",
+            "Alias": "periodedata_id",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "periodedata",
+            "NameInSource": "periodedata",
+            "Alias": "periodedata",
             "Type": "System.String"
           }
         },
@@ -1298,6 +1322,10 @@
               "TextBrush": "solid:Black",
               "TextOptions": {
                 "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             }
