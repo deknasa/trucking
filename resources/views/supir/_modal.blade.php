@@ -260,7 +260,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto SKCK <span class="text-danger">*</span></label>
+                    <label class="col-form-label">Upload Foto SKCK </label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photoskck" id="my-dropzone"></div>
@@ -280,7 +280,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Domisili <span class="text-danger">*</span></label>
+                    <label class="col-form-label">Upload Foto Domisili</label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photodomisili" id="my-dropzone"></div>
@@ -300,7 +300,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Vaksin <span class="text-danger">*</span></label>
+                    <label class="col-form-label">Upload Foto Vaksin</label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photovaksin" id="my-dropzone"></div>
