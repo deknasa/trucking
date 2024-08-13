@@ -33,10 +33,10 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <button type="button" id="btnPreview" class="btn btn-info ">
+                                <!-- <button type="button" id="btnPreview" class="btn btn-info ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </button>
+                                </button> -->
                                 <button type="button" id="btnExport" class="btn btn-warning ">
                                     <i class="fas fa-file-export"></i>
                                     Export
