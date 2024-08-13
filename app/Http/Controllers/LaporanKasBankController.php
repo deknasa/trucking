@@ -196,11 +196,12 @@ class LaporanKasBankController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
-            $sheet->setCellValue("A$detail_start_row", $dateValue);
-            $sheet->getStyle("A$detail_start_row")
-                ->getNumberFormat()
-                ->setFormatCode('dd-mm-yyyy');
+            // $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+            // $sheet->setCellValue("A$detail_start_row", $dateValue);
+            // $sheet->getStyle("A$detail_start_row")
+            //     ->getNumberFormat()
+            //     ->setFormatCode('dd-mm-yyyy');
+            $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
