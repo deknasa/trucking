@@ -842,7 +842,7 @@
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').hide()
-    $('[name=gudang]').parents('.form-group').hide()
+    // $('[name=gudang]').parents('.form-group').hide()
     $('.tbl_qty').show()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
@@ -2977,6 +2977,7 @@
       fileName: 'gudang',
       beforeProcess: function(test) {
         this.postData = {
+          Aktif: 'AKTIF',
           pengeluaranstok_id: $(`#pengeluaranstokId`).val()
         }
       },
