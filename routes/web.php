@@ -342,7 +342,7 @@ Route::get('reset-password/success', [ResetPasswordController::class, 'success']
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
 
 Route::get('statusolitrado/exportdetail', [StatusOliTradoController::class, 'exportdetail'])->name('statusolitrado.exportdetail');
-
+Route::get('stokpusat/tokenmks', [StokPusatController::class, 'tokenMks']);
 Route::get('stokpusat/tokenjkt', [StokPusatController::class, 'tokenJkt']);
 Route::get('stokpusat/tokenjkttnl', [StokPusatController::class, 'tokenJktTnl']);
 Route::middleware(['auth', 'authorized'])->group(function () {
