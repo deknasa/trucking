@@ -419,14 +419,14 @@
       setNominalSupir()
     })
 
-    $(document).on('change', `#crudForm [name="statusupahzona"]`, function(event) {
-      let selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
-      if (selectedUpahZona == 'NON UPAH ZONA' || selectedUpahZona == 'UPAH ZONA') {
-        if (aksiEdit == true) {
-          formatUpahZona(selectedUpahZona)
-        }
-      }
-    })
+    // $(document).on('change', `#crudForm [name="statusupahzona"]`, function(event) {
+    //   let selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
+    //   if (selectedUpahZona == 'NON UPAH ZONA' || selectedUpahZona == 'UPAH ZONA') {
+    //     if (aksiEdit == true) {
+    //       formatUpahZona(selectedUpahZona)
+    //     }
+    //   }
+    // })
 
     $(document).on('input', `#table_body [name="nominalkenek[]"]`, function(event) {
       setNominalKenek()

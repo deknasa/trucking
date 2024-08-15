@@ -646,8 +646,8 @@ $.fn.lookupMaster = function (options) {
                 lookupContainer.remove();
                 element.data("hasLookup", false);
 
-                return false;
                 activate = false;
+                return false;
             }
         });
 
