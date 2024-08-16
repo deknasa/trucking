@@ -1543,7 +1543,7 @@
         }
         cekKelompok(row);
         this.postData = {
-
+          from: 'pengeluaranstok',
           Aktif: 'AKTIF',
           // if  (kodePengeluaranStok=listKodePengeluaran[1])  {
           pengeluaranstok_id: idpengeluaranstok,
@@ -2139,6 +2139,7 @@
                   // var levelcoa = $(`#levelcoa`).val();
                   cekKelompok(id);
                   this.postData = {
+                    from: 'pengeluaranstok',
                     pengeluaranstok_id: $(pengeluaranstokId).val(),
                     Aktif: 'AKTIF',
                     KelompokId: KelompokId,
@@ -2592,6 +2593,7 @@
       fileName: 'stok',
       beforeProcess: function(test) {
         this.postData = {
+          from: 'pengeluaranstok',
           Aktif: 'AKTIF',
           statusreuse: 'REUSE'
         }
