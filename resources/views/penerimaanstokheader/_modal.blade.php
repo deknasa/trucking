@@ -1199,6 +1199,7 @@
               var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
               cekKelompok(id);
               this.postData = {
+                from: 'penerimaanstok',
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 nobukti : nobukti,
@@ -1380,6 +1381,7 @@
               var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
               cekKelompok(row);
               this.postData = {
+                from: 'penerimaanstok',
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 nobukti : nobukti,
@@ -1569,6 +1571,7 @@
           var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
           cekKelompok(row);
           this.postData = {
+            from: 'penerimaanstok',
             penerimaanstok_id: penerimaanstokId,
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
             nobukti : nobukti,
@@ -2740,6 +2743,7 @@
         var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
         cekKelompok(row);
         this.postData = {
+          from: 'penerimaanstok',
           penerimaanstok_id: penerimaanstokId,
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           nobukti : nobukti,
@@ -3216,6 +3220,7 @@
                 var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
                 cekKelompok(row);
                 this.postData = {
+                  from: 'penerimaanstok',
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                   nobukti : nobukti,

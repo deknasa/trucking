@@ -1659,7 +1659,7 @@
         var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
         cekKelompok(row);
         this.postData = {
-
+          from: 'pengeluaranstok',
           Aktif: 'AKTIF',
           // if  (kodePengeluaranStok=listKodePengeluaran[1])  {
           pengeluaranstok_id: idpengeluaranstok,
@@ -2319,6 +2319,7 @@
                   var nobukti = $('#crudModal').find(`[name=nobukti]`).val();                  
                   cekKelompok(id);
                   this.postData = {
+                    from: 'pengeluaranstok',
                     pengeluaranstok_id: $(pengeluaranstokId).val(),
                     Aktif: 'AKTIF',
                     nobukti : nobukti,                    
@@ -2909,6 +2910,7 @@
       fileName: 'stok',
       beforeProcess: function(test) {
         this.postData = {
+          from: 'pengeluaranstok',
           Aktif: 'AKTIF',
           statusreuse: 'REUSE',
           isLookup: true

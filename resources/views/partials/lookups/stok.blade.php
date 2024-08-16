@@ -16,6 +16,7 @@
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
         nobukti: `{!! $nobukti ?? '' !!}`,
         KelompokId: `{!! $KelompokId ?? '' !!}`,
         StokId: `{!! $StokId ?? '' !!}`,
