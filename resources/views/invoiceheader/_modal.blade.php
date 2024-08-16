@@ -70,12 +70,12 @@
                   </select>
                 </div>
 
-                <div class="col-12 col-md-2  ">
+                <div class="col-12 col-md-2 jenisorder">
                   <label class="col-form-label">
                     Jenis Order <span class="text-danger">*</span>
                   </label>
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4 jenisorder">
                   <input type="hidden" name="jenisorder_id">
                   <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
@@ -84,11 +84,22 @@
               <div class="row form-group noinvoicepajak">
                 <div class="col-12 col-md-2  ">
                   <label class="col-form-label">
-                    no invoice pajak <span class="text-danger">*</span>
+                    no invoice pajak
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="noinvoicepajak" class="form-control">
+                </div>
+
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
+                    STATUS JENIS KENDARAAN <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <select name="statusjeniskendaraan" class="form-control select2bs4" id="statusjeniskendaraan">
+                    <option value="">-- PILIH STATUS JENIS KENDARAAN --</option>
+                  </select>
                 </div>
               </div>
 
@@ -132,6 +143,10 @@
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
+            </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
@@ -185,6 +200,14 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
 
       let method
       let url
@@ -232,6 +255,10 @@
       data.push({
         name: 'noinvoicepajak',
         value: form.find(`[name="noinvoicepajak"]`).val()
+      })
+      data.push({
+        name: 'statusjeniskendaraan',
+        value: form.find(`[name="statusjeniskendaraan"]`).val()
       })
 
       data.push({
@@ -281,6 +308,10 @@
       })
 
       data.push({
+        name: 'button',
+        value: button
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
@@ -316,6 +347,10 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -350,27 +385,51 @@
         },
         data: data,
         success: response => {
-          id = response.data.id
 
-          $('#crudModal').find('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (button == 'btnSubmit') {
+            id = response.data.id
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#crudModal').find('#crudForm').trigger('reset')
+            $('#crudModal').modal('hide')
+
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
 
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            // showSuccessDialog(response.message, response.data.nobukti)
+            createInvoiceHeader()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $("#tableInvoice")[0].p.selectedRowIds = [];
+            $('#tableInvoice').jqGrid("clearGridData");
+            $("#tableInvoice")
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_total"]`).text(0))
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_omset"]`).text(0))
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalextra"]`).text(0))
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(0))
+
+
           }
         },
         error: error => {
@@ -419,7 +478,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -427,6 +486,11 @@
 
     setFormBindKeys(form)
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     activeGrid = null
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -442,10 +506,72 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+
+  $(document).on('change', `#crudForm [name="statusjeniskendaraan"]`, function(event) {
+
+    let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
+    statusJenisKendaran = statusjeniskendaraan
+    let jenisorder = $('#crudForm [name=jenisorder]')
+    if (statusjeniskendaraan == 'TANGKI') {
+
+      jenisorder.val('')
+      jenisorder.data('currentValue', '')
+      $('#crudForm [name=jenisorder_id]').val('')
+      jenisorder.attr('readonly', true)
+      jenisorder.parents('.input-group').find('.input-group-append').hide()
+      jenisorder.parents('.input-group').find('.button-clear').hide()
+    }
+    if (statusjeniskendaraan == 'GANDENGAN') {
+
+      jenisorder.attr('readonly', false)
+      jenisorder.parents('.input-group').find('.input-group-append').show()
+      jenisorder.parents('.input-group').find('.button-clear').show()
+    }
+  })
+
+  function removeEditingBy(id) {
+
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'invoiceheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function createInvoiceHeader() {
     let form = $('#crudForm')
@@ -463,6 +589,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -510,6 +637,7 @@
       .all([
         setTglBukti(form),
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -564,6 +692,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -608,6 +737,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setStatusJenisKendaraanOptions(form),
         setTampilan(),
         setFormatTable()
       ])
@@ -641,10 +771,13 @@
       url = `${invId}/getAllEdit`
     }
 
-    if ($('#crudForm').find(`[name="agen_id"]`).val() != '' && $('#crudForm').find(`[name="jenisorder_id"]`).val() != '') {
+    $('#btnSubmit').prop('disabled', true)
+    $('#btnSaveAdd').prop('disabled', true)
+    if ($('#crudForm').find(`[name="agen_id"]`).val() != '') {
       $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
         $("#tableInvoice")[0].p.selectedRowIds = [];
+        $('#tableInvoice').jqGrid("clearGridData");
         if ($('#crudForm').data('action') == 'add') {
           selectedRowId = [];
         } else {
@@ -661,6 +794,8 @@
               selectedRowIds: selectedRowId
             })
             .trigger("reloadGrid");
+          $('#btnSubmit').prop('disabled', false)
+          $('#btnSaveAdd').prop('disabled', false)
         }, 100);
 
       });
@@ -803,9 +938,9 @@
             sortable: true,
           },
           {
-            label: "TARIF",
+            label: "TUJUAN",
             name: "tarif_id",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : sm_dekstop_1,
             sortable: true,
           },
           {
@@ -1130,6 +1265,10 @@
       value: form.find(`[name="statuspilihaninvoice"]`).val()
     })
     data.push({
+      name: 'statusjeniskendaraan',
+      value: form.find(`[name="statusjeniskendaraan"]`).val()
+    })
+    data.push({
       name: 'limit',
       value: 0
     })
@@ -1319,12 +1458,13 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
             // getEdit(invId, aksi)
-            $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+            // $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
             $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
             $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           }
           // getEdit(invId, aksi)
-          $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+          // $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+          // $('#crudForm').find("[name=statusjeniskendaraan]").prop('disabled', true);
           $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
           $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           // loadInvoiceGrid();
@@ -1591,6 +1731,49 @@
       })
     })
   }
+  const setStatusJenisKendaraanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusjeniskendaraan]').empty()
+      relatedForm.find('[name=statusjeniskendaraan]').append(
+        new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS JENIS KENDARAAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusJenisKendaraan => {
+            let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id)
+            if (statusJenisKendaraan.default == "YA") {
+              selectedId = statusJenisKendaraan.id
+            }
+            relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change')
+          });
+
+          relatedForm.find('[name=statusjeniskendaraan]').val(selectedId).trigger('change')
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
 
   function setTglJatuhTempo(top = 0) {
     // Tanggal awal dalam format "YYYY-MM-DD"
@@ -1750,7 +1933,7 @@
           memo = JSON.parse(response.memo)
           memo = memo.INPUT
           if (memo != '') {
-            
+
             input = memo.split(',');
             input.forEach(field => {
               field = $.trim(field.toLowerCase());

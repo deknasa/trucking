@@ -159,9 +159,31 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
+                        label: 'TGL berlaku milik mandor',
+                        name: 'tglberlakumilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
                         label: 'SUPIR',
                         name: 'supir_id',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                    },
+                    {
+                        label: 'TGL berlaku milik supir',
+                        name: 'tglberlakumiliksupir',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'STATUS AKTIF',
@@ -433,64 +455,65 @@
                             newformat: "d-m-Y H:i:s"
                         }
                     },
-                    {
-                        label: 'TGL SERVICE OPNAME',
-                        name: 'tglserviceopname',
-                        width: 200,
-                        formatter: "date",
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'STATUS STANDARISASI',
-                        name: 'statusstandarisasi',
-                        width: 200,
-                        stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-                                    foreach ($data['statusstandarisasi'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusstandarisasi'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-                                    ?>
-        `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusStandarisasi = JSON.parse(value)
+                    //             {
+                    //                 label: 'TGL SERVICE OPNAME',
+                    //                 name: 'tglserviceopname',
+                    //                 width: 200,
+                    //                 formatter: "date",
+                    //                 width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                 formatoptions: {
+                    //                     srcformat: "ISO8601Long",
+                    //                     newformat: "d-m-Y"
+                    //                 }
+                    //             },
+                    //             {
+                    //                 label: 'STATUS STANDARISASI',
+                    //                 name: 'statusstandarisasi',
+                    //                 width: 200,
+                    //                 stype: 'select',
+                    //                 width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                 searchoptions: {
+                    //                     value: `<?php
+                                                    //                             $i = 1;
+                                                    //                             foreach ($data['statusstandarisasi'] as $status) :
+                                                    //                                 echo "$status[param]:$status[parameter]";
+                                                    //                                 if ($i !== count($data['statusstandarisasi'])) {
+                                                    //                                     echo ';';
+                                                    //                                 }
+                                                    //                                 $i++;
+                                                    //                             endforeach;
+                                                    //                             
+                                                    ?>
+                    // `,
+                    //                     dataInit: function(element) {
+                    //                         $(element).select2({
+                    //                             width: 'resolve',
+                    //                             theme: "bootstrap4"
+                    //                         });
+                    //                     }
+                    //                 },
+                    //                 formatter: (value, options, rowData) => {
+                    //                     let statusStandarisasi = JSON.parse(value)
 
-                            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusStandarisasi.WARNA}; color: #fff;">
-                  <span>${statusStandarisasi.SINGKATAN}</span>
-                </div>
-              `)
+                    //                     let formattedValue = $(`
+                    //         <div class="badge" style="background-color: ${statusStandarisasi.WARNA}; color: #fff;">
+                    //           <span>${statusStandarisasi.SINGKATAN}</span>
+                    //         </div>
+                    //       `)
 
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusStandarisasi = JSON.parse(rowObject.statusstandarisasi)
+                    //                     return formattedValue[0].outerHTML
+                    //                 },
+                    //                 cellattr: (rowId, value, rowObject) => {
+                    //                     let statusStandarisasi = JSON.parse(rowObject.statusstandarisasi)
 
-                            return ` title="${statusStandarisasi.MEMO}"`
-                        }
-                    },
-                    {
-                        label: 'KET. PROGRESS STANDARISASI',
-                        width: 230,
-                        name: 'keteranganprogressstandarisasi',
-                    },
+                    //                     return ` title="${statusStandarisasi.MEMO}"`
+                    //                 }
+                    //             },
+                    //             {
+                    //                 label: 'KET. PROGRESS STANDARISASI',
+                    //                 width: 230,
+                    //                 name: 'keteranganprogressstandarisasi',
+                    //             },
 
                     {
                         label: 'TGL GANTI AKI AKHIR',
@@ -503,138 +526,141 @@
                             newformat: "d-m-Y"
                         }
                     },
-                    {
-                        label: 'STATUS MUTASI',
-                        name: 'statusmutasi',
-                        stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-                                    foreach ($data['statusmutasi'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusmutasi'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-                                    ?>
-        `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusMutasi = JSON.parse(value)
+                    //                     {
+                    //                         label: 'STATUS MUTASI',
+                    //                         name: 'statusmutasi',
+                    //                         stype: 'select',
+                    //                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                         searchoptions: {
+                    //                             value: `<?php
+                                                            //                                     $i = 1;
+                                                            //                                     foreach ($data['statusmutasi'] as $status) :
+                                                            //                                         echo "$status[param]:$status[parameter]";
+                                                            //                                         if ($i !== count($data['statusmutasi'])) {
+                                                            //                                             echo ';';
+                                                            //                                         }
+                                                            //                                         $i++;
+                                                            //                                     endforeach;
+                                                            //                                     
+                                                            ?>
+                    //         `,
+                    //                             dataInit: function(element) {
+                    //                                 $(element).select2({
+                    //                                     width: 'resolve',
+                    //                                     theme: "bootstrap4"
+                    //                                 });
+                    //                             }
+                    //                         },
+                    //                         formatter: (value, options, rowData) => {
+                    //                             let statusMutasi = JSON.parse(value)
 
-                            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusMutasi.WARNA}; color: #fff;">
-                  <span>${statusMutasi.SINGKATAN}</span>
-                </div>
-              `)
+                    //                             let formattedValue = $(`
+                    //                 <div class="badge" style="background-color: ${statusMutasi.WARNA}; color: #fff;">
+                    //                   <span>${statusMutasi.SINGKATAN}</span>
+                    //                 </div>
+                    //               `)
 
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusMutasi = JSON.parse(rowObject.statusmutasi)
+                    //                             return formattedValue[0].outerHTML
+                    //                         },
+                    //                         cellattr: (rowId, value, rowObject) => {
+                    //                             let statusMutasi = JSON.parse(rowObject.statusmutasi)
 
-                            return ` title="${statusMutasi.MEMO}"`
-                        }
-                    },
-                    {
-                        label: 'STATUS VALIDASI KEND',
-                        name: 'statusvalidasikendaraan',
-                        width: 200,
-                        stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-                                    foreach ($data['statusvalidasikendaraan'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusvalidasikendaraan'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-                                    ?>
-  `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusValKendaraan = JSON.parse(value)
+                    //                             return ` title="${statusMutasi.MEMO}"`
+                    //                         }
+                    //                     },
+                    //                     {
+                    //                         label: 'STATUS VALIDASI KEND',
+                    //                         name: 'statusvalidasikendaraan',
+                    //                         width: 200,
+                    //                         stype: 'select',
+                    //                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                         searchoptions: {
+                    //                             value: `<?php
+                                                            //                                     $i = 1;
+                                                            //                                     foreach ($data['statusvalidasikendaraan'] as $status) :
+                                                            //                                         echo "$status[param]:$status[parameter]";
+                                                            //                                         if ($i !== count($data['statusvalidasikendaraan'])) {
+                                                            //                                             echo ';';
+                                                            //                                         }
+                                                            //                                         $i++;
+                                                            //                                     endforeach;
+                                                            //                                     
+                                                            ?>
+                    //   `,
+                    //                             dataInit: function(element) {
+                    //                                 $(element).select2({
+                    //                                     width: 'resolve',
+                    //                                     theme: "bootstrap4"
+                    //                                 });
+                    //                             }
+                    //                         },
+                    //                         formatter: (value, options, rowData) => {
+                    //                             let statusValKendaraan = JSON.parse(value)
 
-                            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusValKendaraan.WARNA}; color: #fff;">
-                  <span>${statusValKendaraan.SINGKATAN}</span>
-                </div>
-              `)
+                    //                             let formattedValue = $(`
+                    //                 <div class="badge" style="background-color: ${statusValKendaraan.WARNA}; color: #fff;">
+                    //                   <span>${statusValKendaraan.SINGKATAN}</span>
+                    //                 </div>
+                    //               `)
 
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusValKendaraan = JSON.parse(rowObject.statusvalidasikendaraan)
+                    //                             return formattedValue[0].outerHTML
+                    //                         },
+                    //                         cellattr: (rowId, value, rowObject) => {
+                    //                             let statusValKendaraan = JSON.parse(rowObject.statusvalidasikendaraan)
 
-                            return ` title="${statusValKendaraan.MEMO}"`
-                        }
-                    },
-                    {
-                        label: 'STATUS MOBIL STORING',
-                        name: 'statusmobilstoring',
-                        width: 200,
-                        stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-                                    foreach ($data['statusmobilstoring'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusmobilstoring'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-                                    ?>
-  `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusMobilStoring = JSON.parse(value)
+                    //                             return ` title="${statusValKendaraan.MEMO}"`
+                    //                         }
+                    //                     },
+                    //                     {
+                    //                         label: 'STATUS MOBIL STORING',
+                    //                         name: 'statusmobilstoring',
+                    //                         width: 200,
+                    //                         stype: 'select',
+                    //                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                         searchoptions: {
+                    //                             value: `<?php
+                                                            //                                     $i = 1;
+                                                            //                                     foreach ($data['statusmobilstoring'] as $status) :
+                                                            //                                         echo "$status[param]:$status[parameter]";
+                                                            //                                         if ($i !== count($data['statusmobilstoring'])) {
+                                                            //                                             echo ';';
+                                                            //                                         }
+                                                            //                                         $i++;
+                                                            //                                     endforeach;
+                                                            //                                     
+                                                            ?>
+                    //   `,
+                    //                             dataInit: function(element) {
+                    //                                 $(element).select2({
+                    //                                     width: 'resolve',
+                    //                                     theme: "bootstrap4"
+                    //                                 });
+                    //                             }
+                    //                         },
+                    //                         formatter: (value, options, rowData) => {
+                    //                             let statusMobilStoring = JSON.parse(value)
 
-                            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusMobilStoring.WARNA}; color: #fff;">
-                  <span>${statusMobilStoring.SINGKATAN}</span>
-                </div>
-              `)
+                    //                             let formattedValue = $(`
+                    //                 <div class="badge" style="background-color: ${statusMobilStoring.WARNA}; color: #fff;">
+                    //                   <span>${statusMobilStoring.SINGKATAN}</span>
+                    //                 </div>
+                    //               `)
 
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusMobilStoring = JSON.parse(rowObject.statusmobilstoring)
+                    //                             return formattedValue[0].outerHTML
+                    //                         },
+                    //                         cellattr: (rowId, value, rowObject) => {
+                    //                             let statusMobilStoring = JSON.parse(rowObject.statusmobilstoring)
 
-                            return ` title="${statusMobilStoring.MEMO}"`
-                        }
-                    },
+                    //                             return ` title="${statusMobilStoring.MEMO}"`
+                    //                         }
+                    //                     },
                     // 
                     {
                         label: 'STATUS ABSENSI SUPIR',
                         name: 'statusabsensisupir',
                         width: 200,
                         stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -672,59 +698,103 @@
                         }
                     },
                     // 
+                    //                     {
+                    //                         label: 'STATUS BAN EDIT',
+                    //                         name: 'statusappeditban',
+                    //                         stype: 'select',
+                    //                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                         searchoptions: {
+                    //                             value: `<?php
+                                                            //                                     $i = 1;
+                                                            //                                     foreach ($data['statusappeditban'] as $status) :
+                                                            //                                         echo "$status[param]:$status[parameter]";
+                                                            //                                         if ($i !== count($data['statusappeditban'])) {
+                                                            //                                             echo ';';
+                                                            //                                         }
+                                                            //                                         $i++;
+                                                            //                                     endforeach;
+                                                            //                                     
+                                                            ?>
+                    //   `,
+                    //                             dataInit: function(element) {
+                    //                                 $(element).select2({
+                    //                                     width: 'resolve',
+                    //                                     theme: "bootstrap4"
+                    //                                 });
+                    //                             }
+                    //                         },
+                    //                         formatter: (value, options, rowData) => {
+                    //                             let statusAppEditBan = JSON.parse(value)
+
+                    //                             let formattedValue = $(`
+                    //                 <div class="badge" style="background-color: ${statusAppEditBan.WARNA}; color: #fff;">
+                    //                   <span>${statusAppEditBan.SINGKATAN}</span>
+                    //                 </div>
+                    //               `)
+
+                    //                             return formattedValue[0].outerHTML
+                    //                         },
+                    //                         cellattr: (rowId, value, rowObject) => {
+                    //                             let statusAppEditBan = JSON.parse(rowObject.statusappeditban)
+
+                    //                             return ` title="${statusAppEditBan.MEMO}"`
+                    //                         }
+                    //                     },
+                    //                     {
+                    //                         label: 'STATUS LEWAT VALIDASI',
+                    //                         name: 'statuslewatvalidasi',
+                    //                         width: 200,
+                    //                         stype: 'select',
+                    //                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    //                         searchoptions: {
+                    //                             value: `<?php
+                                                            //                                     $i = 1;
+                                                            //                                     foreach ($data['statuslewatvalidasi'] as $status) :
+                                                            //                                         echo "$status[param]:$status[parameter]";
+                                                            //                                         if ($i !== count($data['statuslewatvalidasi'])) {
+                                                            //                                             echo ';';
+                                                            //                                         }
+                                                            //                                         $i++;
+                                                            //                                     endforeach;
+                                                            //                                     
+                                                            ?>
+                    //   `,
+                    //                             dataInit: function(element) {
+                    //                                 $(element).select2({
+                    //                                     width: 'resolve',
+                    //                                     theme: "bootstrap4"
+                    //                                 });
+                    //                             }
+                    //                         },
+                    //                         formatter: (value, options, rowData) => {
+                    //                             let statusLewatValidasi = JSON.parse(value)
+
+                    //                             let formattedValue = $(`
+                    //                 <div class="badge" style="background-color: ${statusLewatValidasi.WARNA}; color: #fff;">
+                    //                   <span>${statusLewatValidasi.SINGKATAN}</span>
+                    //                 </div>
+                    //               `)
+
+                    //                             return formattedValue[0].outerHTML
+                    //                         },
+                    //                         cellattr: (rowId, value, rowObject) => {
+                    //                             let statusLewatValidasi = JSON.parse(rowObject.statuslewatvalidasi)
+
+                    //                             return ` title="${statusLewatValidasi.MEMO}"`
+                    //                         }
+                    //                     },
                     {
-                        label: 'STATUS BAN EDIT',
-                        name: 'statusappeditban',
-                        stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-                                    foreach ($data['statusappeditban'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusappeditban'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-                                    ?>
-  `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusAppEditBan = JSON.parse(value)
-
-                            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAppEditBan.WARNA}; color: #fff;">
-                  <span>${statusAppEditBan.SINGKATAN}</span>
-                </div>
-              `)
-
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusAppEditBan = JSON.parse(rowObject.statusappeditban)
-
-                            return ` title="${statusAppEditBan.MEMO}"`
-                        }
-                    },
-                    {
-                        label: 'STATUS LEWAT VALIDASI',
-                        name: 'statuslewatvalidasi',
+                        label: 'STATUS APP HISTORY TRADO MILIK MANDOR',
+                        name: 'statusapprovalhistorytradomilikmandor',
                         width: 200,
                         stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-                                    foreach ($data['statuslewatvalidasi'] as $status) :
+                                    foreach ($data['statusapprovalhistorytradomilikmandor'] as $status) :
                                         echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statuslewatvalidasi'])) {
+                                        if ($i !== count($data['statusapprovalhistorytradomilikmandor'])) {
                                             echo ';';
                                         }
                                         $i++;
@@ -739,22 +809,119 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
-                            let statusLewatValidasi = JSON.parse(value)
+                            let statusApprovalHistoryTradoMilikMandor = JSON.parse(value)
 
                             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLewatValidasi.WARNA}; color: #fff;">
-                  <span>${statusLewatValidasi.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statusApprovalHistoryTradoMilikMandor.WARNA}; color: #fff;">
+                  <span>${statusApprovalHistoryTradoMilikMandor.SINGKATAN}</span>
                 </div>
               `)
 
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
-                            let statusLewatValidasi = JSON.parse(rowObject.statuslewatvalidasi)
+                            let statusApprovalHistoryTradoMilikMandor = JSON.parse(rowObject.statusapprovalhistorytradomilikmandor)
 
-                            return ` title="${statusLewatValidasi.MEMO}"`
+                            return ` title="${statusApprovalHistoryTradoMilikMandor.MEMO}"`
                         }
                     },
+                    {
+                        label: 'USER APP HISTORY trado MILIK MANDOR',
+                        name: 'userapprovalhistorytradomilikmandor',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    },
+                    {
+                        label: 'TGL APP HISTORY trado MILIK MANDOR',
+                        name: 'tglapprovalhistorytradomilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    {
+                        label: 'TGL UPDATE HISTORY trado MILIK MANDOR',
+                        name: 'tglupdatehistorytradomilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    {
+                        label: 'STATUS APP HISTORY TRADO MILIK SUPIR',
+                        name: 'statusapprovalhistorytradomiliksupir',
+                        width: 200,
+                        stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+                                    foreach ($data['statusapprovalhistorytradomiliksupir'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['statusapprovalhistorytradomiliksupir'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    ?>
+  `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusApprovalHistoryTradoMilikSupir = JSON.parse(value)
+
+                            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApprovalHistoryTradoMilikSupir.WARNA}; color: #fff;">
+                  <span>${statusApprovalHistoryTradoMilikSupir.SINGKATAN}</span>
+                </div>
+              `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApprovalHistoryTradoMilikSupir = JSON.parse(rowObject.statusapprovalhistorytradomiliksupir)
+
+                            return ` title="${statusApprovalHistoryTradoMilikSupir.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'USER APP HISTORY trado MILIK supir',
+                        name: 'userapprovalhistorytradomiliksupir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    },
+                    {
+                        label: 'TGL APP HISTORY trado MILIK supir',
+                        name: 'tglapprovalhistorytradomiliksupir',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    {
+                        label: 'TGL UPDATE HISTORY trado MILIK supir',
+                        name: 'tglupdatehistorytradomiliksupir',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    //                 
                     {
                         label: 'PHOTO STNK',
                         name: 'photostnk',
@@ -981,7 +1148,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editTrado(selectedId)
+                                cekValidasi(selectedId, 'EDIT')
                             }
                         }
                     },
@@ -994,7 +1161,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId, 'DELETE')
                             }
                         }
                     },
@@ -1032,15 +1199,17 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                        class: 'btn btn-purple btn-sm mr-1 ',
+                        item: [{
                                 id: 'approveun',
-                                text: "UN/APPROVAL Reminder Oli Mesin",
+                                text: "APPROVAL/UN Reminder Oli Mesin",
+                                color: "btn-success",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
 
@@ -1049,17 +1218,32 @@
                                 }
                             },
                             {
+                                id: 'approvalaktif',
+                                text: "APPROVAL AKTIF",
+                                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalaktif') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalaktif') }}`) {
+                                        approvalAktif('trado')
+                                    }
+                                }
+                            },
+                            {
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
+                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`),
                                 onClick: () => {
-
-                                    approvalNonAktif('trado')
-
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`) {
+                                        approvalNonAktif('trado')
+                                    }
                                 }
                             },
                             {
                                 id: 'approvalPersneling',
-                                text: "un/Approval Reminder Oli Persneling",
+                                text: "APPROVAL/UN Reminder Oli Persneling",
+                                color: "btn-primary",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
                                         approvalPersneling();
@@ -1069,7 +1253,9 @@
                             },
                             {
                                 id: 'approvalGardan',
-                                text: "un/Approval Reminder Oli Gardan",
+                                text: "APPROVAL/UN Reminder Oli Gardan",
+                                color: "btn-purple",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
                                         approvalGardan();
@@ -1079,7 +1265,9 @@
                             },
                             {
                                 id: 'approvalSaringanHawa',
-                                text: "un/Approval Reminder Oli Saringan Hawa",
+                                text: "APPROVAL/UN Reminder Oli Saringan Hawa",
+                                color: "btn-orange",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
                                         approvalSaringanHawa();
@@ -1089,7 +1277,9 @@
                             },
                             {
                                 id: 'StoreApprovalTradoTanpa',
-                                text: "un/Approval Trado Tanpa Keterangan/Gambar",
+                                text: "APPROVAL/UN Trado Tanpa Keterangan/Gambar",
+                                color: "btn-warning",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'StoreApprovalTradoTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
@@ -1099,9 +1289,31 @@
                                     }
                                 }
                             },
+                            {
+                                id: 'approvalHistoryTradoMilikMandor',
+                                text: "APPROVAL/UN History Trado Milik Mandor",
+                                color: "btn-danger",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`) {
+                                        approvalHistoryTradoMilikMandor();
+                                    }
+                                }
+                            },
+                            {
+                                id: 'approvalHistoryTradoMilikSupir',
+                                text: "APPROVAL/UN History Trado Milik Supir",
+                                color: "btn-success",
+                                hidden: (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`) {
+                                        approvalHistoryTradoMilikSupir();
+                                    }
+                                }
+                            },
                             // {
                             //     id: 'approvalTradoGambar',
-                            //     text: "un/Approval Trado tanpa Gambar",
+                            //     text: "APPROVAL/UN Trado tanpa Gambar",
                             //     onClick: () => {
                             //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradogambar') }}`) {
                             //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1117,7 +1329,7 @@
                             // },
                             // {
                             //     id: 'approvalTradoKeterangan',
-                            //     text: "un/Approval Trado tanpa Keterangan",
+                            //     text: "APPROVAL/UN Trado tanpa Keterangan",
                             //     onClick: () => {
                             //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradoketerangan') }}`) {
                             //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1140,15 +1352,18 @@
                         title: 'Lainnya',
                         caption: 'Lainnya',
                         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                        class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        class: 'btn btn-secondary btn-sm mr-1 ',
+                        item: [{
                             id: 'historyMandor',
                             text: "History Trado Milik Mandor",
+                            color: "btn-success",
+                            hidden: (!`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`),
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`) {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
-                                        editTradoMilikMandor(selectedOne[1])
+                                        // editTradoMilikMandor(selectedOne[1])
+                                        cekValidasihistory(selectedOne[1], 'historyMandor')
                                     } else {
                                         showDialog(selectedOne[1])
                                     }
@@ -1157,11 +1372,15 @@
                         }, {
                             id: 'historySupir',
                             text: "History Trado Milik Supir",
+                            color: "btn-info",
+                            hidden: (!`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`),
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`) {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
-                                        editTradoMilikSupir(selectedOne[1])
+                                        // editTradoMilikSupir(selectedOne[1])
+                                        cekValidasihistory(selectedOne[1], 'historySupir')
+
                                     } else {
                                         showDialog(selectedOne[1])
                                     }
@@ -1199,21 +1418,32 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('trado', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('trado', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                // if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
+                //     $('#edit').attr('disabled', 'disabled')
+                // }
+
+                if ((!`{{ $myAuth->hasPermission('trado', 'update') }}`) && (!`{{ $myAuth->hasPermission('trado', 'updateuser') }}`)) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('trado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
             if (!`{{ $myAuth->hasPermission('trado', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
@@ -1231,6 +1461,12 @@
             if (!`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`) {
                 hakApporveCount--
                 $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
@@ -1257,6 +1493,19 @@
                 $('#StoreApprovalTradoTanpa').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`) {
+                hakApporveCount--
+                $('#approvalHistoryTradoMilikMandor').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`) {
+                hakApporveCount--
+                $('#approvalHistoryTradoMilikSupir').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+
 
 
 
@@ -1282,7 +1531,7 @@
 
             if (hakLainnyaCount < 1) {
                 // $('#approve').hide()
-                $('#lainnya').attr('disabled', 'disabled')
+                $('#lainnya').hide()
             }
 
         }
@@ -1462,6 +1711,8 @@
                 });
             });
         }
+
+
 
         const setStatusApprovalOptions = function(relatedForm) {
             return new Promise((resolve, reject) => {

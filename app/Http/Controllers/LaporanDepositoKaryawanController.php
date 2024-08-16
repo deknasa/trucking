@@ -39,8 +39,9 @@ class LaporanDepositoKaryawanController extends MyController
             ->get(config('app.api_url') . 'laporandepositokaryawan/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporandepositokaryawan', compact('data', 'user', 'detailParams'));
+        return view('reports.laporandepositokaryawan', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -55,6 +56,7 @@ class LaporanDepositoKaryawanController extends MyController
             ->get(config('app.api_url') . 'laporandepositokaryawan/export', $detailParams);
 
         $data = $header['data'];
+        $namacabang = $header['namacabang'];
 
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
@@ -65,21 +67,25 @@ class LaporanDepositoKaryawanController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:G2');
 
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
         $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->sampai)));
 
-        $sheet->setCellValue('A2', strtoupper('Laporan Deposito Karyawan'));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->mergeCells('A2:G2');
-
-        $sheet->setCellValue('A3', strtoupper('Periode: ' . $tglsampai));
+        $sheet->setCellValue('A3', strtoupper('Laporan Deposito Karyawan'));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:G3');
 
+        $sheet->setCellValue('A4', strtoupper('Periode: ' . $tglsampai));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:G4');
 
-        $header_start_row = 5;
+
+        $header_start_row = 6;
         $detail_start_row = $header_start_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -188,20 +194,20 @@ class LaporanDepositoKaryawanController extends MyController
         }
 
         //format decimal
-        $sheet->getStyle("A6:A$detail_start_row")->applyFromArray($styleArray)->getNumberFormat()->setFormatCode("0.0");
+        $sheet->getStyle("A7:A$detail_start_row")->applyFromArray($styleArray)->getNumberFormat()->setFormatCode("0.0");
 
         //total
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
 
-        $totalnomdeposito = "=SUM(D6:D" . ($detail_start_row - 2) . ")";
+        $totalnomdeposito = "=SUM(D7:D" . ($detail_start_row - 2) . ")";
         $sheet->setCellValue("D$total_start_row", $totalnomdeposito)->getStyle("D$total_start_row")->applyFromArray($style_number);
 
-        $totalpenarikan = "=SUM(E6:E" . ($detail_start_row - 2) . ")";
+        $totalpenarikan = "=SUM(E7:E" . ($detail_start_row - 2) . ")";
         $sheet->setCellValue("E$total_start_row", $totalpenarikan)->getStyle("E$total_start_row")->applyFromArray($style_number);
 
-        $total = "=SUM(F6:F" . ($detail_start_row - 2) . ")";
+        $total = "=SUM(F7:F" . ($detail_start_row - 2) . ")";
         $sheet->setCellValue("F$total_start_row", $total)->getStyle("F$total_start_row")->applyFromArray($style_number);
 
         //format currency

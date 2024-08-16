@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-8 col-md-10">
                                 <input type="hidden" name="reminderemail_id">
-                                <input type="text" name="reminderemail" class="form-control reminderemail-lookup">
+                                <input type="text" id="reminderemail" name="reminderemail" class="form-control reminderemail-lookup">
                             </div>
                         </div>
 
@@ -84,6 +84,7 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let isEditTgl
+    var data_id
 
     $(document).ready(function() {
 
@@ -215,6 +216,7 @@
             form.find('#btnSubmit').prop('disabled', true)
         }
         initSelect2(form.find('.select2bs4'), true)
+        data_id = $('#crudForm').find('[name=id]').val();
 
         initLookup()
         initDatepicker()
@@ -222,9 +224,41 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy(data_id)
         clearSelectedRows()
         $('#crudModal').find('.modal-body').html(modalBody)
     })
+
+    function removeEditingBy(id) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'toemail'
+
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
+
 
     function createToEmail() {
         let form = $('#crudForm')
@@ -429,14 +463,30 @@
     }
 
     function cekValidasi(Id, Aksi) {
-
-        if (Aksi == 'EDIT') {
-            editToEmail(Id)
-        }
-        if (Aksi == 'DELETE') {
-            deleteToEmail(Id)
-        }
-
+        $.ajax({
+            url: `{{ config('app.api_url') }}toemail/${Id}/cekValidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            data: {
+                aksi: Aksi,
+            },
+            success: response => {
+                var error = response.error
+                if (error == true) {
+                    showDialog(response.message)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editToEmail(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteToEmail(Id)
+                    }
+                }
+            }
+        })
     }
 
     const setStatusAktifOptions = function(relatedForm) {
@@ -532,6 +582,36 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        // $('.reminderemail-lookup').lookupMaster({
+        //     title: 'pengeluaran stok Lookup',
+        //     fileName: 'reminderemailMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'reminderemail_id',
+        //             searchText: 'reminderemail-lookup',
+        //             title: 'Pengeluaran Stok',
+        //             typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (reminderemail, element) => {
+        //         $('#crudForm [name=reminderemail_id]').first().val(reminderemail.id)
+        //         element.val(reminderemail.keterangan)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=reminderemail_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
 
     }
     const setTglBukti = function(form) {

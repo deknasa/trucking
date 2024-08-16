@@ -21,7 +21,7 @@
                         <a href="trado?status=AKTIF" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-               
+
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -36,8 +36,8 @@
                         <a href="supir?status=AKTIF" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                 <!-- ./col -->
-                 <div class="col-lg-3 col-6">
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
@@ -68,7 +68,7 @@
             </div>
 
             <div class="row">
-             
+
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-yellow-light">
@@ -108,7 +108,7 @@
                 </div>
             </div>
             <div class="row">
-                
+
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-olive">
@@ -147,7 +147,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
 </div>
 </section>
@@ -156,6 +156,9 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        pleaseSelectARow = `<?php echo $data['error']; ?>`;
+        var from_login = "{{ session()->has('from_login') }}"
+
         if (!`{{ $myAuth->hasPermission('reminderoli', 'index') }}`) {
             $('#reminderoli').attr('href', '#')
         }
@@ -186,7 +189,18 @@
         if (!`{{ $myAuth->hasPermission('statusolitrado', 'index') }}`) {
             $('#statusolitrado').attr('href', '#')
         }
+        if (from_login) {
+            showLoginModal()
+        }
     })
+
+    function showLoginModal() {
+        let show = `<?php echo $reminder['show']; ?>`;
+        if (show == 1) {
+            let dataApprovalFinal = `<?php echo $reminder['data']; ?>`;
+            showDialog('Ada Absensi Belum Approval Final, Tanggal : ' + dataApprovalFinal);
+        }
+    }
 </script>
 @endpush
 @endsection

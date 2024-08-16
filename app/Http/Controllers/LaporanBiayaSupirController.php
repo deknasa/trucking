@@ -49,6 +49,7 @@ class LaporanBiayaSupirController extends MyController
             }
         }
 
+        $namacabang = $header['namacabang'];
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -56,14 +57,18 @@ class LaporanBiayaSupirController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
-
-        $sheet->setCellValue('A2', strtoupper($data[0]['judulLaporan']));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:G2');
 
-        $sheet->setCellValue('A3', strtoupper('Periode : ' . $request->dari . ' s/d ' . $request->sampai));
+        $sheet->setCellValue('A3', strtoupper($data[0]['judulLaporan']));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:G3');
+
+        $sheet->setCellValue('A4', strtoupper('Periode : ' . $request->dari . ' s/d ' . $request->sampai));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:G4');
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -137,7 +142,7 @@ class LaporanBiayaSupirController extends MyController
             ],
         ];
         
-        $detail_start_row = 5;
+        $detail_start_row = 6;
 
         foreach ($header_columns as $data_columns_index => $data_column) {
             if ($data_column['label'] == 'No KTP') {

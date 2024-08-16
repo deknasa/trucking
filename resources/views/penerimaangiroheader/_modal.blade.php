@@ -133,6 +133,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-batal btn-secondary">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -375,6 +379,15 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+
+        function submit(button) {
 
             let method
             let url
@@ -387,6 +400,10 @@
                 data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
             })
 
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -422,6 +439,10 @@
             data.push({
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
+            })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
             })
 
 
@@ -461,23 +482,33 @@
                 success: response => {
 
                     // isAllowedForceEdit = false
-                    id = response.data.id
-                    console.log(id)
-                    $('#crudModal').modal('hide')
-                    $('#crudModal').find('#crudForm').trigger('reset')
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        console.log(id)
+                        $('#crudModal').modal('hide')
+                        $('#crudModal').find('#crudForm').trigger('reset')
 
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
+                    } else {
 
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        // showSuccessDialog(response.message, response.data.nobukti)
+                        createPenerimaanGiro()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+
                     }
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
@@ -512,7 +543,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -520,6 +551,11 @@
 
         setFormBindKeys(form)
 
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         activeGrid = null
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
@@ -533,12 +569,52 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
         // isAllowedForceEdit = false
         // TAMBAH INI
         selectIndex = 0
     })
+
+    function removeEditingBy(id) {
+
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'penerimaangiroheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
 
 
     // function tarikPelunasan(aksi, id = null) {
@@ -826,7 +902,7 @@
     }
 
 
-    function cekValidasi(Id, Aksi) {
+    function cekValidasi(Id, Aksi, nobukti) {
         $.ajax({
             url: `{{ config('app.api_url') }}penerimaangiroheader/${Id}/cekvalidasi`,
             method: 'POST',
@@ -835,26 +911,21 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             data: {
-                aksi: Aksi
+                aksi: Aksi,
+                nobukti: nobukti
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'PRINTER BESAR') {
-                            window.open(`{{ route('penerimaangiroheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-                        } else if (Aksi == 'PRINTER KECIL') {
-                            window.open(`{{ route('penerimaangiroheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-                        } else {
-                            cekValidasiAksi(Id, Aksi)
-                        }
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('penerimaangiroheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('penerimaangiroheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
             }
         })
@@ -870,9 +941,9 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kondisi = response.kondisi
-                if (kondisi == true) {
-                    showDialog(response.message['keterangan'])
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
                     if (Aksi == 'EDIT') {
                         editPenerimaanGiro(Id)

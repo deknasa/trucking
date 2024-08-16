@@ -24,6 +24,7 @@ class AbsenTradoController extends MyController
         
         $data = [
             'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('absentrado.index', compact('title', 'data'));

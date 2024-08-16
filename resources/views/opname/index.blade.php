@@ -39,37 +39,37 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
 
   function clearSelectedRows() {
@@ -98,13 +98,13 @@ function checkboxHandler(element) {
       }
     })
   }
-reloadGrid()
-setSpaceBarCheckedHandler()
+  reloadGrid()
+  setSpaceBarCheckedHandler()
 
   $(document).ready(function() {
     setRange()
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('opnameheader')
       selectedRows = []
       selectedbukti = []
@@ -116,13 +116,12 @@ setSpaceBarCheckedHandler()
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: '',
             name: '',
             width: 30,
@@ -137,9 +136,9 @@ setSpaceBarCheckedHandler()
               dataInit: function(element) {
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
-                
+
                 $(element).on('click', function() {
-                  
+
                   $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
@@ -147,7 +146,7 @@ setSpaceBarCheckedHandler()
                     clearSelectedRows()
                   }
                 })
-                
+
               }
             },
             formatter: (value, rowOptions, rowData) => {
@@ -211,75 +210,75 @@ setSpaceBarCheckedHandler()
             }
           },
           {
-          label: 'Status approval',
-          name: 'statusapproval',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS APPROVAL',
-                    subgrp: 'STATUS APPROVAL'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.id,
-                      text: row.text
-                    }));
-                    
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-                    
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusAktif = JSON.parse(value)
-            if (!statusAktif) {
-              return ''
-            }
-            let formattedValue = $(`
+            label: 'Status approval',
+            name: 'statusapproval',
+            stype: 'select',
+            searchoptions: {
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4",
+                  ajax: {
+                    url: `${apiUrl}parameter/combo`,
+                    dataType: 'JSON',
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                      grp: 'STATUS APPROVAL',
+                      subgrp: 'STATUS APPROVAL'
+                    },
+                    beforeSend: () => {
+                      // clear options
+                      $(element).data('select2').$results.children().filter((index, element) => {
+                        // clear options except index 0, which
+                        // is the "searching..." label
+                        if (index > 0) {
+                          element.remove()
+                        }
+                      })
+                    },
+                    processResults: (response) => {
+                      let formattedResponse = response.data.map(row => ({
+                        id: row.id,
+                        text: row.text
+                      }));
+
+                      formattedResponse.unshift({
+                        id: '',
+                        text: 'ALL'
+                      });
+
+                      return {
+                        results: formattedResponse
+                      };
+                    },
+                  }
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+              if (!statusAktif) {
+                return ''
+              }
+              let formattedValue = $(`
             <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
               <span>${statusAktif.SINGKATAN}</span>
               </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusAktif = JSON.parse(rowObject.statusapproval)
               if (!statusAktif) {
                 return ''
-              } 
+              }
               return ` title="${statusAktif.MEMO}"`
             }
           },
-          
+
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -380,7 +379,7 @@ setSpaceBarCheckedHandler()
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -420,7 +419,7 @@ setSpaceBarCheckedHandler()
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -490,7 +489,7 @@ setSpaceBarCheckedHandler()
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId, 'EDIT')                
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -503,22 +502,22 @@ setSpaceBarCheckedHandler()
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId, 'DELETE')                
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
 
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'report',
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportStokOpname',
-                text: 'report Stok Opname',//blank
+                text: 'report Stok Opname', //blank
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -531,6 +530,7 @@ setSpaceBarCheckedHandler()
               {
                 id: 'reportStokBukti',
                 text: 'report Stok Bukti',
+                color:'btn-info',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -543,6 +543,7 @@ setSpaceBarCheckedHandler()
               {
                 id: 'reportStokBaning',
                 text: "report Stok Banding",
+                color:'btn-primary',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -559,22 +560,11 @@ setSpaceBarCheckedHandler()
             title: 'Export',
             caption: 'Export',
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1  dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-warning btn-sm mr-1  ',
+            item: [{
                 id: 'exportStokBukti',
-                text: 'export Stok Bukti',//blank
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokOpname`)
-                  }
-                }
-              },
-              {
-                id: 'exportStokBukti',
-                text: 'export Stok Opname',//blank
+                text: 'export Stok Bukti', //blank
+                color:'btn-success',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -585,8 +575,22 @@ setSpaceBarCheckedHandler()
                 }
               },
               {
+                id: 'exportStokOpname',
+                text: 'export Stok Opname', //blank
+                color:'btn-info',
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokOpname`)
+                  }
+                }
+              },
+              {
                 id: 'exportStokBaning',
                 text: "export Stok Banding",
+                color:'btn-primary',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -597,28 +601,28 @@ setSpaceBarCheckedHandler()
                 }
               },
             ]
-          }, 
+          },
           {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
-                text: ' UN/APPROVAL status',
+                text: ' APPROVAL/UN status',
                 onClick: () => {
                   if (!selectedRows.length) {
-                      showDialog('Harap pilih salah satu record')
-                    } else {
-                      approvalStatus()
-                    }
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    approvalStatus()
+                  }
                 }
               },
-              
+
               {
                 id: 'approval-buka-cetak',
-                text: "Approval Buka Cetak PENGELUARAN STOK",
+                text: "Approval Buka Cetak OPNAME",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -632,9 +636,25 @@ setSpaceBarCheckedHandler()
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas OPNAME",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'OPNAMEHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
             ],
-          } 
-          
+          }
+
         ]
 
       })
@@ -666,33 +686,47 @@ setSpaceBarCheckedHandler()
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'store') }}`) {
-          $('#add').attr('disabled', 'disabled')
-        }
-    
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'update') }}`) {
-          $('#edit').attr('disabled', 'disabled')
-        }
-    
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'destroy') }}`) {
-          $('#delete').attr('disabled', 'disabled')
-        }
-    
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'export') }}`) {
-          $('#export').attr('disabled', 'disabled')
-        }
-    
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
-          $('#report').attr('disabled', 'disabled')
-        }
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
-          $('#approve').attr('disabled', 'disabled')
-        }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
       }
 
-    
-   
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
+        $('#approve').attr('disabled', 'disabled')
+      }
+
+      let hakApporveCount = 0;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('opnameheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+      }
+    }
+
+
+
     function approve(id) {
       if (approveRequest) {
         approveRequest.abort();
@@ -706,16 +740,16 @@ setSpaceBarCheckedHandler()
         },
         success: response => {
           getStatusApproval()
-          .then(statusApproval=>{
-            
-            // console.log(statusApproval);
-            let msg = `YAKIN Approve Opname `
-            if (response.data.statusapproval === statusApproval) {
-              msg = `YAKIN UnApprove Opname `
-            }
-            showConfirm(msg, response.data.nobukti, `opnameheader/${response.data.id}/approval`)
+            .then(statusApproval => {
 
-          })
+              // console.log(statusApproval);
+              let msg = `YAKIN Approve Opname `
+              if (response.data.statusapproval === statusApproval) {
+                msg = `YAKIN UnApprove Opname `
+              }
+              showConfirm(msg, response.data.nobukti, `opnameheader/${response.data.id}/approval`)
+
+            })
         },
       })
     }
@@ -725,7 +759,7 @@ setSpaceBarCheckedHandler()
       let form = $('#crudForm')
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
-      
+
       $.ajax({
         url: `${apiUrl}opnameheader/approval`,
         method: 'POST',
@@ -739,8 +773,8 @@ setSpaceBarCheckedHandler()
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          
-          $('#jqGrid').jqGrid('setGridParam',{
+
+          $('#jqGrid').jqGrid('setGridParam', {
             postData: {
               proses: 'reload'
             }
@@ -752,7 +786,7 @@ setSpaceBarCheckedHandler()
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            
+
             setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.responseJSON)
@@ -762,7 +796,7 @@ setSpaceBarCheckedHandler()
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-      
+
     }
 
   })

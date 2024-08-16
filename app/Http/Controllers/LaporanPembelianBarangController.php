@@ -73,6 +73,7 @@ class LaporanPembelianBarangController extends MyController
         if(count($pengeluaran) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $responses['namacabang'];
         $judul = $pengeluaran[0]['judul'] ?? '';
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
@@ -85,17 +86,21 @@ class LaporanPembelianBarangController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:I1');
-
-        $sheet->setCellValue('A2', strtoupper('Laporan Pembelian Stok'));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:I2');
 
-        $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->setCellValue('A3', strtoupper('Laporan Pembelian Stok'));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:I3');
 
-        $header_start_row = 5;
-        $detail_start_row = 6;
+        $sheet->setCellValue('A4', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:I4');
+
+        $header_start_row = 6;
+        $detail_start_row = 7;
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -233,11 +238,11 @@ class LaporanPembelianBarangController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':I' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        $totalDebet = "=SUM(E7:E" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-        $totalDebet = "=SUM(H6:H" . ($detail_start_row - 1) . ")";
+        $totalDebet = "=SUM(H7:H" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         

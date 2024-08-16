@@ -19,6 +19,7 @@
                   <label class="col-sm-2 col-form-label">No KTP<span class="text-danger">*</span></label>
                   <div class="col-sm-10">
                     <input type="text" name="noktp" id="noktp" maxlength="16" class="form-control numbernoseparate">
+                    <div id="pesan-enter-noktp">Setelah mengisi Noktp tekan <b>enter</b> </div>
                   </div>
                 </div>
 
@@ -62,7 +63,7 @@
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label">NO Telepon / Handphone <span class="text-danger">*</span></label>
                   <div class="col-sm-10">
-                    <input type="text" name="telp" class="form-control numbernoseparate" maxlength="50">
+                    <input type="text" name="telp" class="form-control numbernoseparate" maxlength="15">
                   </div>
                 </div>
 
@@ -79,9 +80,8 @@
                       STATUS POSTING TNL <span class="text-danger">*</span></label>
                   </div>
                   <div class="col-12 col-md-10">
-                    <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
-                      <option value="">-- PILIH STATUS POSTING TNL --</option>
-                    </select>
+                    <input type="hidden" name="statuspostingtnl">
+                    <input type="text" name="statuspostingtnlnama" id="statuspostingtnlnama" class="form-control lg-form statuspostingtnl-lookup">
                   </div>
                 </div>
               </div>
@@ -124,9 +124,8 @@
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                   <div class="col-sm-10">
-                    <select name="statusaktif" class="form-control select2bs4" style="width: 100%;">
-                      <option value="">-- PILIH STATUS AKTIF --</option>
-                    </select>
+                    <input type="hidden" name="statusaktif">
+                    <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
                   </div>
                 </div>
 
@@ -261,7 +260,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto SKCK <span class="text-danger">*</span></label>
+                    <label class="col-form-label">Upload Foto SKCK </label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photoskck" id="my-dropzone"></div>
@@ -281,7 +280,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Domisili <span class="text-danger">*</span></label>
+                    <label class="col-form-label">Upload Foto Domisili</label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photodomisili" id="my-dropzone"></div>
@@ -301,7 +300,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Vaksin <span class="text-danger">*</span></label>
+                    <label class="col-form-label">Upload Foto Vaksin</label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photovaksin" id="my-dropzone"></div>
@@ -355,6 +354,7 @@
 
   let dropzones = []
   let hasFormBindKeys = false
+  var data_id
   let modalBody = $('#crudModal').find('.modal-body').html()
   let linkPdf
   $(document).ready(function() {
@@ -448,23 +448,63 @@
   })
 
 
-  // $('#crudModal').on('shown.bs.modal', () => {
-  //   let form = $('#crudForm')
+  $('#crudModal').on('shown.bs.modal', () => {
+    data_id = $('#crudForm').find('[name=id]').val();
 
-  //   setFormBindKeys(form)
+    //   let form = $('#crudForm')
 
-  //   activeGrid = null
+    //   setFormBindKeys(form)
 
-  //   getMaxLength(form)
-  //   initLookup()
-  // })
+    //   activeGrid = null
+
+    //   getMaxLength(form)
+    // initLookup()
+  })
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
     })
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'supir'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
+  $('#crudForm [name=noktp]').focus(function() {
+    $(`#pesan-enter-noktp`).show();
+  });
+
+  $('#crudForm [name=noktp]').blur(function() {
+    $(`#pesan-enter-noktp`).hide();
+  });
 
   $('#crudForm [name=noktp]').bind("enterKey", function(e) {
     let form = $('#crudForm');
@@ -490,6 +530,13 @@
               element.val(dateFormat(value))
             } else {
               element.val(value)
+            }
+
+            if (index == "namasupir") {
+              element.prop("readonly", true)
+            }
+            if (index == "tglmasuk") {
+              element.val(dateFormat(''))
             }
           })
           initDropzone('edit', response.data)
@@ -534,14 +581,14 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
         showDefault(form)
           .then(() => {
-            
+
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
             let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
             name.attr('disabled', false)
@@ -552,6 +599,17 @@
               background: '#e9ecef'
             })
             $('#crudModal').modal('show')
+
+            form.find(`[name="noktp"]`).attr('readonly', false)
+            form.find(`[name="namasupir"]`).attr('readonly', false)
+            form.find(`[name="tgllahir"]`).attr('readonly', false)
+            form.find(`[name="alamat"]`).attr('readonly', false)
+            form.find(`[name="kota"]`).attr('readonly', false)
+            form.find(`[name="nokk"]`).attr('readonly', false)
+            form.find(`[name="tglmasuk"]`).attr('readonly', false)
+            form.find(`[name="statusaktif"]`).attr('readonly', false)
+            form.find(`[name="keterangan"]`).attr('readonly', false)
+
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -570,7 +628,7 @@
     initDropzonePdf(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2(form.find('.select2bs4'), true)
+    // initSelect2(form.find('.select2bs4'), true)
     form.find('[name]').removeAttr('disabled')
   }
 
@@ -593,8 +651,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -605,7 +663,7 @@
             initDropzonePdf(form.data('action'), supir)
             initLookup()
             initDatepicker()
-            initSelect2(form.find('.select2bs4'), true)
+            // initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
             form.find('[name=statuspostingtnl]').prop('disabled', true)
           })
@@ -650,8 +708,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -711,8 +769,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusPostingTnlOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusPostingTnlOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -776,8 +834,27 @@
             } else {
               element.val(value)
             }
-          })
 
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statuspostingtnlnama') {
+              element.data('current-value', value)
+            }
+          })
+          if (response.data.noktp_readonly != '') {
+            form.find(`[name="noktp"]`).attr(response.data.noktp_readonly, true)
+            form.find(`[name="namasupir"]`).attr(response.data.namasupir_readonly, true)
+            form.find(`[name="tgllahir"]`).attr(response.data.tgllahir_readonly, true)
+            form.find(`[name="alamat"]`).attr(response.data.alamat_readonly, true)
+            form.find(`[name="kota"]`).attr(response.data.kota_readonly, true)
+            form.find(`[name="nokk"]`).attr(response.data.nokk_readonly, true)
+            form.find(`[name="tglmasuk"]`).attr(response.data.tglmasuk_readonly, true)
+            form.find(`[name="statusaktif"]`).attr(response.data.statusaktif_readonly, true)
+            form.find(`[name="keterangan"]`).attr(response.data.keterangan_readonly, true)
+
+          }
           resolve(response.data)
         },
         error: error => {
@@ -878,6 +955,74 @@
         }
       })
     }
+
+    $(`.statuspostingtnl-lookup`).lookupMaster({
+      title: 'Status Posting TNL Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS POSTING TNL',
+          subgrp: 'STATUS POSTING TNL',
+          searching: 1,
+          valueName: `statuspostingtnl`,
+          searchText: `statuspostingtnl-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Posting TNL'
+        };
+      },
+      onSelectRow: (statuspostingtnl, element) => {
+        $('#crudForm [name=statuspostingtnl]').first().val(statuspostingtnl.id)
+        element.val(statuspostingtnl.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statuspostingtnl"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (statusaktif, element) => {
+        $('#crudForm [name=statusaktif]').first().val(statusaktif.id)
+        element.val(statusaktif.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function handlePDFClick(event) {
@@ -996,17 +1141,35 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     if (data[paramName] == '') {
       $('.dropzoneImg').each((index, element) => {
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
             url: 'test',
+            previewTemplate: document.querySelector('.dz-preview').innerHTML,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'image/*',
+            minFilesize: 100, // Set the minimum file size in kilobytes
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 5) {
+                  this.removeFile(file);
+                }
+                if ($(element).data('field') != 'photosupir') {
+
+                  if (file.size < (this.options.minFilesize * 1024)) {
+                    showDialog('ukuran file minimal 100 kb')
+                    this.removeFile(file);
+                  }
+                }
+              });
             }
           })
         }
@@ -1038,6 +1201,7 @@
   }
 
   function assignAttachmentPdf(dropzone, data) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     const paramName = dropzone.options.paramName
     const type = paramName.substring(3)
     if (data[paramName] == '') {
@@ -1048,10 +1212,38 @@
             url: 'test',
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'application/pdf',
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 1) {
+                  this.removeFile(file);
+                } else {
+                  linkPdf.href = window.URL.createObjectURL(file);
+
+                  const currentDropzone = this;
+                  const reader = new FileReader();
+                  reader.onload = function(event) {
+                    const arrayBuffer = event.target.result;
+                    const uint8Array = new Uint8Array(arrayBuffer);
+
+                    // Check for PDF magic numbers in the first few bytes (PDF files start with '%PDF')
+                    const isPdf = uint8Array[0] === 0x25 && uint8Array[1] === 0x50 && uint8Array[2] === 0x44 && uint8Array[3] === 0x46;
+
+                    console.log(isPdf)
+                    if (!isPdf) {
+                      // If the file is not a PDF, remove it from the dropzone
+                      currentDropzone.removeFile(file);
+                      showDialog('TYPE FILE BUKAN PDF')
+                    }
+                  };
+
+                  reader.readAsArrayBuffer(file);
+                }
+                // $(file.previewElement).find('img').prop('src',appUrl+'/images/pdf_icon.png')
+              });
             }
           })
         }
@@ -1090,86 +1282,87 @@
   }
 
 
-  const setStatusPostingTnlOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuspostingtnl]').empty()
-      relatedForm.find('[name=statuspostingtnl]').append(
-        new Option('-- PILIH POSTING TNL --', '', false, true)
-      ).trigger('change')
+  // const setStatusPostingTnlOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statuspostingtnl]').empty()
+  //     relatedForm.find('[name=statuspostingtnl]').append(
+  //       new Option('-- PILIH POSTING TNL --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS POSTING TNL"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statuspostingTnl => {
-            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS POSTING TNL"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statuspostingTnl => {
+  //           let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
 
-            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
+
   const setTampilan = function(relatedForm) {
     return new Promise((resolve, reject) => {
       let data = [];
@@ -1247,6 +1440,49 @@
     xhr.send();
   }
 
+  function approve() {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}supir/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsSupir
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsSupir = []
+        $('#gs_check').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
 
   function approvenonaktif() {
 
@@ -1293,6 +1529,118 @@
 
   }
 
+  function approveaktif() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}supir/approvalaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsSupir
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsSupir = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
+
+  function approvalHistorySupirMilikMandor(id) {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}supir/approvalhistorysupirmilikmandor`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        table: 'trado'
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
+  function cekValidasihistory(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}supir/${Id}/cekvalidasihistory`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'historyMandor') {
+            editSupirMilikMandor(Id)
+          }
+        }
+
+      }
+    })
+  }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {

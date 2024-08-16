@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         
         <form action="" method="post">
 
@@ -82,6 +87,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -105,6 +114,15 @@
 
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
       event.preventDefault()
 
       let method
@@ -186,6 +204,7 @@
           indexRow: indexRow,
           page: page,
           limit: limit,
+          button: button,
           tgldariheader: $('#tgldariheader').val(),
           tglsampaiheader: $('#tglsampaiheader').val()
         },
@@ -193,24 +212,38 @@
           id = response.data.id
 
           $('#crudModal').find('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+  
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+  
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
-
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+  
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          }else{
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $("#tableOpname")[0].p.selectedRowIds = [];
+            $('#tableOpname').jqGrid("clearGridData");
+            $("#tableOpname")
+            .jqGrid("setGridParam", {
+              selectedRowIds: []
+            })
+            // showSuccessDialog(response.message, response.data.nobukti)
+            createOpname();
           }
         },
         error: error => {
@@ -260,7 +293,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -270,6 +303,11 @@
 
     activeGrid = null
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     initLookup()
     initDatepicker()
   })
@@ -290,7 +328,7 @@
       Save
     `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Opname')
+    $('#crudModalTitle').text('Add Opname')
     if (selectedRows.length > 0) {
               clearSelectedRows()
             }

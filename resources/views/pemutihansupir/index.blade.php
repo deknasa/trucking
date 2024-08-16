@@ -35,6 +35,7 @@
   let tgldariheader
   let tglsampaiheader
   let selectedRows = [];
+  let activeGrid
 
   let selectedbukti = [];
 
@@ -223,9 +224,28 @@ function checkboxHandler(element) {
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
               let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let bankpenerimaan = rowData.penerimaanbank_id
               let url = "{{route('penerimaanheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpenerimaan}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+          },
+          {
+            label: 'NO BUKTI PENGELUARAN',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            name: 'pengeluaran_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluaranheader
+              let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let bankpengeluaran = rowData.pengeluaranbank_id              
+              let url = "{{route('pengeluaranheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpengeluaran}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -254,7 +274,7 @@ function checkboxHandler(element) {
               let tglsampai = rowData.tglsampaiheaderposting
               let url = "{{route('penerimaantruckingheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -271,7 +291,7 @@ function checkboxHandler(element) {
               let tglsampai = rowData.tglsampaiheadernonposting
               let url = "{{route('penerimaantruckingheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -419,33 +439,35 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pemutihansupir.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')                    
                   }
                 }
               },
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pemutihansupir.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')                    
                   }
                 }
               },
@@ -468,27 +490,67 @@ function checkboxHandler(element) {
               }
             }
           },
-
           {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PEMUTIHAN SUPIR",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PEMUTIHAN SUPIR",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
+                hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalBukaCetak(tglbukacetak, 'PEMUTIHANSUPIR', selectedRows, selectedbukti);
+                    approvalBukaCetak(tglbukacetak, 'PEMUTIHANSUPIR', selectedRowsIndex, selectedbukti);
 
+                  }
                 }
-              }
-            }, ],
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas PEMUTIHAN SUPIR",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
+                hidden:(!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PEMUTIHANSUPIR', selectedRowsIndex, selectedbukti);
+
+                  }
+                }
+              },            
+            ],
           }
+
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //     id: 'approval-buka-cetak',
+          //     text: "Approval Buka Cetak PEMUTIHAN SUPIR",
+          //     onClick: () => {
+          //       if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
+          //         let tglbukacetak = $('#tgldariheader').val().split('-');
+          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+          //         approvalBukaCetak(tglbukacetak, 'PEMUTIHANSUPIR', selectedRows, selectedbukti);
+
+          //       }
+          //     }
+          //   }, 
+          // ],
+          // }
         ],
         buttons: [{
             id: 'add',
@@ -537,7 +599,8 @@ function checkboxHandler(element) {
               }
             }
           },
-        ]
+        ],
+
       })
 
     /* Append clear filter button */
@@ -597,6 +660,11 @@ function checkboxHandler(element) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()

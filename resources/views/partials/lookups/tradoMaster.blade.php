@@ -47,243 +47,181 @@ $idLookup = isset($id) ? $id : null;
         label: 'NO POLISI',
         name: 'kodetrado',
       },
-      
+
     ];
   } else {
-    column = [
+    column = [{
+        label: 'ID',
+        name: 'id',
+        width: '50px',
+        search: false,
+        hidden: true
+      },
       {
-          label: 'ID',
-          name: 'id',
-          width: '50px',
-          search: false,
-          hidden: true
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-        },
-        {
-          label: 'NO POLISI',
-          name: 'kodetrado',
-        },
-        // {
-        //   label: 'STATUS AKTIF',
-        //   name: 'statusaktif',
-        //   stype: 'select',
-        //   searchoptions: {
-        //     dataInit: function(element) {
-        //       $(element).select2({
-        //         width: 'resolve',
-        //         theme: "bootstrap4",
-        //         ajax: {
-        //           url: `${apiUrl}parameter/combo`,
-        //           dataType: 'JSON',
-        //           headers: {
-        //             Authorization: `Bearer ${accessToken}`
-        //           },
-        //           data: {
-        //             grp: 'STATUS AKTIF',
-        //             subgrp: 'STATUS AKTIF'
-        //           },
-        //           beforeSend: () => {
-        //             // clear options
-        //             $(element).data('select2').$results.children().filter((index, element) => {
-        //               // clear options except index 0, which
-        //               // is the "searching..." label
-        //               if (index > 0) {
-        //                 element.remove()
-        //               }
-        //             })
-        //           },
-        //           processResults: (response) => {
-        //             let formattedResponse = response.data.map(row => ({
-        //               id: row.text,
-        //               text: row.text
-        //             }));
-
-        //             formattedResponse.unshift({
-        //               id: '',
-        //               text: 'ALL'
-        //             });
-
-        //             return {
-        //               results: formattedResponse
-        //             };
-        //           },
-        //         }
-        //       });
-        //     }
-        //   },
-        //   formatter: (value, options, rowData) => {
-        //     let statusAktif = JSON.parse(value)
-
-        //     let formattedValue = $(`
-        //         <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-        //           <span>${statusAktif.SINGKATAN}</span>
-        //         </div>
-        //       `)
-
-        //     return formattedValue[0].outerHTML
-        //   },
-        //   cellattr: (rowId, value, rowObject) => {
-        //     let statusAktif = JSON.parse(rowObject.statusaktif)
-
-        //     return ` title="${statusAktif.MEMO}"`
-        //   }
-        // },
-        {
-          label: 'KM AWAL',
-          name: 'kmawal',
-          align: 'right',
-          formatter: currencyFormat,
-        },
-        {
-          label: 'KM GANTI OLI AKHIR',
-          name: 'kmakhirgantioli',
-          align: 'right',
-          formatter: currencyFormat,
-        },
-        // {
-        //   label: 'TGL AKHIR GANTI OLI',
-        //   name: 'tglakhirgantioli',
-        //   align: 'left',
-        //   formatter: "date",
-        //   formatoptions: {
-        //     srcformat: "ISO8601Long",
-        //     newformat: "d-m-Y"
-        //   }
-        // },
-        {
-          label: 'MEREK',
-          name: 'merek',
-        },
-        {
-          label: 'NO RANGKA',
-          name: 'norangka',
-        },
-        {
-          label: 'NO MESIN',
-          name: 'nomesin',
-        },
-        {
-          label: 'NAMA',
-          name: 'nama',
-        },
-        {
-          label: 'NO STNK',
-          name: 'nostnk',
-        },
-        {
-          label: 'ALAMAT STNK',
-          name: 'alamatstnk',
-        },
-        {
-          label: 'MODIFIED BY',
-          name: 'modifiedby',
-        },
-        {
-          label: 'CREATED AT',
-          name: 'created_at',
-          align: 'right',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y H:i:s"
-          }
-        },
-        {
-          label: 'TGL SERVICE OPNAME',
-          name: 'tglserviceopname',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
-        
-        {
-          label: 'TGL PAJAK STNK',
-          name: 'tglpajakstnk',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'TGL GANTI AKI AKHIR',
-          name: 'tglgantiakiterakhir',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'TIPE',
-          name: 'tipe',
-        },
-        {
-          label: 'JENIS',
-          name: 'jenis',
-        },
-        {
-          label: 'ISI SILINDER',
-          name: 'isisilinder',
-        },
-        {
-          label: 'WARNA',
-          name: 'warna',
-        },
-        {
-          label: 'BAHAN BAKAR',
-          name: 'jenisbahanbakar',
-        },
-        {
-          label: 'JLH SUMBU',
-          name: 'jumlahsumbu',
-        },
-        {
-          label: 'JLH RODA',
-          name: 'jumlahroda',
-        },
-        {
-          label: 'MODEL',
-          name: 'model',
-        },
-        {
-          label: 'BPKB',
-          name: 'nobpkb',
-        },
-        {
-          label: 'MANDOR',
-          name: 'mandor_id',
-        },
-        {
-          label: 'JLH BAN SERAP',
-          name: 'jumlahbanserap',
-        },
-          {
-            label: 'PLUS BORONGAN',
-            name: 'nominalplusborongan',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+        label: 'KETERANGAN',
+        name: 'keterangan',
+      },
+      {
+        label: 'NO POLISI',
+        name: 'kodetrado',
+      },
+      {
+        label: 'KM AWAL',
+        name: 'kmawal',
+        align: 'right',
+        formatter: currencyFormat,
+      },
+      {
+        label: 'KM GANTI OLI AKHIR',
+        name: 'kmakhirgantioli',
+        align: 'right',
+        formatter: currencyFormat,
+      },
+      {
+        label: 'MEREK',
+        name: 'merek',
+      },
+      {
+        label: 'NO RANGKA',
+        name: 'norangka',
+      },
+      {
+        label: 'NO MESIN',
+        name: 'nomesin',
+      },
+      {
+        label: 'NAMA',
+        name: 'nama',
+      },
+      {
+        label: 'NO STNK',
+        name: 'nostnk',
+      },
+      {
+        label: 'ALAMAT STNK',
+        name: 'alamatstnk',
+      },
+      {
+        label: 'MODIFIED BY',
+        name: 'modifiedby',
+      },
+      {
+        label: 'CREATED AT',
+        name: 'created_at',
+        align: 'right',
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y H:i:s"
+        }
+      },
+      {
+        label: 'TGL SERVICE OPNAME',
+        name: 'tglserviceopname',
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y"
+        }
+      },
+      {
+        label: 'TGL PAJAK STNK',
+        name: 'tglpajakstnk',
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y"
+        }
+      },
+      {
+        label: 'TGL GANTI AKI AKHIR',
+        name: 'tglgantiakiterakhir',
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y"
+        }
+      },
+      {
+        label: 'TIPE',
+        name: 'tipe',
+      },
+      {
+        label: 'JENIS',
+        name: 'jenis',
+      },
+      {
+        label: 'ISI SILINDER',
+        name: 'isisilinder',
+      },
+      {
+        label: 'WARNA',
+        name: 'warna',
+      },
+      {
+        label: 'BAHAN BAKAR',
+        name: 'jenisbahanbakar',
+      },
+      {
+        label: 'JLH SUMBU',
+        name: 'jumlahsumbu',
+      },
+      {
+        label: 'JLH RODA',
+        name: 'jumlahroda',
+      },
+      {
+        label: 'MODEL',
+        name: 'model',
+      },
+      {
+        label: 'BPKB',
+        name: 'nobpkb',
+      },
+      {
+        label: 'SUPIR',
+        name: 'supir_id',
+      },
+      {
+        label: 'SUPIRID',
+        name: 'supirid',
+        hidden: true,
+        search: false,
+      },
+      {
+        label: 'MANDOR',
+        name: 'mandor_id',
+      },
+      {
+        label: 'JLH BAN SERAP',
+        name: 'jumlahbanserap',
+      },
+      {
+        label: 'PLUS BORONGAN',
+        name: 'nominalplusborongan',
+        align: 'right',
+        formatter: currencyFormat,
+      },
     ]
   }
 
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'trado' }}`,
+    url: `{!! $url ?? config('app.api_url')  !!}` + 'trado',
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
-        aktif: `{!! $Aktif ?? '' !!}`,
-        trado_id: `{!! $trado_id ?? '' !!}`,
-        cabang: `{!! $cabang ?? '' !!}`,
-        absensiId: `{!! $absensiId ?? '' !!}`,
-      },
+      aktif: `{!! $Aktif ?? '' !!}`,
+      trado_id: `{!! $trado_id ?? '' !!}`,
+      cabang: `{!! $cabang ?? '' !!}`,
+      penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+      supirserap: `{!! $supirserap ?? '' !!}`,
+      tglabsensi: `{!! $tglabsensi ?? '' !!}`,
+      tradodarike: `{!! $tradodarike ?? '' !!}`,
+      tradodari_id: `{!! $tradodari_id ?? '' !!}`,
+      tradoke_id: `{!! $tradoke_id ?? '' !!}`,
+    },
     idPrefix: 'tradoLookup',
     colModel: column,
     height: 350,

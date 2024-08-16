@@ -108,25 +108,29 @@ class LaporanBukuBesarController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
 
-        $sheet->setCellValue('A2', 'Buku Besar Divisi Trucking');
+        $sheet->setCellValue('A2', $dataheader['cabang']);
         $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:F2');
-
-        $sheet->setCellValue('A3', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
-        $sheet->getStyle("A3")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('A3', 'Buku Besar Divisi Trucking');
+        $sheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A3:F3');
 
-        $sheet->setCellValue('A4', 'No Perk. : ' .  $dataheader['coadari'] . ' s/d ' . $dataheader['coasampai']);
+        $sheet->setCellValue('A4', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A4:F4');
 
-        $sheet->setCellValue('A5', ' ' . $dataheader['ketcoadari'] . ' s/d ' . $dataheader['ketcoasampai']);
+        $sheet->setCellValue('A5', 'No Perk. : ' .  $dataheader['coadari'] . ' s/d ' . $dataheader['coasampai']);
         $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle('A5')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A5:F5');
+
+        $sheet->setCellValue('A6', ' ' . $dataheader['ketcoadari'] . ' s/d ' . $dataheader['ketcoasampai']);
+        $sheet->getStyle("A6")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle('A6')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A6:F6');
 
         $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;

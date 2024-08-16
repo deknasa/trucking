@@ -30,7 +30,7 @@ let keydownIndex = true;
 
 let isKeyDown = false;
 let isLookupOpen = true;
-
+let offsetWindow;
 $.fn.lookupMaster = function (options) {
     let defaults = {
         title: null,
@@ -42,6 +42,8 @@ $.fn.lookupMaster = function (options) {
         totalRow: null,
         alignRightMobile: null,
         alignRight: null,
+        multiColumnSize: null,
+        extendSize: null,
         searching: null,
         disabledIsUsed: null,
         postData: {},
@@ -61,29 +63,51 @@ $.fn.lookupMaster = function (options) {
 
         element.data("hasLookup", true);
 
-        element.wrap('<div class="input-group"></div>');
-
-        let inputGroupAppend = $(
-            '<div class="input-group-append"></div>'
-        ).insertAfter(element);
-
-        if (settings.onClear) {
-            $(
-                '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>'
-            )
-                .appendTo(inputGroupAppend)
-                .click(function () {
-                    handleOnClear(element);
-                });
+        element.wrap('<div class="input-group"></div>')
+        .after(`
+        ${
+            settings.onClear
+                ? `<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>`
+                : ``
         }
+        <div class="input-group-append">
+				<button class="btn btn-easyui lookup-toggler" type="button">
+					<i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px"></i>
+				</button>
+			</div>
+        `)
 
-        $(
-            `<button class="btn btn-easyui lookup-toggler" type="button"><i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px;"></i></button>`
-        )
-            .appendTo(inputGroupAppend)
+        // let inputGroupAppend = $(
+        //     '<div class="input-group-append"></div>'
+        // ).insertAfter(element);
+
+        // if (settings.onClear) {
+        //     // $(
+        //     //     '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>'
+        //     // )
+        //     $(
+        //         '<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>'
+        //     )
+        //         .appendTo(inputGroupAppend)
+        //         .click(function () {
+        //             handleOnClear(element);
+        //         });
+        // }
+
+        element.siblings(".button-clear").click(function () {
+			handleOnClear(element);
+		});
+        // $(
+        //     `<button class="btn btn-easyui lookup-toggler" type="button"><i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px;"></i></button>`
+        // )
+        //     .appendTo(inputGroupAppend)
+
+        element
+            .siblings(".input-group-append")
+			.find(".lookup-toggler")
             .click(async function () {
                 event.preventDefault();
-
+                
                 element.data("input", false);
 
                 let lookupContainer = element.siblings(
@@ -145,13 +169,15 @@ $.fn.lookupMaster = function (options) {
         // });
 
         element.on("input", function (event) {
-            element.data("input", true);
-
-            const searchValue = element.val();
-
             let lookupContainer = element.siblings(
                 `#lookup-${element.attr("id")}`
             );
+
+            element.data("input", true);
+          
+            const searchValue = element.val();
+
+           
 
             if (activeLookupElement != null) {
                 if (aktifId != `#lookup-${element.attr("id")}`) {
@@ -195,9 +221,11 @@ $.fn.lookupMaster = function (options) {
         let bottomSelected = 11;
         let topSelected = 0;
         // let indexRowSelect = 1;
-
+        offsetWindow = window.pageYOffset
         settings.beforeProcess();
         settings.onShowLookup();
+
+        
 
         const detail = settings.detail;
         const miniSize = settings.miniSize;
@@ -240,9 +268,11 @@ $.fn.lookupMaster = function (options) {
                         $(`#lookup-${getId}`).css("right", "0");
                     }
                 } else if (detectDeviceType() == "mobile") {
-                    
+                  
                     let ukuranDevice = window.innerWidth;
-                    let widthValue = ukuranDevice < 400 ? 330 : 340;
+                    let widthValue = ukuranDevice < 400 ? 250 : 250;
+
+                    console.log('masuk yang ini',widthValue);
                     lookupContainer = $(
                         `<div id="lookup-${getId}" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; width: ${widthValue}px; max-height: 280px;  overscroll-behavior: contain!important;"></div>`
                     ).insertAfter(element);
@@ -285,24 +315,32 @@ $.fn.lookupMaster = function (options) {
                     }
                 } else {
                     if (detectDeviceType() == "desktop") {
-                        lookupContainer = $(
-                            '<div id="lookup-' +
-                                getId +
-                                '" style="position: absolute; box-shadow: 10px 10px 5px 12px lightblue; border:1px; background-color: #fff;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%;  width: ' +
-                                width +
-                                'px; max-height: 300px;  overscroll-behavior: contain!important;"></div>'
-                        ).insertAfter(element);
+                        let multiColumnSize = settings.multiColumnSize;
+                        let extend = settings.extendSize;
+                        let sizeExtend = width + extend;
+                      
+                        const commonStyles = 'position: absolute; box-shadow: 10px 10px 5px 12px lightblue; border:1px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; max-height: 300px; overscroll-behavior: contain!important;';
+                        
+                        if (multiColumnSize) {
+                            lookupContainer = $(
+                                `<div id="lookup-${getId}" style="${commonStyles} width: ${sizeExtend}px;"></div>`
+                            ).insertAfter(element);
+                        } else {
+                            lookupContainer = $(
+                                `<div id="lookup-${getId}" style="${commonStyles} width: ${width}px;"></div>`
+                            ).insertAfter(element);
+                        }
 
                         if (alignRight) {
                             $(`#lookup-${getId}`).css("right", "0");
                         }
                     } else if (detectDeviceType() == "mobile") {
-                        
                         lookupContainer = $(
                             '<div id="lookup-' +
                                 getId +
                                 '" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; width: 350px; max-height: 280px;  overscroll-behavior: contain!important;"></div>'
                         ).insertAfter(element);
+
 
                         if (alignRightMobile) {
                             $(`#lookup-${getId}`).css("right", "0");
@@ -325,16 +363,6 @@ $.fn.lookupMaster = function (options) {
                 lookupBody.html(response);
                 let grid = lookupBody.find(".lookup-grid");
 
-                function preventScroll(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    return false;
-                }
-
-                function disableModalScroll() {
-                    modalElement.classList.add("no-scroll");
-                }
 
                 let lookupLabel = settings.fileName;
 
@@ -575,6 +603,7 @@ $.fn.lookupMaster = function (options) {
                         },
                     });
                 }
+                window.scrollTo(0, windowOffset);
             }
         );
 
@@ -617,8 +646,8 @@ $.fn.lookupMaster = function (options) {
                 lookupContainer.remove();
                 element.data("hasLookup", false);
 
-                return false;
                 activate = false;
+                return false;
             }
         });
 
@@ -628,25 +657,10 @@ $.fn.lookupMaster = function (options) {
                 activeLookupElement = null;
             }
         });
+        windowOffset = window.pageYOffset - 250;
     }
 
-    // Fungsi untuk mengatur scroll saat keyboard muncul
-    function adjustScrollForMobile() {
-        const activeElement = document.activeElement;
-        const modalContent = document.querySelector(".overflow"); // Ganti dengan selektor sesuai struktur Anda
-
-        if (
-            activeElement &&
-            "scrollIntoView" in activeElement &&
-            modalContent
-        ) {
-            activeElement.scrollIntoView({
-                behavior: "instant",
-                block: "start",
-                inline: "start",
-            });
-        }
-    }
+  
 
     function handleSelectedRow(id, lookupContainer, element) {
         if (id !== null) {
@@ -657,7 +671,18 @@ $.fn.lookupMaster = function (options) {
                 lookupContainer.find(".lookup-grid").getRowData(id)
             );
 
+            const obj = rowData;
+            const array = Object.values(obj);
+           
+
             element.val(rowData.name);
+
+            if (array.length == 0) {
+                element.val(element.data('currentValue'))
+                lookupContainer.hide();
+                return rowData
+            }
+
             settings.onSelectRow(rowData, element);
 
             lookupContainer.hide();
@@ -670,6 +695,9 @@ $.fn.lookupMaster = function (options) {
             // keydownIndex = false;
 
             // indexRowSelect = 1
+
+          
+            
         }
     }
 
@@ -695,14 +723,16 @@ $.fn.lookupMaster = function (options) {
     async function handleOnInput(element, searchValue = null, data) {
         let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);
         let grid = lookupContainer.find(".lookup-grid");
-
+        abortGridLastRequest($(grid))
         if (searchValue) {
             /* Determine user selection listener */
             if (detectDeviceType() == "desktop") {
-                timeout = 150;
+                timeout = 200;
             } else if (detectDeviceType() == "mobile") {
                 timeout = 50;
             }
+
+           console.log('lasterqeuest ', grid.getGridParam()?.lastRequest);
             input = element.data("input");
 
             if (settings.typeSearch === "ALL") {
@@ -764,7 +794,9 @@ $.fn.lookupMaster = function (options) {
                     return false;
                 }, timeout);
             } else {
+                
                 delay(function () {
+                   
                     var postData = grid.jqGrid("getGridParam", "postData"),
                         colModel = grid.jqGrid("getGridParam", "colModel"),
                         rules = [],

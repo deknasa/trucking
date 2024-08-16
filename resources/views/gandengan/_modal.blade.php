@@ -77,7 +77,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Jumlah Ban Serap <span class="text-danger">*</span>
+                  Jumlah Ban Serap 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -118,6 +118,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   
   let dataMaxLength = []
+  var data_id
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -230,6 +231,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    data_id = $('#crudForm').find('[name=id]').val();
 
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -242,8 +244,40 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'gandengan'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
+  
 
   function createGandengan() {
     let form = $('#crudForm')
@@ -634,6 +668,18 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'trado') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'container') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -724,7 +770,7 @@
 
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasi(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}gandengan/${Id}/cekValidasi`,
       method: 'POST',
@@ -732,12 +778,19 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi,
+      },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteGandengan(Id)
+          if (Aksi=="EDIT") {
+            editGandengan(Id)
+          }else if (Aksi=="DELETE"){
+            deleteGandengan(Id)
+          }
         }
 
       }

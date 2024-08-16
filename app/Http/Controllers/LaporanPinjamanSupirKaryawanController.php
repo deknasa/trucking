@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class LaporanPinjamanSupirKaryawanController extends MyController
 {
-    public $title = 'Laporan Pinjaman Supir/Karyawan';
+    public $title = 'Laporan Pinjaman Karyawan';
 
     public function index(Request $request)
     {
@@ -33,6 +33,7 @@ class LaporanPinjamanSupirKaryawanController extends MyController
     {
         $detailParams = [
             'sampai' => $request->sampai,
+            'jenis' => $request->jenis,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -43,7 +44,8 @@ class LaporanPinjamanSupirKaryawanController extends MyController
         if ($header->successful()) {
             $data = $header['data'];
             $user = Auth::user();
-            return view('reports.laporanpinjamansupirkaryawan', compact('data', 'user', 'detailParams'));
+            $dataCabang['namacabang'] = $header['namacabang'];
+            return view('reports.laporanpinjamansupirkaryawan', compact('data','dataCabang', 'user', 'detailParams'));
         } else {
             return response()->json($header->json(), $header->status());
         }
@@ -52,6 +54,7 @@ class LaporanPinjamanSupirKaryawanController extends MyController
     {
         $detailParams = [
             'sampai' => $request->sampai,
+            'jenis' => $request->jenis,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -64,6 +67,7 @@ class LaporanPinjamanSupirKaryawanController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
 
@@ -74,12 +78,16 @@ class LaporanPinjamanSupirKaryawanController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');        
-        $sheet->setCellValue('A2',  $data[0]['judulLaporan'] ?? '');
-        $sheet->mergeCells('A2:B2');        
-        $sheet->setCellValue('A3', 'Periode: ' . date('d-M-Y', strtotime($request->sampai)) );
-        $sheet->mergeCells('A3:B3');       
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->getStyle("A3:B3")->getFont()->setBold(true);        
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:G2');        
+        $sheet->setCellValue('A3',  $data[0]['judulLaporan'] ?? '');
+        $sheet->mergeCells('A3:B3');        
+        $sheet->setCellValue('A4', 'Periode: ' . date('d-M-Y', strtotime($request->sampai)) );
+        $sheet->mergeCells('A4:B4');       
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A4:B4")->getFont()->setBold(true);        
         // $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('b1', 'LAPORAN PINJAMAN KARYAWAN');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
@@ -93,7 +101,7 @@ class LaporanPinjamanSupirKaryawanController extends MyController
         // $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
 
-        $detail_table_header_row = 5;
+        $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 1;
 
         $styleArray = array(
@@ -180,7 +188,7 @@ class LaporanPinjamanSupirKaryawanController extends MyController
             $sheet->setCellValue("E$detail_start_row", $response_detail['debet']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['kredit']);
 
-            if ($detail_start_row == 6) {
+            if ($detail_start_row == 7) {
                 $sheet->setCellValue('G' . $detail_start_row, $response_detail['Saldo']);
             } else {
                 if ($dataRow > $detail_table_header_row + 1) {
@@ -210,16 +218,16 @@ class LaporanPinjamanSupirKaryawanController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        $totalDebet = "=SUM(E7:E" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-        $totalKredit = "=SUM(F6:F" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->applyFromArray($style_number);
+        $totalKredit = "=SUM(F7:F" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $totalSaldo = "=E".$total_start_row."-F" .$total_start_row;
-        $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $ttd_start_row = $detail_start_row + 2;

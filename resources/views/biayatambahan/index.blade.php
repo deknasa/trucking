@@ -50,6 +50,10 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
     if (element.checked) {
       selectedRows.push($(element).val())
       $(element).parents('tr').addClass('bg-light-blue')
@@ -101,12 +105,16 @@
     loadDetailGrid()
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
-      loadDataHeader('suratpengantar')
+      loadDataHeader('suratpengantar', {
+        biayatambahan: true
+      })
       selectedRows = []
       $('#gs_').prop('checked', false)
     })
+    var grid = $("#jqGrid");
+    grid.jqGrid({
 
-    $("#jqGrid").jqGrid({
+        // $("#jqGrid").jqGrid({
         url: `${apiUrl}suratpengantar`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -156,14 +164,79 @@
             hidden: true
           },
           {
-            label: 'JOB TRUCKING',
-            name: 'jobtrucking',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combotitipan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combotitipan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusApprovalBiayaTambahan = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApprovalBiayaTambahan.WARNA}; color: #fff;">
+                  <span>${statusApprovalBiayaTambahan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusapproval) {
+                return ` title=""`
+              }
+              let statusApprovalBiayaTambahan = JSON.parse(rowObject.statusapproval)
+              return ` title="${statusApprovalBiayaTambahan.MEMO}"`
+            }
           },
           {
             label: 'NO TRIP',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'KETERANGAN EXTRA',
+            name: 'ketextra',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+          },
+          {
+            label: 'BIAYA EXT. SUPIR',
+            name: 'biayaextra',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KETERANGAN EXTRA TAGIH',
+            name: 'ketextratagih',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+          },
+          {
+            label: 'TAGIH KE EMKL',
+            name: 'biayatagih',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
           },
           {
             label: 'TGL TRIP',
@@ -524,6 +597,11 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
+            label: 'JOB TRUCKING',
+            name: 'jobtrucking',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'GUDANG SAMA',
             name: 'statusgudangsama',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -811,11 +889,13 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+        onSelectRow: onSelectRowFunction =function(id) {
+
+        // onSelectRow: function(id) {
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -910,7 +990,7 @@
       .customPager({
         buttons: [{
           id: 'approveun',
-          innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+          innerHTML: '<i class="fas fa-check"></i> APPROVAL/UN',
           class: 'btn btn-purple btn-sm mr-1',
           onClick: () => {
 
@@ -936,7 +1016,7 @@
     }
   })
 
-  
+
   function approveBiayaTambahan() {
     event.preventDefault()
     $.ajax({

@@ -18,6 +18,8 @@ class ServiceInHeaderController extends MyController
         
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'comboserviceout' => $this->comboCetak('list', 'STATUS SERVICE OUT', 'STATUS SERVICE OUT'),
+            'listbtn' => $this->getListBtn()
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]

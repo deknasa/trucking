@@ -33,8 +33,9 @@ class LaporanHistoryTradoMilikSupirController extends MyController
 
         $data = $header['data'];
 
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanhistorytradomiliksupir', compact('data'));
+        return view('reports.laporanhistorytradomiliksupir', compact('data','dataCabang'));
     }
 
     public function export(Request $request): void
@@ -53,6 +54,7 @@ class LaporanHistoryTradoMilikSupirController extends MyController
         if (count($data) == 0) {
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -60,12 +62,16 @@ class LaporanHistoryTradoMilikSupirController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:E2');
 
-        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A3', $data[0]['judulLaporan']);
 
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
-        $detail_start_row = 4;
+        $detail_start_row = 5;
 
         $styleArray = array(
             'borders' => array(

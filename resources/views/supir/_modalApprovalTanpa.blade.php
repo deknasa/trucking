@@ -235,7 +235,7 @@
     form.find('#btnSubmitApprovalTanpa').html(`<i class="fa fa-save"></i> Save`)
 
     form.find(`.sometimes`).show()
-    $('#crudModalApprovalTanpaTitle').text('Un/Approval Supir tanpaKeterangan')
+    $('#crudModalApprovalTanpaTitle').text('APPROVAL/UN Supir tanpaKeterangan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

@@ -38,7 +38,7 @@
                     <label class="col-form-label">penerimaan stok <span class="text-danger">*</span> </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="penerimaanstok" class="form-control penerimaanstok-lookup">
+                    <input type="text" name="penerimaanstok" id="penerimaanstok" class="form-control penerimaanstok-lookup">
                     <input type="text" id="penerimaanstokId" name="penerimaanstok_id" hidden readonly>
                   </div>
                 </div>
@@ -63,6 +63,17 @@
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">pengeluaran stok no bukti proses</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pengeluaranstok_nobukti_proses" class="form-control" readonly>
                   </div>
                 </div>
               </div>
@@ -249,11 +260,13 @@
                     <th class="data_tbl tbl_penerimaanstok_nobukti" style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
+                    <th class="data_tbl tbl_qtyterpakai" style="width:10%; min-width: 100px">qty terpakai</th>
                     <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisir ke</th>
                     <th class="data_tbl tbl_vulkanisirtotal" style="width:10%; min-width: 100px">vulkanisir</th>
                     <th class="data_tbl tbl_total_sebelum" style="width: 20%; min-width: 200px;">Total Sebelum disc</th>
                     <th class="data_tbl tbl_statusban" style="width:10%; min-width: 100px">Status Ban</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
+                    <th class="data_tbl tbl_nominaldiscount" style="width:20%; min-width: 200px">nominal discount</th>
                     <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
                     <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
@@ -282,6 +295,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -299,6 +316,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
   var KelompokId = "";
+  var StokId = "";
   var listKodePenerimaan = [];
   var listIdPenerimaan = [];
   $(document).ready(function() {
@@ -402,6 +420,13 @@
           data.filter((row) => row.name === 'detail_qty[]')[index].value = 0;
         }
       })
+      $('#crudForm').find(`[name="detail_qtyterpakai[]"]`).each((index, element) => {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_qtyterpakai[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qtyterpakai[]"]`)[index])
+        } else {
+          data.filter((row) => row.name === 'detail_qtyterpakai[]')[index].value = 0;
+        }
+      })
       $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
         if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
           data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
@@ -415,6 +440,14 @@
           data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
         } else {
           data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = 0;
+        }
+      })
+
+      $('#crudForm').find(`[name="detail_nominaldiscount[]"]`).each((index, element) => {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_nominaldiscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_nominaldiscount[]"]`)[index])
+        } else {
+          data.filter((row) => row.name === 'detail_nominaldiscount[]')[index].value = 0;
         }
       })
 
@@ -436,6 +469,15 @@
     }
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
       event.preventDefault()
 
       let method
@@ -494,6 +536,14 @@
         name: 'penerimaanheader_id',
         value: $('#penerimaanstokId').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let penerimaanheader_id = $('#penerimaanstokId').val()
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -530,25 +580,44 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          id = response.data.id
           $('#kodepenerimaanheader').val(response.data.penerimaanstok_id).trigger('change')
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            postData: {
-              proses: 'reload',
-              penerimaanheader_id: response.data.penerimaanstok_id,
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
-            },
-            page: response.data.page
-          }).trigger('reloadGrid')
+            id = response.data.id
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              postData: {
+                proses: 'reload',
+                penerimaanheader_id: response.data.penerimaanstok_id,
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              },
+              page: response.data.page
+            }).trigger('reloadGrid')
+
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            if ($('#kodepenerimaanheader').val() != '') {
+              createPenerimaanstokHeader();
+              let index = listIdPenerimaan.indexOf($('#kodepenerimaanheader').val());
+              setKodePenerimaan(listKodePenerimaan[index]);
+              setIsDateAvailable($('#kodepenerimaanheader').val())
+
+              $('#crudForm').find(`[name="penerimaanstok"]`).val(listKodePenerimaan[index])
+              $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
+              $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
+            } else {
+              createPenerimaanstokHeader();
+            }
+            // showSuccessDialog(response.message, response.data.nobukti)
           }
         },
         error: error => {
@@ -565,7 +634,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   function setKodePenerimaan(kode) {
@@ -629,10 +698,13 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
     $('.tbl_penerimaanstok_nobukti').hide();
@@ -661,11 +733,14 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.tbl_penerimaanstok_nobukti').hide();
 
@@ -692,10 +767,12 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan', 7);
+    $('.colspan').attr('colspan', 8);
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').hide();
 
@@ -716,7 +793,7 @@
     $('[name=nobon]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
-
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
     $('[name=tradodari]').parents('.form-group').show()
@@ -725,6 +802,9 @@
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_qtyterpakai').hide();
+
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
@@ -749,7 +829,7 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
 
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -758,12 +838,14 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_qty').show()
     $('.tbl_statusban').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.tbl_total_sebelum').hide();
     $('.colspan').attr('colspan', 5);
@@ -781,6 +863,7 @@
     $('[name=coa]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
 
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
@@ -788,12 +871,13 @@
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 8);
+    $('.colspan').attr('colspan', 9);
 
     $('#addRow').show()
   }
@@ -840,6 +924,7 @@
     $('[name=gandengan]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
 
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
@@ -876,18 +961,23 @@
     $('[name=tradodari]').parents('.form-group').hide()
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.colspan').attr('colspan', 6);
+
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qtyterpakai').show();
 
     $('.sumrow').show();
 
-    $('.tbl_aksi').show()
+    $('.tbl_aksi').hide()
   }
 
   function tampilanPSPK() {
@@ -906,11 +996,13 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
@@ -927,11 +1019,11 @@
     $('[name=nobon]').parents('.form-group').hide()
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
-
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
-
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_total_sebelum').hide();
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -946,6 +1038,7 @@
     $('.tbl_statusban').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 7);
     $('.sumrow').hide();
@@ -969,12 +1062,14 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 7);
+    $('.colspan').attr('colspan', 8);
 
     $('.tbl_aksi').show()
   }
@@ -1017,34 +1112,38 @@
         resetRow()
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
-            <tr class="trow" data-id="${id}">
+            <tr class="trow" data-id="${detail.id}">
                   <td>
                     <div class="baris">1</div>
                   </td>
                   
                   <td>
-                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
-                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
-                    <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
+                    <input type="text"  name="detail_stok[]" id="detail_stok_${detail.id}" class="form-control stok-lookup ">
+                    <input type="text" id="detailstokId_${detail.id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text" id="detailstokKelompok_${detail.id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>
                   <td>
-                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
+                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${detail.id}">
                   </td> 
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
-                    <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
-                    <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
+                    <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${detail.id}" class="form-control ">
+                    <input type="text" id="detailpenerimaanstoknobuktiId_${detail.id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
                   </td>  
 
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${detail.id}" style="text-align:right" class="autonumeric number${detail.id} form-control">                    
                   </td>
 
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${detail.id}" onkeyup="calculate(${detail.id})" style="text-align:right" class="form-control autonumeric number${detail.id}">                    
+                  </td>
+
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${detail.id}" onkeyup="calculate(${detail.id})" style="text-align:right" class="form-control autonumeric number${detail.id}">
                   </td>
 
                   <td class="data_tbl tbl_vulkanisirke">
@@ -1057,19 +1156,23 @@
 
 
                   <td class="data_tbl tbl_total_sebelum">
-                      <input type="text"  name="total_sebelum[]" id="total_sebelum${id}" style="text-align:right"  onkeyup="calculate(${id})" class="form-control total_sebelum autonumeric number${id}" >
+                      <input type="text"  name="total_sebelum[]" id="total_sebelum${detail.id}" style="text-align:right"  onkeyup="calculate(${detail.id})" class="form-control total_sebelum autonumeric number${detail.id}" >
                     </td>
 
 
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${detail.id}" onkeyup="calculate(${detail.id})" style="text-align:right" class="autonumeric number${detail.id} form-control">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${detail.id}" onkeyup="calculate_nominal(${detail.id})" style="text-align:right" class="autonumeric number${detail.id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
+                    <input type="text"  name="totalItem[]" id="totalItem${detail.id}" style="text-align:right" onkeyup="calculate(${detail.id})" class="form-control totalItem autonumeric number${detail.id}">                    
                   </td>
 
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -1085,21 +1188,25 @@
           detailRow.find(`[name="totalItem[]"]`).val(detail.total)
           detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
           $('table #table_body').append(detailRow)
-          initAutoNumeric($(`.number${id}`))
+          initAutoNumeric($(`.number${detail.id}`))
           setRowNumbers()
-          $(`#detail_stok_${id}`).lookup({
+          $(`#detail_stok_${detail.id}`).lookup({
             title: 'stok Lookup',
             fileName: 'stok',
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
-              cekKelompok(row);
+              var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
+              cekKelompok(id);
               this.postData = {
                 from: 'penerimaanstok',
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+                nobukti : nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
+                StokId: StokId,
+                isLookup: true
               }
             },
             onSelectRow: (stok, element) => {
@@ -1119,6 +1226,9 @@
             onClear: (element) => {
               let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
               satuanEl.val('');
+              let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+              iddetailEl.val(0);
+
 
               element.val('')
               parent = element.closest('td');
@@ -1126,7 +1236,7 @@
               element.data('currentValue', element.val())
             }
           })
-          $(`#detail_penerimaanstoknobukti_${id}`).lookup({
+          $(`#detail_penerimaanstoknobukti_${detail.id}`).lookup({
             title: 'penerimaan stok header Lookup',
             fileName: 'penerimaanstokheader',
             beforeProcess: function(test) {
@@ -1154,11 +1264,11 @@
         })
         sumary()
         setTampilanForm()
-        if (KodePenerimaanId === listKodePenerimaan[2]) {
-          $('#addRow').hide()
-        } else {
-          $('#addRow').show()
-        }
+        // if (KodePenerimaanId === listKodePenerimaan[2]) {
+        //   $('#addRow').hide()
+        // } else {
+        $('#addRow').show()
+        // }
       },
       error: error => {
         showDialog(error.statusText)
@@ -1211,6 +1321,10 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
 
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                  </td>
+
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>
@@ -1221,6 +1335,10 @@
 
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_total">
@@ -1260,13 +1378,17 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
               cekKelompok(row);
               this.postData = {
                 from: 'penerimaanstok',
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+                nobukti : nobukti,
                 Aktif: 'AKTIF',
                 KelompokId: KelompokId,
+                StokId: StokId,
+                isLookup: true
               }
             },
             onSelectRow: (stok, element) => {
@@ -1274,6 +1396,9 @@
 
               let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
               satuanEl.val(stok.satuan);
+              let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+              iddetailEl.val(stok.iddetail);
+
 
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
@@ -1286,6 +1411,9 @@
             onClear: (element) => {
               let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
               satuanEl.val('');
+              let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+              iddetailEl.val(0);
+
 
               element.val('')
               parent = element.closest('td');
@@ -1355,6 +1483,7 @@
               </td>
               
               <td>
+                <input name="id_detail[]" hidden value="${detail.id}">
                 <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                 <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                 <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}"  readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -1379,6 +1508,10 @@
                 <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
               </td>
 
+              <td class="data_tbl tbl_qtyterpakai">
+                <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+              </td>
+
               <td class="data_tbl tbl_vulkanisirke">
                 <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
               </td>
@@ -1389,6 +1522,10 @@
 
               <td class="data_tbl tbl_persentase">
                 <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+              </td>  
+
+              <td class="data_tbl tbl_nominaldiscount">
+                <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
               </td>  
 
               <td class="data_tbl tbl_total">
@@ -1431,13 +1568,17 @@
         beforeProcess: function(test) {
           var penerimaanstokId = $(`#penerimaanstokId`).val();
           var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+          var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
           cekKelompok(row);
           this.postData = {
             from: 'penerimaanstok',
             penerimaanstok_id: penerimaanstokId,
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+            nobukti : nobukti,
             Aktif: 'AKTIF',
             KelompokId: KelompokId,
+            StokId: StokId,
+            isLookup: true
           }
         },
         onSelectRow: (stok, element) => {
@@ -1445,6 +1586,9 @@
 
           let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
           satuanEl.val(stok.satuan);
+          let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+          iddetailEl.val(stok.iddetail);
+
 
           parent = element.closest('td');
           parent.children('.detailstokId').val(stok.id)
@@ -1457,6 +1601,9 @@
         onClear: (element) => {
           let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
           satuanEl.val('');
+          let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+        iddetailEl.val(0);
+
 
           element.val('')
           parent = element.closest('td');
@@ -1554,6 +1701,10 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
                   
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                  </td>
+                  
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                   </td> 
@@ -1563,14 +1714,18 @@
                   </td>
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>
 
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -1581,6 +1736,7 @@
             detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+            detailRow.find(`[name="detail_qtyterpakai[]"]`).val(detail.qty)
           } else {
             detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
@@ -1606,8 +1762,10 @@
           initAutoNumeric($(`#detail_qty${id}`), {
             'maximumValue': detail.qty
           })
-
-
+          initAutoNumeric($(`#detail_qtyterpakai${id}`), {
+            'maximumValue': detail.qty
+          })
+          cal(id)
           setRowNumbers()
           $(`#detail_penerimaanstoknobukti_${id}`).lookup({
             title: 'penerimaan stok header Lookup',
@@ -1639,6 +1797,12 @@
         setTampilanForm()
         if ((KodePenerimaanId === listKodePenerimaan[7]) || (KodePenerimaanId === listKodePenerimaan[8])) {
           $('#addRow').hide()
+          $('.tbl_aksi').hide()
+          if (KodePenerimaanId === listKodePenerimaan[8]) {
+            $('.tbl_persentase').hide()
+            $('.tbl_nominaldiscount').hide()
+            $('.colspan').attr('colspan', 5);
+          }
         } else {
           $('#addRow').show()
         }
@@ -1670,6 +1834,7 @@
                   </td>
                   
                   <td>
+                    <input name="id_detail[]" hidden value="${detail.id}">
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -1687,12 +1852,16 @@
                   </td>  
     
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="cal(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="calculate(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>
     
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
+
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                  </td>
 
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
@@ -1703,14 +1872,18 @@
                   </td>
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">
+                  </td>
     
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>
     
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -2044,6 +2217,12 @@
       }
     }
     if (form.data('action') !== 'add') {
+
+      $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+        background: '#fff'
+      })
+      let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+      tglbukti.find('button').attr('disabled', true)
       let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
       let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children()
       let pengeluaranstok_nobukti = $('#crudForm').find(`[name="pengeluaranstok_nobukti"]`).parents('.input-group').children()
@@ -2064,16 +2243,63 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
+
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
     KodePenerimaanId = "";
 
   })
+
+  function removeEditingBy(id) {
+
+
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'penerimaanstokheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
 
   function createPenerimaanstokHeader() {
@@ -2435,6 +2661,7 @@
                   </td>
                   
                   <td>
+                    <input name="id_detail[]" hidden value="0">
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${index}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
@@ -2443,7 +2670,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" class="form-control detail_satuan_${index}">
                   </td> 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -2457,6 +2684,10 @@
 
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
+                  </td>
+
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>
 
                   <td class="data_tbl tbl_vulkanisirke">
@@ -2481,11 +2712,15 @@
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
 
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${index}"  onkeyup="calculate_nominal(${index})"  style="text-align:right" class="form-control autonumeric number${index}" >
+                  </td>  
+
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right"  onkeyup="calculate(${index})" class="form-control totalItem autonumeric number${index}" >                    
                   </td>
 
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -2505,13 +2740,17 @@
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+        var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
         cekKelompok(row);
         this.postData = {
           from: 'penerimaanstok',
           penerimaanstok_id: penerimaanstokId,
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+          nobukti : nobukti,
           Aktif: 'AKTIF',
           KelompokId: KelompokId,
+          StokId: StokId,
+          isLookup: true
         }
       },
       onSelectRow: (stok, element) => {
@@ -2519,6 +2758,8 @@
 
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
         satuanEl.val(stok.satuan);
+        let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+        iddetailEl.val(stok.iddetail);
 
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
@@ -2531,7 +2772,9 @@
       },
       onClear: (element) => {
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
         satuanEl.val('');
+        iddetailEl.val(0);
 
         element.val('')
         element.data('currentValue', element.val())
@@ -2600,9 +2843,12 @@
     //check jika lookup baris pertama
     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
       KelompokId = "";
+      StokId = "";
     } else {
       let detailstokKelompok = $('.detailstokKelompok')
+      let detailstokId = $('.detailstokId')
       KelompokId = $(detailstokKelompok[0]).val();
+      StokId = $(detailstokId[0]).val();
     }
   }
 
@@ -2646,6 +2892,35 @@
     discSatuan = nominaldiscount / qty;
     satuanSetelahDiscount = (total_sebelum / qty) - discSatuan;
     harga = satuanSetelahDiscount;
+
+    elNominalDiscount = AutoNumeric.getAutoNumericElement($(`#detail_nominaldiscount${id}`)[0]);
+    elNominalDiscount.set(nominaldiscount);
+
+    new AutoNumeric($(`#totalItem${id}`)[0]).set(totalItem)
+    new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
+    sumary();
+  }
+
+  function calculate_nominal(id) {
+    qty = $(`#detail_qty${id}`)[0];
+    nominaldiscount = $(`#detail_nominaldiscount${id}`)[0];
+    totalItem = $(`#totalItem${id}`)[0];
+    total_sebelum = $(`#total_sebelum${id}`)[0];
+
+    qty = AutoNumeric.getNumber(qty);
+    nominaldiscount = AutoNumeric.getNumber(nominaldiscount);
+    totalItem = AutoNumeric.getNumber(totalItem);
+    total_sebelum = AutoNumeric.getNumber(total_sebelum);
+
+    totalItem = total_sebelum - nominaldiscount;
+    discSatuan = nominaldiscount / qty;
+    satuanSetelahDiscount = (total_sebelum / qty) - discSatuan;
+    harga = satuanSetelahDiscount;
+    discount = (nominaldiscount / total_sebelum) * 100;
+
+    elPersentaseDiscount = AutoNumeric.getAutoNumericElement($(`#detail_persentasediscount${id}`)[0]);
+    elPersentaseDiscount.set(discount);
+
     new AutoNumeric($(`#totalItem${id}`)[0]).set(totalItem)
     new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
     sumary();
@@ -2700,15 +2975,18 @@
             // showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&nobukti=${nobukti}&printer=reportPrinterBesar`)
             } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&nobukti=${nobukti}&printer=reportPrinterKecil`)
             }
             if (Aksi == 'EDIT') {
               editPenerimaanstokHeader(Id)
             }
             if (Aksi == 'DELETE') {
               deletePenerimaanstokHeader(Id)
+            }
+            if (Aksi == 'VIEW') {
+              viewPenerimaanstokHeader(Id)
             }
           }
         } else {
@@ -2822,16 +3100,17 @@
                     </td>
                     
                     <td>
+                      <input name="id_detail[]" hidden value="${detail.id}">
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                       <input type="text" id="detailstokId_${id}_old" value="${detail.stok_id}" readonly hidden name="detail_stok_id_old[]">
                       <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                     </td>
                     <td>
-                      <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
+                      <input type="text" disabled name="detail_satuan[]" id=""   class="form-control detail_satuan_${id}">
                     </td> 
                     <td>
-                      <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                      <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                     </td>
                     
                     <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -2846,6 +3125,11 @@
                     <td class="data_tbl tbl_qty">
                       <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
                     </td>
+
+                    <td class="data_tbl tbl_qtyterpakai">
+                      <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                    </td>  
+
                     <td class="data_tbl tbl_vulkanisirke">
                       <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                     </td>  
@@ -2866,6 +3150,10 @@
 
                     <td class="data_tbl tbl_persentase">
                       <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">
+                    </td>
+
+                    <td class="data_tbl tbl_nominaldiscount">
+                      <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">
                     </td>
 
                     <td class="data_tbl tbl_total">
@@ -2889,14 +3177,19 @@
               detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
               detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             }
+            if (detail.satuan) {
+              detailRow.find(`[name="detail_satuan[]"]`).val(detail.satuan)
+            }
             detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
             detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
             detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
             detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+            detailRow.find(`[name="detail_qtyterpakai[]"]`).val(detail.qtyterpakai)
             detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).val(detail.penerimaanstok_nobukti)
             detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
             detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+            detailRow.find(`[name="detail_nominaldiscount[]"]`).val(detail.nominaldiscount)
             detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
             detailRow.find(`[name="totalItem[]"]`).val(detail.total)
             totalSSebelumDiscount = detail.total / (1 - (detail.persentasediscount / 100))
@@ -2905,20 +3198,34 @@
             $('table #table_body').append(detailRow)
             initSelect2($(`#statusban${id}`), true)
             setKorv(id, detail.stok_id);
-            initAutoNumeric($(`.number${id}`))
+            initAutoNumeric($(`#detail_qtyterpakai${id}`), {
+              'maximumValue': detail.qty
+            })
+            initAutoNumeric($(`#detail_harga${id}`))
+            initAutoNumeric($(`#detail_qty${id}`))
+            initAutoNumeric($(`#total_sebelum${id}`))
+            initAutoNumeric($(`#detail_persentasediscount${id}`))
+            initAutoNumeric($(`#detail_nominaldiscount${id}`))
+            initAutoNumeric($(`#totalItem${id}`))
+
+
             setRowNumbers()
+            let row = id;
             $(`#detail_stok_${id}`).lookup({
               title: 'stok Lookup',
               fileName: 'stok',
               beforeProcess: function(test) {
                 var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
                 var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+                var nobukti = $('#crudModal').find(`[name=nobukti]`).val();
                 cekKelompok(row);
                 this.postData = {
                   from: 'penerimaanstok',
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+                  nobukti : nobukti,
                   Aktif: 'AKTIF',
+                  isLookup: true
                 }
               },
               onSelectRow: (stok, element) => {
@@ -2926,6 +3233,9 @@
 
                 let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
                 satuanEl.val(stok.satuan);
+                let iddetailEl = element.parents('tr').find(`td [name="id_detail[]"]`);
+                iddetailEl.val(stok.iddetail);
+
 
                 parent = element.closest('td');
                 parent.children('.detailstokId').val(stok.id)
@@ -3071,6 +3381,40 @@
       }
 
     })
+
+    // $('.penerimaanstok-lookup').lookupMaster({
+    //   title: 'penerimaan stok Lookup',
+    //   fileName: 'penerimaanstokMaster',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       roleInput: 'role',
+    //       isLookup: true,
+    //       searching: 1,
+    //       valueName: 'penerimaanstok_id',
+    //       searchText: 'penerimaanstok-lookup',
+    //       title: 'penerimaan stok',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (penerimaanstok, element) => {
+    //     setKodePenerimaan(penerimaanstok.kodepenerimaan)
+    //     setIsDateAvailable(penerimaanstok.id)
+
+    //     element.val(penerimaanstok.kodepenerimaan)
+    //     $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.val('')
+    //     $(`#${element[0]['name']}Id`).val('')
+    //     element.data('currentValue', element.val())
+    //   }
+
+    // })
 
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',
@@ -3236,8 +3580,12 @@
       title: 'Trado Lookup',
       fileName: 'trado',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          penerimaanstok_id: penerimaanstokId,
+          tradodari_id: $('#crudForm').find(`[id="tradodariId"] `).val(),
+          tradodarike: 'ke',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3260,8 +3608,12 @@
       title: 'gandengan Lookup',
       fileName: 'gandengan',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          penerimaanstok_id: penerimaanstokId,
+          gandengandari_id: $('#crudForm').find(`[id="gandengandariId"] `).val(),
+          gandengandarike: 'ke',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3287,7 +3639,8 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          // gudangdarike: 'ke',
+          gudangdari_id: $('#crudForm').find(`[id="gudangdariId"] `).val(),
+          gudangdarike: 'ke',
           Aktif: 'AKTIF',
         }
       },
@@ -3310,8 +3663,12 @@
       title: 'Trado Lookup',
       fileName: 'trado',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+          tradoke_id: $('#crudForm').find(`[id="tradokeId"] `).val(),
           Aktif: 'AKTIF',
+          tradodarike: 'dari',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3335,8 +3692,12 @@
       title: 'gandengan Lookup',
       fileName: 'gandengan',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+          gandenganke_id: $('#crudForm').find(`[id="gandengankeId"] `).val(),
           Aktif: 'AKTIF',
+          gandengandarike: 'dari',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3363,7 +3724,8 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          // gudangdarike: 'dari',
+          gudangke_id: $('#crudForm').find(`[id="gudangkeId"] `).val(),
+          gudangdarike: 'dari',
           Aktif: 'AKTIF',
         }
       },

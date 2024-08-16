@@ -17,6 +17,7 @@ class PiutangHeaderController extends MyController
         $title = $this->title;
         $data = [
             'statuscetak' => $this->comboapproval('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]

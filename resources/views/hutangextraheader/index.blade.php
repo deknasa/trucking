@@ -529,7 +529,7 @@
                     },
                     {
                         id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+                        innerHTML: '<i class="fas fa-check"></i> APPROVAL/UN',
                         class: 'btn btn-purple btn-sm mr-1',
                         onClick: () => {
 

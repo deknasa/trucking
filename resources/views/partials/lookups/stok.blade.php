@@ -2,7 +2,7 @@
 {{-- <div id="stokLookupPager"></div> --}}
 
 <script>
-$('#stokLookup').jqGrid({
+  $('#stokLookup').jqGrid({
       url: `{{ config('app.api_url') . 'stok' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -10,298 +10,200 @@ $('#stokLookup').jqGrid({
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        isLookup: true,
         statusreuse: `{!! $statusreuse ?? '' !!}`,
         approveReuse: `{!! $approveReuse ?? '' !!}`,
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
         from: `{!! $from ?? '' !!}`,
+        nobukti: `{!! $nobukti ?? '' !!}`,
         KelompokId: `{!! $KelompokId ?? '' !!}`,
-      },         
+        StokId: `{!! $StokId ?? '' !!}`,
+        isLookup: `{!! $isLookup ?? '' !!}`,
+      },
       idPrefix: 'stokLookup',
       colModel: [{
-        label: 'ID',
-        name: 'id',
-        align: 'right',
-        width: '70px',
-            search: false,
-        hidden: true
-        
-      },
-      {
-        label: 'NAMA',
-        name: 'namastok',
-        align: 'left',
-        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
-      },
-      {
-          label: 'Status aktif',
-          name: 'statusaktif',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS AKTIF',
-                    subgrp: 'STATUS AKTIF'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '70px',
+          search: false,
+          hidden: true
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusAktif = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusAktif = JSON.parse(rowObject.statusaktif)
-
-            return ` title="${statusAktif.MEMO}"`
-          }
-        },      {
-          label: 'keterangan',
+        },
+        {
+          label: 'NAMA',
+          name: 'namastok',
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
+        },
+         {
+          label: 'iddetail',
+          name: 'iddetail',
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'Keterangan',
           name: 'keterangan',
           align: 'left',
-      },
-      {
-          label: 'Status Reuse',
-          name: 'statusreuse',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS reuse',
-                    subgrp: 'STATUS reuse'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.id,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusreuse = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
-                  <span>${statusreuse.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusreuse = JSON.parse(rowObject.statusreuse)
-
-            return ` title="${statusreuse.MEMO}"`
-          }
-        },      {
-          label: 'keterangan',
-          name: 'keterangan',
-          align: 'left',
-      },
-      {
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
+        },
+        {
           label: 'nama terpusat',
           name: 'namaterpusat',
           width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left',
-      },
-      {
-        label: 'kelompok',
-        name: 'kelompok',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'satuan',
-        name: 'satuan',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'statusban',
-        name: 'statusban',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'jenistrado',
-        name: 'jenistrado',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'subkelompok',
-        name: 'subkelompok',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'kategori',
-        name: 'kategori',
-        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-        align: 'left'
-      },
-      {
-        label: 'merk',
-        name: 'merk',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      
-      {
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'kelompok',
+          name: 'kelompok',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'satuan',
+          name: 'satuan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'statusban',
+          name: 'statusban',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'jenistrado',
+          name: 'jenistrado',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'subkelompok',
+          name: 'subkelompok',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'kategori',
+          name: 'kategori',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'merk',
+          name: 'merk',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
+
+        {
           label: 'qty min',
           name: 'qtymin',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left',
-      },
-      {
+          search: false,
+          hidden: true
+        },
+        {
           label: 'qty max',
           name: 'qtymax',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left',
-      },
-      {
+          search: false,
+          hidden: true
+        },
+        {
           label: 'total vulkanisir',
           name: 'vulkan',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
-      },
-      {
+          search: false,
+          hidden: true
+        },
+        {
           label: 'kelompok_id',
           name: 'kelompok_id',
           align: 'left',
           search: false,
           hidden: true
-      },
-      {
+        },
+        {
           label: 'statusban_id',
           name: 'statusban_id',
           align: 'left',
           search: false,
           hidden: true
-      },
-      {
+        },
+        {
           label: 'vulkanplus',
           name: 'vulkanplus',
           align: 'left',
           search: false,
           hidden: true
-      },
-      {
+        },
+        {
           label: 'vulkanminus',
           name: 'vulkanminus',
           align: 'left',
           search: false,
           hidden: true
-      },
-      {
+        },
+        {
           label: 'penerimaanstokdetail_keterangan',
           name: 'penerimaanstokdetail_keterangan',
           align: 'left',
           search: false,
           hidden: true
-      },   
-      {
+        },
+        {
           label: 'penerimaanstokdetail_qty',
           name: 'penerimaanstokdetail_qty',
           align: 'left',
           search: false,
           hidden: true
-      },   
-      {
+        },
+        {
           label: 'penerimaanstokdetail_harga',
           name: 'penerimaanstokdetail_harga',
           align: 'left',
           search: false,
           hidden: true
-      },   
-      {
+        },
+        {
           label: 'penerimaanstokdetail_total',
           name: 'penerimaanstokdetail_total',
           align: 'left',
           search: false,
           hidden: true
-      },      
-      {
+        },
+        {
           label: 'Status Service Rutin',
           name: 'statusservicerutin',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
+          hidden: true,
+          search: false,
           searchoptions: {
             dataInit: function(element) {
               $(element).select2({
@@ -349,7 +251,7 @@ $('#stokLookup').jqGrid({
           formatter: (value, options, rowData) => {
             let statusService = JSON.parse(value)
             if (!statusService) {
-                return ''
+              return ''
             }
             let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusService.WARNA}; color: #fff;">
@@ -362,50 +264,21 @@ $('#stokLookup').jqGrid({
           cellattr: (rowId, value, rowObject) => {
             let statusService = JSON.parse(rowObject.statusservicerutin)
             if (!statusService) {
-                return ` title=" "`
+              return ` title=" "`
             }
             return ` title="${statusService.MEMO}"`
           }
         },
-      {
+        {
           label: 'service',
           name: 'servicerutin_text',
           align: 'left',
           hidden: true,
           search: false
-      },
-      
-      {
-          label: 'MODIFIED BY',
-          name: 'modifiedby',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          align: 'left',
-      },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-     
-    ],
-        autowidth: true,
+        },
+
+      ],
+      autowidth: true,
       responsive: true,
       shrinkToFit: false,
       height: 450,
@@ -444,7 +317,7 @@ $('#stokLookup').jqGrid({
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

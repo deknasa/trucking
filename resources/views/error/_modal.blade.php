@@ -45,6 +45,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSubmitCountinue" style="display: none;" class="btn btn-success">
+              <i class="fa fa-save"></i>
+              Save & Countinue
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -62,9 +66,18 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    $('#btnSubmit').click(function(event) {
-      event.preventDefault()
 
+    $('#btnSubmitCountinue').click(function(event) {
+      event.preventDefault()
+      submit(false)
+
+    })
+    $('#btnSubmit').click(function(event){
+      event.preventDefault()
+      submit()
+    })
+    
+    function submit(close = true) {
       let method
       let url
       let form = $('#crudForm')
@@ -133,7 +146,9 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (close) {
+            $('#crudModal').modal('hide')
+          }
 
           id = response.data.id
 
@@ -159,15 +174,22 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
+    let action = form.data('action')
 
     setFormBindKeys(form)
 
     activeGrid = null
+
+    if (action =="add") {
+      $('#btnSubmitCountinue').show();
+    }else{
+      $('#btnSubmitCountinue').hide();
+    }
 
     getMaxLength(form)
   })

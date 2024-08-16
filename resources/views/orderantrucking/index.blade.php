@@ -37,37 +37,37 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
 
   setSpaceBarCheckedHandler()
@@ -200,6 +200,21 @@ function checkboxHandler(element) {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'SUPIR',
+            name: 'supir',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
+            label: 'TRADO',
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
+            label: 'MANDOR',
+            name: 'mandor',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CONTAINER',
@@ -518,7 +533,7 @@ function checkboxHandler(element) {
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
-
+          getQueryParameter()
           setHighlight($(this))
         },
       })
@@ -612,53 +627,59 @@ function checkboxHandler(element) {
           },
 
         ],
-        extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
-              id: 'approveun',
-              text: "UN/APPROVAL status orderan trucking",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
-                  approve()
+        modalBtnList: [{
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1  ',
+            item: [{
+                id: 'approveun',
+                text: "APPROVAL/UN status orderan trucking",
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
+                    approve()
+                  }
                 }
-              }
-            },
-            {
-              id: 'approvalEditOrderanTrucking',
-              text: "un/Approval Edit orderan trucking",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
-                  approvalEditOrderanTrucking();
+              },
+              {
+                id: 'approvalEditOrderanTrucking',
+                text: "APPROVAL/UN Edit orderan trucking",
+                color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
+                    approvalEditOrderanTrucking();
+                  }
+                  // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 }
-                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              }
-            },
-            {
-              id: 'approvalTanpaJob',
-              text: "un/Approval Tanpa Job EMKL",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`) {
-                  approvalTanpaJobEMKL();
+              },
+              {
+                id: 'approvalTanpaJob',
+                text: "APPROVAL/UN Tanpa Job EMKL",
+                color: `<?php echo $data['listbtn']->btn->approvaltanpajob; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`) {
+                    approvalTanpaJobEMKL();
+                  }
+                  // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 }
-                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              }
-            },
-          ],
-        },
-        {
-          id: 'lainnya',
-          title: 'Lainnya',
-          caption: 'Lainnya',
-          innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-          class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
+              },
+            ],
+          },
+          {
+            id: 'lainnya',
+            title: 'Lainnya',
+            caption: 'Lainnya',
+            innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+            class: 'btn btn-secondary btn-sm mr-1  ',
+            item: [{
               id: 'updateNoContainer',
               text: "Update No Container",
+              color: `<?php echo $data['listbtn']->btn->updatenocontainer; ?>`,
               onClick: () => {
                 var selectedOne = selectedOnlyOne();
                 if (selectedOne[0]) {
@@ -667,9 +688,9 @@ function checkboxHandler(element) {
                   showDialog(selectedOne[1])
                 }
               }
-            }
-          ]
-        }]
+            }]
+          }
+        ]
       })
 
     /* Append clear filter button */
@@ -815,6 +836,18 @@ function checkboxHandler(element) {
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
       }
+
+      let hakLainnyaCount = 0;
+      hakLainnyaCount++
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'updateNoContainer') }}`) {
+        hakLainnyaCount--
+        $('#updateNoContainer').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakLainnyaCount < 1) {
+        // $('#approve').hide()
+        $('#lainnya').hide()
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -889,7 +922,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

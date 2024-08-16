@@ -41,12 +41,9 @@
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">jenis order </label>
                             <div class="col-sm-4 mt-2">
-                                <select name="jenisorder" id="jenisorder" class="form-select select2" style="width: 100%;">
-                                    {{-- <option value=""> </option> --}}
-                                    @foreach ($combojenisorder as $jenisorder)
-                                    <option value="{{$jenisorder['id']}}"> {{$jenisorder['keterangan']}} </option>
-                                    @endforeach
-                                </select>
+
+                                <input type="hidden" name="jenisorder">
+                                <input type="text" id="jenisorder" name="jenisordernama" class="form-control jenisorder-lookup">
                             </div>
                         </div>
 
@@ -95,14 +92,15 @@
 
 
     $(document).ready(function() {
-        initSelect2($(`#jenisorder`), false)
+        // initSelect2($(`#jenisorder`), false)
+        initLookup()
 
         initDatepicker()
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
             'change');
-            $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
+        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
             'change');
-            $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
+        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
             'change');
 
         if (!`{{ $myAuth->hasPermission('laporantitipanemkl', 'report') }}`) {
@@ -137,7 +135,7 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
-        
+
         let jenisorder = $('#crudForm').find('[name=jenisorder]').val()
         let tgldari = $('#crudForm').find('[name=tgldari]').val()
         let tglsampai = $('#crudForm').find('[name=tglsampai]').val()
@@ -147,7 +145,7 @@
             url: `{{ route('laporantitipanemkl.export') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`,
             type: 'GET',
             beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
             },
             xhrFields: {
                 responseType: 'arraybuffer'
@@ -164,7 +162,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -224,6 +222,41 @@
                 },
             });
         });
+    }
+
+    function initLookup() {
+
+        $('.jenisorder-lookup').lookupMaster({
+            title: 'Jenis Order Lookup',
+            fileName: 'jenisorderMaster',
+            // typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'jenisorder_id',
+                    searchText: 'jenisorder-lookup',
+                    title: 'Jenis Order Lookup',
+                    // typeSearch: 'ALL',
+                    singleColumn : true,
+                    hideLabel: true,
+                }
+            },
+            onSelectRow: (jenisorder, element) => {
+                $('#crudForm [name=jenisorder]').first().val(jenisorder.id)
+                element.val(jenisorder.keterangan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=jenisorder]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
     }
 </script>
 @endpush()

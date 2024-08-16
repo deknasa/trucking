@@ -67,7 +67,11 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -84,7 +88,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -97,7 +101,7 @@
 
   }
 
-  
+
   setSpaceBarCheckedHandler()
   reloadGrid()
   $(document).ready(function() {
@@ -126,7 +130,8 @@
     })
 
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'invoiceextraheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -315,7 +320,7 @@
               let tgldari = rowData.tgldariheaderpiutangheader
               let tglsampai = rowData.tglsampaiheaderpiutangheader
               let url = "{{route('piutangheader.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
             },
           },
@@ -422,17 +427,17 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
 
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_piutang_nobukti"]`).attr('title') ?? '';
 
           // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
           //   loadGrid(id, nobukti)
           // })
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -528,15 +533,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -551,6 +557,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -587,11 +594,13 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status INVOICEEXTRA",
+                text: "APPROVAL/UN Status INVOICE EXTRA",
+                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
                     approve()
@@ -600,7 +609,9 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "Approval Buka Cetak INVOICEEXTRA",
+                text: "Approval Buka Cetak INVOICE EXTRA",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -609,6 +620,23 @@
                       showDialog('Harap pilih salah satu record')
                     } else {
                       approvalBukaCetak(tglbukacetak, 'INVOICEEXTRAHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas INVOICE EXTRA",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimberkas(tglkirimberkas, 'INVOICEEXTRAHEADER', selectedRows, selectedbukti);
                     }
                   }
                 }
@@ -740,6 +768,11 @@
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+      }
       if (hakApporveCount < 1) {
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
@@ -826,7 +859,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

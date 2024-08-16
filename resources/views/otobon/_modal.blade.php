@@ -203,7 +203,7 @@
             minimumValue: 0
         })
         $('#crudModal').modal('show')
-        
+
 
     }
 
@@ -389,6 +389,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    Invoice: 'UTAMA',
                 }
             },
             onSelectRow: (agen, element) => {

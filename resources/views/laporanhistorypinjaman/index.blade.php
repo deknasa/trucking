@@ -15,14 +15,14 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="supirdari_id">
-                                    <input type="text" name="supirdari" class="form-control supirdari-lookup">
+                                    <input type="text" name="supirdari" id="supirdari" class="form-control supirdari-lookup">
                                 </div>
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="supirsampai_id">
-                                    <input type="text" name="supirsampai" class="form-control supirsampai-lookup">
+                                    <input type="text" name="supirsampai" id="supirsampai" class="form-control supirsampai-lookup">
                                 </div>
                             </div>
                         </div>
@@ -132,12 +132,19 @@
 
     function initLookup() {
 
-        $('.supirdari-lookup').lookup({
+        $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
+                    searching: 1,
+                    valueName: 'supirdari_id',
+                    searchText: 'supirdari-lookup',
+                    title: 'supir dari',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -154,12 +161,19 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.supirsampai-lookup').lookup({
+        $('.supirsampai-lookup').lookupMaster({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
+                    searching: 1,
+                    valueName: 'supirsampai_id',
+                    searchText: 'supirsampai-lookup',
+                    title: 'supir sampai',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {

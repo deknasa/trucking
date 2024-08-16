@@ -25,10 +25,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK</label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="kelompok_id">
-                                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                                <input type="text" name="kelompok" id="kelompok" class="form-control kelompok-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -197,12 +197,19 @@
 
 
     function initLookup() {
-        $('.kelompok-lookup').lookup({
+        $('.kelompok-lookup').lookupMaster({
             title: 'kelompok Lookup',
-            fileName: 'kelompok',
+            fileName: 'kelompokMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'kelompok_id',
+                    searchText: 'kelompok-lookup',
+                    title: 'Kelompok lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (kategori, element) => {

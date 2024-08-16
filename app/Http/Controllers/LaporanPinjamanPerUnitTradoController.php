@@ -36,8 +36,9 @@ class LaporanPinjamanPerUnitTradoController extends MyController
             ->get(config('app.api_url') . 'laporanpinjamanperunittrado/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanpinjamanperunittrado', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpinjamanperunittrado', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -57,6 +58,7 @@ class LaporanPinjamanPerUnitTradoController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
         
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -64,14 +66,18 @@ class LaporanPinjamanPerUnitTradoController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');
-        
-        $sheet->setCellValue('A2', strtoupper($data[0]['judulLaporan']));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', strtoupper($namacabang));
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:D2');
-
-        $sheet->setCellValue('A3', strtoupper( 'Trado : ' . $detailParams['trado'] ));
+        
+        $sheet->setCellValue('A3', strtoupper($data[0]['judulLaporan']));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:D3');
+
+        $sheet->setCellValue('A4', strtoupper( 'Trado : ' . $detailParams['trado'] ));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:D4');
 
         $styleArray = array(
             'borders' => array(

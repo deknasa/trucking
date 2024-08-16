@@ -49,12 +49,12 @@
               </div>
 
               <div class="border p-3 mt-3">
-                <h6>Posting Penerimaan</h6>
+                <h6>Posting Penerimaan/Pengeluaran</h6>
 
                 <div class="row form-group">
                   <div class="col-12 col-md-2">
                     <label class="col-form-label">
-                      POSTING </label>
+                      kas / bank </label>
                   </div>
                   <div class="col-12 col-md-4">
                     <input type="hidden" name="bank_id">
@@ -64,10 +64,19 @@
                 <div class="row form-group">
                   <div class="col-12 col-md-2">
                     <label class="col-form-label">
-                      NO BUKTI KAS MASUK </label>
+                      NO BUKTI KAS / BANK MASUK </label>
                   </div>
                   <div class="col-12 col-md-4">
                     <input type="text" name="penerimaan_nobukti" id="penerimaan_nobukti" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
+                      NO BUKTI KAS / BANK KELUAR </label>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
                   </div>
                 </div>
               </div>
@@ -96,6 +105,10 @@
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
+            </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
@@ -233,6 +246,15 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
+      event.preventDefault()
 
       let method
       let url
@@ -274,6 +296,10 @@
         value: form.find(`[name="penerimaan_nobukti"]`).val()
       })
 
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
 
       let rowLength = 0
       $.each(selectedRowsPosting, function(index, item) {
@@ -365,12 +391,20 @@
         value: limit
       })
       data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
       })
       data.push({
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
+      })
+      data.push({
+        name: 'button',
+        value: button
       })
 
       let tgldariheader = $('#tgldariheader').val();
@@ -407,28 +441,54 @@
         },
         data: data,
         success: response => {
+          $('#crudModal').find('#crudForm').trigger('reset')
           id = response.data.id
 
-          $('#crudModal').find('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
 
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+
+          } else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            // showSuccessDialog(response.message, response.data.nobukti)
+
+            $("#posting")[0].p.selectedRowIds = [];
+            $('#posting').jqGrid("clearGridData");
+            $("#posting")
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+
+            $("#nonposting")[0].p.selectedRowIds = [];
+            $('#nonposting').jqGrid("clearGridData");
+            $("#nonposting")
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+            createPemutihanSupir()
           }
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
-          }
         },
         error: error => {
           if (error.status === 422) {
@@ -453,7 +513,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -466,6 +526,11 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
 
     getMaxLength(form)
     initLookup()
@@ -473,10 +538,49 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pemutihansupirheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
 
   function createPemutihanSupir() {
@@ -1036,18 +1140,46 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pemutihansupir.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pemutihansupir.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
+        }
 
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pemutihansupir/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
           if (Aksi == 'EDIT') {
             editPemutihanSupir(Id)
           }
           if (Aksi == 'DELETE') {
             deletePemutihanSupir(Id)
           }
-        } else {
-          showDialog(response.message['keterangan'])
         }
 
       }
@@ -1087,7 +1219,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-          Aktif: 'AKTIF',
+          // Aktif: 'AKTIF',
         }
       },
       onSelectRow: (supir, element) => {

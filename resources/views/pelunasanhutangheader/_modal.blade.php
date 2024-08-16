@@ -37,7 +37,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  ALAT BAYAR <span class="text-danger">*</span></label>
+                  ALAT BAYAR </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
 
@@ -49,13 +49,22 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL CAIR <span class="text-danger">*</span></label>
+                  Tgl Jatuh Tempo <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
 
                 <div class="input-group">
                   <input type="text" name="tglcair" class="form-control datepicker">
                 </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  NO WARKAT</label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="nowarkat" class="form-control">
               </div>
             </div>
 
@@ -79,7 +88,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    KAS / BANK <span class="text-danger">*</span></label>
+                    KAS / BANK </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
@@ -148,6 +157,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -165,6 +178,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
   let isEditTgl
+  let statusApproval
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -175,6 +189,9 @@
       setSisaHutang(element)
     })
 
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+      $('#crudForm').find(`[name="tglcair"]`).val($(this).val()).trigger('change');
+    });
     $(document).on('input', `#table_body [name="potongan[]"]`, function(event) {
       setPotongan()
       let action = $('#crudForm').data('action')
@@ -231,6 +248,15 @@
     })
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
 
       let method
       let url
@@ -288,6 +314,14 @@
       data.push({
         name: 'tglcair',
         value: form.find(`[name="tglcair"]`).val()
+      })
+      data.push({
+        name: 'nowarkat',
+        value: form.find(`[name="nowarkat"]`).val()
+      })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
       })
 
       let selectedRowsHutang = $("#tableHutang").getGridParam("selectedRowIds");
@@ -365,6 +399,14 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -402,27 +444,42 @@
 
           id = response.data.id
           $('#crudModal').find('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+
+
+            $('#detailList tbody').html('')
+            $('#nominalHutang').html('')
+            $('#sisaHutang').html('')
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            // showSuccessDialog(response.message, response.data.nobukti)
 
-
-          $('#detailList tbody').html('')
-          $('#nominalHutang').html('')
-          $('#sisaHutang').html('')
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
-          }
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            $("#tableHutang")[0].p.selectedRowIds = [];
+            $('#tableHutang').jqGrid("clearGridData");
+            $("#tableHutang")
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
+            createPelunasanHutangHeader();
           }
         },
         error: error => {
@@ -438,7 +495,7 @@
               row = parseInt(selectedRowsHutang[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'bank' || indexes[0] == 'alatbayar' || indexes[0] == 'tglcair' || indexes[0] == 'supplier' || indexes[0] == 'tglbukti' || indexes[0] == 'hutang_id') {
+              if (indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'alatbayar' || indexes[0] == 'tglcair' || indexes[0] == 'supplier' || indexes[0] == 'tglbukti' || indexes[0] == 'hutang_id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -472,7 +529,7 @@
         $(this).removeAttr('disabled')
       })
 
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -483,16 +540,65 @@
     activeGrid = null
 
     getMaxLength(form)
+    form.find('#btnSubmit').prop('disabled', false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled', true)
+    }
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     initLookup()
     initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    selectedRows = []
+    statusApproval = ''
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pelunasanhutangheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function setBayar() {
     let nominalDetails = $(`#table_body [name="bayar[]"]:not([disabled])`)
@@ -560,6 +666,20 @@
     if (selectedRows.length > 0) {
       clearSelectedRows()
     }
+    $('#crudForm').find(`[name=tglcair]`).attr('readonly', true)
+    $('#crudForm').find(`[name=tglcair]`).parent('.input-group').find('.input-group-append').hide()
+
+    form.find(`[name="alatbayar"]`).prop('readonly', true)
+    form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+    form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+
+    let name = $('#crudForm').find(`[name=bank]`).parents('.input-group').children()
+    name.attr('disabled', true)
+    name.find('.lookup-toggler').attr('disabled', true)
+    $(`#crudForm [name=bank]`).prop('readonly', true)
+    let bank = $('#crudForm').find(`[name=bank]`).css({
+      background: '#e9ecef'
+    })
     initDatepicker()
     loadHutangGrid()
   }
@@ -592,16 +712,39 @@
           form.find(`[name="tglbukti"]`).prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
-        form.find(`[name="alatbayar"]`).prop('readonly', true)
-        form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="supplier"]`).prop('readonly', true)
-        form.find(`[name="supplier"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="bank"]`).prop('readonly', true)
-        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        // form.find(`[name="supplier"]`).prop('readonly', true)
+        // form.find(`[name="supplier"]`).parent('.input-group').find('.input-group-append').remove()
+        // form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').remove()
+        if (statusApproval == 3) {
 
+          form.find(`[name="bank"]`).prop('readonly', false)
+          form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+
+          form.find(`[name="alatbayar"]`).prop('readonly', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+
+          form.find(`[name="supplier"]`).prop('readonly', true)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+
+        } else {
+
+          form.find(`[name="bank"]`).prop('readonly', true)
+          form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+
+          form.find(`[name="alatbayar"]`).prop('readonly', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+
+          form.find(`[name="supplier"]`).prop('readonly', false)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+        }
+        enableTglJatuhTempo(form)
+        enableNoWarkat(form)
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -635,7 +778,91 @@
           clearSelectedRows()
         }
         $('#crudModal').modal('show')
+        if (statusApproval == 3) {
 
+          form.find(`[name="bank"]`).prop('readonly', false)
+          form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).prop('readonly', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+
+        } else {
+
+          form.find(`[name="bank"]`).prop('readonly', true)
+          form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+
+          form.find(`[name="alatbayar"]`).prop('readonly', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+        }
+        enableTglJatuhTempo(form)
+        enableNoWarkat(form)
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
+
+  function viewPelunasanHutang(Id) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled', true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Pelunasan Hutang')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+
+    Promise
+      .all([
+        showPelunasanHutang(form, Id)
+      ])
+      .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
+        $('#crudModal').modal('show')
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
+        form.find(`[name="supplier"]`).prop('readonly', true)
+        form.find(`[name="supplier"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').remove()
+        if (statusApproval == 3) {
+
+          form.find(`[name="bank"]`).prop('readonly', false)
+          form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).prop('readonly', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', false)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', false)
+
+        } else {
+
+          form.find(`[name="bank"]`).prop('readonly', true)
+          form.find(`[name="bank"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+
+          form.find(`[name="alatbayar"]`).prop('readonly', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.lookup-toggler').attr('disabled', true)
+          form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').attr('disabled', true)
+        }
+        enableTglJatuhTempo(form)
+        enableNoWarkat(form)
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -687,7 +914,7 @@
               element.prop("readonly", true)
             }
           })
-
+          statusApproval = response.data.statusapproval
           loadHutangGrid();
           getDataHutang(response.data.supplier_id, Id).then((response) => {
 
@@ -826,7 +1053,7 @@
 
   function loadHutangGrid() {
     let disabled = '';
-    if ($('#crudForm').data('action') == 'delete') {
+    if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'view') {
       disabled = 'disabled'
     }
     $("#tableHutang")
@@ -867,7 +1094,10 @@
             },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
-              if ($('#crudForm').data('action') == 'delete') {
+              if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'view') {
+                disabled = 'disabled'
+              }
+              if ($('#crudForm').data('action') == 'edit' && statusApproval == '3') {
                 disabled = 'disabled'
               }
               return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHutangHandler(this, ${rowData.id})">`;
@@ -1156,9 +1386,17 @@
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
           if ($('#crudForm').data('action') != 'delete') {
-            return $(this)
-              .find(`tr input[value=${rowData.id}]`)
-              .is(":checked");
+            if ($('#crudForm').data('action') != 'edit') {
+              return $(this)
+                .find(`tr input[value=${rowData.id}]`)
+                .is(":checked");
+            } else { //edit
+              if (statusApproval != '3') { //edit dan tidak approval
+                return $(this)
+                  .find(`tr input[value=${rowData.id}]`)
+                  .is(":checked");
+              }
+            }
           }
         },
         validationCell: function(cellobject, errormsg, iRow, iCol) {
@@ -1277,7 +1515,7 @@
       } else {
         url = `${apiUrl}pelunasanhutangheader/${supplierId}/getHutang`
       }
-    } else if (aksi == 'delete') {
+    } else if (aksi == 'delete' || aksi == 'view') {
       url = `${apiUrl}pelunasanhutangheader/${id}/${supplierId}/getPembayaran`
       attribut = 'disabled'
       forCheckbox = 'disabled'
@@ -1313,7 +1551,6 @@
       .find((row) => row.id == rowId);
 
     editableColumns.forEach((editableColumn) => {
-
       if (!isChecked) {
         for (var i = 0; i < selectedRowIds.length; i++) {
           if (selectedRowIds[i] == rowId) {
@@ -1322,7 +1559,10 @@
         }
         sisa = 0
         if ($('#crudForm').data('action') == 'edit') {
-          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
+          
+          let originBayar = (originalGridData.bayar == undefined) ? 0 : parseFloat(originalGridData.bayar)
+          let originPotongan = (originalGridData.potongan == undefined) ? 0 : parseFloat(originalGridData.potongan)
+          sisa = (parseFloat(originalGridData.sisa) + originBayar + originPotongan)
         } else {
           sisa = originalGridData.sisa
         }
@@ -1358,7 +1598,9 @@
           // } else {
           //   localRow.bayar = originalGridData.sisa
           // }
-          localRow.bayar = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
+          let originBayar = (originalGridData.bayar == undefined) ? 0 : parseFloat(originalGridData.bayar)
+          let originPotongan = (originalGridData.potongan == undefined) ? 0 : parseFloat(originalGridData.potongan)
+          localRow.bayar = (parseFloat(originalGridData.sisa) + originBayar + originPotongan)
         } else {
           localRow.bayar = originalGridData.sisa
         }
@@ -1605,23 +1847,17 @@
         aksi: Aksi
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
@@ -2013,12 +2249,15 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          from: 'pelunasanhutangheader'
         }
       },
       onSelectRow: (supplier, element) => {
         $('#crudForm [name=supplier_id]').first().val(supplier.id)
         element.val(supplier.namasupplier)
         element.data('currentValue', element.val())
+        $('#btnSubmit').prop('disabled', true)
+        $('#btnSaveAdd').prop('disabled', true)
 
         $('#tableHutang').jqGrid("clearGridData");
         $("#tableHutang")
@@ -2026,10 +2265,15 @@
             selectedRowIds: []
           })
           .trigger("reloadGrid");
+
+        setTotalSisa()
+        setTotalBayar()
+        setTotalPotongan()
+        setAllTotal()
+
         getDataHutang(supplier.id).then((response) => {
 
           $("#tableHutang")[0].p.selectedRowIds = [];
-          console.log('before', $("#tableHutang").jqGrid('getGridParam', 'selectedRowIds'))
           setTimeout(() => {
 
             $("#tableHutang")
@@ -2041,6 +2285,8 @@
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
           }, 100);
 
         });
@@ -2075,6 +2321,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          bank_Id: $('#crudForm [name=bank_id]').val(),
         }
       },
       onSelectRow: (alatbayar, element) => {
@@ -2084,6 +2331,8 @@
         element.data('currentValue', element.val())
         $('#crudForm [name=bank_id]').val('')
         $('#crudForm [name=bank]').val('')
+        enableTglJatuhTempo($(`#crudForm`))
+        enableNoWarkat($(`#crudForm`))
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2097,6 +2346,29 @@
         element.data('currentValue', element.val())
       }
     })
+  }
+
+  function enableTglJatuhTempo(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+      el.find(`[name="tglcair"]`).addClass('datepicker')
+      el.find(`[name="tglcair"]`).attr('readonly', false)
+      initDatepicker()
+      el.find(`[name="tglcair"]`).parent('.input-group').find('.input-group-append').show()
+    } else {
+      el.find(`[name="tglcair"]`).removeClass('datepicker')
+      el.find(`[name="tglcair"]`).parent('.input-group').find('.input-group-append').hide()
+      el.find(`[name="tglcair"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
+      el.find(`[name="tglcair"]`).attr('readonly', true)
+    }
+  }
+
+  function enableNoWarkat(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() != 'TUNAI') {
+      el.find(`[name="nowarkat"]`).attr('readonly', false)
+    } else {
+      el.find(`[name="nowarkat"]`).attr('readonly', true)
+      el.find(`[name="nowarkat"]`).val('')
+    }
   }
 
   const setTglBukti = function(form) {

@@ -16,7 +16,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class laporanpembelianController extends MyController
 {
-    public $title = 'Laporan Pembelian';
+    public $title = 'Laporan Pembelian Per Supplier';
 
     public function index(Request $request)
     {
@@ -75,13 +75,14 @@ class laporanpembelianController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanpembelian/report', $detailParams);
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
 
 
         // dd($data);
         // $dataHeader = $header['dataheader'];
         $user = Auth::user();
 
-        return view('reports.laporanpembelian', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpembelian', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
 
@@ -117,6 +118,7 @@ class laporanpembelianController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
         
+        $namacabang = $responses['namacabang'];
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -127,20 +129,24 @@ class laporanpembelianController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:G2');
         
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-        // $sheet->mergeCells('A2:B2');
-        $sheet->setCellValue('A3', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A3', $pengeluaran[0]['judulLaporan']);
         // $sheet->mergeCells('A3:B3');
-        $sheet->setCellValue('A4', 'Status : '. $request->status);
+        $sheet->setCellValue('A4', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         // $sheet->mergeCells('A4:B4');
+        $sheet->setCellValue('A5', 'Status : '. $request->status);
+        // $sheet->mergeCells('A5:B5');
 
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->getStyle("A3:B3")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->getStyle("A4:B4")->getFont()->setBold(true);
+        $sheet->getStyle("A5:B5")->getFont()->setBold(true);
 
-        $header_start_row = 6;
-        $detail_start_row = 7;
+        $header_start_row = 7;
+        $detail_start_row = 8;
 
         $styleArray = array(
             'borders' => array(

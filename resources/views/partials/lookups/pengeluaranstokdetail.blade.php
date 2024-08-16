@@ -3,80 +3,84 @@
 
 <script>
   $('#pengeluaranStokDetailLookup').jqGrid({
-      url:`{!! $url ?? config('app.api_url')  !!}`+'pengeluaranstokdetail',
+      url: `{!! $url ?? config('app.api_url')  !!}` + 'pengeluaranstokdetail',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        penerimaanstokheader_id:  `{!! $penerimaanstokheader_id ?? '' !!}`, //dari klaim
-        pengeluaranstokheader_id:  `{!! $pengeluaranstokheader_id ?? '' !!}`,
+        penerimaanstokheader_id: `{!! $penerimaanstokheader_id ?? '' !!}`, //dari klaim
+        pengeluaranstokheader_id: `{!! $pengeluaranstokheader_id ?? '' !!}`,
+        penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
+        stok_id: `{!! $stok_id ?? '' !!}`,
       },
       idPrefix: 'pengeluaranStokDetailLookup',
       colModel: [{
-            label: 'NO BUKTI',
-            name: 'nobukti',
-          },
-          {
-            label: 'stok',
-            name: 'stok',
-          },
+          label: 'NO BUKTI',
+          name: 'nobukti',
+        },
+        {
+          label: 'stok',
+          name: 'stok',
+        },
 
-          {
-            label: 'qty',
-            name: 'qty',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'harga',
-            name: 'harga',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+        {
+          label: 'qty',
+          name: 'qty',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'harga',
+          name: 'harga',
+          align: 'right',
+          formatter: currencyFormat,
+        },
 
-          {
-            label: 'persentase discount',
-            name: 'persentasediscount',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'nominaldiscount',
-            name: 'nominaldiscount',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'vulkanisirke',
-            name: 'vulkanisirke',
-          },
-          {
-            label: 'TOTAL',
-            name: 'total',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'stok_id',
-            name: 'stok_id',
-            align: 'right',
-            width: '70px',
-              search: false,
-            hidden: true
-          },
+        {
+          label: 'persentase discount',
+          name: 'persentasediscount',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'nominaldiscount',
+          name: 'nominaldiscount',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'vulkanisirke',
+          name: 'vulkanisirke',
+        },
+        {
+          label: 'TOTAL',
+          name: 'total',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_4 : md_mobile_4,
+        },
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+        },
+        {
+          label: 'stok_id',
+          name: 'stok_id',
+          align: 'right',
+          width: '70px',
+          search: false,
+          hidden: true
+        },
 
 
-        ],
+      ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -112,15 +116,15 @@
       },
       loadBeforeSend: function(jqXHR) {
         cab = `{!! $cabang ?? '' !!}`;
-        if(cab == 'TNL'){
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
-        }else{
+        // if (cab == 'TNL') {
+        //   jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        // } else {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-        }
+        // }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

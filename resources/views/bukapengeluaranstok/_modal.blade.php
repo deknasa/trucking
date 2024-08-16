@@ -43,6 +43,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -61,6 +65,15 @@
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
       event.preventDefault()
 
       let method
@@ -98,6 +111,10 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'button',
+        value: button
+      })
 
       switch (action) {
         case 'add':
@@ -127,16 +144,25 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
 
-          id = response.data.id
+          if (button == 'btnSubmit') {  
+            $('#crudModal').modal('hide')
 
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
-          }).trigger('reloadGrid');
+            id = response.data.id
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page
+            }).trigger('reloadGrid');
+
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          }else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            // showSuccessDialog(response.message, response.data.nobukti)
+            createBukaPengeluaranStok();
           }
         },
         error: error => {
@@ -153,7 +179,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -161,6 +187,11 @@
 
     setFormBindKeys(form)
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     activeGrid = null
     initDatepicker()
     initLookup()

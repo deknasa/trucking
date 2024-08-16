@@ -300,6 +300,56 @@
                     },
 
                     {
+                        label: 'STATUS INV. EXTRA',
+                        name: 'statusinvoiceextra',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        stype: 'select',
+                        searchoptions: {
+                            value: `:ALL;<?php
+                                            $i = 1;
+
+                                            foreach ($combo['statusaktif'] as $statusaktif) :
+                                                echo "$statusaktif[text]:$statusaktif[text]";
+
+                                                if ($i !== count($combo['statusaktif'])) {
+                                                    echo ';';
+                                                }
+                                                $i++;
+                                            endforeach;
+
+                                            ?>
+                                     `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusAktif = JSON.parse(value)
+                            if (!statusAktif) {
+                                return ''
+                            }
+
+                            let formattedValue = $(`
+                                            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+                                            <span>${statusAktif.SINGKATAN}</span>
+                                            </div>
+                                        `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusAktif = JSON.parse(rowObject.statusinvoiceextra)
+
+                            if (!statusAktif) {
+                                return ` title=""`
+                            }
+                            return ` title="${statusAktif.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -446,7 +496,8 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editAgen(selectedId)
+                                cekValidasidelete(selectedId, 'edit')
+                                // editAgen(selectedId)
                             }
                         }
                     },
@@ -459,7 +510,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId, 'delete')
                             }
                         }
                     },
@@ -495,31 +546,35 @@
                     },
 
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
-                            id: 'approveun',
-                            text: "UN/APPROVAL Data",
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $combo['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('customer', 'approvalaktif') }}`),
                             onClick: () => {
+                                if (`{{ $myAuth->hasPermission('customer', 'approvalaktif') }}`) {
+                                    approvalAktif('customer')
 
-                                approve()
-
+                                }
                             }
                         },
                         {
                             id: 'approvalnonaktif',
-                            text: "Approval Non Aktif",
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $combo['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`),
                             onClick: () => {
-
-                                approvenonaktif()
-
+                                if (`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('customer')
+                                }
                             }
                         },
-
                     ],
                 }]
             })
@@ -560,21 +615,30 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('customer', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('customer', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('customer', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('customer', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
+
+
             }
 
             if (!`{{ $myAuth->hasPermission('customer', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('customer', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('customer', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('customer', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
@@ -583,22 +647,21 @@
             if (!`{{ $myAuth->hasPermission('customer', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            let hakApporveCount = 0 ;
+
+            let hakApporveCount = 0;
+
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
-              hakApporveCount--
-              $('#approveun').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
             }
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`) {
-              hakApporveCount--
-              $('#approvalnonaktif').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
             }
             if (hakApporveCount < 1) {
-              $('#approve').hide()
-            //   $('#approve').attr('disabled', 'disabled')
+                $('#approve').hide()
             }
         }
 

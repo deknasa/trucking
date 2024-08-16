@@ -174,6 +174,8 @@
           $('#crudModalApprovalTanpa').modal('hide')
 
           $('#jqGrid').trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
         },
         error: error => {
           if (error.status === 422) {
@@ -215,7 +217,7 @@
     form.find('#btnSubmitApprovalTanpa').html(`<i class="fa fa-save"></i> Save`)
 
     form.find(`.sometimes`).show()
-    $('#crudModalApprovalTanpaTitle').text('Un/Approval Trado tanpaKeterangan')
+    $('#crudModalApprovalTanpaTitle').text('APPROVAL/UN Trado tanpaKeterangan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

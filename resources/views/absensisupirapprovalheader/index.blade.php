@@ -39,8 +39,8 @@
 @include('absensisupirapprovalheader._modal')
 <!-- Detail -->
 @include('absensisupirapprovalheader._detail')
-@include('pengeluaran._pengeluaran')
-@include('jurnalumum._jurnal')
+@include('absensisupirapprovalheader._pengeluaran')
+@include('absensisupirapprovalheader._jurnal')
 
 @push('scripts')
 <script>
@@ -54,6 +54,7 @@
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
+  let absensiTangki;
   let limit
   let postData
   let sortname = 'nobukti'
@@ -62,13 +63,17 @@
   let currentTab = 'detail'
   let selectedRows = [];
 
- 
+
 
   let selectedbukti = [];
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -85,7 +90,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -121,17 +126,18 @@
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
   }
 
-
+  reloadGrid()
   setSpaceBarCheckedHandler()
   $(document).ready(function() {
     $("#tabs").tabs()
 
+    isAbsensiTangki()
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)
@@ -164,7 +170,8 @@
       activeGrid = '#jqGrid'
     })
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `${apiUrl}absensisupirapprovalheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -348,7 +355,7 @@
               let tgldari = rowData.tgldariheaderabsensisupirheader
               let tglsampai = rowData.tglsampaiheaderabsensisupirheader
               let url = "{{route('absensisupirheader.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
             },
           },
@@ -367,6 +374,19 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'NO BUKTI pengeluaran',
+            width: 210,
+            name: 'pengeluaran',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return rowData.pengeluaran_url
             }
           },
           {
@@ -481,18 +501,22 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
 
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
-          loadPengeluaranData(id, nobukti)
-          loadJurnalUmumData(id, nobukti)
+          let referen = nobukti
+          if (absensiTangki) {
+            referen = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+          }
+          loadPengeluaranData(id,referen,absensiTangki)
+          loadJurnalUmumData(id, referen,absensiTangki)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -582,15 +606,17 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
+                // hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -603,6 +629,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -635,28 +662,75 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
+              // {
+              //   id: 'approveun',
+              //   text: "APPROVAL/UN Status penerimaan",
+              //   onClick: () => {
+              //     approve()
+              //   }
+              // },
+              {
                 id: 'approval-buka-cetak',
-                text: "Approval Buka Cetak Absensi",
+                text: "Approval Buka Cetak Absensi SUpir Approval",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    } else {
-                      approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', [selectedId], selectedbukti);
-                    }
+
+                    approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', selectedRows, selectedbukti);
+
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas Absensi Supir Approval",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
 
+                    approvalKirimBerkas(tglkirimberkas, 'ABSENSISUPIRAPPROVALHEADER', selectedRows, selectedbukti);
 
+                  }
+                }
+              },
             ],
-          },
+          }
+
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //       id: 'approval-buka-cetak',
+          //       text: "Approval Buka Cetak Absensi",
+          //       onClick: () => {
+          //         if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
+          //           let tglbukacetak = $('#tgldariheader').val().split('-');
+          //           tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //             showDialog('Harap pilih salah satu record')
+          //           } else {
+          //             approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', selectedRows, selectedbukti);
+          //           }
+          //         }
+          //       }
+          //     },
+
+
+          //   ],
+          // },
         ],
         buttons: [{
             id: 'add',
@@ -693,7 +767,8 @@
               }
             }
           },
-        ]
+        ],
+        // modalBtnList: []
 
       })
 
@@ -750,6 +825,11 @@
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()
@@ -833,6 +913,40 @@
     //   })
     // })
   })
+  const isAbsensiTangki = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'ABSENSI TANGKI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'ABSENSI TANGKI'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.text == "YA") {
+            $("#jqGrid").jqGrid('showCol', 'pengeluaran');
+            $("#jqGrid").jqGrid('hideCol', 'pengeluaran_nobukti')
+            absensiTangki = true;
+          }else{
+            $("#jqGrid").jqGrid('showCol', 'pengeluaran_nobukti');
+            $("#jqGrid").jqGrid('hideCol', 'pengeluaran')
+            absensiTangki = false;
+          }
+        }
+      })
+    })
+  }
+  
 </script>
 @endpush()
 @endsection

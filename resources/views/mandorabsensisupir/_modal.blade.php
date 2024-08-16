@@ -575,7 +575,6 @@
 
 
 
-
   function initLookup() {
     // $('.supir-lookup').lookup({
     //   title: 'Supir Lookup',
@@ -615,6 +614,7 @@
         absentradoId = absentrado.id
         element.data('currentValue', element.val())
         getabsentrado(absentradoId)
+        $('#jqGrid').jqGrid('setCell', id_row, 'checked' ,element.val(absentrado.keterangan));
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

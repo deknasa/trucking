@@ -61,7 +61,7 @@
         page: pagePotSemua,
         viewrecords: true,
         postData: {
-          nobukti: nobukti
+          nobukti: nobuktiRicForSearching
         },
         prmNames: {
           sort: 'sortIndex',
@@ -125,7 +125,7 @@
         beforeSearch: function() {
           $(this).setGridParam({
             postData: {
-              nobukti: nobukti
+              nobukti: nobuktiRicForSearching
             },
           })
           clearGlobalSearch($('#potsemuaGrid'))

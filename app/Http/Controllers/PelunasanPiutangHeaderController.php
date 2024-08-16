@@ -11,17 +11,19 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class PelunasanPiutangHeaderController extends MyController
 {
     public $title = 'Pelunasan Piutang';
-    
+
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
-        $data = array_merge(compact('title', 'data'),
-            ["request"=>$request->all()]
+        $data = array_merge(
+            compact('title', 'data'),
+            ["request" => $request->all()]
         );
-        return view('pelunasanpiutangheader.index',$data);
+        return view('pelunasanpiutangheader.index', $data);
     }
 
     public function comboCetak($aksi, $grp, $subgrp)
@@ -45,13 +47,13 @@ class PelunasanPiutangHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('pelunasanpiutangheader.add', compact('title','combo'));
+        return view('pelunasanpiutangheader.add', compact('title', 'combo'));
     }
 
     public function store(Request $request)
     {
         try {
-             /* Unformat nominal */
+            /* Unformat nominal */
             $request->nominal = array_map(function ($nominal) {
                 $nominal = str_replace('.', '', $nominal);
                 $nominal = str_replace(',', '', $nominal);
@@ -111,14 +113,14 @@ class PelunasanPiutangHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "pelunasanpiutangheader/$id");
-            // dd($response->getBody()->getContents());
+        // dd($response->getBody()->getContents());
 
         $pelunasanpiutangheader = $response['data'];
-        
+
 
         $combo = $this->combo();
 
-        return view('pelunasanpiutangheader.edit', compact('title', 'pelunasanpiutangheader','combo'));
+        return view('pelunasanpiutangheader.edit', compact('title', 'pelunasanpiutangheader', 'combo'));
     }
 
     public function update(Request $request, $id)
@@ -156,10 +158,10 @@ class PelunasanPiutangHeaderController extends MyController
                 ->get(config('app.api_url') . "pelunasanpiutangheader/$id");
 
             $pelunasanpiutangheader = $response['data'];
-            
+
             $combo = $this->combo();
 
-            return view('pelunasanpiutangheader.delete', compact('title','combo', 'pelunasanpiutangheader'));
+            return view('pelunasanpiutangheader.delete', compact('title', 'combo', 'pelunasanpiutangheader'));
         } catch (\Throwable $th) {
             return redirect()->route('pelunasanpiutangheader.index');
         }
@@ -173,7 +175,7 @@ class PelunasanPiutangHeaderController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "pelunasanpiutangheader/$id");
 
-            
+
         return response($response);
     }
 
@@ -198,8 +200,8 @@ class PelunasanPiutangHeaderController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'pelunasanpiutangheader/combo');
 
         return $response['data'];
@@ -211,10 +213,10 @@ class PelunasanPiutangHeaderController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ]; 
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
 
@@ -223,25 +225,25 @@ class PelunasanPiutangHeaderController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $pelunasanPiutangs = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pelunasanpiutangheader/'.$id.'/export')['data'];
-        
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pelunasanpiutangheader/' . $id . '/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
             'pelunasanpiutang_id' => $id,
         ];
         $pelunasanPiutang_details = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pelunasanpiutangdetail', $detailParams)['data'];
-        
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pelunasanpiutangdetail', $detailParams)['data'];
+
         $combo = $this->comboReport('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pelunasanPiutangs["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        return view('reports.pelunasanpiutang', compact('pelunasanPiutang_details','pelunasanPiutangs','printer'));
+        return view('reports.pelunasanpiutang', compact('pelunasanPiutang_details', 'pelunasanPiutangs', 'printer'));
     }
 
     public function export(Request $request): void
@@ -249,9 +251,9 @@ class PelunasanPiutangHeaderController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $pelunasanPiutangs = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pelunasanpiutangheader/'.$id.'/export')['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pelunasanpiutangheader/' . $id . '/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -259,9 +261,9 @@ class PelunasanPiutangHeaderController extends MyController
             'pelunasanpiutang_id' => $request->id,
         ];
         $pelunasanPiutang_details = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pelunasanpiutangdetail', $detailParams)['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pelunasanpiutangdetail', $detailParams)['data'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -280,7 +282,7 @@ class PelunasanPiutangHeaderController extends MyController
         $header_right_start_row = 4;
         $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
-       
+
         $alphabets = range('A', 'Z');
 
         $header_columns = [
@@ -315,7 +317,7 @@ class PelunasanPiutangHeaderController extends MyController
                 'index' => 'notadebet_nobukti',
             ],
             [
-                'label' => 'Nota Kredit',
+                'label' => 'Nota Kredit / B. PPH',
                 'index' => 'notakredit_nobukti',
             ]
         ];
@@ -360,10 +362,14 @@ class PelunasanPiutangHeaderController extends MyController
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'SISA PIUTANG',
-                'index' => 'sisapiutang',
+                'label' => 'POTONGAN PPH',
+                'index' => 'potonganpph',
                 'format' => 'currency'
-            ]
+            ],
+            [
+                'label' => 'KET. POT. PPH',
+                'index' => 'keteranganpotonganpph',
+            ],
         ];
 
         //LOOPING HEADER        
@@ -373,8 +379,14 @@ class PelunasanPiutangHeaderController extends MyController
         }
 
         foreach ($header_right_columns as $header_right_column) {
-            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $pelunasanPiutangs[$header_right_column['index']]);
+            if ($header_right_column['index'] == 'notakredit_nobukti') {
+
+                $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+                $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $pelunasanPiutangs['notakredit_nobukti'] . ' / ' . $pelunasanPiutangs['notakreditpph_nobukti']);
+            } else {
+                $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+                $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $pelunasanPiutangs[$header_right_column['index']]);
+            }
         }
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -402,17 +414,17 @@ class PelunasanPiutangHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:J$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
         foreach ($pelunasanPiutang_details as $response_index => $response_detail) {
-            
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getAlignment()->setHorizontal('center');
-            }
+
+            // foreach ($detail_columns as $detail_columns_index => $detail_column) {
+            //     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+            //     $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getFont()->setBold(true);
+            //     $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getAlignment()->setHorizontal('center');
+            // }
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['piutang_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['invoice_nobukti']);
@@ -422,26 +434,28 @@ class PelunasanPiutangHeaderController extends MyController
             $sheet->setCellValue("G$detail_start_row", $response_detail['nominallebihbayar']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['keteranganpotongan']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['sisapiutang']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['potonganpph']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['keteranganpotonganpph']);
 
             $sheet->getStyle("H$detail_start_row:I$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('H')->setWidth(30);
             $sheet->getColumnDimension('I')->setWidth(30);
+            $sheet->getColumnDimension('K')->setWidth(30);
 
-            $sheet ->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-            $sheet ->getStyle("J$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("A$detail_start_row:K$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("J$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total Nominal Bayar')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total Nominal Bayar')->getStyle('A' . $total_start_row . ':K' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("E$detail_start_row", "=SUM(E10:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-        
+
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -459,5 +473,4 @@ class PelunasanPiutangHeaderController extends MyController
 
         $writer->save('php://output');
     }
-
 }

@@ -11,36 +11,46 @@
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
-  <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
+  <!--  <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     let pendapatansupirs = <?= json_encode($pendapatan); ?>;
+    let pendapatansupirs2 = <?= json_encode($pendapatansupir); ?>;
     let formatKomisi = <?= json_encode($formatkomisi); ?>;
     let printer = <?= json_encode($printer); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
+      viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
 
       Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);
       viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
-
-      var statuscetak = pendapatansupirs.statuscetak_id
-      var sudahcetak = pendapatansupirs['combo']['id']
-      if (statuscetak == sudahcetak) {
-        viewerOptions.toolbar.showPrintButton = false;
-        viewerOptions.toolbar.showSaveButton = false;
-        viewerOptions.toolbar.showOpenButton = false;
+      if (formatKomisi == 'FORMAT 1') {
+        var statuscetak = pendapatansupirs.statuscetak_id
+        var sudahcetak = pendapatansupirs['combo']['id']
+        if (statuscetak == sudahcetak) {
+          viewerOptions.toolbar.showPrintButton = false;
+          viewerOptions.toolbar.showSaveButton = false;
+          viewerOptions.toolbar.showOpenButton = false;
+        }
+      } else {
+        var statuscetak = pendapatansupirs2.statuscetak_id
+        var sudahcetak = pendapatansupirs2['combo']['id']
+        if (statuscetak == sudahcetak) {
+          viewerOptions.toolbar.showPrintButton = false;
+          viewerOptions.toolbar.showSaveButton = false;
+          viewerOptions.toolbar.showOpenButton = false;
+        }
       }
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
-      var options = new Stimulsoft.Designer.StiDesignerOptions()
-      options.appearance.fullScreenMode = true
-
-      var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+      // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
@@ -91,8 +101,25 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          if (formatKomisi == 'FORMAT 1') {
+            var id = pendapatansupirs.id
+          } else {
+            var id = pendapatansupirs2.id
+
+          }
+          window.opener.removeEditingBy(id);
+        }
+      });
       window.addEventListener('afterprint', (event) => {
-        var id = pendapatansupirs.id
+        if (formatKomisi == 'FORMAT 1') {
+          var id = pendapatansupirs.id
+        } else {
+          var id = pendapatansupirs2.id
+
+        }
         var apiUrl = `{{ config('app.api_url') }}`;
         $.ajax({
           url: `${apiUrl}pendapatansupirheader/${id}/printreport`,
@@ -103,6 +130,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })

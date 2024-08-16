@@ -244,14 +244,14 @@
 
                     $.each(selectedRows, function(key, value) {
 
-$('#jqGrid tbody tr').each(function(row, tr) {
-    if ($(this).find(`td input:checkbox`).val() == value) {
-        $(this).find(`td input:checkbox`).prop('checked', true)
-        $(this).addClass('bg-light-blue')
-    }
-})
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
 
-});
+                    });
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -323,8 +323,11 @@ $('#jqGrid tbody tr').each(function(row, tr) {
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editAbsenTrado(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasi(selectedId, 'EDIT')
+                            }
                         }
                     },
                     {
@@ -336,7 +339,7 @@ $('#jqGrid tbody tr').each(function(row, tr) {
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId, 'DELETE')
                             }
                         }
                     },
@@ -369,18 +372,40 @@ $('#jqGrid tbody tr').each(function(row, tr) {
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('absentrado', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('absentrado', 'approvalaktif') }}`) {
+                                    approvalAktif('absentrado')
 
-                            approvalNonAktif('absentrado')
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('absentrado', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('absentrado', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('absentrado')
+                                }
+                            }
+                        },
 
-                        }
-                    },
-                ]
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -410,22 +435,26 @@ $('#jqGrid tbody tr').each(function(row, tr) {
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('absentrado', 'store') }}`) {
+
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('absentrado', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('absentrado', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('absentrado', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('absentrado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-
-            if (!`{{ $myAuth->hasPermission('absentrado', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('absentrado', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
-
             if (!`{{ $myAuth->hasPermission('absentrado', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
@@ -433,8 +462,21 @@ $('#jqGrid tbody tr').each(function(row, tr) {
             if (!`{{ $myAuth->hasPermission('absentrado', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            if (!`{{ $myAuth->hasPermission('absentrado', 'approvalnonaktif') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

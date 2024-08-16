@@ -39,6 +39,11 @@
 
 function checkboxHandler(element) {
   let value = $(element).val();
+
+  var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    $("#jqGrid").jqGrid('setSelection', value,false);
+    onSelectRowExisting(value)
+      
   let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
   if (element.checked) {
     selectedRows.push($(element).val())
@@ -88,7 +93,8 @@ function checkboxHandler(element) {
       activeGrid = '#jqGrid'
     })
 
-    $("#jqGrid").jqGrid({
+    var grid= $("#jqGrid");  
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'rekappengeluaranheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -235,12 +241,6 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
-            label: 'bank',
-            name: 'bank',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
@@ -250,6 +250,19 @@ function checkboxHandler(element) {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'bank',
+            name: 'bank',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
           },
           {
             label: 'TGL Transaksi',
@@ -354,13 +367,13 @@ function checkboxHandler(element) {
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
 
           loadDetailData(id)
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
@@ -450,15 +463,16 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -471,6 +485,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -503,11 +518,13 @@ function checkboxHandler(element) {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status REKAP PENGELUARAN",
+                text: "APPROVAL/UN Status REKAP PENGELUARAN",
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
                     handleApproval()
@@ -517,11 +534,26 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak REKAP PENGELUARAN",
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     approvalBukaCetak(tglbukacetak, 'REKAPPENGELUARANHEADER', selectedRows, selectedbukti);
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas REKAP PENGELUARAN",
+                color:'btn-primary',
+                hidden:(!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    approvalKirimBerkas(tglkirimberkas, 'REKAPPENGELUARANHEADER', selectedRows, selectedbukti);
                   }
                 }
               },
@@ -617,6 +649,11 @@ function checkboxHandler(element) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()

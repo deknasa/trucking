@@ -40,8 +40,9 @@ class LaporanTripTradoController extends MyController
             ->get(config('app.api_url') . 'laporantriptrado/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporantriptrado', compact('data', 'user', 'detailParams'));
+        return view('reports.laporantriptrado', compact('data','dataCabang', 'user', 'detailParams'));
     }
     public function export(Request $request): void
     {
@@ -60,6 +61,7 @@ class LaporanTripTradoController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
         
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
@@ -69,15 +71,19 @@ class LaporanTripTradoController extends MyController
 
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data[0]['judul']);
-        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A2', $namacabang);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
-
-        $sheet->setCellValue('A3', 'PERIODE : '.date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
-        $sheet->mergeCells('A3:B3');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:F2');
+        
+        $sheet->setCellValue('A3', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A4', 'PERIODE : '.date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:B4');
 
 
         $detail_table_header_row = 6;

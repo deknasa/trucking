@@ -18,6 +18,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Kas/Bank<span class="text-danger">*</span></label>
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="bank_id" value="{{ $data['bank_id'] }}">
+                                <input type="text" name="bank" id="bank" value="{{ $data['bank'] }}" class="form-control bank-lookup">
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-6 mt-4">
@@ -72,6 +79,7 @@
 
     $(document).ready(function() {
 
+        initLookup()
         initDatepicker()
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
@@ -100,9 +108,12 @@
 
     $(document).on('click', `#reportPrinterBesar`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+
 
         getCekReport().then((response) => {
-            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&printer=reportPrinterBesar`)
+            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}&printer=reportPrinterBesar`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -119,9 +130,12 @@
 
     $(document).on('click', `#reportPrinterKecil`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+
 
         getCekReport().then((response) => {
-            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&printer=reportPrinterKecil`)
+            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}&printer=reportPrinterKecil`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -140,12 +154,14 @@
     $(document).on('click', `#btnExport`, function(event) {
 
         let periode = $('#crudForm').find('[name=periode]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
 
-        if (periode != '') {
+        if (periode != '' && bank_id != '') {
             $('#processingLoader').removeClass('d-none')
 
             $.ajax({
-                url: `{{ route('laporankasgantung.export') }}?periode=${periode}`,
+                url: `{{ route('laporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
                 type: 'GET',
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -161,11 +177,11 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'LAP. KAS GANTUNG ' + new Date().getTime() + '.xlsx';
+                            link.download = 'LAP. KAS GANTUNG ' + bank + ' ' + new Date().getTime() + '.xlsx';
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -200,6 +216,40 @@
                 },
             });
         });
+    }
+
+    function initLookup() {
+
+        $('.bank-lookup').lookupMaster({
+            title: 'Bank Lookup',
+            fileName: 'bankMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    tipe: 'KAS',
+                    searching: 1,
+                    valueName: 'bank_id',
+                    searchText: 'bank-lookup',
+                    title: 'bank',
+                    typeSearch: 'ALL',
+                }
+            },
+            onSelectRow: (bank, element) => {
+                $('#crudForm [name=bank_id]').first().val(bank.id)
+                element.val(bank.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bank_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
     }
 </script>
 @endpush()

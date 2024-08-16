@@ -66,7 +66,7 @@
               let tgldari = rowData.tgldariorderantrucking
               let tglsampai = rowData.tglsampaiorderantrucking
               let url = "{{route('orderantrucking.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
             },
           },

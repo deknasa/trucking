@@ -62,40 +62,45 @@
   let currentTab = 'detail'
   let tgldariheader
   let tglsampaiheader
+  let activeGrid 
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
-      }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    $("#jqGrid").jqGrid('setSelection', value,false);
+    onSelectRowExisting(value)
 
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
   setSpaceBarCheckedHandler()
   reloadGrid()
@@ -124,7 +129,8 @@ function checkboxHandler(element) {
     })
 
 
-    $("#jqGrid").jqGrid({
+     var grid= $("#jqGrid");  
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'notakreditheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -317,14 +323,14 @@ function checkboxHandler(element) {
             align: 'left',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
-              // if ((value == null) ||( value == '')) {
-              //   return '';
-              // }
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
               let tgldari = rowData.tgldariheaderpelunasanpiutangheader
               let tglsampai = rowData.tglsampaiheaderpelunasanpiutangheader
               let url = "{{route('pelunasanpiutangheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -405,6 +411,72 @@ function checkboxHandler(element) {
             search: false
           },
           {
+            label: 'STATUS KIRIM BERKAS',
+            name: 'statuskirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokirimberkas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokirimberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                                `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKirimBerkas = JSON.parse(value)
+              if (!statusKirimBerkas) {
+                return ``
+              }
+              let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
+                                <span>${statusKirimBerkas.SINGKATAN}</span>
+                                </div>
+                            `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
+              if (!statusKirimBerkas) {
+                return ` title=""`
+              }
+              return ` title="${statusKirimBerkas.MEMO}"`
+            }
+          },
+          {
+            label: 'USER KIRIM BERKAS',
+            name: 'userkirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
+          },
+          {
+            label: 'TGL KIRIM BERKAS',
+            name: 'tglkirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -463,15 +535,15 @@ function checkboxHandler(element) {
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           let nobukti_pelunasan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pelunasanpiutang_nobukti"]`).attr('title') ?? '';
           let nobukti_jurnal = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobuktihidden"]`).attr('title') ?? '';
           let nobukti_pengeluaran = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
 
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -572,15 +644,16 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -593,6 +666,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -625,11 +699,13 @@ function checkboxHandler(element) {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status NOTA KREDIT",
+                text: "APPROVAL/UN Status NOTA KREDIT",
+                color:'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
                     approve()
@@ -639,12 +715,29 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak NOTA KREDIT",
+                color:'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
                     approvalBukaCetak(tglbukacetak, 'NOTAKREDITHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas NOTA KREDIT",
+                color:'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`) ,
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'NOTAKREDITHEADER', selectedRows, selectedbukti);
 
                   }
                 }
@@ -766,6 +859,12 @@ function checkboxHandler(element) {
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
       if (hakApporveCount < 1) {
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
@@ -840,7 +939,7 @@ function checkboxHandler(element) {
 
   function clearSelectedRows() {
     selectedRows = []
-    selectedbukti =[]
+    selectedbukti = []
 
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')

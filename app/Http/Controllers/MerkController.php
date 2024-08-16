@@ -23,6 +23,7 @@ class MerkController extends MyController
 
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('merk.index', compact('title','data'));

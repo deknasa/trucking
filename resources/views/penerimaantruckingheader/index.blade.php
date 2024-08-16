@@ -87,6 +87,11 @@
 
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
+
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
 
     if (element.checked) {
@@ -126,6 +131,7 @@
         $('#add').attr('disabled', false)
         $('#edit').attr('disabled', false)
         $('#delete').attr('disabled', false)
+        permission()
       } else {
         $('#add').attr('disabled', true)
         $('#edit').attr('disabled', true)
@@ -135,6 +141,7 @@
       $('#add').attr('disabled', false)
       $('#edit').attr('disabled', false)
       $('#delete').attr('disabled', false)
+      permission()
     }
   }
   $(document).ready(function() {
@@ -170,7 +177,8 @@
       $('#gs_').prop('checked', false)
     })
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'penerimaantruckingheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -316,9 +324,10 @@
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
               let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let bankpenerimaan = rowData.penerimaanbank_id
               let url = "{{route('penerimaanheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpenerimaan}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -415,12 +424,12 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobukti"]`).attr('title') ?? '';
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -496,6 +505,7 @@
           permission()
           $('#gs_').attr('disabled', false)
           setPermissionAcos()
+          getQueryParameter()
           setHighlight($(this))
         }
       })
@@ -516,76 +526,7 @@
 
       .customPager({
 
-        extndBtn: [{
-            id: 'report',
-            title: 'Report',
-            caption: 'Report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
-                id: 'reportPrinterBesar',
-                text: "Printer Lain(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasi(selectedId, 'PRINTER BESAR')
-                  }
-                }
-              },
-              {
-                id: 'reportPrinterKecil',
-                text: "Printer Epson Seri LX(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasi(selectedId, 'PRINTER KECIL')
-                  }
-                }
-              },
 
-            ],
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('penerimaantruckingheader.export') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PENERIMAAN TRUCKING ",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-
-                  approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRows, selectedbukti);
-
-                }
-              }
-            }, ],
-          }
-        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -634,6 +575,104 @@
             }
           },
         ],
+        modalBtnList: [{
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
+                id: 'reportPrinterBesar',
+                text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER BESAR')
+                  }
+                }
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER KECIL')
+                  }
+                }
+              },
+
+            ],
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                window.open(`{{ route('penerimaantruckingheader.export') }}?id=${selectedId}`)
+              }
+            }
+          }, {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [
+              // {
+              //   id: 'approveun',
+              //   text: "APPROVAL/UN Status penerimaan",
+              //   onClick: () => {
+              //     approve()
+              //   }
+              // },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PENERIMAAN TRUCKING",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
+                hidden:(!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                    approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas PENERIMAAN TRUCKING",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
+                hidden:(!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PENERIMAANTRUCKINGHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
+            ],
+          }
+        ]
+
       })
 
     /* Append clear filter button */
@@ -663,44 +702,52 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    function permission() {
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
-        $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
-        $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
-        $('#export').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
-        $('#report').attr('disabled', 'disabled')
-      }
-
-      let hakApporveCount = 0;
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
-        hakApporveCount--
-        $('#approval-buka-cetak').hide()
-        // $('#approval-buka-cetak').attr('disabled', 'disabled')
-      }
-      if (hakApporveCount < 1) {
-        $('#approve').hide()
-        // $('#approve').attr('disabled', 'disabled')
-      }
-    }
   })
+
+
+  function permission() {
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
+
+    let hakApporveCount = 0;
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
+      hakApporveCount--
+      $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalkirimberkas') }}`) {
+      hakApporveCount--
+      $('#approval-kirim-berkas').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    if (hakApporveCount < 1) {
+      $('#approve').hide()
+      // $('#approve').attr('disabled', 'disabled')
+    }
+  }
 
   function clearSelectedRows() {
     selectedRows = []
@@ -727,7 +774,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

@@ -22,6 +22,8 @@
         pengajuantrip_id: `{!! $pengajuantrip_id ?? '' !!}`,
         isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
         uangJalanId: `{!! $uangJalanId ?? '' !!}`,
+        statusjeniskendaraan: `{!! $statusjeniskendaraan ?? '' !!}`,
+        trip_id: `{!! $trip_id ?? '' !!}`,
       },
       colModel: [{
           label: 'TRADO',
@@ -36,7 +38,7 @@
         {
           label: 'STATUS',
           name: 'status',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'KETERANGAN',
@@ -73,6 +75,12 @@
           hidden: true
         },
         {
+          label: 'statusgerobak',
+          name: 'statusgerobak',
+          hidden: true,
+          search: false
+        },
+        {
           label: 'nominalplusborongan',
           name: 'nominalplusborongan',
           hidden: true,
@@ -84,6 +92,8 @@
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           formatter: currencyFormat,
           align: "right",
+          hidden: true,
+          search: false
         },
         {
           label: 'TRADO - SUPIR',

@@ -8,12 +8,27 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  
+  <div class="row">
+    <div class="col-12">
+      <table id="detailstok"></table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table id="detailSPB"></table>
+    </div>
+  </div>
+  
+
 </div>
 
 </div>
 </div>
 
 @include('supplier._modal')
+@include('supplier._detailstok')
+@include('supplier._detailSPB')
 
 @push('scripts')
 <script>
@@ -22,6 +37,7 @@
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
+  let masterSupplierId =""
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
@@ -57,8 +73,9 @@
 
 
   $(document).ready(function() {
-
-    setTampilanIndex()
+    loadStokGrid()
+    loadSPBGrid()
+    // setTampilanIndex()
     $("#jqGrid").jqGrid({
         url: `${apiUrl}supplier`,
         mtype: "GET",
@@ -319,49 +336,6 @@
             }
           },
           {
-            label: 'status posting tnl',
-            name: 'statuspostingtnl',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-                      foreach ($data['combopostingtnl'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combopostingtnl'])) {
-                          echo ';';
-                        }
-                        $i++;
-                      endforeach;
-                      ?>`,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusPostingTnl = JSON.parse(value)
-              if (!statusPostingTnl) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
-                  <span>${statusPostingTnl.SINGKATAN}</span>
-                </div>
-              `)
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusPostingTnl = JSON.parse(rowObject.statuspostingtnl)
-              if (!statusPostingTnl) {
-                return ` title=""`
-              }
-              return ` title="${statusPostingTnl.MEMO}"`
-            }
-          },
-          {
             label: 'kategori usaha',
             name: 'kategoriusaha',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -429,6 +403,10 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+//           loadStokGrid
+// loadSPBGrid
+          loadStokData(id)
+          masterSupplierId = id
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -528,7 +506,8 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editSupplier(selectedId)
+                cekValidasidelete(selectedId, 'edit')
+                // editSupplier(selectedId)
               }
             }
           },
@@ -541,7 +520,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId)
+                cekValidasidelete(selectedId, 'delete')
               }
             }
           },
@@ -576,15 +555,17 @@
           },
 
         ],
-        extndBtn: [{
+        modalBtnList: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1',
+          item: [{
               id: 'approveun',
-              text: "UN/APPROVAL Data",
+              text: "APPROVAL/UN Data",
+              color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`),
               onClick: () => {
 
                 if (`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
@@ -593,12 +574,25 @@
               }
             },
             {
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('supplier', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('supplier', 'approvalaktif') }}`) {
+                  approvalAktif('supplier')
+
+                }
+              }
+            },
+            {
               id: 'approvalnonaktif',
               text: "Approval Non Aktif",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {
-
-                  approvenonaktif()
+                  approvenonaktif('supplier')
                 }
 
               }
@@ -636,21 +630,29 @@
 
     function permission() {
 
-      if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
+      if (cabangTnl == 'YA') {
         $('#add').attr('disabled', 'disabled')
+        $('#edit').attr('disabled', 'disabled')
+        $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+
       }
 
       if (!`{{ $myAuth->hasPermission('supplier', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
-        $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
 
       if (!`{{ $myAuth->hasPermission('supplier', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
@@ -664,12 +666,17 @@
         $('#approval').addClass('ui-disabled')
       }
 
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
         hakApporveCount--
         $('#approveun').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+        hakApporveCount--
+        $('#approvalaktif').hide()
       }
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {

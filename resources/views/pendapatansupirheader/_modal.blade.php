@@ -165,6 +165,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -255,34 +259,43 @@
                             showDialog(error.responseJSON)
                         }
                     })
-                if (isDeposito == 'YA') {
+                // if (isDeposito == 'YA') {
 
-                    getDataPinjaman().then((response) => {
-                        $("#tablePinjaman")[0].p.selectedRowIds = [];
-                        if ($('#crudForm').data('action') == 'add') {
-                            selectedRowId = [];
-                        } else {
-                            selectedRowId = response.selectedId;
-                        }
-                        setTimeout(() => {
+                //     getDataPinjaman().then((response) => {
+                //         $("#tablePinjaman")[0].p.selectedRowIds = [];
+                //         if ($('#crudForm').data('action') == 'add') {
+                //             selectedRowId = [];
+                //         } else {
+                //             selectedRowId = response.selectedId;
+                //         }
+                //         setTimeout(() => {
 
-                            $("#tablePinjaman")
-                                .jqGrid("setGridParam", {
-                                    datatype: "local",
-                                    data: response.data,
-                                    originalData: response.data,
-                                    rowNum: response.data.length,
-                                    selectedRowIds: selectedRowId
-                                })
-                                .trigger("reloadGrid");
-                        }, 100);
-                    });
-                }
+                //             $("#tablePinjaman")
+                //                 .jqGrid("setGridParam", {
+                //                     datatype: "local",
+                //                     data: response.data,
+                //                     originalData: response.data,
+                //                     rowNum: response.data.length,
+                //                     selectedRowIds: selectedRowId
+                //                 })
+                //                 .trigger("reloadGrid");
+                //         }, 100);
+                //     });
+                // }
             }
 
         })
 
         $('#btnSubmit').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+        function submit(button) {
             event.preventDefault()
 
             let method
@@ -335,6 +348,11 @@
                 name: 'jumlahdetail',
                 value: selectedRowsTrip.length
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
+
             // data.push({
             //     name: 'periode',
             //     value: form.find(`[name="periode"]`).val()
@@ -451,6 +469,10 @@
                 name: 'limit',
                 value: limit
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
 
             data.push({
                 name: 'tgldariheader',
@@ -459,6 +481,10 @@
             data.push({
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
+            })
+            data.push({
+                name: 'button',
+                value: button
             })
 
             let tgldariheader = $('#tgldariheader').val();
@@ -496,32 +522,57 @@
                 data: data,
                 success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    selectedRowsTrip = []
-                    selectedTrip = [];
-                    selectedRic = [];
-                    selectedNominal = [];
-                    selectedDari = [];
-                    selectedSampai = [];
-                    selectedGajiKenek = [];
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
-                        }
-                    }).trigger('reloadGrid');
+                    id = response.data.id
+                    if (button == 'btnSubmit') {
+                        $('#crudModal').modal('hide')
+                        selectedRowsTrip = []
+                        selectedTrip = [];
+                        selectedRic = [];
+                        selectedNominal = [];
+                        selectedDari = [];
+                        selectedSampai = [];
+                        selectedGajiKenek = [];
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
 
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
+                        }
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    } else {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        // showSuccessDialog(response.message, response.data.nobukti)
+
+                        $("#tableDeposito")[0].p.selectedRowIds = [];
+                        $('#tableDeposito').jqGrid("clearGridData");
+                        $("#tableDeposito")
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+
+                        $("#tablePinjaman")[0].p.selectedRowIds = [];
+                        $('#tablePinjaman').jqGrid("clearGridData");
+                        $("#tablePinjaman")
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+                        createPendapatanSupir()
                     }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
+
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -537,14 +588,57 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
+    })
+
+    $(document).on("change", `[name=tglbukti]`, function(event) {
+        if (isDeposito == 'YA') {
+
+            $('#btnSubmit').prop('disabled', true)
+            $('#btnSaveAdd').prop('disabled', true)
+            $("#tablePinjaman")[0].p.selectedRowIds = [];
+            $('#tablePinjaman').jqGrid("clearGridData");
+            $("#tablePinjaman")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            getDataPinjaman().then((response) => {
+                $("#tablePinjaman")[0].p.selectedRowIds = [];
+                if ($('#crudForm').data('action') == 'add') {
+                    selectedRowId = [];
+                } else {
+                    selectedRowId = response.selectedId;
+                }
+                setTimeout(() => {
+
+                    $("#tablePinjaman")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: selectedRowId
+                        })
+                        .trigger("reloadGrid");
+
+                    $('#btnSubmit').prop('disabled', false)
+                    $('#btnSaveAdd').prop('disabled', false)
+                }, 100);
+            });
+
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
         $("#tabsModal").tabs()
         setFormBindKeys(form)
-
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         activeGrid = null
 
         getMaxLength(form)
@@ -554,11 +648,49 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
         clearSelectedRowsTrip()
         initDatepicker('datepickerIndex')
     })
+
+    function removeEditingBy(id) {
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'pendapatansupirheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
 
     function createPendapatanSupir() {
         let form = $('#crudForm')

@@ -67,12 +67,12 @@ class LaporanNeracaController extends MyController
             ->get(config('app.api_url') . 'laporanneraca/report', $detailParams);
 
         $data = $header['data'];
-
+        $dataheader = $header['dataheader'];
 
         $user = Auth::user();
         $printer['tipe'] = $request->printer;
 
-        return view('reports.laporanneraca', compact('data', 'user', 'detailParams','printer'));
+        return view('reports.laporanneraca', compact('data','dataheader', 'user', 'detailParams','printer'));
     }
 
     public function export(Request $request)
@@ -96,6 +96,7 @@ class LaporanNeracaController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $dataheader = $header['dataheader'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -103,20 +104,22 @@ class LaporanNeracaController extends MyController
         $tahun = substr($request->sampai,3,4);
 
         $sheet->setCellValue('A1', $data[0]['CmpyName']);
-        $sheet->setCellValue('A2', 'LAPORAN NERACA');
-        $sheet->setCellValue('A3', 'PERIODE : '. $bulan .' - '.$tahun);
+        $sheet->setCellValue('A2', $dataheader['cabang'] ?? '');
+        $sheet->setCellValue('A3', 'LAPORAN NERACA');
+        $sheet->setCellValue('A4', 'PERIODE : '. $bulan .' - '.$tahun);
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:C1');
-        // $sheet->mergeCells('A2:B2');
+        $sheet->mergeCells('A2:C2');
         // $sheet->mergeCells('A3:B3');
         // $sheet->mergeCells('A4:B4');
 

@@ -1,7 +1,8 @@
 @push('scripts')
 <script>
-  function loadDetailGrid() {
-    let sortnameDetail = 'nobukti'
+    let nobuktiSearchDetail = ''
+  function loadDetailGrid(nobukti) {
+    let sortnameDetail = 'id'
     let sortorderDetail = 'asc'
     let totalRecordDetail
     let limitDetail
@@ -16,7 +17,7 @@
         iconSet: 'fontAwesome',
         idPrefix: 'detail',
         colModel: [{
-            label: 'NO BUKTI pengeluaran',
+            label: 'NO BUKTI GIRO',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'nobukti',
           },
@@ -80,7 +81,8 @@
         page: pageDetail,
         viewrecords: true,
         postData: {
-          pengeluaran_id: id
+          pengeluaran_id: id,
+          nobukti: nobuktiSearchDetail
         },
         prmNames: {
           sort: 'sortIndex',
@@ -143,18 +145,13 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-
+          $(this).setGridParam({
+          postData: {
+            nobukti: nobuktiSearchDetail
+          },})
           clearGlobalSearch($('#detail'))
         },
       })
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
       .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detail'))
@@ -163,14 +160,17 @@
     loadGlobalSearch($('#detail'))
   }
 
-  function loadDetailData(id) {
+  function loadDetailData(id, nobukti, status) {
+    nobuktiSearchDetail = nobukti
     abortGridLastRequest($('#detail'))
 
     $('#detail').setGridParam({
       url: `${apiUrl}pencairangiropengeluarandetail`,
       datatype: "json",
       postData: {
-        pengeluaran_id: id
+        pengeluaran_id: id,
+        nobukti: nobukti,
+        status: status
       },
       page: 1
     }).trigger('reloadGrid')

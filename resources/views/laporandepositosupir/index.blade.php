@@ -18,6 +18,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" hidden >
+                            <label class="col-12 col-sm-2 col-form-label mt-2">PERIODE DATA<span class="text-danger">*</span></label>
+                            <div class="col-sm-4 mt-2">
+                                <div class="input-group">
+                                    <input type="hidden" value="{{$data['defaultperiode']['id']}}" name="periodedata_id">
+                                    <input type="text" id="periodedata" value="{{$data['defaultperiode']['text']}}" name="periodedata" class="form-control periodedata-lookup">
+                                </div>
+                            </div>
+                        </div>                        
                         <div class="row">
                             <div class="col-sm-6 mt-4">
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
@@ -60,7 +69,7 @@
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=jenis]'), false)
         setJenisKaryawanOptions($('#crudForm'))
-
+        initLookup()
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
@@ -76,9 +85,11 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-
+        // let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        // let periodedata = $('#crudForm').find('[name=periodedata]').val()
         if (sampai != '') {
 
+            // window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`)
             window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
@@ -89,9 +100,12 @@
         $('#processingLoader').removeClass('d-none')
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        // let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
+        // let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
         if (sampai != '') {
             $.ajax({
+                // url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
                 url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}`,
                 type: 'GET',
                 beforeSend: function(xhr) {
@@ -167,6 +181,44 @@
         })
         // })
     }
+
+    function initLookup() {
+       
+        $(`.periodedata-lookup`).lookupMaster({
+            title: 'PERIODE DATA Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                url: `${apiUrl}parameter/combo`,
+                grp: 'PERIODE DATA',
+                subgrp: 'PERIODE DATA',
+                searching: 1,
+                valueName: `periodedata_id`,
+                searchText: `periodedata-lookup`,
+                singleColumn: true,
+                hideLabel: true,
+                title: 'PERIODE DATA'
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=periodedata_id]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                let status_id_input = $('#crudForm [name=periodedata_id]').first();
+                status_id_input.val('');
+                element.val('');
+                element.data('currentValue', element.val());
+            },
+        });
+    }
+
 </script>
 @endpush()
 @endsection

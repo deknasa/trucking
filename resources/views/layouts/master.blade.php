@@ -103,6 +103,23 @@
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
+
+  <!-- Modal for report and export -->
+  <div class="modal fade" id="listMenuModal" tabindex="-1" aria-labelledby="listMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="listMenuModalLabel"> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+          </button>
+        </div>
+        <div class="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal for report and export -->
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -392,6 +409,14 @@
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
+  <!-- Report -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+  <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+  <!-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> -->
+  <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
+
   <!-- Custom global script -->
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\pager.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookup.js')) }}"></script>
@@ -431,6 +456,8 @@
     let apiTruckingBtgUrl = `{{ config('app.trucking_api_btg_url') }}`
     var pleaseSelectARow;
     let isAllowedForceEdit = false
+    let accessCabang = `{{ session('cabang') }}`
+    let cabangTnl = `{{ session('tnl') }}`
 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
@@ -507,29 +534,29 @@
       //     }
       //   })
 
-      $.ajax({
-        url: `${apiUrl}error/geterrors`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          kodeerror: "PSB"
-        },
-        success: response => {
-          // console.log(response.keterangan);
-          pleaseSelectARow = response.keterangan;
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
+      // $.ajax({
+      //   url: `${apiUrl}error/geterrors`,
+      //   method: 'GET',
+      //   dataType: 'JSON',
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}`
+      //   },
+      //   data: {
+      //     kodeerror: "PSB"
+      //   },
+      //   success: response => {
+      //     // console.log(response.keterangan);
+      //     pleaseSelectARow = response.keterangan;
+      //   },
+      //   error: error => {
+      //     if (error.status === 422) {
+      //       $('.is-invalid').removeClass('is-invalid')
+      //       $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
-          }
-        }
-      })
+      //       setErrorMessages(form, error.responseJSON.errors);
+      //     }
+      //   }
+      // })
     })
 
     $(document).on('collapsed.lte.pushmenu', () => {
@@ -565,8 +592,9 @@
       }
     }
 
-    function approvalBukaCetak(periode, table, selectedRows,buktiselectedRows) {
+    function approvalBukaCetak(periode, table, selectedRows, buktiselectedRows) {
 
+      $('#processingLoader').removeClass('d-none')
       $.ajax({
         url: `${apiUrl}approvalbukacetak`,
         method: 'POST',
@@ -586,12 +614,71 @@
           $('.invalid-feedback').remove()
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          if(table == 'GAJISUPIRHEADER' || table == 'PROSESGAJISUPIRHEADER' || table == 'PENGELUARANTRUCKINGHEADER'){
+          if (table == 'GAJISUPIRHEADER' || table == 'PROSESGAJISUPIRHEADER' || table == 'PENGELUARANTRUCKINGHEADER') {
             selectedRowsIndex = []
-            clearSelectedRowsIndex() 
+            clearSelectedRowsIndex()
           } else {
             selectedRows = []
-            clearSelectedRows() 
+            clearSelectedRows()
+          }
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload',
+            }
+          }).trigger('reloadGrid');
+          let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+        },
+        error: error => {
+          $("#dialog-warning-message").find("p").remove();
+          $(`#dialog-warning-message`).append(
+            `<p class="text-dark">${error.responseJSON.errors.tableId}</p>`
+          );
+
+          $("#dialog-warning-message").dialog({
+            modal: true,
+            buttons: [{
+              text: "Ok",
+              click: function() {
+                $(this).dialog("close");
+              },
+            }, ]
+          });
+          $(".ui-dialog-titlebar-close").find("p").remove();
+
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
+    function approvalKirimBerkas(periode, table, selectedRows, buktiselectedRows) {
+
+      $.ajax({
+        url: `${apiUrl}approvalkirimberkas`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          tableId: selectedRows,
+          bukti: buktiselectedRows,
+          periode: periode,
+          table: table,
+          info: info
+        },
+        success: response => {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+          if (table == 'GAJISUPIRHEADER' || table == 'PROSESGAJISUPIRHEADER' || table == 'PENGELUARANTRUCKINGHEADER') {
+            selectedRowsIndex = []
+            clearSelectedRowsIndex()
+          } else {
+            selectedRows = []
+            clearSelectedRows()
           }
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
@@ -668,7 +755,8 @@
 
       let data = {
         tgldari: $('#tgldariheader').val(),
-        tglsampai: $('#tglsampaiheader').val()
+        tglsampai: $('#tglsampaiheader').val(),
+        proses: 'reload'
       }
       data = {
         ...data,
@@ -768,72 +856,73 @@
       clearGlobalSearch($('#jqGrid'))
       let data = {
         tgldari: $('#tgldariheaderlookup').val(),
-        tglsampai: $('#tglsampaiheaderlookup').val()
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+        proses: 'reload'
       }
       data = {
         ...data,
         ...addtional
       }
-      getIndexLookup(url, data).then((response) => {
-        $('.is-invalid').removeClass('is-invalid')
-        $('.invalid-feedback').remove()
-        clearGlobalSearch($('#jqGrid'))
-        let lookupUrl = `${apiUrl}${url}`
-        if (urlTas) {
-          lookupUrl = urlTas
-        }
-        $(`#${grid}`).setGridParam({
-          url: lookupUrl,
-          datatype: "json",
-          postData: data,
+      // getIndexLookup(url, data).then((response) => {
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+      clearGlobalSearch($('#jqGrid'))
+      let lookupUrl = `${apiUrl}${url}`
+      if (urlTas) {
+        lookupUrl = urlTas
+      }
+      $(`#${grid}`).setGridParam({
+        url: lookupUrl,
+        datatype: "json",
+        postData: data,
 
-          page: 1
-        }).trigger('reloadGrid')
-      }).catch((error) => {
-        clearGlobalSearch($('#jqGrid'))
+        page: 1
+      }).trigger('reloadGrid')
+      // }).catch((error) => {
+      //   clearGlobalSearch($('#jqGrid'))
 
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
+      //   if (error.status === 422) {
+      //     $('.is-invalid').removeClass('is-invalid')
+      //     $('.invalid-feedback').remove()
+      //     errors = error.responseJSON.errors
 
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            let element;
-            element = $('#rangeHeaderLookup').find(`[name="${indexes[0]}headerlookup"]`)[0];
+      //     $.each(errors, (index, error) => {
+      //       let indexes = index.split(".");
+      //       let element;
+      //       element = $('#rangeHeaderLookup').find(`[name="${indexes[0]}headerlookup"]`)[0];
 
-            $(element).addClass("is-invalid");
-            $(`
-              <div class="invalid-feedback">
-              ${error[0].toLowerCase()}
-              </div>
-			    `).appendTo($(element).parent());
+      //       $(element).addClass("is-invalid");
+      //       $(`
+      //         <div class="invalid-feedback">
+      //         ${error[0].toLowerCase()}
+      //         </div>
+      //     `).appendTo($(element).parent());
 
-          });
+      //     });
 
-          $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
-        } else {
-          showDialog(error.responseJSON)
-        }
-      })
+      //     $(".is-invalid").first().focus();
+      //     $('#processingLoader').addClass('d-none')
+      //   } else {
+      //     showDialog(error.responseJSON)
+      //   }
+      // })
 
 
     }
 
     function selectedOnlyOne() {
-      let msg        
+      let msg
       if (selectedRows.length < 1) {
-        msg ='Harap pilih salah satu record'
-      }else if (selectedRows.length > 1) {
-        msg ='Hanya bisa memilih satu record'
+        msg = 'Harap pilih salah satu record'
+      } else if (selectedRows.length > 1) {
+        msg = 'Hanya bisa memilih satu record'
       }
       if (selectedRows.length === 1) {
-        return [true,selectedRows[0]];
-      } 
-      return [false,msg];   
+        return [true, selectedRows[0]];
+      }
+      return [false, msg];
     }
-    
+
     function getIndexLookup(url, data) {
       return new Promise((resolve, reject) => {
         $.ajax({
@@ -879,7 +968,7 @@
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
-          $('#jqGrid').jqGrid('setGridParam',{
+          $('#jqGrid').jqGrid('setGridParam', {
             postData: {
               proses: 'reload'
             }
@@ -903,6 +992,59 @@
       })
 
     }
+
+    function approvalAktif(table) {
+
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
+      $.ajax({
+        url: `${apiUrl}${table}/approvalaktif`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+          table: table
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+
+    }
+
+    window.addEventListener('beforeunload', function(e) {
+      removeEditingBy($('#crudForm').find('[name=id]').val())
+    });
+   
   </script>
 </body>
 

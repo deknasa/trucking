@@ -1,5 +1,5 @@
 <!-- Grid -->
-<div class="container-fluid my-4">
+<div class="container-fluid my-4"  style="display: none">
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>

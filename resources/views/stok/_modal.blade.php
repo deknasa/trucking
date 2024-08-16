@@ -37,9 +37,11 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                {{-- <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                </select> --}}
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
 
@@ -50,9 +52,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusreuse" id="statusreuse" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS REUSE --</option>
-                </select>
+                <input type="hidden" name="statusreuse">
+                <input type="text" name="statusreusenama" data-target-name="statusreuse" id="statusreusenama" class="form-control lg-form statusreuse-lookup">
               </div>
             </div>
 
@@ -63,9 +64,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusservicerutin" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS service rutin --</option>
-                </select>
+                <input type="hidden" name="statusservicerutin">
+                <input type="text" name="statusservicerutinnama" data-target-name="statusservicerutin" id="statusservicerutinnama" class="form-control lg-form statusservicerutin-lookup">
               </div>
             </div>
 
@@ -74,7 +74,7 @@
                 <label class="col-form-label">kelompok <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                <input type="text" name="kelompok" id="kelompok" class="form-control kelompok-lookup">
                 <input type="text" id="kelompokId" name="kelompok_id" readonly hidden>
               </div>
             </div>
@@ -83,7 +83,7 @@
                 <label class="col-form-label">sub kelompok <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="subkelompok" class="form-control subkelompok-lookup">
+                <input type="text" name="subkelompok" id="subkelompok" class="form-control subkelompok-lookup">
                 <input type="text" id="subkelompokId" name="subkelompok_id" readonly hidden>
               </div>
             </div>
@@ -92,7 +92,7 @@
                 <label class="col-form-label">kategori <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kategori" class="form-control kategori-lookup">
+                <input type="text" name="kategori" id="kategori" class="form-control kategori-lookup">
                 <input type="text" id="kategoriId" name="kategori_id" readonly hidden>
               </div>
             </div>
@@ -101,7 +101,7 @@
                 <label class="col-form-label">merk </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="merk" class="form-control merk-lookup">
+                <input type="text" name="merk" id="merk" class="form-control merk-lookup">
                 <input type="text" id="merkId" name="merk_id" readonly hidden>
               </div>
             </div>
@@ -110,7 +110,7 @@
                 <label class="col-form-label">jenis trado </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="jenistrado" class="form-control jenistrado-lookup">
+                <input type="text" name="jenistrado" id="jenistrado" class="form-control jenistrado-lookup">
                 <input type="text" id="jenistradoId" name="jenistrado_id" readonly hidden>
               </div>
             </div>
@@ -120,7 +120,7 @@
                 <label class="col-form-label">satuan </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="satuan" class="form-control satuan-lookup">
+                <input type="text" name="satuan" id="satuan" class="form-control satuan-lookup">
                 <input type="text" id="satuanId" name="satuan_id" readonly hidden>
               </div>
             </div>
@@ -143,9 +143,8 @@
                   </label>
                 </div>
                 <div class="col-12 col-sm-9 col-md-10">
-                  <select name="statusban" class="form-select select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS BAN --</option>
-                  </select>
+                  <input type="hidden" name="statusban">
+                  <input type="text" name="statusservicerutinnama" data-target-name="statusban" id="statusservicerutinnama" class="form-control lg-form statusban-lookup">
                 </div>
               </div>
 
@@ -256,6 +255,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
   var dataReuse = []
+  var data_id
 
   let dataMaxLength = []
 
@@ -325,7 +325,7 @@
       })
 
 
-    
+
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
       formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
@@ -400,6 +400,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    data_id = $('#crudForm').find('[name=id]').val();
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
@@ -407,20 +408,50 @@
 
     initDatepicker()
     initLookup()
-    initSelect2(form.find(`[name="statusaktif"]`))
-    initSelect2(form.find(`[name="statusreuse"]`))
-    initSelect2(form.find(`[name="statusban"]`))
-    initSelect2(form.find(`[name="statusservicerutin"]`))
+    // initSelect2(form.find(`[name="statusaktif"]`))
+    // initSelect2(form.find(`[name="statusreuse"]`))
+    // initSelect2(form.find(`[name="statusban"]`))
+    // initSelect2(form.find(`[name="statusservicerutin"]`))
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     $('#crudModal').find('.modal-body').html(modalBody)
+    removeEditingBy(data_id)
 
     activeGrid = '#jqGrid'
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
     })
   })
+   function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'stok'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
 
   function createStok() {
@@ -633,37 +664,37 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
 
-      $.ajax({
-        url: `${apiUrl}stok/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}stok/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
             form.find(`[name=${index}]`).attr('maxlength', value)
 
-      
+
           }
         })
         resolve()
@@ -983,6 +1014,7 @@
   }
 
   function assignAttachment(dropzone, data) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
 
@@ -991,14 +1023,31 @@
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
             url: 'test',
+            previewTemplate: document.querySelector('.dz-preview').innerHTML,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'image/*',
+            minFilesize: 100, // Set the minimum file size in kilobytes
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
               console.log(this.files.length);
               checkIsPhotExist(this, data)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 5) {
+                  this.removeFile(file);
+                }
+                checkIsPhotExist(this.files, data)
+              });
+            },
+            removedfile: function(file) {
+
+              file.previewElement.remove();
+              checkIsPhotExist(this.files, data)
+
             }
           })
         }
@@ -1075,9 +1124,21 @@
 
   function initLookup() {
 
-    $('.jenistrado-lookup').lookup({
+    $('.jenistrado-lookup').lookupMaster({
       title: 'jenistrado Lookup',
-      fileName: 'jenistrado',
+      fileName: 'jenistradoMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'jenistrado_id',
+          searchText: 'jenistrado-lookup',
+          title: 'jenistrado',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (jenistrado, element) => {
         element.val(jenistrado.kodejenistrado)
         $(`#${element[0]['name']}Id`).val(jenistrado.id)
@@ -1092,9 +1153,21 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.merk-lookup').lookup({
+    $('.merk-lookup').lookupMaster({
       title: 'merk Lookup',
-      fileName: 'merk',
+      fileName: 'merkMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'merk_id',
+          searchText: 'merk-lookup',
+          title: 'merk',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (merk, element) => {
         element.val(merk.kodemerk)
         $(`#${element[0]['name']}Id`).val(merk.id)
@@ -1109,9 +1182,21 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.kelompok-lookup').lookup({
-      title: 'kelompok Lookup',
-      fileName: 'kelompok',
+    $('.kelompok-lookup').lookupMaster({
+      title: 'Kelompok Lookup',
+      fileName: 'kelompokMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kelompok_id',
+          searchText: 'kelompok-lookup',
+          title: 'Kelompok',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (kelompok, element) => {
         element.val(kelompok.kodekelompok)
         $(`#${element[0]['name']}Id`).val(kelompok.id)
@@ -1131,13 +1216,21 @@
         isKelompokBan(0, "")
       }
     })
-    $('.subkelompok-lookup').lookup({
-      title: 'subkelompok Lookup',
-      fileName: 'subkelompok',
+    $('.subkelompok-lookup').lookupMaster({
+      title: 'Subkelompok Lookup',
+      fileName: 'subkelompokMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         var kelompokId = $(`#kelompokId`).val();
         this.postData = {
           kelompok_id: kelompokId,
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'subkelompok_id',
+          searchText: 'subkelompok-lookup',
+          title: 'Sub Kelompok',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (subkelompok, element) => {
@@ -1156,24 +1249,22 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.kategori-lookup').lookup({
+    $('.kategori-lookup').lookupMaster({
       title: 'kategori Lookup',
-      fileName: 'kategori',
+      fileName: 'kategoriMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         var subkelompokId = $(`#subkelompokId`).val();
         this.postData = {
           subkelompok_id: subkelompokId,
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kategori_id',
+          searchText: 'kategori-lookup',
+          title: 'kategori',
+          typeSearch: 'ALL',
         }
-        // this.postData = {
-        //   filters: JSON.stringify({
-        //     "groupOp": "AND",
-        //     "rules": [{
-        //       "field": "subkelompok_id",
-        //       "op": "cn",
-        //       "data": $(`#subkelompokId`).val()
-        //     }]
-        //   })
-        // }
       },
       onSelectRow: (kategori, element) => {
         element.val(kategori.kodekategori)
@@ -1190,9 +1281,21 @@
       }
     })
 
-    $('.satuan-lookup').lookup({
+    $('.satuan-lookup').lookupMaster({
       title: 'satuan Lookup',
-      fileName: 'satuan',
+      fileName: 'satuanMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'satuan_id',
+          searchText: 'satuan-lookup',
+          title: 'satuan',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (satuan, element) => {
         element.val(satuan.satuan)
         $(`#${element[0]['name']}Id`).val(satuan.id)
@@ -1207,6 +1310,162 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $(`.statusreuse-lookup`).lookupMaster({
+      title: 'Status REUSE Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS REUSE',
+          subgrp: 'STATUS REUSE',
+          searching: 1,
+          valueName: `statusreuse`,
+          searchText: `statusreuse-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status REUSE'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+        
+        let reuse = 0
+        
+        if (dataReuse.length) {
+          $.each(dataReuse, (index, data) => {
+            if (data.text == "REUSE") {
+              reuse = data.id
+            }
+          })
+        }
+        if (status.id == reuse) {
+          $('#crudForm').find('[name=vulkanisirawal]').attr('readonly', false);
+        } else {
+          $('#crudForm').find('[name=vulkanisirawal]').attr('readonly', true);
+          $('#crudForm').find('[name=vulkanisirawal]').val('');
+        }
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $(`.statusservicerutin-lookup`).lookupMaster({
+      title: 'Status status service rutin Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS service rutin',
+          subgrp: 'STATUS service rutin',
+          searching: 1,
+          valueName: `statusservicerutin`,
+          searchText: `statusservicerutin-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'STATUS service rutin'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $(`.statusban-lookup`).lookupMaster({
+      title: 'STATUS KONDISI BAN Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS KONDISI BAN',
+          subgrp: 'STATUS KONDISI BAN',
+          searching: 1,
+          valueName: `statusban`,
+          searchText: `statusban-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'STATUS KONDISI BAN'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+
+
   }
 
   function getImgURL(url, callback) {
@@ -1220,7 +1479,7 @@
     xhr.send();
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}stok/${Id}/cekValidasi`,
       method: 'POST',
@@ -1228,12 +1487,20 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },      
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteStok(Id)
+          if(Aksi=='edit') {
+            editStok(Id)
+          } else {
+            deleteStok(Id)
+          }
+          // deleteStok(Id)
         }
 
       }

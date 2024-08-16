@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e4d3940e79aeaf85ed597ffe83b707ac",
+  "ReportGuid": "d66bc3d103a708aea1db0ea1e211d232",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportStokPersediaan.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688435953000+0700)/",
+  "ReportChanged": "/Date(1712560270000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -34,18 +34,42 @@
             "Type": "System.String"
           },
           "1": {
+            "Name": "lokasi",
+            "NameInSource": "lokasi",
+            "Alias": "lokasi",
+            "Type": "System.String"
+          },
+          "2": {
             "Name": "stok_id",
             "NameInSource": "stok_id",
             "Alias": "stok_id",
             "Type": "System.String"
           },
-          "2": {
+          "3": {
             "Name": "qty",
             "NameInSource": "qty",
             "Alias": "qty",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
+            "Name": "gudang_id",
+            "NameInSource": "gudang_id",
+            "Alias": "gudang_id",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "trado_id",
+            "NameInSource": "trado_id",
+            "Alias": "trado_id",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "gandengan_id",
+            "NameInSource": "gandengan_id",
+            "Alias": "gandengan_id",
+            "Type": "System.String"
+          },
+          "7": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
@@ -93,6 +117,12 @@
             "Name": "tglCetak",
             "NameInSource": "tglCetak",
             "Alias": "tglCetak",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "namacabang",
+            "NameInSource": "namacabang",
+            "Alias": "namacabang",
             "Type": "System.String"
           }
         },
@@ -208,14 +238,14 @@
               "Name": "Text29",
               "Guid": "c510137e016cbcfaeaa2c74052410c9b",
               "CanGrow": true,
-              "ClientRectangle": "4,14,208,8",
+              "ClientRectangle": "4,12,208,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{dataHeader.judulLaporan}"
+                "Value": "{dataHeader.namacabang}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
@@ -255,7 +285,7 @@
               "Name": "Text41",
               "Guid": "034dc0a8d5c9f5e8844ba14a4dd34eaf",
               "CanGrow": true,
-              "ClientRectangle": "106,26,106,4",
+              "ClientRectangle": "106,14,106,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -275,7 +305,7 @@
               "Name": "Text40",
               "Guid": "9086d8061fea24e715cd77e69321e1e0",
               "CanGrow": true,
-              "ClientRectangle": "184,22,28,4",
+              "ClientRectangle": "183.9,5.91,28,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -341,15 +371,16 @@
               "Name": "Text11",
               "Guid": "fef05dde22ef97a78abadb185515da7e",
               "CanGrow": true,
-              "ClientRectangle": "12,26,94,4",
+              "ClientRectangle": "179.86,9.97,32,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": ":{dataHeader.user}"
+                "Value": "User : {dataHeader.user}"
               },
+              "HorAlignment": "Right",
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -381,30 +412,10 @@
             },
             "11": {
               "Ident": "StiText",
-              "Name": "Text48",
-              "Guid": "5283f7d3ffb09cdf218602a4eb2debfb",
-              "CanGrow": true,
-              "ClientRectangle": "4,26,8,4",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "User"
-              },
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "12": {
-              "Ident": "StiText",
               "Name": "Text49",
               "Guid": "298cef8ff542a4a1ce09748cec3cf966",
               "CanGrow": true,
-              "ClientRectangle": "134,22,50,4",
+              "ClientRectangle": "134.11,5.91,50,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -420,7 +431,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "13": {
+            "12": {
               "Ident": "StiText",
               "Name": "Text55",
               "Guid": "c7415075a7a9346ac7618071257190df",
@@ -442,6 +453,27 @@
                 "WordWrap": true
               },
               "Type": "Expression"
+            },
+            "13": {
+              "Ident": "StiText",
+              "Name": "Text4",
+              "Guid": "d15b1f7c80cfb37d662c73c214faac96",
+              "CanGrow": true,
+              "ClientRectangle": "4,18,208,8",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "MaxNumberOfLines": 6,
+              "Text": {
+                "Value": "{dataHeader.judulLaporan}"
+              },
+              "HorAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
             },
             "14": {
               "Ident": "StiHorizontalLinePrimitive",
@@ -745,7 +777,7 @@
               "Guid": "ea3a3311ae4ec8a358b0875f5dcf5da1",
               "CanGrow": true,
               "ClientRectangle": "62,0,44,8",
-              "ComponentPlacement": "gf.GroupFooterBand3",
+              "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

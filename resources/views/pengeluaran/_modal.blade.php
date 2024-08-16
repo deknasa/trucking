@@ -96,6 +96,19 @@
               </div>
             </div>
 
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  PENERIMA
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="penerima_id[]" id="multiple" class="select2bs4 form-control" multiple="multiple"></select>
+              </div>
+            </div>
+
+
             <div class="row form-group bmt" style="display: none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -106,40 +119,42 @@
               </div>
             </div>
 
-            <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
-                <thead>
-                  <tr>
-                    <th width="1%">No</th>
-                    <th width="15%">Nama Perkiraan</th>
-                    <th width="25%">Keterangan</th>
-                    <th width="10%">Nominal</th>
-                    <th width="10%">No warkat</th>
-                    <th width="10%">Tgl jatuh tempo</th>
-                    <th width="10%">No Invoice</th>
-                    <th width="10%">Bank</th>
-                    <th width="1%" class="aksiBmt tbl_aksi">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
+            <div class="overflow scroll-container mb-2">
+              <div class="table-container">
+                <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px; min-width: 10px;">No</th>
+                      <th style="width: 180px; min-width: 180px;">Nama Perkiraan</th>
+                      <th style="width: 350px; min-width: 350px;">Keterangan</th>
+                      <th style="width: 180px; min-width: 180px;">Nominal</th>
+                      <th style="width: 180px; min-width: 180px;">No warkat</th>
+                      <th style="width: 150px; min-width: 150px;">Tgl jatuh tempo</th>
+                      <th class="tbl_noinvoice" style="width: 210px; min-width: 210px;">No Invoice</th>
+                      <th class="tbl_bank" style="width: 210px; min-width: 210px;">Bank</th>
+                      <th style="width: 10px; min-width: 10px;" class="aksiBmt tbl_aksi">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table_body" class="form-group">
 
 
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="3">
-                      <p class="text-right font-weight-bold">TOTAL :</p>
-                    </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                    </td>
-                    <td colspan="4"></td>
-                    <td class="aksiBmt tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" id="colspan-1">
+                        <p class="text-right font-weight-bold">TOTAL :</p>
+                      </td>
+                      <td>
+                        <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                      </td>
+                      <td colspan="4" id="colspan-2"></td>
+                      <td class="aksiBmt tbl_aksi">
+                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
 
           </div>
@@ -147,6 +162,10 @@
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
+            </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
@@ -165,6 +184,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
   let isEditTgl
+  let cabangPusat
 
   $(document).ready(function() {
 
@@ -211,7 +231,16 @@
     });
 
     $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
-      $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+      if ($(`#crudForm [name="alatbayar"]`).val() != 'GIRO') {
+        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+      }
+    });
+
+
+    $(document).on('change', `#table_body [name="tgljatuhtempo[]"]`, function() {
+      if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO' || $(`#crudForm [name="alatbayar"]`).val() == 'CHECK') {
+        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val());
+      }
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -221,8 +250,17 @@
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })
-
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+
+    function submit(button) {
       event.preventDefault()
 
       let method
@@ -236,6 +274,10 @@
         data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
 
+      data.push({
+        name: 'button',
+        value: button
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -319,31 +361,53 @@
         success: response => {
 
 
-          id = response.data.id
-          console.log(id)
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
-          $('#bankheader').val(response.data.bank_id).trigger('change')
+          if (button == 'btnSubmit') {
+            id = response.data.id
+            console.log(id)
+            $('#crudModal').modal('hide')
+            $('#crudModal').find('#crudForm').trigger('reset')
+            $('#bankheader').val(response.data.bank_id).trigger('change')
 
-          // $('.select2').select2({
-          //   width: 'resolve',
-          //   theme: "bootstrap4"
-          // });
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              bank_id: response.data.bank_id,
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            // $('.select2').select2({
+            //   width: 'resolve',
+            //   theme: "bootstrap4"
+            // });
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                bank_id: response.data.bank_id,
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader),
+                proses: 'reload'
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
+          } else {
 
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            // showSuccessDialog(response.message, response.data.nobukti)
+            let bankVal = $('#crudForm').find('[name="bank"]').val();
+            let bankIdVal = $('#crudForm').find('[name="bank_id"]').val();
+            let alatbayarVal = $('#crudForm').find('[name="alatbayar"]').val();
+            let alatbayarIdVal = $('#crudForm').find('[name="alatbayar_id"]').val();
+
+            createPengeluaran(true)
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#crudForm').find('[name=tglbukti]').focus()
+            $('#crudForm').find('[name="bank"]').val(bankVal)
+            $('#crudForm').find('[name="bank"]').data('current-value', bankVal)
+            $('#crudForm').find('[name="bank_id"]').val(bankIdVal)
+            $('#crudForm').find('[name="alatbayar"]').val(alatbayarVal)
+            $('#crudForm').find('[name="alatbayar"]').data('current-value', alatbayarVal)
+            $('#crudForm').find('[name="alatbayar_id"]').val(alatbayarIdVal)
+
           }
-
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -362,7 +426,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -373,22 +437,99 @@
 
     activeGrid = null
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     getMaxLength(form)
+    rowCabangPusat()
+
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
+    $('#multiple')
+      .select2({
+        theme: 'bootstrap4',
+        width: '100%',
+      })
     initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    // $.ajax({
+    //   url: `{{ config('app.api_url') }}bataledit`,
+    //   method: 'POST',
+    //   dataType: 'JSON',
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`
+    //   },
+    //   data: {
+    //     id: id,
+    //     aksi: 'BATAL',
+    //     table: 'pengeluaranheader'
+
+    //   },
+    //   success: response => {
+    //     $("#crudModal").modal("hide")
+    //   },
+    //   error: error => {
+    //     if (error.status === 422) {
+    //       $('.is-invalid').removeClass('is-invalid')
+    //       $('.invalid-feedback').remove()
+
+    //       setErrorMessages(form, error.responseJSON.errors);
+    //     } else {
+    //       showDialog(error.responseJSON)
+    //     }
+    //   },
+    // })
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pengeluaranheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -401,7 +542,7 @@
     new AutoNumeric('#total').set(total)
   }
 
-  function createPengeluaran() {
+  function createPengeluaran(isSaveAdd = false) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
     form.trigger('reset')
@@ -419,33 +560,63 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+    if (isSaveAdd) {
 
-    Promise
-      .all([
-        setStatusJenisTransaksiOptions(form)
-      ])
-      .then(() => {
-        showDefault(form)
-          .then(() => {
-            if (bankId == 3) {
-              $('.bmt').show()
-            } else {
-              $('.bmt').hide()
-            }
-            if (selectedRows.length > 0) {
-              clearSelectedRows()
-            }
-            $('#crudModal').modal('show')
-            addRow()
-          })
-          .catch((error) => {
-            showDialog(error.responseJSON)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+      Promise
+        .all([
+          setStatusJenisTransaksiOptions(form),
+          setPenerimaOptions(form),
+        ])
+        .then(() => {
+          if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
+            $('.bmt').show()
+          } else {
+            $('.bmt').hide()
+          }
+          if (selectedRows.length > 0) {
+            clearSelectedRows()
+          }
+          $('#crudModal').modal('show')
+          addRow()
+          enableTglJatuhTempo(form)
+        })
+        .catch((error) => {
+          showDialog(error.responseJSON)
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
+    } else {
 
+      Promise
+        .all([
+          setStatusJenisTransaksiOptions(form),
+          setPenerimaOptions(form),
+        ])
+        .then(() => {
+          showDefault(form)
+            .then(() => {
+              if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
+                $('.bmt').show()
+              } else {
+                $('.bmt').hide()
+              }
+              if (selectedRows.length > 0) {
+                clearSelectedRows()
+              }
+              $('#crudModal').modal('show')
+              addRow()
+              enableTglJatuhTempo(form)
+            })
+            .catch((error) => {
+              showDialog(error.responseJSON)
+            })
+            .finally(() => {
+              $('.modal-loader').addClass('d-none')
+            })
+        })
+
+    }
     setTotal()
   }
 
@@ -502,6 +673,7 @@
       .all([
         setTglBukti(form),
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
 
         // $('#detailList tbody').remove()
       ])
@@ -511,6 +683,9 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -554,6 +729,7 @@
       .all([
         setTglBukti(form),
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showPengeluaran(form, id)
@@ -581,6 +757,9 @@
           .then(() => {
             clearSelectedRows()
             $('#gs_').prop('checked', false)
+
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
@@ -618,6 +797,7 @@
     Promise
       .all([
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showPengeluaran(form, id)
@@ -625,6 +805,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -656,6 +838,7 @@
     Promise
       .all([
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showPengeluaran(form, id)
@@ -680,6 +863,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -701,7 +886,7 @@
 
   }
 
-  function cekValidasi(Id, Aksi,nobukti) {
+  function cekValidasi(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -716,7 +901,11 @@
       success: response => {
         var error = response.error
         if (error) {
+          // if (response.force) {
+          //   showConfirmForce(response.message, Id)
+          // } else {
           showDialog(response)
+          // }
         } else {
           if (Aksi == 'PRINTER BESAR') {
             window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
@@ -848,6 +1037,7 @@
         success: response => {
           let tgl = response.data.tglbukti
 
+          let penerimaIds = []
           $.each(response.data, (index, value) => {
             bankId = response.data.bank_id
             let element = form.find(`[name="${index}"]`)
@@ -873,11 +1063,16 @@
             }
           })
 
-          if (bankId == 3) {
+          if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
             $('.bmt').show()
           } else {
             $('.bmt').hide()
           }
+          response.detailpenerima.forEach((penerima) => {
+            penerimaIds.push(penerima.penerima_id)
+          })
+
+          form.find(`[name="penerima_id[]"]`).val(penerimaIds).change()
 
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
@@ -889,7 +1084,7 @@
                     <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
                   </td>                
                   <td>
-                      <input type="text" name="keterangan_detail[]"  class="form-control">
+                    <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
                   </td>
                   <td>
                       <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
@@ -903,10 +1098,10 @@
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                       </div>
                   </td>
-                  <td>
+                  <td class="tbl_noinvoice">
                       <input type="text" name="noinvoice[]" class="form-control">
                   </td>
-                  <td>
+                  <td class="tbl_bank">
                       <input type="text" name="bank_detail[]" class="form-control">
                   </td>
                   <td class="tbl_aksi">
@@ -942,7 +1137,7 @@
                 }
               },
               onSelectRow: (akunpusat, element) => {
-                $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+                element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
                 element.val(akunpusat.keterangancoa)
                 element.data('currentValue', element.val())
               },
@@ -950,7 +1145,7 @@
                 element.val(element.data('currentValue'))
               },
               onClear: (element) => {
-                $(`#crudForm [name="coadebet[]"]`).last().val('')
+                element.parents('td').find(`[name="coadebet[]"]`).val('')
                 element.val('')
                 element.data('currentValue', element.val())
               }
@@ -975,6 +1170,8 @@
   }
 
   function addRow() {
+
+    let isTheFirstRow = $('#table_body tr').length;
     let detailRow = $(`
       <tr>
         <td></td>
@@ -984,7 +1181,7 @@
         </td>
        
         <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
+          <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
@@ -994,15 +1191,15 @@
         </td>
         <td>
           <div class="input-group">
-            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+            <input type="text" name="tgljatuhtempo[]" class="form-control">   
           </div>
         </td>
-        <td>
+        <td class="tbl_noinvoice">
           <div class="input-group">
             <input type="text" name="noinvoice[]" class="form-control">   
           </div>
         </td>
-        <td>
+        <td class="tbl_bank">
           <div class="input-group">
             <input type="text" name="bank_detail[]" class="form-control">   
           </div>
@@ -1030,22 +1227,58 @@
         $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+
+        enableTglJatuhTempo($(`#crudForm`))
       },
       onClear: (element) => {
         $(`#crudForm [name="coadebet[]"]`).last().val('')
         element.val('')
         element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
       }
     })
     initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
     tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
-    detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
-
-    initDatepicker()
+    if (isTheFirstRow == 0) {
+      detailRow.find(`[name="tgljatuhtempo[]"]`).addClass('first-input');
+      detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
+    } else {
+      let firstDateVal = $('#table_body tr:first').find(`[name="tgljatuhtempo[]"]`).val();
+      detailRow.find(`[name="tgljatuhtempo[]"]`).val(firstDateVal).trigger('change');
+    }
+    enableTglJatuhTempo(detailRow)
+    enableNoWarkat(detailRow)
     setRowNumbers()
+    rowCabangPusat()
+  }
+
+  function enableTglJatuhTempo(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO' || $(`#crudForm [name="alatbayar"]`).val() == 'CHECK') {
+      el.find(`[name="tgljatuhtempo[]"]`).addClass('datepicker')
+      el.find(`[name="tgljatuhtempo[]"]`).attr('readonly', false)
+      initDatepicker()
+      el.find(`[name="tgljatuhtempo[]"]`).parent('.input-group').find('.input-group-append').show()
+    } else {
+      el.find(`[name="tgljatuhtempo[]"]`).removeClass('datepicker')
+      el.find(`[name="tgljatuhtempo[]"]`).parent('.input-group').find('.input-group-append').hide()
+      el.find(`[name="tgljatuhtempo[]"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
+      el.find(`[name="tgljatuhtempo[]"]`).attr('readonly', true)
+    }
+  }
+
+  function enableNoWarkat(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() != 'TUNAI') {
+      el.find(`[name="nowarkat[]"]`).attr('readonly', false)
+    } else {
+      el.find(`[name="nowarkat[]"]`).attr('readonly', true)
+      el.find(`[name="nowarkat[]"]`).val('')
+    }
   }
 
   function deleteRow(row) {
@@ -1084,13 +1317,27 @@
       },
       data: {
         pengeluaranId: selectedRows,
-        bukti: selectedbukti
+        bukti: selectedbukti,
+        table: 'pengeluaranheader',
+        statusapproval: 'statusapproval',
       },
       success: response => {
         $('#crudForm').trigger('reset')
         $('#crudModal').modal('hide')
 
-        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        $('#jqGrid').jqGrid('setGridParam', {
+          postData: {
+            proses: 'reload',
+            tgldari: $('#tgldariheader').val(),
+            tglsampai: $('#tglsampaiheader').val(),
+            bank: $('#bankheader').val(),
+            page: page,
+            limit: limit,
+            sortIndex: $('#jqGrid').getGridParam().sortname,
+            sortOrder: $('#jqGrid').getGridParam().sortorder,
+            filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+          }
+        }).trigger('reloadGrid');
         selectedRows = []
         selectedbukti = []
         $('#gs_').prop('checked', false)
@@ -1137,6 +1384,23 @@
     }
   }
 
+
+  function rowCabangPusat() {
+    if (accessCabang == 'PUSAT') {
+      ;
+      $('.tbl_noinvoice').hide();
+      $('.tbl_bank').hide();
+      $('#colspan-2').attr('colspan', 2);
+      $('#detailList').css({
+        width: '1200px'
+      });
+    } else {
+      $('.tbl_noinvoice').show();
+      $('.tbl_bank').show();
+      $('#colspan-2').attr('colspan', 4);
+    }
+  }
+
   function initLookup() {
 
     $('.pelanggan-lookup').lookup({
@@ -1176,6 +1440,8 @@
         $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
+        enableTglJatuhTempo($(`#crudForm`))
+        enableNoWarkat($(`#crudForm`))
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1193,7 +1459,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-
+          from: 'pengeluaran'
         }
       },
       onSelectRow: (bank, element) => {
@@ -1201,13 +1467,16 @@
 
         bankId = bank.id
 
-        if (bankId == 3) {
+        if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
           $('.bmt').show()
         } else {
           $('.bmt').hide()
         }
         element.val(bank.namabank)
         element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1216,6 +1485,9 @@
         $('#crudForm [name=bank_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
       }
     })
 
@@ -1270,7 +1542,7 @@
                     <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
                   </td>                
                   <td>
-                      <input type="text" name="keterangan_detail[]"  class="form-control">
+                      <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
                   </td>
                   <td>
                       <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
@@ -1284,17 +1556,17 @@
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                       </div>
                   </td>
-                  <td>
+                  <td class="tbl_noinvoice">
                       <input type="text" name="noinvoice[]" class="form-control">
                   </td>
-                  <td>
+                  <td class="tbl_bank">
                       <input type="text" name="bank_detail[]" class="form-control">
                   </td>
               </tr>
             `)
 
           detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val($(`#crudForm [name="tglbukti"]`).val())
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
           detailRow.find(`[name="coadebet[]"]`).val(detail.coakredit)
@@ -1303,7 +1575,7 @@
 
           initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val($(`#crudForm [name="tglbukti"]`).val())
           $('#detailList>#table_body').append(detailRow)
 
           setTotal();
@@ -1363,6 +1635,48 @@
         data: data,
         success: response => {
           isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function setPenerimaOptions(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name="penerima_id[]"]').empty()
+
+      $.ajax({
+        url: `${apiUrl}penerima`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "statusaktif",
+              "op": "eq",
+              "data": "AKTIF"
+            }, {
+              "field": "statuskaryawan",
+              "op": "eq",
+              "data": "KARYAWAN"
+            }]
+          }),
+        },
+        success: response => {
+          response.data.forEach(penerima => {
+            let option = new Option(penerima.namapenerima, penerima.id)
+
+            relatedForm.find(`[name="penerima_id[]"]`).append(option).trigger('change')
+          });
+
           resolve()
         },
         error: error => {

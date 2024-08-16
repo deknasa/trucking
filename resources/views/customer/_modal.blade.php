@@ -58,9 +58,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -120,9 +119,19 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statustas" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS TAS --</option>
-                </select>
+                <input type="hidden" name="statustas">
+                <input type="text" name="statustasnama" id="statustasnama" class="form-control lg-form statustas-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS INVOICE EXTRA <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="statusinvoiceextra">
+                <input type="text" name="statusinvoiceextranama" id="statusinvoiceextranama" class="form-control lg-form statusinvoiceextra-lookup">
               </div>
             </div>
 
@@ -134,7 +143,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="coa">
-                <input type="text" name="keterangancoa" class="form-control coa-lookup">
+                <input type="text" id="keterangancoa" name="keterangancoa" class="form-control coa-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -145,7 +154,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="coapendapatan">
-                <input type="text" name="keterangancoapendapatan" class="form-control coapendapatan-lookup">
+                <input type="text" id="keterangancoapendapatan" name="keterangancoapendapatan" class="form-control coapendapatan-lookup">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -182,6 +191,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   let dataMaxLength = []
+  var data_id
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -293,6 +303,7 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
+    data_id = $('#crudForm').find('[name=id]').val();
 
     setFormBindKeys(form)
 
@@ -303,17 +314,44 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    initSelect2(form.find(`[name="statustas"]`), true)
-    initSelect2(form.find(`[name="statusaktif"]`), true)
-
-
     initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'agen'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createAgen() {
     let form = $('#crudForm')
@@ -334,8 +372,9 @@
     initAutoNumeric(form.find(`[name="top"]`))
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusTasOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusTasOptions(form),
+        // setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -370,8 +409,9 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusTasOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusTasOptions(form),
+        // setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -406,8 +446,9 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusTasOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusTasOptions(form),
+        // setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -443,8 +484,9 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusTasOptions(form),
+        // setStatusAktifOptions(form),
+        // setStatusTasOptions(form),
+        // setStatusInvoiceOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -560,79 +602,116 @@
     })
   }
 
-  const setStatusTasOptions = function setStatusTasOptions(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statustas]').empty()
-      relatedForm.find('[name=statustas]').append(
-        new Option('-- PILIH STATUS TAS --', '', false, true)
-      ).trigger('change')
+  // const setStatusTasOptions = function setStatusTasOptions(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statustas]').empty()
+  //     relatedForm.find('[name=statustas]').append(
+  //       new Option('-- PILIH STATUS TAS --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS TAS"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusKaryawan => {
-            let option = new Option(statusKaryawan.text, statusKaryawan.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS TAS"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusKaryawan => {
+  //           let option = new Option(statusKaryawan.text, statusKaryawan.id)
 
-            relatedForm.find('[name=statustas]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statustas]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
+
+  // const setStatusInvoiceOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusinvoiceextra]').empty()
+  //     relatedForm.find('[name=statusinvoiceextra]').append(
+  //       new Option('-- PILIH STATUS INVOICE EXTRA --', '', false, true)
+  //     ).trigger('change')
+
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
+
+  //           relatedForm.find('[name=statusinvoiceextra]').append(option).trigger('change')
+  //         });
+
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
   function showAgen(form, agenId) {
     return new Promise((resolve, reject) => {
@@ -653,6 +732,15 @@
               element.val(value)
             }
             if (index == 'keteranganjenisemkl') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statustasnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusinvoiceextranama') {
               element.data('current-value', value)
             }
           })
@@ -692,14 +780,71 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.coa-lookup').last().lookup({
+    // $('.coa-lookup').last().lookup({
+    //   title: 'Coa Lookup',
+    //   fileName: 'akunpusat',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       levelCoa: '3',
+    //       Aktif: 'AKTIF',
+    //       KeteranganCoa: 'PIUTANG USAHA',
+    //     }
+    //   },
+    //   onSelectRow: (akunpusat, element) => {
+    //     $('#crudForm [name=coa]').first().val(akunpusat.coa)
+    //     element.val(akunpusat.kodeket)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=coa]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+    // $('.coapendapatan-lookup').last().lookup({
+    //   title: 'Coa Pendapatan Lookup',
+    //   fileName: 'akunpusat',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       levelCoa: '3',
+    //       Aktif: 'AKTIF',
+    //       KeteranganCoa: 'PENDAPATAN -',
+
+    //     }
+    //   },
+    //   onSelectRow: (akunpusat, element) => {
+    //     $('#crudForm [name=coapendapatan]').first().val(akunpusat.coa)
+    //     element.val(akunpusat.kodeket)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=coapendapatan]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+    $('.coa-lookup').lookupMaster({
       title: 'Coa Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
           KeteranganCoa: 'PIUTANG USAHA',
+          searching: 1,
+          valueName: 'subkelompok_id',
+          searchText: 'subkelompok-lookup',
+          title: 'Sub Kelompok',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -716,15 +861,22 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.coapendapatan-lookup').last().lookup({
+
+    $('.coapendapatan-lookup').lookupMaster({
       title: 'Coa Pendapatan Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
           KeteranganCoa: 'PENDAPATAN -',
-
+          searching: 1,
+          valueName: 'subkelompok_id',
+          searchText: 'subkelompok-lookup',
+          title: 'Sub Kelompok',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -741,6 +893,108 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statustas-lookup`).lookupMaster({
+      title: 'Status Tas Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS TAS',
+          subgrp: 'STATUS TAS',
+          searching: 1,
+          valueName: `statustas`,
+          searchText: `statustas-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Tas'
+        };
+      },
+      onSelectRow: (statustas, element) => {
+        $('#crudForm [name=statustas]').first().val(statustas.id)
+        element.val(statustas.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statustas"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusinvoiceextra-lookup`).lookupMaster({
+      title: 'Status Invoice Extra Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusinvoiceextra`,
+          searchText: `statusinvoiceextra-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Invoice Extra'
+        };
+      },
+      onSelectRow: (statusinvoiceextra, element) => {
+        $('#crudForm [name=statusinvoiceextra]').first().val(statusinvoiceextra.id)
+        element.val(statusinvoiceextra.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusinvoiceextra"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function showDefault(form) {
@@ -863,7 +1117,7 @@
   }
 
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}customer/${Id}/cekValidasi`,
       method: 'POST',
@@ -871,12 +1125,26 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: aksi,
+      },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   showDialog(response.message['keterangan'])
+        // } else {
+        //   deleteAgen(Id)
+        // }
+
+        var error = response.error
+        if (error == true) {
+          showDialog(response.message)
         } else {
-          deleteAgen(Id)
+          if (aksi == "edit") {
+            editAgen(Id)
+          } else if (aksi == "delete") {
+            deleteAgen(Id)
+          }
         }
 
       }

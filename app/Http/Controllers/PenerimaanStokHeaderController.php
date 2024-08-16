@@ -17,7 +17,9 @@ class PenerimaanStokHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combokirimberkas' => $this->comboList('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
+            'listbtn' => $this->getListBtn()
         ];
         $combo = $this->comboKodepenerimaan();
         $comboKodepenerimaan = $combo['data'];
@@ -312,7 +314,8 @@ class PenerimaanStokHeaderController extends MyController
             'withRelations' => true,
 
         ];
-        $id = $request->id;
+        // dd($request->all());
+        $id = $request->id ?? 0;
         $penerimaanstok = $this->find($params, $id)['data'];
         $data = $penerimaanstok;
         $i = 0;
@@ -320,7 +323,7 @@ class PenerimaanStokHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanstokdetail', ['forReport' => true, 'penerimaanstokheader_id' => $penerimaanstok['id']]);
+            ->get(config('app.api_url') . 'penerimaanstokdetail', ['forReport' => true,'nobukti'=>$request->nobukti ,'penerimaanstokheader_id' => $penerimaanstok['id']]);
         $data["details"] = $response['data'];
         $data["user"] = Auth::user();
         $combo = $this->combo('list');

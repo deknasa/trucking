@@ -41,9 +41,10 @@ class LaporanHistoryPinjamanController extends MyController
             ->get(config('app.api_url') . 'laporanhistorypinjaman/report', $detailParams);
         // dd($responses['data']);
         $data = $responses['data'];
+        $dataCabang['namacabang'] = $responses['namacabang'];
         $user = Auth::user();
 
-        return view('reports.laporanhistorypinjaman', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanhistorypinjaman', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request)
@@ -64,6 +65,7 @@ class LaporanHistoryPinjamanController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
         $user = Auth::user();
+        $namacabang = $responses['namacabang'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -71,17 +73,21 @@ class LaporanHistoryPinjamanController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
-
-        $sheet->setCellValue('A2', strtoupper('Laporan History Pinjaman'));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:E2');
-        $sheet->setCellValue('A3', 'SUPIR : ' .  $responses['supirdari'] . ' S/D ' . $responses['supirsampai']);
+
+        $sheet->setCellValue('A3', strtoupper('Laporan History Pinjaman'));
         $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->mergeCells('A3:E3');
+        $sheet->setCellValue('A4', 'SUPIR : ' .  $responses['supirdari'] . ' S/D ' . $responses['supirsampai']);
+        $sheet->getStyle("A4")->getFont()->setBold(true);
 
-        $sheet->mergeCells('A3:B3');
+        $sheet->mergeCells('A4:B4');
 
-        $header_start_row = 5;
-        $detail_start_row = 6;
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(
@@ -212,7 +218,7 @@ class LaporanHistoryPinjamanController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        $totalDebet = "=SUM(E7:E" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 

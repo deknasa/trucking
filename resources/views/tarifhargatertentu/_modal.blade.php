@@ -150,7 +150,9 @@
   var statustas
   var kodecontainer
   var isAllowEdited;
+  var data_id
 
+    
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -269,6 +271,9 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
+    data_id = $('#crudForm').find('[name=id]').val();
+
+    
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
@@ -277,8 +282,39 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
+    removeEditingBy(data_id)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'tarifhargatertentu'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createTarifHargaTertentu() {
     let form = $('#crudForm')
@@ -1027,25 +1063,25 @@
 
   function cekValidasidelete(Id, Aksi, nobukti) {
     $.ajax({
-      url: `{{ config('app.api_url') }}tarifhargatertentu/${Id}/${Aksi}/cekValidasi`,
+      url: `{{ config('app.api_url') }}tarifhargatertentu/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       data: {
         aksi: Aksi,
-        nobukti: nobukti
+        id: nobukti
       },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
+        var error = response.error
         isAllowEdited = response.edit;
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        if (error == true) {
+          showDialog(response.message)
         } else {
-          if (Aksi == 'edit') {
+          if (Aksi == 'EDIT') {
             editTarifHargaTertentu(Id)
-          } else if (Aksi == 'delete') {
+          } else if (Aksi == 'DELETE') {
             deleteTarifHargaTertentu(Id)
           }
         }

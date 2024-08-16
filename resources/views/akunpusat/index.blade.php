@@ -30,43 +30,45 @@
     let autoNumericElements = []
     let rowNum = 10
     let selectedRows = [];
-    
+
     function checkboxHandler(element) {
-      let value = $(element).val();
-      if (element.checked) {
-        selectedRows.push($(element).val())
-        $(element).parents('tr').addClass('bg-light-blue')
-      } else {
-        $(element).parents('tr').removeClass('bg-light-blue')
-        for (var i = 0; i < selectedRows.length; i++) {
-          if (selectedRows[i] == value) {
-            selectedRows.splice(i, 1);
-          }
+        let value = $(element).val();
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                }
+            }
         }
-      }
     }
+
     function clearSelectedRows() {
-      selectedRows = []
-      $('#gs_').prop('checked', false);
-      $('#jqGrid').trigger('reloadGrid')
+        selectedRows = []
+        $('#gs_').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
     }
+
     function selectAllRows() {
-      $.ajax({
-        url: `${apiUrl}akunpusat`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
-        },
-        success: (response) => {
-          selectedRows = response.data.map((akunpusat) => akunpusat.id)
-          $('#jqGrid').trigger('reloadGrid')
-        }
-      })
+        $.ajax({
+            url: `${apiUrl}akunpusat`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((akunpusat) => akunpusat.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
     }
 
     $(document).ready(function() {
@@ -76,8 +78,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [
-                    {
+                colModel: [{
                         label: '',
                         name: '',
                         width: 30,
@@ -87,25 +88,25 @@
                         stype: 'input',
                         searchable: false,
                         searchoptions: {
-                          type: 'checkbox',
-                          clearSearch: false,
-                          dataInit: function(element) {
-                            $(element).removeClass('form-control')
-                            $(element).parent().addClass('text-center')
-                            $(element).on('click', function() {
-                              $(element).attr('disabled', true)
-                              if ($(this).is(':checked')) {
-                                selectAllRows()
-                              } else {
-                                clearSelectedRows()
-                              }
-                            })
-                          }
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+                                $(element).on('click', function() {
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+                            }
                         },
                         formatter: (value, rowOptions, rowData) => {
-                          return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
                         },
-                    }, 
+                    },
                     {
                         label: 'ID',
                         name: 'id',
@@ -416,7 +417,7 @@
                             }
                         })
                     });
-                    
+
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -544,17 +545,39 @@
                         onClick: () => {
                             transferCoa()
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-                            approvalNonAktif('akunpusat')
-                            
-                        }
-                    },
-                ]
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('akunpusat', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('akunpusat', 'approvalaktif') }}`) {
+                                    approvalAktif('akunpusat')
+
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('akunpusat', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('akunpusat', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('akunpusat')
+                                }
+                            }
+                        },
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -584,21 +607,30 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
+
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
+
 
             if (!`{{ $myAuth->hasPermission('akunpusat', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('akunpusat', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
@@ -611,9 +643,22 @@
             if (!`{{ $myAuth->hasPermission('akunpusat', 'transfer') }}`) {
                 $('#transfer').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('akunpusat', 'approvalnonaktif') }}`) {
-                $('#approveun').hide()
-              }
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
+            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {

@@ -40,7 +40,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    SUPIR <span class="text-danger">*</span>
+                                    SUPIR
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
@@ -59,12 +59,26 @@
                                 <input type="text" name="supirserap" class="form-control supirserap-lookup">
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-12 col-md-2">
+                                <label class="col-form-label">
+                                    KETERANGAN <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <input type="text" name="keterangan" class="form-control">
+                            </div>
+                        </div>
 
                     </div>
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
+                        </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
                         </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
@@ -90,7 +104,14 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
 
+        function submit(button) {
             let method
             let url
             let form = $('#crudForm')
@@ -98,6 +119,10 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -158,16 +183,26 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
 
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                    }).trigger('reloadGrid');
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                        }).trigger('reloadGrid');
 
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    } else {
+
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        // showSuccessDialog(response.message)
+                        createSupirSerap()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+
                     }
                 },
                 error: error => {
@@ -184,7 +219,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -193,6 +228,11 @@
         setFormBindKeys(form)
         activeGrid = null
         getMaxLength(form)
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
@@ -488,8 +528,8 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    fromSupirSerap :true,
-                    tgltrip:$('#crudForm').find('[name=tglabsensi]').val()
+                    fromSupirSerap: true,
+                    tgltrip: $('#crudForm').find('[name=tglabsensi]').val()
                 }
             },
             onSelectRow: (supir, element) => {

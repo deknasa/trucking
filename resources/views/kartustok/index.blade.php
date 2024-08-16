@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Kategori<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Kategori</label>
 
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="kelompok_id">
@@ -92,7 +92,7 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="gandengan_id">
-                                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                                    <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                                 </div>
                             </div>
                         </div>
@@ -722,6 +722,36 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        // $('.gandengan-lookup').lookupMaster({
+        //     title: 'Gandengan Lookup',
+        //     fileName: 'gandenganMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //         searching: 1,
+        //         valueName: 'kelompok_id',
+        //         searchText: 'gandengan-lookup',
+        //         title: 'gandengan',
+        //         typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (gandengan, element) => {
+        //         $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+        //         element.val(gandengan.keterangan)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=gandengan_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+        
         $('.kelompok-lookup').lookup({
             title: 'Kelompok Lookup',
             fileName: 'kelompok',

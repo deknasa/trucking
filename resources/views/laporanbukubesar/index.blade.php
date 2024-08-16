@@ -31,14 +31,14 @@
 
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="coadari_id">
-                                <input type="text" name="coadari" class="form-control coadari-lookup">
+                                <input type="text" id="coadari" name="coadari" class="form-control coadari-lookup">
                             </div>
                             <div class="col-sm-1 mt-2">
                                 <h5 class="text-center mt-2">s/d</h5>
                             </div>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="coasampai_id">
-                                <input type="text" name="coasampai" class="form-control coasampai-lookup">
+                                <input type="text" id="coasampai" name="coasampai" class="form-control coasampai-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -241,13 +241,21 @@
 
     function initLookup() {
 
-        $('.coadari-lookup').lookup({
+        $('.coadari-lookup').lookupMaster({
             title: 'Kd. Perkiraan Lookup',
-            fileName: 'akunpusat',
+            fileName: 'akunpusatMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
-                    levelCoa: '3',
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'coadari_id',
+                    searchText: 'coadari-lookup',
+                    singleColumn: true,
+                    title: 'Kd. Perkiraan Lookup',
+                    typeSearch: 'ALL',
+                    levelCoa: '3',
                 }
             },
             onSelectRow: (coa, element) => {
@@ -264,13 +272,22 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.coasampai-lookup').lookup({
+
+        $('.coasampai-lookup').lookupMaster({
             title: 'Kd. Perkiraan Lookup',
-            fileName: 'akunpusat',
+            fileName: 'akunpusatMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
-                    levelCoa: '3',
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'coasampai_id',
+                    searchText: 'coasampai-lookup',
+                    singleColumn: true,
+                    title: 'Kd. Perkiraan Lookup',
+                    typeSearch: 'ALL',
+                    levelCoa: '3',
                 }
             },
             onSelectRow: (coa, element) => {
@@ -287,6 +304,7 @@
                 element.data('currentValue', element.val())
             }
         })
+
         $('.cabang-lookup').lookup({
             title: 'Cabang Lookup',
             fileName: 'cabang',

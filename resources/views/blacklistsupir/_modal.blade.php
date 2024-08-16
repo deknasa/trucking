@@ -10,7 +10,7 @@
 
         <form action="" method="post">
           <div class="modal-body">
-            <input type="text" name="id" class="form-control" hidden readonly>
+            <input type="text" name="id" class="form-control" id="data_id" hidden readonly>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -75,6 +75,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  var data_id 
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -188,8 +189,38 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+  function removeEditingBy(Id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: Id,
+        aksi: 'BATAL',
+        table: 'blacklistsupir'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createBlackListSupir() {
     let form = $('#crudForm')
@@ -257,12 +288,42 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           element.val(value)
-        })
 
+          if (index =='id') {
+            form.find(`[name="data_id"]`).val(value)
+          }
+        })
+        data_id = $(`#data_id`).val();
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+      }
+    })
+  }
+  function cekValidasi(id,aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}blacklistsupir/${id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data:{
+        aksi: aksi,
+      },
+      success: response => {
+        var error = response.error
+        if (error == true) {
+          showDialog(response.message)
+        } else {
+          if (aksi=="edit") {
+            editBlackListSupir(selectedId)
+          }else if (aksi=="delete"){
+            deleteBlackListSupir(selectedId)
+          }
+        }
+
       }
     })
   }

@@ -130,6 +130,43 @@ $idLookup = isset($id) ? $id : null;
         formatter: currencyFormat
       },
       {
+        label: 'STATUS APPROVAL',
+        name: 'statusapproval',
+        formatter: (value, options, rowData) => {
+          let statusApproval = JSON.parse(value)
+
+          let formattedValue = $(`
+                    <div class="badge" style="background-color: ${statusApproval.WARNA}; color: ${statusApproval.WARNATULISAN};">
+                      <span>${statusApproval.SINGKATAN}</span>
+                    </div>
+                  `)
+
+          return formattedValue[0].outerHTML
+        },
+        cellattr: (rowId, value, rowObject) => {
+          let statusApproval = JSON.parse(rowObject.statusapproval)
+
+          return ` title="${statusApproval.MEMO}"`
+        }
+      },
+      {
+        label: 'USER APPROVAL',
+        name: 'userapproval',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+        align: 'left'
+      },
+      {
+        label: 'TGL APPROVAL',
+        name: 'tglapproval',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'right',
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y"
+        }
+      },
+      {
         label: 'STATUS TAS',
         name: 'statustas',
         formatter: (value, options, rowData) => {
@@ -169,6 +206,7 @@ $idLookup = isset($id) ? $id : null;
           srcformat: "ISO8601Long",
           newformat: "d-m-Y H:i:s",
         },
+        align: 'right'
       },
       {
         label: "Updated At",
@@ -179,6 +217,7 @@ $idLookup = isset($id) ? $id : null;
           srcformat: "ISO8601Long",
           newformat: "d-m-Y H:i:s",
         },
+        align: 'right'
       },
     ]
   }

@@ -333,7 +333,8 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editPelanggan(selectedId)
+                // editPelanggan(selectedId)
+                cekValidasidelete(selectedId, 'edit')
               }
             }
           },
@@ -346,7 +347,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId)
+                cekValidasidelete(selectedId, 'delete')
               }
             }
           },
@@ -379,18 +380,39 @@
               $('#rangeModal').find('button:submit').html(`Export`)
               $('#rangeModal').modal('show')
             }
-          },
-          {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
+          }
+        ],
+        modalBtnList: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('shipper', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('shipper', 'approvalaktif') }}`) {
+                  approvalAktif('shipper')
 
-              approvenonaktif()
-
-            }
-          },
-        ]
+                }
+              }
+            },
+            {
+              id: 'approvalnonaktif',
+              text: "APPROVAL NON AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('shipper', 'approvalnonaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('shipper', 'approvalnonaktif') }}`) {
+                  approvalNonAktif('shipper')
+                }
+              }
+            },
+          ],
+        }]
       })
 
     /* Append clear filter button */
@@ -420,21 +442,45 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('shipper', 'store') }}`) {
-        $('#add').attr('disabled', 'disabled')
-      }
 
-      if (!`{{ $myAuth->hasPermission('shipper', 'update') }}`) {
+      if (cabangTnl == 'YA') {
+        $('#add').attr('disabled', 'disabled')
         $('#edit').attr('disabled', 'disabled')
+        $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('shipper', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('shipper', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('shipper', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+
+        let hakApporveCount = 0;
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
+          hakApporveCount--
+          $('#approvalaktif').hide()
+        }
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+          hakApporveCount--
+          $('#approvalnonaktif').hide()
+        }
+        if (hakApporveCount < 1) {
+          $('#approve').hide()
+        }
       }
 
       if (!`{{ $myAuth->hasPermission('shipper', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('shipper', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
 
       if (!`{{ $myAuth->hasPermission('shipper', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')

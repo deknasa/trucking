@@ -7,7 +7,7 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
       {{-- @if ($kodepenerimaan['id'] === "1") selected @endif --}}
-      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} ({{$kodepenerimaan['kodepenerimaan']}}) </option>
       {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
 
@@ -92,6 +92,10 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -125,7 +129,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
-    selectedbukti =[]
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -166,6 +170,7 @@
         $('#add').attr('disabled', false)
         $('#edit').attr('disabled', false)
         $('#delete').attr('disabled', false)
+        permission()
       } else {
         $('#add').attr('disabled', true)
         $('#edit').attr('disabled', true)
@@ -175,6 +180,7 @@
       $('#add').attr('disabled', false)
       $('#edit').attr('disabled', false)
       $('#delete').attr('disabled', false)
+      permission()
     }
   }
 
@@ -212,7 +218,8 @@
       activeGrid = '#jqGrid'
     })
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -311,6 +318,7 @@
               return ` title="${statusCetak.MEMO}"`
             }
           },
+
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -334,6 +342,7 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            hidden: true,
             align: 'left'
           },
           {
@@ -349,7 +358,7 @@
               let tglsampai = rowData.tglsampaiheadernobuktipenerimaanstok
               let url = "{{route('penerimaanstokheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
@@ -367,10 +376,16 @@
               let tglsampai = rowData.tglsampaiheaderpengeluaranstok
               let url = "{{route('pengeluaranstokheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
             }
+          },
+          {
+            label: 'nominal',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'Gudang',
@@ -404,9 +419,86 @@
               let tglsampai = rowData.tglsampaiheaderhutangheader
               let url = "{{route('hutangheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
+            }
+          },
+          {
+            label: 'approval PG spk',
+            name: 'statusapprovalpindahgudangspk',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS APPROVAL',
+                    subgrp: 'STATUS APPROVAL'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.id,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ``
+              }
+              let apppgspk = JSON.parse(value)
+              if (!apppgspk) {
+                return ``
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${apppgspk.WARNA}; color: #fff;">
+                  <span>${apppgspk.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject) {
+                return ` title=""`
+              }
+              let apppgspk = JSON.parse(rowObject.statusapprovalpindahgudangspk)
+              if (!apppgspk) {
+                return ` title=""`
+              }
+              return ` title="${apppgspk.MEMO}"`
             }
           },
           {
@@ -415,8 +507,28 @@
             align: 'left'
           },
           {
+            label: 'trado dari',
+            name: 'tradodari',
+            align: 'left'
+          },
+          {
+            label: 'gandengan dari',
+            name: 'gandengandari',
+            align: 'left'
+          },
+          {
             label: 'gudang ke',
             name: 'gudangke',
+            align: 'left'
+          },
+          {
+            label: 'trado ke',
+            name: 'tradoke',
+            align: 'left'
+          },
+          {
+            label: 'gandengan ke',
+            name: 'gandenganke',
             align: 'left'
           },
           {
@@ -424,7 +536,55 @@
             name: 'coa',
             align: 'left'
           },
+          {
+            label: 'STATUS KIRIM BERKAS',
+            name: 'statuskirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
 
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokirimberkas'] as $status) :
+                        echo "$status[id]:$status[parameter]";
+                        if ($i !== count($data['combokirimberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKirimBerkas = JSON.parse(value)
+              if (!statusKirimBerkas) {
+                return ``
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
+                  <span>${statusKirimBerkas.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
+              if (!statusKirimBerkas) {
+                return ` title=""`
+              }
+              return ` title="${statusKirimBerkas.MEMO}"`
+            }
+          },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
@@ -479,20 +639,21 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           let penerimaanstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaanstok"]`).attr('title') ?? '';
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+          loadDetailData(id,nobukti)
           if (penerimaanstok == "SPB" || penerimaanstok == "SPBS") {
             nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutang_nobukti"]`).attr('title') ?? '';
           }
 
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          loadDetailData(id)
+          
           loadHutangData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
         },
@@ -564,6 +725,7 @@
           permission()
           setPermissionAcos()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
@@ -629,25 +791,30 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                viewPenerimaanstokHeader(selectedId)
+                // viewPenerimaanstokHeader(selectedId)
+                cekValidasi(selectedId, 'VIEW', selectednobukti)
               }
             }
           },
 
 
         ],
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'report',
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: 'Printer Lain(Faktur)',
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -663,6 +830,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -696,11 +864,13 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approvalEdit',
-                text: ' UN/APPROVAL status Edit',
+                text: ' APPROVAL/UN status Edit',
+                color:'btn-success',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -714,7 +884,9 @@
               },
               {
                 id: 'approvalEditKeterangan',
-                text: ' UN/APPROVAL status Edit Keterangan',
+                text: ' APPROVAL/UN status Edit Keterangan',
+                color:'btn-info',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -727,8 +899,26 @@
                 }
               },
               {
+                id: 'approvalBukaTglBatasPG',
+                text: ' approval/un Buka Tgl Batas PG',
+                color:'btn-primary',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`) {
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedRows.length > 0) {
+                      approvalBukaTglBatasPG()
+                    } else {
+                      showDialog('Harap pilih salah satu record')
+                    }
+                  }
+                }
+              },
+              {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENERIMAAN STOK",
+                color:'btn-orange',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -738,6 +928,24 @@
                       showDialog('Harap pilih salah satu record')
                     } else {
                       approvalBukaCetak(tglbukacetak, 'PENERIMAANSTOKHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas PENERIMAAN STOK",
+                color:'btn-dark-blue',
+                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'PENERIMAANSTOKHEADER', selectedRows, selectedbukti);
                     }
                   }
                 }
@@ -773,56 +981,6 @@
     $('#export .ui-pg-div')
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
-
-    function permission() {
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'store') }}`) {
-        $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'update') }}`) {
-        $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'export') }}`) {
-        $('#export').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'report') }}`) {
-        $('#report').attr('disabled', 'disabled')
-      }
-      let hakApporveCount = 0;
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
-        $('#approvalEdit').hide()
-        hakApporveCount--
-        // $('#approvalEdit').attr('disabled', 'disabled')
-      }
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
-        $('#approvalEditKeterangan').hide()
-        hakApporveCount--
-        // $('#approvalEditKeterangan').attr('disabled', 'disabled')
-      }
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
-        hakApporveCount--
-        $('#approval-buka-cetak').hide()
-        // $('#approval-buka-cetak').attr('disabled', 'disabled')
-      }
-      if (hakApporveCount < 1) {
-        $('#approve').hide()
-        // $('#approve').attr('disabled', 'disabled')
-      }
-
-    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -940,6 +1098,53 @@
         },
       })
     }
+    function approvalBukaTglBatasPG() {
+      event.preventDefault()
+      
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+      
+      $.ajax({
+        url: `${apiUrl}penerimaanstokheader/approvalbukatglbataspg`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+          nobukti:selectedbukti,
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+      
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+      
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
+
 
     function approveEditKeterangan(id) {
       if (approveEditRequest) {
@@ -999,6 +1204,67 @@
     }
 
   })
+
+
+  function permission() {
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
+    let hakApporveCount = 0;
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
+      $('#approvalEdit').hide()
+      hakApporveCount--
+      // $('#approvalEdit').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
+      $('#approvalEditKeterangan').hide()
+      hakApporveCount--
+      // $('#approvalEditKeterangan').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
+      hakApporveCount--
+      $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`) {
+      hakApporveCount--
+      $('#approval-kirim-berkas').hide()
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`) {
+      hakApporveCount--
+      $('#approvalBukaTglBatasPG').hide()
+    }
+    if (hakApporveCount < 1) {
+      $('#approve').hide()
+      // $('#approve').attr('disabled', 'disabled')
+    }
+
+  }
 </script>
 @endpush()
 @endsection

@@ -8,12 +8,13 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        level: `{!! $levelCoa ?? '' !!}`,
+        levelCoa: `{!! $levelCoa ?? '' !!}`,
         potongan: `{!! $potongan ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
         keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
         supplier: `{!! $Supplier ?? '' !!}`,
         isParent: `{!! $isParent ?? '' !!}`,
+        limit: `{!! $limits ?? '10' !!}`,
         // filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'akunPusatLookup',
@@ -376,7 +377,7 @@
       responsive: true,
       shrinkToFit: false,
       height: 450,
-      rowNum: 10,
+      rowNum: `{!! $limits ?? '10' !!}`,
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50, 0],
@@ -453,6 +454,11 @@
 
         $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
+        // var limits = `{!! $limits ?? '10' !!}`
+        // if(limits == 50){
+          // $('#akunPusatLookup_rowList').val(limit).trigger('change')
+        // }
+
       }
     })
 

@@ -98,7 +98,7 @@
                                         NOMINAL <span class="text-danger">*</span>
                                     </label>
                                 </div>
-                                <div class="col-12 col-md-10">
+                                <div class="col-12 col-md-10" id="contNominal">
                                     <input type="text" name="nominal" class="form-control text-right">
                                 </div>
                             </div>
@@ -119,6 +119,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -136,6 +140,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let bankDariId
     let bankKeId
+    let bankId
 
     $(document).ready(function() {
 
@@ -148,6 +153,15 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+
+        function submit(button) {
 
             let method
             let url
@@ -160,6 +174,10 @@
                 data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[index])
             })
 
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'tgldariheader',
                 value: $('#tgldariheader').val()
@@ -197,6 +215,10 @@
                 value: limit
             })
 
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -231,21 +253,35 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
 
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
 
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
-                        }
-                    }).trigger('reloadGrid');
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
 
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+                    } else {
+
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        // showSuccessDialog(response.message, response.data.nobukti)
+                        createPindahBuku()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        let nominalEl = `<input type="text" name="nominal" class="form-control text-right">`
+                        $('#crudForm').find(`[name="nominal"]`).remove()
+                        $('#contNominal').append(nominalEl)
+                        new AutoNumeric(`#crudForm [name="nominal"]`)
+
+                    }
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
                     }
@@ -264,7 +300,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     });
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -272,6 +308,12 @@
 
         setFormBindKeys(form)
 
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
@@ -283,9 +325,58 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
+
+        bankDariId = ''
+        bankKeId = ''
+        bankId = ''
     })
+
+    function removeEditingBy(id) {
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'pindahbuku');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
+
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+        if ($(`#crudForm [name="alatbayar"]`).val() != 'GIRO') {
+            $('#crudForm').find(`[name="tgljatuhtempo"]`).val($(this).val()).trigger('change');
+        }
+    });
+
 
     function createPindahBuku() {
         let form = $('#crudForm')
@@ -312,6 +403,9 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -343,6 +437,8 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -376,6 +472,8 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -428,6 +526,8 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -467,6 +567,7 @@
                     })
 
                     bankDariId = response.data.bankdari_id
+                    bankId = response.data.bankdari_id
                     bankKeId = response.data.bankke_id
                     form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
                     form.find(`[name="tgljatuhtempo"]`).val(dateFormat(response.data.tgljatuhtempo))
@@ -489,28 +590,39 @@
     }
 
     function showDefault(form) {
-        $.ajax({
-            url: `${apiUrl}pindahbuku/default`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}pindahbuku/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
 
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                    if (index == 'alatbayar') {
-                        element.data('current-value', value)
-                    }
-                })
-            }
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                        if (index == 'alatbayar') {
+                            element.data('current-value', value)
+                        }
+                        if (index == 'bankdari') {
+                            element.data('current-value', value)
+                        }
+                    })
+                    resolve()
+                    bankId = response.data.bankdari_id
+                    bankDariId = response.data.bankdari_id
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -527,9 +639,13 @@
             },
             onSelectRow: (bank, element) => {
                 bankDariId = bank.id
+                bankId = bank.id
                 $('#crudForm [name=bankdari_id]').first().val(bank.id)
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=alatbayar_id]').first().val('')
+                $('#crudForm [name=alatbayar]').first().val('')
+                $('#crudForm [name=alatbayar]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -538,6 +654,10 @@
                 $('#crudForm [name=bankdari_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                bankDariId = ''
+                $('#crudForm [name=alatbayar_id]').first().val('')
+                $('#crudForm [name=alatbayar]').first().val('')
+                $('#crudForm [name=alatbayar]').data('currentValue', '')
             }
         })
 
@@ -564,6 +684,7 @@
                 $('#crudForm [name=bankke_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                bankKeId = ''
             }
         })
 
@@ -572,14 +693,17 @@
             fileName: 'alatbayar',
             beforeProcess: function(test) {
                 this.postData = {
-
+                    bank_Id: bankId,
                     Aktif: 'AKTIF',
+                    from: 'pindahbuku'
                 }
             },
             onSelectRow: (alatbayar, element) => {
                 $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
                 element.val(alatbayar.namaalatbayar)
                 element.data('currentValue', element.val())
+                enableTglJatuhTempo($(`#crudForm`))
+                enableNoWarkat($(`#crudForm`))
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -590,6 +714,78 @@
                 element.data('currentValue', element.val())
             }
         })
+    }
+
+
+    function enableTglJatuhTempo(el) {
+        if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+            el.find(`[name="tgljatuhtempo"]`).addClass('datepicker')
+            el.find(`[name="tgljatuhtempo"]`).attr('readonly', false)
+            initDatepicker()
+            el.find(`[name="tgljatuhtempo"]`).parent('.input-group').find('.input-group-append').show()
+        } else {
+            el.find(`[name="tgljatuhtempo"]`).removeClass('datepicker')
+            el.find(`[name="tgljatuhtempo"]`).parent('.input-group').find('.input-group-append').hide()
+            el.find(`[name="tgljatuhtempo"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
+            el.find(`[name="tgljatuhtempo"]`).attr('readonly', true)
+        }
+    }
+
+    function enableNoWarkat(el) {
+        if ($(`#crudForm [name="alatbayar"]`).val() != 'TUNAI') {
+            el.find(`[name="nowarkat"]`).attr('readonly', false)
+        } else {
+            el.find(`[name="nowarkat"]`).attr('readonly', true)
+            el.find(`[name="nowarkat"]`).val('')
+        }
+    }
+
+
+    function approve() {
+
+        event.preventDefault()
+
+        let form = $('#crudForm')
+        $(this).attr('disabled', '')
+        $('#processingLoader').removeClass('d-none')
+
+        $.ajax({
+            url: `${apiUrl}pindahbuku/approval`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                pindahId: selectedRows,
+                bukti: selectedbukti,
+                table: 'pindahbuku',
+                statusapproval: 'statusapproval',
+            },
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
+
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                selectedRows = []
+                selectedbukti = []
+                $('#gs_').prop('checked', false)
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        }).always(() => {
+            $('#processingLoader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
+
     }
 </script>
 @endpush()

@@ -72,7 +72,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="alatbayar_id">
-                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
               </div>
             </div>
 
@@ -119,6 +119,10 @@
               <i class="fa fa-save"></i>
               Save
             </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
+            </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Cancel
@@ -152,6 +156,15 @@
     })
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    
+    function submit(button) {
       event.preventDefault()
       let method
       let url
@@ -202,6 +215,14 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
+        name: 'button',
+        value: button
+      })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -236,22 +257,31 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
-
-          id = response.data.id
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
-            }
-          }).trigger('reloadGrid');
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
+            
+            id = response.data.id
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }                
+            }).trigger('reloadGrid');
+            
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }  
+          }else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#table_body').html('')
+            // showSuccessDialog(response.message, response.data.nobukti)
+            createNotaKredit();
           }
         },
         error: error => {
@@ -268,7 +298,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -283,6 +313,11 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     initLookup()
     initDatepicker()
     initSelect2(form.find('.select2bs4'), true)
@@ -290,10 +325,48 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'notakreditheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -919,6 +992,38 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.alatbayar-lookup').lookupMaster({
+    //   title: 'Alat Bayar Lookup',
+    //   fileName: 'alatbayarMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     // const bank_ID=0        
+    //     this.postData = {
+    //       bank_Id: bankId,
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'alatbayar_id',
+    //       searchText: 'alatbayar-lookup',
+    //       title: 'alat bayar',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (alatbayar, element) => {
+    //     $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+    //     element.val(alatbayar.namaalatbayar)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $(`#crudForm [name="alatbayar_id"]`).first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',

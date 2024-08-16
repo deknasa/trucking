@@ -18,7 +18,8 @@ class ShipperController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Shipper',
-            'combo' => $this->combo('list')
+            'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('shipper.index', compact('title', 'data'));

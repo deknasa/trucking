@@ -12,6 +12,11 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         asal:  `{!! $Asal ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        gandengandarike: `{!! $gandengandarike ?? '' !!}`,
+        gandengandari_id: `{!! $gandengandari_id ?? '' !!}`,        
+        gandenganke_id: `{!! $gandenganke_id ?? '' !!}`,             
+        statusjeniskendaraan: `{!! $statusjeniskendaraan ?? '' !!}`,             
       },      
       idPrefix: 'gandenganLookup',
       colModel: [{

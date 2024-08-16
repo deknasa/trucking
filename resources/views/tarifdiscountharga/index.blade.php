@@ -398,7 +398,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editTarifDiscountHarga(selectedId)
+                                cekValidasidelete(selectedId, 'EDIT')
                             }
 
                         }
@@ -412,7 +412,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                deleteTarifDiscountHarga(selectedId)
+                                cekValidasidelete(selectedId, 'DELETE')
                             }
                         }
                     },
@@ -448,7 +448,7 @@
                     },
                     {
                         id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
                         class: 'btn btn-purple btn-sm mr-1',
                         onClick: () => {
 

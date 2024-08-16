@@ -15,7 +15,7 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="trado_id">
-                                    <input type="text" name="trado" class="form-control trado-lookup">
+                                    <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                                 </div>
                             </div>
                         </div>
@@ -185,9 +185,20 @@
 
     function initLookup() {
 
-        $('.trado-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'trado',
+        $('.trado-lookup').lookupMaster({
+            title: 'Trado Lookup',
+            fileName: 'tradoMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                searching: 1,
+                valueName: 'trado_id',
+                searchText: 'trado-lookup',
+                title: 'trado',
+                typeSearch: 'ALL',
+                }
+            },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
                 element.val(trado.kodetrado)

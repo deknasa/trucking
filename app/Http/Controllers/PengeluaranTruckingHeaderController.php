@@ -18,6 +18,8 @@ class PengeluaranTruckingHeaderController extends MyController
         $data = [
             'combostatusposting' => $this->comboList('list', 'STATUS POSTING', 'STATUS POSTING'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combokirimberkas' => $this->comboList('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
+            'listbtn' => $this->getListBtn()
         ];
         $combo  = $this->comboKodepengeluaran();
         $comboKodepengeluaran = $combo['data'];

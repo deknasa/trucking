@@ -150,6 +150,7 @@
   var statustas
   var kodecontainer
   var isAllowEdited;
+  var data_id
 
   
   let dataMaxLength = []
@@ -271,15 +272,47 @@
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
+    data_id = $('#crudForm').find('[name=id]').val();
+
     initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
+    removeEditingBy(data_id)
     initDatepicker('datepickerIndex')
   })
 
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'tarifdiscountharga'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
   function createTarifDiscountHarga() {
     let form = $('#crudForm')
 
@@ -1026,26 +1059,26 @@
 
   function cekValidasidelete(Id, Aksi, nobukti) {
     $.ajax({
-      url: `{{ config('app.api_url') }}tarifdiscountharga/${Id}/${Aksi}/cekValidasi`,
+      url: `{{ config('app.api_url') }}tarifdiscountharga/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       data: {
         aksi: Aksi,
-        nobukti: nobukti
+        id: nobukti
       },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
+        var error = response.error
         isAllowEdited = response.edit;
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        if (error == true) {
+          showDialog(response.message)
         } else {
-          if (Aksi == 'edit') {
+          if (Aksi == 'EDIT') {
             editTarifDiscountHarga(selectedId)
-          } else if (Aksi == 'delete') {
-            deleteTarifDiscountHarga(Id)
+          } else if (Aksi == 'DELETE') {
+            deleteTarifDiscountHarga(selectedId)
           }
         }
 

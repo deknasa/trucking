@@ -21,6 +21,7 @@ class PengembalianKasGantungHeaderController extends MyController
         
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('pengembaliankasgantung.index', compact('title', 'data'));

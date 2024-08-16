@@ -97,7 +97,7 @@ class TradoController extends MyController
             $data = [
                 'total' => $response['attributes']['totalPages'],
                 'records' => $response['attributes']['totalRows'],
-                'rows' => $rows
+                'rows' => $rows,
             ];
 
             return response($data);
@@ -114,6 +114,9 @@ class TradoController extends MyController
             'statusappeditban' => $this->comboStatusAktif('list','STATUS APPROVAL EDIT BAN','STATUS APPROVAL EDIT BAN'),
             'statuslewatvalidasi' => $this->comboStatusAktif('list','STATUS LEWAT VALIDASI','STATUS LEWAT VALIDASI'),
             'statusabsensisupir' => $this->comboStatusAktif('list','STATUS ABSENSI SUPIR','STATUS ABSENSI SUPIR'),
+            'statusapprovalhistorytradomilikmandor' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'statusapprovalhistorytradomiliksupir' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn(),
         ];
 
    
@@ -286,6 +289,8 @@ class TradoController extends MyController
             $statusAppEditBan= $params['statusappeditban'];
             $statusLewatValidasi= $params['statuslewatvalidasi'];
             $statusAbsensiSupir= $params['statusabsensisupir'];
+            $statusApprovalHistoryTradoMilikMandor= $params['statusapprovalhistorytradomilikmandor'];
+            $statusApprovalHistoryTradoMilikSupir= $params['statusapprovalhistorytradomiliksupir'];
 
 
             $result = json_decode($statusaktif, true);
@@ -297,6 +302,8 @@ class TradoController extends MyController
             $resultAppEditBan = json_decode($statusAppEditBan, true);
             $resultLewatValidasi = json_decode($statusLewatValidasi, true);
             $resultAbsensiSupir = json_decode($statusAbsensiSupir, true);
+            $resultApprovalHistoryTradoMilikMandor = json_decode($statusApprovalHistoryTradoMilikMandor, true);
+            $resultApprovalHistoryTradoMilikSupir = json_decode($statusApprovalHistoryTradoMilikSupir, true);
 
             $statusaktif = $result['MEMO'];
             $statusStandarisasi = $resultStandarisasi['MEMO'];
@@ -307,6 +314,8 @@ class TradoController extends MyController
             $statusAppEditBan = $resultAppEditBan['MEMO'];
             $statusLewatValidasi = $resultLewatValidasi['MEMO'];
             $statusAbsensiSupir = $resultAbsensiSupir['MEMO'];
+            $statusApprovalHistoryTradoMilikMandor = $resultApprovalHistoryTradoMilikMandor['MEMO'];
+            $statusApprovalHistoryTradoMilikSupir = $resultApprovalHistoryTradoMilikSupir['MEMO'];
 
 
             $trados[$i]['statusaktif'] = $statusaktif;
@@ -318,6 +327,8 @@ class TradoController extends MyController
             $trados[$i]['statusappeditban'] = $statusAppEditBan;
             $trados[$i]['statuslewatvalidasi'] = $statusLewatValidasi;
             $trados[$i]['statusabsensisupir'] = $statusAbsensiSupir;
+            $trados[$i]['statusapprovalhistorytradomilikmandor'] = $statusApprovalHistoryTradoMilikMandor;
+            $trados[$i]['statusapprovalhistorytradomiliksupir'] = $statusApprovalHistoryTradoMilikSupir;
 
             $i++;
         }

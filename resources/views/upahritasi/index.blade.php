@@ -125,9 +125,9 @@
           },
           {
             label: 'DARI',
+            name: 'kotadari_id',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
-
           },
           {
             label: 'TUJUAN',
@@ -192,16 +192,16 @@
               return ` title="${statusAktif.MEMO}"`
             }
           },
-          {
-            label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku',
-            formatter: "date",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
+          // {
+          //   label: 'TGL MULAI BERLAKU',
+          //   name: 'tglmulaiberlaku',
+          //   formatter: "date",
+          //   width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           // {
           //   label: 'TGL AKHIR BERLAKU',
           //   name: 'tglakhirberlaku',
@@ -448,12 +448,28 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('upahritasi.report') }}?id=${selectedId}`)
-              }
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahritasi.report') }}`,
+                method: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                success: function(response) {
+                  $('#processingLoader').addClass('d-none')
+                  // Handle the success response
+                  var newWindow = window.open('', '_blank');
+                  newWindow.document.open();
+                  newWindow.document.write(response);
+                  newWindow.document.close();
+                },
+                error: function(xhr, status, error) {
+                 
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              });
             }
           },
           {
@@ -469,8 +485,40 @@
               // } else {
               //   window.open(`{{ route('upahritasi.export') }}?id=${selectedId}`)
               // }
-              $('#rangeTglModal').find('button:submit').html(`Export`)
-              $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('upahritasi.export') }}`,
+                type: 'GET',
+                data: {
+                  limit: 0,
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = `LAPORAN UPAH RITASI ${new Date().getTime()}.xlsx`;
+                      link.click();
+                    }
+                  }
+
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
           {
@@ -482,18 +530,40 @@
               $('#importModal').find('button:submit').html(`Update Harga`)
               $('#importModal').modal('show')
             }
-          },
-          {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
+          }
+        ],
+        modalBtnList: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('upahritasi', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('upahritasi', 'approvalaktif') }}`) {
+                  approvalAktif('upahritasi')
 
-              approvalNonAktif('upahritasi')
+                }
+              }
+            },
+            {
+              id: 'approvalnonaktif',
+              text: "APPROVAL NON AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`) {
+                  approvalNonAktif('upahritasi')
+                }
+              }
+            },
 
-            }
-          },
-        ]
+          ],
+        }]
       })
 
     /* Append clear filter button */
@@ -548,8 +618,21 @@
       if (!`{{ $myAuth->hasPermission('upahritasi', 'updateharga') }}`) {
         $('#approvalEdit').attr('disabled', 'disabled')
       }
+
+      let hakApporveCount = 0;
+
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('upahritasi', 'approvalaktif') }}`) {
+        hakApporveCount--
+        $('#approvalaktif').hide()
+      }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
+        hakApporveCount--
+        $('#approvalnonaktif').hide()
+      }
+      if (hakApporveCount < 1) {
+        $('#approve').hide()
       }
     }
 

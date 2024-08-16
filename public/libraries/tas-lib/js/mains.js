@@ -28,6 +28,19 @@ let lg_mobile_2 = "600px";
 let lg_mobile_3 = "650px";
 let lg_mobile_4 = "700px";
 
+let sm_extendSize_1 = 50;
+let sm_extendSize_2 = 100;
+let sm_extendSize_3 = 150;
+let sm_extendSize_4 = 200;
+let md_extendSize_1 = 250;
+let md_extendSize_2 = 300;
+let md_extendSize_3 = 350;
+let md_extendSize_4 = 400;
+let lg_extendSize_1 = 450;
+let lg_extendSize_2 = 500;
+let lg_extendSize_3 = 550;
+let lg_extendSize_4 = 600;
+
 $(document).ready(function () {
     setFormats();
     startTime();
@@ -37,6 +50,7 @@ $(document).ready(function () {
     initSelect2();
     initAutoNumeric();
     initDisabled();
+    activeUrl()
 
     /* Remove autocomplete */
     $("input").attr("autocomplete", "off");
@@ -61,6 +75,37 @@ $(document).ready(function () {
 
         sidebarIsOpen = false;
     });
+
+    function activeUrl() {
+        const myArray = window.location.href.split("/")
+        const pathLink = myArray[4].split("?")[0]
+        let dynamicId = `link-${pathLink}`
+        
+        // Find the element by the dynamic ID
+        var activeElement = $('#' + dynamicId);
+    
+        if (activeElement.length) {
+          // Add 'active' class to the element
+          activeElement.addClass('active');
+          var topNavItem = activeElement.closest('.nav-item').parents('.nav-item').last();
+
+          // Iterate over all parent elements up to the main sidebar
+          activeElement.parents('.nav-item').each(function() {
+            // Add 'menu-open' class to the parent 'nav-item'
+            $(this).addClass('menu-open');
+    
+            // Add 'active' class to the parent link
+            if(topNavItem[0] == $(this)[0]){
+                $(this).children('a.nav-link').addClass('active');
+            // }else{
+            //     $(this).children('a.nav-link').addClass('active-parrent');
+            }
+          });
+        //   activeElement.removeClass('active-parrent');
+        //   topNavItem.children('a.nav-link').addClass('active');
+
+        }
+    }
 
     $(document).on("click", ".toggle-password", function (event) {
         $(this).toggleClass("fa-eye fa-eye-slash");
@@ -90,6 +135,14 @@ $(document).ready(function () {
     $("#loader").addClass("d-none");
 
     $.fn.modal.Constructor.Default.backdrop = "static";
+});
+$("#listMenuModal").on("show.bs.modal", function () {
+    $(this).data("bs.modal")._config.backdrop = true;
+    setTimeout(() => $(".modal-backdrop").addClass("custom-backdrop"));
+});
+$("#listMenuModal").on("hidden.bs.modal", function () {
+    $(this).find(".modal-body").html("");
+    setTimeout(() => $(".modal-backdrop").removeClass("custom-backdrop"));
 });
 
 window.onbeforeunload = () => {
@@ -137,6 +190,15 @@ function initAutoNumeric(elements = null, options = null) {
     } else {
         $.each(elements, (index, element) => {
             new AutoNumeric(element, option);
+            if ($(element).is("input")) {
+                $(element).attr({
+                    pattern: "d*",
+                    inputmode: "numeric",
+                });
+                $(element).on("click", function () {
+                    $(this).select();
+                });
+            }
         });
     }
 }
@@ -376,6 +438,8 @@ function removeTags(str) {
  * Set Home, End, PgUp, PgDn
  * to move grid page
  */
+let topSelected = 0;
+let bottomSelected = 12;
 function setCustomBindKeys(grid) {
     setSidebarBindKeys();
 
@@ -525,6 +589,29 @@ function setCustomBindKeys(grid) {
                             $(activeGrid)
                                 .resetSelection()
                                 .setSelection(gridIds[currentIndex - 1]);
+
+                            var selInRow = $(activeGrid).getGridParam("selrow");
+
+                            indexRowSelect = $(activeGrid).jqGrid(
+                                "getInd",
+                                selInRow
+                            );
+
+                            var currentRowHeight =
+                                $(activeGrid).getGridParam("rowHeight") || 26;
+
+                            var currentScrollTop = $(activeGrid)
+                                .closest(".ui-jqgrid-bdiv")
+                                .scrollTop();
+                            var recordScrollUp =
+                                $(activeGrid).getGridParam("reccount") - 10;
+                            if (indexRowSelect < recordScrollUp) {
+                                $(activeGrid)
+                                    .closest(".ui-jqgrid-bdiv")
+                                    .scrollTop(
+                                        currentScrollTop - currentRowHeight - 2
+                                    );
+                            }
                         }
                     }
                     if (40 === e.keyCode) {
@@ -532,10 +619,28 @@ function setCustomBindKeys(grid) {
                             $(activeGrid)
                                 .resetSelection()
                                 .setSelection(gridIds[currentIndex + 1]);
-                        } else {
-                            $(".ui-jqgrid-bdiv").animate({
-                                scrollTop: 10,
-                            });
+                            var currentRowHeight =
+                                $(activeGrid).getGridParam("rowHeight") || 26;
+
+                            var selInRow = $(activeGrid).getGridParam("selrow");
+                            indexRowSelect = $(activeGrid).jqGrid(
+                                "getInd",
+                                selInRow
+                            );
+
+                            var currentScrollTop = $(activeGrid)
+                                .closest(".ui-jqgrid-bdiv")
+                                .scrollTop();
+
+                            var recordsAll =
+                                $(activeGrid).getGridParam("records");
+                            if (indexRowSelect > 12) {
+                                $(activeGrid)
+                                    .closest(".ui-jqgrid-bdiv")
+                                    .scrollTop(
+                                        currentScrollTop + currentRowHeight + 2
+                                    );
+                            }
                         }
                     }
                     if (13 === e.keyCode) {
@@ -1295,7 +1400,7 @@ function showSuccessDialog(statusText = "", message = "") {
 // 	$(".ui-dialog-titlebar-close").find("p").remove();
 // }
 
-function showDialog(response) {
+function showDialog(response, maxWIdth = "600px") {
     $("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`);
@@ -1314,6 +1419,9 @@ function showDialog(response) {
 
             $("#dialog-message").dialog({
                 modal: true,
+                width: "auto", // Automatically adjust width
+                height: "auto",
+                resizable: false,
                 buttons: [
                     {
                         text: "Ok",
@@ -1322,6 +1430,18 @@ function showDialog(response) {
                         },
                     },
                 ],
+                open: function () {
+                    // Adjust the dialog size after it is opened
+                    $(this).css({
+                        "min-width": "300px",
+                        "max-width": maxWIdth, // Set your desired maximum width here
+                    });
+                    $(this).dialog("option", "position", {
+                        my: "center",
+                        at: "center",
+                        of: window,
+                    });
+                },
             });
             $(".ui-dialog-titlebar-close").find("p").remove();
         } else {
@@ -1331,6 +1451,9 @@ function showDialog(response) {
 
             $(`#dialog-${response.statuspesan}-message`).dialog({
                 modal: true,
+                width: "auto", // Automatically adjust width
+                height: "auto",
+                resizable: false,
                 buttons: [
                     {
                         text: "Ok",
@@ -1342,6 +1465,18 @@ function showDialog(response) {
                         },
                     },
                 ],
+                open: function () {
+                    // Adjust the dialog size after it is opened
+                    $(this).css({
+                        "min-width": "300px",
+                        "max-width": maxWIdth, // Set your desired maximum width here
+                    });
+                    $(this).dialog("option", "position", {
+                        my: "center",
+                        at: "center",
+                        of: window,
+                    });
+                },
             });
 
             $(".ui-dialog-titlebar-close").find("p").remove();
@@ -1353,6 +1488,9 @@ function showDialog(response) {
 
         $("#dialog-warning-message").dialog({
             modal: true,
+            width: "auto", // Automatically adjust width
+            height: "auto",
+            resizable: false,
             buttons: [
                 {
                     text: "Ok",
@@ -1362,6 +1500,18 @@ function showDialog(response) {
                     },
                 },
             ],
+            open: function () {
+                // Adjust the dialog size after it is opened
+                $(this).css({
+                    "min-width": "300px",
+                    "max-width": maxWIdth, // Set your desired maximum width here
+                });
+                $(this).dialog("option", "position", {
+                    my: "center",
+                    at: "center",
+                    of: window,
+                });
+            },
         });
         $(".ui-dialog-titlebar-close").find("p").remove();
     }
@@ -1466,8 +1616,8 @@ function showConfirmForce(message = "", Id = "") {
         modal: true,
         buttons: [
             {
-                id: "Force Edit",
-                text: "Force Edit",
+                id: "approval-kacab-force-edit",
+                text: "approval",
                 click: function () {
                     $(this).dialog("close");
                     console.log(Id);
@@ -1727,6 +1877,7 @@ function setSpaceBarCheckedHandler(table = null) {
                             for (var i = 0; i < selectedRows.length; i++) {
                                 if (selectedRows[i] == value) {
                                     selectedRows.splice(i, 1);
+                                    selectedbukti.splice(i, 1);
                                 }
                             }
 
@@ -1748,6 +1899,14 @@ function setSpaceBarCheckedHandler(table = null) {
                                 );
                             } else {
                                 selectedRows.push($checkbox.val());
+
+                                selectedbukti.push(
+                                    $(`#jqGrid tr#${selectedRowId}`)
+                                        .find(
+                                            `td[aria-describedby="jqGrid_nobukti"]`
+                                        )
+                                        .attr("title")
+                                );
                             }
                             $checkbox.parents("tr").addClass("bg-light-blue");
                         }
@@ -1795,6 +1954,7 @@ function setSpaceBarCheckedHandler2() {
                             for (var i = 0; i < selectedRowsIndex.length; i++) {
                                 if (selectedRowsIndex[i] == value) {
                                     selectedRowsIndex.splice(i, 1);
+                                    selectedbukti.splice(i, 1);
                                 }
                             }
 
@@ -1808,6 +1968,13 @@ function setSpaceBarCheckedHandler2() {
                         } else {
                             $checkbox.prop("checked", true);
                             selectedRowsIndex.push($checkbox.val());
+                            selectedbukti.push(
+                                $(`#jqGrid tr#${selectedRowId}`)
+                                    .find(
+                                        `td[aria-describedby="jqGrid_nobukti"]`
+                                    )
+                                    .attr("title")
+                            );
                             $checkbox.parents("tr").addClass("bg-light-blue");
                         }
                         event.preventDefault();
@@ -1828,6 +1995,325 @@ function reloadGrid() {
     $("#jqGrid").trigger("reloadGrid");
 }
 
-function preventNewTab(table){
-    showDialog('TIDAK PUNYA HAK UNTUK MENGAKSES '+table)
+function preventNewTab(table) {
+    showDialog("TIDAK PUNYA HAK UNTUK MENGAKSES " + table);
+}
+
+function elementPager() {
+    let elPager = $(`
+    <div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-3">
+        <div id="PagerHandler"
+            class="pager-handler d-flex align-items-center justify-content-center mx-2">
+            <button type="button" id="firstPageButton"
+                class="btn btn-sm hover-primary mr-2 d-flex">
+                <span class="fas fa-step-backward"></span>
+            </button>
+
+            <button type="button" id="previousPageButton"
+                class="btn btn-sm hover-primary d-flex">
+                <span class="fas fa-backward"></span>
+            </button>
+
+            <div class="d-flex align-items-center my-1  justify-content-between gap-10" id="infoPage">
+                <span>Page</span>
+                <input id="pagerInput" class="pager-input" value="1" autocomplete="off">
+               
+            </div>
+
+            <button type="button" id="nextPageButton"
+                class="btn btn-sm hover-primary d-flex">
+                <span class="fas fa-forward"></span>
+            </button>
+
+            <button type="button" id="lastPageButton"
+                class="btn btn-sm hover-primary ml-2 d-flex">
+                <span class="fas fa-step-forward"></span>
+            </button>
+
+            <select id="rowList" class="ml-2">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="0">ALL</option>
+            </select>
+        </div>
+        <div id="InfoHandlerEditAll" class="pager-info">
+            
+        </div>
+    </div>
+
+    `);
+
+    $(".editAllPager").append(elPager);
+}
+
+let dateFilter = $("#editAllForm").find("[name=tglpengiriman]").val();
+function filtersEditAll(dataColumn = []) {
+    let elFilters = ` <th>
+    <div id="resetfilter" class="reset"><span id="resetdatafilter"
+            class="btn btn-default align-items-center"> X </span></div>
+    </th>`;
+
+    $.each(dataColumn, (index, detail) => {
+        elFilters += `
+       
+        <th rowspan="1" colspan="1" >
+            <div class="row">
+                <div class="col-3 col-sm-12 input-group">
+                    <input type="text" name="nama[]" class="form-control filter-input" data-field="${detail}" autocomplete="off">
+                    <button type="button" title="Reset Search Value" data-column="${detail}" class="clearsearchclass btn position-absolute button-clear text-secondary" style="right: 14px; z-index: 99;"><i class="fa fa-times"></i></button>
+                </div>
+                
+            
+            </div>
+
+        </th>
+
+    `;
+    });
+
+    $("table tr.filters").html($(elFilters));
+
+    $("#resetdatafilter").on("click", function () {
+        var filters = [];
+        $(".filter-input").each(function () {
+            var field = $(this).data("field");
+        });
+
+        filterObject = {
+            groupOp: "AND",
+            rules: [],
+        };
+
+        $(".filter-input").val("");
+        $("#searchText").val("");
+
+        getAll(1, $("#rowList").val(), filterObject, dateFilter);
+        setTimeout(function () {
+            totalInfoPage(totalPages);
+            viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        }, 500);
+    });
+
+    $(".filter-input").on("input", function () {
+        var filters = [];
+        $(".filter-input").each(function () {
+            var field = $(this).data("field");
+
+            var data = $(this).val();
+            if (data !== "") {
+                filters.push({
+                    field: field,
+                    op: "cn",
+                    data: data,
+                });
+            }
+        });
+
+        filterObject = {
+            groupOp: "AND",
+            rules: filters,
+        };
+        // firstPage = false;
+        getAll(1, 0, filterObject, dateFilter);
+        console.log(filters, "filter");
+        // setTimeout(function () {
+        //     totalInfoPage(totalPages);
+        //     viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        // }, 500);
+    });
+
+    $("#searchText").on("keyup", function () {
+        var filters = [];
+        var l = $(".filter-input").length;
+
+        for (i = 0; i < l; i++) {
+            var data = $(this).val();
+            field = $(".filter-input").eq(i).data("field");
+
+            if (data !== "") {
+                filters.push({
+                    field: field,
+                    op: "cn",
+                    data: data,
+                });
+            }
+        }
+
+        filterObject = {
+            groupOp: "OR",
+            rules: filters,
+        };
+
+        getAll(1, $("#rowList").val(), filterObject, dateFilter);
+        setTimeout(function () {
+            totalInfoPage(totalPages);
+            viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        }, 500);
+    });
+
+    var filters = {};
+    $(".clearsearchclass").on("click", function () {
+        var column = $(this).data("column");
+
+        if (!filters[column]) {
+            filters[column] = $('.filter-input[data-field="' + column + '"]');
+        }
+
+        if (filters[column]) {
+            filters[column].val("");
+        }
+
+        filterObject = {
+            groupOp: "AND",
+            rules: [],
+        };
+
+        $(".filter-input").each(function () {
+            var field = $(this).data("field");
+            var data = $(this).val();
+
+            if (data !== "") {
+                filterObject.rules.push({
+                    field: field,
+                    op: "cn",
+                    data: data,
+                });
+            }
+        });
+
+        getAll(1, $("#rowList").val(), filterObject, dateFilter);
+
+        setTimeout(function () {
+            totalInfoPage(totalPages);
+            viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        }, 500);
+    });
+}
+
+function bindKeyPagerEditAll(date) {
+    $("#previousPageButton").click(function (e) {
+        if (currentPage > 1) {
+            getAll(parseInt(currentPage) - 1, rowCount, filterObject, date);
+            $("#pagerInput").val(parseInt(currentPage) - 1);
+        }
+
+        if (tglPengiriman) {
+            setTimeout(function () {
+                viewPageEdit(10, lengthValue);
+            }, 500);
+        } else {
+            viewPageEdit();
+        }
+    });
+    // Handle next page button click
+    $("#nextPageButton").click(function (e) {
+        if (currentPage < totalPages) {
+            // console.log(lengthValue);
+
+            getAll(parseInt(currentPage) + 1, rowCount, filterObject, date);
+
+            $("#pagerInput").val(parseInt(currentPage) + 1);
+            // viewPageEdit(selectedValue, rowCount,lengthValue);
+        }
+
+        if (tglPengiriman) {
+            setTimeout(function () {
+                viewPageEdit(10, lengthValue);
+            }, 500);
+        } else {
+            viewPageEdit();
+        }
+    });
+
+    $("#lastPageButton").click(function (e) {
+        getAll(lastPageEditAll);
+        console.log(lengthValue);
+        $("#pagerInput").val(lastPageEditAll);
+        viewPageEdit();
+    });
+
+    $("#firstPageButton").click(function (e) {
+        getAll(1, selectedValue);
+
+        $("#pagerInput").val(1, selectedValue);
+        viewPageEdit(selectedValue, rowCount);
+    });
+
+    $("#pagerInput").on("input", function () {
+        let inputValue = $(this).val();
+
+        if (inputValue === "" || inputValue == 0) {
+            inputValue = 1; // Jika kosong, paksakan nilai menjadi 1
+            $(this).val(inputValue);
+        }
+        getAll(inputValue);
+
+        viewPageEdit();
+    });
+
+    $("#rowList").on("change", function () {
+        selectedValue = $(this).val();
+
+        getAll($("#pagerInput").val(), selectedValue);
+
+        setTimeout(function () {
+            rowCount = $("#editAll tbody tr").length;
+
+            totalInfoPage(totalPages);
+            viewPageEdit(selectedValue, rowCount);
+        }, 500);
+    });
+}
+
+function viewPageEdit(perPage = 10, rowCountEdit = 10) {
+    let pageEditAll = $("#pagerInput").val();
+    let perPageEditAll = perPage;
+    let recordCountEditAll = rowCountEdit;
+    let firstRowEditAll = (pageEditAll - 1) * perPageEditAll + 1;
+    let lastRowEditAll = firstRowEditAll + recordCountEditAll - 1;
+    $("#InfoHandlerEditAll").html(`
+        <div class="text-md-right">
+            View  ${firstRowEditAll} - ${lastRowEditAll} of ${totalRowsEditAll}
+        </div>
+    `);
+}
+
+function totalInfoPage() {
+    $("#totalPage").remove();
+    $("#infoPage").append(`
+    <span id="totalPage">of ${totalPages}</span>
+`);
+}
+
+function getQueryParameter() {
+    setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("nobukti") != null) {
+            $("#gs_nobukti").val(urlParams.get("nobukti"));
+            $("#jqGrid")
+                .jqGrid("setGridParam", {
+                    postData: {
+                        filters: JSON.stringify({
+                            groupOp: "AND",
+                            rules: [
+                                {
+                                    field: "nobukti",
+                                    op: "cn",
+                                    data: urlParams.get("nobukti"),
+                                },
+                            ],
+                        }),
+                    },
+                    datatype: "json",
+                })
+                .trigger("reloadGrid");
+
+            window.history.replaceState(
+                null,
+                "",
+                window.location.origin + window.location.pathname
+            );
+        }
+    }, 1000);
 }

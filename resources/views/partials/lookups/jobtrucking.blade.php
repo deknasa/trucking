@@ -21,6 +21,8 @@
         statuslongtrip: `{!! $statuslongtrip ?? '' !!}`,
         tripasal: `{!! $tripasal ?? '' !!}`,
         isPulangLongtrip: `{!! $isPulangLongtrip ?? '' !!}`,
+        tglbukti: `{!! $tglbukti ?? '' !!}`,
+        dari_id: `{!! $dari_id ?? '' !!}`,
         filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'jobTruckingLookup',

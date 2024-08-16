@@ -730,6 +730,7 @@ if (statustas == '0') {
         this.postData = {
 
           Aktif: 'AKTIF',
+          Invoice: 'UTAMA',
         }
       },
       onSelectRow: (agen, element) => {

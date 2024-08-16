@@ -45,7 +45,7 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="suratpengantar_nobukti" id="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
+                                <input type="text" id="suratpengantar_nobukti" name="suratpengantar_nobukti" id="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
                             </div>
                         </div>
 
@@ -80,6 +80,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -102,6 +106,14 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+        function submit(button) {
 
             let method
             let url
@@ -110,6 +122,10 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -173,26 +189,36 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
 
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
 
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    } else {
 
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
-                    }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        // showSuccessDialog(response.message)
+                        createTripInap()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+
                     }
                 },
                 error: error => {
@@ -209,7 +235,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -219,6 +245,11 @@
 
         activeGrid = null
 
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
@@ -613,6 +644,7 @@
                 element.data('currentValue', element.val())
             }
         })
+
         $('.supir-lookup').lookupMaster({
             title: 'supir Lookup',
             fileName: 'supirMaster',
@@ -641,6 +673,7 @@
                 element.data('currentValue', element.val())
             }
         })
+
         $('.suratpengantar-lookup').lookupMaster({
             title: 'Surat Pengantar Lookup',
             fileName: 'suratpengantartripinap',
@@ -676,6 +709,37 @@
             }
         })
 
+        // $('.suratpengantar-lookup').lookupMaster({
+        //     title: 'surat pengantar Lookup',
+        //     fileName: 'suratpengantartripinapMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'suratpengantar_nobukti',
+        //             searchText: 'suratpengantar-lookup',
+        //             title: 'surat pengantar',
+        //             typeSearch: 'ALL',
+        //             from: 'tripinap',
+        //             tglabsensi: $('#crudForm [name=tglabsensi]').first().val(),
+        //             trado_id: $('#crudForm [name=trado_id]').first().val(),
+        //             supir_id: $('#crudForm [name=supir_id]').first().val(),
+        //         }
+        //     },
+        //     onSelectRow: (suratpengantar, element) => {
+        //         element.val(suratpengantar.nobukti)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
 
         $('.absensisupirdetail-lookup').lookupMaster({
             title: 'Trado Lookup',

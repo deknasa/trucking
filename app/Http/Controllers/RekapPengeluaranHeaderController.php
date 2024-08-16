@@ -18,6 +18,7 @@ class RekapPengeluaranHeaderController extends MyController
         $data = [
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('rekappengeluaranheader.index', compact('title','data'));
     }
@@ -93,6 +94,19 @@ class RekapPengeluaranHeaderController extends MyController
         return $response['data'];
     }
 
+    public function comboEntry($aksi,$grp,$subgrp)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     /**
      * @ClassName
      */
@@ -104,11 +118,12 @@ class RekapPengeluaranHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'rekappengeluaranheader/'.$id.'/export')['data'];
-        
+
         //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
             'rekappengeluaran_id' => $request->id,
+            'formatcetakan' => $rekappengeluaran['formatcetakan'],
         ];
         $rekappengeluaran_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
@@ -116,9 +131,10 @@ class RekapPengeluaranHeaderController extends MyController
             ->get(config('app.api_url') .'rekappengeluarandetail', $detailParams)['data'];
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $formatcetakan = $this->comboEntry('entry','FORMAT CETAKAN BANK','FORMAT CETAKAN BANK 1')[0];
         $rekappengeluaran["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        return view('reports.rekappengeluaranheader', compact('rekappengeluaran','rekappengeluaran_details','printer'));
+        return view('reports.rekappengeluaranheader', compact('rekappengeluaran','rekappengeluaran_details','printer','formatcetakan'));
     }
 
     public function export(Request $request)

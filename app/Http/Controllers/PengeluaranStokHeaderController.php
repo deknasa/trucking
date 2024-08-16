@@ -16,7 +16,10 @@ class PengeluaranStokHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combokirimberkas' => $this->comboList('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
+            'listbtn' => $this->getListBtn()
+
         ];
         $combo = $this->comboKodepengeluaran();
         $comboKodepengeluaran = $combo['data'];

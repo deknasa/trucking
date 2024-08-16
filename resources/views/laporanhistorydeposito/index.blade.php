@@ -10,17 +10,17 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="supirdari_id">
-                                <input type="text" name="supirdari" class="form-control supirdari-lookup">
+                                <input type="text" name="supirdari" id="supirdari" class="form-control supirdari-lookup">
                             </div>
                         </div>
-                        
-                      
-                      
+
+
+
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -72,7 +72,7 @@
         $('#crudForm').find('[name=ambildari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambilsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        initLookup() 
+        initLookup()
         if (!`{{ $myAuth->hasPermission('laporanhistorydeposito', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -82,12 +82,54 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let supirdari_id= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
+        let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirdari = $('#crudForm').find('[name=supirdari]').val()
+        let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
         if (supirdari_id != '') {
 
-            window.open(`{{ route('laporanhistorydeposito.report') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`)
+            // window.open(`{{ route('laporanhistorydeposito.report') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`)
+            $.ajax({
+                    url: `${apiUrl}laporanhistorydeposito/report`,
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        judul: 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+                        judullaporan: 'Laporan History Deposito',
+                        tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+                        supirdari_id: supirdari_id,
+                        supirdari: supirdari,
+                    },
+                    success: function(response) {
+                        // console.log(response)
+                        let data = response.data
+                        let dataCabang = response.namacabang
+                        let detailParams = {
+                            judul: 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+                            judullaporan: 'Laporan History Deposito',
+                            tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+                            supirdari_id: supirdari_id,
+                            supirdari: supirdari,
+                        };
+                        let user = response.data[0].username;
+                        // console.log(JSON.stringify(data))
+                        laporanhistorydeposito(data, detailParams, dataCabang, user);
+                    },
+                    error: function(error) {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+                            $('#rangeTglModal').modal('hide')
+                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON.message);
+                        }
+                    }
+                })
+                .always(() => {
+                    $('#processingLoader').addClass('d-none')
+                });
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -95,13 +137,13 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
-        
-        let supirdari_id= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
+
+        let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirdari = $('#crudForm').find('[name=supirdari]').val()
+        let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
         if (supirdari_id != '') {
             $.ajax({
-            
+
                 url: `{{ route('laporanhistorydeposito.export') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`,
                 type: 'GET',
                 beforeSend: function(xhr) {
@@ -122,7 +164,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -131,17 +173,27 @@
                 }
             })
         } else {
+            $('#processingLoader').addClass('d-none')
             showDialog('ISI SELURUH KOLOM')
         }
-            })
+    })
 
     function initLookup() {
-        $('.supirdari-lookup').lookup({
+        $('.supirdari-lookup').lookupMaster({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            multiColumnSize: true,
+            extendSize: md_extendSize_1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
+                    searching: 1,
+                    valueName: 'supirdari_id',
+                    searchText: 'supirdari-lookup',
+                    title: 'supir lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -181,6 +233,47 @@
                 element.data('currentValue', element.val())
             }
         })
+    }
+
+    function laporanhistorydeposito(data, detailParams, dataCabang, user) {
+
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanHistoryPenjualan.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'user': user,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            console.log("Laporan berhasil dirender.");
+
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
     }
 
     const setStatusKembali = function(relatedForm) {

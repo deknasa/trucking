@@ -22,6 +22,7 @@ class ServiceOutHeaderController extends MyController
 
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]

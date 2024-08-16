@@ -116,8 +116,19 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	padding: 15px; 
 	padding-right: 5px; 
 } 
+.ui-jqgrid .ui-jqgrid-bdiv:not(.bdiv-lookup) {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    z-index: 101;
+    overscroll-behavior: auto !important;
+    /* height: 317px!important; */
+}
+
 .bdiv-lookup {
-	height: 300px!important;
+    height: 289px !important;
+    overscroll-behavior: contain !important;
 }
 
 .hidden {
@@ -296,6 +307,61 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 .btn-orange:hover {
 	color: #fff !important;
 	background-color: #dd4a00;
+	/* background-color:  #25588f; */
+}
+.btn-black {
+	background-color: #343a40;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-black:hover {
+	color: #fff !important;
+	background-color: #313840;
+	/* background-color:  #25588f; */
+}
+.btn-slateblue {
+	background-color: #436685;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-slateblue:hover {
+	color: #fff !important;
+	background-color: #346590;
+	/* background-color:  #25588f; */
+}
+.btn-burnt {
+	background-color: #8A3324;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-burnt:hover {
+	color: #fff !important;
+	background-color: #753024;
+	/* background-color:  #25588f; */
+}
+.btn-blueberry {
+	background-color: #241571;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-blueberry:hover {
+	color: #fff !important;
+	background-color: #211463;
+	/* background-color:  #25588f; */
+}
+.btn-seagreen {
+	background-color: #2E8B57;
+	/* background-color: #3f6791; */
+	color: #fff;
+}
+
+.btn-seagreen:hover {
+	color: #fff !important;
+	background-color: #275d3f;
 	/* background-color:  #25588f; */
 }
 
@@ -642,6 +708,38 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	background-color: #DCDCDC;
 }
 
+/* Not with modal-header (For cek Modal History Mandor) */
+#crudModalApprovalLuarKota {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#crudModalApprovalLuarKota .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#crudModalApprovalLuarKota .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#crudModalApprovalLuarKota .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 80px);
+	border: 0;
+	border-radius: 0;
+}
+
+#crudModalApprovalLuarKota .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
 .highlight {
 	background-color: yellow;
 }
@@ -741,7 +839,7 @@ select[readonly].select2-hidden-accessible + .select2-container {
 
 .link-color{
 	/* color: #e22b0b !important; */
-	color: #007bff;
+	color: #007bff !important;
 	text-decoration: underline;
 	background-color: rgba(0,0,0,0);
 }	
@@ -1084,9 +1182,14 @@ span.textCard {
 		padding-right: 5px; 
 	} 
 		
-	.ui-jqgrid .ui-jqgrid-bdiv { 
-		height: 447px!important; 
-	}
+	
+    .ui-jqgrid .ui-jqgrid-bdiv:not(.bdiv-lookup) {
+        height: 447px !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        height: 250px !important;
+    }
 	
 	.loadingMessage {
         position: absolute;
@@ -1220,3 +1323,65 @@ ul.mob-ul {
 .dropdown-extndbtn>li:last-child>a{
 	border: none;
 }
+
+.custom-backdrop {
+	opacity: 0 !important;
+}
+#imageModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+#imageModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+#imageModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+#imageModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 80px);
+	border: 0;
+	border-radius: 0;
+	display: flex;
+    justify-content: center;
+}
+#imageModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+.imgPreview {
+    text-align: center; 
+}
+.imgPreview img {
+	height: auto;
+	width: 50%;
+  }
+  .zoom-controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+  }
+  
+  .zoom-icon {
+	cursor: pointer;
+  }
+  
+  input[type="range"] {
+	width: calc(100% - 48px); /* Adjust the width based on the space needed for icons */
+  }
+  
+  .other-controls {
+	width: 100%;
+  }
+
+  .form-control[readonly] {
+    pointer-events: none;
+}
+

@@ -200,6 +200,7 @@ $.fn.customPager = function (option = {}) {
         let grid = $(this);
         let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
         let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
+        let modalBtnList = "";
         let extndBtn = "";
         let extndBtnMobile = "";
         if (option.extndBtn) {
@@ -309,6 +310,77 @@ $.fn.customPager = function (option = {}) {
                 }
             });
         }
+        if (option.modalBtnList) {
+           
+            option.modalBtnList.forEach((element) => {
+                let buttonElement = document.createElement("button");
+                buttonElement.id =
+                    typeof element.id !== "undefined"
+                        ? element.id
+                        : `customButton_${index}`;
+                let hasItem = element.item ? '<i class="ml-1 fa fa-angle-up"></i>': ''
+                buttonElement.className = element.class;
+                buttonElement.innerHTML = element.innerHTML+hasItem;
+                let targetModal = element.targetModal ?  element.targetModal :'#listMenuModal'
+                if (targetModal && element.item) {
+                    $(document).on(
+                        "click",
+                        `#${buttonElement.id}`,
+                        function (event) {
+                            $(targetModal).modal('show')
+                            
+                            if (element.item) {
+                                let listItem = `<div class="row">`
+                                element.item.forEach((dropmenuHTML) => {
+                                    let hidden = dropmenuHTML.hidden ?  'hidden' :''
+                                    // console.log(dropmenuHTML.id ,dropmenuHTML.hidden,hidden);
+                                    let colorbuton = dropmenuHTML.color ?  dropmenuHTML.color :'btn-danger'
+                                    let iconbuton = dropmenuHTML.icon ?  dropmenuHTML.icon :'fa-globe'
+                                    listItem += `<div class="col-12 mt-2" ${hidden}>
+                                        <button  class="btn ${colorbuton} btn-lg btn-block item-menu" id="${dropmenuHTML.id}"><i class="fa ${iconbuton}"></i> ${dropmenuHTML.text.toUpperCase()}</button>
+                                    </div>`;
+                                })
+                                listItem += `</div>`
+                                $(targetModal).find('.modal-body').html(listItem)
+
+                                element.item.forEach((dropmenuHTML) => {
+                                    if (dropmenuHTML.onClick) {
+                                        $(document).on(
+                                            "click",
+                                            `#${dropmenuHTML.id}`,
+                                            function (event) {
+                                                event.stopImmediatePropagation();
+
+                                                dropmenuHTML.onClick();
+                                            }
+                                        );
+                                    } 
+                                })
+                                
+                                
+                            }
+                            $( ".item-menu" ).on( "click", function() {
+                                $(targetModal).modal('hide')
+
+                            });
+                        }
+                    );
+                }else{
+                    if (element.onClick) {
+                        $(document).on(
+                            "click",
+                            `#${buttonElement.id}`,
+                            function (event) {
+                                event.stopImmediatePropagation();
+
+                                element.onClick();
+                            }
+                        );
+                    }
+                }
+                modalBtnList += buttonElement.outerHTML;
+            });
+        }
 
         if (detectDeviceType() == "desktop") {
             $(`#gbox_${$(this).getGridParam().id}`).after(`
@@ -348,6 +420,7 @@ $.fn.customPager = function (option = {}) {
                                       .join("")
                                 : ""
                         }
+							${modalBtnList}
 							${extndBtn}
 					</div>
 					<div class="col-4">
@@ -409,7 +482,7 @@ $.fn.customPager = function (option = {}) {
                                           .join("")
                                     : ""
                             }
-
+                            ${modalBtnList}
 							${extndBtn}
 						</div>
 					</div>

@@ -25,16 +25,16 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Trado<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Trado</label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="posisiakhirtrado_id" id="tradoId">
-                                    <input type="text" name="posisiakhirtrado" class="form-control posisiakhirtrado-lookup">
+                                    <input type="text" id="posisiakhirtrado" name="posisiakhirtrado" class="form-control posisiakhirtrado-lookup">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Gandengan<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Gandengan</label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="posisiakhirgandengan_id" id="gandenganId">
@@ -45,8 +45,8 @@
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Parameter<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <select name="text" id="text" class="form-select select2bs4" style="width: 100%;">
-                                </select>
+                                <input type="hidden" name="text" id="text">
+                                <input type="text" id="text" name="textnama" class="form-control text-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -91,9 +91,6 @@
 
 
     $(document).ready(function() {
-
-        initSelect2($('#crudForm').find('[name=text]'), false)
-        setTextParameterOptions($('#crudForm'))
 
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -173,7 +170,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -264,91 +261,99 @@
     }
 
     function initLookup() {
-        $('.posisiakhirtrado-lookup').lookup({
+
+        $('.posisiakhirtrado-lookup').lookupMaster({
             title: 'Posisi Akhir Ban Trado Lookup',
-            fileName: 'trado',
+            fileName: 'tradoMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'posisiakhirtrado_id',
+                    searchText: 'posisiakhirtrado-lookup',
+                    title: 'Posisi Akhir Ban Trado Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=posisiakhirtrado_id]').first().val(trado.id)
                 element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
-                lookupSelected('trado');
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=posisiakhirtrado_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="posisiakhirtrado_id"]`).first().val('')
                 element.data('currentValue', element.val())
-                enabledLookupSelected()
             }
         })
-        $('.posisiakhirgandengan-lookup').lookup({
+
+        $('.posisiakhirgandengan-lookup').lookupMaster({
             title: 'Posisi Akhir Ban Gandengan Lookup',
-            fileName: 'gandengan',
+            fileName: 'gandenganMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'posisiakhirgandengan_id',
+                    searchText: 'posisiakhirgandengan-lookup',
+                    title: 'Posisi Akhir Ban Gandengan Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (gandengan, element) => {
                 $('#crudForm [name=posisiakhirgandengan_id]').first().val(gandengan.id)
                 element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
-                lookupSelected('gandengan');
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=posisiakhirgandengan_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="posisiakhirgandengan_id"]`).first().val('')
                 element.data('currentValue', element.val())
-                enabledLookupSelected()
             }
         })
-    }
 
-    const setTextParameterOptions = function(relatedForm) {
-        relatedForm.find('[name=text]').append(
-            new Option('-- PILIH JENIS LAPORAN --', '', false, true)
-        ).trigger('change')
-
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'LAPORAN PEMAKAIAN BAN'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'LAPORAN PEMAKAIAN BAN'
-        })
-        $.ajax({
-            url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+        $('.text-lookup').lookupMaster({
+            title: 'Parameter Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'LAPORAN PEMAKAIAN BAN',
+                    subgrp: 'LAPORAN PEMAKAIAN BAN',
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'text_id',
+                    searchText: 'text-lookup',
+                    title: 'Parameter Lookup',
+                    typeSearch: 'ALL',
+                    singleColumn: true,
+                    hideLabel: true,
+                }
             },
-            data: data,
-            success: response => {
-
-                response.data.forEach(statusPosting => {
-                    let option = new Option(statusPosting.text, statusPosting.id)
-                    relatedForm.find('[name=text]').append(option).trigger('change')
-                });
-
-
-                relatedForm
-                    .find('[name=text]')
-                    .val($(`#crudForm [name=text] option:eq(1)`).val())
-                    .trigger('change')
-                    .trigger('select2:selected');
+            onSelectRow: (text, element) => {
+                $('#crudForm [name=text]').first().val(text.id)
+                element.val(text.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=text]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
     }

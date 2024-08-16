@@ -11,23 +11,23 @@
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
-  <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
+  <!--  <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-    
     let prosesgajisupirheader = <?= json_encode($prosesgajisupir); ?>
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
+      viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
 
-      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);      
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);
       viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
-      
+
       var statuscetak = prosesgajisupirheader.statuscetak_id
       var sudahcetak = prosesgajisupirheader['combo']['id']
       if (statuscetak == sudahcetak) {
@@ -36,10 +36,10 @@
         viewerOptions.toolbar.showOpenButton = false;
       }
 
-      var options = new Stimulsoft.Designer.StiDesignerOptions()
-      options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
-      var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+      // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
@@ -58,16 +58,16 @@
       // designer.report = report;
       // designer.renderHtml('content');
       viewer.report = report
-      viewer.onPrintReport = function (event) {
+      viewer.onPrintReport = function(event) {
         triggerEvent(window, 'afterprint');
       }
-      
+
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
-            var e = document.createEvent('HTMLEvents');
-            e.initEvent(type, false, true);
-            el.dispatchEvent(e);
+          var e = document.createEvent('HTMLEvents');
+          e.initEvent(type, false, true);
+          el.dispatchEvent(e);
         } else {
           // IE8
           var e = document.createEventObject();
@@ -76,6 +76,13 @@
         }
       }
 
+      window.addEventListener('beforeunload', function() {
+        if (window.opener && !window.opener.closed) {
+
+          var id = prosesgajisupirheader.id
+          window.opener.removeEditingBy(id);
+        }
+      });
       window.addEventListener('afterprint', (event) => {
         var id = prosesgajisupirheader.id
         var apiUrl = `{{ config('app.api_url') }}`;
@@ -88,6 +95,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
@@ -95,20 +103,20 @@
     }
   </script>
   <script type="text/javascript">
-    $( document ).ready(function() {
+    $(document).ready(function() {
       var statuscetak = prosesgajisupirheader.statuscetak_id
       var sudahcetak = prosesgajisupirheader['combo']['id']
       if (statuscetak == sudahcetak) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+        $(document).on('keydown', function(e) {
+          if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
             alert("Document Sudah Pernah Dicetak ");
             e.cancelBubble = true;
             e.preventDefault();
             e.stopImmediatePropagation();
-          }  
-        });  
+          }
+        });
       }
-    }); 
+    });
   </script>
   <style>
     .stiJsViewerPage {
@@ -116,7 +124,9 @@
     }
   </style>
 </head>
+
 <body onLoad="Start()">
   <div id="content"></div>
 </body>
+
 </html>

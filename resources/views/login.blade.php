@@ -167,12 +167,26 @@
                                 );
                                 $("#dialog-success-message").dialog({
                                     modal: true,
+                                    width: 'auto', // Automatically adjust width
+                                    height: 'auto',
+                                    resizable: false,
                                     buttons: [{
                                         text: "Ok",
                                         click: function() {
                                             $(this).dialog("close");
                                         },
-                                    }, ]
+                                    }, ],
+                                    open: function() {
+                                        // Adjust the dialog size after it is opened
+                                        $(this).css({
+                                            'max-width': '600px', // Set your desired maximum width here
+                                        });
+                                        $(this).dialog("option", "position", {
+                                            my: "center",
+                                            at: "center",
+                                            of: window
+                                        });
+                                    }
                                 });
                                 showSuccessDialog(response.message)
                             },

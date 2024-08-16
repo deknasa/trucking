@@ -43,7 +43,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  nama kontak <span class="text-danger">*</span>
+                  nama kontak <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -55,7 +55,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  NO TELEPON/HANDPHONE <span class="text-danger">*</span>
+                  NO TELEPON/HANDPHONE <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -65,7 +65,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  alamat (1) <span class="text-danger">*</span>
+                  alamat (1) <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -85,7 +85,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  kota <span class="text-danger">*</span>
+                  kota <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -119,12 +119,9 @@
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
-
-
               <div class="col-12 col-sm-9 col-md-9">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -146,7 +143,9 @@
 
 @push('scripts')
 <script>
-    let dataMaxLength = []
+  let dataMaxLength = []
+  var data_id
+
 
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
@@ -181,7 +180,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      }) 
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -258,7 +257,7 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-
+    data_id = $('#crudForm').find('[name=id]').val();
     setFormBindKeys(form)
 
     activeGrid = null
@@ -268,14 +267,45 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    initSelect2(form.find('.select2bs4'), true)
-
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'pelanggan'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
+
 
   function createPelanggan() {
     let form = $('#crudForm')
@@ -353,6 +383,41 @@
     })
   }
 
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+  }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
@@ -513,36 +578,36 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
 
-      $.ajax({
-        url: `${apiUrl}shipper/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-              if (index == 'kodepos') {
-                form.find(`[name=${index}]`).attr('maxlength', 5)
+        $.ajax({
+          url: `${apiUrl}shipper/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+                if (index == 'kodepos') {
+                  form.find(`[name=${index}]`).attr('maxlength', 5)
+                }
+                if (index == 'telp') {
+                  form.find(`[name=${index}]`).attr('maxlength', 13)
+                }
               }
-              if (index == 'telp') {
-                form.find(`[name=${index}]`).attr('maxlength', 13)
-              }
-            }
-          })
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-     })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
@@ -550,15 +615,15 @@
             form.find(`[name=${index}]`).attr('maxlength', value)
 
             if (index == 'kodepos') {
-                form.find(`[name=${index}]`).attr('maxlength', 5)
-              }
-              if (index == 'telp') {
-                form.find(`[name=${index}]`).attr('maxlength', 13)
-              }
+              form.find(`[name=${index}]`).attr('maxlength', 5)
+            }
+            if (index == 'telp') {
+              form.find(`[name=${index}]`).attr('maxlength', 13)
+            }
           }
         })
         resolve()
-      })  
+      })
     }
   }
 
@@ -579,6 +644,10 @@
               element.val(value).trigger('change')
             } else {
               element.val(value)
+            }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
             }
           })
           if (form.data('action') === 'delete') {
@@ -640,7 +709,7 @@
 
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}shipper/${Id}/cekValidasi`,
       method: 'POST',
@@ -648,12 +717,26 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: aksi,
+      },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   showDialog(response.message['keterangan'])
+        // } else {
+        //   deletePelanggan(Id)
+        // }
+
+        var error = response.error
+        if (error == true) {
+          showDialog(response.message)
         } else {
-          deletePelanggan(Id)
+          if (aksi == "edit") {
+            editPelanggan(Id)
+          } else if (aksi == "delete") {
+            deletePelanggan(Id)
+          }
         }
 
       }

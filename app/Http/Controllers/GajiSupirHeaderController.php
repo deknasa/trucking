@@ -17,7 +17,8 @@ class GajiSupirHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         $data = array_merge(
             compact('title', 'data'),

@@ -241,8 +241,7 @@
                                 class: 'btn btn-success btn-sm mr-1',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                                    editHariLibur(selectedId)
+                                    cekValidasi(selectedId,'edit')
                                 }
                             },
                             {
@@ -251,8 +250,7 @@
                                 class: 'btn btn-danger btn-sm mr-1',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                                    deleteHariLibur(selectedId)
+                                    cekValidasi(selectedId,'delete')
                                 }
                             },
                             {
@@ -305,6 +303,11 @@
                     .parent().addClass('px-1')
 
                     function permission() {
+                        if (cabangTnl == 'YA') {
+                $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
                 if (!`{{ $myAuth->hasPermission('harilibur', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -313,6 +316,14 @@
                     $('#edit').attr('disabled', 'disabled')
                 }
 
+                if (!`{{ $myAuth->hasPermission('harilibur', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                } }
+
+            }
+
+                    
+
                 if (!`{{ $myAuth->hasPermission('harilibur', 'export') }}`) {
                     $('#export').attr('disabled', 'disabled')
                 }
@@ -320,9 +331,6 @@
                     $('#report').attr('disabled', 'disabled')
                 }
 
-                if (!`{{ $myAuth->hasPermission('harilibur', 'destroy') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
-                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {
@@ -495,10 +503,9 @@
                     });
                 }
 
-
-
-
             })
+
+          
         </script>
     @endpush()
 @endsection

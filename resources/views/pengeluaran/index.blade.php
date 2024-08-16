@@ -61,6 +61,7 @@
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
+  let activeGrid 
   let limit
   let postData
   let sortname = 'nobukti'
@@ -77,6 +78,10 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    $("#jqGrid").jqGrid('setSelection', value,false);
+    onSelectRowExisting(value)
+
     let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -116,7 +121,7 @@
     loadDetailGrid()
     loadJurnalUmumGrid(nobukti)
 
-    $('.select2').select2({
+    $('#bankheader').select2({
       width: 'resolve',
       theme: "bootstrap4"
     });
@@ -127,6 +132,10 @@
     @isset($request['tglsampai'])
     tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
+
+    @isset($request['bank_id'])
+    $('#bankheader').val(`{{ $request['bank_id'] }}`).trigger('change')
+    @endisset    
 
     setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
@@ -140,7 +149,8 @@
       $('#gs_').prop('checked', false)
     })
 
-    $("#jqGrid").jqGrid({
+    var grid= $("#jqGrid");  
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -287,7 +297,7 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left'
           },
           {
@@ -300,6 +310,13 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'ALAT BAYAR',
@@ -322,7 +339,7 @@
 
           {
             label: 'BANK',
-            name: 'bank_id',
+            name: 'bank',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
@@ -342,6 +359,12 @@
             label: 'TRANSFER NAMA BANK',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: 'transferkebank',
+            align: 'left'
+          },
+          {
+            label: 'PENERIMA',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            name: 'penerima',
             align: 'left'
           },
           {
@@ -383,6 +406,55 @@
             name: 'penerimaan_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left'
+          },
+          {
+            label: 'STATUS KIRIM BERKAS',
+            name: 'statuskirimberkas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokirimberkas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokirimberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKirimBerkas = JSON.parse(value)
+              if (!statusKirimBerkas) {
+                return ``
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusKirimBerkas.WARNA}; color: #fff;">
+                  <span>${statusKirimBerkas.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKirimBerkas = JSON.parse(rowObject.statuskirimberkas)
+              if (!statusKirimBerkas) {
+                return ` title=""`
+              }
+              return ` title="${statusKirimBerkas.MEMO}"`
+            }
           },
           {
             label: 'MODIFIED BY',
@@ -441,13 +513,13 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
 
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -523,6 +595,7 @@
           permission()
           setHighlight($(this))
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
         }
       })
 
@@ -548,15 +621,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -574,6 +648,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
@@ -613,11 +688,13 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status PENGELUARAN",
+                text: "APPROVAL/UN Status PENGELUARAN",
+                color:"btn-success",
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
                     approve()
@@ -627,6 +704,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENGELUARAN",
+                color:"btn-info",
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -634,6 +713,21 @@
 
 
                     approvalBukaCetak(tglbukacetak, 'PENGELUARANHEADER', selectedRows, selectedbukti);
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas PENGELUARAN",
+                color:"btn-primary",
+                hidden:(!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+
+                    approvalKirimBerkas(tglkirimberkas, 'PENGELUARANHEADER', selectedRows, selectedbukti);
                   }
                 }
               },
@@ -774,6 +868,11 @@
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()

@@ -43,17 +43,31 @@
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
                                 <input type="hidden" name="trado_id">
-                                <input type="text" name="trado" class="form-control trado-lookup">
+                                <input type="text" id="trado" name="trado" class="form-control trado-lookup">
                             </div>
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TGL MASUK <span class="text-danger">*</span>
+                                    TGL & JAM MASUK <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
                                 <div class="input-group">
-                                    <input type="text" name="tglmasuk" class="form-control datepicker">
+                                    <input type="datetime-local" name="tglmasuk" class="form-control inputmask-time">
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    Status Service Out <span class="text-danger">*</span>
+                                </label>
+                            </div>
+
+
+                            <div class="col-12 col-sm-4 col-md-4">
+                                <input type="hidden" name="statusserviceout">
+                                <input type="text" name="statusserviceoutnama" id="statusserviceoutnama" class="form-control lg-form status-lookup">
                             </div>
                         </div>
 
@@ -73,7 +87,7 @@
                                                         <th width="2%" class="tbl_aksi">Aksi</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="table_body">
 
                                                 </tbody>
                                                 <tfoot>
@@ -96,6 +110,10 @@
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
+                        </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
                         </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
@@ -161,6 +179,16 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+
+        function submit(button) {
+            event.preventDefault()
 
             let method
             let url
@@ -197,6 +225,14 @@
                 name: 'limit',
                 value: limit
             })
+            data.push({
+                name: 'button',
+                value: button
+            })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
@@ -232,26 +268,36 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
 
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
 
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        $('#crudModal').modal('hide')
+
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
 
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
-                    }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+                    } else {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        // showSuccessDialog(response.message, response.data.nobukti)
+                        createServicein()
                     }
                 },
                 error: error => {
@@ -268,7 +314,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -282,17 +328,65 @@
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
 
         getMaxLength(form)
         initLookup()
         initDatepicker()
+        Inputmask("datetime", {
+            inputFormat: "HH:MM",
+            max: 24
+        }).mask(".inputmask-time");
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
+
+    function removeEditingBy(id) {
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'serviceinheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
 
     function createServicein() {
         let form = $('#crudForm')
@@ -304,7 +398,7 @@
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service in')
-        $('#crudModal').modal('show')
+
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -313,8 +407,24 @@
         if (selectedRows.length > 0) {
             clearSelectedRows()
         }
-        $('#table_body').html('')
-        addRow()
+
+        Promise
+            .all([
+                showDefault(form),
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+                $('#table_body').html('')
+                addRow()
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
+
     }
 
     function editServicein(id) {
@@ -485,7 +595,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="karyawan_id[]" class="form-control">
-                                <input type="text" name="karyawan[]" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
+                                <input type="text" name="karyawan[]"  id="karyawan"data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
                             </td>
 
                             <td>
@@ -546,13 +656,43 @@
         })
     }
 
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}serviceinheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        console.log(value)
+                        let element = form.find(`[name="${index}"]`)
+
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+
     function addRow() {
         let detailRow = (`
         <tr>
             <td></td>
             <td>
                 <input type="hidden" name="karyawan_id[]" class="form-control">
-                <input type="text" name="karyawan[]" class="form-control karyawan-lookup">
+                <input type="text" name="karyawan[]" id="karyawan" class="form-control karyawan-lookup">
             </td>
 
             <td>
@@ -603,27 +743,43 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'PRINTER BESAR') {
-                            window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-                        } else if (Aksi == 'PRINTER KECIL') {
-                            window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-                        }
-                        if (Aksi == 'EDIT') {
-                            editServicein(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteServicein(Id)
-                        }
+
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
                     }
 
+                    cekValidasiAksi(Id, Aksi)
+                }
+
+            }
+        })
+    }
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}serviceinheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'EDIT') {
+                        editServicein(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteServicein(Id)
+                    }
                 }
             }
         })
@@ -699,6 +855,69 @@
                 element.data('currentValue', element.val())
             }
         })
+
+        // $('.trado-lookup').lookupMaster({
+        //     title: 'trado Lookup',
+        //     fileName: 'tradoMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'trado_id',
+        //             searchText: 'trado-lookup',
+        //             title: 'Trado',
+        //             typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (trado, element) => {
+        //         $('#crudForm [name=trado_id]').first().val(trado.id)
+        //         element.val(trado.kodetrado)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=trado_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+
+        $(`.status-lookup`).lookupMaster({
+            title: 'STATUS SERVICE OUT Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'STATUS SERVICE OUT',
+                    subgrp: 'STATUS SERVICE OUT',
+                    searching: 1,
+                    valueName: `statusserviceout`,
+                    searchText: `status-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'STATUS SERVICE OUT'
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=statusserviceout]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                $('#crudForm [name=statusserviceout]').first().val('')
+                element.val('');
+                element.data('currentValue', element.val());
+            },
+        });
 
     }
     const setTglBukti = function(form) {

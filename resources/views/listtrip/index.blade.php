@@ -27,7 +27,7 @@
   let limit
   let postData
   let sortname = 'nobukti'
-  let sortorder = 'desc'
+  let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
@@ -75,6 +75,11 @@
           },
 
           {
+            label: 'JOB TRUCKING',
+            name: 'jobtrucking',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -111,6 +116,11 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+          },
+          {
             label: 'SHIPPER',
             name: 'pelanggan_id',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
@@ -129,6 +139,11 @@
             label: 'TRADO',
             name: 'trado_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+          },
+          {
+            label: 'GANDENGAN',
+            name: 'gandengan_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'SUPIR',

@@ -76,6 +76,7 @@ class LaporanStokController extends MyController
         }
         
         $judul = $pengeluaran[0]['judul'] ?? '';
+        $namacabang = $responses['namacabang'];
 
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
@@ -88,14 +89,18 @@ class LaporanStokController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:K1');
-
-        $sheet->setCellValue('A2', strtoupper('Laporan Pemakaian Stok'));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:K2');
 
-        $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->setCellValue('A3', strtoupper('Laporan Pemakaian Stok'));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:K3');
+
+        $sheet->setCellValue('A4', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:K4');
         $sheet->getColumnDimension('I')->setWidth(60);  
         // $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         // $sheet->setCellValue('A2', 'Laporan Stok');
@@ -108,8 +113,8 @@ class LaporanStokController extends MyController
         // $sheet->mergeCells('A2:K2');
         // $sheet->mergeCells('A3:K3');
 
-        $header_start_row = 5;
-        $detail_start_row = 6;
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(

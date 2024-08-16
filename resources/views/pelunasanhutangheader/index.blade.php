@@ -68,6 +68,11 @@
 
 function checkboxHandler(element) {
   let value = $(element).val();
+
+  var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    $("#jqGrid").jqGrid('setSelection', value,false);
+    onSelectRowExisting(value)
+
   let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
   if (element.checked) {
     selectedRows.push($(element).val())
@@ -125,7 +130,8 @@ function checkboxHandler(element) {
       $('#gs_').prop('checked', false)
     })
 
-    $("#jqGrid").jqGrid({
+    var grid= $("#jqGrid");  
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'pelunasanhutangheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -286,8 +292,23 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'POTONGAN',
+            name: 'potongan',
+            align: 'right',
+            formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'SUPPLIER',
             name: 'supplier_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -321,7 +342,7 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
-            label: 'TANGGAL CAIR',
+            label: 'TGL JATUH TEMPO',
             name: 'tglcair',
             align: 'left',
             formatter: "date",
@@ -330,6 +351,11 @@ function checkboxHandler(element) {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'NO WARKAT',
+            name: 'nowarkat',
+            align: 'left'
           },
           {
             label: 'USER APPROVAL',
@@ -422,12 +448,12 @@ function checkboxHandler(element) {
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
@@ -503,6 +529,7 @@ function checkboxHandler(element) {
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
@@ -523,15 +550,16 @@ function checkboxHandler(element) {
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -546,6 +574,7 @@ function checkboxHandler(element) {
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -582,11 +611,13 @@ function checkboxHandler(element) {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Status PELUNASAN HUTANG",
+                text: "APPROVAL/UN Status PELUNASAN HUTANG",
+                color:'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) {
                     approve()
@@ -596,6 +627,8 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PELUNASAN HUTANG",
+                color:'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -604,6 +637,23 @@ function checkboxHandler(element) {
                       showDialog('Harap pilih salah satu record')
                     } else {
                       approvalBukaCetak(tglbukacetak, 'PELUNASANHUTANGHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas PELUNASAN HUTANG",
+                color:'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) ,
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'PELUNASANHUTANGHEADER', selectedRows, selectedbukti);
                     }
                   }
                 }
@@ -647,6 +697,16 @@ function checkboxHandler(element) {
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              viewPelunasanHutang(selectedId)
             }
           },
         ],
@@ -711,6 +771,11 @@ function checkboxHandler(element) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()

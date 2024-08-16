@@ -74,6 +74,7 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
 
+    var data_id 
     let dataMaxLength = []
 
     $(document).ready(function() {
@@ -181,6 +182,7 @@
         let form = $('#crudForm')
 
         setFormBindKeys(form)
+        data_id = $('#crudForm').find('[name=id]').val();
 
         activeGrid = null
 
@@ -190,9 +192,75 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy(data_id)
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
+    function removeEditingBy(id) {
+        // $.ajax({
+        //     url: `{{ config('app.api_url') }}bataledit`,
+        //     method: 'POST',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessToken}`
+        //     },
+        //     data: {
+        //         id: id,
+        //         aksi: 'BATAL',
+        //         table: 'harilibur'
+                
+        //     },
+        //     success: response => {
+        //         $("#crudModal").modal("hide")
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
+                    
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
+        let formData = new FormData();
+
+       
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'harilibur');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: formData,
+            keepalive:true
+
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            $("#crudModal").modal("hide");
+        })
+        .catch(error => {
+            // Handle error
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+                setErrorMessages(form, error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON);
+            }
+        });
+    }
+    
     function createHariLibur() {
         let form = $('#crudForm')
 
@@ -449,5 +517,32 @@
             })
         })
     }
+
+    function cekValidasi(id,aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}harilibur/${id}/cekValidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            data:{
+                aksi: aksi,
+            },
+            success: response => {
+                var error = response.error
+                if (error == true) {
+                    showDialog(response.message)
+                } else {
+                    if (aksi=="edit") {
+                        editHariLibur(id)
+                    }else if (aksi=="delete"){
+                        deleteHariLibur(id)
+                    }
+                }
+            }
+        })
+    }
+
 </script>
 @endpush()

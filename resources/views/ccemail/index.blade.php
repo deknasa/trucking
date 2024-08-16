@@ -440,7 +440,7 @@
           },
           {
             id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+            innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
 
@@ -479,16 +479,22 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('ccemail', 'store') }}`) {
+      if (cabangTnl == 'YA') {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('ccemail', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('ccemail', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('ccemail', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('ccemail', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('ccemail', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
       }
 
       if (!`{{ $myAuth->hasPermission('ccemail', 'export') }}`) {

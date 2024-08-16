@@ -25,6 +25,7 @@ class ProsesUangJalanSupirHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('prosesuangjalansupir.index', compact('title', 'data'));
     }

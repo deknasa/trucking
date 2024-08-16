@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -23,11 +24,27 @@ class LaporanKasBankController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Laporan Kas/Bank',
+            'defaultperiode' => $this->defaultperiode(),
         ];
 
-        return view('laporankasbank.index', compact('title'));
+        return view('laporankasbank.index', compact('title', 'data'));
     }
 
+    public function defaultperiode()
+    {
+
+        $status = [
+            'grp' => "PERIODE DATA",
+            'subgrp' => "PERIODE DATA",
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getdegfault', $status);
+
+        return $response['data'];
+    }
     public function report(Request $request)
     {
         $detailParams = [
@@ -35,18 +52,32 @@ class LaporanKasBankController extends MyController
             'sampai' => $request->sampai,
             'bank_id' => $request->bank_id,
             'bank' => $request->bank,
+            'periodedata_id' => $request->periodedata_id,
+            'periodedata' => $request->periodedata,
         ];
-
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
-        $data = $header['data'];
+        $jumlah['jumlah'] = 1;
+        if (session('cabang') == 'PUSAT') {
+            $data = $header['data'];
+            if (count($data) > 1) {
+                array_shift($data);
+                $jumlah['jumlah'] = 2;
+            }
+        } else {
+            $data = $header['data'];
+        }
+        $infopemeriksa = $header['infopemeriksa'];
+        $datasaldo = $header['datasaldo'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $printer['tipe'] = $request->printer;
+        $cabang['cabang'] = session('cabang');
 
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data', 'user', 'detailParams','printer'));
+        return view('reports.laporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa', 'jumlah'));
     }
 
     public function export(Request $request): void
@@ -56,6 +87,8 @@ class LaporanKasBankController extends MyController
             'sampai' => $request->sampai,
             'bank_id' => $request->bank_id,
             'bank' => $request->bank,
+            'periodedata_id' => $request->periodedata_id,
+            'periodedata' => $request->periodedata,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -64,10 +97,11 @@ class LaporanKasBankController extends MyController
             ->get(config('app.api_url') . 'laporankasbank/export', $detailParams);
 
         $data = $header['data'];
-        
-        if(count($data) == 0){
+
+        if (count($data) == 0) {
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -76,18 +110,18 @@ class LaporanKasBankController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
 
-        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A2', $data[0]['judulLaporan'] . ' - ' . $namacabang);
         $sheet->mergeCells('A2:B2');
         $sheet->setCellValue('A3', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         $sheet->mergeCells('A3:B3');
-        $sheet->setCellValue('A4', 'Buku Kas/Bank : '. $request->bank);
+        $sheet->setCellValue('A4', 'Buku Kas/Bank : ' . $request->bank);
         $sheet->mergeCells('A4:B4');
 
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle("A3:B3")->getFont()->setBold(true);
         $sheet->getStyle("A4:B4")->getFont()->setBold(true);
 
-        $detail_table_header_row = 6;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 2;
 
         $styleArray = array(
@@ -152,7 +186,13 @@ class LaporanKasBankController extends MyController
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
         $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-
+        $cabang = DB::table('parameter')->from(db::raw("parameter a with (readuncommitted)"))
+            ->select(
+                'a.text as keterangan'
+            )
+            ->where('grp', 'CABANG')
+            ->where('subgrp', 'CABANG')
+            ->first();
         // LOOPING DETAIL
         $dataRow = $detail_table_header_row + 2;
         $previousRow = $dataRow - 1; // Initialize the previous row number
@@ -162,19 +202,22 @@ class LaporanKasBankController extends MyController
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
- 
-            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
-            $sheet->setCellValue("A$detail_start_row", $dateValue);
-            $sheet->getStyle("A$detail_start_row") 
-            ->getNumberFormat() 
-            ->setFormatCode('dd-mm-yyyy');
+            if ($cabang == 'PUSAT') {
+                $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+            } else {
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+                $sheet->setCellValue("A$detail_start_row", $dateValue);
+                $sheet->getStyle("A$detail_start_row")
+                    ->getNumberFormat()
+                    ->setFormatCode('dd-mm-yyyy');
+            }
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['debet']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['kredit']);
 
-            if ($response_detail['nobukti'] == '') {
+            if ($response_detail['nobukti'] == 'SALDO AWAL') {
                 $sheet->setCellValue('G' . $dataRow, $response_detail['saldo']);
             } else {
                 if ($dataRow > $detail_table_header_row + 1) {
@@ -195,10 +238,10 @@ class LaporanKasBankController extends MyController
         $sheet->mergeCells('A' . $detail_start_row . ':D' . $detail_start_row);
         $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':D' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $sheet->setCellValue("E$detail_start_row", "=SUM(E8:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$detail_start_row", "=SUM(E9:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->setCellValue("F$detail_start_row",  "=SUM(F8:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("G$detail_start_row",  "=G".($dataRow-1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$detail_start_row",  "=SUM(F9:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$detail_start_row",  "=G" . ($dataRow - 1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");

@@ -1,6 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+<style>
+     .no-calendar .ui-datepicker-calendar {
+            display: none;
+        }
+</style>
     <!-- Grid -->
     <div class="container-fluid">
         <div class="row">
@@ -10,6 +15,25 @@
                     </div>
                     <form id="crudForm">
                         <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-12 col-sm-2 col-form-label mt-2">bulan<span class="text-danger">*</span></label>
+                                <div class="col-sm-4 mt-2">
+                                    <div class="input-group">
+                                        <input type="text" name="bulan" class="form-control bulan">
+                                    </div>
+                                </div>
+                            
+                                <div class="col-sm-1 text-center mt-2" >
+                                    <label class=" mt-2 ">MINGGU KE<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-4 mt-2">
+                                    <div class="input-group">
+                                        {{-- <input type="hidden" name="tgldari">
+                                        <input type="hidden" name="tglsampai"> --}}
+                                        <input type="text" name="minggu" id="minggu" class="form-control minggu-lookup">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span
                                         class="text-danger">*</span></label>
@@ -32,7 +56,7 @@
                                 <div class="col-sm-4 mt-2">
                                     <div class="input-group">
                                         <input type="hidden" name="tradodari_id">
-                                        <input type="text" name="tradodari" class="form-control tradodari-lookup">
+                                        <input type="text" name="tradodari" id="tradodari" class="form-control tradodari-lookup">
                                     </div>
                                 </div>
                                 <div class="col-sm-1 mt-2">
@@ -41,7 +65,7 @@
                                 <div class="col-sm-4 mt-2">
                                     <div class="input-group">
                                         <input type="hidden" name="tradosampai_id">
-                                        <input type="text" name="tradosampai" class="form-control tradosampai-lookup">
+                                        <input type="text" name="tradosampai" id="tradosampai" class="form-control tradosampai-lookup">
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +107,7 @@
             $(document).ready(function() {
                 initLookup()
                 initDatepicker()
-
+                $('#crudForm').find('[name=bulan]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
                 $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
                     'change');
                 $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
@@ -92,6 +116,39 @@
                 if (!`{{ $myAuth->hasPermission('exportlaporanmingguansupir', 'export') }}`) {
                     $('#btnExport').attr('disabled', 'disabled')
                 }
+
+                $('.bulan').datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    showButtonPanel: true,
+                    showOn: "button",
+                    dateFormat: 'mm-yy',
+                    onClose: function(dateText, inst) {
+                        $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+                        $(inst.dpDiv).removeClass('no-calendar');
+                    },
+                    beforeShow: function(input, inst) {
+                        // Tambahkan kelas khusus untuk menyembunyikan kalender
+                        setTimeout(function() {
+                            $(inst.dpDiv).addClass('no-calendar');
+                        }, 0);
+                    },
+                    onChangeMonthYear : function (year, month, inst) { 
+                        $('#minggu').val('')
+                    } 
+                }).siblings(".ui-datepicker-trigger")
+                .wrap(
+                    `
+                    <div class="input-group-append">
+                    </div>
+                    `)
+                .addClass("btn btn-easyui text-easyui-dark").html(`
+                <i class="fa fa-calendar-alt"></i>
+                `);
+
+                $('#crudForm').find('[name=bulan]').on('change', function() {
+                    $('#minggu').val('')
+                })
             })
 
             $(document).on('click', `#btnExport`, function(event) {
@@ -179,12 +236,19 @@
             }
 
             function initLookup() {
-                $('.tradodari-lookup').lookup({
+                $('.tradodari-lookup').lookupMaster({
                     title: 'Trado Lookup',
-                    fileName: 'trado',
+                    fileName: 'tradoMaster',
+                    typeSearch: 'ALL',
+                    searching: 1,
                     beforeProcess: function(test) {
                         this.postData = {
                             Aktif: 'AKTIF',
+                            searching: 1,
+                            valueName: 'tradodari_id',
+                            searchText: 'tradodari-lookup',
+                            title: 'trado dari',
+                            typeSearch: 'ALL',
                         }
                     },  
                     onSelectRow: (trado, element) => {
@@ -202,12 +266,19 @@
                     }
                 })
 
-                $('.tradosampai-lookup').lookup({
+                $('.tradosampai-lookup').lookupMaster({
                     title: 'Trado Lookup',
-                    fileName: 'trado',
+                    fileName: 'tradoMaster',
+                    typeSearch: 'ALL',
+                    searching: 1,
                     beforeProcess: function(test) {
                         this.postData = {
                             Aktif: 'AKTIF',
+                            searching: 1,
+                            valueName: 'tradosampai_id',
+                            searchText: 'tradosampai-lookup',
+                            title: 'trado sampai',
+                            typeSearch: 'ALL',
                         }
                     },  
                     onSelectRow: (trado, element) => {
@@ -220,6 +291,40 @@
                     },
                     onClear: (element) => {
                         $('#crudForm [name=tradosampai_id]').first().val('')
+                        element.val('')
+                        element.data('currentValue', element.val())
+                    }
+                })
+
+                $('.minggu-lookup').lookupMaster({
+                    title: 'Mingguan Lookup',
+                    fileName: 'mingguanMaster',
+                    typeSearch: 'ALL',
+                    searching: 1,
+                    beforeProcess: function(test) {
+                        this.postData = {
+                            Aktif: 'AKTIF',
+                            bulan: $('#crudForm').find('[name=bulan]').val(),
+                            searching: 1,
+                            valueName: 'minggu',
+                            searchText: 'minggu',
+                            title: 'minggu',
+                            typeSearch: 'ALL',
+                        }
+                    },  
+                    onSelectRow: (minggu, element) => {
+                        
+                        $('#crudForm').find('[name=dari]').val(minggu.fTglDr).trigger('change');
+                        $('#crudForm').find('[name=sampai]').val(minggu.fTglSd).trigger('change');
+                        element.val(minggu.fKode)
+                        element.data('currentValue', element.val())
+                    },
+                    onCancel: (element) => {
+                        element.val(element.data('currentValue'))
+                    },
+                    onClear: (element) => {
+                        // $('#crudForm [name=tgldari]').val('')
+                        // $('#crudForm [name=tglsampai]').val('')
                         element.val('')
                         element.data('currentValue', element.val())
                     }

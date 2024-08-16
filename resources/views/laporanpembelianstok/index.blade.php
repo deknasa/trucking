@@ -30,12 +30,12 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">stok<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="stokdari_id">
-                                <input type="text" name="stokdari" class="form-control stokdari-lookup">
+                                <input type="text" id="stokdari" name="stokdari" class="form-control stokdari-lookup">
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="stoksampai_id">
-                                <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
+                                <input type="text" id="stoksampai" name="stoksampai" class="form-control stoksampai-lookup">
                             </div>
                         </div>
 
@@ -232,12 +232,20 @@
     }
 
     function initLookup() {
-        $('.stokdari-lookup').lookup({
+
+        $('.stokdari-lookup').lookupMaster({
             title: 'Stok Lookup',
-            fileName: 'stok',
+            fileName: 'stokMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'stokdari_id',
+                    searchText: 'stokdari-lookup',
+                    title: 'Stok Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (stok, element) => {
@@ -249,18 +257,25 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=stokdari_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="stokdari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
-        });
+        })
 
-        $('.stoksampai-lookup').lookup({
-            title: 'stok Lookup',
-            fileName: 'stok',
+        $('.stoksampai-lookup').lookupMaster({
+            title: 'Stok Lookup',
+            fileName: 'stokMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'stoksampai_id',
+                    searchText: 'stoksampai-lookup',
+                    title: 'Stok Lookup',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (stok, element) => {
@@ -272,8 +287,8 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=stoksampai_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="stoksampai_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })

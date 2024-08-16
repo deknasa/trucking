@@ -78,12 +78,19 @@
   let tgldariheader
   let tglsampaiheader
   let selectedRowsIndex = [];
-
+  let nobuktiRicForSearching = '';
+  let jenisTambahan = '';
   let selectedbukti = [];
 
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
+
+
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRowsIndex.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -100,7 +107,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -108,7 +115,7 @@
       if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
-      
+
     }
 
   }
@@ -155,6 +162,7 @@
     loadPotPribadiIndexGrid()
     loadDepositoGrid()
     loadBBMGrid()
+    getJenisTambahan()
     loadAbsensiGrid()
 
     @isset($request['tgldari'])
@@ -173,7 +181,8 @@
     })
 
 
-    $("#jqGrid").jqGrid({
+    var grid = $("#jqGrid");
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'gajisupirheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -316,9 +325,9 @@
             formatter: currencyFormat,
           },
           {
-            label: 'Biaya Extra',
+            label: 'Biaya Extra (Trip)',
             name: 'biayaextra',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -377,6 +386,19 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
+          },
+          {
+            label: 'B. EXTRA',
+            name: 'biayaextraheader',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KET. BIAYA EXTRA',
+            name: 'keteranganextra',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            align: 'left'
           },
           {
             label: 'Nominal',
@@ -484,7 +506,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           loadDetailData(id)
           loadPotSemuaIndexData(nobukti)
@@ -492,11 +514,11 @@
           loadDepositoData(nobukti)
           loadBBMData(nobukti)
           loadAbsensiData(nobukti)
-
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          nobuktiRicForSearching = nobukti
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
         },
@@ -573,6 +595,7 @@
               komisisupir: data.attributes.totalKomisiSupir,
               gajikenek: data.attributes.totalGajiKenek,
               biayaextra: data.attributes.totalBiayaExtra,
+              biayaextraheader: data.attributes.totalBiayaExtraHeader,
               uangjalan: data.attributes.totalUangJalan,
               bbm: data.attributes.totalBbm,
               potonganpinjaman: data.attributes.totalPotPinj,
@@ -587,6 +610,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_check').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
@@ -688,16 +712,16 @@
             }
           },
         ],
-        extndBtn: [{
+        modalBtnList: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [
             // {
             //   id: 'approveun',
-            //   text: "UN/APPROVAL Status penerimaan",
+            //   text: "APPROVAL/UN Status penerimaan",
             //   onClick: () => {
             //     approve()
             //   }
@@ -705,12 +729,29 @@
             {
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak GAJI SUPIR",
+              color: "btn-success",
+              color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
                   approvalBukaCetak(tglbukacetak, 'GAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-kirim-berkas',
+              text: "APPROVAL/UN Kirim Berkas GAJI SUPIR",
+              color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'GAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
 
                 }
               }
@@ -777,12 +818,45 @@
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+      }
       if (hakApporveCount < 1) {
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
       }
     }
   })
+
+  function getJenisTambahan() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'GAJI SUPIR',
+        subgrp: 'JENIS TAMBAHAN'
+      },
+      success: response => {
+        jenisTambahan = response.text
+
+        if (jenisTambahan == 'RITASI') {
+          $("#detail").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+          $("#detail").jqGrid("hideCol", `biayaextrasupir_nominal`);
+          $("#detail").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+        } else {
+          $("#detail").jqGrid("hideCol", `ritasi_nobukti`);
+          $("#detail").jqGrid("hideCol", `upahritasi`);
+          $("#detail").jqGrid("hideCol", `statusritasi`);
+        }
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

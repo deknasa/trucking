@@ -21,16 +21,19 @@ class PenerimaanHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        
+
         $data = [
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combokas' => $this->comboList('list', 'STATUS KAS', 'STATUS KAS'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combokirimberkas' => $this->comboList('list', 'STATUSKIRIMBERKAS', 'STATUSKIRIMBERKAS'),
             'combobank' => $this->comboBank(),
+            'listbtn' => $this->getListBtn()
         ];
 
-        $data = array_merge(compact('title', 'data'),
-            ["request"=>$request->all()]
+        $data = array_merge(
+            compact('title', 'data'),
+            ["request" => $request->all()]
         );
         return view('penerimaan.index', $data);
     }
@@ -105,7 +108,8 @@ class PenerimaanHeaderController extends MyController
     {
         $detailParams = [
             'aktif' => 'AKTIF',
-            'format' => 'penerimaan'
+            'format' => 'penerimaan',
+            'limit' => 0
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
@@ -114,7 +118,7 @@ class PenerimaanHeaderController extends MyController
 
         return $response['data'];
     }
-    
+
     public function comboList($aksi, $grp, $subgrp)
     {
 
@@ -138,10 +142,10 @@ class PenerimaanHeaderController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ]; 
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
 
@@ -152,7 +156,7 @@ class PenerimaanHeaderController extends MyController
         $penerimaan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanheader/'.$id.'/export')['data'];
+            ->get(config('app.api_url') . 'penerimaanheader/' . $id . '/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -165,13 +169,14 @@ class PenerimaanHeaderController extends MyController
             ->get(config('app.api_url') . 'penerimaandetail', $detailParams)['data'];
 
         $combo = $this->combo('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
         $penerimaan["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        if($penerimaan['tipe_bank'] === 'KAS')
-        { return view('reports.penerimaankas', compact('penerimaan', 'penerimaan_details','printer'));
+        $cabang['cabang'] = session('cabang');
+        if ($penerimaan['tipe_bank'] === 'KAS') {
+            return view('reports.penerimaankas', compact('penerimaan', 'penerimaan_details', 'printer', 'cabang'));
         } else {
-            return view('reports.penerimaanbank', compact('penerimaan', 'penerimaan_details','printer'));
+            return view('reports.penerimaanbank', compact('penerimaan', 'penerimaan_details', 'printer', 'cabang'));
         }
     }
 
@@ -182,7 +187,7 @@ class PenerimaanHeaderController extends MyController
         $penerimaan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanheader/'.$id.'/export')['data'];
+            ->get(config('app.api_url') . 'penerimaanheader/' . $id . '/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -196,20 +201,19 @@ class PenerimaanHeaderController extends MyController
 
         $tglBukti = $penerimaan["tglbukti"];
         $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $dateTglBukti = date('d-m-Y', $timeStamp);
         $penerimaan['tglbukti'] = $dateTglBukti;
 
         $tglLunas = $penerimaan["tgllunas"];
         $timeStamp = strtotime($tglLunas);
-        $datetglLunas = date('d-m-Y', $timeStamp); 
+        $datetglLunas = date('d-m-Y', $timeStamp);
         $penerimaan['tgllunas'] = $datetglLunas;
 
-        if($penerimaan['tipe_bank'] === 'KAS')
-        {
+        if ($penerimaan['tipe_bank'] === 'KAS') {
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', $penerimaan['judul']);
-            $sheet->setCellValue('A2', 'Laporan Penerimaan '. $penerimaan['bank_id']);
+            $sheet->setCellValue('A2', 'Laporan Penerimaan ' . $penerimaan['bank_id']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
             $sheet->getStyle("A2")->getFont()->setSize(12);
             $sheet->getStyle("A1")->getFont()->setBold(true);
@@ -218,7 +222,7 @@ class PenerimaanHeaderController extends MyController
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:D1');
             $sheet->mergeCells('A2:D2');
-            
+
             $header_start_row = 4;
             $header_start_row_right = 4;
             $detail_table_header_row = 9;
@@ -338,7 +342,7 @@ class PenerimaanHeaderController extends MyController
             $sheet->getColumnDimension('E')->setAutoSize(true);
 
             $writer = new Xlsx($spreadsheet);
-            $filename = 'Laporan Penerimaan ' .$penerimaan['bank_id'] . date('dmYHis');
+            $filename = 'Laporan Penerimaan ' . $penerimaan['bank_id'] . date('dmYHis');
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
             header('Cache-Control: max-age=0');
@@ -348,7 +352,7 @@ class PenerimaanHeaderController extends MyController
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', $penerimaan['judul']);
-            $sheet->setCellValue('A2', 'Laporan Penerimaan '. $penerimaan['bank_id']);
+            $sheet->setCellValue('A2', 'Laporan Penerimaan ' . $penerimaan['bank_id']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
             $sheet->getStyle("A2")->getFont()->setSize(12);
             $sheet->getStyle("A1")->getFont()->setBold(true);
@@ -485,14 +489,12 @@ class PenerimaanHeaderController extends MyController
             $sheet->getColumnDimension('F')->setAutoSize(true);
 
             $writer = new Xlsx($spreadsheet);
-            $filename = 'Laporan Penerimaan Bank ' .$penerimaan['bank_id'] . date('dmYHis');
+            $filename = 'Laporan Penerimaan Bank ' . $penerimaan['bank_id'] . date('dmYHis');
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
             header('Cache-Control: max-age=0');
 
             $writer->save('php://output');
         }
-        
-        
     }
 }

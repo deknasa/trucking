@@ -43,47 +43,53 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="supplier_id">
-                <input type="text" name="supplier" class="form-control supplier-lookup">
+                <input type="text" id="supplier" name="supplier" class="form-control supplier-lookup">
               </div>
             </div>
 
 
-            <div class="table-responsive table-scroll">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
-                <thead>
-                  <tr>
-                    <th scope="col" width="1%">No</th>
-                    <th scope="col" width="55%">Keterangan</th>
-                    <th scope="col" width="18%">Tgl Jatuh Tempo</th>
-                    <th scope="col" width="25%">Total</th>
-                    <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body">
+            <div class="overflow scroll-container mb-2">
+              <div class="table-container">
+                <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
+                  <thead>
+                    <tr>
+                      <th scope="col" width="1%">No</th>
+                      <th scope="col" width="55%">Keterangan</th>
+                      <th scope="col" width="18%">Tgl Jatuh Tempo</th>
+                      <th scope="col" width="25%">Total</th>
+                      <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table_body">
 
-                </tbody>
-                <tfoot>
-                  <tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
 
-                    <td colspan="3">
-                      <h5 class="font-weight-bold">TOTAL :</h5>
-                    </td>
-                    <td>
-                      <h5 id="total" class="text-right font-weight-bold"></h5>
-                    </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
+                      <td colspan="3">
+                        <h5 class="font-weight-bold">TOTAL :</h5>
+                      </td>
+                      <td>
+                        <h5 id="total" class="text-right font-weight-bold"></h5>
+                      </td>
+                      <td class="tbl_aksi">
+                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                      </td>
+                    </tr>
+                  </tfoot>
 
-              </table>
+                </table>
+              </div>
             </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
+            </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
@@ -168,6 +174,15 @@
     })
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
+      event.preventDefault()
 
       let method
       let url
@@ -225,6 +240,15 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
+        name: 'button',
+        value: button
+      })
+
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -261,24 +285,32 @@
 
           id = response.data.id
           $('#crudModal').find('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detailGrid').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
 
-          if (id == 0) {
-            $('#detailGrid').jqGrid().trigger('reloadGrid')
-          }
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          } else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            // showSuccessDialog(response.message, response.data.nobukti)
+            createHutangHeader();
           }
         },
         error: error => {
@@ -296,7 +328,7 @@
         $(this).removeAttr('disabled')
       })
 
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -311,6 +343,11 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     initLookup()
     getMaxLength(form)
     initDatepicker()
@@ -318,10 +355,49 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'hutangheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function setTotal() {
     let nominalDetails = $(`#detailList [name="total_detail[]"]`)
@@ -499,26 +575,22 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            // showDialog(response.message['keterangan'])
-            showDialog(response)
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
-          }
-
-        } else {
+        var error = response.error
+        if (error) {
           // showDialog(response.message['keterangan'])
           showDialog(response)
+        } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
@@ -549,7 +621,7 @@
 
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
-        selectedbukti= []
+        selectedbukti = []
         $('#gs_').prop('checked', false)
       },
       error: error => {
@@ -580,8 +652,8 @@
       success: response => {
         // var kondisi = response.kondisi
         // if (kondisi == true) {
-          var error = response.error
-        if (error) {          
+        var error = response.error
+        if (error) {
           // showDialog(response.message['keterangan'])
           showDialog(response)
         } else {
@@ -802,6 +874,36 @@
         element.data('currentValue', element.val())
       }
     })
+
+    // $('.supplier-lookup').lookupMaster({
+    //   title: 'supplier Lookup',
+    //   fileName: 'supplierMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'supplier_id',
+    //       searchText: 'supplier-lookup',
+    //       title: 'Supplier',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (supplier, element) => {
+    //     $('#crudForm [name=supplier_id]').first().val(supplier.id)
+    //     element.val(supplier.namasupplier)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=supplier_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
   }
   const setTglBukti = function(form) {

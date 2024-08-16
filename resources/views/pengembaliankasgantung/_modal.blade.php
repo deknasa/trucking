@@ -97,8 +97,8 @@
                     POSTING </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="bank" class="form-control" readonly>
-                  <input type="text" id="bankId" name="bank_id" hidden>
+                  <input type="text" name="bank" class="form-control bank-lookup">
+                  <input type="hidden" id="bankId" name="bank_id">
                 </div>
               </div>
               <div class="row form-group">
@@ -119,6 +119,10 @@
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
+            </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
@@ -161,6 +165,15 @@
     })
 
     $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+    function submit(button) {
       event.preventDefault()
 
       let method
@@ -263,12 +276,20 @@
         value: limit
       })
       data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
       })
       data.push({
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
+      })
+      data.push({
+        name: 'button',
+        value: button
       })
 
       let tgldariheader = $('#tgldariheader').val();
@@ -306,22 +327,38 @@
         data: data,
         success: response => {
           $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
+          if (button == 'btnSubmit') {
+            $('#crudModal').modal('hide')
 
-          id = response.data.id
+            id = response.data.id
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
             }
-          }).trigger('reloadGrid');
+          } else {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            // showSuccessDialog(response.message, response.data.nobukti)
+            $("#tablePengembalian")[0].p.selectedRowIds = [];
+            $('#tablePengembalian').jqGrid("clearGridData");
+            $("#tablePengembalian")
+              .jqGrid("setGridParam", {
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
+            createPengembalianKasGantung();
           }
         },
         error: error => {
@@ -371,7 +408,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
 
 
   })
@@ -385,15 +422,61 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
+
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
     initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     editedData = {}
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'pengembaliankasgantungheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function rangeKasgantung() {
 
@@ -407,9 +490,7 @@
     getDataPengembalian(tgldari, tglsampai)
       .then((response) => {
 
-        if ($('#crudForm').data('action') == 'add') {
-          $("#tablePengembalian")[0].p.selectedRowIds = [];
-        }
+        $("#tablePengembalian")[0].p.selectedRowIds = [];
         selectedId = []
         totalBayar = 0
         $.each(response.data, (index, value) => {
@@ -541,6 +622,9 @@
           form.find(`[name="tglbukti"]`).not('#gs_tglbukti').prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -583,6 +667,9 @@
         form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="tglsampai"]`).prop('readonly', true)
         form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -1030,7 +1117,8 @@
     data = {
       limit: 0,
       tgldari: dari,
-      tglsampai: sampai
+      tglsampai: sampai,
+      bank_id: $(`#crudForm`).find(`[name="bank_id"]`).val()
     }
 
     return new Promise((resolve, reject) => {
@@ -1351,6 +1439,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         // console.log(response)
         var error = response.error
@@ -1358,11 +1449,11 @@
         if (error) {
           showDialog(response)
         } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
             cekValidasiAksi(Id, Aksi)
           }
         }
@@ -1394,8 +1485,8 @@
       method: 'POST',
       dataType: 'JSON',
       data: {
-                aksi: Aksi
-            },
+        aksi: Aksi
+      },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
@@ -1410,7 +1501,7 @@
           if (Aksi == 'DELETE') {
             deletePengembalianKasGantung(Id)
           }
-        }        
+        }
         // var kondisi = response.kondisi
         // if (kondisi == true) {
         //   showDialog(response.message['keterangan'])
@@ -1539,6 +1630,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          tipe: 'KAS'
         }
       },
       onSelectRow: (bank, element) => {

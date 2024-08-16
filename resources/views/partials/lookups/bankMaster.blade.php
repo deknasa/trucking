@@ -203,6 +203,7 @@ $idLookup = isset($id) ? $id : null;
       bankExclude: `{!! $bankExclude ?? '' !!}`,
       alatbayar: `{!! $alatbayar ?? '' !!}`,
       withPusat: `{!! $withPusat ?? '' !!}`,
+      from: `{!! $from ?? '' !!}`,
     },
     idPrefix: 'bankLookup',
     colModel: column,

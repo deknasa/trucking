@@ -46,16 +46,16 @@
               </div>
             </div>
 
-            <div class="table-responsive table-scroll">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+            <div class="table-container">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1150px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">NAMA PERKIRAAN (DEBET)</th>
-                    <th width="5%">NAMA PERKIRAAN (KREDIT)</th>
-                    <th width="5%">KETERANGAN</th>
-                    <th width="6%">NOMINAL</th>
-                    <th width="2%" class="tbl_aksi">Aksi</th>
+                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th width="8%">NAMA PERKIRAAN (DEBET)</th>
+                    <th width="8%">NAMA PERKIRAAN (KREDIT)</th>
+                    <th width="5%">NOMINAL</th>
+                    <th width="10%">KETERANGAN</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -63,15 +63,17 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4">
+                    <td></td>
+                    <td class="tbl_aksi">
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                    <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
+                    <td></td>
                   </tr>
                 </tfoot>
               </table>
@@ -82,6 +84,10 @@
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
+            </button>
+            <button id="btnSaveAdd" class="btn btn-success">
+              <i class="fas fa-file-upload"></i>
+              Save & Add
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
@@ -157,6 +163,15 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      submit($(this).attr('id'))
+    })
+    $('#btnSaveAdd').click(function(event) {
+      event.preventDefault()
+      submit($(this).attr('id'))
+    })
+
+
+    function submit(button) {
 
       let method
       let url
@@ -195,7 +210,11 @@
       })
       data.push({
         name: 'limit',
-        value: limit
+        value: $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+      })
+      data.push({
+        name: 'button',
+        value: button
       })
       data.push({
         name: 'tgldariheader',
@@ -245,23 +264,33 @@
         data: data,
         success: response => {
 
+          if (button == 'btnSubmit') {
 
-          id = response.data.id
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
+            id = response.data.id
+            console.log('id', id)
+            $('#crudModal').modal('hide')
+            $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page,
-            postData: {
-              tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page,
+              postData: {
+                tgldari: dateFormat(response.data.tgldariheader),
+                tglsampai: dateFormat(response.data.tglsampaiheader)
+              }
+            }).trigger('reloadGrid');
+
+            if (id == 0) {
+              $('#detail').jqGrid().trigger('reloadGrid')
             }
-          }).trigger('reloadGrid');
+          } else {
 
-          if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            // showSuccessDialog(response.message, response.data.nobukti)
+            createJurnalUmumHeader()
+            $('#crudForm').find('input[type="text"]').data('current-value', '')
           }
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -281,13 +310,18 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
+    }
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
     setFormBindKeys(form)
+    if (form.data('action') == 'add') {
+      form.find('#btnSaveAdd').show()
+    } else {
+      form.find('#btnSaveAdd').hide()
+    }
 
     activeGrid = null
 
@@ -303,10 +337,48 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'jurnalumumheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -649,6 +721,9 @@
             let detailRow = $(`
               <tr>
               <td></td>
+              <td class="tbl_aksi">
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
                 <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
@@ -658,12 +733,10 @@
                 <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
               </td>
               <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">   
-              </td><td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
               </td>
-              <td class="tbl_aksi">
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">   
               </td>
               </tr>
             `)
@@ -746,6 +819,9 @@
     let detailRow = $(`
       <tr>
         <td></td>
+        <td class="tbl_aksi">
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+        </td>
         <td>
           <input type="hidden" name="coadebet_detail[]">
           <input type="text" name="ketcoadebet_detail[]"  class="form-control coadebet-lookup">
@@ -755,12 +831,10 @@
           <input type="text" name="ketcoakredit_detail[]"  class="form-control coakredit-lookup">
         </td>
         <td>
-          <input type="text" name="keterangan_detail[]" class="form-control">   
-        </td><td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
-        <td class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+        <td>
+          <input type="text" name="keterangan_detail[]" class="form-control">   
         </td>
       </tr>
     `)
@@ -775,6 +849,7 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          limits: 50,
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -799,6 +874,7 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          limits: 50,
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -906,6 +982,9 @@
           let detailRow = $(`
               <tr>
               <td></td>
+              <td class="tbl_aksi">
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
                 <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
@@ -913,14 +992,11 @@
               <td>
                 <input type="hidden" name="coakredit_detail[]">
                 <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
-              </td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">   
               </td><td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
               </td>
-              <td class="tbl_aksi">
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">   
               </td>
               </tr>
             `)

@@ -32,6 +32,11 @@
             name: 'status',
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
+          {
+            label: 'jenis kendaraan',
+            name: 'statusjeniskendaraan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          },
 
           // {
           //   label: 'STATUS TRIP',
@@ -100,6 +105,39 @@
             formatter: currencyFormat,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
+          {
+            label: 'pengembalian kas gantung',
+            name: 'pengembaliankasgantung_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpkgt
+              let tglsampai = rowData.tglsampaiheaderpkgt
+              let url = "{{route('pengembaliankasgantungheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
+          },
+          {
+            label: 'penerimaan',
+            name: 'penerimaan_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaan
+              let tglsampai = rowData.tglsampaiheaderpenerimaan
+              let bankPenerimaan = rowData.bank_penerimaan
+              let url = "{{route('penerimaanheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankPenerimaan}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -166,6 +204,7 @@
             $(this).jqGrid('footerData', 'set', {
               trado: 'Total:',
               uangjalan: data.totalNominal,
+              jumlahtrip: data.jlhtrip,
             }, true)
           }
 

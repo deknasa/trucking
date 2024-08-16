@@ -27,7 +27,7 @@
               let tgldari = rowData.tgldariheadergajisupirheaderheader
               let tglsampai = rowData.tglsampaiheadergajisupirheaderheader
               let url = "{{route('gajisupirheader.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
             },
 
@@ -50,9 +50,9 @@
             formatter: currencyFormat,
           },
           {
-            label: 'Biaya Extra',
+            label: 'Biaya Extra (Trip)',
             name: 'biayaextra',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -103,6 +103,13 @@
             label: 'U. Makan Berjenjang',
             name: 'uangmakanberjenjang',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'B. Extra',
+            name: 'biayaextraheader',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -205,6 +212,7 @@
               bbm: data.attributes.totalBBM,
               uangmakanharian: data.attributes.totalUangMakan,
               uangmakanberjenjang: data.attributes.totalUangMakanBerjenjang,
+              biayaextraheader: data.attributes.totalBiayaExtraHeader,
               potonganpinjaman: data.attributes.totalPinjaman,
               potonganpinjamansemua: data.attributes.totalPinjamanSemua,
               deposito: data.attributes.totalDeposito,

@@ -75,9 +75,10 @@ class LaporanUangJalanController extends MyController
             ->get(config('app.api_url') . 'laporanuangjalan/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
 
-        return view('reports.laporanuangjalan', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanuangjalan', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
 
@@ -105,6 +106,7 @@ class LaporanUangJalanController extends MyController
         if(count($pengeluaran) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $responses['namacabang'];
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -112,22 +114,26 @@ class LaporanUangJalanController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-
-        $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
-        $sheet->setCellValue('A2',  $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'TGL RIC : ' . date('d-M-Y', strtotime($detailParams['ricdari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['ricsampai'])));
-        $sheet->setCellValue('A4', 'TGL AMBIL UANG JALAN : ' . date('d-M-Y', strtotime($detailParams['ambildari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['ambilsampai'])));
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3',  $pengeluaran[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A4', 'TGL RIC : ' . date('d-M-Y', strtotime($detailParams['ricdari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['ricsampai'])));
+        $sheet->setCellValue('A5', 'TGL AMBIL UANG JALAN : ' . date('d-M-Y', strtotime($detailParams['ambildari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['ambilsampai'])));
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:F2');
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->getStyle("A5")->getFont()->setBold(true);
 
-        $header_start_row = 6;
-        $detail_start_row = 7;
+        $header_start_row = 7;
+        $detail_start_row = 8;
 
         $styleArray = array(
             'borders' => array(

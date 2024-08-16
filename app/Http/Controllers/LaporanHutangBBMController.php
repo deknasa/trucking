@@ -41,8 +41,9 @@ class LaporanHutangBBMController extends MyController
             ->get(config('app.api_url') . 'laporanhutangbbm/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanhutangbbm', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanhutangbbm', compact('data','dataCabang', 'user', 'detailParams'));
     }
     public function export(Request $request): void
     {
@@ -60,6 +61,7 @@ class LaporanHutangBBMController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
 
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
@@ -73,14 +75,18 @@ class LaporanHutangBBMController extends MyController
         $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->sampai)));
 
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
-        $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'PERIODE : ' . $tanggal);
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3', $data[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A4', 'PERIODE : ' . $tanggal);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
 
         $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
 
 
         $detail_table_header_row = 6;

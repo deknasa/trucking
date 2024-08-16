@@ -34,6 +34,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row form-group statusjeniskendaraan">
+                            <div class="col-12 col-md-2">
+                                <label class="col-form-label">
+                                    STATUS JENIS KENDARAAN <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <select name="statusjeniskendaraan" class="form-control select2bs4" id="statusjeniskendaraan">
+                                    <option value="">-- PILIH STATUS JENIS KENDARAAN --</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
@@ -276,6 +288,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -297,6 +313,7 @@
     let selectedKomisi = [];
     let selectedMakan = [];
     let selectedMakanBerjenjang = [];
+    let selectedExtraHeader = [];
     let selectedPP = [];
     let selectedPS = [];
     let selectedDeposito = [];
@@ -316,6 +333,7 @@
     let indexRowRincian
     let isEditTgl
     let isReload = false;
+    let isJenisTangki
 
     function checkboxHandler(element) {
         let value = $(element).val();
@@ -332,6 +350,7 @@
             selectedKomisi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text());
             selectedMakan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text());
             selectedMakanBerjenjang.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text());
+            selectedExtraHeader.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_biayaextraheader"]`).text());
             selectedGajiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text());
             selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text());
             selectedExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_extra"]`).text());
@@ -353,6 +372,7 @@
                     selectedKomisi.splice(i, 1);
                     selectedMakan.splice(i, 1);
                     selectedMakanBerjenjang.splice(i, 1);
+                    selectedExtraHeader.splice(i, 1);
                     selectedGajiSupir.splice(i, 1);
                     selectedGajiKenek.splice(i, 1);
                     selectedExtra.splice(i, 1);
@@ -373,6 +393,7 @@
         komisi = 0;
         makan = 0;
         berjenjang = 0;
+        extraheader = 0;
         gajisupir = 0;
         gajikenek = 0;
         extra = 0;
@@ -402,6 +423,9 @@
         });
         $.each(selectedMakanBerjenjang, function(index, item) {
             berjenjang = berjenjang + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedExtraHeader, function(index, item) {
+            extraheader = extraheader + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedGajiSupir, function(index, item) {
             gajisupir = gajisupir + parseFloat(item.replace(/,/g, ''))
@@ -436,6 +460,7 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text(makan))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(berjenjang))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextraheader"]`).text(extraheader))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajisupir))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajikenek))
         initAutoNumericMinus($('.footrow').find(`td[aria-describedby="rekapRincian_extra"]`).text(extra))
@@ -444,6 +469,17 @@
     $(document).ready(function() {
 
         $('#btnSubmit').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+
+        function submit(button) {
+
 
             let method
             let url
@@ -558,6 +594,10 @@
             })
 
             data.push({
+                name: 'statusjeniskendaraan',
+                value: form.find(`[name="statusjeniskendaraan"]`).val()
+            })
+            data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
             })
@@ -585,7 +625,10 @@
                 name: 'limit',
                 value: limit
             })
-
+            data.push({
+                name: 'button',
+                value: button
+            })
             data.push({
                 name: 'tgldariheader',
                 value: $('#tgldariheader').val()
@@ -593,6 +636,10 @@
             data.push({
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
+            })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
             })
 
             let tgldariheader = $('#tgldariheader').val();
@@ -630,24 +677,36 @@
                 data: data,
                 success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
 
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            proses: 'reload',
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                proses: 'reload',
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        clearSelectedRows()
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
+                    } else {
 
-                    clearSelectedRows()
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        // showSuccessDialog(response.message, response.data.nobukti)
+                        createProsesGajiSupirHeader()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        $('#rekapRincian').jqGrid("clearGridData");
+                        clearRows()
+                        countNominal()
                     }
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
@@ -667,7 +726,7 @@
                 $(this).removeAttr('disabled')
             })
 
-        })
+        }
     })
 
     $('#crudModal').on('shown.bs.modal', () => {
@@ -677,11 +736,17 @@
         setFormBindKeys(form)
 
         activeGrid = null
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         initLookup()
         initDatepicker()
         getMaxLength(form)
         initAutoNumeric()
 
+        initSelect2(form.find('.select2bs4'), true)
         form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
@@ -690,6 +755,7 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         selectedRows = []
         selectedPP = [];
         selectedPS = [];
@@ -701,6 +767,7 @@
         selectedJalan = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedExtraHeader = [];
         selectedGajiKenek = [];
         selectedGajiSupir = [];
         selectedExtra = [];
@@ -708,6 +775,44 @@
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
+
+    function removeEditingBy(id) {
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'prosesgajisupirheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
 
 
     function rekapRincian() {
@@ -847,6 +952,13 @@
                         align: "right",
                     },
                     {
+                        label: 'B. EXTRA',
+                        name: 'biayaextraheader',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
                         label: 'U. MAKAN BERJENJANG',
                         name: 'uangmakanberjenjang',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
@@ -882,9 +994,9 @@
                         align: "right",
                     },
                     {
-                        label: 'BIAYA EXTRA',
+                        label: 'BIAYA EXTRA (Trip)',
                         name: 'extra',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatter: currencyFormat,
                         align: "right",
                     },
@@ -1044,7 +1156,30 @@
         loadGlobalSearch($('#rekapRincian'))
     }
 
+    $(document).on('change', `[name="statusjeniskendaraan"]`, function(event) {
+        let statusjeniskendaraan = $(`#crudForm [name="statusjeniskendaraan"] option:selected`).text()
+        statusJenisKendaran = statusjeniskendaraan
+        if (statusjeniskendaraan == 'TANGKI') {
+            if (isJenisTangki == 'YA') {
+                $(`#crudForm [name="bank"]`).prop('readonly', true);
+                $(`#crudForm [name="bank_id"]`).val(6);
+                $(`#crudForm [name="bank"]`).val('KAS TRUCKING TNL');
+                $(`#crudForm [name="bank"]`).parents('.input-group').find('.input-group-append').hide()
+                $(`#crudForm [name="bank"]`).parents('.input-group').find('.button-clear').hide()
+            }
+        }
+        if (statusjeniskendaraan == 'GANDENGAN') {
+            if (isJenisTangki == 'YA') {
 
+                $(`#crudForm [name="bank"]`).prop('readonly', true);
+                $(`#crudForm [name="bank_id"]`).val(1);
+                $(`#crudForm [name="bank"]`).val('KAS TRUCKING');
+                $(`#crudForm [name="bank"]`).parents('.input-group').find('.input-group-append').hide()
+                $(`#crudForm [name="bank"]`).parents('.input-group').find('.button-clear').hide()
+            }
+
+        }
+    })
 
     function createProsesGajiSupirHeader() {
         let form = $('#crudForm')
@@ -1075,21 +1210,35 @@
 
         Promise
             .all([
-                showDefault(form)
+                setStatusJenisKendaraanOptions(form),
+                isTangki()
             ])
             .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
-                }
-                $('#crudModal').modal('show')
-            })
-            .catch((error) => {
-                showDialog(error.responseJSON)
-            })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
-            })
+                showDefault(form)
+                    .then(() => {
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        if (isJenisTangki == 'YA') {
+                            form.find(`[name="bank"]`).prop('readonly', true)
+                            setTimeout(() => {
 
+                                form.find(`[name="bank"]`).parents('.input-group').find('.input-group-append').hide()
+                                form.find(`[name="bank"]`).parents('.input-group').find('.button-clear').hide()
+                            }, 100);
+                        }
+                        $('#crudModal').modal('show')
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
+            })
     }
 
     function editProsesGajiSupirHeader(Id) {
@@ -1106,24 +1255,40 @@
         $('.invalid-feedback').remove()
         Promise
             .all([
+                setStatusJenisKendaraanOptions(form),
+                isTangki(),
                 setTglBukti(form),
-                showProsesGajiSupir(form, Id, 'edit')
             ])
             .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
-                }
-                $('#crudModal').modal('show')
-                if (isEditTgl == 'TIDAK') {
-                    form.find(`[name="tglbukti"]`).prop('readonly', true)
-                    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-                }
-            })
-            .catch((error) => {
-                showDialog(error.responseJSON)
-            })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
+                showProsesGajiSupir(form, Id, 'edit')
+                    .then(() => {
+
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        if (isJenisTangki == 'YA') {
+                            form.find(`[name="bank"]`).prop('readonly', true)
+                            setTimeout(() => {
+
+                                form.find(`[name="bank"]`).parents('.input-group').find('.input-group-append').hide()
+                                form.find(`[name="bank"]`).parents('.input-group').find('.button-clear').hide()
+                            }, 100);
+                        }
+                        $('#crudModal').modal('show')
+                        if (isEditTgl == 'TIDAK') {
+                            form.find(`[name="tglbukti"]`).prop('readonly', true)
+                            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                        }
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
@@ -1143,21 +1308,37 @@
         form.find('#btnTampil').prop('disabled', true)
         Promise
             .all([
-                showProsesGajiSupir(form, Id, 'delete')
+
+                setStatusJenisKendaraanOptions(form),
+                isTangki(),
             ])
             .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
-                }
-                $('#crudModal').modal('show')
-                form.find(`[name="tglbukti"]`).prop('readonly', true)
-                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-            })
-            .catch((error) => {
-                showDialog(error.responseJSON)
-            })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
+                showProsesGajiSupir(form, Id, 'delete')
+                    .then(() => {
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        if (isJenisTangki == 'YA') {
+                            form.find(`[name="bank"]`).prop('readonly', true)
+                            setTimeout(() => {
+
+                                form.find(`[name="bank"]`).parents('.input-group').find('.input-group-append').hide()
+                                form.find(`[name="bank"]`).parents('.input-group').find('.button-clear').hide()
+                            }, 100);
+                        }
+                        $('#crudModal').modal('show')
+                        form.find(`[name="tglbukti"]`).prop('readonly', true)
+                        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
@@ -1179,45 +1360,128 @@
         form.find('#btnTampil').prop('disabled', true)
         Promise
             .all([
-                showProsesGajiSupir(form, Id, 'delete')
+                setStatusJenisKendaraanOptions(form),
+                isTangki(),
             ])
             .then(id => {
-                setFormBindKeys(form)
-                form.find('[name]').removeAttr('disabled')
+                showProsesGajiSupir(form, Id, 'delete')
+                    .then(id => {
+                        setFormBindKeys(form)
+                        form.find('[name]').removeAttr('disabled')
 
-                form.find('select').each((index, select) => {
-                    let element = $(select)
+                        form.find('select').each((index, select) => {
+                            let element = $(select)
 
-                    if (element.data('select2')) {
-                        element.select2('destroy')
-                    }
-                })
-                form.find('[name]').attr('disabled', 'disabled').css({
-                    background: '#fff'
-                })
-                form.find('[name=id]').prop('disabled', false);
+                            if (element.data('select2')) {
+                                element.select2('destroy')
+                            }
+                        })
+                        form.find('[name]').attr('disabled', 'disabled').css({
+                            background: '#fff'
+                        })
+                        form.find('[name=id]').prop('disabled', false);
+                    })
+                    .then(() => {
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        if (isJenisTangki != 'YA') {
+                            $('.statusjeniskendaraan').hide()
+                        }
+                        if (isJenisTangki == 'YA') {
+                            form.find(`[name="bank"]`).prop('readonly', true)
+                            setTimeout(() => {
+
+                                form.find(`[name="bank"]`).parents('.input-group').find('.input-group-append').hide()
+                                form.find(`[name="bank"]`).parents('.input-group').find('.button-clear').hide()
+                            }, 100);
+                        }
+                        $('#crudModal').modal('show')
+                        clearSelectedRows()
+                        $('#gs_').prop('checked', false)
+                        form.find(`.hasDatepicker`).prop('readonly', true)
+                        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                        let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+                        name.attr('disabled', true)
+                        name.find('.lookup-toggler').remove()
+                        nameFind.find('button.button-clear').remove()
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
-            .then(() => {
-                if (selectedRowsIndex.length > 0) {
-                    clearSelectedRowsIndex()
+    }
+
+    const setStatusJenisKendaraanOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statusjeniskendaraan]').empty()
+            relatedForm.find('[name=statusjeniskendaraan]').append(
+                new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS JENIS KENDARAAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusJenisKendaraan => {
+                        let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id)
+                        relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
                 }
-                $('#crudModal').modal('show')
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
-                form.find(`.hasDatepicker`).prop('readonly', true)
-                form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-                let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-                let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
-                name.attr('disabled', true)
-                name.find('.lookup-toggler').remove()
-                nameFind.find('button.button-clear').remove()
             })
-            .catch((error) => {
-                showDialog(error.statusText)
+        })
+    }
+    const isTangki = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'ABSENSI TANGKI'
             })
-            .finally(() => {
-                $('.modal-loader').addClass('d-none')
+            data.push({
+                name: 'subgrp',
+                value: 'ABSENSI TANGKI'
             })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    isJenisTangki = response.text
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
     }
 
     function cekValidasi(Id, Aksi) {
@@ -1272,160 +1536,168 @@
     }
 
     function showProsesGajiSupir(form, gajiId, aksi) {
-        $.ajax({
-            url: `${apiUrl}prosesgajisupirheader/${gajiId}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}prosesgajisupirheader/${gajiId}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
 
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-                    form.find(`[name="${index}"]`).val(value)
+                        form.find(`[name="${index}"]`).val(value)
 
-                    if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
+                        if (element.hasClass('datepicker')) {
+                            element.val(dateFormat(value))
+                        }
+                        if (index == 'bankPR') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
+
+                        form.find(`[name="tglbuktiPR"]`).val(dateFormat(response.data.tglbukti))
+                    })
+
+                    // url = `${gajiId}/getEdit`
+                    rekapRincian()
+                    $.each(response.getTrip, (index, detail) => {
+
+                        selectedRows.push(detail.idric)
+
+                        selectedBorongan.push(detail.borongan)
+                        selectedGajiSupir.push(detail.gajisupir)
+                        selectedGajiKenek.push(detail.gajikenek)
+                        selectedExtra.push(detail.extra)
+                        selectedJalan.push(detail.uangjalan)
+                        selectedKomisi.push(detail.komisisupir)
+                        selectedMakan.push(detail.uangmakanharian)
+                        selectedMakanBerjenjang.push(detail.uangmakanberjenjang)
+                        selectedExtraHeader.push(detail.biayaextraheader)
+                        selectedPP.push(detail.potonganpinjaman)
+                        selectedPS.push(detail.potonganpinjamansemua)
+                        selectedDeposito.push(detail.deposito)
+                        selectedBBM.push(detail.bbm)
+                        selectedRIC.push(detail.nobuktiric)
+                        selectedSupir.push(detail.supir_id)
+
+                    })
+
+                    $('#rekapRincian').jqGrid("clearGridData");
+                    $('#rekapRincian').jqGrid('setGridParam', {
+                        url: `${apiUrl}prosesgajisupirheader/${gajiId}/getEdit`,
+                        postData: {
+                            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                            statusjeniskendaraan: $('#crudForm').find('[name=statusjeniskendaraan]').val(),
+                            sortIndex: sortnameRincian,
+                            aksi: ''
+                        },
+                        datatype: "json"
+                    }).trigger('reloadGrid');
+
+
+                    if (response.potsemua != null) {
+                        $.each(response.potsemua, (index, value) => {
+                            let element = form.find(`[name="${index}"]`)
+
+                            form.find(`[name="${index}"]`).val(value)
+                            if (index == 'bankPS') {
+                                element.data('current-value', value).prop('readonly', true)
+                                element.parent('.input-group').find('.button-clear').remove()
+                                element.parent('.input-group').find('.input-group-append').remove()
+                            }
+
+                        })
+                        form.find(`[name="tglbuktiPS"]`).val(dateFormat(response.data.tglbukti))
+
                     }
-                    if (index == 'bankPR') {
-                        element.data('current-value', value).prop('readonly', true)
-                        element.parent('.input-group').find('.button-clear').remove()
-                        element.parent('.input-group').find('.input-group-append').remove()
+                    if (response.potpribadi != null) {
+                        $.each(response.potpribadi, (index, value) => {
+                            let element = form.find(`[name="${index}"]`)
+
+                            form.find(`[name="${index}"]`).val(value)
+
+                            if (index == 'bankPP') {
+                                element.data('current-value', value).prop('readonly', true)
+                                element.parent('.input-group').find('.button-clear').remove()
+                                element.parent('.input-group').find('.input-group-append').remove()
+                            }
+                        })
+                        form.find(`[name="tglbuktiPP"]`).val(dateFormat(response.data.tglbukti))
+
                     }
 
-                    form.find(`[name="tglbuktiPR"]`).val(dateFormat(response.data.tglbukti))
-                })
+                    if (response.deposito != null) {
+                        $.each(response.deposito, (index, value) => {
+                            let element = form.find(`[name="${index}"]`)
 
-                // url = `${gajiId}/getEdit`
-                rekapRincian()
-                $.each(response.getTrip, (index, detail) => {
+                            form.find(`[name="${index}"]`).val(value)
 
-                    selectedRows.push(detail.idric)
+                            if (index == 'bankDeposito') {
+                                element.data('current-value', value).prop('readonly', true)
+                                element.parent('.input-group').find('.button-clear').remove()
+                                element.parent('.input-group').find('.input-group-append').remove()
+                            }
+                        })
+                        form.find(`[name="tglbuktiDeposito"]`).val(dateFormat(response.data.tglbukti))
 
-                    selectedBorongan.push(detail.borongan)
-                    selectedGajiSupir.push(detail.gajisupir)
-                    selectedGajiKenek.push(detail.gajikenek)
-                    selectedExtra.push(detail.extra)
-                    selectedJalan.push(detail.uangjalan)
-                    selectedKomisi.push(detail.komisisupir)
-                    selectedMakan.push(detail.uangmakanharian)
-                    selectedMakanBerjenjang.push(detail.uangmakanberjenjang)
-                    selectedPP.push(detail.potonganpinjaman)
-                    selectedPS.push(detail.potonganpinjamansemua)
-                    selectedDeposito.push(detail.deposito)
-                    selectedBBM.push(detail.bbm)
-                    selectedRIC.push(detail.nobuktiric)
-                    selectedSupir.push(detail.supir_id)
+                    }
 
-                })
+                    if (response.bbm != null) {
+                        $.each(response.bbm, (index, value) => {
+                            let element = form.find(`[name="${index}"]`)
 
-                $('#rekapRincian').jqGrid("clearGridData");
-                $('#rekapRincian').jqGrid('setGridParam', {
-                    url: `${apiUrl}prosesgajisupirheader/${gajiId}/getEdit`,
-                    postData: {
-                        tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                        sortIndex: sortnameRincian,
-                        aksi: ''
-                    },
-                    datatype: "json"
-                }).trigger('reloadGrid');
+                            form.find(`[name="${index}"]`).val(value)
+                            if (index == 'bankBBM') {
+                                element.data('current-value', value).prop('readonly', true)
+                                element.parent('.input-group').find('.button-clear').remove()
+                                element.parent('.input-group').find('.input-group-append').remove()
+                            }
+                        })
+                        form.find(`[name="tglbuktiBBM"]`).val(dateFormat(response.data.tglbukti))
+
+                    }
+
+                    if (response.uangjalan != null) {
+                        $.each(response.uangjalan, (index, value) => {
+                            let element = form.find(`[name="${index}"]`)
+
+                            form.find(`[name="${index}"]`).val(value)
+                            if (index == 'bankUangjalan') {
+                                element.data('current-value', value).prop('readonly', true)
+                                element.parent('.input-group').find('.button-clear').remove()
+                                element.parent('.input-group').find('.input-group-append').remove()
+                            }
+                        })
+                        form.find(`[name="tglbuktiUangjalan"]`).val(dateFormat(response.data.tglbukti))
+
+                    }
 
 
-                if (response.potsemua != null) {
-                    $.each(response.potsemua, (index, value) => {
-                        let element = form.find(`[name="${index}"]`)
+                    initAutoNumeric(form.find(`[name="nomPR"]`))
+                    initAutoNumeric(form.find(`[name="nomPS"]`))
+                    initAutoNumeric(form.find(`[name="nomPP"]`))
+                    initAutoNumeric(form.find(`[name="nomDeposito"]`))
+                    initAutoNumeric(form.find(`[name="nomBBM"]`))
 
-                        form.find(`[name="${index}"]`).val(value)
-                        if (index == 'bankPS') {
-                            element.data('current-value', value).prop('readonly', true)
-                            element.parent('.input-group').find('.button-clear').remove()
-                            element.parent('.input-group').find('.input-group-append').remove()
-                        }
+                    if (aksi == 'delete') {
 
-                    })
-                    form.find(`[name="tglbuktiPS"]`).val(dateFormat(response.data.tglbukti))
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
+                    }
 
+                    countNominal()
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
                 }
-                if (response.potpribadi != null) {
-                    $.each(response.potpribadi, (index, value) => {
-                        let element = form.find(`[name="${index}"]`)
-
-                        form.find(`[name="${index}"]`).val(value)
-
-                        if (index == 'bankPP') {
-                            element.data('current-value', value).prop('readonly', true)
-                            element.parent('.input-group').find('.button-clear').remove()
-                            element.parent('.input-group').find('.input-group-append').remove()
-                        }
-                    })
-                    form.find(`[name="tglbuktiPP"]`).val(dateFormat(response.data.tglbukti))
-
-                }
-
-                if (response.deposito != null) {
-                    $.each(response.deposito, (index, value) => {
-                        let element = form.find(`[name="${index}"]`)
-
-                        form.find(`[name="${index}"]`).val(value)
-
-                        if (index == 'bankDeposito') {
-                            element.data('current-value', value).prop('readonly', true)
-                            element.parent('.input-group').find('.button-clear').remove()
-                            element.parent('.input-group').find('.input-group-append').remove()
-                        }
-                    })
-                    form.find(`[name="tglbuktiDeposito"]`).val(dateFormat(response.data.tglbukti))
-
-                }
-
-                if (response.bbm != null) {
-                    $.each(response.bbm, (index, value) => {
-                        let element = form.find(`[name="${index}"]`)
-
-                        form.find(`[name="${index}"]`).val(value)
-                        if (index == 'bankBBM') {
-                            element.data('current-value', value).prop('readonly', true)
-                            element.parent('.input-group').find('.button-clear').remove()
-                            element.parent('.input-group').find('.input-group-append').remove()
-                        }
-                    })
-                    form.find(`[name="tglbuktiBBM"]`).val(dateFormat(response.data.tglbukti))
-
-                }
-
-                if (response.uangjalan != null) {
-                    $.each(response.uangjalan, (index, value) => {
-                        let element = form.find(`[name="${index}"]`)
-
-                        form.find(`[name="${index}"]`).val(value)
-                        if (index == 'bankUangjalan') {
-                            element.data('current-value', value).prop('readonly', true)
-                            element.parent('.input-group').find('.button-clear').remove()
-                            element.parent('.input-group').find('.input-group-append').remove()
-                        }
-                    })
-                    form.find(`[name="tglbuktiUangjalan"]`).val(dateFormat(response.data.tglbukti))
-
-                }
-
-
-                initAutoNumeric(form.find(`[name="nomPR"]`))
-                initAutoNumeric(form.find(`[name="nomPS"]`))
-                initAutoNumeric(form.find(`[name="nomPP"]`))
-                initAutoNumeric(form.find(`[name="nomDeposito"]`))
-                initAutoNumeric(form.find(`[name="nomBBM"]`))
-
-                if (aksi == 'delete') {
-
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
-                }
-
-                countNominal()
-            }
+            })
         })
     }
 
@@ -1450,6 +1722,7 @@
                     selectedKomisi = response.data.map((data) => data.komisisupir)
                     selectedMakan = response.data.map((data) => data.uangmakanharian)
                     selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
+                    selectedExtraHeader = response.data.map((data) => data.biayaextraheader)
                     selectedPP = response.data.map((data) => data.potonganpinjaman)
                     selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                     selectedDeposito = response.data.map((data) => data.deposito)
@@ -1468,6 +1741,7 @@
                     postData: {
                         tgldari: $('#crudForm').find('[name=tgldari]').val(),
                         tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                        statusjeniskendaraan: $('#crudForm').find('[name=statusjeniskendaraan]').val(),
                         aksi: aksi
                     },
                     datatype: "json"
@@ -1604,6 +1878,7 @@
         selectedKomisi = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedExtraHeader = [];
         selectedPP = [];
         selectedPS = [];
         selectedDeposito = [];
@@ -1622,6 +1897,7 @@
         selectedKomisi = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedExtraHeader = [];
         selectedPP = [];
         selectedPS = [];
         selectedDeposito = [];
@@ -1648,6 +1924,7 @@
                     limit: 0,
                     tgldari: $('#crudForm').find('[name=tgldari]').val(),
                     tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                    statusjeniskendaraan: $('#crudForm').find('[name=statusjeniskendaraan]').val(),
                     aksi: $(`#crudForm`).data('action'),
                     sortIndex: sortnameRincian,
                 },
@@ -1657,19 +1934,6 @@
                 success: (response) => {
                     response.url = urlTrip
                     resolve(response)
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-
-
-                        errors = error.responseJSON.errors
-                        reject(errors)
-
-                    } else {
-                        showDialog(error.responseJSON)
-                    }
                 },
                 error: error => {
                     reject(error)
@@ -1693,6 +1957,7 @@
                 limit: 0,
                 tgldari: $('#crudForm').find('[name=tgldari]').val(),
                 tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                statusjeniskendaraan: $('#crudForm').find('[name=statusjeniskendaraan]').val(),
                 aksi: aksi,
                 sortIndex: sortnameRincian,
             },
@@ -1709,6 +1974,7 @@
                 selectedKomisi = response.data.map((data) => data.komisisupir)
                 selectedMakan = response.data.map((data) => data.uangmakanharian)
                 selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
+                selectedExtraHeader = response.data.map((data) => data.biayaextraheader)
                 selectedPP = response.data.map((data) => data.potonganpinjaman)
                 selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                 selectedDeposito = response.data.map((data) => data.deposito)

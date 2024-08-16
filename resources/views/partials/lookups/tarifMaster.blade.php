@@ -61,6 +61,11 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
         {
+          label: 'UPAH SUPIR',
+          name: 'upahsupir',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+        },
+        {
           label: 'TUJUAN',
           name: 'tujuan',
         },

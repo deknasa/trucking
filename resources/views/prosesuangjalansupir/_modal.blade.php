@@ -335,6 +335,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -442,6 +446,15 @@
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+        function submit(button) {
+            event.preventDefault()
 
             let method
             let url
@@ -539,6 +552,15 @@
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
+            data.push({
+                name: 'button',
+                value: button
+            })
+
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
@@ -574,27 +596,46 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
-
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        $('#crudModal').modal('hide')
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
 
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    } else {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        uangjalan = AutoNumeric.getAutoNumericElement($('#crudForm').find(`input[name="uangjalan"]`)[0]);
+                        uangjalan.set(0);
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        // showSuccessDialog(response.message, response.data.nobukti)
+
+                        $("#tablePengembalian")[0].p.selectedRowIds = [];
+                        $('#tablePengembalian').jqGrid("clearGridData");
+                        $("#tablePengembalian")
+                            .jqGrid("setGridParam", {
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+
+                        createProsesUangJalanSupir()
                     }
 
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -641,9 +682,36 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
 
+    $(document).on("change", `[name=tglbukti]`, function(event) {
+        if ($('#crudForm').find(`[name="supir_id"]`).val() != '') {
+
+            $("#tablePengembalian")[0].p.selectedRowIds = [];
+            $('#tablePengembalian').jqGrid("clearGridData");
+            $("#tablePengembalian")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: []
+                })
+                .trigger("reloadGrid");
+            getDataPengembalian($('#crudForm').find(`[name="supir_id"]`).val()).then((response) => {
+                setTimeout(() => {
+
+                    $("#tablePengembalian")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: []
+                        })
+                        .trigger("reloadGrid");
+                }, 100);
+
+            });
+        }
+    })
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
 
@@ -659,13 +727,82 @@
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
+
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
+
+    function removeEditingBy(id) {
+
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'prosesuangjalansupirheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
+
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+        $('#crudForm').find(`[name="tgltransfer[]"]`).val($(this).val()).trigger('change');
+        $('#crudForm').find(`[name="tgladjust"]`).val($(this).val()).trigger('change');
+        $('#crudForm').find(`[name="tgldeposit"]`).val($(this).val()).trigger('change');
+        if ($('#crudForm').find(`[name="supir"]`).val() != '') {
+            let tglbukti = $('#crudForm [name=tglbukti]').val();
+            let parts = tglbukti.split('-'); // Split the string into parts using '-'
+            let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+            $(`#crudForm [name="keterangantransfer[]"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+            $(`#crudForm [name="keteranganadjust"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+
+        }
+    });
+    $(document).on('change', `#crudForm [name="tgladjust"]`, function() {
+        if ($('#crudForm').find(`[name="supir"]`).val() != '') {
+            let tgladjust = $('#crudForm [name=tgladjust]').val();
+            let parts = tgladjust.split('-'); // Split the string into parts using '-'
+            let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+            $(`#crudForm [name="keteranganadjust"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+
+        }
+    });
 
     // function setTotal() {
     //     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -728,28 +865,75 @@
 
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Save
-    `)
+        <i class="fa fa-save"></i>
+        Save
+        `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Proses Uang Jalan Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        $('#table_body').html('')
-        if (selectedRows.length > 0) {
-            clearSelectedRows()
-        }
+        $('#tbodyTransfer').html('')
+
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgladjust]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldeposit]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         addRowTransfer()
-        $('#addRowTransfer').show()
         initAutoNumeric(form.find(`[name="nilaideposit"]`))
         initAutoNumeric(form.find(`[name="nilaiadjust"]`))
         initAutoNumeric(form.find(`[name="uangjalan"]`))
         loadPengembalianGrid()
+        Promise
+            .all([
+                showDefault(form)
+            ])
+            .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
+                $('#crudModal').modal('show')
+                $('#addRowTransfer').show()
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+    }
+
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}prosesuangjalansupirheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = '';
+                        if (index == 'bank_idtransfer' || index == 'banktransfer') {
+                            element = form.find(`[name="${index}[]"]`)
+                        } else {
+                            element = form.find(`[name="${index}"]`)
+                        }
+                        // let element = form.find(`[name="statusaktif"]`)
+
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
     }
 
     function editProsesUangJalanSupir(userId) {
@@ -1327,32 +1511,48 @@
                 aksi: Aksi
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'PRINTER BESAR') {
-                            window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-                        }
-                        if (Aksi == 'PRINTER KECIL') {
-                            window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-                        }
-                        if (Aksi == 'EDIT') {
-                            editProsesUangJalanSupir(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteProsesUangJalanSupir(Id)
-                        }
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
+
             }
         })
     }
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}prosesuangjalansupirheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editProsesUangJalanSupir(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteProsesUangJalanSupir(Id)
+                    }
+                }
+
+            }
+        })
+    }
+
 
     function showProsesUangJalanSupir(form, userId) {
         return new Promise((resolve, reject) => {
@@ -1605,6 +1805,16 @@
 
 
         $('#detailTransfer #tbodyTransfer').append(detailRow)
+
+        $(document).on('change', detailRow.find(`[name="tgltransfer[]"]`), function() {
+            if ($('#crudForm').find(`[name="supir"]`).val() != '') {
+                let tgltransfer = detailRow.find(`[name="tgltransfer[]"]`).val();
+                let parts = tgltransfer.split('-'); // Split the string into parts using '-'
+                let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+                detailRow.find(`[name="keterangantransfer[]"]`).val("UANG JALAN " + $('#crudForm').find(`[name="supir"]`).val() + ' TGL ' + formattedDate)
+
+            }
+        });
         $('.bank-lookup').last().lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
@@ -1628,8 +1838,11 @@
                 element.data('currentValue', element.val())
             }
         })
-
-        $('#crudForm').find(`[name="tgltransfer[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        let bankid_transfer = $('#detailTransfer tbody').children('tr:first').find(`td [name="bank_idtransfer[]"]`).val()
+        let bank_transfer = $('#detailTransfer tbody').children('tr:first').find(`td [name="banktransfer[]"]`).val()
+        detailRow.find(`[name="bank_idtransfer[]"]`).val(bankid_transfer)
+        detailRow.find(`[name="banktransfer[]"]`).val(bank_transfer)
+        $('#crudForm').find(`[name="tgltransfer[]"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
         initDatepicker();
         initAutoNumeric(detailRow.find('.autonumeric'))
         setTotalTransfer()
@@ -1758,8 +1971,17 @@
                 initAutoNumeric($('#crudForm [name=uangjalan]'))
                 element.val(supir.supir)
                 element.data('currentValue', element.val())
+                $('#btnSubmit').prop('disabled', true)
+                $('#btnSaveAdd').prop('disabled', true)
                 $('#tablePengembalian').jqGrid("clearGridData");
                 $("#tablePengembalian")[0].p.selectedRowIds = [];
+                $('#crudForm [name=keterangandeposit]').val("DEPOSITO SUPIR " + supir.supir)
+                let tglbukti = $('#crudForm [name=tglbukti]').val();
+                let parts = tglbukti.split('-'); // Split the string into parts using '-'
+                let formattedDate = parts[0] + '/' + parseInt(parts[1], 10);
+                $(`#crudForm [name="keterangantransfer[]"]`).val("UANG JALAN " + supir.supir + ' TGL ' + formattedDate)
+                $(`#crudForm [name="keteranganadjust"]`).val("UANG JALAN " + supir.supir + ' TGL ' + formattedDate)
+
 
                 getDataPengembalian(supir.supir_id).then((response) => {
                     setTimeout(() => {
@@ -1773,6 +1995,8 @@
                                 selectedRowIds: []
                             })
                             .trigger("reloadGrid");
+                        $('#btnSubmit').prop('disabled', false)
+                        $('#btnSaveAdd').prop('disabled', false)
                     }, 100);
 
                 });

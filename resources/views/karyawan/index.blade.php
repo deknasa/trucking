@@ -368,7 +368,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editKaryawan(selectedId)
+                                cekValidasi(selectedId, 'edit')
                             }
 
                         }
@@ -382,7 +382,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId, 'delete')
                             }
                         }
                     },
@@ -418,7 +418,7 @@
                     },
                     {
                         id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+                        innerHTML: '<i class="fas fa-check"></i> APPROVAL NON AKTIF',
                         class: 'btn btn-purple btn-sm mr-1',
                         onClick: () => {
 
@@ -456,21 +456,29 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('karyawan', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('karyawan', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('karyawan', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('karyawan', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('karyawan', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('karyawan', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('karyawan', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
             if (!`{{ $myAuth->hasPermission('karyawan', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
@@ -655,8 +663,6 @@
 
 
     })
-
-
 </script>
 @endpush()
 @endsection

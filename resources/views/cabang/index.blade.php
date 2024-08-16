@@ -381,7 +381,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editCabang(selectedId)
+                                cekValidasi(selectedId, 'edit')
                             }
                         }
                     },
@@ -394,7 +394,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                deleteCabang(selectedId)
+                                cekValidasi(selectedId, 'delete')
                             }
                         }
                     },
@@ -441,17 +441,19 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
                             id: 'approvalKoneksi',
-                            text: ' UN/APPROVAL KONEKSI',
+                            text: ' APPROVAL/UN KONEKSI',
+                            color: `<?php echo $data['listbtn']->btn->approvalkoneksi; ?>`,
+                            hidden :(!`{{ $myAuth->hasPermission('cabang', 'approvalKonensi') }}`),
                             onClick: () => {
-                                var selectedOne = selectedOnlyOne();                            
+                                var selectedOne = selectedOnlyOne();
                                 if (selectedOne[0]) {
                                     approvalKoneksi(selectedOne[1])
                                 } else {
@@ -462,6 +464,8 @@
                         {
                             id: 'approvalnonaktif',
                             text: "Approval Non Aktif",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden :(!`{{ $myAuth->hasPermission('cabang', 'approvalnonaktif') }}`),
                             onClick: () => {
                                 approvalNonAktif('cabang')
                             }
@@ -498,19 +502,28 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+                $('#edit').attr('disabled', 'disabled')
+                $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+                if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
+
             }
+
             if (!`{{ $myAuth->hasPermission('cabang', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-            if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
 
             if (!`{{ $myAuth->hasPermission('cabang', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
@@ -585,10 +598,10 @@
                         msg = `YAKIN SET KONEKSI MENJADI OFFLINE `
                     }
                     showConfirm(msg, response.data.namacabang, `cabang/${response.data.id}/approvalkonensi`)
-                    .then(()=>{
-                        selectedRows = []
-                        $('#gs_').prop('checked', false)
-                    })
+                        .then(() => {
+                            selectedRows = []
+                            $('#gs_').prop('checked', false)
+                        })
                 },
             })
         }

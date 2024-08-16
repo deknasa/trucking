@@ -11,18 +11,18 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Gandengan<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Gandengan</label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="gandengandari_id">
-                                    <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
+                                    <input type="text" name="gandengandari" id="gandengandari" class="form-control gandengandari-lookup">
                                 </div>
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="gandengansampai_id">
-                                    <input type="text" name="gandengansampai" class="form-control gandengansampai-lookup">
+                                    <input type="text" name="gandengansampai" id="gandengansampai" class="form-control gandengansampai-lookup">
                                 </div>
                             </div>
                         </div>
@@ -161,12 +161,19 @@
 
 
     function initLookup() {
-        $('.gandengandari-lookup').lookup({
+        $('.gandengandari-lookup').lookupMaster({
             title: 'Gandengan Lookup',
-            fileName: 'gandengan',
+            fileName: 'gandenganMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'kelompok_id',
+                    searchText: 'kelompok-lookup',
+                    title: 'Kelompok',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (gandengan, element) => {
@@ -183,12 +190,19 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.gandengansampai-lookup').lookup({
+        $('.gandengansampai-lookup').lookupMaster({
             title: 'Gandengan Lookup',
-            fileName: 'gandengan',
+            fileName: 'gandenganMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'gandengan_id',
+                    searchText: 'gandengan-lookup',
+                    title: 'gandengan dari',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (gandengan, element) => {

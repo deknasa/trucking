@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "239343d1a1215e647fa1aef8b748f52f",
+  "ReportGuid": "2f57c8bb792a77a1a26c16f7efd96c4a",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanBukuBesarBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1700556249000+0700)/",
+  "ReportChanged": "/Date(1712301628000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -55,7 +55,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "5": {
             "Name": "nobukti",
@@ -100,21 +100,21 @@
             "Type": "System.String"
           },
           "12": {
+            "Name": "cabang",
+            "NameInSource": "cabang",
+            "Alias": "cabang",
+            "Type": "System.String"
+          },
+          "13": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "13": {
+          "14": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
-            "Type": "System.String"
-          },
-          "14": {
-            "Name": "Cabang",
-            "NameInSource": "Cabang",
-            "Alias": "Cabang",
             "Type": "System.String"
           }
         },
@@ -406,7 +406,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.judulLaporan}"
+                "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
@@ -425,7 +425,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.judul}"
+                "Value": "{dataheader.cabang}"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -433,7 +433,7 @@
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "2": {
               "Ident": "StiText",
@@ -772,7 +772,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.Cabang}"
+                "Value": "{data.judulLaporan}"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

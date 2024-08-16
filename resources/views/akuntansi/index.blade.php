@@ -29,7 +29,7 @@
   let autoNumericElements = []
   let rowNum = 10
   let selectedRows = [];
-            
+
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -44,11 +44,13 @@
       }
     }
   }
+
   function clearSelectedRows() {
     selectedRows = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
+
   function selectAllRows() {
     $.ajax({
       url: `${apiUrl}akuntansi`,
@@ -75,8 +77,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: '',
             name: '',
             width: 30,
@@ -104,7 +105,7 @@
             formatter: (value, rowOptions, rowData) => {
               return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
-          }, 
+          },
           {
             label: 'ID',
             name: 'id',
@@ -249,7 +250,7 @@
               }
             })
           });
-  
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -322,7 +323,8 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editAkuntansi(selectedId)
+                // editAkuntansi(selectedId)
+                cekValidasidelete(selectedId, 'edit')
               }
 
             }
@@ -336,7 +338,8 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                deleteAkuntansi(selectedId)
+                // deleteAkuntansi(selectedId)
+                cekValidasidelete(selectedId, 'delete')
               }
             }
           },
@@ -370,17 +373,38 @@
               $('#rangeModal').modal('show')
             }
           },
-          {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              approvalNonAktif('akuntansi')
-              
-            }
-          },
-          
-        ]
+        ],
+        modalBtnList: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          class: 'btn btn-purple btn-sm mr-1 ',
+          item: [{
+              id: 'approvalaktif',
+              text: "APPROVAL AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('akuntansi', 'approvalaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('akuntansi', 'approvalaktif') }}`) {
+                  approvalAktif('akuntansi')
+
+                }
+              }
+            },
+            {
+              id: 'approvalnonaktif',
+              text: "APPROVAL NON AKTIF",
+              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('akuntansi', 'approvalnonaktif') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('akuntansi', 'approvalnonaktif') }}`) {
+                  approvalNonAktif('akuntansi')
+                }
+              }
+            },
+          ],
+        }]
       })
 
     /* Append clear filter button */
@@ -403,25 +427,47 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('akuntansi', 'store') }}`) {
+      if (cabangTnl == 'YA') {
         $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('akuntansi', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
+        $('#delete').attr('disabled', 'disabled')
+      } else {
+        if (!`{{ $myAuth->hasPermission('akuntansi', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('akuntansi', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('akuntansi', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+
+
       }
 
-      if (!`{{ $myAuth->hasPermission('akuntansi', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
       if (!`{{ $myAuth->hasPermission('akuntansi', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
       if (!`{{ $myAuth->hasPermission('akuntansi', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
+
+      let hakApporveCount = 0;
+
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('akuntansi', 'approvalaktif') }}`) {
+        hakApporveCount--
+        $('#approvalaktif').hide()
+      }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('akuntansi', 'approvalnonaktif') }}`) {
-        $('#approveun').hide()
+        hakApporveCount--
+        $('#approvalnonaktif').hide()
+      }
+      if (hakApporveCount < 1) {
+        $('#approve').hide()
       }
     }
 

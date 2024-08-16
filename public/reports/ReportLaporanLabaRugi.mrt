@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b6a2dc89cd53f685502306a5a424f3b4",
+  "ReportGuid": "428efb841d0051050f08a41402041cc0",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1702974643000+0700)/",
+  "ReportChanged": "/Date(1712302803000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -36,9 +36,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "OrderMain",
-            "NameInSource": "OrderMain",
-            "Alias": "OrderMain",
+            "Name": "ordermain",
+            "NameInSource": "ordermain",
+            "Alias": "ordermain",
             "Type": "System.String"
           },
           "2": {
@@ -142,6 +142,20 @@
       },
       "1": {
         "Ident": "StiDataTableSource",
+        "Name": "dataheader",
+        "Alias": "dataheader",
+        "Columns": {
+          "0": {
+            "Name": "cabang",
+            "NameInSource": "cabang",
+            "Alias": "cabang",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.dataheader"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
         "Name": "user_roles_pivot",
         "Alias": "user_roles_pivot",
         "Columns": {
@@ -166,7 +180,7 @@
         },
         "NameInSource": "Data.user_roles_pivot"
       },
-      "2": {
+      "3": {
         "Ident": "StiDataTableSource",
         "Name": "user_roles",
         "Alias": "user_roles",
@@ -222,7 +236,7 @@
         },
         "NameInSource": "Data.user_roles"
       },
-      "3": {
+      "4": {
         "Ident": "StiDataTableSource",
         "Name": "user",
         "Alias": "user",
@@ -314,7 +328,7 @@
         },
         "NameInSource": "Data.user"
       },
-      "4": {
+      "5": {
         "Ident": "StiDataTableSource",
         "Name": "parameter",
         "Alias": "parameter",
@@ -461,7 +475,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judullaporan}"
+                "Value": "{dataheader.cabang}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
@@ -662,7 +676,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.Cabang}"
+                "Value": "{parameter.judullaporan}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",

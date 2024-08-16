@@ -91,8 +91,18 @@
                                 <input type="text" name="bank" class="form-control bank-lookup">
                             </div>
                         </div>
-
                         <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    ALAT BAYAR <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="alatbayar_id">
+                                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                            </div>
+                        </div>
+
+                        {{-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
                                     No Bukti Penerimaan Giro</label>
@@ -100,7 +110,7 @@
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="text" name="penerimaangiro_nobukti" class="form-control penerimaangiro-lookup">
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
@@ -112,17 +122,17 @@
                             </div>
                         </div>--}}
 
-                        <div class="table-responsive table-scroll">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2010px;">
+                        <div class="table-container">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
                                 <thead>
                                     <tr>
                                         <th width="1%">No</th>
                                         <th width="5%">Nama Perkiraan</th>
-                                        <th width="6%">Tgl jatuh tempo</th>
-                                        <th width="4%">No warkat</th>
-                                        <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
+                                        <th width="4%">Tgl jatuh tempo</th>
+                                        <th width="4%">No warkat</th>
+                                        <th width="5%" class="bankpelanggan">Bank Pelanggan</th>
                                         <th width="1%" class="aksiGiro tbl_aksi">Aksi</th>
                                     </tr>
                                 </thead>
@@ -131,7 +141,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6">
+                                        <td class='colspan'>
                                             <p class="text-right font-weight-bold">TOTAL :</p>
                                         </td>
                                         <td>
@@ -151,6 +161,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnSaveAdd" class="btn btn-success">
+                            <i class="fas fa-file-upload"></i>
+                            Save & Add
+                        </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
                             Cancel
@@ -169,9 +183,9 @@
     let type
     let penerimaanGiro = '';
     let isEditTgl
+    let bankId
 
     $(document).ready(function() {
-
         $("#crudForm [name]").attr("autocomplete", "off");
         $(document).on('change', '[name=statuskas]', function() {
             if ($(this).val() == 116) {
@@ -231,6 +245,15 @@
         })
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
+            submit($(this).attr('id'))
+        })
+        $('#btnSaveAdd').click(function(event) {
+            event.preventDefault()
+            submit($(this).attr('id'))
+        })
+
+        function submit(button) {
+            event.preventDefault()
             let method
             let url
             let form = $('#crudForm')
@@ -282,6 +305,11 @@
                 name: 'bankheader',
                 value: data.find(item => item.name === "bank_id").value
             })
+            data.push({
+                name: 'button',
+                value: button
+            })
+
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
             let bankheader = data.find(item => item.name === "bank_id").value
@@ -319,33 +347,42 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
-                    $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
-                    penerimaanGiro = ''
 
-                    $('#bankheader').val(response.data.bank_id).trigger('change')
+                    if (button == 'btnSubmit') {
+                        id = response.data.id
+                        $('#crudModal').modal('hide')
+                        penerimaanGiro = ''
 
-                    // $('.select2').select2({
-                    //     width: 'resolve',
-                    //     theme: "bootstrap4"
-                    // });
-                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page,
-                        postData: {
-                            bank: response.data.bank_id,
-                            tgldari: dateFormat(response.data.tgldariheader),
-                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        $('#bankheader').val(response.data.bank_id).trigger('change')
+
+                        // $('.select2').select2({
+                        //     width: 'resolve',
+                        //     theme: "bootstrap4"
+                        // });
+                        $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                        $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page,
+                            postData: {
+                                bank: response.data.bank_id,
+                                tgldari: dateFormat(response.data.tgldariheader),
+                                tglsampai: dateFormat(response.data.tglsampaiheader)
+                            }
+                        }).trigger('reloadGrid');
+
+                        if (id == 0) {
+                            $('#detail').jqGrid().trigger('reloadGrid')
                         }
-                    }).trigger('reloadGrid');
-
-                    if (id == 0) {
-                        $('#detail').jqGrid().trigger('reloadGrid')
-                    }
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    } else {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        // showSuccessDialog(response.message, response.data.nobukti)
+                        createPenerimaan();
                     }
                 },
                 error: error => {
@@ -361,7 +398,7 @@
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-        })
+        }
     })
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
@@ -372,15 +409,89 @@
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
+
+        if (form.data('action') == 'add') {
+            form.find('#btnSaveAdd').show()
+        } else {
+            form.find('#btnSaveAdd').hide()
+        }
         initLookup()
         initSelect2(form.find('.select2bs4'), true)
         initDatepicker()
+        rowCabangPusat()
     })
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
+        removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
+
+    function removeEditingBy(id) {
+        // $.ajax({
+        //     url: `{{ config('app.api_url') }}bataledit`,
+        //     method: 'POST',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessToken}`
+        //     },
+        //     data: {
+        //         id: id,
+        //         aksi: 'BATAL',
+        //         table: 'penerimaanheader'
+
+        //     },
+        //     success: response => {
+        //         $("#crudModal").modal("hide")
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
+
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
+
+        let formData = new FormData();
+
+
+        formData.append('id', id);
+        formData.append('aksi', 'BATAL');
+        formData.append('table', 'penerimaanheader');
+
+        fetch(`{{ config('app.api_url') }}removeedit`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: formData,
+                keepalive: true
+
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                $("#crudModal").modal("hide");
+            })
+            .catch(error => {
+                // Handle error
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON);
+                }
+            })
+    }
 
     function setTotal() {
         let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -425,6 +536,16 @@
                             clearSelectedRows()
                         }
                         $('#crudModal').modal('show')
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.responseJSON)
@@ -501,10 +622,13 @@
                             form.find(`[name="tglbukti"]`).prop('readonly', true)
                             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                         }
+
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                     })
                     .catch((error) => {
                         showDialog(error.responseJSON)
@@ -513,6 +637,19 @@
                         $('.modal-loader').addClass('d-none')
                     })
             })
+    }
+
+    function rowCabangPusat() {
+        if (accessCabang == 'PUSAT') {
+            $('.bankpelanggan').hide();
+            $('.colspan').attr('colspan', 5)
+            $('#detailList').css({
+                width: '1200px'
+            });
+        } else {
+            $('.bankpelanggan').show();
+            $('.colspan').attr('colspan', 6)
+        }
     }
 
     function editCoa(id) {
@@ -559,6 +696,17 @@
                     .then(() => {
                         clearSelectedRows()
                         $('#gs_').prop('checked', false)
+
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tglbukti]').attr('readonly', true)
                         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
@@ -566,6 +714,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                         $('#crudForm [name=pelanggan]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=pelanggan]').parent('.input-group').find('.input-group-append').remove()
                         $('#crudForm [name=penerimaangiro_nobukti]').parent('.input-group').find('.button-clear').remove()
@@ -612,11 +762,23 @@
                         if (selectedRows.length > 0) {
                             clearSelectedRows()
                         }
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                     })
                     .catch((error) => {
                         showDialog(error.responseJSON)
@@ -659,6 +821,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
                         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                         name.attr('disabled', true)
@@ -683,6 +847,16 @@
                     })
                     .then(() => {
                         clearSelectedRows()
+                        if (accessCabang == 'PUSAT') {
+                            $('.bankpelanggan').hide();
+                            $('.colspan').attr('colspan', 5)
+                            $('#detailList').css({
+                                width: '1200px'
+                            });
+                        } else {
+                            $('.bankpelanggan').show();
+                            $('.colspan').attr('colspan', 6)
+                        }
                         $('#gs_').prop('checked', false)
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -691,6 +865,8 @@
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
                         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
                         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                         name.attr('disabled', true)
@@ -825,6 +1001,7 @@
                 },
                 success: response => {
                     let tgl = response.data.tglbukti
+                    bankId = response.data.bank_id
                     $.each(response.data, (index, value) => {
                         let element = form.find(`[name="${index}"]`)
                         if (element.is('select')) {
@@ -843,6 +1020,9 @@
                         if (index == 'bank') {
                             element.data('current-value', value).prop('readonly', true)
                         }
+                        if (index == 'alatbayar') {
+                            element.data('current-value', value).prop('readonly', true)
+                        }
                         if (index == 'penerimaangiro_nobukti') {
                             element.data('current-value', value)
                         }
@@ -859,6 +1039,12 @@
                                 <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
                             </td>
                             <td>
+                                <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control" ${readOnly}></textarea>
+                            </td>
+                            <td>
+                                <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
+                            </td>
+                            <td>
                                 <div class="input-group">
                                     <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                                 </div>
@@ -866,15 +1052,9 @@
                             <td>
                                 <input type="text" name="nowarkat[]"  class="form-control">
                             </td>
-                            <td>
+                            <td class="bankpelanggan">
                                 <input type="hidden" name="bankpelanggan_id[]">
                                 <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
-                            </td>
-                            <td>
-                                <input type="text" name="keterangan_detail[]"  class="form-control" ${readOnly}>
-                            </td>
-                            <td>
-                                <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                             </td>
                             <td class="tbl_aksi">
                                 <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1016,6 +1196,12 @@
           <input type="text" name="ketcoakredit[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
+          <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
+        </td>
+        <td>
+          <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
+        </td>
+        <td>
           <div class="input-group">
             <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
           </div>
@@ -1023,15 +1209,9 @@
         <td>
           <input type="text" name="nowarkat[]"  class="form-control">
         </td>
-        <td>
+        <td class="bankpelanggan">
             <input type="hidden" name="bankpelanggan_id[]">
             <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
-        </td>
-        <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
-        </td>
-        <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
         <td class="aksiGiro tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1090,6 +1270,7 @@
         detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
         initDatepicker()
         setRowNumbers()
+        rowCabangPusat()
     }
 
     function deleteRow(row) {
@@ -1126,7 +1307,10 @@
                 Authorization: `Bearer ${accessToken}`
             },
             data: {
-                penerimaanId: selectedRows
+                penerimaanId: selectedRows,
+                bukti: selectedbukti,
+                table: 'penerimaanheader',
+                statusapproval: 'statusapproval'
             },
             success: response => {
                 $('#crudForm').trigger('reset')
@@ -1134,8 +1318,21 @@
 
                 $('#crudModal').modal('hide')
 
-                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                $('#jqGrid').jqGrid('setGridParam', {
+                    postData: {
+                        proses: 'reload',
+                        tgldari: $('#tgldariheader').val(),
+                        tglsampai: $('#tglsampaiheader').val(),
+                        bank: $('#bankheader').val(),
+                        page: page,
+                        limit: limit,
+                        sortIndex: $('#jqGrid').getGridParam().sortname,
+                        sortOrder: $('#jqGrid').getGridParam().sortorder,
+                        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                    }
+                }).trigger('reloadGrid');
                 selectedRows = []
+                selectedbukti = []
                 $('#gs_').prop('checked', false)
             },
             error: error => {
@@ -1242,6 +1439,7 @@
             },
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
+                bankId = bank.id
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
@@ -1276,6 +1474,32 @@
                 $('.aksiGiro').show()
                 $('#table_body').html('')
                 addRow();
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.alatbayar-lookup').lookup({
+            title: 'Alat Bayar Lookup',
+            fileName: 'alatbayar',
+            beforeProcess: function(test) {
+                // const bank_ID=0        
+                this.postData = {
+                    bank_Id: bankId,
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (alatbayar, element) => {
+                $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+                element.val(alatbayar.namaalatbayar)
+                element.data('currentValue', element.val())
+                enableTglJatuhTempo($(`#crudForm`))
+                enableNoWarkat($(`#crudForm`))
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $(`#crudForm [name="alatbayar_id"]`).first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
@@ -1316,7 +1540,7 @@
                                 <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup" readonly>
                             </td>
                             <td>
-                                <input type="text" name="keterangan_detail[]"  class="form-control" readonly>
+                                <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control" readonly></textarea>
                             </td>
                             <td>
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  readonly> 

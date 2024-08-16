@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "15a2f4319c470e92011da8c1cdf7a21f",
+  "ReportGuid": "ff5842019962f4b664bdc6a6add07b16",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeracaBesar.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1702974534000+0700)/",
+  "ReportChanged": "/Date(1712305715000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -154,6 +154,20 @@
       },
       "1": {
         "Ident": "StiDataTableSource",
+        "Name": "dataheader",
+        "Alias": "dataheader",
+        "Columns": {
+          "0": {
+            "Name": "cabang",
+            "NameInSource": "cabang",
+            "Alias": "cabang",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.dataheader"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
         "Name": "user_roles_pivot",
         "Alias": "user_roles_pivot",
         "Columns": {
@@ -178,7 +192,7 @@
         },
         "NameInSource": "Data.user_roles_pivot"
       },
-      "2": {
+      "3": {
         "Ident": "StiDataTableSource",
         "Name": "user_roles",
         "Alias": "user_roles",
@@ -234,7 +248,7 @@
         },
         "NameInSource": "Data.user_roles"
       },
-      "3": {
+      "4": {
         "Ident": "StiDataTableSource",
         "Name": "user",
         "Alias": "user",
@@ -326,7 +340,7 @@
         },
         "NameInSource": "Data.user"
       },
-      "4": {
+      "5": {
         "Ident": "StiDataTableSource",
         "Name": "parameter",
         "Alias": "parameter",
@@ -473,14 +487,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{ToUpperCase(parameter.judullaporan)}"
+                "Value": "{dataheader.cabang}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "4": {
               "Ident": "StiText",
@@ -674,7 +688,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.Cabang}"
+                "Value": "{ToUpperCase(parameter.judullaporan)}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",

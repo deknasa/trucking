@@ -21,6 +21,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
             'pagename' => 'Menu Utama Invoice Charge Gandengan Extra',
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('invoicechargegandenganheader.index', compact('title', 'data'));
     }

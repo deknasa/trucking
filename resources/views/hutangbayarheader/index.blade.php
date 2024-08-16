@@ -467,6 +467,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission() 
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
           setHighlight($(this))
         }
       })
@@ -560,7 +561,7 @@
           },
           {
             id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+            innerHTML: '<i class="fas fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
 

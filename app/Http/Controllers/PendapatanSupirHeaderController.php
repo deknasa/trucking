@@ -17,7 +17,8 @@ class PendapatanSupirHeaderController extends MyController
         $title = $this->title;
         $data = [
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('pendapatansupirheader.index', compact('title', 'data'));
     }
@@ -104,6 +105,7 @@ class PendapatanSupirHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pendapatan["combo"] =  $combo[$key];
+        $pendapatansupir["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
 
         return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details', 'formatkomisi', 'printer', 'pendapatansupir', 'pendapatansupir_details'));

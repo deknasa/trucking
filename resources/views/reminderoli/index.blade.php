@@ -15,9 +15,8 @@
                                 <label class="col-form-label">Status <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-sm-4">
-                                <select name="status" id="status" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="0">{SEMUA}</option>
-                                </select>
+                                <input type="hidden" name="status">
+                                <input type="text" name="statusnama" id="statusnama" class="form-control lg-form status-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -62,9 +61,9 @@
     let hasDetail = false
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=status]'), false)
+        // initSelect2($('#crudForm').find('[name=status]'), false)
         setStatusOptions($('#crudForm'))
-
+        initLookup()
         $('#btnTampil').click(function(event) {
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
@@ -381,6 +380,43 @@
                 }
             })
         })
+    }
+
+    function initLookup(){
+        $(`.status-lookup`).lookupMaster({
+        title: 'status Lookup',
+        fileName: 'parameterMaster',
+        typeSearch: 'ALL',
+        searching: 1,
+        beforeProcess: function() {
+            this.postData = {
+            url: `${apiUrl}parameter/combo`,
+            grp: 'STATUS SERVICE RUTIN',
+            subgrp: 'STATUS SERVICE RUTIN',
+            searching: 1,
+            valueName: `status`,
+            searchText: `status-lookup`,
+            singleColumn: true,
+            hideLabel: true,
+            title: 'status Lookup'
+            };
+        },
+        onSelectRow: (status, element) => {
+            let elId = element.data('targetName')
+            $(`#crudForm [name=${elId}]`).first().val(status.id)
+            element.val(status.text)
+            element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+            element.val(element.data('currentValue'));
+        },
+        onClear: (element) => {
+            let elId = element.data('targetName')
+            $(`#crudForm [name=${elId}]`).first().val('')
+            element.val('')
+            element.data('currentValue', element.val())
+        },
+        });
     }
 </script>
 @endpush()

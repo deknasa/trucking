@@ -45,14 +45,14 @@ $idLookup = isset($id) ? $id : null;
       },
       {
         label: 'KODE TIPE',
-        name: 'kodetype',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        name: 'coa',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'AKUNTANSI',
-        name: 'akuntansi',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        name: 'keterangancoa',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         align: 'left'
       },
 
@@ -133,12 +133,6 @@ $idLookup = isset($id) ? $id : null;
           let statusAktif = JSON.parse(rowObject.statusaktif)  
           return ` title="${statusAktif.MEMO}"`
         }
-      },
-      {
-        label: 'KODE PERKIRAAN',
-        name: 'coa',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left',
       },
       {
         label: 'KODE PERKIRAAN',
@@ -430,7 +424,7 @@ $idLookup = isset($id) ? $id : null;
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
-      level: `{!! $levelCoa ?? '' !!}`,
+      levelCoa: `{!! $levelCoa ?? '' !!}`,
       potongan: `{!! $potongan ?? '' !!}`,
       aktif: `{!! $Aktif ?? '' !!}`,
       keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,

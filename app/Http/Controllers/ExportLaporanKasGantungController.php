@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -22,12 +23,14 @@ class ExportLaporanKasGantungController extends MyController
 
     public function index(Request $request)
     {
-        $title = $this->title;
+        $title = $this->title;        
+        $bank = DB::table('bank')->where('tipe','KAS')->first();
         $data = [
             'pagename' => 'Menu Utama Export Laporan Kas Gantung',
+            'bank_id' => $bank->id,
+            'bank' => $bank->namabank
         ];
-
-        return view('exportlaporankasgantung.index', compact('title'));
+        return view('exportlaporankasgantung.index', compact('title','data'));
     }
 
     public function export(Request $request): void
@@ -44,7 +47,7 @@ class ExportLaporanKasGantungController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'exportlaporankasgantung/export', $detailParams);
-
+        // dd($header->json());
         $data = $header['data'];
 
         if(count($data) == 0){
@@ -52,6 +55,7 @@ class ExportLaporanKasGantungController extends MyController
         }
 
         $dataDua = $header['dataDua'];
+        $namacabang = $header['namacabang'];
 
         $spreadsheet = new Spreadsheet();
         $alphabets = array_merge(range('A', 'Z'), range('AA', 'AZ'), range('BA', 'BZ'), range('CA', 'CZ'));
@@ -112,17 +116,21 @@ class ExportLaporanKasGantungController extends MyController
             $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:G1');
-
-            $sheet->setCellValue('A2', 'LAPORAN KAS GANTUNG');
+            $sheet->setCellValue('A2', $namacabang);
             $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A2:G2');
-            $sheet->setCellValue('A3', 'PER ' . $tanggal);
+
+            $sheet->setCellValue('A3', 'LAPORAN KAS GANTUNG');
             $sheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A3:G3');
+            $sheet->setCellValue('A4', 'PER ' . $tanggal);
+            $sheet->getStyle("A4")->getFont()->setSize(16)->setBold(true);
+            $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A4:G4');
 
-            $headerRow = 5;
+            $headerRow = 6;
             $columnIndex = 0;
             $headerColumns = [
                 'tgl' => 'Tanggal',
@@ -214,12 +222,12 @@ class ExportLaporanKasGantungController extends MyController
 
 
             // Setelah perulangan selesai, tambahkan total ke sheet
-            $sheet->setCellValue('E' . $dataRow, "=SUM(E6:E" . ($dataRow - 1) . ")");
+            $sheet->setCellValue('E' . $dataRow, "=SUM(E7:E" . ($dataRow - 1) . ")");
             // $sheet->getStyle('E' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('E' . $dataRow)->applyFromArray($boldStyle);
             $sheet->getStyle('E' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-            $sheet->setCellValue('F' . $dataRow, "=SUM(F6:F" . ($dataRow - 1) . ")");
+            $sheet->setCellValue('F' . $dataRow, "=SUM(F7:F" . ($dataRow - 1) . ")");
             // $sheet->getStyle('F' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('F' . $dataRow)->applyFromArray($boldStyle);
             $sheet->getStyle('F' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
@@ -251,17 +259,21 @@ class ExportLaporanKasGantungController extends MyController
         $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A1:F1');
-
-        $rekapPerkiraanSheet->setCellValue('A2', 'LAPORAN REKAP KAS GANTUNG');
+        $rekapPerkiraanSheet->setCellValue('A2', $namacabang);
         $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $rekapPerkiraanSheet->setCellValue('A3', 'PERIODE : ' . $bulan1 . ' - ' . $tahun);
+        $rekapPerkiraanSheet->mergeCells('A2:F2');
+
+        $rekapPerkiraanSheet->setCellValue('A3', 'LAPORAN REKAP KAS GANTUNG');
         $rekapPerkiraanSheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A3')->getAlignment()->setHorizontal('center');
-        $rekapPerkiraanSheet->mergeCells('A2:F2');
+        $rekapPerkiraanSheet->setCellValue('A4', 'PERIODE : ' . $bulan1 . ' - ' . $tahun);
+        $rekapPerkiraanSheet->getStyle("A4")->getFont()->setSize(16)->setBold(true);
+        $rekapPerkiraanSheet->getStyle('A4')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A3:F3');
+        $rekapPerkiraanSheet->mergeCells('A4:F4');
 
-        $rekapPerkiraanHeaderRow = 5;
+        $rekapPerkiraanHeaderRow = 6;
         $rekapPerkiraanColumnIndex = 0;
         $rekapPerkiraanHeaderColumns = [
             'tglbukti' => 'Tanggal',

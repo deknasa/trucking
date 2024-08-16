@@ -21,9 +21,8 @@
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Jenis Pinjaman<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <select name="jenis" id="jenis" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
+                                <input type="hidden" name="jenis">
+                                <input type="text" name="jenisnama" data-target-name="jenis" id="jenisnama" class="form-control lg-form jenis-lookup">
                             </div>
                         </div>
                          <div class="row">
@@ -67,14 +66,11 @@
 
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=jenis]'), false)
-        setJenisKaryawanOptions($('#crudForm'))
-
         initDatepicker()
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
-        
+        initLookup()
         if (!`{{ $myAuth->hasPermission('laporanketeranganpinjamansupir', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -137,47 +133,44 @@
         }
     })
 
-    const setJenisKaryawanOptions = function(relatedForm) {
-        // return new Promise((resolve, reject) => {
-        // relatedForm.find('[name=approve]').empty()
-        relatedForm.find('[name=jenis]').append(
-            new Option('-- PILIH JENIS PINJAMAN --', '', false, true)
-        ).trigger('change')
-
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'STATUS POSTING'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'STATUS POSTING'
-        })
-        $.ajax({
+    function initLookup() {
+        $(`.jenis-lookup`).lookupMaster({
+        title: 'Jenis Lookup',
+        fileName: 'parameterMaster',
+        typeSearch: 'ALL',
+        searching: 1,
+        beforeProcess: function() {
+            this.postData = {
             url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: data,
-            success: response => {
+            grp: 'STATUS POSTING',
+            subgrp: 'STATUS POSTING',
+            searching: 1,
+            valueName: `jenis`,
+            searchText: `jenis-lookup`,
+            singleColumn: true,
+            hideLabel: true,
+            title: 'Jenis Lookup'
+            };
+        },
+        onSelectRow: (status, element) => {
+            let elId = element.data('targetName')
+            $(`#crudForm [name=${elId}]`).first().val(status.id)
+            element.val(status.text)
+            element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+            element.val(element.data('currentValue'));
+        },
+        onClear: (element) => {
+            let elId = element.data('targetName')
+            $(`#crudForm [name=${elId}]`).first().val('')
+            element.val('')
+            element.data('currentValue', element.val())
+        },
+        });
+   
+  }
 
-                response.data.forEach(statusPosting => {
-                    let option = new Option(statusPosting.text, statusPosting.id)
-                    relatedForm.find('[name=jenis]').append(option).trigger('change')
-                });
-
-               
-                relatedForm
-                    .find('[name=jenis]')
-                    .val($(`#crudForm [name=jenis] option:eq(1)`).val())
-                    .trigger('change')
-                    .trigger('select2:selected');
-            }
-        })
-        // })
-    }
 </script>
 @endpush()
 @endsection

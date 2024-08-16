@@ -77,8 +77,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [
-                    {
+                colModel: [{
                         label: '',
                         name: '',
                         width: 30,
@@ -310,8 +309,12 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editSatuan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasidelete(selectedId, 'edit')
+                            }
+                            // editSatuan(selectedId)
                         }
                     },
                     {
@@ -320,8 +323,12 @@
                         class: 'btn btn-danger btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            deleteSatuan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasidelete(selectedId, 'delete')
+                            }
+                            // deleteSatuan(selectedId)
                         }
                     },
                     {
@@ -352,18 +359,40 @@
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-    
-                            approvalNonAktif('satuan')
-    
-                        }
-                    },
-                ]
+                    }
+                ],
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1 ',
+                    item: [{
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('satuan', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('satuan', 'approvalaktif') }}`) {
+                                    approvalAktif('satuan')
+
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('satuan', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('satuan', 'approvalnonaktif') }}`) {
+                                    approvalNonAktif('satuan')
+                                }
+                            }
+                        },
+
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -394,16 +423,24 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('satuan', 'store') }}`) {
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('satuan', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('satuan', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
+                // if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
+                if ((!`{{ $myAuth->hasPermission('satuan', 'update') }}`) && (!`{{ $myAuth->hasPermission('satuan', 'updateuser') }}`)) {
+
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('satuan', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
             if (!`{{ $myAuth->hasPermission('satuan', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
@@ -411,8 +448,21 @@
             if (!`{{ $myAuth->hasPermission('satuan', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0;
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('satuan', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+            }
+            hakApporveCount++
             if (!`{{ $myAuth->hasPermission('satuan', 'approvalnonaktif') }}`) {
-                $('#approveun').hide()
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+            }
+            if (hakApporveCount < 1) {
+                $('#approve').hide()
             }
         }
 

@@ -40,6 +40,12 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
+
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    $("#jqGrid").jqGrid('setSelection', value,false);
+    onSelectRowExisting(value)
+    
+    
     let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -84,7 +90,8 @@
     })
 
 
-    $("#jqGrid").jqGrid({
+    var grid= $("#jqGrid");  
+    grid.jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -133,55 +140,6 @@
             width: '50px',
             search: false,
             hidden: true
-          },
-          {
-            label: 'STATUS CETAK',
-            name: 'statuscetak',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combocetak'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combocetak'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusCetak = JSON.parse(value)
-              if (!statusCetak) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
-                  <span>${statusCetak.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusCetak = JSON.parse(rowObject.statuscetak)
-              if (!statusCetak) {
-                return ` title=" "`
-              }
-              return ` title="${statusCetak.MEMO}"`
-            }
           },
           {
             label: 'STATUS APPROVAL',
@@ -339,12 +297,12 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        onSelectRow: onSelectRowFunction =function(id) {
 
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           if (!hasDetail) {
@@ -441,15 +399,16 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -464,6 +423,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -500,11 +460,13 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
                 id: 'approveun',
-                text: "UN/APPROVAL Jurnal Umum",
+                text: "APPROVAL/UN Jurnal Umum",
+                color:'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
                     approve()
@@ -514,6 +476,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak JURNAL",
+                color:'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) ,
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -522,6 +486,19 @@
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas JURNAL",
+                color:'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) ,
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    approvalKirimberkas(tglkirimberkas, 'JURNALUMUMHEADER', selectedRows, selectedbukti);
+                  }
+                }
+              },              
             ],
           },
           {
@@ -529,10 +506,11 @@
             title: 'Lainnya',
             caption: 'Lainnya',
             innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-secondary btn-sm mr-1 ',
+            item: [{
                 id: 'copy',
                 text: "COPY",
+                color:'btn-success',
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -676,6 +654,11 @@
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()

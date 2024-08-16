@@ -122,7 +122,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="stokdari_id">
-                                            <input type="text" name="stokdari" class="form-control stokdari-lookup">
+                                            <input type="text" id="stokdari" name="stokdari" class="form-control stokdari-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="stoksampai_id">
-                                            <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
+                                            <input type="text" id="stoksampai" name="stoksampai" class="form-control stoksampai-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -280,12 +280,12 @@
             //(kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
-            (filter != '') &&
-            (jenistgltampil != '') &&
-            (priode != '') &&
+            // (filter != '') &&
+            // (jenistgltampil != '') &&
+            (priode != '')
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&
-            (dataFilter != '')
+            // (dataFilter != '')
         ) {
             window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&kelompok=${kelompok}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
@@ -318,6 +318,36 @@
             }
         })
 
+        // $('.stokdari-lookup').lookupMaster({
+        //     title: 'stok dari Lookup',
+        //     fileName: 'stokMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'stokdari_id',
+        //             searchText: 'stokdari-lookup',
+        //             title: 'Stok',
+        //             typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (stok, element) => {
+        //         $('#crudForm [name=stokdari_id]').first().val(stok.id)
+        //         element.val(stok.namastok)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=stokdari_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+
         $('.stoksampai-lookup').lookup({
             title: 'stok sampai dari lookup',
             fileName: 'stok',
@@ -341,6 +371,38 @@
             }
         })
 
+        // $('.stoksampai-lookup').lookupMaster({
+        //     title: 'stok sampai dari Lookup',
+        //     fileName: 'stokMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'stoksampai_id',
+        //             searchText: 'stoksampai-lookup',
+        //             title: 'Stok',
+        //             typeSearch: 'ALL',
+        //             roleInput: 'role',
+        //             isLookup: true
+        //         }
+        //     },
+        //     onSelectRow: (stok, element) => {
+        //         $('#crudForm [name=stoksampai_id]').first().val(stok.id)
+        //         element.val(stok.namastok)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=stoksampai_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+
         $('.kelompok-lookup').lookup({
             title: 'kelompok dari lookup',
             fileName: 'kelompok',
@@ -363,7 +425,6 @@
                 element.data('currentValue', element.val())
             }
         })
-
         $('.gudang-lookup').lookup({
             title: 'gudang dari lookup',
             fileName: 'gudang',
@@ -450,7 +511,7 @@
         } else {
             $('#trado').hide()
             $('#gandengan').hide()
-            $('#gudang').show()
+            $('#gudang').hide()
         }
     })
 

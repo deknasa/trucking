@@ -79,7 +79,17 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="pelanggan_id">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                <input type="text" id="pelanggan" name="pelanggan" class="form-control pelanggan-lookup">
+              </div>
+            </div>
+            <div class="row form-group gandengan">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NO GANDENGAN / CHASIS <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="gandengan_id">
+                <input type="text" id="gandengan" name="gandengan" class="form-control gandengan-lookup">
               </div>
             </div>
             <div class="row form-group" style="display:none;">
@@ -198,9 +208,15 @@
   var statustas
   var kodecontainer
   var isAllowEdited;
+  let orderemklshipper
+  var jenisKendaraanTangki;
+  var isTangki = false;
+
 
   $(document).ready(function() {
     $("#crudForm [name]").attr("autocomplete", "off");
+    var orederan_id;
+    getStatusJenisKendaraan()
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -248,6 +264,10 @@
       data.push({
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
+      })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
       })
 
       let tgldariheader = $('#tgldariheader').val();
@@ -331,13 +351,56 @@
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
+    orederan_id = $('#crudForm').find('[name=id]').val();
+    if (accessCabang != 'MEDAN') {
+      $('.gandengan').hide()
+    }
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(orederan_id)
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'orderantrucking');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+  }
 
   function createOrderanTrucking() {
     let form = $('#crudForm')
@@ -790,6 +853,36 @@
     })
   }
 
+  function getStatusJenisKendaraan() {
+    $.ajax({
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
+            "field": "grp",
+            "op": "cn",
+            "data": "STATUS JENIS KENDARAAN"
+          }, {
+            "field": "text",
+            "op": "cn",
+            "data": "TANGKI"
+          }]
+        })
+      },
+      success: response => {
+        jenisKendaraanTangki = response.data[0].id;
+      }
+    })
+  }
+
+
   function showOrderanTrucking(form, orderanTruckingId) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -835,13 +928,27 @@
             if (index == 'nojobemkl2') {
               element.data('current-value', value)
             }
+            if (index == 'gandengan') {
+              element.data('current-value', value)
+            }
 
             if (index == 'agen_id') {
               getagentas(form, value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
             }
           })
+          if (jenisKendaraanTangki == response.data.statusjeniskendaraan) {
+            isTangki = true
+            let container = $('#crudForm').find(`[name="container"]`).parents('.form-group').hide()
+            let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.form-group').hide()
+            let nojobemkl = $('#crudForm').find(`[name="nojobemkl"]`).parents('.form-group').hide()
+            let nocont = $('#crudForm').find(`[name="nocont"]`).parents('.form-group').hide()
+            let noseal = $('#crudForm').find(`[name="noseal"]`).parents('.form-group').hide()
+            let nojobemkl2 = $('#crudForm').find(`[name="nojobemkl2"]`).parents('.form-group').hide()
+            let nocont2 = $('#crudForm').find(`[name="nocont2"]`).parents('.form-group').hide()
+            let noseal2 = $('#crudForm').find(`[name="noseal2"]`).parents('.form-group').hide()
+          }
 
-
+          orderemklshipper = response.orderemklshipper
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -984,7 +1091,7 @@
   }
 
 
-  function getagentas(form ,id, statusapproval, tglbatas) {
+  function getagentas(form, id, statusapproval, tglbatas) {
     $.ajax({
       url: `${apiUrl}orderantrucking/${id}/getagentas`,
       method: 'GET',
@@ -1062,6 +1169,7 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
+          orderemklshipper: orderemklshipper
         }
       },
       onSelectRow: (orderanemkl, element) => {
@@ -1092,6 +1200,7 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
+          orderemklshipper: orderemklshipper
         }
       },
       onSelectRow: (orderanemkl, element) => {
@@ -1116,6 +1225,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          Invoice: 'UTAMA',
         }
 
       },
@@ -1123,7 +1233,7 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
-        getagentas($('#crudForm'),agen.id)
+        getagentas($('#crudForm'), agen.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1180,6 +1290,71 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $('.gandengan-lookup').lookup({
+      title: 'Gandengan Lookup',
+      fileName: 'gandengan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        var jeniskendaraan = '';
+        if (isTangki) {
+          jeniskendaraan = jenisKendaraanTangki
+        }
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          statusjeniskendaraan: jeniskendaraan,
+        }
+      },
+      onSelectRow: (gandengan, element) => {
+        $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+        if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+          gandenganId = gandengan.id
+        }
+        element.val(gandengan.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=gandengan_id]').first().val('')
+        element.val('')
+        if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+          gandenganId = 0
+        }
+        element.data('currentValue', element.val())
+      }
+    })
+    // $('.pelanggan-lookup').lookupMaster({
+    //   title: 'pelanggan Lookup',
+    //   fileName: 'pelangganMaster',
+    //   typeSearch: 'ALL',
+    //   searching: 1,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       searching: 1,
+    //       valueName: 'pelanggan_id',
+    //       searchText: 'pelanggan-lookup',
+    //       title: 'pelanggan',
+    //       typeSearch: 'ALL',
+    //     }
+    //   },
+    //   onSelectRow: (pelanggan, element) => {
+    //     $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+    //     element.val(pelanggan.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=pelanggan_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     $('.tarifrincian-lookup').lookup({
       title: 'Tarif Rincian Lookup',
       fileName: 'tarifrincian',

@@ -27,12 +27,16 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Kas/Bank<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" class="form-control bank-lookup">
+                                <input type="text" id="bank" name="bank" class="form-control bank-lookup">
                             </div>
                         </div>
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
+                                <!-- <button type="button" id="btnPreview" class="btn btn-info ">
+                                    <i class="fas fa-print"></i>
+                                    Report
+                                </button> -->
                                 <button type="button" id="btnExport" class="btn btn-warning ">
                                     <i class="fas fa-file-export"></i>
                                     Export
@@ -97,8 +101,40 @@
         if (!`{{ $myAuth->hasPermission('exportlaporankasharian', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('exportlaporankasharian', 'report') }}`) {
+            $('#btnPreview').attr('disabled', 'disabled')
+        }
     })
 
+    $(document).on('click', `#btnPreview`, function(event) {
+         let periode = $('#crudForm').find('[name=periode]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+        var kasbank
+        var norek
+        if (bank_id == 1) {
+            kasbank = 'KAS HARIAN';
+            norek = '';
+        } else {
+            kasbank = 'BANK';
+            norek = `( ${bank} )`;
+        }
+        getCekReport().then((response) => {
+            window.open(`{{ route('exportlaporankasharian.report') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`)
+
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+
+            }
+        })
+
+    })
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
@@ -147,14 +183,50 @@
         })
     })
 
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}exportlaporankasharian/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    periode : $('#crudForm').find('[name=periode]').val(),
+                    bank_id : $('#crudForm').find('[name=bank_id]').val(),
+                    bank : $('#crudForm').find('[name=bank]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
    
 
 
     function initLookup() {
 
-        $('.bank-lookup').lookup({
+        $('.bank-lookup').lookupMaster({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'bank_id',
+                    searchText: 'bank-lookup',
+                    title: 'bank Lookup',
+                    typeSearch: 'ALL',
+                }
+            },
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)

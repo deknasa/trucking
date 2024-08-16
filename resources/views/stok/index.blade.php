@@ -8,9 +8,22 @@
             <table id="jqGrid"></table>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table id="detailsupplier"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table id="detailSPB"></table>
+        </div>
+    </div>
 </div>
 
 @include('stok._modal')
+@include('stok._detailsupplier')
+@include('stok._detailSPB')
 
 @push('scripts')
 <script>
@@ -21,6 +34,7 @@
     let pager = '#jqGridPager'
     let popup = "";
     let id = "";
+    let masterStokId = "";
     let triggerClick = true;
     let highlightSearch;
     let totalRecord
@@ -28,7 +42,7 @@
     let postData
     let sortname = 'namastok'
     let sortorder = 'asc'
-    let approveEditRequest =null ;
+    let approveEditRequest = null;
 
     let autoNumericElements = []
     let selectedRows = [];
@@ -52,14 +66,14 @@
             }
         }
     }
-    
+
     function clearSelectedRows() {
         selectedRows = []
         selectedRowsStok = []
         $('#gs_').prop('checked', false);
         $('#jqGrid').trigger('reloadGrid')
     }
-    
+
     function selectAllRows() {
         $.ajax({
             url: `${apiUrl}stok`,
@@ -79,12 +93,14 @@
             }
         })
     }
-    
-    
+
+
     $(document).ready(function() {
 
         $('#lookup').hide()
 
+        loadSupplierGrid()
+        loadSPBGrid()
 
 
 
@@ -98,8 +114,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [
-                    {
+                colModel: [{
                         label: '',
                         name: 'check',
                         width: 30,
@@ -203,21 +218,21 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
-            let statusaktif = JSON.parse(value)
+                            let statusaktif = JSON.parse(value)
 
-            let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusaktif.WARNA}; color: ${statusaktif.WARNATULISAN};">
                   <span>${statusaktif.SINGKATAN}</span>
                 </div>
               `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusaktif = JSON.parse(rowObject.statusaktif)
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusaktif = JSON.parse(rowObject.statusaktif)
 
-            return ` title="${statusaktif.MEMO}"`
-          }
+                            return ` title="${statusaktif.MEMO}"`
+                        }
                     },
                     {
                         label: 'STATUS reuse',
@@ -247,21 +262,27 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
-            let statusreuse = JSON.parse(value)
+                            if (!value) {
+                                return ''
+                            }
+                            let statusreuse = JSON.parse(value)
 
-            let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
                   <span>${statusreuse.SINGKATAN}</span>
                 </div>
               `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusreuse = JSON.parse(rowObject.statusreuse)
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            if (!rowObject.statusreuse) {
+                                return ''
+                            }
+                            let statusreuse = JSON.parse(rowObject.statusreuse)
 
-            return ` title="${statusreuse.MEMO}"`
-          }
+                            return ` title="${statusreuse.MEMO}"`
+                        }
                     },
                     {
                         label: 'tanpa klaim',
@@ -292,24 +313,24 @@
                         },
                         formatter: (value, options, rowData) => {
                             if (!value) {
-                               return '' 
+                                return ''
                             }
                             let statusreuse = JSON.parse(value)
-                            
+
                             let formattedValue = $(`
                             <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
                                 <span>${statusreuse.SINGKATAN}</span>
                             </div>
                             `)
-                            
+
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
                             if (!rowObject.statusapprovaltanpaklaim) {
-                               return '' 
+                                return ''
                             }
                             let statusreuse = JSON.parse(rowObject.statusapprovaltanpaklaim)
-                            
+
                             return ` title="${statusreuse.MEMO}"`
                         }
                     },
@@ -465,8 +486,8 @@
                 autowidth: true,
                 shrinkToFit: false,
                 postData: {
-                    dari:"index"
-                  },
+                    dari: "index"
+                },
                 height: 350,
                 rowNum: 10,
                 rownumbers: true,
@@ -500,6 +521,10 @@
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+                    loadSuplierData(id)
+                    masterStokId = id
+
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
@@ -507,7 +532,7 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
-                    
+
                     $.each(selectedRows, function(key, value) {
                         $('#jqGrid tbody tr').each(function(row, tr) {
                             if ($(this).find(`td input:checkbox`).val() == value) {
@@ -516,7 +541,7 @@
                             }
                         })
                     });
-                    
+
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -596,7 +621,9 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editStok(selectedId)
+                                cekValidasidelete(selectedId, 'edit')
+
+                                // editStok(selectedId)
                             }
                         }
                     },
@@ -609,7 +636,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId, 'delete')
                             }
                         }
                     },
@@ -643,41 +670,57 @@
                         }
                     },
                 ],
-                extndBtn: [
-                    {
-                        id: 'approve',
-                        title: 'Approve',
-                        caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [
-                            {
-                                id: 'approvalTanpaKlaim',
-                                text: ' UN/APPROVAL Tanpa Klaim',
-                                onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalTanpaKlaim(selectedId)
+                modalBtnList: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                    class: 'btn btn-purple btn-sm mr-1',
+                    item: [{
+                            id: 'approvalTanpaKlaim',
+                            text: ' APPROVAL/UN Tanpa Klaim',
+                            color: `<?php echo $data['listbtn']->btn->approvaltanpaklaim; ?>`,
+                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalklaim') }}`),
+                            onClick: () => {
+                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                approvalTanpaKlaim(selectedId)
+                            }
+                        },
+                        {
+                            id: 'approvalReuse',
+                            text: ' APPROVAL/UN Reuse',
+                            color: `<?php echo $data['listbtn']->btn->approvalreuse; ?>`,
+                            hidden:(!`{{ $myAuth->hasPermission('stok', 'approvalReuse') }}`),
+                            onClick: () => {
+                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                approvalReuse(selectedId)
+                            }
+                        },
+                        {
+                            id: 'approvalaktif',
+                            text: "APPROVAL AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`) {
+                                    approvalAktif('stok')
+
                                 }
-                            },
-                            {
-                                id: 'approvalReuse',
-                                text: ' UN/APPROVAL Reuse',
-                                onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalReuse(selectedId)
-                                }
-                            },
-                            {
-                                id: 'approveun',
-                                text: ' APPROVAL NON AKTIF',
-                                onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "APPROVAL NON AKTIF",
+                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`),
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`) {
                                     approvalNonAktif('stok')
                                 }
-                            },
-                        ],
-                    }
-                ]    
+                            }
+                        },
+                    ],
+                }]
 
             })
 
@@ -708,20 +751,35 @@
             .parent().addClass('px-1')
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('stok', 'store') }}`) {
+
+            if (cabangTnl == 'YA') {
                 $('#add').attr('disabled', 'disabled')
+            } else {
+                if (!`{{ $myAuth->hasPermission('stok', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
+
             }
 
             if (!`{{ $myAuth->hasPermission('stok', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-                
-            if (!`{{ $myAuth->hasPermission('stok', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
 
-            if (!`{{ $myAuth->hasPermission('stok', 'destroy') }}`) {
+            // if (!`{{ $myAuth->hasPermission('stok', 'update') }}`) {
+
+            if (cabangTnl == 'YA') {
+                $('#edit').attr('disabled', 'disabled')
                 $('#delete').attr('disabled', 'disabled')
+            } else {
+
+                if ((!`{{ $myAuth->hasPermission('stok', 'update') }}`) && (!`{{ $myAuth->hasPermission('stok', 'updateuser') }}`)) {
+
+                    $('#edit').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('stok', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
             }
 
             if (!`{{ $myAuth->hasPermission('stok', 'export') }}`) {
@@ -731,28 +789,34 @@
             if (!`{{ $myAuth->hasPermission('stok', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            let hakApporveCount = 0 ;
+            let hakApporveCount = 0;
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('stok', 'approvalklaim') }}`) {
-              hakApporveCount--
-              $('#approvalTanpaKlaim').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalTanpaKlaim').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('stok', 'approvalReuse') }}`) {
-              hakApporveCount--
-              $('#approvalReuse').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalReuse').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`) {
-              hakApporveCount--
-              $('#approveun').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('stok', 'approvalaktif') }}`) {
+                hakApporveCount--
+                $('#approvalaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
-              $('#approve').hide()
-            //   $('#approve').attr('disabled', 'disabled')
+                $('#approve').hide()
+                //   $('#approve').attr('disabled', 'disabled')
             }
         }
 
@@ -954,83 +1018,84 @@
         function approvalTanpaKlaim(id) {
             if (approveEditRequest) {
                 approveEditRequest.abort();
-            }     
-            approveEditRequest = 
-            $.ajax({
-                url: `${apiUrl}stok/approvalklaim`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    Id: selectedRows,
-                    nama: selectedRowsStok
-                },
-                success: response => {
-                    $('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    
-                    $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    selectedRows = []
-                    selectedRowsStok = []
-                    $('#gs_').prop('checked', false)
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON)
-                    }
-                },
-            }).always(() => {
-                $('#processingLoader').addClass('d-none')
-                $(this).removeAttr('disabled')
-            })
+            }
+            approveEditRequest =
+                $.ajax({
+                    url: `${apiUrl}stok/approvalklaim`,
+                    method: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        Id: selectedRows,
+                        nama: selectedRowsStok
+                    },
+                    success: response => {
+                        $('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+
+                        $('#jqGrid').jqGrid().trigger('reloadGrid');
+                        selectedRows = []
+                        selectedRowsStok = []
+                        $('#gs_').prop('checked', false)
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    },
+                }).always(() => {
+                    $('#processingLoader').addClass('d-none')
+                    $(this).removeAttr('disabled')
+                })
         }
+
         function approvalReuse(id) {
             if (approveEditRequest) {
                 approveEditRequest.abort();
-            }     
-            approveEditRequest = 
-            $.ajax({
-                url: `${apiUrl}stok/approvalreuse`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    Id: selectedRows,
-                    nama: selectedRowsStok,
-                    info:info             
-                },
-                success: response => {
-                    $('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    
-                    $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    selectedRows = []
-                    selectedRowsStok = []
-                    $('#gs_').prop('checked', false)
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON)
-                    }
-                },
-            }).always(() => {
-                $('#processingLoader').addClass('d-none')
-                $(this).removeAttr('disabled')
-            })
+            }
+            approveEditRequest =
+                $.ajax({
+                    url: `${apiUrl}stok/approvalreuse`,
+                    method: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        Id: selectedRows,
+                        nama: selectedRowsStok,
+                        info: info
+                    },
+                    success: response => {
+                        $('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+
+                        $('#jqGrid').jqGrid().trigger('reloadGrid');
+                        selectedRows = []
+                        selectedRowsStok = []
+                        $('#gs_').prop('checked', false)
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    },
+                }).always(() => {
+                    $('#processingLoader').addClass('d-none')
+                    $(this).removeAttr('disabled')
+                })
         }
 
         // function approvalTanpaKlaim(id) {
@@ -1056,6 +1121,7 @@
         // }
 
         getStatusTanpaKlaim()
+
         function getStatusTanpaKlaim() {
             $.ajax({
                 url: `${apiUrl}parameter`,
@@ -1072,7 +1138,7 @@
                             "field": "grp",
                             "op": "cn",
                             "data": "STATUS APPROVAL"
-                        },{
+                        }, {
                             "field": "text",
                             "op": "cn",
                             "data": "APPROVAL"
@@ -1080,14 +1146,14 @@
                     })
                 },
                 success: response => {
-                    statusTanpaKlaim =  response.data[0].id;
+                    statusTanpaKlaim = response.data[0].id;
                 }
             })
         }
-                
-                
-                        
-                    
+
+
+
+
 
     })
 </script>

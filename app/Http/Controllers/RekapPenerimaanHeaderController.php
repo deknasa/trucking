@@ -18,6 +18,7 @@ class RekapPenerimaanHeaderController extends MyController
         $data = [
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('rekappenerimaanheader.index', compact('title','data'));
     }

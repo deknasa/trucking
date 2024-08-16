@@ -36,7 +36,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    Mandor Baru<span class="text-danger">*</span>
+                                    Mandor Baru<span class="text-danger"></span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">

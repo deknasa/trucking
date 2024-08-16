@@ -3,9 +3,9 @@
 @section('content')
 
 <style>
-    .ui-datepicker-calendar {
+    /* .ui-datepicker-calendar {
         display: none;
-    }
+    } */
 </style>
 <!-- Grid -->
 <div class="container-fluid">
@@ -20,10 +20,21 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="periode" class="form-control datepicker">
+                                    <input type="text" name="periode" class="form-control monthpicker">
                                 </div>
                             </div>
 
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Status<span class="text-danger">*</span></label>
+                            <div class="col-sm-4 mt-2">
+                                <select name="status" id="status" class="form-select select2" style="width: 100%;">
+                                    @foreach ($data['combostatus'] as $status)
+                                    <option value="{{$status['id']}}"> {{$status['parameter']}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4 mt-2">
@@ -65,6 +76,7 @@
 </div>
 <!-- Detail -->
 @include('pencairangiropengeluaran._detail')
+@include('pencairangiropengeluaran._modal')
 @include('jurnalumum._jurnal')
 
 @push('scripts')
@@ -81,7 +93,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'nobukti'
+    let sortname = 'pengeluaran_nobukti'
     let sortorder = 'asc'
     let autoNumericElements = []
     let rowNum = 10
@@ -104,39 +116,33 @@
         }
     }
 
+    initMonthpicker();
     $(document).ready(function() {
         $('#tabs').tabs();
 
         let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
         loadDetailGrid()
         loadJurnalUmumGrid(nobukti)
-
+        $('.select2').select2({
+            width: 'resolve',
+            theme: "bootstrap4"
+        });
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
-        $('.datepicker').datepicker({
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                showOn: "button",
-                dateFormat: 'mm-yy',
-                onClose: function(dateText, inst) {
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                }
-            }).siblings(".ui-datepicker-trigger")
-            .wrap(
-                `<div class="input-group-append"></div>`)
-            .addClass("btn btn-easyui text-easyui-dark").html(`
-			    <i class="fa fa-calendar-alt"></i>
-		    `);
-
-
         $(document).on('click', '#btnReload', function(event) {
-            console.log(selectedRows)
+            $('.checkbox-jqgrid').prop('disabled',true)
+            selectedRows = []
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     periode: $('#crudForm').find('[name=periode]').val(),
+                    status: $('#status').find(":selected").val(),
+                    proses: 'reload'
                 },
             }).trigger('reloadGrid');
+           
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
         })
 
         function approve() {
@@ -148,18 +154,29 @@
             let form = $('#crudForm')
             let data = $('#crudForm').serializeArray()
 
-            $.each(selectedRows, function(index, item) {
-                data.push({
-                    name: 'pengeluaranId[]',
-                    value: item
-                })
-                data.push({
-                    name: 'nobukti[]',
-                    value: $(`tr#${item}`).find(`td[aria-describedby="jqGrid_nobukti"]`).text()
-                })
-                
-            });
 
+            let nobukti = [];
+            let nobuktiCair = [];
+            let tglbuktigiro = [];
+            $.each(selectedRows, function(index, item) {
+                nobukti.push($(`#jqGrid tr#${item}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).text())
+                nobuktiCair.push($(`#jqGrid tr#${item}`).find(`td[aria-describedby="jqGrid_nobukti"]`).text())
+                tglbuktigiro.push($(`#jqGrid tr#${item}`).find(`td[aria-describedby="jqGrid_tglbukti_giro"]`).text())
+            });
+            let requestData = {
+                'nobukti': nobukti,
+                'nobuktiCair': nobuktiCair,
+                'tglbuktigiro': tglbuktigiro,
+            };
+
+            data.push({
+                name: 'jumlahdetail',
+                value: selectedRows.length
+            })
+            data.push({
+                name: 'detail',
+                value: JSON.stringify(requestData)
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -202,13 +219,18 @@
                 },
                 data: data,
                 success: response => {
-                    $('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
-
-                    $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    let data = $('#jqGrid').jqGrid("getGridParam", "postData");
-                    $('#crudForm').find('[name=periode]').val(data.periode)
+                   
+                    $('#jqGrid').jqGrid('setGridParam', {
+                        postData: {
+                            periode: $('#crudForm').find('[name=periode]').val(),
+                            status: $('#status').find(":selected").val(),
+                            proses: 'reload'
+                        },
+                    }).trigger('reloadGrid');
                     selectedRows = []
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
                 },
                 error: error => {
 
@@ -263,7 +285,7 @@
                     {
                         label: 'NO BUKTI',
                         name: 'nobukti',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'left'
                     },
                     {
@@ -278,28 +300,64 @@
                         }
                     },
                     {
-                        label: 'NO BUKTI pengeluaran',
+                        label: 'NO BUKTI GIRO',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
-                        name: 'pengeluaran_nobukti',
+                        name: 'urlpengeluaran',
                         align: 'left',
                         formatter: (value, options, rowData) => {
-                            if ((value == null) ||( value == '')) {
-                              return '';
+                            if ((value == null) || (value == '')) {
+                                return '';
                             }
-                            let tgldari = rowData.tgldariheaderpengeluaranheader
-                            let tglsampai = rowData.tglsampaiheaderpengeluaranheader
-                            let url = "{{route('pengeluaranheader.index')}}"
-                            let formattedValue = $(`
-                            <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-                           `)
-                           return formattedValue[0].outerHTML
-                         }
+                        //     let tgldari = rowData.tgldariheaderpengeluaranheader
+                        //     let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+                        //     let url = "{{route('pengeluaranheader.index')}}"
+                        //     let formattedValue = $(`
+                        //     <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+                        //    `)
+                            return value
+                        }
+                    },
+                    {
+                        label: 'TGL BUKTI GIRO',
+                        name: 'tglbukti_giro',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
+                        label: 'NOMINAL',
+                        name: 'nominal',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'right',
+                        formatter: currencyFormat
+                    },
+                    {
+                        label: 'pengeluaran_nobukti',
+                        name: 'pengeluaran_nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        hidden: true,
+                        search: false
                     },
                     {
                         label: 'ALAT BAYAR',
                         name: 'alatbayar_id',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
+                    },
+                    {
+                        label: 'TGL JATUH TEMPO',
+                        name: 'tgljatuhtempo',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'BANK',
@@ -312,13 +370,6 @@
                         name: 'dibayarke',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
-                    },
-                    {
-                        label: 'NOMINAL',
-                        name: 'nominal',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-                        align: 'right',
-                        formatter: currencyFormat
                     },
                     {
                         label: 'MODIFIED BY',
@@ -364,6 +415,7 @@
                 viewrecords: true,
                 postData: {
                     periode: $('#crudForm').find('[name=periode]').val(),
+                    status: $('#status').find(":selected").val()
                 },
                 prmNames: {
                     sort: 'sortIndex',
@@ -392,14 +444,15 @@
                 },
                 onSelectRow: function(id, status) {
                     let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
+                    let nobuktiCair = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
                     activeGrid = $(this)
                     indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-                    loadDetailData(id)
-                    loadJurnalUmumData(id, nobukti)
+                    loadDetailData(id, nobukti, $('#status').find(":selected").val())
+                    loadJurnalUmumData(id, nobuktiCair)
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
@@ -462,7 +515,7 @@
                             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                         }
                     }, 100)
-
+                    $('.checkbox-jqgrid').prop('disabled',false)
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
                     setHighlight($(this))
@@ -485,15 +538,27 @@
 
             .customPager({
                 buttons: [{
-                    id: 'approveun',
-                    innerHTML: '<i class="fa fa-plus"></i> PROSES',
-                    class: 'btn btn-primary btn-sm mr-1',
-                    onClick: () => {
+                        id: 'approveun',
+                        innerHTML: '<i class="fa fa-plus"></i> PROSES',
+                        class: 'btn btn-primary btn-sm mr-1',
+                        onClick: () => {
 
-                        approve()
+                            approve()
 
+                        }
+                    },
+                    {
+                        id: 'edittgl',
+                        innerHTML: '<i class="fa fa-pen"></i> EDIT TGL JATUH TEMPO',
+                        class: 'btn btn-success btn-sm mr-1',
+                        onClick: () => {
+                            $('#tglJatuhTempoModal').data('action', 'edittgl')
+                            $('#tglJatuhTempoModal').modal('show')
+
+                        }
                     }
-                }]
+                ]
+                
             })
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
@@ -504,6 +569,9 @@
         function permission() {
             if (!`{{ $myAuth->hasPermission('pencairangiropengeluaranheader', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
+            }
+            if (!`{{ $myAuth->hasPermission('pencairangiropengeluaranheader', 'updateTglJatuhTempo') }}`) {
+                $('#edittgl').attr('disabled', 'disabled')
             }
         }
     })

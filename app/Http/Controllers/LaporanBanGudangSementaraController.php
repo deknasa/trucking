@@ -42,8 +42,9 @@ class LaporanBanGudangSementaraController extends MyController
             ->get(config('app.api_url') . 'laporanbangudangsementara/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanbangudangsementara', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanbangudangsementara', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -70,6 +71,7 @@ class LaporanBanGudangSementaraController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
 
@@ -77,13 +79,17 @@ class LaporanBanGudangSementaraController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
-        $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3', $data[0]['judulLaporan'] ?? '');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
 
-        $detail_table_header_row = 4;
+        $detail_table_header_row = 5;
         $detail_start_row = $detail_table_header_row + 1;
 
         $styleArray = array(

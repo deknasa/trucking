@@ -46,17 +46,20 @@
                 <div class="card" style="max-height:500px; overflow-y: scroll;">
                   <div class="card-body">
                     <!-- <div class="table-responsive"> -->
-                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800px;">
+                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2150px;">
                       <thead>
                         <tr>
                           <th width="2%">No</th>
                           <th width="13%">Trado</th>
-                          <th width="15%">Supir</th>
-                          <th width="30%">Keterangan</th>
-                          <th width="15%">Status</th>
-                          <th width="8%">jlh trip</th>
-                          <th width="9%">tgl batas</th>
-                          <th width="15%" class="uangjalan">Uang Jalan</th>
+                          <th width="5%">supir serap</th>
+                          <th width="5%">tambahan trado</th>
+                          <th width="10%">Supir</th>
+                          <th width="10%" class="uangjalan">Uang Jalan</th>
+                          <th width="16%">Keterangan</th>
+                          <th width="10%" class="kolom-jeniskendaraan">jenis kendaraan</th>
+                          <th width="10%">Status</th>
+                          <th width="6%">jlh trip</th>
+                          <th width="8%">tgl batas</th>
                           {{-- <th width="2%">Aksi</th> --}}
                         </tr>
                       </thead>
@@ -95,7 +98,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colspan="7">
+                          <td colspan="5">
                             <h5 class="text-right font-weight-bold">TOTAL:</h5>
                           </td>
                           <td>
@@ -198,6 +201,10 @@
         value: $('#tgldariheader').val()
       })
       data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
         name: 'tglsampai',
         value: $('#tglsampaiheader').val()
       })
@@ -290,9 +297,50 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
+
+  function removeEditingBy(id) {
+    
+    let formData = new FormData();
+
+
+    formData.append('id', id);
+    formData.append('aksi', 'BATAL');
+    formData.append('table', 'absensisupirheader');
+
+    fetch(`{{ config('app.api_url') }}removeedit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: formData,
+        keepalive: true
+
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        $("#crudModal").modal("hide");
+      })
+      .catch(error => {
+        // Handle error
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid');
+          $('.invalid-feedback').remove();
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON);
+        }
+      })
+    
+  }
 
 
 
@@ -552,6 +600,10 @@
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
 
+            if (!activeKolomJenisKendaraan) {
+              $(`.kolom-jeniskendaraan`).hide()
+            }
+
             if (isTradoMilikSupir == 'YA') {
 
               form.find(`[name="supir[]"]`).prop('readonly', true)
@@ -597,6 +649,9 @@
             }
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+            if (!activeKolomJenisKendaraan) {
+              $(`.kolom-jeniskendaraan`).hide()
+            }
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -663,6 +718,10 @@
             name.attr('disabled', true)
             name.find('.lookup-toggler').remove()
             nameFind.find('button.button-clear').remove()
+
+            if (!activeKolomJenisKendaraan) {
+              $(`.kolom-jeniskendaraan`).hide()
+            }
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -696,11 +755,17 @@
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
-            <tr>
+            <tr class="index${index}">
               <td></td>
               <td>
                 <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
                 <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}" readonly>
+              </td>
+              <td>
+                <input type="text" class="form-control" name="statussupirserap[]" value="${detail.statussupirserap}" readonly>
+              </td>
+              <td>
+                <input type="text" class="form-control" name="statustambahantrado[]" value="${detail.statustambahantrado}" readonly>
               </td>
               <td>
                 <input type="hidden" name="supir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
@@ -709,8 +774,15 @@
                 <input type="hidden" name="supir_id[]" id="supir_id_row_${index}">
                 <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" id="supir_row_${index}" value="${detail.supir}">
               </td>
+              <td class="uangjalan">
+                <input type="text" id="uangjalan_row_${index}" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}" ${detail.uangjalan_readonly}>
+              </td>
               <td>
                 <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
+              </td>
+              <td class='kolom-jeniskendaraan'>
+                <input type="hidden" name="statusjeniskendaraan[]" value="">
+                <input type="text" name="jeniskendaraan[]"  data-current-value="" id="jeniskendaraan-${index}" class="form-control  jeniskendaraan-lookup" value="">
               </td>
               <td>
                 <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
@@ -723,9 +795,6 @@
               <td>
                 <input type="text" class="form-control autonumeric" name="tglbatas[]" value="${detail.tglbatas}" disabled></input>
               </td>
-              <td class="uangjalan">
-                <input type="text" id="uangjalan_row_${index}" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}" ${detail.uangjalan_readonly}>
-              </td>
               <input type="hidden" name="namasupir_old[]" value="${detail.namasupir_old}">
               <input type="hidden" name="supirold_id[]" value="${detail.supir_id_old}">
 
@@ -733,6 +802,15 @@
             `)
 
             detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+            if (detail.statusjeniskendaraan) {
+              detailRow.find(`[name="statusjeniskendaraan[]"]`).val(detail.statusjeniskendaraan)
+              detailRow.find(`[name="jeniskendaraan[]"]`).val(detail.statusjeniskendaraannama)
+              detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", detail.statusjeniskendaraannama);
+            }else{
+              detailRow.find(`[name="statusjeniskendaraan[]"]`).val(response.attributes.defaultJenis.id)
+              detailRow.find(`[name="jeniskendaraan[]"]`).val(response.attributes.defaultJenis.text)
+              detailRow.find(`[name="jeniskendaraan[]"]`).attr("data-current-value", response.attributes.defaultJenis.text);
+            }
             // getabsentrado(detail.absen_id).then((response) => {
             //       setSupirEnableIndex(response, index)
             //     }).catch(() => {
@@ -826,10 +904,69 @@
                 setSupirEnableIndex(false, index)
               }
             })
+            $(`.jeniskendaraan-lookup`).last().lookupMaster({
+              title: 'Jenis Kendaraan',
+              fileName: 'parameterMaster',
+              typeSearch: 'ALL',
+              searching: 1,
+              beforeProcess: function() {
+                this.postData = {
+                  url: `${apiUrl}parameter/combo`,
+                  grp: 'STATUS JENIS KENDARAAN',
+                  subgrp: 'STATUS JENIS KENDARAAN',
+                  searching: 1,
+                  valueName: `jeniskendaraan_id`,
+                  searchText: `jeniskendaraan-${index}`,
+                  singleColumn: true,
+                  hideLabel: true,
+                  title: 'JENIS KENDARAAN'
+                };
+              },
+              onSelectRow: (status, element) => {
+                element.parents('td').find(`[name="jeniskendaraan_id[]"]`).val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'));
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="jeniskendaraan_id[]"]`).val('')
+                element.val('');
+                element.data('currentValue', element.val());
+              },
+            });
+            $('.jeniskendaraan-lookup').last().parents('td').children().find('input').attr('disabled', true)
+            $('.jeniskendaraan-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+            $('.jeniskendaraan-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
             if (detail.berlaku == 0) {
               $('.absentrado-lookup').last().parents('td').children().find('input').attr('disabled', true)
               $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
               $('.absentrado-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+            }
+            if ( detail.pujnobukti_readonly == "readonly") {
+              $('.absentrado-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.absentrado-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+              
+              $('.jeniskendaraan-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.jeniskendaraan-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.jeniskendaraan-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+              
+              $('.uangjalan').last().attr('readonly', true)
+             
+              $('.supir-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.supir-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.supir-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+            }
+            if (detail.tidakadasupir == "readonly") {
+              setSupirEnableIndex({supir:1}, index,detail.supir_id)
+            } else if (detail.jlhtrip >0) {
+              // console.log(detail.jlhtrip,index,detail.supir);
+              setSupirEnableIndex({supir:1}, index,detail.supir_id)
+            }
+            if (detail.tgltrip) {
+              setRowDisable(index);
             }
           })
 
@@ -1002,6 +1139,53 @@
     }
   }
 
+  function approvalFinalAbsensi(id) {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}absensisupirheader/approvalfinalabsensi`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        bukti: selectedbukti ,
+        table: 'absensisupirheader' ,
+        statusapproval: 'statusapprovalfinalabsensi' ,
+
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
+
+
   function cekValidasi(Id, Aksi) {
 
     $.ajax({
@@ -1058,28 +1242,46 @@
     })
   }
 
-  function setSupirEnableIndex(kodeabsensitrado, rowId) {
+  function setSupirEnableIndex(kodeabsensitrado, rowId,supir = false) {
+    var supirText = $(`#supir_row_${rowId}`).parents('.input-group').children()
+
     if (kodeabsensitrado.supir) {
-      $(`#supir_row_${rowId}`).val('')
-      $(`#supir_id_row_${rowId}`).val('')
-      // $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
+      if (!supir) {
+        $(`#supir_row_${rowId}`).val('')
+        $(`#supir_id_row_${rowId}`).val('')
+        
+      }
+      $(`#supir_id_row_${rowId}`).prop('readonly', true);
+      $(`#supir_row_${rowId}`).prop('readonly', true);
+      $(supirText[1]).attr('disabled', true)
+      $(supirText[2]).find('.lookup-toggler').attr('disabled', true)
     } else {
-      console.log(rowId);
+      $(`#supir_id_row_${rowId}`).prop('readonly', false);
+      $(`#supir_row_${rowId}`).prop('readonly', false);
+      $(supirText[1]).attr('disabled', false)
+      $(supirText[2]).find('.lookup-toggler').attr('disabled', false)
       let namasupir_old = $(`#supir_old_row_${rowId}`).val()
       let supir_id_old = $(`#supir_old_id_row_${rowId}`).val()
+      if (namasupir_old != null && supir_id_old != 0 && namasupir_old != 'null' && supir_id_old != '0') {
+        $(`#supir_row_${rowId}`).val(namasupir_old)
+        $(`#supir_id_row_${rowId}`).val(supir_id_old)
+      }
 
-      console.log($(`#supir_old_row_${rowId}`), $(`#supir_old_id_row_${rowId}`));
-      $(`#supir_row_${rowId}`).val(namasupir_old)
-      $(`#supir_id_row_${rowId}`).val(supir_id_old)
     }
     if (kodeabsensitrado.uang) {
       $(`#uangjalan_row_${rowId}`).attr('readonly', true)
-    }else{
+    } else {
       $(`#uangjalan_row_${rowId}`).attr('readonly', false)
     }
 
 
   }
+
+  function setRowDisable(rowId) {
+    $(`.index${rowId} input`).attr('readonly', true);
+    $(`.index${rowId} button`).attr('disabled', true);
+  }
+
 
   function getabsentrado(id) {
     return new Promise((resolve, reject) => {

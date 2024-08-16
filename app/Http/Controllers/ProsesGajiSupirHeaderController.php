@@ -17,7 +17,8 @@ class ProsesGajiSupirHeaderController extends MyController
         $title = $this->title;
         $data = [
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'listbtn' => $this->getListBtn()
         ];
         return view('prosesgajisupirheader.index', compact('title', 'data'));
     }

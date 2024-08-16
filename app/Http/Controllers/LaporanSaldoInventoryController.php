@@ -48,8 +48,9 @@ class LaporanSaldoInventoryController extends MyController
         $data = $header['data'];
         $user = Auth::user();
         $opname['opname'] = $header['opname'];
+        $dataCabang['namacabang'] = $header['namacabang'];
 
-        return view('reports.laporansaldoinventory', compact('data', 'user', 'detailParams', 'opname'));
+        return view('reports.laporansaldoinventory', compact('data','dataCabang', 'user', 'detailParams', 'opname'));
     }
 
     public function export(Request $request): void
@@ -80,6 +81,7 @@ class LaporanSaldoInventoryController extends MyController
         $format = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DMYMINUS;
 
         $data = $header['data'];
+        $namacabang = $header['namacabang'];
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -87,21 +89,25 @@ class LaporanSaldoInventoryController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
-
-        $sheet->setCellValue('A2', 'LAPORAN SALDO INVENTORY');
-        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:G2');
 
-        $sheet->setCellValue('A4', 'PERIODE');
-        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
-        $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('A3', 'LAPORAN SALDO INVENTORY');
+        $sheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A3:G3');
 
-        $sheet->setCellValue('B4', ': ' . $request->priode);
-
-        $sheet->setCellValue('A5', 'STOK');
+        $sheet->setCellValue('A5', 'PERIODE');
         $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B5")->getFont()->setSize(12)->setBold(true);
+
+        $sheet->setCellValue('B5', ': ' . $request->priode);
+
+        $sheet->setCellValue('A6', 'STOK');
+        $sheet->getStyle("A6")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B6")->getFont()->setSize(12)->setBold(true);
 
         $stokdari = $data[0]['stokdari'] ?? " ";
         $stoksampai = $data[0]['stoksampai'] ?? " ";
@@ -111,17 +117,17 @@ class LaporanSaldoInventoryController extends MyController
         $sheet->setCellValue('B5', ': ' .  $stokdari . " S/D" . " " . $stoksampai);
         $kelompok = ($request->kelompok != '') ? $request->kelompok : 'ALL';
 
-        $sheet->setCellValue('A6', 'KATEGORI');
-        $sheet->getStyle("A6")->getFont()->setSize(12)->setBold(true);
-        $sheet->getStyle("B6")->getFont()->setSize(12)->setBold(true);
-        $sheet->setCellValue('B6', ': ' . $kelompok);
-
-        $sheet->setCellValue('A7', $lokasi);
+        $sheet->setCellValue('A7', 'KATEGORI');
         $sheet->getStyle("A7")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B7")->getFont()->setSize(12)->setBold(true);
-        $sheet->setCellValue('B7', ': ' . $namalokasi);
+        $sheet->setCellValue('B7', ': ' . $kelompok);
 
-        $sheet->getStyle("C4")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('A8', $lokasi);
+        $sheet->getStyle("A8")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B8")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('B8', ': ' . $namalokasi);
+
+        $sheet->getStyle("C5")->getFont()->setSize(12)->setBold(true);
 
         $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;

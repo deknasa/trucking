@@ -1,4 +1,3 @@
-
 @include('layouts._rangeheaderlookup')
 <table id="pengeluaranStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 {{-- <div id="pengeluaranStokHeaderLookupPager"></div> --}}
@@ -7,18 +6,32 @@
 <script>
   setRangeLookup()
   initDatepicker()
-  $(document).on('click', '#btnReloadLookup', function(event) {
-    loadDataHeaderLookup('pengeluaranstokheader', 'pengeluaranStokHeaderLookup')
+  $('#btnReloadLookup').click(function(event) {
+    event.preventDefault()
+    console.log('tekan')
+    loadDataHeaderLookup('pengeluaranstokheader', 'pengeluaranStokHeaderLookup', {
+      penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+      cabang: `{!! $cabang ?? '' !!}`,
+      from: `{!! $from ?? '' !!}`,
+      aksi: `{!! $aksi ?? '' !!}`,
+      pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
+
+      tgldari: $('#tgldariheaderlookup').val(),
+      tglsampai: $('#tglsampaiheaderlookup').val(),
+    }, `{!! $url ?? config('app.api_url')  !!}` + 'pengeluaranstokheader')
   })
 
   $('#pengeluaranStokHeaderLookup').jqGrid({
-      url: `{!! $url ?? config('app.api_url')  !!}`+'pengeluaranstokheader',
+      url: `{!! $url ?? config('app.api_url')  !!}` + 'pengeluaranstokheader',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       postData: {
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
+        aksi: `{!! $aksi ?? '' !!}`,
+        pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
 
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
@@ -26,117 +39,117 @@
       idPrefix: 'pengeluaranStokHeaderLookup',
       datatype: "json",
       colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'Gudang',
-            name: 'gudang',
-            align: 'left'
-          },
-          {
-            label: 'Trado',
-            name: 'trado',
-            align: 'left'
-          },
-          {
-            label: 'gandengan',
-            name: 'gandengan',
-            align: 'left'
-          },
-          {
-            label: 'supplier',
-            name: 'supplier',
-            align: 'left'
-          },
-          {
-            label: 'supir',
-            name: 'supir',
-            align: 'left'
-          },
-          {
-            label: 'PENgeluaran Stok',
-            name: 'pengeluaranstok',
-            align: 'left'
-          },
-          {
-            label: 'Pengeluaran trucking no BUKTI',
-            name: 'pengeluarantrucking_nobukti',
-            align: 'left'
-          },
-          
-          {
-            label: 'SERVICE IN NO BUKTI',
-            name: 'servicein_nobukti',
-            align: 'left'
-          },
-         
-          
-          {
-            label: 'Penerimaan stok no bukti',
-            name: 'penerimaanstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Pengeluaran no bukti',
-            name: 'pengeluaranstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Penerimaan no bukti',
-            name: 'penerimaan_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'kerusakan',
-            name: 'kerusakan',
-            align: 'left'
-          },
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-        ],
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tglbukti',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'Gudang',
+          name: 'gudang',
+          align: 'left'
+        },
+        {
+          label: 'Trado',
+          name: 'trado',
+          align: 'left'
+        },
+        {
+          label: 'gandengan',
+          name: 'gandengan',
+          align: 'left'
+        },
+        {
+          label: 'supplier',
+          name: 'supplier',
+          align: 'left'
+        },
+        {
+          label: 'supir',
+          name: 'supir',
+          align: 'left'
+        },
+        {
+          label: 'PENgeluaran Stok',
+          name: 'pengeluaranstok',
+          align: 'left'
+        },
+        {
+          label: 'Pengeluaran trucking no BUKTI',
+          name: 'pengeluarantrucking_nobukti',
+          align: 'left'
+        },
+
+        {
+          label: 'SERVICE IN NO BUKTI',
+          name: 'servicein_nobukti',
+          align: 'left'
+        },
+
+
+        {
+          label: 'Penerimaan stok no bukti',
+          name: 'penerimaanstok_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'Pengeluaran no bukti',
+          name: 'pengeluaranstok_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'Penerimaan no bukti',
+          name: 'penerimaan_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'kerusakan',
+          name: 'kerusakan',
+          align: 'left'
+        },
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+      ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -172,16 +185,16 @@
       },
       loadBeforeSend: function(jqXHR) {
         cab = `{!! $cabang ?? '' !!}`;
-        if(cab == 'TNL'){
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
-        }else{
+        // if (cab == 'TNL') {
+        //   jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        // } else {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-        }
+        // }
 
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

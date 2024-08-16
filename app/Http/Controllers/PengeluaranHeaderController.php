@@ -24,8 +24,11 @@ class PengeluaranHeaderController extends MyController
         $data = [            
             'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
+            'combokirimberkas' => $this->comboCetak('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
             'combobank' => $this->comboBank(),
+            'listbtn' => $this->getListBtn()
         ];
+        
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]
         );
@@ -112,7 +115,8 @@ class PengeluaranHeaderController extends MyController
     {
         $detailParams = [
             'aktif' => 'AKTIF',
-            'format' => 'pengeluaran'
+            'from' => 'pengeluaran',
+            'limit' => 0
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
@@ -138,6 +142,7 @@ class PengeluaranHeaderController extends MyController
 
         return $response['data'];
     }
+
 
     // /**
     //  * Fungsi combo
@@ -189,11 +194,12 @@ class PengeluaranHeaderController extends MyController
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $pengeluaran["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-
+        $cabang['cabang'] = session('cabang');
+        // dd($cabang['cabang']);
         if($pengeluaran['tipe_bank'] === 'KAS')
-        { return view('reports.pengeluarankas', compact('pengeluaran', 'pengeluaran_details','printer'));
+        { return view('reports.pengeluarankas', compact('pengeluaran', 'pengeluaran_details','printer', 'cabang',));
         } else {
-            return view('reports.pengeluaranbank', compact('pengeluaran', 'pengeluaran_details','printer'));
+            return view('reports.pengeluaranbank', compact('pengeluaran', 'pengeluaran_details','printer', 'cabang',));
         }
     }
 

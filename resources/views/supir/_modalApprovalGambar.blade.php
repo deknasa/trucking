@@ -207,7 +207,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalApprovalGambarTitle').text('un/approval Approval Supir Gambar')
+    $('#crudModalApprovalGambarTitle').text('APPROVAL/UN Approval Supir Gambar')
     $('#crudModalApprovalGambar').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -232,7 +232,7 @@
     <i class="fa fa-save"></i>
     Save
   `)
-    $('#crudModalApprovalGambarTitle').text('un/approval Supir tanpa Gambar')
+    $('#crudModalApprovalGambarTitle').text('APPROVAL/UN Supir tanpa Gambar')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise

@@ -124,6 +124,16 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
+                        label: 'MANDOR',
+                        name: 'mandor',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+                    },
+                    {
+                        label: 'keterangan',
+                        name: 'keterangan',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_4 : md_mobile_3,
+                    },
+                    {
                         label: 'Status Approval',
                         name: 'statusapproval',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -397,7 +407,7 @@
                 ],
                 extndBtn: [{
                     id: 'approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                     class: 'btn btn-purple btn-sm mr-1',
                     onClick: () => {
                         approve()

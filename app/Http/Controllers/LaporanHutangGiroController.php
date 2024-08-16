@@ -69,13 +69,14 @@ class LaporanHutangGiroController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanhutanggiro/report', $detailParams);
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
 
 
 
         // $dataHeader = $header['dataheader'];
         $user = Auth::user();
         // dd($data);
-        return view('reports.laporanhutanggiro', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanhutanggiro', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
 
@@ -103,6 +104,7 @@ class LaporanHutangGiroController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
 
+        $namacabang = $responses['namacabang'];
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
 
@@ -114,6 +116,10 @@ class LaporanHutangGiroController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:F2');
         
 
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -121,15 +127,15 @@ class LaporanHutangGiroController extends MyController
         
         $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->periode)));
 
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'Periode : ' . $tanggal);
+        $sheet->setCellValue('A3', $pengeluaran[0]['judulLaporan']);
+        $sheet->setCellValue('A4', 'Periode : ' . $tanggal);
 
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->getStyle("A3:B3")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A4:B4")->getFont()->setBold(true);
 
-        $header_start_row = 5;
-        $detail_start_row = 6;
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(
@@ -230,8 +236,8 @@ class LaporanHutangGiroController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(F6:F" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->applyFromArray($style_number);
+        $totalDebet = "=SUM(F7:F" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         
         $ttd_start_row = $detail_start_row + 2;

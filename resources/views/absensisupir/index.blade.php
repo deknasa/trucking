@@ -18,6 +18,7 @@
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#rekap-tab">Rekap Absen Trado</a></li>
               <li class="kasgantung_nobukti"><a href="#kasgantung-tab">KAS GANTUNG</a></li>
+              <li><a href="#tidaklengkap-tab">Data tidak lengkap</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
@@ -27,6 +28,9 @@
             </div>
             <div class="kasgantung_nobukti" id="kasgantung-tab">
               <table id="kasgantungGrid"></table>
+            </div>
+            <div id="tidaklengkap-tab">
+              <table id="dataTidakLengkapGrid"></table>
             </div>
           </div>
         </div>
@@ -41,6 +45,7 @@
 @include('absensisupir._detail')
 @include('absensisupir._rekapabsentrado')
 @include('absensisupir._kasgantung')
+@include('absensisupir._tidaklengkap')
 
 @push('scripts')
 <script>
@@ -63,14 +68,22 @@
   var statusTidakBisaEdit;
   let approveEditRequest = null;
   let showKasgantung = true;
+  let absensiTangki;
   let tgldariheader
   let tglsampaiheader
+  let activeKolomJenisKendaraan
   let isTradoMilikSupir = ''
   let selectedRows = [];
   let selectedbukti = [];
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    // perubahan
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
+    $("#jqGrid").jqGrid('setSelection', value,false);
+    onSelectRowExisting(value)
+    // 
+
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
 
     if (element.checked) {
@@ -137,10 +150,13 @@
 
     $("#tabs").tabs()
     setTampilanIndex()
+    isAbsensiTangki()
     loadDetailGrid()
+    loadDataTidakLengkapGrid()
     loadRekapAbsenTradoGrid()
     loadKasGantungGrid()
     setTradoMilikSupir()
+    GetActiveKolomJenisKendaraan()
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
@@ -155,7 +171,10 @@
       selectedbukti = []
       $('#gs_').prop('checked', false)
     })
-    $("#jqGrid").jqGrid({
+    // perubahan
+    var grid= $("#jqGrid");  
+    grid.jqGrid({
+      // 
         url: `${apiUrl}absensisupirheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -271,6 +290,18 @@
           },
           {
             label: 'NO BUKTI KGT',
+            name: 'kasgantung',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return rowData.kasgantung_url
+            }
+          },
+          {
+            label: 'NO BUKTI KGT',
             name: 'kasgantung_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
@@ -292,6 +323,72 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat
           },
+          {
+            label: 'STATUS FINAL ABSENSI',
+            name: 'statusapprovalfinalabsensi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combofinalabsensi'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combofinalabsensi'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusFinalAbsensi = JSON.parse(value)
+              if (!statusFinalAbsensi) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFinalAbsensi.WARNA}; color: #fff;">
+                  <span>${statusFinalAbsensi.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFinalAbsensi = JSON.parse(rowObject.statusapprovalfinalabsensi)
+              if (!statusFinalAbsensi) {
+                return ` title=" "`
+              }
+              return ` title="${statusFinalAbsensi.MEMO}"`
+            }
+          },
+          {
+            label: 'USER FINAL ABSENSI',
+            name: 'userapprovalfinalabsensi',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TGL FINAL ABSENSI',
+            name: 'tglapprovalfinalabsensi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },          
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
@@ -487,19 +584,26 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: function(id) {
+        // perubahan
+        onSelectRow: onSelectRowFunction =function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_kasgantung_nobukti"]`).attr('title') ?? '';
 
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
+          // 
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
+          loadDataTidakLengkap(id)
           loadRekapAbsenTradoData(id)
           if (showKasgantung) {
-            loadKasGantungData(nobukti)
+            let referen = nobukti
+            if (absensiTangki) {
+              referen = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+            }
+            loadKasGantungData(referen,absensiTangki)
           }
         },
         loadComplete: function(data) {
@@ -568,6 +672,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          getQueryParameter()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -589,15 +694,17 @@
 
       .customPager({
 
-        extndBtn: [{
+        modalBtnList: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
+            class: 'btn btn-info btn-sm mr-1 ',
+            item: [{
                 id: 'reportPrinterBesar',
                 text: "Printer Lain(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterBesar; ?>`,
+                // hidden :(!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -610,6 +717,7 @@
               {
                 id: 'reportPrinterKecil',
                 text: "Printer Epson Seri LX(Faktur)",
+                color: `<?php echo $data['listbtn']->btn->reportPrinterKecil; ?>`,
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -642,25 +750,35 @@
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            item: [{
                 id: 'approvalEdit',
-                text: "UN/APPROVAL Absensi Edit",
+                text: "APPROVAL/UN Absensi Edit",
+                color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
-                    var selectedOne = selectedOnlyOne();
-                    if (selectedOne[0]) {
-                      approveEdit(selectedOne[1])
+                    // var selectedOne = selectedOnlyOne();
+                    // if (selectedOne[0]) {
+                    //   approveEdit(selectedOne[1])
+                    // } else {
+                    //   showDialog(selectedOne[1])
+                    // }
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
                     } else {
-                      showDialog(selectedOne[1])
+                      approveEdit()
                     }
                   }
                 }
               },
               {
                 id: 'approvalTripInap',
-                text: "UN/APPROVAL Pengajuan Trip Inap",
+                text: "APPROVAL/UN Pengajuan Trip Inap",
+                color: `<?php echo $data['listbtn']->btn->approvalpengajuantripinap; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`),
                 onClick: () => {
                   // if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`) {
                   // var selectedOne = selectedOnlyOne();                            
@@ -675,6 +793,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Absensi",
+                color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -688,7 +808,37 @@
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "APPROVAL/UN Kirim Berkas Absensi",
+                color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'ABSENSISUPIRHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
 
+              {
+                  id: 'approvalabsensifinal',
+                  text: "APPROVAL/UN Absensi Final",
+                  color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
+                  hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`),
+                  onClick: () => {
+                      if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`) {
+                        approvalFinalAbsensi();
+                      }
+                  }
+              },
+             
 
             ],
           },
@@ -697,10 +847,12 @@
             title: 'Lainnya',
             caption: 'Lainnya',
             innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            class: 'btn btn-secondary btn-sm mr-1',
+            item: [{
                 id: 'cekAbsenTrado',
                 text: "Cek Absen Trado",
+                color: `<?php echo $data['listbtn']->btn->cekabsentrado; ?>`,
+                hidden :(!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -813,6 +965,11 @@
       }
 
       hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
+        hakApporveCount--
+        $('#approval-kirim-berkas').hide()
+      }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
         hakApporveCount--
         $('#approvalEdit').hide()
@@ -821,6 +978,7 @@
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
       }
+      // console.log(hakApporveCount);
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -913,7 +1071,54 @@
     }
     getStatusEdit()
 
-    function approveEdit(id) {
+    function approveEdit() {
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+      if (approveEditRequest) {
+        approveEditRequest.abort();
+      }
+      approveEditRequest = $.ajax({
+        url: `${apiUrl}absensisupirheader/approvalEditAbsensi`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
+    function approveEditOld(id) {
       if (approveEditRequest) {
         approveEditRequest.abort();
       }
@@ -924,17 +1129,24 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
+   
         success: response => {
-          let msg = `YAKIN UnApprove Status Edit `
-          console.log(statusTidakBisaEdit);
-          if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
-            msg = `YAKIN Approve Status Edit `
+          if (response.data.statusapprovalfinalabsensi === "TIDAK"){
+            let msg = `YAKIN UnApprove Status Edit `
+              console.log(statusTidakBisaEdit);
+              if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
+                msg = `YAKIN Approve Status Edit `
+              }
+              showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi?absenId=${selectedRows}`)
+                .then(() => {
+                  selectedRows = []
+                  $('#gs_').prop('checked', false)
+                })
+
+          } else {
+            showDialog("TIDAK BISA APPROVAL KARENA SUDAH APPROVAL FINAL")
           }
-          showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi`)
-            .then(() => {
-              selectedRows = []
-              $('#gs_').prop('checked', false)
-            })
+
 
         },
       })
@@ -1016,6 +1228,42 @@
     })
   }
 
+  const isAbsensiTangki = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'ABSENSI TANGKI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'ABSENSI TANGKI'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.text == "YA") {
+            $("#jqGrid").jqGrid('showCol', 'kasgantung');
+            $("#jqGrid").jqGrid('hideCol', 'kasgantung_nobukti')
+            absensiTangki = true;
+          }else{
+            $("#jqGrid").jqGrid('showCol', 'kasgantung_nobukti');
+            $("#jqGrid").jqGrid('hideCol', 'kasgantung')
+            absensiTangki = false;
+          }
+            
+
+        }
+      })
+    })
+  }
+
   function setTradoMilikSupir() {
     $.ajax({
       url: `${apiUrl}parameter/getparamfirst`,
@@ -1030,6 +1278,24 @@
       },
       success: response => {
         isTradoMilikSupir = $.trim(response.text)
+      }
+    })
+  }
+  function GetActiveKolomJenisKendaraan() {
+    $.ajax({
+      url: `${apiUrl}absensisupirheader/getStatusJeniskendaraan`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+     
+      success: response => {
+        activeKolomJenisKendaraan = response.activeKolomJenisKendaraan
+        if (!activeKolomJenisKendaraan) {
+          $("#detail").jqGrid("hideCol", `statusjeniskendaraan`);
+          $("#dataTidakLengkapGrid").jqGrid("hideCol", `statusjeniskendaraan`);
+        }
       }
     })
   }

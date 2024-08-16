@@ -16,6 +16,7 @@
 @include('supir._modalApprovalGambar') --}}
 @include('supir._modalSupirResign')
 @include('supir._modalHistoryMandor')
+@include('supir._modalApprovalSupirLuarKota')
 
 @push('scripts')
 <script>
@@ -99,9 +100,9 @@
         })
     }
 
+    permission()
     $(document).ready(function() {
-        permission()
-        
+
         setTampilanIndex()
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}supir`,
@@ -150,6 +151,85 @@
                         hidden: true
                     },
                     {
+                        label: 'STATUS APPROVAL',
+                        name: 'statusapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4",
+                                    ajax: {
+                                        url: `${apiUrl}parameter/combo`,
+                                        dataType: 'JSON',
+                                        headers: {
+                                            Authorization: `Bearer ${accessToken}`
+                                        },
+                                        data: {
+                                            grp: 'STATUS Approval',
+                                            subgrp: 'STATUS Approval'
+                                        },
+                                        beforeSend: () => {
+                                            // clear options
+                                            $(element).data('select2').$results.children().filter((index, element) => {
+                                                // clear options except index 0, which
+                                                // is the "searching..." label
+                                                if (index > 0) {
+                                                    element.remove()
+                                                }
+                                            })
+                                        },
+                                        processResults: (response) => {
+                                            let formattedResponse = response.data.map(row => ({
+                                                id: row.text,
+                                                text: row.text
+                                            }));
+
+                                            formattedResponse.unshift({
+                                                id: 'ALL',
+                                                text: 'ALL'
+                                            });
+
+                                            return {
+                                                results: formattedResponse
+                                            };
+                                        },
+                                    }
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            if (!value) {
+                                return ''
+                            }
+                            let statusApproval = JSON.parse(value)
+
+                            if (statusApproval == null) {
+                                return '';
+                            }
+
+                            let formattedValue = $(`
+                            <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                              <span>${statusApproval.SINGKATAN}</span>
+                            </div>
+                          `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            if (!rowObject.statusapproval) {
+                                return ''
+                            }
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
+                            if (statusApproval == null) {
+                                return '';
+                            }
+                            return ` title="${statusApproval.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'NAMA',
                         name: 'namasupir',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
@@ -163,6 +243,17 @@
                         label: 'MANDOR',
                         name: 'mandor_id',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
+                    {
+                        label: 'TGL berlaku milik mandor',
+                        name: 'tglberlakumilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'TGL LAHIR',
@@ -208,7 +299,7 @@
                                     endforeach;
 
                                     ?>
-          `,
+                            `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -288,7 +379,7 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
-                    },                    
+                    },
                     {
                         label: 'TGL TERBIT SIM',
                         name: 'tglterbitsim',
@@ -455,14 +546,99 @@
                     // {
                     //   label: 'ZONA',
                     //   name: 'zona_id',
-                    // },
+                    // },                    
                     {
-                        label: 'angsuran pinjaman',
-                        name: 'angsuranpinjaman',
+                        label: 'TGL BATAS TDK BOLEH LUAR KOTA',
+                        name: 'tglbatastidakbolehluarkota',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align: 'left',
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
-                        label: 'plafon deposito',
-                        name: 'plafondeposito',
+                        label: 'Ket. TDK BOLEH LUAR KOTA',
+                        name: 'keterangantidakbolehluarkota',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+                    },
+                    // {
+                    //     label: 'angsuran pinjaman',
+                    //     name: 'angsuranpinjaman',
+                    // },
+                    // {
+                    //     label: 'plafon deposito',
+                    //     name: 'plafondeposito',
+                    // },
+                    {
+                        label: 'STATUS APP HISTORY SUPIR MILIK MANDOR',
+                        name: 'statusapprovalhistorysupirmilikmandor',
+                        width: 200,
+                        stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+                                    foreach ($data['statusapprovalhistorysupirmilikmandor'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['statusapprovalhistorysupirmilikmandor'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    ?>
+                            `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusApprovalHistorySupirMilikMandor = JSON.parse(value)
+
+                            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApprovalHistorySupirMilikMandor.WARNA}; color: #fff;">
+                  <span>${statusApprovalHistorySupirMilikMandor.SINGKATAN}</span>
+                </div>
+              `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApprovalHistorySupirMilikMandor = JSON.parse(rowObject.statusapprovalhistorysupirmilikmandor)
+
+                            return ` title="${statusApprovalHistorySupirMilikMandor.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'USER APP HISTORY SUPIR MILIK MANDOR',
+                        name: 'userapprovalhistorysupirmilikmandor',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    },
+                    {
+                        label: 'TGL APP HISTORY SUPIR MILIK MANDOR',
+                        name: 'tglapprovalhistorysupirmilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    {
+                        label: 'TGL UPDATE HISTORY SUPIR MILIK MANDOR',
+                        name: 'tglupdatehistorysupirmilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
                     },
                     {
                         label: 'STATUS POSTING TNL',
@@ -993,15 +1169,18 @@
                         }
                     },
                 ],
-                extndBtn: [{
+                modalBtnList: [{
                         id: 'approve',
                         title: 'Approve',
                         caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN ',
+                        class: 'btn btn-purple btn-sm mr-1',
+                        // targetModal:'#listMenuModal',
+                        item: [{
                                 id: 'approvalBlackListSupir',
-                                text: "un/Approval Black List Supir",
+                                text: "APPROVAL/UN Black List Supir",
+                                color: `<?php echo $data['listbtn']->btn->approvalblacklist; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -1014,108 +1193,286 @@
                                 }
                             },
                             {
+                                id: 'approveun',
+                                text: "APPROVAL/UN Kacab",
+                                color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approval') }}`),
+                                onClick: () => {
+                                    approve()
+                                }
+                            },
+                            {
+                                id: 'approvalaktif',
+                                text: "Approval Aktif",
+                                color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`) {
+                                        approvalAktif('supir')
+
+                                    }
+                                }
+                            },
+                            {
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
+                                color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`),
                                 onClick: () => {
-                                    approvalNonAktif('supir')
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
+                                        approvalNonAktif('supir')
+                                    }
                                 }
                             },
                             {
                                 id: 'approvalSupirLuarKota',
-                                text: "un/Approval Supir Luar Kota",
+                                text: "APPROVAL/UN Supir Luar Kota",
+                                color: `<?php echo $data['listbtn']->btn->approvalsupirluarkota; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
+                                        // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        // if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        //     showDialog('Harap pilih salah satu record')
+                                        // } else {
+                                        //     approvalSupirLuarKota(selectedId)
+                                        // }
+                                        var selectedOne = selectedOnlyOne();
+                                        if (selectedOne[0]) {
+                                            approvalLuarKota(selectedOne[1])
                                         } else {
-                                            approvalSupirLuarKota(selectedId)
+                                            showDialog(selectedOne[1])
                                         }
                                     }
                                 }
                             },
                             {
                                 id: 'approvalSupirResign',
-                                text: "un/Approval Supir Resign",
+                                text: "APPROVAL/UN Supir Resign",
+                                color: `<?php echo $data['listbtn']->btn->approvalresign; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
                                         var selectedOne = selectedOnlyOne();
                                         if (selectedOne[0]) {
                                             supirResign(selectedOne[1])
                                         } else {
-                                          showDialog(selectedOne[1])
+                                            showDialog(selectedOne[1])
                                         }
                                     }
                                 }
                             },
                             {
+                                id: 'approvalHistorySupirMilikMandor',
+                                text: "APPROVAL/UN History Supir Milik Mandor",
+                                color: `<?php echo $data['listbtn']->btn->approvalhistorysupirmilikmandor; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`),
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+                                        approvalHistorySupirMilikMandor();
+                                    }
+                                }
+                            },
+
+                            {
                                 id: 'StoreApprovalTradoTanpa',
-                                text: "un/Approval Supir Tanpa Keterangan/Gambar",
+                                text: "APPROVAL/UN Supir Tanpa Keterangan/Gambar",
+                                color: `<?php echo $data['listbtn']->btn->approvaltanpaketerangan; ?>`,
+                                hidden: (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`),
                                 onClick: () => {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
                                         cekValidasiTanpa(selectedOne[1])
                                     } else {
-                                      showDialog(selectedOne[1])
+                                        showDialog(selectedOne[1])
                                     }
                                 }
                             },
-                            // {
-                            //     id: 'approvalSupirKeterangan',
-                            //     text: "un/Approval Supir tanpa Keterangan",
-                            //     onClick: () => {
-                            //         // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
-                            //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            //             showDialog('Harap pilih salah satu record')
-                            //         } else {
-                            //             approvalSupirKeterangan(selectedId);
-                            //         }
-                            //         // }
-                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //     }
-                            // },
-                            // {
-                            //     id: 'approvalSupirGambar',
-                            //     text: "un/Approval Supir tanpa Gambar",
-                            //     onClick: () => {
-                            //         // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
-                            //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            //             showDialog('Harap pilih salah satu record')
-                            //         } else {
-                            //             approvalSupirGambar(selectedId);
-                            //         }
-                            //         // }
-                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            //     }
-                            // },
-
                         ]
                     },
-
                     {
                         id: 'lainnya',
                         title: 'Lainnya',
                         caption: 'Lainnya',
                         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                        class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [{
+                        class: 'btn btn-secondary btn-sm mr-1',
+                        // targetModal:'#listMenuModal',
+                        item: [{
                             id: 'historyMandor',
                             text: "History Supir Milik Mandor",
+                            hidden: (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`),
+                            color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
-                                        editSupirMilikMandor(selectedOne[1])
+                                        // editSupirMilikMandor(selectedOne[1])
+                                        cekValidasihistory(selectedOne[1], 'historyMandor')
+
                                     } else {
-                                      showDialog(selectedOne[1])
+                                        showDialog(selectedOne[1])
                                     }
                                 }
-                            }
-                        }, ],
+                            },
+                        }, ]
+
                     }
-                ]
+                ],
+                // extndBtn: [{
+                //         id: 'approve',
+                //         title: 'Approve',
+                //         caption: 'Approve',
+                //         innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+                //         class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                //         dropmenuHTML: [{
+                //                 id: 'approvalBlackListSupir',
+                //                 text: "APPROVAL/UN Black List Supir",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+                //                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //                         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //                             showDialog('Harap pilih salah satu record')
+                //                         } else {
+                //                             approvalBlackListSupir(selectedId)
+                //                         }
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approveun',
+                //                 text: "APPROVAL/UN Kacab",
+                //                 onClick: () => {
+                //                     approve()
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalnonaktif',
+                //                 text: "Approval Non Aktif",
+                //                 onClick: () => {
+                //                     approvalNonAktif('supir')
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalaktif',
+                //                 text: "Approval Aktif",
+                //                 onClick: () => {
+                //                     approvalAktif('supir')
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalSupirLuarKota',
+                //                 text: "APPROVAL/UN Supir Luar Kota",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+                //                         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //                         // if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //                         //     showDialog('Harap pilih salah satu record')
+                //                         // } else {
+                //                         //     approvalSupirLuarKota(selectedId)
+                //                         // }
+                //                         var selectedOne = selectedOnlyOne();
+                //                         if (selectedOne[0]) {
+                //                             approvalLuarKota(selectedOne[1])
+                //                         } else {
+                //                             showDialog(selectedOne[1])
+                //                         }
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalSupirResign',
+                //                 text: "APPROVAL/UN Supir Resign",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+                //                         var selectedOne = selectedOnlyOne();
+                //                         if (selectedOne[0]) {
+                //                             supirResign(selectedOne[1])
+                //                         } else {
+                //                             showDialog(selectedOne[1])
+                //                         }
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 id: 'approvalHistorySupirMilikMandor',
+                //                 text: "APPROVAL/UN History Supir Milik Mandor",
+                //                 onClick: () => {
+                //                     if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+                //                         approvalHistorySupirMilikMandor();
+                //                     }
+                //                 }
+                //             },
+
+                //             {
+                //                 id: 'StoreApprovalTradoTanpa',
+                //                 text: "APPROVAL/UN Supir Tanpa Keterangan/Gambar",
+                //                 onClick: () => {
+                //                     var selectedOne = selectedOnlyOne();
+                //                     if (selectedOne[0]) {
+                //                         cekValidasiTanpa(selectedOne[1])
+                //                     } else {
+                //                         showDialog(selectedOne[1])
+                //                     }
+                //                 }
+                //             },
+                //             // {
+                //             //     id: 'approvalSupirKeterangan',
+                //             //     text: "APPROVAL/UN Supir tanpa Keterangan",
+                //             //     onClick: () => {
+                //             //         // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
+                //             //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //             //             showDialog('Harap pilih salah satu record')
+                //             //         } else {
+                //             //             approvalSupirKeterangan(selectedId);
+                //             //         }
+                //             //         // }
+                //             //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //     }
+                //             // },
+                //             // {
+                //             //     id: 'approvalSupirGambar',
+                //             //     text: "APPROVAL/UN Supir tanpa Gambar",
+                //             //     onClick: () => {
+                //             //         // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
+                //             //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                //             //             showDialog('Harap pilih salah satu record')
+                //             //         } else {
+                //             //             approvalSupirGambar(selectedId);
+                //             //         }
+                //             //         // }
+                //             //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                //             //     }
+                //             // },
+
+                //         ]
+                //     },
+
+                //     {
+                //         id: 'lainnya',
+                //         title: 'Lainnya',
+                //         caption: 'Lainnya',
+                //         innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                //         class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+                //         dropmenuHTML: [{
+                //             id: 'historyMandor',
+                //             text: "History Supir Milik Mandor",
+                //             onClick: () => {
+                //                 if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+                //                     var selectedOne = selectedOnlyOne();
+                //                     if (selectedOne[0]) {
+                //                         // editSupirMilikMandor(selectedOne[1])
+                //                         cekValidasihistory(selectedOne[1], 'historyMandor')
+
+                //                     } else {
+                //                         showDialog(selectedOne[1])
+                //                     }
+                //                 }
+                //             }
+                //         }, ],
+                //     }
+                // ]
             })
 
         /* Append clear filter button */
@@ -1144,76 +1501,6 @@
             .addClass('btn-sm btn-warning')
             .parent().addClass('px-1')
 
-        function permission() {
-            if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
-                $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'show') }}`) {
-                $('#view').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
-            if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
-                $('#export').attr('disabled', 'disabled')
-            }
-            if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
-                $('#report').attr('disabled', 'disabled')
-            }
-
-            let hakApporveCount = 0;
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
-                hakApporveCount--
-                $('#approvalBlackListSupir').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
-                hakApporveCount--
-                $('#approvalnonaktif').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
-                hakApporveCount--
-                $('#approvalSupirLuarKota').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
-                hakApporveCount--
-                $('#approvalSupirResign').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`) {
-                hakApporveCount--
-                $('#StoreApprovalTradoTanpa').hide()
-            }
-
-            
-
-            if (hakApporveCount < 1) {
-                $('#approve').hide()
-                // $('#approve').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
-                $('#lainnya').attr('disabled', 'disabled')
-            }
-        }
 
         getTidakBolehLuarkota()
         getBukanBlackList()
@@ -1437,6 +1724,7 @@
 
 
         function approvalBlackListSupir(supirId) {
+            console.log('cvbn');
             event.preventDefault()
 
             let form = $('#crudForm')
@@ -1565,6 +1853,108 @@
         }
 
     })
+
+
+    function permission() {
+
+
+
+        if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
+            $('#add').attr('disabled', 'disabled')
+        }
+
+        if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`)) {
+            $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
+            $('#delete').attr('disabled', 'disabled')
+        }
+
+
+
+
+        if (!`{{ $myAuth->hasPermission('supir', 'show') }}`) {
+            $('#view').attr('disabled', 'disabled')
+        }
+
+        // if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
+        //     $('#edit').attr('disabled', 'disabled')
+        // }
+
+
+        if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
+            $('#export').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
+            $('#report').attr('disabled', 'disabled')
+        }
+
+        let hakApporveCount = 0;
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+            hakApporveCount--
+            $('#approvalBlackListSupir').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalaktif') }}`) {
+            hakApporveCount--
+            $('#approvalaktif').hide()
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
+            hakApporveCount--
+            $('#approvalnonaktif').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+            hakApporveCount--
+            $('#approvalSupirLuarKota').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approval') }}`) {
+            hakApporveCount--
+            $('#approveun').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+            hakApporveCount--
+            $('#approvalSupirResign').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`) {
+            hakApporveCount--
+            $('#StoreApprovalTradoTanpa').hide()
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+            hakApporveCount--
+            $('#approvalHistorySupirMilikMandor').hide()
+        }
+
+
+
+        if (hakApporveCount < 1) {
+            $('#approve').hide()
+            // $('#approve').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+            $('#lainnya').hide()
+        }
+    }
 
     function getTidakBolehLuarkota() {
 

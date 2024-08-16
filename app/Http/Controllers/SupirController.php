@@ -167,6 +167,8 @@ class SupirController extends MyController
             'statuszonatertentu' => $this->comboStatusAktif('list','ZONA TERTENTU','ZONA TERTENTU'),
             'statusblacklist' => $this->comboStatusAktif('list','BLACKLIST SUPIR','BLACKLIST SUPIR'),
             'combopostingtnl' => $this->comboStatusAktif('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
+            'statusapprovalhistorysupirmilikmandor' => $this->comboStatusAktif('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('supir.index', compact('title','data'));
@@ -331,18 +333,23 @@ class SupirController extends MyController
             $statusZonaTertentu = $params['statuszonatertentu'];
             $statusBlacklist = $params['statusblacklist'];
             $statusUpdateGambar = $params['statusadaupdategambar'];
+            $statusApprovalHistorySupirMilikMandor= $params['statusapprovalhistorysupirmilikmandor'];
 
             $result = json_decode($statusaktif, true);
             $resultLuarKota = json_decode($statusLuarKota, true);
             $resultZonaTertentu = json_decode($statusZonaTertentu, true);
             $resultBlacklist = json_decode($statusBlacklist, true);
             $resultUpdateGambar = json_decode($statusUpdateGambar, true);
+            $resultApprovalHistorySupirMilikMandor = json_decode($statusApprovalHistorySupirMilikMandor, true);
+
 
             $statusaktif = $result['MEMO'];
             $statusLuarKota = $resultLuarKota['MEMO'];
             $statusZonaTertentu = $resultZonaTertentu['MEMO'];
             $statusBlacklist = $resultBlacklist['MEMO'];
             $statusUpdateGambar = $resultUpdateGambar['MEMO'];
+            $statusApprovalHistorySupirMilikMandor = $resultApprovalHistorySupirMilikMandor['MEMO'];
+
 
 
             $supirs[$i]['statusaktif'] = $statusaktif;
@@ -350,6 +357,8 @@ class SupirController extends MyController
             $supirs[$i]['statuszonatertentu'] = $statusZonaTertentu;
             $supirs[$i]['statusblacklist'] = $statusBlacklist;
             $supirs[$i]['statusadaupdategambar'] = $statusUpdateGambar;
+            $trados[$i]['statusapprovalhistorysupirmilikmandor'] = $statusApprovalHistorySupirMilikMandor;
+
 
         
             $i++;

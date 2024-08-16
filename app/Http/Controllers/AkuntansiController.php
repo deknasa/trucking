@@ -19,7 +19,8 @@ class AkuntansiController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Akuntansi',
-            'combo' => $this->combo('list')
+            'combo' => $this->combo('list'),
+            'listbtn' => $this->getListBtn()
         ];
 
         return view('akuntansi.index', compact('title', 'data'));

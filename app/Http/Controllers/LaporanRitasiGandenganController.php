@@ -46,6 +46,8 @@ class LaporanRitasiGandenganController extends MyController
         // die;
         // dd($ritasi);
         date_default_timezone_set("Asia/Jakarta");
+        
+        $namacabang = $header['namacabang'];
 
         $monthNum  = intval(substr($request->periode, 0, 2));
         $yearNum  = substr($request->periode, 3);
@@ -55,18 +57,22 @@ class LaporanRitasiGandenganController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('A1', 'Laporan Ritasi Gandengan : ' . $monthName . ' - ' . $yearNum);
         $sheet->setCellValue('A1', $header['judul'] ?? '');
-        $sheet->setCellValue('A2','LAPORAN RITASI GANDENGAN');
-        $sheet->setCellValue('A3', 'PERIODE : ' . $monthName . ' - ' . $yearNum);
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3','LAPORAN RITASI GANDENGAN');
+        $sheet->setCellValue('A4', 'PERIODE : ' . $monthName . ' - ' . $yearNum);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
 
         $sheet->mergeCells('A1:AG1');
+        $sheet->mergeCells('A2:AG2');
         $totalTanggal = count($ritasi[0]) - 1;
 
         // SET DATA
-        $rowIndex = 6;
+        $rowIndex = 7;
         $columnIndex = 1;
         foreach ($ritasi as $data) {
             $noPol = $data['gandengan']; // Ganti 'no_pol' dengan indeks yang sesuai
@@ -95,16 +101,16 @@ class LaporanRitasiGandenganController extends MyController
 
         // SET HEADER
         $columnIndexHeader = 2;
-        $sheet->setCellValue('A5', 'Gandengan');
+        $sheet->setCellValue('A6', 'Gandengan');
         for ($i = 1; $i <= $totalTanggal; $i++) {
-            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
+            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '6';
             $sheet->setCellValue($cell, $i);
             $columnIndexHeader++;
         }
 
-        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
+        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '6';
         $sheet->setCellValue($cell, 'Total');
-        $cellRange = "A5:$cell";
+        $cellRange = "A6:$cell";
 
         $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . $rowIndex;
         $cellFooter = "A" . $rowIndex . ":$cell";
@@ -152,7 +158,7 @@ class LaporanRitasiGandenganController extends MyController
 
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
+                $cellBody = $columnLabel . "7:" . $columnLabel . $rowIndex;
                 $sheet->getStyle($cellBody)->applyFromArray($styleBody);
             }
         }
@@ -163,8 +169,8 @@ class LaporanRitasiGandenganController extends MyController
             $columnLabel = $this->alphabetLoop($columnIndex);
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
-                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "6:" . $columnLabel . $rowIndex . ")");
+                $cellBody = $columnLabel . "7:" . $columnLabel . $rowIndex;
+                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "7:" . $columnLabel . $rowIndex . ")");
             }
         }
 

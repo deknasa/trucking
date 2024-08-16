@@ -31,7 +31,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="kotadari_id">
-                <input type="text" name="kotadari" class="form-control kotadari-lookup">
+                <input type="text" id="kotadari" name="kotadari" class="form-control kotadari-lookup">
               </div>
             </div>
 
@@ -43,7 +43,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="kotasampai_id">
-                <input type="text" name="kotasampai" class="form-control kotasampai-lookup">
+                <input type="text" id="kotasampai" name="kotasampai" class="form-control kotasampai-lookup">
               </div>
             </div>
 
@@ -62,7 +62,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JARAK <span class="text-danger">*</span>
+                  JARAK <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -94,12 +94,11 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-control select2bs4">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   TGL MULAI BERLAKU <span class="text-danger">*</span>
@@ -136,7 +135,7 @@
               </div>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive" style="display: none">
               <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1000px">
                 <thead>
                   <tr>
@@ -205,6 +204,7 @@
   let statusAktif
 
   let dataMaxLength = []
+  var data_id
 
 
   $(document).ready(function() {
@@ -348,6 +348,7 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
+    data_id = $('#crudForm').find('[name=id]').val();
 
     activeGrid = null
 
@@ -356,16 +357,46 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-   
-    initSelect2(form.find('.select2bs4'), true)
+
     initDatepicker()
     initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'upahritasi'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function setNominalSupir() {
     let nominalDetails = $(`#table_body [name="nominalsupir[]"]`)
@@ -401,7 +432,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form),
         getMaxLength(form)
       ])
@@ -444,7 +475,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form),
         getMaxLength(form)
       ])
@@ -501,7 +532,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form),
         getMaxLength(form)
       ])
@@ -540,7 +571,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form),
         getMaxLength(form)
       ])
@@ -577,30 +608,30 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}upahritasi/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}upahritasi/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
@@ -616,7 +647,7 @@
           }
         })
         resolve()
-      })  
+      })
     }
   }
 
@@ -662,46 +693,46 @@
     })
   }
 
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
+  // const setStatusAktifOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusaktif]').empty()
+  //     relatedForm.find('[name=statusaktif]').append(
+  //       new Option('-- PILIH STATUS AKTIF --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS AKTIF"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       },
+  //       error: error => {
+  //         reject(error)
+  //       }
+  //     })
+  //   })
+  // }
 
   function showUpahRitasi(form, userId) {
     return new Promise((resolve, reject) => {
@@ -734,8 +765,9 @@
             if (index == 'zona') {
               element.data('current-value', value)
             }
-
-
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
 
           initAutoNumeric(form.find(`[name="jarak"]`), {
@@ -990,9 +1022,22 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.kotadari-lookup').lookup({
+
+    $('.kotadari-lookup').lookupMaster({
       title: 'Kota Dari Lookup',
-      fileName: 'kota',
+      fileName: 'kotaMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kotadari_id',
+          searchText: 'kotadari-lookup',
+          title: 'Kota Dari Lookup',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1008,9 +1053,21 @@
       }
     })
 
-    $('.kotasampai-lookup').lookup({
-      title: 'Kota Tujuan Lookup',
-      fileName: 'kota',
+    $('.kotasampai-lookup').lookupMaster({
+      title: 'Kota Sampai Lookup',
+      fileName: 'kotaMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kotasampai_id',
+          searchText: 'kotasampai-lookup',
+          title: 'Kota Sampai Lookup',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1025,6 +1082,40 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
 
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
@@ -1054,14 +1145,22 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: aksi
+      },
       success: response => {
-        var kondisi = response.error
+        var kondisi = response.kondisi
         if (kondisi == true) {
-          if (aksi == 'EDIT') {
-            aksiEdit = false
-            editUpahRitasi(selectedId)
+
+          if (!response.editblok) {
+            if (aksi == 'EDIT') {
+              aksiEdit = false
+              editUpahRitasi(selectedId)
+            } else {
+              showDialog(response)
+            }
           } else {
-            showDialog(response)
+            showDialog(response.message['keterangan'])
           }
         } else {
           if (aksi == 'EDIT') {
