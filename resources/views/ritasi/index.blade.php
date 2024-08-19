@@ -325,9 +325,30 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              $('#formRangeTgl').data('action', 'report')
-              $('#rangeTglModal').find('button:submit').html(`Report`)
-              $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('ritasi.report') }}`,
+                method: 'GET',
+                data: {
+                  limit: 0,
+                  tgldari: $('#tgldariheader').val(),
+                  tglsampai: $('#tglsampaiheader').val(),
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                success: function(response) {
+                  $('#processingLoader').addClass('d-none')
+                  // Handle the success response
+                  var newWindow = window.open('', '_blank');
+                  newWindow.document.open();
+                  newWindow.document.write(response);
+                  newWindow.document.close();
+                },
+                error: function(xhr, status, error) {
+
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              });
             }
           },
           {
@@ -335,9 +356,42 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              $('#formRangeTgl').data('action', 'export')
-              $('#rangeTglModal').find('button:submit').html(`Export`)
-              $('#rangeTglModal').modal('show')
+              $('#processingLoader').removeClass('d-none')
+              $.ajax({
+                url: `{{ route('ritasi.export') }}`,
+                type: 'GET',
+                data: {
+                  limit: 0,
+                  tgldari: $('#tgldariheader').val(),
+                  tglsampai: $('#tglsampaiheader').val(),
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = `LAPORAN RITASI ${new Date().getTime()}.xlsx`;
+                      link.click();
+                    }
+                  }
+
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
         ]
