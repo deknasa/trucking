@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2d994f700260e7d24946c051b1a170b2",
+  "ReportGuid": "3935c83c83f865d2e28c1ef57ef58a8a",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://server:8074/trucking/public/reports/ReportLaporanArusKas.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724046617000+0700)/",
+  "ReportChanged": "/Date(1724049976000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -674,7 +674,7 @@
               "Text": {
                 "Value": "{data.jenisarus}"
               },
-              "Font": "Tahoma;10;Bold, Underline;",
+              "Font": "Tahoma;;Bold, Underline;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -732,7 +732,7 @@
                 "Value": "{saldo.nominalawal}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -766,7 +766,7 @@
                 "Value": "{saldo.nominalakhir}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
