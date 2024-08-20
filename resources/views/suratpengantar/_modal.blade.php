@@ -2063,7 +2063,7 @@
 
           isShow = false
           setRowNumbers()
-          getDataUpahSupir()
+          getDataUpahSupir(true)
           initDatepicker()
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
