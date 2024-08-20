@@ -642,7 +642,7 @@
                     <div class="baris"></div>
                   </td> 
                   <td>
-                    <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>    
                   </td>                  
                   <td>
                     <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
@@ -722,7 +722,7 @@
                     </td>
                     
                     <td>
-                      <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
+                      <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                     </td>
                     <td>
                       <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    

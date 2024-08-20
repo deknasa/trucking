@@ -457,7 +457,7 @@
                       <input type="text" name="supir[]" class="form-control supir-lookup">
                     </td>
                     <td>
-                      <input type="text" name="keterangan_detail[]" class="form-control">
+                      <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                     </td>
                     <td>
                       <input type="hidden" name="absen_id[]">
@@ -778,7 +778,7 @@
                 <input type="text" id="uangjalan_row_${index}" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}" ${detail.uangjalan_readonly}>
               </td>
               <td>
-                <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
+                <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="">${detail.keterangan}</textarea>
               </td>
               <td class='kolom-jeniskendaraan'>
                 <input type="hidden" name="statusjeniskendaraan[]" value="">
@@ -998,7 +998,7 @@
           <input type="text" name="supir[]" class="form-control supir-lookup">
         </td>
         <td>
-          <input type="text" name="keterangan_detail[]" class="form-control">
+          <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
         </td>
         <td>
           <input type="hidden" name="absen_id[]">

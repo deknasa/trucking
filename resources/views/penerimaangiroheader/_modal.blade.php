@@ -1011,7 +1011,7 @@
                                 <input type="text" name="bankpelanggan[]" id="bankpelanggan_${selectIndex}" data-current-value="${detail.bankpelanggan}" class="form-control lg-forms bankpelanggan-lookup${selectIndex}">
                             </td>
                             <td>
-                                <input type="text" name="keterangan_detail[]" class="form-control" ${readOnly}>
+                                <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="" ${readOnly}></textarea>
                             </td>
                             <td>
                                 <input type="text" name="nominal[]" class="form-control autonumeric" ${readOnly}> 
@@ -1141,7 +1141,7 @@
             <input type="text" name="bankpelanggan[]" id="bankpelanggan_${selectIndex}" class="form-control bankpelanggan-lookup${selectIndex}">
         </td>
         <td>
-        <input type="text" name="keterangan_detail[]" class="form-control">
+            <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="" ></textarea>
         </td>
         <td>
         <input type="text" name="nominal[]" class="form-control autonumeric "> 

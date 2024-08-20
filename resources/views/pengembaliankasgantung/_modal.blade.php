@@ -1305,7 +1305,7 @@
                 ${nominal}
                 <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}" hidden class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
               </td>
-            <td><input type="text" name="keterangandetail[]" disabled id="keterangan_detail_${detail.detail_id}"  class="form-control keterangan_detail_${detail.detail_id}"></td>
+            <td><textarea disabled name="keterangandetail[]" class="form-control keterangan_detail_${detail.detail_id}" id="keterangan_detail_${detail.detail_id}" rows="1"></textarea></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           $(`.coa_detail_${detail.detail_id}`).lookup({
@@ -1371,7 +1371,7 @@
                 ${nominal}
                 <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}" hidden class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
               </td>
-            <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" id="keterangan_detail_${detail.detail_id}" class="form-control"></td>
+            <td><textarea class="form-control" name="keterangandetail[]" id="keterangan_detail_${detail.detail_id}" rows="1" placeholder="">${detail.keterangandetail}</textarea></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           $(`.coa_detail_${detail.detail_id}`).lookup({

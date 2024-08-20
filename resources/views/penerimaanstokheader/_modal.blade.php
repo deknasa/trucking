@@ -1126,7 +1126,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${detail.id}">
                   </td> 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -1305,7 +1305,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
                   </td> 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>    
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -1492,7 +1492,7 @@
                 <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
               </td> 
               <td>
-                <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
               </td>
               
               <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -1685,7 +1685,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
                   </td> 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
@@ -1843,7 +1843,7 @@
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
                   </td> 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <textarea class="form-control" name="detail_keterangan[]" rows="1" placeholder=""></textarea>
                   </td>
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
