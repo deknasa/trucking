@@ -1988,7 +1988,7 @@
                         <tr>
                           <td></td>
                           <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">
+                            <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                             <input type="hidden" name="tambahan_id[]">
                           </td>
                           <td>
@@ -2141,7 +2141,7 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="keterangan_detail[]" class="form-control">
+          <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
           <input type="hidden" name="tambahan_id[]">
         </td>
         <td>

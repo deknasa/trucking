@@ -649,7 +649,7 @@
                     <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
                   </td>                
                   <td>
-                      <input type="text" name="keterangan_detail[]"  class="form-control">
+                      <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                   </td>
                   <td>
                       <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
@@ -740,7 +740,7 @@
         </td>
        
         <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
+          <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 

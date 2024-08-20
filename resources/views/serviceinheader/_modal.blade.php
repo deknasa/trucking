@@ -599,7 +599,7 @@
                             </td>
 
                             <td>
-                                <input type="text" name="keterangan_detail[]" class="form-control">
+                                <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                             </td>
 
                             <td class="tbl_aksi">
@@ -696,7 +696,7 @@
             </td>
 
             <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">
+                <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
             </td>
 
             <td class="tbl_aksi">

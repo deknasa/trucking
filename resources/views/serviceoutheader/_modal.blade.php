@@ -566,7 +566,7 @@
                                 <input type="text" name="servicein_nobukti[]" data-current-value="${detail.servicein_nobukti}" class="form-control serviceinheader-lookup">
                             </td>
                             <td>
-                                <input type="text" name="keterangan_detail[]" class="form-control">
+                                <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                             </td>
                             <td class="tbl_aksi">
                             <div class='btn btn-danger btn-sm delete-row '>Delete</div>
@@ -627,7 +627,7 @@
             <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
         </td>
         <td>
-            <input type="text" name="keterangan_detail[]" class="form-control">
+            <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
         </td>
         <td>
         <div class='btn btn-danger btn-sm delete-row '>Delete</div>
