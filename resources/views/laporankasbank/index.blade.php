@@ -112,22 +112,8 @@
         let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
         let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}&printer=reportPrinterBesar`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
-            }
-        })
-
+        getCekReport(dari, sampai, bank_id, bank, periodedata_id, periodedata, 'reportPrinterBesar')
     })
-    
 
     $(document).on('click', `#reportPrinterKecil`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
@@ -137,20 +123,7 @@
         let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
         let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}&printer=reportPrinterKecil`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
-            }
-        })
-
+        getCekReport(dari, sampai, bank_id, bank, periodedata_id, periodedata, 'reportPrinterKecil')
     })
 
     $(document).on('click', `#btnExport`, function(event) {
@@ -164,10 +137,19 @@
         let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
         $.ajax({
-            url: `{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
+            url: `${apiUrl}laporankasbank/export`,
+            // url: `{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
             type: 'GET',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            data: {
+                dari: dari,
+                sampai: sampai,
+                bank_id: bank_id,
+                bank: bank,
+                periodedata_id: periodedata_id,
+                periodedata: periodedata
             },
             xhrFields: {
                 responseType: 'arraybuffer'
@@ -184,7 +166,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -195,33 +177,63 @@
 
     })
 
-    function getCekReport() {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
+    function getCekReport(dari, sampai, bank_id, bank, periodedata_id, periodedata, printer) {
+        // console.log(dari, sampai, bank_id, bank, periodedata_id, periodedata, printer)
+        $.ajax({
                 url: `${apiUrl}laporankasbank/report`,
-                dataType: "JSON",
+                method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
-                    dari: $('#crudForm').find('[name=dari]').val(),
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    bank: $('#crudForm').find('[name=bank]').val(),
-                    bank_id: $('#crudForm').find('[name=bank_id]').val(),
-                    periodedata: $('#crudForm').find('[name=periodedata]').val(),
-                    periodedata_id: $('#crudForm').find('[name=periodedata_id]').val(),
-                    isCheck: true,
+                    dari: dari,
+                    sampai: sampai,
+                    bank_id: bank_id,
+                    bank: bank,
+                    periodedata_id: periodedata_id,
+                    periodedata: periodedata,
                 },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let datasaldo = response.datasaldo
+                    let infopemeriksa = response.infopemeriksa
+                    let dataCabang = response.namacabang
+                    let cabang = accessCabang
+                    let detailParams = {
+                        dari: dari,
+                        sampai: sampai,
+                        bank_id: bank_id,
+                        bank: bank,
+                        periodedata_id: periodedata_id,
+                        periodedata: periodedata,
+                    };
 
+                    let jumlah = 1;
+                    if (accessCabang == 'PUSAT') {
+                        if (data.length > 1) {
+                            data.shift()
+                            jumlah = 2;
+                        }
+                    }
+
+                    // return view('reports.laporankasbank', compact('data', 'dataCabang', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa', 'jumlah'));
+                    laporankasbank(data, datasaldo, infopemeriksa, dataCabang, cabang, detailParams, jumlah, printer);
                 },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
             });
-        });
     }
 
     function getCekExport() {
@@ -291,15 +303,15 @@
             searching: 1,
             beforeProcess: function() {
                 this.postData = {
-                url: `${apiUrl}parameter/combo`,
-                grp: 'PERIODE DATA',
-                subgrp: 'PERIODE DATA',
-                searching: 1,
-                valueName: `periodedata_id`,
-                searchText: `periodedata-lookup`,
-                singleColumn: true,
-                hideLabel: true,
-                title: 'PERIODE DATA'
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'PERIODE DATA',
+                    subgrp: 'PERIODE DATA',
+                    searching: 1,
+                    valueName: `periodedata_id`,
+                    searchText: `periodedata-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'PERIODE DATA'
                 };
             },
             onSelectRow: (status, element) => {
@@ -317,6 +329,77 @@
                 element.data('currentValue', element.val());
             },
         });
+    }
+
+    function laporankasbank(data, datasaldo, infopemeriksa, dataCabang, cabang, detailParams, jumlah, printer) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        // console.log(cabang, printer)
+
+        if (cabang == 'PUSAT') {
+            if (jumlah == 2) {
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarPusat.mrt') }}`)
+            } else {
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt') }}`)
+            }
+        } else {
+            if (printer == 'reportPrinterBesar') {
+                // console.log()
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
+            } else {
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
+            }
+        }
+
+        dataSet.readJson({
+            'data': data,
+            'datasaldo': datasaldo,
+            'infopemeriksa': infopemeriksa,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        //PDF
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+
+        //WORD
+        // report.renderAsync(function() {
+        //     report.exportDocumentAsync(function(wordData) {
+        //         let blob = new Blob([new Uint8Array(wordData)], {
+        //             type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        //         });
+        //         let fileURL = URL.createObjectURL(blob);
+        //         let link = document.createElement('a');
+        //         link.href = fileURL;
+        //         link.download = 'Laporan.docx';
+        //         link.click();
+        //     }, Stimulsoft.Report.StiExportFormat.Word2007);
+        // }, function(error) {
+        //     console.error("Error rendering report: ", error);
+        // });
+
     }
 </script>
 @endpush()
