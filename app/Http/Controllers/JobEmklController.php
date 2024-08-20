@@ -37,4 +37,19 @@ class JobEmklController extends MyController
 
         return $response['data'];
     }
+
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'jobemkl', $request->all());
+
+        $jobemkls = $response['data'];
+        
+        $i = 0;
+       
+
+        return view('reports.jobemkl', compact('jobemkls'));
+    }
 }

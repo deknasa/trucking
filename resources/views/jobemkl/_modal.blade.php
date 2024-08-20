@@ -375,7 +375,7 @@
         getMaxLength(form)
       ])
       .then(() => {
-        showJenisTrado(form, jenisTradoId)
+        showJobEmkl(form, jenisTradoId)
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -413,7 +413,7 @@
         getMaxLength(form)
       ])
       .then(() => {
-        showJenisTrado(form, jenisTradoId)
+        showJobEmkl(form, jenisTradoId)
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -451,7 +451,7 @@
         getMaxLength(form)
       ])
       .then(() => {
-        showJenisTrado(form, jenisTradoId)
+        showJobEmkl(form, jenisTradoId)
           .then(jenisTradoId => {
             // form.find('.aksi').hide()
             setFormBindKeys(form)
@@ -557,7 +557,7 @@
     })
   }
 
-  function showJenisTrado(form, jenisTradoId) {
+  function showJobEmkl(form, jenisTradoId) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}jobemkl/${jenisTradoId}`,
@@ -572,6 +572,9 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
+            } else if (element.attr("name") == 'tglbukti') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
             } else {
               element.val(value)
             }

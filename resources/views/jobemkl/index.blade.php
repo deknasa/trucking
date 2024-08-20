@@ -133,23 +133,23 @@
                         }
                       },
                     {
-                        label:'shipper_id',
-                        name: 'shipper_id',
+                        label:'shipper',
+                        name: 'shipper',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'tujuan_id',
-                        name: 'tujuan_id',
+                        label:'tujuan',
+                        name: 'tujuan',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'container_id',
-                        name: 'container_id',
+                        label:'container',
+                        name: 'container',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'jenisorder_id',
-                        name: 'jenisorder_id',
+                        label:'jenisorder',
+                        name: 'jenisorder',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
