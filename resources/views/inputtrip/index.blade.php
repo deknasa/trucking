@@ -5,7 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <div class="card card-easyui bordered mb-4">
+      <div class="card card-easyui bordered mb-4" style="overflow: auto;">
         <div class="card-header">
           <h5 class="card-title" id="crudModalTitle" style="color: #0e2d5f;font-weight: 700;"> {{$title}} </h5>
 
@@ -94,7 +94,7 @@
                   <label class="col-sm-12 col-form-label">FULL / EMPTY <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="statuscontainer_id">
-                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
+                    <input type="text" name="statuscontainer" id="statuscontainer" class="form-control statuscontainer-lookup">
                   </div>
                 </div>
 
@@ -102,7 +102,7 @@
                   <label class="col-sm-4 col-form-label">CONTAINER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
-                    <input type="text" name="container" class="form-control container-lookup">
+                    <input type="text" name="container" id="container" class="form-control container-lookup">
                   </div>
                 </div>
 
@@ -117,7 +117,7 @@
                   <label class="col-sm-4 col-form-label">UPAH SUPIR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="upah_id">
-                    <input type="text" name="upah" class="form-control upahsupirrincian-lookup">
+                    <input type="text" name="upah" id="upah" class="form-control upahsupirrincian-lookup">
                   </div>
                 </div>
 
@@ -134,7 +134,7 @@
                     <label class="col-sm-4 col-form-label">DARI <span class="text-danger">*</span></label>
                     <div class="col-sm-12">
                       <input type="hidden" name="dari_id">
-                      <input type="text" name="dari" class="form-control kotadari-lookup" readonly>
+                      <input type="text" name="dari" id="dari" class="form-control kotadari-lookup" readonly>
                     </div>
                   </div>
 
@@ -142,7 +142,7 @@
                     <label class="col-sm-12 col-form-label">Sampai <span class="text-danger">*</span></label>
                     <div class="col-sm-12">
                       <input type="hidden" name="sampai_id">
-                      <input type="text" name="sampai" class="form-control kotasampai-lookup" readonly>
+                      <input type="text" name="sampai" id="sampai" class="form-control kotasampai-lookup" readonly>
                     </div>
                   </div>
                 </div>
@@ -168,7 +168,7 @@
                     <input type="hidden" name="trado_id">
                     <input type="hidden" name="supir_id">
                     <input type="hidden" name="absensidetail_id">
-                    <input type="text" name="trado" class="form-control absensisupirdetail-lookup">
+                    <input type="text" name="trado" id="trado" class="form-control absensisupirdetail-lookup">
                     <table class="table table-striped table-bordered table-responsive tableInfo" style="display:none">
                       <thead>
                         <tr>
@@ -188,7 +188,7 @@
                   <label class="col-sm-12 col-form-label">TRIP TANGKI <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="triptangki_id">
-                    <input type="text" name="triptangki" class="form-control triptangki-lookup">
+                    <input type="text" name="triptangki" id="triptangki" class="form-control triptangki-lookup">
                   </div>
                 </div>
 
@@ -196,7 +196,7 @@
                   <label class="col-sm-12 col-form-label">SHIPPER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
-                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                    <input type="text" name="pelanggan" id="pelanggan" class="form-control pelanggan-lookup">
                   </div>
                 </div>
 
@@ -213,7 +213,7 @@
                   <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
-                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                    <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                   </div>
                 </div>
 
@@ -221,7 +221,7 @@
                   <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS (ASAL)</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandenganasal_id">
-                    <input type="text" name="gandenganasal" class="form-control gandenganasal-lookup">
+                    <input type="text" name="gandenganasal" id="gandenganasal" class="form-control gandenganasal-lookup">
                   </div>
                 </div>
 
@@ -240,7 +240,7 @@
                     {{-- <span class="text-danger">*</span> --}}
                   </label>
                   <div class="col-sm-12">
-                    <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
+                    <input type="text" name="jobtrucking" id="jobtrucking" class="form-control jobtrucking-lookup">
                   </div>
                 </div>
 
@@ -251,7 +251,7 @@
                   </div>
                 </div>
 
-                <div class="table-scroll table-responsive ritasi">
+                <div class="ritasi">
                   <table class="table table-bordered table-bindkeys" id="ritasiList" style="width: 1000px;">
                     <thead>
                       <tr>
@@ -852,13 +852,14 @@
     addRow()
     Promise
       .all([
-        setStatusJenisKendaraanOptions(form),
-        setStatusLongTripOptions(form),
-        setStatusGudangSamaOptions(form),
-        setStatusLangsirOptions(form),
-        setStatusGandenganOptions(form),
+        setStatusAll(form),
+        // setStatusJenisKendaraanOptions(form),
+        // setStatusLongTripOptions(form),
+        // setStatusGudangSamaOptions(form),
+        // setStatusLangsirOptions(form),
+        // setStatusGandenganOptions(form),
         // setStatusKandangOptions(form),
-        setStatusPenyesuaianOptions(form),
+        // setStatusPenyesuaianOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -994,6 +995,139 @@
       })
     })
   }
+
+  // const setStatusAll = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statuslongtrip]').empty()
+  //     relatedForm.find('[name=statuslongtrip]').append(
+  //       new Option('-- PILIH STATUS LONG TRIPS --', '', false, true)
+  //     ).trigger('change')
+  //     jeniskendaraan = `{!! json_encode($data['longtrip']) !!}`;
+  //     console.log('jeniskendaraan',jeniskendaraan)
+  //     // $.ajax({
+  //     //   url: `${apiUrl}parameter`,
+  //     //   method: 'GET',
+  //     //   dataType: 'JSON',
+  //     //   headers: {
+  //     //     Authorization: `Bearer ${accessToken}`
+  //     //   },
+  //     //   data: {
+  //     //     filters: JSON.stringify({
+  //     //       "groupOp": "AND",
+  //     //       "rules": [{
+  //     //         "field": "grp",
+  //     //         "op": "cn",
+  //     //         "data": "STATUS PENYESUAIAN"
+  //     //       }]
+  //     //     })
+  //     //   },
+  //     //   success: response => {
+  //       $.each(jeniskendaraan, function(index, value) {
+  //           // $('#vehicleTypes').append('<option value="' + value.id + '">' + value.text + '</option>'); 
+  //           console.log(value.text, value.id)
+  //           let option = new Option(value.text, value.id)
+  //           relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
+  //       });
+  //     // jeniskendaraan.forEach(statusPenyesuaian => {
+  //     //   console.log('statusPenyesuaian.text',statusPenyesuaian.text)
+  //     //   let option = new Option(statusPenyesuaian.text, statusPenyesuaian.id)
+  //     //   relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
+  //     // });
+
+  //         resolve()
+  //       // },
+  //       // error: error => {
+  //       //   reject(error)
+  //       // }
+  //     // })
+  //   })
+  // }
+
+  const setStatusAll = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      // Clear and set initial option
+      relatedForm.find('[name=statuslongtrip]').empty()
+      relatedForm.find('[name=statuslongtrip]').append(
+        new Option('-- PILIH STATUS LONG TRIPS --', '', false, true)
+      ).trigger('change');
+
+      let longtrip = {!! json_encode($data['longtrip']) !!};
+
+      longtrip.forEach(function(statuslongtrip) {
+            let option = new Option(statuslongtrip.text, statuslongtrip.id);
+            relatedForm.find('[name=statuslongtrip]').append(option).trigger('change');
+      });
+
+      
+      relatedForm.find('[name=statusjeniskendaraan]').empty()
+      relatedForm.find('[name=statusjeniskendaraan]').append(
+        new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+      ).trigger('change');
+
+      let jeniskendaraan = {!! json_encode($data['jeniskendaraan']) !!};
+
+      jeniskendaraan.forEach(function(statusJenisKendaraan) {
+            let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id);
+            relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statusgudangsama]').empty()
+      relatedForm.find('[name=statusgudangsama]').append(
+        new Option('-- PILIH STATUS GUDANG SAMA --', '', false, true)
+      ).trigger('change');
+
+      let gudangsama = {!! json_encode($data['gudangsama']) !!};
+
+      gudangsama.forEach(function(statusGudangSama) {
+            let option = new Option(statusGudangSama.text, statusGudangSama.id);
+            relatedForm.find('[name=statusgudangsama]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statuslangsir]').empty()
+      relatedForm.find('[name=statuslangsir]').append(
+        new Option('-- PILIH STATUS LANGSIR --', '', false, true)
+      ).trigger('change');
+
+      let langsir = {!! json_encode($data['langsir']) !!};
+
+      langsir.forEach(function(statuslangsir) {
+            let option = new Option(statuslangsir.text, statuslangsir.id);
+            relatedForm.find('[name=statuslangsir]').append(option).trigger('change');
+      });
+
+
+      relatedForm.find('[name=statusgandengan]').empty()
+      relatedForm.find('[name=statusgandengan]').append(
+        new Option('-- PILIH STATUS GANDENGAN --', '', false, true)
+      ).trigger('change');
+
+      let gandengan = {!! json_encode($data['gandengan']) !!};
+
+      gandengan.forEach(function(statusgandengan) {
+            let option = new Option(statusgandengan.text, statusgandengan.id);
+            if(statusgandengan.text == "TINGGAL GANDENGAN") {
+              tinggalGandengan = statusgandengan.id
+            }
+            relatedForm.find('[name=statusgandengan]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statuspenyesuaian]').empty()
+      relatedForm.find('[name=statuspenyesuaian]').append(
+        new Option('-- PILIH STATUS PENYESUAIAN --', '', false, true)
+      ).trigger('change');
+
+      let penyesuaian = {!! json_encode($data['penyesuaian']) !!};
+
+      penyesuaian.forEach(function(statuspenyesuaian) {
+            let option = new Option(statuspenyesuaian.text, statuspenyesuaian.id);
+            relatedForm.find('[name=statuspenyesuaian]').append(option).trigger('change');
+      });
+
+
+      // Resolve the promise once done
+      resolve();
+    });
+  };
 
   const setStatusPenyesuaianOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -1663,9 +1797,39 @@
       }
     })
 
-    $('.kotadari-lookup').lookup({
+    // $('.kotadari-lookup').lookup({
+    //   title: 'Kota Dari Lookup',
+    //   fileName: 'kotazona',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       kotaZona: zonadariId
+    //     }
+    //   },
+    //   onSelectRow: (kota, element) => {
+    //     $('#crudForm [name=dari_id]').first().val(kota.id)
+    //     pilihKotaDariId = kota.id
+    //     getpelabuhan(kota.id)
+    //     element.val(kota.kodekota)
+    //     element.data('currentValue', element.val())
+    //     // getGaji()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=dari_id]').first().val('')
+    //     pilihKotaDariId = 0
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     // getGaji()
+    //   }
+    // })
+    $('.kotadari-lookup').lookupV3({
       title: 'Kota Dari Lookup',
-      fileName: 'kotazona',
+      fileName: 'kotazonaV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1693,9 +1857,46 @@
       }
     })
 
-    $('.jobtrucking-lookup').lookup({
+    // $('.jobtrucking-lookup').lookup({
+    //   title: 'Job Trucking Lookup',
+    //   fileName: 'jobtrucking',
+    //   beforeProcess: function(test) {
+
+    //     this.postData = {
+    //       jenisorder_id: $('#crudForm [name=jenisorder_id]').val(),
+    //       container_id: $('#crudForm [name=container_id]').val(),
+    //       pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+    //       gandengan_id: $('#crudForm [name=gandengan_id]').val(),
+    //       trado_id: $('#crudForm [name=trado_id]').val(),
+    //       statuslongtrip: statusLongtrip,
+    //       tarif_id: $('#crudForm [name=tarifrincian_id]').val(),
+    //       tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
+    //       tglbukti: $('#crudForm [name=tglbukti]').val(),
+    //       dari_id: $('#crudForm [name=dari_id]').val(),
+    //       isPulangLongtrip: isPulangLongtrip
+    //     }
+    //   },
+    //   onSelectRow: (jobtrucking, element) => {
+    //     $('#crudForm [name=jobtrucking]').first().val(jobtrucking.jobtrucking)
+    //     element.val(jobtrucking.jobtrucking)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=jobtrucking]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+
+    //   }
+    // })
+
+    $('.jobtrucking-lookup').lookupV3({
       title: 'Job Trucking Lookup',
-      fileName: 'jobtrucking',
+      fileName: 'jobtruckingV3',
+      searching: ['jobtrucking'],
+      labelColumn: true,
       beforeProcess: function(test) {
 
         this.postData = {
@@ -1728,19 +1929,57 @@
       }
     })
 
-    $('.kotasampai-lookup').lookup({
+
+    // $('.kotasampai-lookup').lookup({
+    //   title: 'Kota Tujuan Lookup',
+    //   fileName: 'kotazona',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //       kotaZona: zonasampaiId,
+    //       isLookup: 1,
+    //       url: ($('#crudForm [name=statuslongtrip]').val() == 65) ? `${apiUrl}kota/getlongtrip` : `${apiUrl}kota`,
+    //       statuslongtrip: $('#crudForm [name=statuslongtrip]').val(),
+    //       dari_id: $('#crudForm [name=dari_id]').val(),
+    //       from: 'inputtrip'
+    //     }
+    //   },
+    //   onSelectRow: (kota, element) => {
+    //     $('#crudForm [name=sampai_id]').first().val(kota.id)
+    //     pilihKotaSampaiId = kota.id
+    //     element.val(kota.kodekota)
+    //     element.data('currentValue', element.val())
+    //     // getGaji()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=sampai_id]').first().val('')
+
+    //     pilihKotaSampaiId = 0
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     // getGaji()
+    //   }
+    // })
+
+    $('.kotasampai-lookup').lookupV3({
       title: 'Kota Tujuan Lookup',
-      fileName: 'kotazona',
+      fileName: 'kotazonaV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
           kotaZona: zonasampaiId,
-          isLookup:  1,
+          isLookup: 1,
           url: ($('#crudForm [name=statuslongtrip]').val() == 65) ? `${apiUrl}kota/getlongtrip` : `${apiUrl}kota`,
-          statuslongtrip:  $('#crudForm [name=statuslongtrip]').val(),
-          dari_id:  $('#crudForm [name=dari_id]').val(),
+          statuslongtrip: $('#crudForm [name=statuslongtrip]').val(),
+          dari_id: $('#crudForm [name=dari_id]').val(),
           from: 'inputtrip'
         }
       },
@@ -1764,9 +2003,41 @@
       }
     })
 
-    $('.pelanggan-lookup').lookup({
+    // $('.pelanggan-lookup').lookup({
+    //   title: 'Shipper Lookup',
+    //   fileName: 'pelanggan',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (pelanggan, element) => {
+    //     $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+    //     pelangganId = pelanggan.id
+
+    //     element.val(pelanggan.namapelanggan)
+    //     element.data('currentValue', element.val())
+    //     // clearTripAsal()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     pelangganId = 0
+    //     $('#crudForm [name=pelanggan_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     // clearTripAsal()
+    //   }
+    // })
+
+    $('.pelanggan-lookup').lookupV3({
       title: 'Shipper Lookup',
-      fileName: 'pelanggan',
+      fileName: 'pelangganV3',
+      // searching: ['kodepelanggan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1778,7 +2049,7 @@
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         pelangganId = pelanggan.id
 
-        element.val(pelanggan.namapelanggan)
+        element.val(pelanggan.kodepelanggan)
         element.data('currentValue', element.val())
         // clearTripAsal()
       },
@@ -1794,9 +2065,47 @@
       }
     })
 
-    $('.container-lookup').lookup({
+    // $('.container-lookup').lookup({
+    //   title: 'Container Lookup',
+    //   fileName: 'container',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (container, element) => {
+    //     $('#crudForm [name=container_id]').first().val(container.id)
+    //     containerId = container.id
+    //     element.val(container.keterangan)
+    //     element.data('currentValue', element.val())
+    //     enabledUpahSupir()
+    //     clearTripAsal()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //     enabledUpahSupir()
+    //   },
+    //   onClear: (element) => {
+    //     containerId = 0
+    //     $('#crudForm [name=container_id]').first().val('')
+    //     $('#crudForm [name=upah_id]').val('')
+    //     $('#crudForm [name=upah]').val('').data('currentValue', '')
+    //     enabledUpahSupir()
+    //     clearUpahSupir()
+    //     clearTripAsal()
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+
+    $('.container-lookup').lookupV3({
       title: 'Container Lookup',
-      fileName: 'container',
+      fileName: 'containerV3',
+      // searching: ['kodecontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1807,7 +2116,7 @@
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         containerId = container.id
-        element.val(container.keterangan)
+        element.val(container.kodecontainer)
         element.data('currentValue', element.val())
         enabledUpahSupir()
         clearTripAsal()
@@ -1830,11 +2139,59 @@
     })
 
 
-    $('.statuscontainer-lookup').lookup({
+    // $('.statuscontainer-lookup').lookup({
+    //   title: 'Status Container Lookup',
+    //   fileName: 'statuscontainer',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (statuscontainer, element) => {
+    //     $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
+    //     statuscontainerId = statuscontainer.id
+    //     kodeStatusContainer = statuscontainer.kodestatuscontainer
+    //     element.val(statuscontainer.keterangan)
+    //     element.data('currentValue', element.val())
+    //     enabledUpahSupir()
+    //     if (statuscontainer.kodestatuscontainer == 'FULL EMPTY') {
+    //       let jobtrucking = $('#crudForm [name=jobtrucking]')
+    //       let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
+    //       jobtrucking.attr('hidden', true)
+    //       labeljobtrucking.attr('hidden', true)
+    //       jobtrucking.parents('.input-group').find('.input-group-append').hide()
+    //       jobtrucking.parents('.input-group').find('.button-clear').hide()
+    //       enableTripAsalLongTrip()
+    //     } else {
+    //       enableTripAsalLongTrip()
+    //     }
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //     enabledUpahSupir()
+    //   },
+    //   onClear: (element) => {
+    //     statuscontainerId = 0
+    //     $('#crudForm [name=statuscontainer_id]').first().val('')
+    //     $('#crudForm [name=upah_id]').val('')
+    //     $('#crudForm [name=upah]').val('').data('currentValue', '')
+    //     enabledUpahSupir()
+    //     clearUpahSupir()
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     isPulangLongtrip = false;
+    //     clearTripAsal()
+    //   }
+    // })
+
+    $('.statuscontainer-lookup').lookupV3({
       title: 'Status Container Lookup',
-      fileName: 'statuscontainer',
+      fileName: 'statuscontainerV3',
+      // searching: ['kodestatuscontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
@@ -1844,7 +2201,7 @@
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
         statuscontainerId = statuscontainer.id
         kodeStatusContainer = statuscontainer.kodestatuscontainer
-        element.val(statuscontainer.keterangan)
+        element.val(statuscontainer.kodestatuscontainer)
         element.data('currentValue', element.val())
         enabledUpahSupir()
         if (statuscontainer.kodestatuscontainer == 'FULL EMPTY') {
@@ -1877,9 +2234,39 @@
       }
     })
 
-    $('.triptangki-lookup').lookup({
+    // $('.triptangki-lookup').lookup({
+    //   title: 'Trip tangki Lookup',
+    //   fileName: 'triptangki',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       tglbukti: $('#crudForm [name=tglbukti]').val(),
+    //       statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val(),
+    //       trado_id: $('#crudForm [name=trado_id]').val(),
+    //       supir_id: $('#crudForm [name=supir_id]').val(),
+    //       from: 'inputtrip'
+    //     }
+    //   },
+    //   onSelectRow: (triptangki, element) => {
+    //     $('#crudForm [name=triptangki_id]').first().val(triptangki.id)
+    //     element.val(triptangki.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=triptangki_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+    $('.triptangki-lookup').lookupV3({
       title: 'Trip tangki Lookup',
-      fileName: 'triptangki',
+      fileName: 'triptangkiV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1933,9 +2320,75 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.absensisupirdetail-lookup').lookup({
+    // $('.absensisupirdetail-lookup').lookup({
+    //   title: 'Trado Lookup',
+    //   fileName: 'absensisupirdetail',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       tgltrip: $('#crudForm [name=tglbukti]').val(),
+    //       Aktif: 'AKTIF',
+    //       statusjeniskendaraan: $('#crudForm [name=statusjeniskendaraan]').val()
+    //     }
+    //   },
+    //   onSelectRow: (absensi, element) => {
+    //     $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
+    //     $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
+    //     $('#crudForm [name=absensidetail_id]').first().val(absensi.id)
+    //     tradoId = absensi.trado_id
+    //     element.val(absensi.tradosupir)
+    //     element.data('currentValue', element.val())
+    //     getInfoTrado(tradoId)
+    //     if (accessCabang == 'MEDAN') {
+    //       if (absensi.statusgerobak == 246) {
+    //         if ($('#crudForm [name=nobukti_tripasal]').val() == '') {
+    //           $('#crudForm [name=gandengan]').val('')
+    //           $('#crudForm [name=gandengan_id]').val('')
+    //         }
+    //         $('.gandengan').hide()
+    //       } else {
+    //         $('.gandengan').show()
+
+    //         if ($('#crudForm [name=nobukti_tripasal]').val() == '') {
+    //           $('#crudForm [name=gandengan]').attr('readonly', false)
+    //           $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
+    //           $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+    //         }
+    //       }
+    //     }
+    //     // clearTripAsal()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     tradoId = 0
+    //     $('#crudForm [name=trado_id]').first().val('')
+    //     $('#crudForm [name=supir_id]').first().val('')
+    //     $('#crudForm [name=absensidetail_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     // clearTripAsal()
+    //     $('.tableInfo').hide()
+    //     if (accessCabang == 'MEDAN') {
+    //       $('.gandengan').show()
+
+    //       if ($('#crudForm [name=nobukti_tripasal]').val() == '') {
+    //         $('#crudForm [name=gandengan]').val('')
+    //         $('#crudForm [name=gandengan_id]').val('')
+    //         $('#crudForm [name=gandengan]').attr('readonly', false)
+    //         $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').show()
+    //         $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').show()
+    //       }
+    //     }
+    //   }
+    // })
+
+    $('.absensisupirdetail-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'absensisupirdetail',
+      fileName: 'absensisupirdetailV3',
+      // searching: ['tradosupir'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1997,9 +2450,45 @@
       }
     })
 
-    $('.gandengan-lookup').lookup({
+    // $('.gandengan-lookup').lookup({
+    //   title: 'Gandengan Lookup',
+    //   fileName: 'gandengan',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //       statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
+    //     }
+    //   },
+    //   onSelectRow: (gandengan, element) => {
+    //     $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+    //     if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+    //       gandenganId = gandengan.id
+    //     }
+    //     element.val(gandengan.kodegandengan)
+    //     element.data('currentValue', element.val())
+    //     clearJobTrucking()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=gandengan_id]').first().val('')
+    //     element.val('')
+    //     if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+    //       gandenganId = 0
+    //     }
+    //     element.data('currentValue', element.val())
+    //     clearJobTrucking()
+    //   }
+    // })
+
+    $('.gandengan-lookup').lookupV3({
       title: 'Gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      // searching: ['kodegandengan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2030,6 +2519,7 @@
         clearJobTrucking()
       }
     })
+
     // $('.agen-lookup').lookupMaster({
     //   title: 'customer Lookup',
     //   fileName: 'agenMaster',
@@ -2065,11 +2555,40 @@
     //     clearTripAsal()
     //   }
     // })
-    $('.agen-lookup').lookup({
+
+    // $('.agen-lookup').lookup({
+    //   title: 'Customer Lookup',
+    //   fileName: 'agen',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //       Invoice: 'UTAMA',
+    //     }
+    //   },
+    //   onSelectRow: (agen, element) => {
+    //     $('#crudForm [name=agen_id]').first().val(agen.id)
+    //     element.val(agen.namaagen)
+    //     element.data('currentValue', element.val())
+    //     clearTripAsal()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=agen_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     clearTripAsal()
+    //   }
+    // })
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
@@ -2084,6 +2603,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+        console.log('on cancel agen');
       },
       onClear: (element) => {
         $('#crudForm [name=agen_id]').first().val('')
@@ -2139,11 +2659,50 @@
     //     clearTripAsal()
     //   }
     // })
-    $('.jenisorder-lookup').lookup({
+    // $('.jenisorder-lookup').lookup({
+    //   title: 'Jenis Order Lookup',
+    //   fileName: 'jenisorder',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (jenisorder, element) => {
+    //     $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+    //     jenisorderId = jenisorder.id
+    //     element.val(jenisorder.keterangan)
+    //     element.data('currentValue', element.val())
+    //     enabledUpahSupir()
+    //     if ($('#crudForm [name=statuscontainer_id]') != 3) {
+    //       enableTripAsal()
+    //       enableTripAsalLongTrip()
+    //     }
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //     enabledUpahSupir()
+    //   },
+    //   onClear: (element) => {
+    //     jenisorderId = 0
+    //     $('#crudForm [name=jenisorder_id]').first().val('')
+    //     $('#crudForm [name=upah_id]').val('')
+    //     $('#crudForm [name=upah]').val('').data('currentValue', '')
+    //     enabledUpahSupir()
+    //     clearUpahSupir()
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     isPulangLongtrip = false;
+    //     clearTripAsal()
+    //   }
+    // })
+    $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderV3',
+      // searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
@@ -2209,9 +2768,88 @@
       }
     })
 
-    $('.upahsupirrincian-lookup').lookup({
+    // $('.upahsupirrincian-lookup').lookup({
+    //   title: 'Upah Supir Lookup',
+    //   fileName: 'upahsupirrincian',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       container_Id: containerId,
+    //       statuscontainer_Id: statuscontainerId,
+    //       jenisorder_Id: jenisorderId,
+    //       statuskandang_Id: $('#crudForm [name=statuskandang]').val(),
+    //       statusUpahZona: statusUpahZona,
+    //       tglbukti: $('#crudForm [name=tglbukti]').val(),
+    //       longtrip: $('#crudForm [name=statuslongtrip]').val(),
+    //       dari_id: $('#crudForm [name=dari_id]').val(),
+    //       sampai_id: $('#crudForm [name=sampai_id]').val(),
+    //       statuspenyesuaian: $('#crudForm [name=statuspenyesuaian]').val(),
+    //       statusperalihan: $('#crudForm [name=statusperalihan]').val(),
+    //       statuslangsir: $('#crudForm [name=statuslangsir]').val(),
+    //       nobukti_tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
+    //       statusjeniskendaraan: statusJenisKendaran
+    //     }
+    //   },
+    //   onSelectRow: (upahsupir, element) => {
+    //     $('#crudForm [name=upah_id]').val(upahsupir.upah_id)
+    //     // if (selectedUpahZona == 'NON UPAH ZONA') {
+
+    //     $('#crudForm [name=tarifrincian_id]').val(upahsupir.tarif_id)
+    //     $('#crudForm [name=tarifrincian]').val(upahsupir.tarif)
+    //     $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
+    //     $('#crudForm [name=dari_id]').val(upahsupir.kotadari_id)
+    //     $('#crudForm [name=dari]').val(upahsupir.kotadari)
+    //     $('#crudForm [name=sampai_id]').val(upahsupir.kotasampai_id)
+    //     $('#crudForm [name=sampai]').val(upahsupir.kotasampai)
+    //     element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
+
+    //     tarifrincianId = upahsupir.tarif_id
+    //     if (kodeStatusContainer != 'FULL EMPTY') {
+    //       getpelabuhan(upahsupir.kotadari_id)
+    //     }
+    //     // } else {
+    //     //   zonadariId = upahsupir.zonadari_id
+    //     //   zonasampaiId = upahsupir.zonasampai_id
+
+    //     //   element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
+    //     // }
+    //     // kotaUpahZona()
+    //     if (upahsupir.kotadari == 'KANDANG') {
+    //       $('.nobukti_tripasal').show()
+    //       $(".nobukti_tripasal").appendTo("#tripasal");
+    //     }
+    //     element.data('currentValue', element.val())
+    //     // clearTrado()
+    //     getInfoTrado()
+    //     // clearTripAsal()
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //     // enabledKota()
+    //   },
+    //   onClear: (element) => {
+    //     tarifrincianId = 0
+
+    //     $('#crudForm [name=upah_id]').val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     // clearTrado()
+
+    //     if ($('#crudForm [name=statuslongtrip]').val() != 65) {
+    //       clearUpahSupir()
+    //       // clearTripAsal()
+    //     }
+
+    //   }
+    // })
+
+
+    $('.upahsupirrincian-lookup').lookupV3({
       title: 'Upah Supir Lookup',
-      fileName: 'upahsupirrincian',
+      fileName: 'upahsupirrincianV3',
+      searching: ['kotadarisampai'],
+      labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2267,6 +2905,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+        console.log('on cancel');
         // enabledKota()
       },
       onClear: (element) => {
@@ -2285,9 +2924,45 @@
       }
     })
 
-    $('.gandenganasal-lookup').lookup({
+
+    // $('.gandenganasal-lookup').lookup({
+    //   title: 'Gandengan Asal Lookup',
+    //   fileName: 'gandengan',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+
+    //       Aktif: 'AKTIF',
+    //       Asal: 'YA'
+    //     }
+    //   },
+    //   onSelectRow: (gandengan, element) => {
+    //     $('#crudForm [name=gandenganasal_id]').first().val(gandengan.id)
+    //     gandenganId = gandengan.id
+
+    //     element.val(gandengan.kodegandengan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=gandenganasal_id]').first().val('')
+    //     if ($('#crudForm [name=gandengan_id]') != '') {
+    //       gandenganId = $('#crudForm [name=gandengan_id]').val()
+    //     } else {
+    //       gandenganId = 0
+    //     }
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+    $('.gandenganasal-lookup').lookupV3({
       title: 'Gandengan Asal Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      // searching: ['kodegandengan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2317,7 +2992,6 @@
         element.data('currentValue', element.val())
       }
     })
-
   }
 
   function clearUpahSupir() {
@@ -2391,15 +3065,15 @@
         <td></td>
         <td>
           <input type="hidden" name="jenisritasi_id[]" id="jenisritasi_id_${index}">
-          <input type="text" name="jenisritasi[]" class="form-control dataritasi-lookup" id="jenisritasi_${index}">
+          <input type="text" name="jenisritasi[]" id="jenisritasi-${index}" class="form-control dataritasi-lookup-${index}" id="jenisritasi_${index}">
         </td>
         <td>
           <input type="hidden" name="ritasidari_id[]">
-          <input type="text" name="ritasidari[]" class="form-control ritasidari-lookup" readonly>
+          <input type="text" name="ritasidari[]" id="ritasidari-${index}" class="form-control ritasidari-lookup-${index}" readonly>
         </td>
         <td>
           <input type="hidden" name="ritasike_id[]">
-          <input type="text" name="ritasike[]" class="form-control ritasike-lookup" readonly>
+          <input type="text" name="ritasike[]" id="ritasike-${index}" class="form-control ritasike-lookup-${index}" readonly>
         </td>
         <td>
           <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -2411,108 +3085,109 @@
     // setStatusRitasi(detailRow)
     // initSelect2(detailRow.find(`[name="jenisritasi[]"]`), false)
 
+    initLookupDetail(index)
 
-    $(`.ritasidari-lookup`).last().lookup({
-      title: 'RITASI DARI Lookup',
-      fileName: 'kota',
-      beforeProcess: function() {
-        console.log(this)
-        this.postData = {
-          Aktif: 'AKTIF',
-          DataRitasi: dataRitasiId[`jenisritasi_${index}`],
-          RitasiDariKe: 'dari',
-          pilihkota_id: pilihKotaSampaiRitasiId
-        }
-      },
-      onSelectRow: (kota, element) => {
-        element.parents('td').find(`[name="ritasidari_id[]"]`).val(kota.id)
-        pilihKotaDariRitasiId = kota.id
-        element.val(kota.kodekota)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="ritasidari_id[]"]`).val('')
-        pilihKotaDariRitasiId = 0
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    // $(`.ritasidari-lookup`).last().lookup({
+    //   title: 'RITASI DARI Lookup',
+    //   fileName: 'kota',
+    //   beforeProcess: function() {
+    //     console.log(this)
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       DataRitasi: dataRitasiId[`jenisritasi_${index}`],
+    //       RitasiDariKe: 'dari',
+    //       pilihkota_id: pilihKotaSampaiRitasiId
+    //     }
+    //   },
+    //   onSelectRow: (kota, element) => {
+    //     element.parents('td').find(`[name="ritasidari_id[]"]`).val(kota.id)
+    //     pilihKotaDariRitasiId = kota.id
+    //     element.val(kota.kodekota)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="ritasidari_id[]"]`).val('')
+    //     pilihKotaDariRitasiId = 0
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
-    $(`.ritasike-lookup`).last().lookup({
-      title: 'RITASI KE Lookup',
-      fileName: 'kota',
-      beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-          DataRitasi: dataRitasiId[`jenisritasi_${index}`],
-          RitasiDariKe: 'ke',
-          pilihkota_id: pilihKotaDariRitasiId
-        }
-      },
-      onSelectRow: (kota, element) => {
-        element.parents('td').find(`[name="ritasike_id[]"]`).val(kota.id)
-        pilihKotaSampaiRitasiId = kota.id
-        element.val(kota.kodekota)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="ritasike_id[]"]`).val('')
-        pilihKotaSampaiRitasiId = 0
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    // $(`.ritasike-lookup`).last().lookup({
+    //   title: 'RITASI KE Lookup',
+    //   fileName: 'kota',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       DataRitasi: dataRitasiId[`jenisritasi_${index}`],
+    //       RitasiDariKe: 'ke',
+    //       pilihkota_id: pilihKotaDariRitasiId
+    //     }
+    //   },
+    //   onSelectRow: (kota, element) => {
+    //     element.parents('td').find(`[name="ritasike_id[]"]`).val(kota.id)
+    //     pilihKotaSampaiRitasiId = kota.id
+    //     element.val(kota.kodekota)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="ritasike_id[]"]`).val('')
+    //     pilihKotaSampaiRitasiId = 0
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
-    $('.dataritasi-lookup').last().lookup({
-      title: 'Data Ritasi Lookup',
-      fileName: 'dataritasi',
-      //fileName: 'upahritasiTrip',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
+    // $('.dataritasi-lookup').last().lookup({
+    //   title: 'Data Ritasi Lookup',
+    //   fileName: 'dataritasi',
+    //   //fileName: 'upahritasiTrip',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
 
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (dataRitasi, element) => {
-        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
-        element.val(dataRitasi.statusritasi)
-        element.data('currentValue', element.val())
-        getKotaRitasi(dataRitasi.statusritasi_id, element, element.attr("id"))
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (dataRitasi, element) => {
+    //     element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
+    //     element.val(dataRitasi.statusritasi)
+    //     element.data('currentValue', element.val())
+    //     getKotaRitasi(dataRitasi.statusritasi_id, element, element.attr("id"))
 
-        // element.parents('tr').find(`td [name="ritasidari_id[]"]`).val(dataRitasi.ritasidari_id)
-        // element.parents('tr').find(`td [name="ritasidari[]"]`).val(dataRitasi.ritasidari).data('currentValue', dataRitasi.ritasidari).attr("readonly", true)
-        // element.parents('tr').find(`td [name="ritasike_id[]"]`).val(dataRitasi.ritasike_id)
-        // element.parents('tr').find(`td [name="ritasike[]"]`).val(dataRitasi.ritasike).data('currentValue', dataRitasi.ritasike).attr("readonly", true)
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="jenisritasi_id[]"]`).val('')
-        element.parents('tr').find(`td [name="ritasidari_id[]"]`).val('')
-        element.parents('tr').find(`td [name="ritasidari[]"]`).val('').data('currentValue', '').attr("readonly", true)
-        element.parents('tr').find(`td [name="ritasike_id[]"]`).val('')
-        element.parents('tr').find(`td [name="ritasike[]"]`).val('').data('currentValue', '').attr("readonly", true)
+    //     // element.parents('tr').find(`td [name="ritasidari_id[]"]`).val(dataRitasi.ritasidari_id)
+    //     // element.parents('tr').find(`td [name="ritasidari[]"]`).val(dataRitasi.ritasidari).data('currentValue', dataRitasi.ritasidari).attr("readonly", true)
+    //     // element.parents('tr').find(`td [name="ritasike_id[]"]`).val(dataRitasi.ritasike_id)
+    //     // element.parents('tr').find(`td [name="ritasike[]"]`).val(dataRitasi.ritasike).data('currentValue', dataRitasi.ritasike).attr("readonly", true)
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="jenisritasi_id[]"]`).val('')
+    //     element.parents('tr').find(`td [name="ritasidari_id[]"]`).val('')
+    //     element.parents('tr').find(`td [name="ritasidari[]"]`).val('').data('currentValue', '').attr("readonly", true)
+    //     element.parents('tr').find(`td [name="ritasike_id[]"]`).val('')
+    //     element.parents('tr').find(`td [name="ritasike[]"]`).val('').data('currentValue', '').attr("readonly", true)
 
-        element.val('')
-        element.data('currentValue', element.val())
-        let ritDari = element.parents('tr').find(`td [name="ritasidari[]"]`).parents('.input-group')
-        ritDari.find('.button-clear').attr('disabled', true)
-        ritDari.children().find('.lookup-toggler').attr('disabled', true)
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     let ritDari = element.parents('tr').find(`td [name="ritasidari[]"]`).parents('.input-group')
+    //     ritDari.find('.button-clear').attr('disabled', true)
+    //     ritDari.children().find('.lookup-toggler').attr('disabled', true)
 
-        let ritKe = element.parents('tr').find(`td [name="ritasike[]"]`).parents('.input-group')
-        ritKe.find('.button-clear').attr('disabled', true)
-        ritKe.children().find('.lookup-toggler').attr('disabled', true)
+    //     let ritKe = element.parents('tr').find(`td [name="ritasike[]"]`).parents('.input-group')
+    //     ritKe.find('.button-clear').attr('disabled', true)
+    //     ritKe.children().find('.lookup-toggler').attr('disabled', true)
 
-      }
-    })
+    //   }
+    // })
 
     let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
     ritDari.find('.button-clear').attr('disabled', true)
@@ -2597,6 +3272,148 @@
         isPulangLongtrip = false;
       }
     }
+  }
+
+  function initLookupDetail(index) {
+    let rowLookup = index;
+    $(`.ritasidari-lookup-${rowLookup}`).last().lookupV3({
+      title: 'RITASI DARI Lookup',
+      fileName: 'kotaV3',
+      labelColumn: false,
+      beforeProcess: function() {
+        console.log(this)
+        this.postData = {
+          Aktif: 'AKTIF',
+          DataRitasi: dataRitasiId[`jenisritasi_${index}`],
+          RitasiDariKe: 'dari',
+          pilihkota_id: pilihKotaSampaiRitasiId
+        }
+      },
+      onSelectRow: (kota, element) => {
+        element.parents('td').find(`[name="ritasidari_id[]"]`).val(kota.id)
+        pilihKotaDariRitasiId = kota.id
+        element.val(kota.kodekota)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="ritasidari_id[]"]`).val('')
+        pilihKotaDariRitasiId = 0
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $(`.ritasike-lookup-${rowLookup}`).last().lookupV3({
+      title: 'RITASI KE Lookup',
+      fileName: 'kotaV3',
+      labelColumn: false,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          DataRitasi: dataRitasiId[`jenisritasi_${index}`],
+          RitasiDariKe: 'ke',
+          pilihkota_id: pilihKotaDariRitasiId
+        }
+      },
+      onSelectRow: (kota, element) => {
+        element.parents('td').find(`[name="ritasike_id[]"]`).val(kota.id)
+        pilihKotaSampaiRitasiId = kota.id
+        element.val(kota.kodekota)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="ritasike_id[]"]`).val('')
+        pilihKotaSampaiRitasiId = 0
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $(`.dataritasi-lookup-${rowLookup}`).last().lookupV3({
+      title: 'Data Ritasi Lookup',
+      fileName: 'dataritasiv3',
+      labelColumn: false,
+      //fileName: 'upahritasiTrip',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (dataRitasi, element) => {
+        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
+        element.val(dataRitasi.statusritasi)
+        element.data('currentValue', element.val())
+        getKotaRitasi(dataRitasi.statusritasi_id, element, element.attr("id"))
+
+        // element.parents('tr').find(`td [name="ritasidari_id[]"]`).val(dataRitasi.ritasidari_id)
+        // element.parents('tr').find(`td [name="ritasidari[]"]`).val(dataRitasi.ritasidari).data('currentValue', dataRitasi.ritasidari).attr("readonly", true)
+        // element.parents('tr').find(`td [name="ritasike_id[]"]`).val(dataRitasi.ritasike_id)
+        // element.parents('tr').find(`td [name="ritasike[]"]`).val(dataRitasi.ritasike).data('currentValue', dataRitasi.ritasike).attr("readonly", true)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="jenisritasi_id[]"]`).val('')
+        element.parents('tr').find(`td [name="ritasidari_id[]"]`).val('')
+        element.parents('tr').find(`td [name="ritasidari[]"]`).val('').data('currentValue', '').attr("readonly", true)
+        element.parents('tr').find(`td [name="ritasike_id[]"]`).val('')
+        element.parents('tr').find(`td [name="ritasike[]"]`).val('').data('currentValue', '').attr("readonly", true)
+
+        element.val('')
+        element.data('currentValue', element.val())
+        let ritDari = element.parents('tr').find(`td [name="ritasidari[]"]`).parents('.input-group')
+        ritDari.find('.button-clear').attr('disabled', true)
+        ritDari.children().find('.lookup-toggler').attr('disabled', true)
+
+        let ritKe = element.parents('tr').find(`td [name="ritasike[]"]`).parents('.input-group')
+        ritKe.find('.button-clear').attr('disabled', true)
+        ritKe.children().find('.lookup-toggler').attr('disabled', true)
+
+      }
+    })
+
+    // $(`.absentrado-lookup-${rowLookup}`).last().lookup({
+    //   title: 'Absen Trado Lookup',
+    //   fileName: 'absentrado',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       trado_id: detail.trado_id,
+    //       supir_id: detail.supir_id,
+    //       supirold_id: detail.supir_id_old,
+    //       tglabsensi: $('#tglbukaabsensi').val(),
+    //       dari: 'mandorabsensisupir',
+    //     }
+    //   },
+    //   onSelectRow: (absentrado, element) => {
+    //     getabsentrado(absentrado.id).then((response) => {
+    //       setSupirEnableIndex(response, index)
+    //     }).catch(() => {
+    //       setSupirEnableIndex(false, index)
+    //     })
+    //     element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
+    //     element.val(absentrado.keterangan)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="absen_id[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     setSupirEnableIndex(false, index)
+    //   }
+    // })
   }
 </script>
 @endpush
