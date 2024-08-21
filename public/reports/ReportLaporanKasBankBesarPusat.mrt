@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3b2de21788bc6b2a5231a5e33d6a9cb8",
+  "ReportGuid": "64f2a1f33e7f300e60c0c7684cbfb728",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1723098723000+0700)/",
+  "ReportChanged": "/Date(1724225811000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1238,6 +1238,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1276,6 +1277,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.kredit}"
               },
@@ -1322,6 +1324,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totaldebet}"
               },
@@ -1368,6 +1371,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totalkredit}"
               },
@@ -1406,6 +1410,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.debet}"
               },
@@ -1417,12 +1422,13 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "NullValue": "Empty",
               "TextFormat": {
                 "Ident": "StiNumberFormatService",
                 "NegativePattern": 1,
                 "GroupSeparator": ","
               },
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "5": {
               "Ident": "StiText",
@@ -1435,7 +1441,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.keterangan}"
+                "Value": "{root_data.keterangan}&nbsp;"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1444,6 +1450,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Type": "Expression"
             },
             "6": {
@@ -1457,7 +1465,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.keterangancoa}"
+                "Value": "{root_data.keterangancoa}&nbsp;"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1466,6 +1474,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Type": "Expression"
             },
             "7": {
@@ -1489,7 +1499,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.nobukti}"
+                "Value": "{root_data.nobukti}&nbsp;"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1498,6 +1508,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Type": "Expression"
             },
             "8": {
@@ -1572,6 +1584,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.debet)}"
               },
@@ -1611,6 +1624,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.kredit)}"
               },
@@ -1640,6 +1654,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
