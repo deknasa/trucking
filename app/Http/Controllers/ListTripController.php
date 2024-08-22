@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class ListTripController extends MyController
@@ -15,11 +16,12 @@ class ListTripController extends MyController
     {
         $title = $this->title;
         
+        $status = $this->getData();
         $data = [
             'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
             'combogudangsama' => $this->comboList('list', 'STATUS GUDANG SAMA', 'STATUS GUDANG SAMA')
         ];
-        return view('listtrip.index', compact('title','data'));
+        return view('listtrip.index', compact('title','data','status'));
     }
 
     public function comboList($aksi, $grp, $subgrp)
@@ -37,5 +39,44 @@ class ListTripController extends MyController
             ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
+    }
+    
+    public function getData()
+    {
+        $dataJenisKendaraan = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS JENIS KENDARAAN')
+            ->get()->toArray();
+        $dataLongtrip = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS LONGTRIP')
+            ->get()->toArray();
+        $dataGudangSama = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS GUDANG SAMA')
+            ->get()->toArray();
+        $dataLangsir = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS LANGSIR')
+            ->get()->toArray();
+        $dataGandengan = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS GANDENGAN')
+            ->get()->toArray();
+        $dataPenyesuaian = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS PENYESUAIAN')
+            ->get()->toArray();
+
+        $data = [
+            'jeniskendaraan' => $dataJenisKendaraan,
+            'longtrip' => $dataLongtrip,
+            'gudangsama' => $dataGudangSama,
+            'langsir' => $dataLangsir,
+            'gandengan' => $dataGandengan,
+            'penyesuaian' => $dataPenyesuaian,
+        ];
+
+        return $data;
     }
 }
