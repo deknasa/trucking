@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "64f2a1f33e7f300e60c0c7684cbfb728",
+  "ReportGuid": "f4c8e53f2117ecca16e9a53d3d70dafd",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724225811000+0700)/",
+  "ReportChanged": "/Date(1724315775000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1268,7 +1268,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.kredit",
+                  "Column": "root_data.kredit",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1307,7 +1307,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "Condition": "NotEqualTo",
-                  "Column": "data.urutdetail",
+                  "Column": "root_data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1315,7 +1315,7 @@
                 "1": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.totaldebet",
+                  "Column": "root_data.totaldebet",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1354,7 +1354,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "Condition": "NotEqualTo",
-                  "Column": "data.urutdetail",
+                  "Column": "root_data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1362,7 +1362,7 @@
                 "1": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.totalkredit",
+                  "Column": "root_data.totalkredit",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1401,7 +1401,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.debet",
+                  "Column": "root_data.debet",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1489,7 +1489,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "Condition": "NotEqualTo",
-                  "Column": "data.urutdetail",
+                  "Column": "root_data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1523,7 +1523,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "Condition": "NotEqualTo",
-                  "Column": "data.urutdetail",
+                  "Column": "root_data.urutdetail",
                   "Value1": "1.0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1575,7 +1575,7 @@
                   "Ident": "StiCondition",
                   "Item": "Expression",
                   "Expression": {
-                    "Value": "{Sum(data.debet) == 0}"
+                    "Value": "{Sum(root_data.debet) == 0}"
                   },
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1615,7 +1615,7 @@
                   "Ident": "StiCondition",
                   "Item": "Expression",
                   "Expression": {
-                    "Value": "{Sum(data.kredit) == 0}"
+                    "Value": "{Sum(root_data.kredit) == 0}"
                   },
                   "Enabled": false,
                   "BorderSides": "None"

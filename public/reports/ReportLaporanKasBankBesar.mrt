@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7b75dbdd91a49e870350a31378379d9d",
+  "ReportGuid": "8ce41585de7bbf7c3f539f5b26456a8e",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportLaporanKasBankBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724226476000+0700)/",
+  "ReportChanged": "/Date(1724316229000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1095,7 +1095,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.debet",
+                  "Column": "root_data.debet",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1134,7 +1134,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.kredit",
+                  "Column": "root_data.kredit",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
