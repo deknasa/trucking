@@ -1124,19 +1124,14 @@
 
   function initLookup() {
 
-    $('.jenistrado-lookup').lookupMaster({
-      title: 'jenistrado Lookup',
-      fileName: 'jenistradoMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+    $('.jenistrado-lookup').lookupV3({
+      title: 'jenis trado Lookup',
+      fileName: 'jenistradoV3',
+      searching: ['kodemerk'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'jenistrado_id',
-          searchText: 'jenistrado-lookup',
-          title: 'jenistrado',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (jenistrado, element) => {
@@ -1153,19 +1148,14 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.merk-lookup').lookupMaster({
+    $('.merk-lookup').lookupV3({
       title: 'merk Lookup',
-      fileName: 'merkMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'merkV3',
+      searching: ['kodemerk'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'merk_id',
-          searchText: 'merk-lookup',
-          title: 'merk',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (merk, element) => {
@@ -1182,19 +1172,33 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.kelompok-lookup').lookupMaster({
+    $('.kelompok-lookup').lookupV3({
+      /**
+       title: 'Kelompok Lookup',
+       fileName: 'kelompokMaster',
+       typeSearch: 'ALL',
+       searching: 1,
+       beforeProcess: function(test) {
+         this.postData = {
+           Aktif: 'AKTIF',
+           searching: 1,
+           valueName: 'kelompok_id',
+           searchText: 'kelompok-lookup',
+           title: 'Kelompok',
+           typeSearch: 'ALL',
+         }
+       },
+       * 
+      */
       title: 'Kelompok Lookup',
-      fileName: 'kelompokMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kelompokV3',
+      searching: ['kodekelompok'],
+      labelColumn: false,
       beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
+
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kelompok_id',
-          searchText: 'kelompok-lookup',
-          title: 'Kelompok',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kelompok, element) => {
@@ -1216,21 +1220,16 @@
         isKelompokBan(0, "")
       }
     })
-    $('.subkelompok-lookup').lookupMaster({
-      title: 'Subkelompok Lookup',
-      fileName: 'subkelompokMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+    $('.subkelompok-lookup').lookupV3({
+      title: 'subkelompok Lookup',
+      fileName: 'subkelompokV3',
+      searching: ['kodesubkelompok'],
+      labelColumn: false,
       beforeProcess: function(test) {
         var kelompokId = $(`#kelompokId`).val();
         this.postData = {
           kelompok_id: kelompokId,
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'subkelompok_id',
-          searchText: 'subkelompok-lookup',
-          title: 'Sub Kelompok',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (subkelompok, element) => {
@@ -1249,21 +1248,16 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.kategori-lookup').lookupMaster({
+    $('.kategori-lookup').lookupV3({
       title: 'kategori Lookup',
-      fileName: 'kategoriMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kategoriV3',
+      searching: ['kodekategori'],
+      labelColumn: false,
       beforeProcess: function(test) {
         var subkelompokId = $(`#subkelompokId`).val();
         this.postData = {
           subkelompok_id: subkelompokId,
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kategori_id',
-          searchText: 'kategori-lookup',
-          title: 'kategori',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kategori, element) => {
@@ -1281,19 +1275,15 @@
       }
     })
 
-    $('.satuan-lookup').lookupMaster({
+    // $('.satuan-lookup').lookupMaster({
+    $('.satuan-lookup').lookupV3({
       title: 'satuan Lookup',
-      fileName: 'satuanMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'satuanV3',
+      searching: ['kodesatuan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'satuan_id',
-          searchText: 'satuan-lookup',
-          title: 'satuan',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (satuan, element) => {
@@ -1311,22 +1301,16 @@
       }
     })
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -1345,22 +1329,16 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statusreuse-lookup`).lookupMaster({
+    $(`.statusreuse-lookup`).lookupV3({
       title: 'Status REUSE Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS REUSE',
           subgrp: 'STATUS REUSE',
-          searching: 1,
-          valueName: `statusreuse`,
-          searchText: `statusreuse-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status REUSE'
         };
       },
       onSelectRow: (status, element) => {
@@ -1396,22 +1374,16 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statusservicerutin-lookup`).lookupMaster({
+    $(`.statusservicerutin-lookup`).lookupV3({
       title: 'Status status service rutin Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS service rutin',
           subgrp: 'STATUS service rutin',
-          searching: 1,
-          valueName: `statusservicerutin`,
-          searchText: `statusservicerutin-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'STATUS service rutin'
         };
       },
       onSelectRow: (status, element) => {
@@ -1430,22 +1402,16 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statusban-lookup`).lookupMaster({
+    $(`.statusban-lookup`).lookupV3({
       title: 'STATUS KONDISI BAN Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS KONDISI BAN',
           subgrp: 'STATUS KONDISI BAN',
-          searching: 1,
-          valueName: `statusban`,
-          searchText: `statusban-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'STATUS KONDISI BAN'
         };
       },
       onSelectRow: (status, element) => {
