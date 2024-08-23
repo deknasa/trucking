@@ -40,6 +40,7 @@
   <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\pager.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
+  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/Print.js-1.5.0/print.min.css') }}">
   @stack('style')
 
 </head>
@@ -409,18 +410,19 @@
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
+  <script src="{{ asset('libraries/Print.js-1.5.0/print.min.js') }}"></script>
+
+
+
   <!-- Report -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
-  <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-  <!-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> -->
+  @stack('report-scripts')
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
 
   <!-- Custom global script -->
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\pager.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookup.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookupMaster.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupMaster.js')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/lookupV3.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupV3.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\mains.js')) }}"></script>
   {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script> --}}
 
@@ -1044,7 +1046,6 @@
     window.addEventListener('beforeunload', function(e) {
       removeEditingBy($('#crudForm').find('[name=id]').val())
     });
-   
   </script>
 </body>
 

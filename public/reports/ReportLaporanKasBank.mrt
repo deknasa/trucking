@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "5c5909577228b530328c5f82cce8ad5e",
+  "ReportGuid": "baa1ab8915b377bea388bb41fe2fd892",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBank.mrt",
+  "ReportFile": "ReportLaporanKasBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1723090381000+0700)/",
+  "ReportChanged": "/Date(1724316174000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -595,7 +595,7 @@
               "Ident": "StiText",
               "Name": "Text9",
               "Guid": "f47cef1884666d89d616bd67de20014a",
-              "ClientRectangle": "17,18,26,8",
+              "ClientRectangle": "19,18,26,8",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -852,7 +852,7 @@
             "25": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive7",
-              "ClientRectangle": "17,17.89,0,0",
+              "ClientRectangle": "19,17.89,0,0",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -862,7 +862,7 @@
             "26": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive7",
-              "ClientRectangle": "17,25.71,0,0",
+              "ClientRectangle": "19,25.71,0,0",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -872,7 +872,7 @@
             "27": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive8",
-              "ClientRectangle": "42.59,18.09,0,0",
+              "ClientRectangle": "44.59,18.09,0,0",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -882,7 +882,7 @@
             "28": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive8",
-              "ClientRectangle": "42.59,25.91,0,0",
+              "ClientRectangle": "44.59,25.91,0,0",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1019,7 +1019,7 @@
               "Name": "Text20",
               "Guid": "7a7e2607963e58ddd075917536210794",
               "CanGrow": true,
-              "ClientRectangle": "17.5,0.27,24,6.09",
+              "ClientRectangle": "20,0.27,24,6.09",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1041,13 +1041,13 @@
               "Name": "Text21",
               "Guid": "91a448fde875072e545ba98196f18e97",
               "CanGrow": true,
-              "ClientRectangle": "43.38,0.08,30.68,6.09",
+              "ClientRectangle": "45.38,0.08,30.68,6.09",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.keterangancoa}"
+                "Value": "{root_data.keterangancoa}&nbsp;"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1056,6 +1056,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Type": "DataColumn"
             },
             "2": {
@@ -1069,7 +1071,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.keterangan}"
+                "Value": "{root_data.keterangan}&nbsp;"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1078,6 +1080,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Type": "DataColumn"
             },
             "3": {
@@ -1091,7 +1095,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.debet",
+                  "Column": "root_data.debet",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1100,6 +1104,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.debet}"
               },
@@ -1129,7 +1134,7 @@
                 "0": {
                   "Ident": "StiCondition",
                   "DataType": "Numeric",
-                  "Column": "data.kredit",
+                  "Column": "root_data.kredit",
                   "Value1": "0",
                   "Enabled": false,
                   "BorderSides": "None"
@@ -1138,6 +1143,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.kredit}"
               },
@@ -1166,6 +1172,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1189,7 +1196,7 @@
               "Name": "Text32",
               "Guid": "da2f25dfcfb46d3b4d765e109f348641",
               "CanGrow": true,
-              "ClientRectangle": "1.95,0.08,15,6.09",
+              "ClientRectangle": "1.95,0.08,17,6.09",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1261,6 +1268,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.debet)}"
               },
@@ -1289,6 +1297,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.kredit)}"
               },
@@ -1318,6 +1327,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1656,7 +1666,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive5",
           "Guid": "9bec4f6b99eca3b449c105b646ec27c0",
-          "ClientRectangle": "17,21.89,0.254,7.82",
+          "ClientRectangle": "19,21.89,0.254,7.82",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1668,7 +1678,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive6",
           "Guid": "0dcb02c13424c9292a10a87a4378ad1c",
-          "ClientRectangle": "42.59,22.09,0.254,7.82",
+          "ClientRectangle": "44.59,22.09,0.254,7.82",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
