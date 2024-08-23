@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="trado_id">
-                                <input type="text" name="trado" class="form-control trado-lookup">
+                                <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -56,7 +56,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="supirserap_id">
-                                <input type="text" name="supirserap" class="form-control supirserap-lookup">
+                                <input type="text" name="supirserap" id="supirserap" class="form-control supirserap-lookup">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -491,11 +491,12 @@
     }
 
     function initLookup() {
-        $('.trado-lookup').lookup({
+        $('.trado-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'trado',
+            fileName: 'tradoV3',
+            searching: ['kodetrado'],
+            // labelColumn: false,
             beforeProcess: function(test) {
-                console.log($('#crudForm').find('[name=tglabsensi]').val());
                 this.postData = {
                     Aktif: 'AKTIF',
                     supirserap: true,
@@ -522,9 +523,11 @@
                 $('#crudForm [name=supir]').data('currentValue', '')
             }
         })
-        $('.supirserap-lookup').lookup({
+        $('.supirserap-lookup').lookupV3({
             title: 'Supir Serap Lookup',
-            fileName: 'supir',
+            fileName: 'supirV3',
+            searching: ['namasupir'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

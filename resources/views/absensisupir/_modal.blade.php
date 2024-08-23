@@ -823,10 +823,14 @@
               max: 24
             }).mask(".inputmask-time");
 
-
-            $(document).find('.supir-lookup').last().lookup({
+            $(document).find('.supir-lookup').last().lookupV3({
               title: 'Supir Lookup',
-              fileName: 'supir',
+              fileName: 'supirV3',
+              searching: ['namasupir'],
+              labelColumn: false,
+              // $(document).find('.supir-lookup').last().lookup({
+              // title: 'Supir Lookup',
+              // fileName: 'supir',
               beforeProcess: function(test) {
                 this.postData = {
                   Aktif: 'AKTIF',
@@ -871,9 +875,11 @@
               }
             })
 
-            $('.absentrado-lookup').last().lookup({
+            $('.absentrado-lookup').last().lookupV3({
               title: 'Absen Trado Lookup',
-              fileName: 'absentrado',
+              fileName: 'absentradoV3',
+              searching: ['keterangan'],
+              labelColumn: false,
               beforeProcess: function(test) {
                 this.postData = {
                   Aktif: 'AKTIF',
@@ -904,22 +910,16 @@
                 setSupirEnableIndex(false, index)
               }
             })
-            $(`.jeniskendaraan-lookup`).last().lookupMaster({
+            $(`.jeniskendaraan-lookup`).last().lookupV3({
               title: 'Jenis Kendaraan',
-              fileName: 'parameterMaster',
-              typeSearch: 'ALL',
-              searching: 1,
+              fileName: 'parameterV3',
+              searching: ['keterangan'],
+              labelColumn: false,
               beforeProcess: function() {
                 this.postData = {
                   url: `${apiUrl}parameter/combo`,
                   grp: 'STATUS JENIS KENDARAAN',
                   subgrp: 'STATUS JENIS KENDARAAN',
-                  searching: 1,
-                  valueName: `jeniskendaraan_id`,
-                  searchText: `jeniskendaraan-${index}`,
-                  singleColumn: true,
-                  hideLabel: true,
-                  title: 'JENIS KENDARAAN'
                 };
               },
               onSelectRow: (status, element) => {
