@@ -17,11 +17,13 @@ class ListTripController extends MyController
         $title = $this->title;
         
         $status = $this->getData();
+        $jobmanual = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+        ->where('grp','JOB TRUCKING MANUAL')->first()->text ?? 'TIDAK';
         $data = [
             'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
             'combogudangsama' => $this->comboList('list', 'STATUS GUDANG SAMA', 'STATUS GUDANG SAMA')
         ];
-        return view('listtrip.index', compact('title','data','status'));
+        return view('listtrip.index', compact('title','data','status','jobmanual'));
     }
 
     public function comboList($aksi, $grp, $subgrp)

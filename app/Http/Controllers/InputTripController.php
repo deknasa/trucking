@@ -17,7 +17,9 @@ class InputTripController extends MyController
         $title = $this->title;
 
         $data = $this->getData();
-        return view('inputtrip.index', compact('title','data'));
+        $jobmanual = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+        ->where('grp','JOB TRUCKING MANUAL')->first()->text ?? 'TIDAK';
+        return view('inputtrip.index', compact('title','data','jobmanual'));
     }
 
     public function getData()
