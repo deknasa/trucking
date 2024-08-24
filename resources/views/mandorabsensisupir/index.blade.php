@@ -486,9 +486,11 @@
   function initLookupDetail(index, detailRow, detail) {
     let rowLookup = index;
 
-    $(`.supir-lookup-${rowLookup}`).last().lookup({
+    $(`.supir-lookup-${rowLookup}`).last().lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      searching: ['namasupir'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -502,7 +504,6 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-        console.log(element.data('currentValue'));
       },
       onClear: (element) => {
         element.parents('td').find(`[name="supir_id[]"]`).val('')
@@ -511,41 +512,48 @@
       }
     })
 
-    // $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
-    //   title: 'Jenis Kendaraan',
-    //   fileName: 'supirMaster',
-    //   typeSearch: 'ALL',
-    //   searching: 1,
-    //   beforeProcess: function() {
-    //     this.postData = {
-    //       Aktif: 'AKTIF',
-    //       searching: 1,
-    //       valueName: `namasupir_${index}`,
-    //       searchText: `supir-lookup-${rowLookup}`,
-    //       title: 'SUPIR LOOKUP'
-    //     };
-    //   },
-      
-    //   onSelectRow: (supir, element) => {
-    //     element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-        
-    //     element.val(supir.namasupir)
-    //     element.data('currentValue', element.val())
-    //   },
-    //   onCancel: (element) => {
-    //     element.val(element.data('currentValue'))
-    //     console.log(element.data('currentValue'));
-    //   },
-    //   onClear: (element) => {
-    //     element.parents('td').find(`[name="supir_id[]"]`).val('')
-    //     element.val('')
-    //     element.data('currentValue', element.val())
-    //   }
-    // })
+    /**
+     * 
+     * 
+     $(`.supir-lookup-${rowLookup}`).last().lookupMaster({
+       title: 'Jenis Kendaraan',
+       fileName: 'supirMaster',
+       typeSearch: 'ALL',
+       searching: 1,
+       beforeProcess: function() {
+         this.postData = {
+           Aktif: 'AKTIF',
+           searching: 1,
+           valueName: `namasupir_${index}`,
+           searchText: `supir-lookup-${rowLookup}`,
+           title: 'SUPIR LOOKUP'
+         };
+       },
+       
+       onSelectRow: (supir, element) => {
+         element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+         
+         element.val(supir.namasupir)
+         element.data('currentValue', element.val())
+       },
+       onCancel: (element) => {
+         element.val(element.data('currentValue'))
+         console.log(element.data('currentValue'));
+       },
+       onClear: (element) => {
+         element.parents('td').find(`[name="supir_id[]"]`).val('')
+         element.val('')
+         element.data('currentValue', element.val())
+       }
+     })
+     * 
+     * **/
     
-    $(`.absentrado-lookup-${rowLookup}`).last().lookup({
+    $(`.absentrado-lookup-${rowLookup}`).last().lookupV3({
       title: 'Absen Trado Lookup',
-      fileName: 'absentrado',
+      fileName: 'absentradoV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -576,65 +584,62 @@
         setSupirEnableIndex(false, index)
       }
     })
-
-    // $(`.absentrado-lookup-${rowLookup}`).last().lookupMaster({
-    //   title: 'Absen Trado Lookup',
-    //   fileName: 'absentradoMaster',
-    //   typeSearch: 'ALL',
-    //   searching: 1,
-    //   detail: true,
-    //   miniSize: true,
-    //   beforeProcess: function(test) {
-    //     this.postData = {
-    //       Aktif: 'AKTIF',
-    //       trado_id: detail.trado_id,
-    //       supir_id: detail.supir_id,
-    //       supirold_id: detail.supir_id_old,
-    //       tglabsensi: $('#tglbukaabsensi').val(),
-    //       dari: 'mandorabsensisupir',
-    //       valueName: `absen_id`,
-    //       typeSearch: 'ALL',
-    //       searching: 1,
-    //       searchText: `absentrado-${index}`,
-    //       title: 'ABSEN TRADO'
-    //     }
-    //   },
-    //   onSelectRow: (absentrado, element) => {
-    //     getabsentrado(absentrado.id).then((response) => {
-    //       setSupirEnableIndex(response, index)
-    //     }).catch(() => {
-    //       setSupirEnableIndex(false, index)
-    //     })
-    //     element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
-    //     element.val(absentrado.keterangan)
-    //     element.data('currentValue', element.val())
-    //   },
-    //   onCancel: (element) => {
-    //     element.val(element.data('currentValue'))
-    //   },
-    //   onClear: (element) => {
-    //     element.parents('td').find(`[name="absen_id[]"]`).val('')
-    //     element.val('')
-    //     element.data('currentValue', element.val())
-    //     setSupirEnableIndex(false, index)
-    //   }
-    // })
-    $(`.jeniskendaraan-lookup-${rowLookup}`).last().lookupMaster({
+    /**
+     * 
+     // $(`.absentrado-lookup-${rowLookup}`).last().lookupMaster({
+     //   title: 'Absen Trado Lookup',
+     //   fileName: 'absentradoMaster',
+     //   typeSearch: 'ALL',
+     //   searching: 1,
+     //   detail: true,
+     //   miniSize: true,
+     //   beforeProcess: function(test) {
+     //     this.postData = {
+     //       Aktif: 'AKTIF',
+     //       trado_id: detail.trado_id,
+     //       supir_id: detail.supir_id,
+     //       supirold_id: detail.supir_id_old,
+     //       tglabsensi: $('#tglbukaabsensi').val(),
+     //       dari: 'mandorabsensisupir',
+     //       valueName: `absen_id`,
+     //       typeSearch: 'ALL',
+     //       searching: 1,
+     //       searchText: `absentrado-${index}`,
+     //       title: 'ABSEN TRADO'
+     //     }
+     //   },
+     //   onSelectRow: (absentrado, element) => {
+     //     getabsentrado(absentrado.id).then((response) => {
+     //       setSupirEnableIndex(response, index)
+     //     }).catch(() => {
+     //       setSupirEnableIndex(false, index)
+     //     })
+     //     element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
+     //     element.val(absentrado.keterangan)
+     //     element.data('currentValue', element.val())
+     //   },
+     //   onCancel: (element) => {
+     //     element.val(element.data('currentValue'))
+     //   },
+     //   onClear: (element) => {
+     //     element.parents('td').find(`[name="absen_id[]"]`).val('')
+     //     element.val('')
+     //     element.data('currentValue', element.val())
+     //     setSupirEnableIndex(false, index)
+     //   }
+     // })
+     * **/
+    // $(`.jeniskendaraan-lookup-${rowLookup}`).last().lookupMaster({
+    $(`.jeniskendaraan-lookup-${rowLookup}`).last().lookupV3({
       title: 'Jenis Kendaraan',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS JENIS KENDARAAN',
           subgrp: 'STATUS JENIS KENDARAAN',
-          searching: 1,
-          valueName: `jeniskendaraan_id`,
-          searchText: `jeniskendaraan-${index}`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'JENIS KENDARAAN'
         };
       },
       onSelectRow: (status, element) => {
@@ -651,8 +656,6 @@
         element.data('currentValue', element.val());
       },
     });
-
-    
   }
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {

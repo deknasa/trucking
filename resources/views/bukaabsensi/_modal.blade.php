@@ -333,25 +333,28 @@
   }
 
   function initLookup() {
-    $('.user-lookup').lookup({
-      title: 'user Lookup',
-      fileName: 'user',
+    $('.user-lookup').lookupV3({
+      title: 'Supir Lookup',
+      fileName: 'userV3',
+      searching: ['user'],
+      labelColumn: false,
+     
       beforeProcess: function(test) {
         this.postData = {
           role: 'MANDOR',
         }
       },
-      onSelectRow: (user, element) => {
-        $(`#crudForm [name="user_id"]`).first().val(user.id)
-        element.val(user.name)
+      onSelectRow: (supir, element) => {
+        $('#crudForm [name=user_id]').first().val(user.id) 
+        element.val(supir.user)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=user_id]').first().val('')
         element.val('')
-        $(`#crudForm [name="user_id"]`).first().val('')
         element.data('currentValue', element.val())
       }
     })
