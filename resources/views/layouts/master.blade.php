@@ -809,6 +809,63 @@
 
     }
 
+    function loadDataHeaderTrip(url, addtional = null) {
+
+      let data = {
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        proses: 'reload'
+      }
+      data = {
+        ...data,
+        ...addtional
+      }
+      getIndex(url, data).then((response) => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        clearGlobalSearch($('#jqGrid'))
+        $('#jqGrid').setGridParam({
+          url: `${apiUrl}${url}`,
+          datatype: "json",
+          postData: data,
+
+          page: 1
+        }).trigger('reloadGrid')
+      }).catch((error) => {
+        clearGlobalSearch($('#jqGrid'))
+
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
+
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let element;
+            if (indexes[0] == 'tgldari' || indexes[0] == 'tglsampai') {
+              element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+            } else {
+              element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
+            }
+
+            $(element).addClass("is-invalid");
+            $(`
+        <div class="invalid-feedback">
+        ${error[0].toLowerCase()}
+        </div>
+    `).appendTo($(element).parent());
+
+          });
+
+          $(".is-invalid").first().focus();
+          $('#processingLoader').addClass('d-none')
+        } else {
+          showDialog(error.responseJSON)
+        }
+      })
+
+    }
+
     function getIndex(url, data) {
       let reload = {
         reload: true
@@ -1045,7 +1102,6 @@
     window.addEventListener('beforeunload', function(e) {
       removeEditingBy($('#crudForm').find('[name=id]').val())
     });
-   
   </script>
 </body>
 
