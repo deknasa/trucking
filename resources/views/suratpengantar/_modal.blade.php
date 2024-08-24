@@ -1291,13 +1291,13 @@
 
             moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
             if(jobmanual == 'YA'){
-              if($('#crudForm [name=jobtrucking]').val() != ''){
+              // if($('#crudForm [name=jobtrucking]').val() != ''){
                 $('#crudForm [name=nocont]').attr('readonly', false)
                 $('#crudForm [name=noseal]').attr('readonly', false)
                 $('#crudForm [name=nocont2]').attr('readonly', false)
                 $('#crudForm [name=noseal2]').attr('readonly', false)
 
-              }
+              // }
             }
           })
           .catch((error) => {
