@@ -63,6 +63,7 @@
   let isApprovalBiayaTambahan;
   let selectedRows = [];
   let selectedbukti = [];
+  let selectednobuktiheader;
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -162,7 +163,6 @@
       rawCellValueheader = $("#jqGrid").jqGrid('getCell', selectedIdheader, 'nobukti');
       celValueheader = $("<div>").html(rawCellValueheader).text();
       selectednobuktiheader = celValueheader
-      
       $('#jqGrid').jqGrid('setGridParam', {
         postData: {
 
@@ -172,7 +172,8 @@
           nobukti: selectednobuktiheader,
           proses: 'reload',
           reload: true,
-          filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+          // clearfilter:true,
+          filters: ''
         }
 
       }).trigger('reloadGrid')
@@ -190,7 +191,6 @@
         postData: {
           tgldari: $('#tgldariheader').val(),
           tglsampai: $('#tglsampaiheader').val(),
-          nobukti: $('#nobukti').val(),
         },
         datatype: "json",
         colModel: [{
@@ -1665,8 +1665,13 @@
         },
         success: response => {
           clearSelectedRows()
-          selectedbukti=[]
-          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          selectedbukti = []
+          loadDataHeader('suratpengantar', {
+            nobukti: '',
+            proses: 'reload',
+            reload: true,
+          })
+          // $('#jqGrid').jqGrid().trigger('reloadGrid');
         },
         error: error => {
           if (error.status === 422) {
