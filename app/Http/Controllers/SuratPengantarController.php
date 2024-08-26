@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -30,6 +31,8 @@ class SuratPengantarController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $jobmanual = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->where('grp', 'JOB TRUCKING MANUAL')->first()->text ?? 'TIDAK';
         $data = [
             'combolongtrip' => $this->comboList('list', 'STATUS LONGTRIP', 'STATUS LONGTRIP'),
             'comboeditsp' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
@@ -44,11 +47,71 @@ class SuratPengantarController extends MyController
             'listbtn' => $this->getListBtn()
         ];
 
+        $status = $this->getData();
         $data = array_merge(
-            compact('title', 'data'),
+            compact('title', 'data', 'jobmanual', 'status'),
             ["request" => $request->all()]
         );
         return view('suratpengantar.index', $data);
+    }
+
+    public function getData()
+    {
+        $dataJenisKendaraan = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS JENIS KENDARAAN')
+            ->get()->toArray();
+        $dataLongtrip = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS LONGTRIP')
+            ->get()->toArray();
+        $dataGudangSama = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS GUDANG SAMA')
+            ->get()->toArray();
+        $dataLangsir = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS LANGSIR')
+            ->get()->toArray();
+        $dataGandengan = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS GANDENGAN')
+            ->get()->toArray();
+        $dataPenyesuaian = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS PENYESUAIAN')
+            ->get()->toArray();
+        $dataTolakan = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS APPROVAL')
+            ->get()->toArray();
+        $dataPeralihan = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS PERALIHAN')
+            ->get()->toArray();
+        $dataBatalMuat = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS BATAL MUAT')
+            ->get()->toArray();
+        $dataKandang = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
+            ->select('id', 'text')
+            ->where('grp', 'STATUS KANDANG')
+            ->get()->toArray();
+
+        $data = [
+            'jeniskendaraan' => $dataJenisKendaraan,
+            'longtrip' => $dataLongtrip,
+            'gudangsama' => $dataGudangSama,
+            'langsir' => $dataLangsir,
+            'gandengan' => $dataGandengan,
+            'penyesuaian' => $dataPenyesuaian,
+            'tolakan' => $dataTolakan,
+            'peralihan' => $dataPeralihan,
+            'batalmuat' => $dataBatalMuat,
+            'kandang' => $dataKandang,
+        ];
+
+        return $data;
     }
 
     public function comboList($aksi, $grp, $subgrp)

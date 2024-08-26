@@ -311,19 +311,13 @@
             formatter: currencyFormat,
           },
           {
-            label: 'Komisi Kenek',
-            name: 'gajikenek',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            label: 'U. Borongan (Ritasi Supir)',
+            name: 'ritasisupir',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'Komisi Supir',
-            name: 'komisisupir',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'right',
-            formatter: currencyFormat,
-          },
+        
           {
             label: 'Biaya Extra (Trip)',
             name: 'biayaextra',
@@ -407,7 +401,20 @@
             align: 'right',
             formatter: currencyFormat,
           },
-
+          {
+            label: 'Komisi Kenek',
+            name: 'gajikenek',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Supir',
+            name: 'komisisupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
@@ -447,6 +454,7 @@
               newformat: "d-m-Y"
             }
           },
+
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
@@ -605,6 +613,7 @@
               uangmakanharian: data.attributes.totalMakan,
               nominal: data.attributes.totalNominal,
               gajisupir: data.attributes.totalGajiSupir,
+              ritasisupir: data.attributes.totalRitasiSupir,
             }, true)
           }
           $('#left-nav').find('button').attr('disabled', false)
