@@ -238,25 +238,29 @@
                     <input type="text" name="gudang" class="form-control">
                   </div>
                 </div>
-
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO SP <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">KETERANGAN</label>
                   <div class="col-sm-12">
-                    <input type="text" name="nosp" class="form-control">
+                    <input type="text" name="keterangan" class="form-control">
+                  </div>
+                </div> 
+                <div class="form-group batalmuat">
+                  <label class="col-sm-12 col-form-label">BATAL MUAT<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusbatalmuat" class="form-control select2bs4" id="statusbatalmuat">
+                      <option value="">-- PILIH STATUS BATAL MUAT --</option>
+                    </select>
                   </div>
                 </div>
-                <div class="form-group nocont">
-                  <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (1)</u></em></label>
+                <div class="form-group statustolakan">
+                  <label class="col-sm-12 col-form-label">STATUS TOLAKAN <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <input type="text" name="nocont" class="form-control" readonly>
+                    <select name="statustolakan" class="form-control select2bs4">
+                      <option value="">-- PILIH STATUS TOLAKAN --</option>
+                    </select>
                   </div>
                 </div>
-                <div class="form-group noseal">
-                  <label class="col-sm-12 col-form-label"><em><u>NO SEAL (1)</u></em></label>
-                  <div class="col-sm-12">
-                    <input type="text" name="noseal" class="form-control" readonly>
-                  </div>
-                </div>
+
               </div>
               <div class="col-md-4">
 
@@ -295,6 +299,25 @@
                     </div>
                   </div>
                 </div>
+                
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO SP <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nosp" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group nocont">
+                  <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (1)</u></em></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nocont" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group noseal">
+                  <label class="col-sm-12 col-form-label"><em><u>NO SEAL (1)</u></em></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="noseal" class="form-control" readonly>
+                  </div>
+                </div>
                 <div class="form-group nocont2">
                   <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (2)</u></em></label>
                   <div class="col-sm-12">
@@ -327,12 +350,6 @@
                   </div>
                 </div> -->
 
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">KETERANGAN</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="keterangan" class="form-control">
-                  </div>
-                </div>
                 <div class="form-group hargaton">
                   <label class="col-sm-12 col-form-label">HARGA PER TON (TARIF)</label>
                   <div class="col-sm-12">
@@ -352,22 +369,7 @@
                     <input type="text" name="triptangki" class="form-control triptangki-lookup">
                   </div>
                 </div>
-                <div class="form-group batalmuat">
-                  <label class="col-sm-12 col-form-label">BATAL MUAT<span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <select name="statusbatalmuat" class="form-control select2bs4" id="statusbatalmuat">
-                      <option value="">-- PILIH STATUS BATAL MUAT --</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group statustolakan">
-                  <label class="col-sm-12 col-form-label">STATUS TOLAKAN <span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <select name="statustolakan" class="form-control select2bs4">
-                      <option value="">-- PILIH STATUS TOLAKAN --</option>
-                    </select>
-                  </div>
-                </div>
+               
                 <div id="tripasal">
                   <div class="form-group nobukti_tripasal">
                     <label class="col-sm-12 col-form-label">TRIP ASAL</label>
@@ -612,6 +614,7 @@
   let isGudangSama = true;
   let statusJenisKendaran
   let jenisKendaraan
+  let jobmanual = `{{ $jobmanual }}`;
 
   $(document).ready(function() {
     $('.nobukti_tripasal').hide()
@@ -1241,16 +1244,17 @@
 
     Promise
       .all([
-        setStatusJenisKendaraanOptions(form),
-        setStatusLongTripOptions(form),
-        setStatusTolakanOptions(form),
-        setStatusPeralihanOptions(form),
-        setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form),
-        setStatusGandenganOptions(form),
+        setStatusAll(form),
+        // setStatusJenisKendaraanOptions(form),
+        // setStatusLongTripOptions(form),
+        // setStatusTolakanOptions(form),
+        // setStatusPeralihanOptions(form),
+        // setStatusGudangSamaOptions(form),
+        // setStatusBatalMuatOptions(form),
+        // setStatusGandenganOptions(form),
         // setStatusKandangOptions(form),
-        setStatusPenyesuaianOptions(form),
-        setStatusLangsirOptions(form),
+        // setStatusPenyesuaianOptions(form),
+        // setStatusLangsirOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1286,6 +1290,17 @@
             }
 
             moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
+            if(jobmanual == 'YA'){
+              // if($('#crudForm [name=jobtrucking]').val() != ''){
+                $('#crudForm [name=nocont]').attr('readonly', false)
+                $('#crudForm [name=noseal]').attr('readonly', false)
+                if($('#crudForm [name=container_id]').val() == 3){
+                  $('#crudForm [name=nocont2]').attr('readonly', false)
+                  $('#crudForm [name=noseal2]').attr('readonly', false)
+                }
+
+              // }
+            }
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -1314,16 +1329,17 @@
 
     Promise
       .all([
-        setStatusJenisKendaraanOptions(form),
-        setStatusLongTripOptions(form),
-        setStatusPeralihanOptions(form),
-        setStatusTolakanOptions(form),
-        setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form),
-        setStatusGandenganOptions(form),
-        // setStatusKandangOptions(form),
-        setStatusPenyesuaianOptions(form),
-        setStatusLangsirOptions(form),
+        setStatusAll(form),
+        // setStatusJenisKendaraanOptions(form),
+        // setStatusLongTripOptions(form),
+        // setStatusPeralihanOptions(form),
+        // setStatusTolakanOptions(form),
+        // setStatusGudangSamaOptions(form),
+        // setStatusBatalMuatOptions(form),
+        // setStatusGandenganOptions(form),
+        // // setStatusKandangOptions(form),
+        // setStatusPenyesuaianOptions(form),
+        // setStatusLangsirOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1362,15 +1378,16 @@
 
     Promise
       .all([
-        setStatusJenisKendaraanOptions(form),
-        setStatusLongTripOptions(form),
-        setStatusPeralihanOptions(form),
-        setStatusTolakanOptions(form),
-        setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form),
-        setStatusGandenganOptions(form),
-        setStatusPenyesuaianOptions(form),
-        setStatusLangsirOptions(form),
+        setStatusAll(form),
+        // setStatusJenisKendaraanOptions(form),
+        // setStatusLongTripOptions(form),
+        // setStatusPeralihanOptions(form),
+        // setStatusTolakanOptions(form),
+        // setStatusGudangSamaOptions(form),
+        // setStatusBatalMuatOptions(form),
+        // setStatusGandenganOptions(form),
+        // setStatusPenyesuaianOptions(form),
+        // setStatusLangsirOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -3428,5 +3445,139 @@
       $(this).removeAttr('disabled')
     })
   })
+
+  
+  const setStatusAll = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      // Clear and set initial option
+      relatedForm.find('[name=statuslongtrip]').empty()
+      relatedForm.find('[name=statuslongtrip]').append(
+        new Option('-- PILIH STATUS LONG TRIPS --', '', false, true)
+      ).trigger('change');
+
+      let longtrip = {!! json_encode($status['longtrip']) !!};
+
+      longtrip.forEach(function(statuslongtrip) {
+            let option = new Option(statuslongtrip.text, statuslongtrip.id);
+            relatedForm.find('[name=statuslongtrip]').append(option).trigger('change');
+      });
+
+      
+      relatedForm.find('[name=statusjeniskendaraan]').empty()
+      relatedForm.find('[name=statusjeniskendaraan]').append(
+        new Option('-- PILIH STATUS JENIS KENDARAAN --', '', false, true)
+      ).trigger('change');
+
+      let jeniskendaraan = {!! json_encode($status['jeniskendaraan']) !!};
+
+      jeniskendaraan.forEach(function(statusJenisKendaraan) {
+            let option = new Option(statusJenisKendaraan.text, statusJenisKendaraan.id);
+            relatedForm.find('[name=statusjeniskendaraan]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statusgudangsama]').empty()
+      relatedForm.find('[name=statusgudangsama]').append(
+        new Option('-- PILIH STATUS GUDANG SAMA --', '', false, true)
+      ).trigger('change');
+
+      let gudangsama = {!! json_encode($status['gudangsama']) !!};
+
+      gudangsama.forEach(function(statusGudangSama) {
+            let option = new Option(statusGudangSama.text, statusGudangSama.id);
+            relatedForm.find('[name=statusgudangsama]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statuslangsir]').empty()
+      relatedForm.find('[name=statuslangsir]').append(
+        new Option('-- PILIH STATUS LANGSIR --', '', false, true)
+      ).trigger('change');
+
+      let langsir = {!! json_encode($status['langsir']) !!};
+
+      langsir.forEach(function(statuslangsir) {
+            let option = new Option(statuslangsir.text, statuslangsir.id);
+            relatedForm.find('[name=statuslangsir]').append(option).trigger('change');
+      });
+
+
+      relatedForm.find('[name=statusgandengan]').empty()
+      relatedForm.find('[name=statusgandengan]').append(
+        new Option('-- PILIH STATUS GANDENGAN --', '', false, true)
+      ).trigger('change');
+
+      let gandengan = {!! json_encode($status['gandengan']) !!};
+
+      gandengan.forEach(function(statusgandengan) {
+            let option = new Option(statusgandengan.text, statusgandengan.id);
+            if(statusgandengan.text == "TINGGAL GANDENGAN") {
+              tinggalGandengan = statusgandengan.id
+            }
+            relatedForm.find('[name=statusgandengan]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statuspenyesuaian]').empty()
+      relatedForm.find('[name=statuspenyesuaian]').append(
+        new Option('-- PILIH STATUS PENYESUAIAN --', '', false, true)
+      ).trigger('change');
+
+      let penyesuaian = {!! json_encode($status['penyesuaian']) !!};
+
+      penyesuaian.forEach(function(statuspenyesuaian) {
+            let option = new Option(statuspenyesuaian.text, statuspenyesuaian.id);
+            relatedForm.find('[name=statuspenyesuaian]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statustolakan]').empty()
+      relatedForm.find('[name=statustolakan]').append(
+        new Option('-- PILIH STATUS TOLAKAN --', '', false, true)
+      ).trigger('change');
+
+      let tolakan = {!! json_encode($status['tolakan']) !!};
+
+      tolakan.forEach(function(statustolakan) {
+            let option = new Option(statustolakan.text, statustolakan.id);
+            relatedForm.find('[name=statustolakan]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statusperalihan]').empty()
+      relatedForm.find('[name=statusperalihan]').append(
+        new Option('-- PILIH STATUS PERALIHAN --', '', false, true)
+      ).trigger('change');
+
+      let peralihan = {!! json_encode($status['peralihan']) !!};
+
+      peralihan.forEach(function(statusperalihan) {
+            let option = new Option(statusperalihan.text, statusperalihan.id);
+            relatedForm.find('[name=statusperalihan]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statusbatalmuat]').empty()
+      relatedForm.find('[name=statusbatalmuat]').append(
+        new Option('-- PILIH STATUS BATAL MUAT --', '', false, true)
+      ).trigger('change');
+
+      let batalmuat = {!! json_encode($status['batalmuat']) !!};
+
+      batalmuat.forEach(function(statusbatalmuat) {
+            let option = new Option(statusbatalmuat.text, statusbatalmuat.id);
+            relatedForm.find('[name=statusbatalmuat]').append(option).trigger('change');
+      });
+
+      relatedForm.find('[name=statuskandang]').empty()
+      relatedForm.find('[name=statuskandang]').append(
+        new Option('-- PILIH STATUS KANDANG --', '', false, true)
+      ).trigger('change');
+
+      let kandang = {!! json_encode($status['kandang']) !!};
+
+      kandang.forEach(function(statuskandang) {
+            let option = new Option(statuskandang.text, statuskandang.id);
+            relatedForm.find('[name=statuskandang]').append(option).trigger('change');
+      });
+
+      // Resolve the promise once done
+      resolve();
+    });
+  };
 </script>
 @endpush()

@@ -5,7 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      @include('layouts._rangeheader')
+      @include('layouts._rangeheadertrip')
 
       <table id="jqGrid"></table>
     </div>
@@ -58,10 +58,12 @@
   var statusEditTujuan;
   let tgldariheader
   let tglsampaiheader
+  let nobukti
   let isKomisi;
   let isApprovalBiayaTambahan;
   let selectedRows = [];
   let selectedbukti = [];
+  let selectednobuktiheader;
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -108,6 +110,7 @@
   }
 
   function selectAllRows() {
+
     $.ajax({
       url: `${apiUrl}suratpengantar`,
       method: 'GET',
@@ -119,6 +122,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
+        nobukti: $('#nobukti').val(),
         filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
@@ -134,20 +138,55 @@
     setIsKomisi()
     loadDetailGrid()
     loadRekapCustGrid($('#tgldariheader').val(), $('#tglsampaiheader').val())
+
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
     tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
+
+
     setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
-      loadDataHeader('suratpengantar')
+      selectedbukti = []
+      loadDataHeader('suratpengantar', {
+        nobukti: '',
+        proses: 'reload',
+        reload: true,
+      })
       selectedRows = []
       $('#gs_').prop('checked', false)
     })
+    $(document).on('click', '#btnReloadTrip', function(event) {
+      selectedbukti = []
+      selectedIdheader = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      rawCellValueheader = $("#jqGrid").jqGrid('getCell', selectedIdheader, 'nobukti');
+      celValueheader = $("<div>").html(rawCellValueheader).text();
+      selectednobuktiheader = celValueheader
 
+      $('#jqGrid').jqGrid('setGridParam', {
+        page:1,
+        postData: {
+
+          limit: 0,
+          page: 1,
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          nobukti: selectednobuktiheader,
+          proses: 'page',
+          reload: true,
+          // clearfilter:true,
+          filters: ''
+        }
+
+      }).trigger('reloadGrid')
+
+      // loadDataHeaderTrip('suratpengantar')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
+    })
     var grid = $("#jqGrid");
     grid.jqGrid({
         url: `${apiUrl}suratpengantar`,
@@ -337,6 +376,16 @@
           {
             label: 'no seaL',
             name: 'noseal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+          },
+          {
+            label: 'no conT 2',
+            name: 'nocont2',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+          },
+          {
+            label: 'no seaL 2',
+            name: 'noseal2',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
@@ -1309,6 +1358,18 @@
                 }
               }
             },
+            {
+              id: 'approvalGabungJobTrucking',
+              text: "APPROVAL/UN Gabung Job Trucking",
+              color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`),
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approvalGabungJobTrucking(selectedId);
+                }
+              }
+            },
           ],
         }]
 
@@ -1467,6 +1528,12 @@
         $('#approvalBiayaExtra').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`) {
+        hakApporveCount--
+        $('#approvalGabungJobTrucking').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
       if (hakApporveCount < 1) {
         $('#approve').hide()
         // $('#approve').attr('disabled', 'disabled')
@@ -1592,6 +1659,52 @@
         $(this).removeAttr('disabled')
       })
     }
+
+    function approvalGabungJobTrucking(id) {
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
+      $.ajax({
+        url: `${apiUrl}suratpengantar/approvalgabungjobtrucking`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedbukti,
+          table: 'surat pengantar'
+        },
+        success: response => {
+          // clearSelectedRows()
+          selectedRows = []
+          selectedbukti = []
+          $('#gs_').prop('checked', false);
+          loadDataHeader('suratpengantar', {
+            nobukti: '',
+            proses: 'reload',
+            reload: true,
+          })
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
 
     function approvalTitipanEmkl(id, noBukti) {
 

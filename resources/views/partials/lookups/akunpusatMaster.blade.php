@@ -44,13 +44,13 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
       {
-        label: 'KODE TIPE',
+        label: 'KODE PERKIRAAN',
         name: 'coa',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
-        label: 'AKUNTANSI',
+        label: 'NAMA',
         name: 'keterangancoa',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         align: 'left'
@@ -60,79 +60,13 @@ $idLookup = isset($id) ? $id : null;
 
 
   } else {
-    column = [
-      {
+    column = [{
         label: 'ID',
         name: 'id',
         align: 'right',
         width: '70px',
         search: false,
         hidden: true
-      },
-      {
-        label: 'STATUS AKTIF',
-        name: 'statusaktif',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left',
-        stype: 'select',
-        searchoptions: {
-          dataInit: function(element) {
-            $(element).select2({
-              width: 'resolve',
-              theme: "bootstrap4",
-              ajax: {
-                url: `${apiUrl}parameter/combo`,
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                  grp: 'STATUS AKTIF',
-                  subgrp: 'STATUS AKTIF'
-                },
-                beforeSend: () => {
-                  // clear options
-                  $(element).data('select2').$results.children().filter((index, element) => {
-                    // clear options except index 0, which
-                    // is the "searching..." label
-                    if (index > 0) {
-                      element.remove()
-                    }
-                  })
-                },
-                processResults: (response) => {
-                  let formattedResponse = response.data.map(row => ({
-                    id: row.text,
-                    text: row.text
-                  }));
-                  
-                  formattedResponse.unshift({
-                    id: '',
-                    text: 'ALL'
-                  });
-                  
-                  return {
-                    results: formattedResponse
-                  };
-                },
-              }
-            });
-          }
-        },
-        formatter: (value, options, rowData) => {
-          let statusAktif = JSON.parse(value)
-          
-          let formattedValue = $(`
-          <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-            <span>${statusAktif.SINGKATAN}</span>
-          </div>`)
-          
-          return formattedValue[0].outerHTML
-        },
-        cellattr: (rowId, value, rowObject) => {
-          let statusAktif = JSON.parse(rowObject.statusaktif)  
-          return ` title="${statusAktif.MEMO}"`
-        }
       },
       {
         label: 'KODE PERKIRAAN',
@@ -150,273 +84,46 @@ $idLookup = isset($id) ? $id : null;
         label: 'TYPE',
         name: 'type',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
+        align: 'left',
+        search: false,
+        hidden: true
       },
       {
         label: 'LEVEL',
         name: 'level',
         align: 'left',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        search: false,
+        hidden: true
       },
       {
         label: 'PARENT',
         name: 'parent',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'STATUS PARENT',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        name: 'statusparent',
         align: 'left',
-
-        stype: 'select',
-        searchoptions: {
-          dataInit: function(element) {
-            $(element).select2({
-              width: 'resolve',
-              theme: "bootstrap4",
-              ajax: {
-                url: `${apiUrl}parameter/combo`,
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                  grp: 'STATUS PARENT',
-                  subgrp: 'STATUS PARENT'
-                },
-                beforeSend: () => {
-                  // clear options
-                  $(element).data('select2').$results.children().filter((index, element) => {
-                    // clear options except index 0, which
-                    // is the "searching..." label
-                    if (index > 0) {
-                      element.remove()
-                    }
-                  })
-                },
-                processResults: (response) => {
-                  let formattedResponse = response.data.map(row => ({
-                    id: row.text,
-                    text: row.text
-                  }));
-
-                  formattedResponse.unshift({
-                    id: '',
-                    text: 'ALL'
-                  });
-
-                  return {
-                    results: formattedResponse
-                  };
-                },
-              }
-            });
-          }
-        },
-        formatter: (value, options, rowData) => {
-          if (!value) {
-            return ''
-          }
-          let statusParent = JSON.parse(value)
-
-          let formattedValue = $(`
-              <div class="badge" style="background-color: ${statusParent.WARNA}; color: #fff;">
-                <span>${statusParent.SINGKATAN}</span>
-              </div>
-            `)
-
-          return formattedValue[0].outerHTML
-        },
-        cellattr: (rowId, value, rowObject) => {
-          if (!rowObject.statusparent) {
-            return ` title=""`
-          }
-          let statusParent = JSON.parse(rowObject.statusparent)
-
-          return ` title="${statusParent.MEMO}"`
-        }
-      },
-      {
-        label: 'STATUS NERACA',
-        name: 'statusneraca',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left',
-        stype: 'select',
-        searchoptions: {
-          dataInit: function(element) {
-            $(element).select2({
-              width: 'resolve',
-              theme: "bootstrap4",
-              ajax: {
-                url: `${apiUrl}parameter/combo`,
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                  grp: 'STATUS NERACA',
-                  subgrp: 'STATUS NERACA'
-                },
-                beforeSend: () => {
-                  // clear options
-                  $(element).data('select2').$results.children().filter((index, element) => {
-                    // clear options except index 0, which
-                    // is the "searching..." label
-                    if (index > 0) {
-                      element.remove()
-                    }
-                  })
-                },
-                processResults: (response) => {
-                  let formattedResponse = response.data.map(row => ({
-                    id: row.text,
-                    text: row.text
-                  }));
-
-                  formattedResponse.unshift({
-                    id: '',
-                    text: 'ALL'
-                  });
-
-                  return {
-                    results: formattedResponse
-                  };
-                },
-              }
-            });
-          }
-        },
-        formatter: (value, options, rowData) => {
-          let statusNeraca = JSON.parse(value)
-
-          let formattedValue = $(`
-              <div class="badge" style="background-color: ${statusNeraca.WARNA}; color: #fff;">
-                <span>${statusNeraca.SINGKATAN}</span>
-              </div>
-            `)
-
-          return formattedValue[0].outerHTML
-        },
-        cellattr: (rowId, value, rowObject) => {
-          let statusNeraca = JSON.parse(rowObject.statusneraca)
-
-          return ` title="${statusNeraca.MEMO}"`
-        }
-      },
-      {
-        label: 'STATUS LABA RUGI',
-        name: 'statuslabarugi',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left',
-
-        stype: 'select',
-        searchoptions: {
-          dataInit: function(element) {
-            $(element).select2({
-              width: 'resolve',
-              theme: "bootstrap4",
-              ajax: {
-                url: `${apiUrl}parameter/combo`,
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                  grp: 'STATUS LABA RUGI',
-                  subgrp: 'STATUS LABA RUGI'
-                },
-                beforeSend: () => {
-                  // clear options
-                  $(element).data('select2').$results.children().filter((index, element) => {
-                    // clear options except index 0, which
-                    // is the "searching..." label
-                    if (index > 0) {
-                      element.remove()
-                    }
-                  })
-                },
-                processResults: (response) => {
-                  let formattedResponse = response.data.map(row => ({
-                    id: row.text,
-                    text: row.text
-                  }));
-
-                  formattedResponse.unshift({
-                    id: '',
-                    text: 'ALL'
-                  });
-
-                  return {
-                    results: formattedResponse
-                  };
-                },
-              }
-            });
-          }
-        },
-        formatter: (value, options, rowData) => {
-          let statusLabaRugi = JSON.parse(value)
-
-          let formattedValue = $(`
-              <div class="badge" style="background-color: ${statusLabaRugi.WARNA}; color: #fff;">
-                <span>${statusLabaRugi.SINGKATAN}</span>
-              </div>
-            `)
-
-          return formattedValue[0].outerHTML
-        },
-        cellattr: (rowId, value, rowObject) => {
-          let statusLabaRugi = JSON.parse(rowObject.statuslabarugi)
-
-          return ` title="${statusLabaRugi.MEMO}"`
-        }
+        search: false,
+        hidden: true
       },
       {
         label: 'kode perkiraan main',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         name: 'coamain',
-        align: 'left'
-      },
-      {
-        label: 'MODIFIED BY',
-        name: 'modifiedby',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        align: 'left'
-      },
-      {
-        label: 'CREATED AT',
-        name: 'created_at',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-        align: 'right',
-        formatter: "date",
-        formatoptions: {
-          srcformat: "ISO8601Long",
-          newformat: "d-m-Y H:i:s"
-        }
-      },
-      {
-        label: 'UPDATED AT',
-        name: 'updated_at',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-        align: 'right',
-        formatter: "date",
-        formatoptions: {
-          srcformat: "ISO8601Long",
-          newformat: "d-m-Y H:i:s"
-        }
+        align: 'left',
+        search: false,
+        hidden: true
       },
       {
         label: 'kode-keterangan',
         name: 'kodeket',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
-        align: 'left'
+        width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+        align: 'left',
+        search: false,
+        hidden: true
       },
-    ]  
+    ]
   }
-  
-  
+
+
   selector.jqGrid({
     url: `{{ config('app.api_url') . 'akunpusat' }}`,
     mtype: "GET",
@@ -430,7 +137,7 @@ $idLookup = isset($id) ? $id : null;
       keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
       supplier: `{!! $Supplier ?? '' !!}`,
       isParent: `{!! $isParent ?? '' !!}`,
-        // filters: `{!! $filters ?? '' !!}`
+      // filters: `{!! $filters ?? '' !!}`
     },
     idPrefix: 'akunpusatLookup',
     colModel: column,
@@ -510,7 +217,7 @@ $idLookup = isset($id) ? $id : null;
         } else {
           cm = colModel[searching];
 
-          if (cm.search !== false && (cm.stype === undefined || cm.stype ==="text")) {
+          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
 
             postData.filters = JSON.stringify({
               groupOp: "AND",
