@@ -841,10 +841,10 @@
           Aktif: 'AKTIF',
           KeteranganCoa: 'PIUTANG USAHA',
           searching: 1,
-          valueName: 'subkelompok_id',
-          searchText: 'subkelompok-lookup',
-          title: 'Sub Kelompok',
           typeSearch: 'ALL',
+          valueName: 'coa_id',
+          searchText: 'coa-lookup',
+          title: 'Akun pusat',
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -873,9 +873,9 @@
           Aktif: 'AKTIF',
           KeteranganCoa: 'PENDAPATAN -',
           searching: 1,
-          valueName: 'subkelompok_id',
-          searchText: 'subkelompok-lookup',
-          title: 'Sub Kelompok',
+          valueName: 'coapendapatan_id',
+          searchText: 'coapendapatan-lookup',
+          title: 'Akun Pusat',
           typeSearch: 'ALL',
         }
       },

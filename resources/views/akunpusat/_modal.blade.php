@@ -969,7 +969,7 @@
           valueName: `parentnama`,
           searchText: `parent-lookup`,
           // singleColumn: true,
-          title: 'Main Akun Pusat Lookup',
+          title: 'Akun Pusat Lookup',
           isParent: true,
           typeSearch: 'ALL',
         }
