@@ -165,14 +165,17 @@
       rawCellValueheader = $("#jqGrid").jqGrid('getCell', selectedIdheader, 'nobukti');
       celValueheader = $("<div>").html(rawCellValueheader).text();
       selectednobuktiheader = celValueheader
+
       $('#jqGrid').jqGrid('setGridParam', {
+        page:1,
         postData: {
 
           limit: 0,
+          page: 1,
           tgldari: $('#tgldariheader').val(),
           tglsampai: $('#tglsampaiheader').val(),
           nobukti: selectednobuktiheader,
-          proses: 'reload',
+          proses: 'page',
           reload: true,
           // clearfilter:true,
           filters: ''
@@ -373,6 +376,16 @@
           {
             label: 'no seaL',
             name: 'noseal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+          },
+          {
+            label: 'no conT 2',
+            name: 'nocont2',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+          },
+          {
+            label: 'no seaL 2',
+            name: 'noseal2',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
@@ -1666,14 +1679,15 @@
           table: 'surat pengantar'
         },
         success: response => {
-          clearSelectedRows()
+          // clearSelectedRows()
+          selectedRows = []
           selectedbukti = []
+          $('#gs_').prop('checked', false);
           loadDataHeader('suratpengantar', {
             nobukti: '',
             proses: 'reload',
             reload: true,
           })
-          // $('#jqGrid').jqGrid().trigger('reloadGrid');
         },
         error: error => {
           if (error.status === 422) {
