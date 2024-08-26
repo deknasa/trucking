@@ -136,6 +136,11 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
+            label: 'PELABUHAN',
+            name: 'pelabuhan_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'UPAH SUPIR',
             name: 'upahsupir',
             width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
