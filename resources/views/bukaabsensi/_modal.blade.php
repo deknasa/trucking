@@ -345,7 +345,7 @@
         }
       },
       onSelectRow: (supir, element) => {
-        $('#crudForm [name=user_id]').first().val(user.id) 
+        $('#crudForm [name=user_id]').first().val(supir.id) 
         element.val(supir.user)
         element.data('currentValue', element.val())
       },
