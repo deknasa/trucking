@@ -23,6 +23,7 @@
           search: false,
           hidden: true
         },
+
         {
           label: 'TUJUAN',
           name: 'tujuan',
@@ -193,6 +194,11 @@
         {
           label: 'ZONA',
           name: 'zona_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        },
+        {
+          label: 'PELABUHAN',
+          name: 'pelabuhan_id',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
         {

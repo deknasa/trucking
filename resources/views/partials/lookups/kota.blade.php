@@ -10,6 +10,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        statuspelabuhan: `{!! $StatusPelabuhan ?? '' !!}`,
         kotadari_id: `{!! $kotadari_id ?? '' !!}`,
         kotasampai_id: `{!! $kotasampai_id ?? '' !!}`,
         pilihkota_id: `{!! $pilihkota_id ?? '' !!}`,

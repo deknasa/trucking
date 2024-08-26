@@ -232,6 +232,10 @@ $idLookup = isset($id) ? $id : null;
           name: 'zona_id',
         },
         {
+          label: 'pelabuhan',
+          name: 'pelabuhan_id',
+        },
+        {
           label: 'jenis order',
           name: 'jenisorder',
         },
