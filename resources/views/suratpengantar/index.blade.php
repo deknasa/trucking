@@ -150,6 +150,7 @@
     setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
+      selectedbukti = []
       loadDataHeader('suratpengantar', {
         nobukti: '',
         proses: 'reload',
@@ -159,6 +160,7 @@
       $('#gs_').prop('checked', false)
     })
     $(document).on('click', '#btnReloadTrip', function(event) {
+      selectedbukti = []
       selectedIdheader = $("#jqGrid").jqGrid('getGridParam', 'selrow')
       rawCellValueheader = $("#jqGrid").jqGrid('getCell', selectedIdheader, 'nobukti');
       celValueheader = $("<div>").html(rawCellValueheader).text();
