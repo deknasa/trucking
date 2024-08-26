@@ -1683,8 +1683,9 @@
           selectedRows = []
           selectedbukti = []
           $('#gs_').prop('checked', false);
+          console.log( response.nobukti)
           loadDataHeader('suratpengantar', {
-            nobukti: '',
+            nobukti: response.nobukti,
             proses: 'reload',
             reload: true,
           })
