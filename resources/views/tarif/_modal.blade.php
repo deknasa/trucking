@@ -45,6 +45,17 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  pelabuhan <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="pelabuhan_id">
+                <input type="text" name="pelabuhan" id="pelabuhan" class="form-control pelabuhan-lookup">
+              </div>
+            </div>
+
             <div class="row form-group ">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -1250,6 +1261,35 @@
         element.data('currentValue', element.val())
       }
     })
+    $('.pelabuhan-lookup').lookup({
+      title: 'pelabuhan Lookup',
+      fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          StatusPelabuhan : 'PELABUHAN',
+        }
+      },
+      onSelectRow: (pelabuhan, element) => {
+        $('#crudForm [name=pelabuhan_id]').first().val(pelabuhan.id)
+        element.val(pelabuhan.kodekota)
+        element.data('currentValue', element.val())
+        $('#crudForm [name=tujuan]').val(pelabuhan.kodekota)
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pelabuhan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    
+
     $('.zona-lookup').lookupMaster({
       title: 'Zona Lookup',
       fileName: 'zonaMaster',
