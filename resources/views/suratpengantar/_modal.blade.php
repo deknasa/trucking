@@ -939,7 +939,10 @@
           $('#crudModal').find('#crudForm').trigger('reset')
 
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              proses: 'reload'
+            }
           }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
