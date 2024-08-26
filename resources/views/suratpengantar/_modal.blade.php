@@ -1294,8 +1294,10 @@
               // if($('#crudForm [name=jobtrucking]').val() != ''){
                 $('#crudForm [name=nocont]').attr('readonly', false)
                 $('#crudForm [name=noseal]').attr('readonly', false)
-                $('#crudForm [name=nocont2]').attr('readonly', false)
-                $('#crudForm [name=noseal2]').attr('readonly', false)
+                if($('#crudForm [name=container_id]').val() == 3){
+                  $('#crudForm [name=nocont2]').attr('readonly', false)
+                  $('#crudForm [name=noseal2]').attr('readonly', false)
+                }
 
               // }
             }
