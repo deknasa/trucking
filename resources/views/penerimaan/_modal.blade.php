@@ -88,7 +88,7 @@
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" class="form-control bank-lookup">
+                                <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="hidden" name="alatbayar_id">
-                                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                                <input type="text" name="alatbayar" id="alatbayar"  class="form-control alatbayar-lookup">
                             </div>
                         </div>
 
@@ -182,6 +182,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let type
     let penerimaanGiro = '';
+    let rowIndex = 0;
     let isEditTgl
     let bankId
 
@@ -1036,7 +1037,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="coakredit[]">
-                                <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
+                                <input type="text" name="ketcoakredit[]" id="ketcoa_${index}" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
                             </td>
                             <td>
                                 <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control" ${readOnly}></textarea>
@@ -1054,7 +1055,7 @@
                             </td>
                             <td class="bankpelanggan">
                                 <input type="hidden" name="bankpelanggan_id[]">
-                                <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
+                                <input type="text" name="bankpelanggan[]"  id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
                             </td>
                             <td class="tbl_aksi">
                                 <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1074,9 +1075,11 @@
                             detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
                             $('#detailList>#table_body').append(detailRow)
                             setTotal();
-                            $('.akunpusat-lookup').last().lookup({
+                            $('.akunpusat-lookup').last().lookupV3({
                                 title: 'Kode Perk. Lookup',
-                                fileName: 'akunpusat',
+                                fileName: 'akunpusatV3',
+                                searching: ['coa','keterangancoa'],
+                                labelColumn: false,
                                 beforeProcess: function(test) {
                                     // var levelcoa = $(`#levelcoa`).val();
                                     this.postData = {
@@ -1099,9 +1102,11 @@
                                     element.data('currentValue', element.val())
                                 }
                             })
-                            $('.bankpelanggan-lookup').last().lookup({
+                            $('.bankpelanggan-lookup').last().lookupV3({
                                 title: 'Bank Pelanggan Lookup',
-                                fileName: 'bankpelanggan',
+                                fileName: 'bankpelangganV3', 
+                                searching: ['coa','keterangancoa'],
+                                labelColumn: false,
                                 beforeProcess: function(test) {
                                     this.postData = {
                                         Aktif: 'AKTIF',
@@ -1193,7 +1198,7 @@
         <td></td>
         <td>
             <input type="hidden" name="coakredit[]">
-          <input type="text" name="ketcoakredit[]"  class="form-control akunpusat-lookup">
+          <input type="text" name="ketcoakredit[]" id="ketcoa_${rowIndex}" class="form-control akunpusat-lookup">
         </td>
         <td>
           <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
@@ -1211,7 +1216,7 @@
         </td>
         <td class="bankpelanggan">
             <input type="hidden" name="bankpelanggan_id[]">
-            <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
+            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${rowIndex}" class="form-control bankpelanggan-lookup">
         </td>
         <td class="aksiGiro tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1219,10 +1224,12 @@
       </tr>
     `)
         $('#detailList>#table_body').append(detailRow)
-        $('.akunpusat-lookup').last().lookup({
-            title: 'Kode Perkiraan Lookup',
-            fileName: 'akunpusat',
-            beforeProcess: function(test) {
+        $('.akunpusat-lookup').last().lookupV3({
+            title: 'Kode Perk. Lookup',
+            fileName: 'akunpusatV3',
+            searching: ['coa','keterangancoa'],
+            labelColumn: false,
+            beforeProcess: function(test) {    
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
                     levelCoa: '3',
@@ -1243,9 +1250,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.bankpelanggan-lookup').last().lookup({
+        $('.bankpelanggan-lookup').last().lookupV3({
             title: 'Bank Pelanggan Lookup',
-            fileName: 'bankpelanggan',
+            fileName: 'bankpelangganV3', 
+            searching: ['coa','keterangancoa'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -1421,32 +1430,30 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.bank-lookup').lookup({
+        // $('.bank-lookup').lookup({
+        $('.bank-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
-                    filters: JSON.stringify({
-                        "groupOp": "AND",
-                        "rules": [{
-                            "field": "tipe",
-                            "op": "cn",
-                            "data": type
-                        }]
-                    }),
                     Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (bank, element) => {
+                console.log('onSelectRow');
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 bankId = bank.id
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
+                console.log('onCancel');
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                console.log('onClear');
                 element.val('')
                 $(`#crudForm [name="bank_id"]`).first().val('')
                 element.data('currentValue', element.val())
@@ -1478,9 +1485,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.alatbayar-lookup').lookup({
+        $('.alatbayar-lookup').lookupV3({
             title: 'Alat Bayar Lookup',
-            fileName: 'alatbayar',
+            fileName: 'alatbayarV3',
+            searching: ['namaalatbayar'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 // const bank_ID=0        
                 this.postData = {
@@ -1492,8 +1501,8 @@
                 $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
                 element.val(alatbayar.namaalatbayar)
                 element.data('currentValue', element.val())
-                enableTglJatuhTempo($(`#crudForm`))
-                enableNoWarkat($(`#crudForm`))
+                // enableTglJatuhTempo($(`#crudForm`))
+                // enableNoWarkat($(`#crudForm`))
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
