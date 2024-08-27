@@ -138,6 +138,13 @@
               return formattedValue[0].outerHTML
             },
           },
+          {
+            label: 'nobukti_ric',
+            name: 'nobukti_ric',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+           
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
