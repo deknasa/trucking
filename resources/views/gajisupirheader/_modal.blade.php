@@ -528,6 +528,7 @@
                         rowNum: response.data.length,
                         selectedRowIds: selectedTrip
                     }).trigger('reloadGrid');
+
                     hitung(selectedTrip)
                 })
                 .catch((error) => {
@@ -2380,7 +2381,7 @@
                                 initAutoNumeric($(this).find(`td[aria-describedby="tablePotPribadi_nominalPP"]`))
                             });
                     }, 100);
-                    // setTotalNominal()
+                    setTotalNominalPP()
                     setTotalSisaPotPribadi()
                     setHighlight($(this))
                 },
@@ -3578,6 +3579,23 @@
 
                 });
 
+                let getPotPribadi = AutoNumeric.getAutoNumericElement($(`#crudForm [name="potonganpinjaman"]`)[0]);
+                getPotPribadi.set(0)
+
+                let getUangMakan = AutoNumeric.getAutoNumericElement($(`#crudForm [name="uangmakanharian"]`)[0]);
+                getUangMakan.set(0)
+                let getUangMakanBerjenjang = AutoNumeric.getAutoNumericElement($(`#crudForm [name="berjenjanguangmakan"]`)[0]);
+                getUangMakanBerjenjang.set(0)
+                let getDeposito = AutoNumeric.getAutoNumericElement($(`#crudForm [name="deposito"]`)[0]);
+                getDeposito.set(0)
+                let getNomDeposito = AutoNumeric.getAutoNumericElement($(`#crudForm [name="nomDeposito"]`)[0]);
+                getNomDeposito.set(0)
+                let getBbm = AutoNumeric.getAutoNumericElement($(`#crudForm [name="bbm"]`)[0]);
+                getBbm.set(0)
+                let getNomBbm = AutoNumeric.getAutoNumericElement($(`#crudForm [name="nomBBM"]`)[0]);
+                getNomBbm.set(0)
+
+                hitungSisa()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))

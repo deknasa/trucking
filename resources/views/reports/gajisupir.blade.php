@@ -47,8 +47,10 @@
       viewer.renderHtml('content')
       if (formatcetak == 'FORMAT 1') {
         report.loadFile(`{{ asset('public/reports/ReportGajisupir.mrt') }}`)
-      } else {
+      } else if (formatcetak == 'FORMAT 2'){
         report.loadFile(`{{ asset('public/reports/ReportGajisupirFormat2.mrt') }}`)
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportGajisupirFormat3.mrt') }}`)
       }
 
       report.dictionary.dataSources.clear()
