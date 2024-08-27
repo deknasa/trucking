@@ -66,110 +66,65 @@ $idLookup = isset($id) ? $id : null;
           align: 'left',
         },
         {
+          label: 'NAMA ALIAS',
+          name: 'namaalias',
+          align: 'left',
+        },
+        {
           label: 'TGL LAHIR',
           name: 'tgllahir',
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
-          }
+          },
+          hidden: true,
+          search: false
         },
         {
           label: 'ALAMAT',
           name: 'alamat',
-          align: 'left'
+          align: 'left',
+          hidden: true,
+          search: false
         },
         {
           label: 'KOTA',
           name: 'kota',
-          align: 'left'
+          align: 'left',
+          hidden: true,
+          search: false
         },
         {
           label: 'NO TELEPON',
           name: 'telp',
-          align: 'left'
-        },
-        {
-          label: 'STATUS AKTIF',
-          name: 'statusaktif',
           align: 'left',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS AKTIF',
-                    subgrp: 'STATUS AKTIF'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusAktif = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusAktif = JSON.parse(rowObject.statusaktif)
-
-            return ` title="${statusAktif.MEMO}"`
-          }
+          hidden: true,
+          search: false
         },
         {
           label: 'NOMINAL DEPOSIT',
           name: 'nominaldepositsa',
+          hidden: true,
+          search: false
         },
         {
           label: 'NOM PINJ SALDO AWAL',
           name: 'nominalpinjamansaldoawal',
+          hidden: true,
+          search: false
         },
         {
           label: 'SUPIR LAMA',
           name: 'supirold_id',
+          hidden: true,
+          search: false
         },
         {
           label: 'SIM',
           name: 'nosim',
+          hidden: true,
+          search: false
         },
         {
           label: 'TGL EXP SIM',
@@ -178,7 +133,9 @@ $idLookup = isset($id) ? $id : null;
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
-          }
+          },
+          hidden: true,
+          search: false
         },
         {
           label: 'TGL TERBIT SIM',
@@ -187,226 +144,228 @@ $idLookup = isset($id) ? $id : null;
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
-          }
+          },
+          hidden: true,
+          search: false
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          hidden: true,
+          search: false
         },
         {
           label: 'KTP',
           name: 'noktp',
+          hidden: true,
+          search: false
         },
         {
           label: 'KK',
           name: 'nokk',
+          hidden: true,
+          search: false
         },
-        {
-          label: 'STATUS ADA UPDATE GBR',
-          name: 'statusadaupdategambar',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS ADA UPDATE GAMBAR',
-                    subgrp: 'STATUS ADA UPDATE GAMBAR'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        // {
+        //   label: 'STATUS ADA UPDATE GBR',
+        //   name: 'statusadaupdategambar',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'STATUS ADA UPDATE GAMBAR',
+        //             subgrp: 'STATUS ADA UPDATE GAMBAR'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusAdaUpdateGambar = JSON.parse(value)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusAdaUpdateGambar = JSON.parse(value)
 
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAdaUpdateGambar.WARNA}; color: #fff;">
-                  <span>${statusAdaUpdateGambar.SINGKATAN}</span>
-                </div>
-              `)
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusAdaUpdateGambar.WARNA}; color: #fff;">
+        //           <span>${statusAdaUpdateGambar.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusAdaUpdateGambar = JSON.parse(rowObject.statusadaupdategambar)
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusAdaUpdateGambar = JSON.parse(rowObject.statusadaupdategambar)
 
-            return ` title="${statusAdaUpdateGambar.MEMO}"`
-          }
-        },
-        {
-          label: 'STATUS LUAR KOTA',
-          name: 'statusluarkota',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS LUAR KOTA',
-                    subgrp: 'STATUS LUAR KOTA'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        //     return ` title="${statusAdaUpdateGambar.MEMO}"`
+        //   }
+        // },
+        // {
+        //   label: 'STATUS LUAR KOTA',
+        //   name: 'statusluarkota',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'STATUS LUAR KOTA',
+        //             subgrp: 'STATUS LUAR KOTA'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusLuarKota = JSON.parse(value)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusLuarKota = JSON.parse(value)
 
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLuarKota.WARNA}; color: #fff;">
-                  <span>${statusLuarKota.SINGKATAN}</span>
-                </div>
-              `)
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusLuarKota.WARNA}; color: #fff;">
+        //           <span>${statusLuarKota.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusLuarKota = JSON.parse(rowObject.statusluarkota)
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusLuarKota = JSON.parse(rowObject.statusluarkota)
 
-            return ` title="${statusLuarKota.MEMO}"`
-          }
-        },
-        {
-          label: 'ZONA TERTENTU',
-          name: 'statuszonatertentu',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'ZONA TERTENTU',
-                    subgrp: 'ZONA TERTENTU'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        //     return ` title="${statusLuarKota.MEMO}"`
+        //   }
+        // },
+        // {
+        //   label: 'ZONA TERTENTU',
+        //   name: 'statuszonatertentu',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'ZONA TERTENTU',
+        //             subgrp: 'ZONA TERTENTU'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusZonaTertentu = JSON.parse(value)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusZonaTertentu = JSON.parse(value)
 
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusZonaTertentu.WARNA}; color: #fff;">
-                  <span>${statusZonaTertentu.SINGKATAN}</span>
-                </div>
-              `)
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusZonaTertentu.WARNA}; color: #fff;">
+        //           <span>${statusZonaTertentu.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusZonaTertentu = JSON.parse(rowObject.statuszonatertentu)
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusZonaTertentu = JSON.parse(rowObject.statuszonatertentu)
 
-            return ` title="${statusZonaTertentu.MEMO}"`
-          }
-        },
+        //     return ` title="${statusZonaTertentu.MEMO}"`
+        //   }
+        // },
         {
           label: 'ZONA',
           name: 'zona_id',
-        },
-        {
-          label: 'angsuran pinjaman',
-          name: 'angsuranpinjaman',
-        },
-        {
-          label: 'plafondeposito',
-          name: 'plafondeposito',
+          hidden: true,
+          search: false
         },
         {
           label: 'TGL BERHENTI SUPIR',
@@ -415,101 +374,9 @@ $idLookup = isset($id) ? $id : null;
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'KET RESIGN',
-          name: 'keteranganresign',
-        },
-        {
-          label: 'STATUS BLACKLIST',
-          name: 'statusblacklist',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'BLACKLIST SUPIR',
-                    subgrp: 'BLACKLIST SUPIR'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
           },
-          formatter: (value, options, rowData) => {
-            let statusBlacklist = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusBlacklist.WARNA}; color: #fff;">
-                  <span>${statusBlacklist.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusBlacklist = JSON.parse(rowObject.statusblacklist)
-
-            return ` title="${statusBlacklist.MEMO}"`
-          }
-        },
-        {
-          label: 'MODIFIED BY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'CREATED AT',
-          name: 'created_at',
-          align: 'right',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y H:i:s"
-          }
-        },
-        {
-          label: 'UPDATED AT',
-          name: 'updated_at',
-          align: 'right',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y H:i:s"
-          }
+          hidden: true,
+          search: false
         },
     ]
   }
