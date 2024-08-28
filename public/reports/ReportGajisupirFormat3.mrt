@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "21eeb78db84a3139efd6bae5bad502ba",
+  "ReportGuid": "442bd9236256b787060a19d8473629be",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportGajisupirFormat3.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724754190000+0700)/",
+  "ReportChanged": "/Date(1724820334000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -192,30 +192,36 @@
             "Type": "System.String"
           },
           "22": {
+            "Name": "trado",
+            "NameInSource": "trado",
+            "Alias": "trado",
+            "Type": "System.String"
+          },
+          "23": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "23": {
+          "24": {
             "Name": "formatcetak",
             "NameInSource": "formatcetak",
             "Alias": "formatcetak",
             "Type": "System.String"
           },
-          "24": {
+          "25": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "25": {
+          "26": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "26": {
+          "27": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -1264,7 +1270,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{gajisupir.supir_id}"
+                "Value": "{gajisupir.supir_id} ({gajisupir.trado})"
               },
               "VertAlignment": "Center",
               "Font": "Tahoma;;;",

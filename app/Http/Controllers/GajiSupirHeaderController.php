@@ -390,7 +390,15 @@ class GajiSupirHeaderController extends MyController
         //LOOPING HEADER   
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': ' . $gajisupirs[$header_column['index']]);
+            if ($gajisupirs['formatcetak'] == 'FORMAT 3') {
+                if ($header_column['index'] == 'supir_id') {
+                    $sheet->setCellValue('C' . $header_start_row++, ': ' . $gajisupirs['supir_id'] . ' (' . $gajisupirs['trado'] . ')');
+                } else {
+                    $sheet->setCellValue('C' . $header_start_row++, ': ' . $gajisupirs[$header_column['index']]);
+                }
+            } else {
+                $sheet->setCellValue('C' . $header_start_row++, ': ' . $gajisupirs[$header_column['index']]);
+            }
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -550,12 +558,11 @@ class GajiSupirHeaderController extends MyController
             }
             $sheet->setCellValue('K' . $sisapinjaman_row, 'Sisa Pinjaman');
             $sheet->setCellValue('L' . $sisapinjaman_row, $gajisupirs['sisapinjaman']);
-            $sheet->getStyle('L'. $sisapinjaman_row)->applyFromArray($style_number_2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle('L' . $sisapinjaman_row)->applyFromArray($style_number_2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sisapinjaman_row++;
             $sheet->setCellValue('K' . $sisapinjaman_row, 'Saldo Deposito');
             $sheet->setCellValue('L' . $sisapinjaman_row, $gajisupirs['sisadeposito']);
-            $sheet->getStyle('L'. $sisapinjaman_row)->applyFromArray($style_number_2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-
+            $sheet->getStyle('L' . $sisapinjaman_row)->applyFromArray($style_number_2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         } else {
 
             foreach ($header_down_columns as $header_down_column) {
