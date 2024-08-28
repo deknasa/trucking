@@ -24,7 +24,8 @@ const getLookupV3 = function (
     let lookupClasses = classArray.filter((className) =>
         className.includes("-lookup")
     );
-
+  
+    
     postData.searchText = lookupClasses[0];
     postData.title = title;
     postData.searching = searching;
@@ -236,7 +237,7 @@ $.fn.lookupV3 = function (options) {
         settings.beforeProcess();
         settings.onShowLookup();
 
-        $('.input-group').removeClass('active'); // Hapus status aktif dari elemen lainnya
+        $('.input-group').removeClass('active'); 
         element.addClass('active');
 
         
@@ -320,11 +321,14 @@ $.fn.lookupV3 = function (options) {
                         }
                     }
                 } else {
+                   
                     if (detectDeviceType() == "desktop") {
                         let multiColumnSize = settings.multiColumnSize;
                         let extend = settings.extendSize;
                         let sizeExtend = width + extend;
-
+                        
+                        console.log(sizeExtend, width);
+                        
                         const commonStyles =
                             "position: absolute; box-shadow: 10px 10px 5px 12px lightblue; border:1px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; max-height: 300px; overscroll-behavior: contain!important;";
 
