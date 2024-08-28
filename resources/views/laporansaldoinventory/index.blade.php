@@ -153,16 +153,17 @@
                                 </div>
                             </div> -->
 
-                            {{-- <div class="col-md-6">
-                                <div class="row">
-                                    <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
+                            <div class="col-md-6">
+                                <div class="row" id="kelompok">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">JENIS LAPORAN<span class="text-danger">*</span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
-                                            <input type="text" name="sampai" class="form-control datepicker">
+                                            <select name="jenislaporan" id="jenislaporan" class="form-select select2bs4" style="width: 100%;">
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
 
                         <div class=" row">
@@ -196,6 +197,7 @@
         initDatepicker()
         initSelect2($('#crudForm').find('[name=filter]'), false)
         initSelect2($('#crudForm').find('[name=statusban]'), false)
+        initSelect2($('#crudForm').find('[name=jenislaporan]'), false)
         initSelect2($('#crudForm').find('[name=statusreuse]'), false)
         initSelect2($('#crudForm').find('[name=jenistgltampil]'), false)
 
@@ -204,6 +206,7 @@
         // $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         setFilterOptions(form)
         setStatusBanOptions(form)
+        setJenisLaporanOptions(form)
         setStatusReuseOptions(form)
         setJenisTglTampilOptions(form)
     })
@@ -213,6 +216,7 @@
         let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
         let statusreuse = $('#crudForm').find('[name=statusreuse]').val()
         let statusban = $('#crudForm').find('[name=statusban]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
         let filter = $('#crudForm').find('[name=filter]').val()
         let jenistgltampil = $('#crudForm').find('[name=jenistgltampil]').val()
         let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
@@ -238,13 +242,13 @@
             // (statusreuse != '') &&
             // (statusban != '') &&
             // (filter != '') &&
-            // (jenistgltampil != '') &&
+            (jenislaporan != '') &&
             (priode != '')
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&
             // (dataFilter != '')
         ) {
-            window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
+            window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&jenislaporan=${jenislaporan}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
 
         } else {
             showDialog('ISI SELURUH KOLOM')
@@ -257,6 +261,7 @@
         let kelompok = $('#crudForm').find('[name=kelompok]').val()
         let statusreuse = $('#crudForm').find('[name=statusreuse]').val()
         let statusban = $('#crudForm').find('[name=statusban]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
         let filter = $('#crudForm').find('[name=filter]').val()
         let jenistgltampil = $('#crudForm').find('[name=jenistgltampil]').val()
         let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
@@ -287,7 +292,7 @@
             // (stoksampai_id != '') &&
             // (dataFilter != '')
         ) {
-            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&kelompok=${kelompok}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
+            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&kelompok=${kelompok}&statusreuse=${statusreuse}&statusban=${statusban}&jenislaporan=${jenislaporan}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -592,6 +597,46 @@
             })
         })
     }
+
+    const setJenisLaporanOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=jenislaporan]').empty()
+            relatedForm.find('[name=jenislaporan]').append(
+                new Option('-- PILIH JENIS LAPORAN --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "JENIS LAPORAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusReuse => {
+                        let option = new Option(statusReuse.text, statusReuse.id)
+
+                        relatedForm.find('[name=jenislaporan]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }    
 
     const setJenisTglTampilOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
