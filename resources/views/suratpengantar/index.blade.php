@@ -34,6 +34,7 @@
 
 @include('suratpengantar._tambahan')
 @include('suratpengantar._customer')
+@include('suratpengantar._editsp')
 
 @include('suratpengantar._modal')
 
@@ -167,7 +168,7 @@
       selectednobuktiheader = celValueheader
 
       $('#jqGrid').jqGrid('setGridParam', {
-        page:1,
+        page: 1,
         postData: {
 
           limit: 0,
@@ -1282,96 +1283,113 @@
           },
         ],
         modalBtnList: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-          class: 'btn btn-purple btn-sm mr-1 ',
-          item: [{
-              id: 'approvalBatalMuat',
-              text: "APPROVAL/UN Batal Muat",
-              color: `<?php echo $data['listbtn']->btn->approvalbatalmuat; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  approvalBatalMuat(selectedId);
-                }
-              }
-            },
-            {
-              id: 'approvalEditTujuan',
-              text: "APPROVAL/UN Edit Surat Pengantar",
-              color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  approvalEditTujuan(selectedId);
-                }
-              }
-            },
-            {
-              id: 'approvalTitipanEmkl',
-              text: "APPROVAL/UN Titipan EMKL",
-              color: `<?php echo $data['listbtn']->btn->approvaltitipanemkl; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`),
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
-                celValue = $("<div>").html(rawCellValue).text();
-                selectednobukti = celValue
-                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
-                  approvalTitipanEmkl(selectedId, selectednobukti);
-                }
-              }
-            },
-            {
-              id: 'approvalTolakan',
-              text: "APPROVAL/UN Tolakan",
-              color: `<?php echo $data['listbtn']->btn->approvaltolakan; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`) {
-                  var selectedOne = selectedOnlyOne();
-                  if (selectedOne[0]) {
-                    approvalTolakan(selectedOne[1]);
-                  } else {
-                    showDialog(selectedOne[1])
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+            class: 'btn btn-purple btn-sm mr-1 ',
+            item: [{
+                id: 'approvalBatalMuat',
+                text: "APPROVAL/UN Batal Muat",
+                color: `<?php echo $data['listbtn']->btn->approvalbatalmuat; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approvalBatalMuat(selectedId);
                   }
                 }
-              }
-            },
-            {
-              id: 'approvalBiayaExtra',
-              text: "APPROVAL/UN Biaya Extra",
-              color: `<?php echo $data['listbtn']->btn->approvalbiayaextra; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`) {
-                  var selectedOne = selectedOnlyOne();
-                  if (selectedOne[0]) {
-                    approvalBiayaExtra(selectedOne[1]);
-                  } else {
-                    showDialog(selectedOne[1])
+              },
+              {
+                id: 'approvalEditTujuan',
+                text: "APPROVAL/UN Edit Surat Pengantar",
+                color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approvalEditTujuan(selectedId);
                   }
                 }
-              }
-            },
-            {
-              id: 'approvalGabungJobTrucking',
-              text: "APPROVAL/UN Gabung Job Trucking",
-              color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`) {
+              },
+              {
+                id: 'approvalTitipanEmkl',
+                text: "APPROVAL/UN Titipan EMKL",
+                color: `<?php echo $data['listbtn']->btn->approvaltitipanemkl; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`),
+                onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  approvalGabungJobTrucking(selectedId);
+                  rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+                  celValue = $("<div>").html(rawCellValue).text();
+                  selectednobukti = celValue
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
+                    approvalTitipanEmkl(selectedId, selectednobukti);
+                  }
                 }
+              },
+              {
+                id: 'approvalTolakan',
+                text: "APPROVAL/UN Tolakan",
+                color: `<?php echo $data['listbtn']->btn->approvaltolakan; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTolakan') }}`) {
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedOne[0]) {
+                      approvalTolakan(selectedOne[1]);
+                    } else {
+                      showDialog(selectedOne[1])
+                    }
+                  }
+                }
+              },
+              {
+                id: 'approvalBiayaExtra',
+                text: "APPROVAL/UN Biaya Extra",
+                color: `<?php echo $data['listbtn']->btn->approvalbiayaextra; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaExtra') }}`) {
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedOne[0]) {
+                      approvalBiayaExtra(selectedOne[1]);
+                    } else {
+                      showDialog(selectedOne[1])
+                    }
+                  }
+                }
+              },
+              {
+                id: 'approvalGabungJobTrucking',
+                text: "APPROVAL/UN Gabung Job Trucking",
+                color: `<?php echo $data['listbtn']->btn->approvaledit; ?>`,
+                hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`),
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalGabungJobTrucking') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approvalGabungJobTrucking(selectedId);
+                  }
+                }
+              },
+            ],
+          },
+          {
+            id: 'lainnya',
+            title: 'Lainnya',
+            caption: 'Lainnya',
+            innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+            class: 'btn btn-secondary btn-sm mr-1  ',
+            hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'editSP') }}`),
+            item: [{
+              id: 'editSP',
+              text: "Edit SP",
+              color: `<?php echo $data['listbtn']->btn->updatenocontainer; ?>`,
+              onClick: () => {
+                createEditSp()
               }
-            },
-          ],
-        }]
+            }]
+          }
+        ]
 
 
       })
@@ -1541,6 +1559,16 @@
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaTambahan') }}`) {
         $('#approvalbiayatambahan').attr('disabled', 'disabled')
       }
+      let hakLainnyaCount = 0;
+      hakLainnyaCount++
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'editSP') }}`) {
+        hakLainnyaCount--
+        $('#editSP').hide()
+      }
+      if (hakLainnyaCount < 1) {
+        // $('#approve').hide()
+        $('#lainnya').hide()
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -1683,7 +1711,7 @@
           selectedRows = []
           selectedbukti = []
           $('#gs_').prop('checked', false);
-          console.log( response.nobukti)
+          console.log(response.nobukti)
           loadDataHeader('suratpengantar', {
             nobukti: response.nobukti,
             proses: 'reload',
