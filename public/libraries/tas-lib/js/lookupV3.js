@@ -16,7 +16,8 @@ const getLookupV3 = function (
     title,
     searching,
     singleColumn,
-    labelColumn
+    labelColumn,
+    filter
 ) {
     let classString = element.attr("class");
     let classArray = classString.split(" ");
@@ -29,6 +30,7 @@ const getLookupV3 = function (
     postData.searching = searching;
     postData.singleColumn = singleColumn;
     postData.labelColumn = labelColumn;
+    postData.filterToolbar = filter;
 
     // console.log(postData.searching);
 
@@ -75,6 +77,7 @@ $.fn.lookupV3 = function (options) {
         extendSize: null,
         disabledIsUsed: null,
         selectedRequired: null,
+        filterToolbar: false,
         postData: {},
         beforeProcess: function () {},
         onShowLookup: function (rowData, element) {},
@@ -367,11 +370,12 @@ $.fn.lookupV3 = function (options) {
             searching: src = [], // Default value for 'searching' as an empty array
             singleColumn: singleclm = false, // Default value for 'singleColumn' as false
             labelColumn: hidelbl = false, // Default value for 'labelColumn' as false
+            filterToolbar: filter = false,
         } = settings;
 
         console.log(src);
 
-        getLookupV3(flnm, pst, element, title, src, singleclm, hidelbl).then(
+        getLookupV3(flnm, pst, element, title, src, singleclm, hidelbl, filter).then(
             (response) => {
                 lookupBody.html(response);
                 let grid = lookupBody.find(".lookup-grid");
@@ -741,16 +745,23 @@ $.fn.lookupV3 = function (options) {
     }
 
     function handleOnClear(element) {
-        settings.onClear(element);
-
         let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);
         let grid = lookupContainer.find(".lookup-grid");
 
-        // grid.jqGrid("setGridParam", {
-        //     postData: {
-        //         filters: [],
-        //     },
-        // });
+        let colMdl = grid.jqGrid("getGridParam", "colModel");
+
+        settings.onClear(element);
+
+        rules = [];
+        colMdl.forEach(function (cm) {
+            $("#gs_" + cm.name).val("");
+        });
+
+        grid.jqGrid("setGridParam", {
+            postData: {
+                filters: "",
+            },
+        });
 
         grid.trigger("reloadGrid", [{ page: 1, current: true }]);
     }
@@ -770,6 +781,13 @@ $.fn.lookupV3 = function (options) {
             console.log("lasterqeuest ", grid.getGridParam()?.lastRequest);
             input = element.data("input");
 
+            let colMdl = grid.jqGrid("getGridParam", "colModel");
+
+        
+            rules = [];
+            colMdl.forEach(function (cm) {
+                $("#gs_" + cm.name).val("");
+            });
             if (settings.searching.length == 0) {
                 console.log(settings.searching.length);
                 delay(function () {

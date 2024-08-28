@@ -1279,6 +1279,7 @@
 
   function setRowDisable(rowId) {
     $(`.index${rowId} input`).attr('readonly', true);
+    $(`.index${rowId} textarea`).attr('readonly', true);
     $(`.index${rowId} button`).attr('disabled', true);
   }
 
