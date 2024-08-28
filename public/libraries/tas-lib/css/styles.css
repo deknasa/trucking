@@ -547,6 +547,38 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	background-color: #DCDCDC;
 }
 
+/* Not with modal-header EDIT SP */
+#crudModalEditSp {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#crudModalEditSp .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#crudModalEditSp .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#crudModalEditSp .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 80px);
+	border: 0;
+	border-radius: 0;
+}
+
+#crudModalEditSp .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
 /* Not with modal-header */
 #activeCabang {
 	padding-right: 0px !important;
