@@ -1417,3 +1417,12 @@ ul.mob-ul {
     pointer-events: none;
 }
 
+.ui-jqgrid tr.jqgrow td.wrapgrid {
+    white-space: normal !important;
+    height:auto;
+    padding-top:2px;
+}
+.ui-jqgrid tr.jqgrow td
+{
+    vertical-align:text-top;
+}

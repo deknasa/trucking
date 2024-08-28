@@ -14,7 +14,7 @@
                         <input type="hidden" name="id">
 
                         <div class="row form-group">
-                            <div class="col-12 col-sm-2 col-md-2">
+                            <div class="col-12 col-sm-1 col-md-1">
                                 <label class="col-form-label">
                                     TGL DARI <span class="text-danger"></span>
                                 </label>
@@ -25,9 +25,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-sm-2 col-md-2">
+                            <div class="col-12 offset-md-1 col-sm-1 col-md-1">
                                 <label class="col-form-label">
-                                    TGL SAMPAI <span class="text-danger">*</span>
+                                    TGL SAMPAI 
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="row form-group supir">
-                            <div class="col-12 col-md-2">
+                            <div class="col-12 col-md-1">
                                 <label class="col-form-label">
                                     SUPIR
                                 </label>
@@ -262,9 +262,9 @@
                             .jqGrid("setGridParam", {
                                 selectedRowIds: []
                             })
-                            $("#tableEditSp").remove()
-                            $('#gbox_tableEditSp').remove()
-                            $('#tes').append(`<table id="tableEditSp"></table>`)
+                        $("#tableEditSp").remove()
+                        $('#gbox_tableEditSp').remove()
+                        $('#tes').append(`<table id="tableEditSp"></table>`)
                         createEditSp();
                     }
                 },
@@ -403,43 +403,33 @@
                         search: false,
                     },
                     {
-                        label: "NO TRIP",
-                        name: "nobuktiedit",
-                        sortable: true,
-                    },
-                    {
                         label: "JOB TRUCKING",
                         name: "jobtruckingedit",
                         sortable: true,
                     },
                     {
-                        label: "TGL TRIP",
-                        name: "tglbuktiedit",
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
+                        label: "NO TRIP",
+                        name: "nobuktiedit",
+                        sortable: true,
                     },
                     {
-                        label: "NO SP",
-                        name: "nospedit",
-                        sortable: false,
-                        editable: true,
-                        editoptions: {
-                            dataEvents: [{
-                                type: "keyup",
-                                fn: function(event, rowObject) {
-
-                                    let localRow = $("#tableEditSp").jqGrid(
-                                        "getLocalRow",
-                                        rowObject.rowId
-                                    );
-                                    localRow.nospedit = event.target.value;
-                                },
-                            }, ],
-                        },
+                        label: "TGL",
+                        name: "tglbuktiedit",
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
+                    },
+                    {
+                        label: "TUJUAN",
+                        name: "tujuanedit",
+                        sortable: true,
+                        classes: 'wrapgrid',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+                    },
+                    {
+                        label: "QTY",
+                        name: "containeredit",
+                        sortable: true,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
                     },
                     {
                         label: "NO CONT",
@@ -518,9 +508,44 @@
                         },
                     },
                     {
-                        label: "CONTAINER",
-                        name: "containeredit",
+                        label: "NO SP",
+                        name: "nospedit",
+                        sortable: false,
+                        editable: true,
+                        editoptions: {
+                            dataEvents: [{
+                                type: "keyup",
+                                fn: function(event, rowObject) {
+
+                                    let localRow = $("#tableEditSp").jqGrid(
+                                        "getLocalRow",
+                                        rowObject.rowId
+                                    );
+                                    localRow.nospedit = event.target.value;
+                                },
+                            }, ],
+                        },
+                    },
+                    {
+                        label: "EMKL",
+                        name: "agenedit",
                         sortable: true,
+                    },
+                    {
+                        label: 'BORONGAN',
+                        name: 'boronganedit',
+                        align: 'right',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        formatter: currencyFormat,
+
+                    },
+                    {
+                        label: 'BIAYA EXTRA',
+                        name: 'extraedit',
+                        align: 'right',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        formatter: currencyFormat,
+
                     },
                     {
                         label: "STATUS CONTAINER",
@@ -530,21 +555,6 @@
                     {
                         label: "JENIS ORDER",
                         name: "jenisorderedit",
-                        sortable: true,
-                    },
-                    {
-                        label: "DARI",
-                        name: "dariedit",
-                        sortable: true,
-                    },
-                    {
-                        label: "SAMPAI",
-                        name: "sampaiedit",
-                        sortable: true,
-                    },
-                    {
-                        label: "PENYESUAIAN",
-                        name: "penyesuaianedit",
                         sortable: true,
                     },
                     {
@@ -569,6 +579,19 @@
                 cellsubmit: "clientArray",
                 editableColumns: ["nosp"],
                 selectedRowIds: [],
+                beforeEditCell: function(rowid, cellname, value, iRow, iCol) {
+                    let localRow = $("#tableEditSp").jqGrid("getLocalRow", rowid);
+                    console.log('beforeeditcell', localRow, cellname)
+                    // Check if the containeredit value is "2x20"
+                    if (localRow.containeredit != '2x20"' && cellname == "nocont2edit") {
+                        // Disable editing by preventing the edit operation
+                        return false;
+                    }
+                    if (localRow.containeredit != '2x20"' && cellname == "noseal2edit") {
+                        // Disable editing by preventing the edit operation
+                        return false;
+                    }
+                },
                 afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
                     let originalGridData = $("#tableEditSp")
                         .jqGrid("getGridParam", "originalData")
