@@ -10,7 +10,7 @@
 
         <form action="" method="post">
 
-          <div class="modal-body">
+          <div class="modal-body" style="overflow-y: auto; overflow-x: auto;">
             <input type="hidden" name="id">
 
             <div class="row form-group">
@@ -54,7 +54,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="bank_id">
-                <input type="text" name="bank" class="form-control bank-lookup">
+                <input type="text" name="bank" id="bank" class="form-control bank-lookup">
               </div>
             </div>
 
@@ -65,7 +65,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="alatbayar_id">
-                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -655,7 +655,7 @@
     })
   }
 
-
+ 
   function editPengeluaran(id) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -1022,6 +1022,7 @@
     })
   }
 
+  let lastIndex = 0;
   function showPengeluaran(form, id) {
     console.log(id);
     return new Promise((resolve, reject) => {
@@ -1081,7 +1082,7 @@
                   <td></td>
                   <td>
                     <input type="hidden" name="coadebet[]">
-                    <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
+                    <input type="text" name="ketcoadebet[]" id="ketcoa_${index}" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup_${index}">
                   </td>                
                   <td>
                     <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
@@ -1126,30 +1127,32 @@
 
             setTotal();
 
-            $('.akunpusat-lookup').last().lookup({
-              title: 'Kode Perk. Lookup',
-              fileName: 'akunpusat',
-              beforeProcess: function(test) {
-                // var levelcoa = $(`#levelcoa`).val();
-                this.postData = {
-                  levelCoa: '3',
-                  Aktif: 'AKTIF',
-                }
-              },
-              onSelectRow: (akunpusat, element) => {
-                element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
-                element.val(akunpusat.keterangancoa)
-                element.data('currentValue', element.val())
-              },
-              onCancel: (element) => {
-                element.val(element.data('currentValue'))
-              },
-              onClear: (element) => {
-                element.parents('td').find(`[name="coadebet[]"]`).val('')
-                element.val('')
-                element.data('currentValue', element.val())
-              }
-            })
+            // $('.akunpusat-lookup').last().lookup({
+            //   title: 'Kode Perk. Lookup',
+            //   fileName: 'akunpusat',
+            //   beforeProcess: function(test) {
+            //     // var levelcoa = $(`#levelcoa`).val();
+            //     this.postData = {
+            //       levelCoa: '3',
+            //       Aktif: 'AKTIF',
+            //     }
+            //   },
+            //   onSelectRow: (akunpusat, element) => {
+            //     element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
+            //     element.val(akunpusat.keterangancoa)
+            //     element.data('currentValue', element.val())
+            //   },
+            //   onCancel: (element) => {
+            //     element.val(element.data('currentValue'))
+            //   },
+            //   onClear: (element) => {
+            //     element.parents('td').find(`[name="coadebet[]"]`).val('')
+            //     element.val('')
+            //     element.data('currentValue', element.val())
+            //   }
+            // })
+            initLookupDetail(index);
+            lastIndex = index;
 
 
           })
@@ -1170,14 +1173,14 @@
   }
 
   function addRow() {
-
+    lastIndex += 1; 
     let isTheFirstRow = $('#table_body tr').length;
     let detailRow = $(`
       <tr>
         <td></td>
         <td>
             <input type="hidden" name="coadebet[]">
-            <input type="text" name="ketcoadebet[]"  class="form-control akunpusat-lookup">
+            <input type="text" name="ketcoadebet[]" id="ketcoa_${lastIndex}"  class="form-control akunpusat-lookup_${lastIndex}">
         </td>
        
         <td>
@@ -1213,36 +1216,36 @@
     $('#detailList>#table_body').append(detailRow)
 
 
-    $('.akunpusat-lookup').last().lookup({
-      title: 'Kode Perkiraan Lookup',
-      fileName: 'akunpusat',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-          levelCoa: '3',
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (akunpusat, element) => {
-        $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
-        element.val(akunpusat.keterangancoa)
-        element.data('currentValue', element.val())
+    // $('.akunpusat-lookup').last().lookup({
+    //   title: 'Kode Perkiraan Lookup',
+    //   fileName: 'akunpusat',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       levelCoa: '3',
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (akunpusat, element) => {
+    //     $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+    //     element.val(akunpusat.keterangancoa)
+    //     element.data('currentValue', element.val())
 
-        enableTglJatuhTempo($(`#crudForm`))
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
 
-        enableTglJatuhTempo($(`#crudForm`))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="coadebet[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //   },
+    //   onClear: (element) => {
+    //     $(`#crudForm [name="coadebet[]"]`).last().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
 
-        enableTglJatuhTempo($(`#crudForm`))
-      }
-    })
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //   }
+    // })
     initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
     tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
     if (isTheFirstRow == 0) {
@@ -1256,6 +1259,8 @@
     enableNoWarkat(detailRow)
     setRowNumbers()
     rowCabangPusat()
+    initLookupDetail(lastIndex);
+   
   }
 
   function enableTglJatuhTempo(el) {
@@ -1270,6 +1275,78 @@
       el.find(`[name="tgljatuhtempo[]"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
       el.find(`[name="tgljatuhtempo[]"]`).attr('readonly', true)
     }
+  }
+
+  function initLookupDetail(index){
+    let rowLookup = index
+
+    // $('.akunpusat-lookup').last().lookup({
+    //   title: 'Kode Perkiraan Lookup',
+    //   fileName: 'akunpusat',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
+    //       levelCoa: '3',
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (akunpusat, element) => {
+    //     $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+    //     element.val(akunpusat.keterangancoa)
+    //     element.data('currentValue', element.val())
+
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //   },
+    //   onClear: (element) => {
+    //     $(`#crudForm [name="coadebet[]"]`).last().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //   }
+    // })
+
+
+    $(`.akunpusat-lookup_${rowLookup}`).lookupV3({
+        title: 'Kode Perk. Lookup',
+        fileName: 'akunpusatV3',
+        searching: ['coa','keterangancoa'],
+        labelColumn: true,
+        extendSize: md_extendSize_3,
+        multiColumnSize:true,
+        filterToolbar: true,
+        beforeProcess: function(test) {    
+            // var levelcoa = $(`#levelcoa`).val();
+            this.postData = {
+                levelCoa: '3',
+                Aktif: 'AKTIF',
+            }
+        },
+        onSelectRow: (akunpusat, element) => {
+            $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+            element.val(akunpusat.keterangancoa)
+            element.data('currentValue', element.val())
+
+            enableTglJatuhTempo($(`#crudForm`))
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+
+          enableTglJatuhTempo($(`#crudForm`))
+        },
+        onClear: (element) => {
+          $(`#crudForm [name="coadebet[]"]`).last().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+
+          enableTglJatuhTempo($(`#crudForm`))
+        }
+    })
   }
 
   function enableNoWarkat(el) {
@@ -1426,69 +1503,139 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.alatbayar-lookup').lookup({
-      title: 'Alat Bayar Lookup',
-      fileName: 'alatbayar',
-      beforeProcess: function(test) {
-        // const bank_ID=0        
-        this.postData = {
-          bank_Id: bankId,
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (alatbayar, element) => {
-        $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
-        element.val(alatbayar.namaalatbayar)
-        element.data('currentValue', element.val())
-        enableTglJatuhTempo($(`#crudForm`))
-        enableNoWarkat($(`#crudForm`))
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="alatbayar_id"]`).first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    // $('.alatbayar-lookup').lookup({
+    //   title: 'Alat Bayar Lookup',
+    //   fileName: 'alatbayar',
+    //   beforeProcess: function(test) {
+    //     // const bank_ID=0        
+    //     this.postData = {
+    //       bank_Id: bankId,
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (alatbayar, element) => {
+    //     $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+    //     element.val(alatbayar.namaalatbayar)
+    //     element.data('currentValue', element.val())
+    //     enableTglJatuhTempo($(`#crudForm`))
+    //     enableNoWarkat($(`#crudForm`))
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $(`#crudForm [name="alatbayar_id"]`).first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
-    $('.bank-lookup').lookup({
-      title: 'Bank Lookup',
-      fileName: 'bank',
-      beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-          from: 'pengeluaran'
-        }
-      },
-      onSelectRow: (bank, element) => {
-        $('#crudForm [name=bank_id]').first().val(bank.id)
+    $('.alatbayar-lookup').lookupV3({
+            title: 'Alat Bayar Lookup',
+            fileName: 'alatbayarV3',
+            searching: ['namaalatbayar'],
+            labelColumn: false,
+            beforeProcess: function(test) {
+                // const bank_ID=0        
+                this.postData = {
+                    bank_Id: bankId,
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (alatbayar, element) => {
+              $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+              element.val(alatbayar.namaalatbayar)
+              element.data('currentValue', element.val())
+              enableTglJatuhTempo($(`#crudForm`))
+              enableNoWarkat($(`#crudForm`))
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              $(`#crudForm [name="alatbayar_id"]`).first().val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+        })
 
-        bankId = bank.id
+    // $('.bank-lookup').lookup({
+    //   title: 'Bank Lookup',
+    //   fileName: 'bank',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       from: 'pengeluaran'
+    //     }
+    //   },
+    //   onSelectRow: (bank, element) => {
+    //     $('#crudForm [name=bank_id]').first().val(bank.id)
 
-        if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
-          $('.bmt').show()
-        } else {
-          $('.bmt').hide()
-        }
-        element.val(bank.namabank)
-        element.data('currentValue', element.val())
-        $('#crudForm [name=alatbayar_id]').first().val('')
-        $('#crudForm [name=alatbayar]').first().val('')
-        $('#crudForm [name=alatbayar]').data('currentValue', '')
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=bank_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-        $('#crudForm [name=alatbayar_id]').first().val('')
-        $('#crudForm [name=alatbayar]').first().val('')
-        $('#crudForm [name=alatbayar]').data('currentValue', '')
-      }
+    //     bankId = bank.id
+
+    //     if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
+    //       $('.bmt').show()
+    //     } else {
+    //       $('.bmt').hide()
+    //     }
+    //     element.val(bank.namabank)
+    //     element.data('currentValue', element.val())
+    //     $('#crudForm [name=alatbayar_id]').first().val('')
+    //     $('#crudForm [name=alatbayar]').first().val('')
+    //     $('#crudForm [name=alatbayar]').data('currentValue', '')
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=bank_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //     $('#crudForm [name=alatbayar_id]').first().val('')
+    //     $('#crudForm [name=alatbayar]').first().val('')
+    //     $('#crudForm [name=alatbayar]').data('currentValue', '')
+    //   }
+    // })
+
+    $('.bank-lookup').lookupV3({
+          title: 'Bank Lookup',
+          fileName: 'bankV3',
+          searching: ['namabank'],
+          labelColumn: false,
+          // filterToolbar:true,
+          beforeProcess: function(test) {
+              this.postData = {
+                  Aktif: 'AKTIF',
+                  from: 'pengeluaran'
+              }
+          },
+          onSelectRow: (bank, element) => {
+            $('#crudForm [name=bank_id]').first().val(bank.id)
+
+            bankId = bank.id
+
+            if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
+              $('.bmt').show()
+            } else {
+              $('.bmt').hide()
+            }
+            element.val(bank.namabank)
+            element.data('currentValue', element.val())
+            $('#crudForm [name=alatbayar_id]').first().val('')
+            $('#crudForm [name=alatbayar]').first().val('')
+            $('#crudForm [name=alatbayar]').data('currentValue', '')
+          },
+          onCancel: (element) => {
+            element.val(element.data('currentValue'))
+          },
+          onClear: (element) => {
+            $('#crudForm [name=bank_id]').first().val('')
+            element.val('')
+            element.data('currentValue', element.val())
+            $('#crudForm [name=alatbayar_id]').first().val('')
+            $('#crudForm [name=alatbayar]').first().val('')
+            $('#crudForm [name=alatbayar]').data('currentValue', '')
+          }
     })
 
     $('.bmt-lookup').lookup({

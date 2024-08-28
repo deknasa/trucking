@@ -386,7 +386,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 } */
 
 /* Not with modal-header */
-#crudModal {
+/* #crudModal {
 	padding-right: 0px !important;
 	padding-left: 0px !important;
 }
@@ -415,7 +415,50 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	border: 0;
 	border-radius: 0;
 	background-color: #DCDCDC;
+} */
+
+#crudModal {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
 }
+#crudModal .modal-dialog {
+    max-width: 100%;
+    margin: 0;
+    height: 100%;
+}
+#crudModal .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    /* padding: 0!important; */
+    background-color: #ffcc99;
+}
+#crudModal .modal-body {
+    overflow-y: auto;
+    height: calc(100vh - 81px);
+    /* height: calc(92vh); */
+    /* height: 100%; */
+    border: 0;
+    border-radius: 0;
+    padding-bottom: 4rem;
+}
+#crudModal .modal-footer {
+    position: sticky;
+    bottom: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: #dcdcdc;
+    z-index: 9999;
+}
+
+#crudModal .modal-header .modal-title {
+    position: sticky;
+    top: 0;
+    border: 0;
+    border-radius: 0;
+    z-index: 9999;
+}
+
 
 /* Not with modal-header (For ACL) */
 #userAclModal {
@@ -1189,6 +1232,14 @@ span.textCard {
 	html { 
 		font-size: 16px;  
 	} 
+
+	 /* tambahan di mobile */
+	 #crudModal .modal-content {
+        max-height: calc(100vh);
+        border: 0;
+        border-radius: 0;
+        background-color: #ffcc99;
+    }
 
 	.jqgrow td {
 		padding-top: 8px!important;

@@ -987,11 +987,11 @@
             })
         })
     }
-
+    let lastIndex = 0;
     function showPenerimaan(form, id) {
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
-
+            // alert(1)
 
             $.ajax({
                 url: `${apiUrl}penerimaanheader/${id}`,
@@ -1037,7 +1037,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="coakredit[]">
-                                <input type="text" name="ketcoakredit[]" id="ketcoa_${index}" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
+                                <input type="text" name="ketcoakredit[]" id="ketcoa_${index}" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup_${index}">
                             </td>
                             <td>
                                 <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control" ${readOnly}></textarea>
@@ -1055,7 +1055,7 @@
                             </td>
                             <td class="bankpelanggan">
                                 <input type="hidden" name="bankpelanggan_id[]">
-                                <input type="text" name="bankpelanggan[]"  id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
+                                <input type="text" name="bankpelanggan[]"  id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup_${index}">
                             </td>
                             <td class="tbl_aksi">
                                 <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1075,59 +1075,63 @@
                             detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
                             $('#detailList>#table_body').append(detailRow)
                             setTotal();
-                            $('.akunpusat-lookup').last().lookupV3({
-                                title: 'Kode Perk. Lookup',
-                                fileName: 'akunpusatV3',
-                                searching: ['coa','keterangancoa'],
-                                labelColumn: false,
-                                beforeProcess: function(test) {
-                                    // var levelcoa = $(`#levelcoa`).val();
-                                    this.postData = {
-                                        levelCoa: '3',
-                                        Aktif: 'AKTIF',
-                                    }
-                                },
-                                onSelectRow: (akunpusat, element) => {
-                                    element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
-                                    element.val(akunpusat.keterangancoa)
-                                    element.data('currentValue', element.val())
-                                },
-                                onCancel: (element) => {
-                                    element.val(element.data('currentValue'))
-                                },
-                                onClear: (element) => {
 
-                                    element.parents('td').find(`[name="coakredit[]"]`).val('')
-                                    element.val('')
-                                    element.data('currentValue', element.val())
-                                }
-                            })
-                            $('.bankpelanggan-lookup').last().lookupV3({
-                                title: 'Bank Pelanggan Lookup',
-                                fileName: 'bankpelangganV3', 
-                                searching: ['coa','keterangancoa'],
-                                labelColumn: false,
-                                beforeProcess: function(test) {
-                                    this.postData = {
-                                        Aktif: 'AKTIF',
-                                    }
-                                },
-                                onSelectRow: (bankpelanggan, element) => {
-                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
-                                    element.val(bankpelanggan.namabank)
-                                    element.data('currentValue', element.val())
-                                },
-                                onCancel: (element) => {
-                                    element.val(element.data('currentValue'))
-                                },
-                                onClear: (element) => {
-                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
-                                    element.val('')
-                                    element.data('currentValue', element.val())
-                                }
-                            })
+                            initLookupDetail(index);
+                            lastIndex = index;
+                            // $('.akunpusat-lookup').last().lookupV3({
+                            //     title: 'Kode Perk. Lookup',
+                            //     fileName: 'akunpusatV3',
+                            //     searching: ['coa','keterangancoa'],
+                            //     labelColumn: false,
+                            //     beforeProcess: function(test) {
+                            //         // var levelcoa = $(`#levelcoa`).val();
+                            //         this.postData = {
+                            //             levelCoa: '3',
+                            //             Aktif: 'AKTIF',
+                            //         }
+                            //     },
+                            //     onSelectRow: (akunpusat, element) => {
+                            //         element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
+                            //         element.val(akunpusat.keterangancoa)
+                            //         element.data('currentValue', element.val())
+                            //     },
+                            //     onCancel: (element) => {
+                            //         element.val(element.data('currentValue'))
+                            //     },
+                            //     onClear: (element) => {
+
+                            //         element.parents('td').find(`[name="coakredit[]"]`).val('')
+                            //         element.val('')
+                            //         element.data('currentValue', element.val())
+                            //     }
+                            // })
+                            // $('.bankpelanggan-lookup').last().lookupV3({
+                            //     title: 'Bank Pelanggan Lookup',
+                            //     fileName: 'bankpelangganV3', 
+                            //     searching: ['coa','keterangancoa'],
+                            //     labelColumn: false,
+                            //     beforeProcess: function(test) {
+                            //         this.postData = {
+                            //             Aktif: 'AKTIF',
+                            //         }
+                            //     },
+                            //     onSelectRow: (bankpelanggan, element) => {
+                            //         element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
+                            //         element.val(bankpelanggan.namabank)
+                            //         element.data('currentValue', element.val())
+                            //     },
+                            //     onCancel: (element) => {
+                            //         element.val(element.data('currentValue'))
+                            //     },
+                            //     onClear: (element) => {
+                            //         element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+                            //         element.val('')
+                            //         element.data('currentValue', element.val())
+                            //     }
+                            // })
                         })
                     } else {
+                        
                         penerimaanGiro = response.data.penerimaangiro_nobukti;
                         $('.aksiGiro').hide()
                         $('#detailList tbody').html('')
@@ -1191,14 +1195,14 @@
             })
         })
     }
-
     function addRow() {
+        lastIndex += 1; 
         let detailRow = $(`
       <tr>
         <td></td>
         <td>
             <input type="hidden" name="coakredit[]">
-          <input type="text" name="ketcoakredit[]" id="ketcoa_${rowIndex}" class="form-control akunpusat-lookup">
+          <input type="text" name="ketcoakredit[]" id="ketcoa_${lastIndex}" class="form-control akunpusat-lookup_${lastIndex}">
         </td>
         <td>
           <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
@@ -1216,7 +1220,7 @@
         </td>
         <td class="bankpelanggan">
             <input type="hidden" name="bankpelanggan_id[]">
-            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${rowIndex}" class="form-control bankpelanggan-lookup">
+            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${lastIndex}" class="form-control bankpelanggan-lookup_${lastIndex}">
         </td>
         <td class="aksiGiro tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
@@ -1224,11 +1228,31 @@
       </tr>
     `)
         $('#detailList>#table_body').append(detailRow)
-        $('.akunpusat-lookup').last().lookupV3({
+
+        
+
+        initAutoNumericMinus(detailRow.find('.autonumeric'))
+        tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
+        detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
+        initDatepicker()
+        setRowNumbers()
+        rowCabangPusat()
+        initLookupDetail(lastIndex);
+        // initLookupDetail(indexAdd)
+        // indexAdd++
+ 
+    }
+
+    function initLookupDetail(index){
+        let rowLookup = index
+        $(`.akunpusat-lookup_${rowLookup}`).lookupV3({
             title: 'Kode Perk. Lookup',
             fileName: 'akunpusatV3',
             searching: ['coa','keterangancoa'],
-            labelColumn: false,
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {    
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
@@ -1250,7 +1274,8 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.bankpelanggan-lookup').last().lookupV3({
+
+        $(`.bankpelanggan-lookup_${rowLookup}`).lookupV3({
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelangganV3', 
             searching: ['coa','keterangancoa'],
@@ -1274,12 +1299,6 @@
                 element.data('currentValue', element.val())
             }
         })
-        initAutoNumericMinus(detailRow.find('.autonumeric'))
-        tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
-        detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
-        initDatepicker()
-        setRowNumbers()
-        rowCabangPusat()
     }
 
     function deleteRow(row) {
