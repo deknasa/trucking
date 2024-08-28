@@ -35,6 +35,7 @@ class LaporanStokController extends MyController
             'judullaporan' => 'Laporan Stok',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
             'sampai' => $request->sampai,
+            'jenislaporan' => $request->jenislaporan,
 
         ];
         $header = Http::withHeaders(request()->header())
@@ -60,6 +61,8 @@ class LaporanStokController extends MyController
             'judullaporan' => 'Laporan  Stok',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
             'sampai' => $request->sampai,
+            'jenislaporan' => $request->jenislaporan,
+
 
 
         ];

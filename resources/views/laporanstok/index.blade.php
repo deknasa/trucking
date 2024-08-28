@@ -15,13 +15,40 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        <div class="form-group row">
-                            <div class="col-12 col-sm-2 col-md-2">
+                        <!-- <div class="form-group row">
+                            <div class="col-12 col-sm-3">
                                 <label class="col-form-label">Periode <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input-group">
                                     <input type="text" name="sampai" class="form-control datepicker">
+                                </div>
+                            </div>
+
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row" id="kelompok">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="text" name="sampai" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row" id="kelompok">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">JENIS LAPORAN<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <select name="jenislaporan" id="jenislaporan" class="form-select select2bs4" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -67,8 +94,11 @@
 
     $(document).ready(function() {
 
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+        initSelect2($('#crudForm').find('[name=jenislaporan]'), false)
 
+        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+        setJenisLaporanOptions($('#crudForm'))
+        
         $('.datepicker').datepicker({
                 changeMonth: true,
                 changeYear: true,
@@ -95,12 +125,54 @@
         if (!`{{ $myAuth->hasPermission('laporanstok', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
-
+       
     })
+
+    const setJenisLaporanOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=jenislaporan]').empty()
+            relatedForm.find('[name=jenislaporan]').append(
+                new Option('-- PILIH JENIS LAPORAN --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "JENIS LAPORAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusReuse => {
+                        let option = new Option(statusReuse.text, statusReuse.id)
+
+                        relatedForm.find('[name=jenislaporan]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }    
+
 
     $(document).on('click', `#btnPreview`, function(event) {
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
         $.ajax({
             url: `{{ route('laporanstok.report') }}`,
             method: 'GET',
@@ -109,7 +181,7 @@
             },
             success: function(response) {
                 // Handle the success response
-                var newWindow = window.open('','_blank');
+                var newWindow = window.open('', '_blank');
                 newWindow.document.open();
                 newWindow.document.write(response);
                 newWindow.document.close();
@@ -131,10 +203,11 @@
         $('#processingLoader').removeClass('d-none')
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
 
         if (sampai != '') {
             $.ajax({
-                url: `{{ route('laporanstok.export') }}?sampai=${sampai}`,
+                url: `{{ route('laporanstok.export') }}?sampai=${sampai}&jenislaporan=${jenislaporan}`,
                 type: 'GET',
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -154,7 +227,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -178,6 +251,8 @@
                 },
                 data: {
                     sampai: $('#crudForm').find('[name=sampai]').val(),
+                    jenislaporan: $('#crudForm').find('[name=jenislaporan]').val(),
+                    
                     isCheck: true,
                 },
                 success: (response) => {
