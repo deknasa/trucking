@@ -53,6 +53,12 @@
             align: 'left'
           },
           {
+            label: 'is_holiday_or_sunday',
+            name: 'is_holiday_or_sunday',
+            hidden: true,
+            search: false
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

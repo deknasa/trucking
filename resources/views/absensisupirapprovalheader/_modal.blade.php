@@ -25,7 +25,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                  <input type="text" name="tglbukti" class="form-control" readonly>
+                  <input type="text" name="tglbukti" class="form-control datepicker" readonly>
                 </div>
               </div>
             </div>
@@ -95,6 +95,13 @@
         element.val(absensisupir.nobukti)
         $(`#absensisupir_kasgantung`).val(absensisupir.kasgantung_nobukti)
         $(`#crudForm [name="tglbukti"]`).val(absensisupir.tglbukti)
+        if (absensisupir.is_holiday_or_sunday == 1) {
+          $('#crudForm').find('[name=tglbukti]').prop('readonly', false)
+          $('#crudForm').find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').show()
+        } else {
+          $('#crudForm').find(`[name="tglbukti"]`).prop('readonly', true)
+          $('#crudForm').find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').hide()
+        }
         getAbsensi(absensisupir.id)
         element.data('currentValue', element.val())
       },
@@ -345,8 +352,14 @@
     if (selectedRows.length > 0) {
       clearSelectedRows()
     }
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    setTimeout(() => {
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').hide()
+
+    }, 100);
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('ADD ABSENSI SUPIR POSTING (KEUANGAN)')
+
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -410,6 +423,10 @@
         if (selectedRows.length > 0) {
           clearSelectedRows()
         }
+        setTimeout(() => {
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').hide()
+        }, 100);
+
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -512,7 +529,7 @@
           $('#detailList').append(detailRow)
 
         })
-
+        $('#modalgrid').jqGrid("clearGridData");
         initAutoNumeric($('#gbox_modalgrid .footrow').find(`td[aria-describedby="modalgrid_uangjalan"]`).text(response.attributes.totalUangJalan))
         $('#modalgrid').setGridParam({
           datatype: "local",
