@@ -1066,7 +1066,7 @@
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
                         // showSuccessDialog(response.message, response.data.nobukti)
-                        createGajiSupirHeader()
+                        createGajiSupirHeader(true)
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
                         $("#rekapRincian")[0].p.selectedRowIds = [];
                         $('#rekapRincian').jqGrid("clearGridData");
@@ -1313,7 +1313,7 @@
             })
     }
 
-    function createGajiSupirHeader() {
+    function createGajiSupirHeader(isSaveAdd = false) {
         let form = $('#crudForm')
 
         form.trigger('reset')
@@ -1334,8 +1334,10 @@
         initDatepicker()
         setGajiSupir()
         form.find(`[name="subtotal"]`).addClass('disabled')
-        initAutoNumeric($('#crudForm').find('[name=nomDeposito]'))
-        initAutoNumeric($('#crudForm').find('[name=nomBBM]'))
+        if (!isSaveAdd) {
+            initAutoNumeric($('#crudForm').find('[name=nomDeposito]'))
+            initAutoNumeric($('#crudForm').find('[name=nomBBM]'))
+        }
         initAutoNumeric($('#crudForm').find('[name=nomPinjaman]'))
         initAutoNumeric($('#crudForm').find('[name=uangmakanharian]'))
         initAutoNumeric($('#crudForm').find('[name=biayaextraheader]'))

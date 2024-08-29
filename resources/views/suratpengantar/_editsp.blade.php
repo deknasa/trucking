@@ -27,7 +27,7 @@
 
                             <div class="col-12 offset-md-1 col-sm-1 col-md-1">
                                 <label class="col-form-label">
-                                    TGL SAMPAI 
+                                    TGL SAMPAI
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -243,8 +243,8 @@
                 data: data,
                 success: response => {
 
-                    $('#crudModalEditSp').find('#editSpForm').trigger('reset')
                     if (button == 'btnSubmitEditSp') {
+                        $('#crudModalEditSp').find('#editSpForm').trigger('reset')
                         $('#crudModalEditSp').modal('hide')
                         $('#jqGrid').jqGrid().trigger('reloadGrid');
 
@@ -254,7 +254,7 @@
                     } else {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        $('#editSpForm').find('input[type="text"]').data('current-value', '')
+                        // $('#editSpForm').find('input[type="text"]').data('current-value', '')
 
                         $("#tableEditSp")[0].p.selectedRowIds = [];
                         $('#tableEditSp').jqGrid("clearGridData");
@@ -265,7 +265,7 @@
                         $("#tableEditSp").remove()
                         $('#gbox_tableEditSp').remove()
                         $('#tes').append(`<table id="tableEditSp"></table>`)
-                        createEditSp();
+                        createEditSp(true);
                     }
                 },
                 error: error => {
@@ -363,11 +363,10 @@
     })
 
 
-    function createEditSp() {
+    function createEditSp(isSaveAdd = false) {
         let form = $('#editSpForm')
         $('.modal-loader').removeClass('d-none')
 
-        form.trigger('reset')
         form.find('#btnSubmitEditSp').html(`
             <i class="fa fa-save"></i>
             Save
@@ -376,13 +375,17 @@
         $('#crudModalEditSpTitle').text('Edit SP')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        let today = new Date();
-        firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-        let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
-        lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
-        $('#editSpForm').find('[name=tgldarisp]').val(formattedFirstDay).trigger('change');
-        $('#editSpForm').find('[name=tglsampaisp]').val(formattedLastDay).trigger('change');
+        if (!isSaveAdd) {
+
+            form.trigger('reset')
+            let today = new Date();
+            firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+            lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+            $('#editSpForm').find('[name=tgldarisp]').val(formattedFirstDay).trigger('change');
+            $('#editSpForm').find('[name=tglsampaisp]').val(formattedLastDay).trigger('change');
+        }
 
         $('#crudModalEditSp').modal('show')
         loadEditSpGrid()
@@ -558,6 +561,12 @@
                         sortable: true,
                     },
                     {
+                        label: "ispelabuhan",
+                        name: "ispelabuhan",
+                        hidden: true,
+                        search: false,
+                    },
+                    {
                         label: "empty",
                         name: "empty",
                         hidden: true,
@@ -576,20 +585,59 @@
                 pginput: false,
                 cellEdit: true,
                 cellSelect: true,
+                sortable: true,
+                sortorder: 'nobuktiedit',
                 cellsubmit: "clientArray",
                 editableColumns: ["nosp"],
                 selectedRowIds: [],
-                beforeEditCell: function(rowid, cellname, value, iRow, iCol) {
-                    let localRow = $("#tableEditSp").jqGrid("getLocalRow", rowid);
-                    console.log('beforeeditcell', localRow, cellname)
-                    // Check if the containeredit value is "2x20"
-                    if (localRow.containeredit != '2x20"' && cellname == "nocont2edit") {
-                        // Disable editing by preventing the edit operation
-                        return false;
+                onCellSelect: function(rowId, iCol, cellContent, e) {
+                    let colModel = $("#tableEditSp").jqGrid('getGridParam', 'colModel');
+                    let colName = colModel[iCol].name;
+                    let localRow = $("#tableEditSp").jqGrid("getLocalRow", rowId);
+
+                    if (colName === "nocont2edit" && localRow.containeredit !== '2X20"') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
+                        }, 0);
                     }
-                    if (localRow.containeredit != '2x20"' && cellname == "noseal2edit") {
-                        // Disable editing by preventing the edit operation
-                        return false;
+                    if (colName === "noseal2edit" && localRow.containeredit !== '2X20"') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
+                        }, 0);
+                    }
+                    if (localRow.jobtruckingedit == '' && colName != 'nospedit') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
+                        }, 0);
+                    }
+                    if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && colName != 'nospedit') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
+                        }, 0);
+                    }
+                },
+                beforeEditCell: function(rowId, cellName, value, iRow, iCol) {
+                    console.log('iCol', iCol)
+                    let localRow = $("#tableEditSp").jqGrid("getLocalRow", rowId);
+                    if (cellName === "nocont2edit" && localRow.containeredit !== '2X20"') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
+                        }, 0);
+                    }
+                    if (cellName === "noseal2edit" && localRow.containeredit !== '2X20"') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
+                        }, 0);
+                    }
+                    if (localRow.jobtruckingedit == '' && cellName != 'nospedit') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
+                        }, 0);
+                    }
+                    if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && cellName != 'nospedit') {
+                        setTimeout(function() {
+                            $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
+                        }, 0);
                     }
                 },
                 afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
