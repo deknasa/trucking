@@ -3210,7 +3210,7 @@
                     {
                         label: 'STATUS RITASI',
                         name: 'statusritasi',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
                         align: 'left'
                     },
                     {
