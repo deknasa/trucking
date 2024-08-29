@@ -567,6 +567,18 @@
                         search: false,
                     },
                     {
+                        label: "islangsir",
+                        name: "islangsir",
+                        hidden: true,
+                        search: false,
+                    },
+                    {
+                        label: "islongtrip",
+                        name: "islongtrip",
+                        hidden: true,
+                        search: false,
+                    },
+                    {
                         label: "empty",
                         name: "empty",
                         hidden: true,
@@ -595,12 +607,12 @@
                     let colName = colModel[iCol].name;
                     let localRow = $("#tableEditSp").jqGrid("getLocalRow", rowId);
 
-                    if (colName === "nocont2edit" && localRow.containeredit !== '2X20"') {
+                    if (colName === "nocont2edit" && localRow.containeredit != '2X20"') {
                         setTimeout(function() {
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
                         }, 0);
                     }
-                    if (colName === "noseal2edit" && localRow.containeredit !== '2X20"') {
+                    if (colName === "noseal2edit" && localRow.containeredit != '2X20"') {
                         setTimeout(function() {
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
                         }, 0);
@@ -610,7 +622,7 @@
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
                         }, 0);
                     }
-                    if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && colName != 'nospedit') {
+                    if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && localRow.islangsir == 0 && localRow.islongtrip == 0 && colName != 'nospedit') {
                         setTimeout(function() {
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
                         }, 0);
@@ -634,7 +646,8 @@
                             $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
                         }, 0);
                     }
-                    if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && cellName != 'nospedit') {
+                    if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && localRow.islangsir == 0 && localRow.islongtrip == 0 && cellName != 'nospedit') {
+
                         setTimeout(function() {
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
                         }, 0);
