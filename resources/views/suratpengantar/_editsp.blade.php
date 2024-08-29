@@ -617,11 +617,11 @@
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
                         }, 0);
                     }
-                    if (localRow.jobtruckingedit == '' && colName != 'nospedit') {
-                        setTimeout(function() {
-                            $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
-                        }, 0);
-                    }
+                    // if (localRow.jobtruckingedit == '' && colName != 'nospedit') {
+                    //     setTimeout(function() {
+                    //         $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
+                    //     }, 0);
+                    // }
                     if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && localRow.islangsir == 0 && localRow.islongtrip == 0 && colName != 'nospedit') {
                         setTimeout(function() {
                             $("#tableEditSp").jqGrid('restoreCell', rowId, iCol);
@@ -641,11 +641,11 @@
                             $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
                         }, 0);
                     }
-                    if (localRow.jobtruckingedit == '' && cellName != 'nospedit') {
-                        setTimeout(function() {
-                            $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
-                        }, 0);
-                    }
+                    // if (localRow.jobtruckingedit == '' && cellName != 'nospedit') {
+                    //     setTimeout(function() {
+                    //         $("#tableEditSp").jqGrid('restoreCell', iRow, iCol);
+                    //     }, 0);
+                    // }
                     if (localRow.jobtruckingedit != '' && localRow.ispelabuhan == 0 && localRow.islangsir == 0 && localRow.islongtrip == 0 && cellName != 'nospedit') {
 
                         setTimeout(function() {
