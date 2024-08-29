@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7c4b011a835535cea14d845106ab3855",
+  "ReportGuid": "86c433c0ec7488a9c869d7d7b11d8114",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanBukuBesar.mrt",
+  "ReportFile": "ReportLaporanBukuBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1712301637000+0700)/",
+  "ReportChanged": "/Date(1724226650000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -115,6 +115,12 @@
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "15": {
+            "Name": "Cabang",
+            "NameInSource": "Cabang",
+            "Alias": "Cabang",
             "Type": "System.String"
           }
         },
@@ -400,7 +406,7 @@
               "Ident": "StiText",
               "Name": "Text79",
               "Guid": "56975b7ea49b7bee49069fb63a4b0962",
-              "ClientRectangle": "154.03,8.83,50,4.06",
+              "ClientRectangle": "154.03,6,50,4.06",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -409,7 +415,7 @@
                 "Value": "{data.usercetak}"
               },
               "HorAlignment": "Right",
-              "Font": ";;Italic;",
+              "Font": "Comic Sans MS3;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -429,7 +435,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";;Italic;",
+              "Font": "Comic Sans MS3;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -439,7 +445,7 @@
               "Ident": "StiText",
               "Name": "Text51",
               "Guid": "f75a9746605cc515ac6ad0f3ab5d2fba",
-              "ClientRectangle": "154,5.72,50,4.06",
+              "ClientRectangle": "154,10.9,50,4.06",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -448,6 +454,7 @@
                 "Value": "Hal:{PageNumber} dari {TotalPageCount}"
               },
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -465,7 +472,7 @@
               "Text": {
                 "Value": "Periode"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -483,7 +490,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -501,7 +508,7 @@
               "Text": {
                 "Value": "{dataheader.dari}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -519,7 +526,7 @@
               "Text": {
                 "Value": "s/d"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -537,7 +544,7 @@
               "Text": {
                 "Value": "{dataheader.sampai}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -555,7 +562,7 @@
               "Text": {
                 "Value": "{dataheader.coasampai}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -573,7 +580,7 @@
               "Text": {
                 "Value": "s/d"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -591,7 +598,7 @@
               "Text": {
                 "Value": "{dataheader.coadari}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -609,7 +616,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -627,7 +634,7 @@
               "Text": {
                 "Value": "No Perkiraan"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -645,7 +652,7 @@
               "Text": {
                 "Value": "Ket. Perkiraan"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -663,7 +670,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -681,7 +688,7 @@
               "Text": {
                 "Value": "{dataheader.ketcoadari}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -699,7 +706,7 @@
               "Text": {
                 "Value": "s/d"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -717,7 +724,7 @@
               "Text": {
                 "Value": "{dataheader.ketcoasampai}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -736,7 +743,7 @@
                 "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "Comic Sans MS3;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -756,7 +763,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "Comic Sans MS3;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -776,7 +783,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "Comic Sans MS3;10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -807,7 +814,7 @@
               "Text": {
                 "Value": "{data.coa}"
               },
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -826,7 +833,7 @@
                 "Value": ":"
               },
               "HorAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -844,7 +851,7 @@
               "Text": {
                 "Value": "{data.keterangancoa}"
               },
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -854,7 +861,7 @@
               "Ident": "StiText",
               "Name": "Text9",
               "Guid": "1743e22c690255bf72c7c41107db79e2",
-              "ClientRectangle": "2,8.83,26,8",
+              "ClientRectangle": "2,8.83,22,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -864,7 +871,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -874,7 +881,7 @@
               "Ident": "StiText",
               "Name": "Text10",
               "Guid": "7c7569ba714e8f2a0c9507870c69d7cc",
-              "ClientRectangle": "28,8.83,34,8",
+              "ClientRectangle": "24,8.83,34,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -884,7 +891,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -894,7 +901,7 @@
               "Ident": "StiText",
               "Name": "Text11",
               "Guid": "a4b228d618e8776fe04d2226bc54435d",
-              "ClientRectangle": "62,8.83,52,8",
+              "ClientRectangle": "58,8.83,50,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -904,7 +911,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -914,7 +921,7 @@
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "e464fbe7565f170e380869cf33db5528",
-              "ClientRectangle": "114,8.83,28,8",
+              "ClientRectangle": "108,8.83,32,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -924,7 +931,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -934,7 +941,7 @@
               "Ident": "StiText",
               "Name": "Text13",
               "Guid": "2625510fdd03670d2811a7eeb4b902ec",
-              "ClientRectangle": "142,8.83,32,8",
+              "ClientRectangle": "140,8.83,32,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -944,7 +951,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -954,7 +961,7 @@
               "Ident": "StiText",
               "Name": "Text14",
               "Guid": "1748bbf7148822dd6f40c4164dd7bb00",
-              "ClientRectangle": "174,8.83,30,8",
+              "ClientRectangle": "172,8.83,32,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -964,7 +971,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -990,7 +997,7 @@
               "Ident": "StiText",
               "Name": "Text20",
               "Guid": "7a7e2607963e58ddd075917536210794",
-              "ClientRectangle": "4,0,22,8",
+              "ClientRectangle": "4,0,18,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -998,7 +1005,7 @@
               "Text": {
                 "Value": "{data.tglbukti}"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1015,16 +1022,17 @@
               "Ident": "StiText",
               "Name": "Text23",
               "Guid": "a91f497eb014c8dfc40781c6188f9f19",
-              "ClientRectangle": "114,0,26,8",
+              "ClientRectangle": "108,0,30,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{data.debet}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1043,16 +1051,17 @@
               "Ident": "StiText",
               "Name": "Text25",
               "Guid": "fb18c7d15c1504b2606ae173c01c0e04",
-              "ClientRectangle": "142,0,30,8",
+              "ClientRectangle": "140,0,30,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{data.kredit}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1071,16 +1080,17 @@
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "d58d2714a378f7fa0793a745b2ba9db2",
-              "ClientRectangle": "174,0,30,8",
+              "ClientRectangle": "172,0,30,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{data.Saldo}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1099,21 +1109,23 @@
               "Ident": "StiText",
               "Name": "Text21",
               "Guid": "91a448fde875072e545ba98196f18e97",
-              "ClientRectangle": "27.21,0.29,34.47,7.98",
+              "ClientRectangle": "23.21,0.29,34.47,7.98",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nobukti}"
+                "Value": "{data.nobukti}&nbsp;"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Type": "DataColumn"
             },
             "5": {
@@ -1121,21 +1133,23 @@
               "Name": "Text22",
               "Guid": "2b643fa7e677a9a771103263ed36bfae",
               "CanGrow": true,
-              "ClientRectangle": "62,0.29,51.51,7.98",
+              "ClientRectangle": "58,0.29,49.51,7.98",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keterangan}"
+                "Value": "{data.keterangan}&nbsp;"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 3,
@@ -1178,7 +1192,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1198,7 +1212,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1218,7 +1232,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1238,7 +1252,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1257,7 +1271,7 @@
                 "Value": "Total"
               },
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1270,17 +1284,18 @@
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "397742ac9dd1576e3ddedfd2a6f72051",
-              "ClientRectangle": "113,1.54,26,6",
+              "ClientRectangle": "108,1.54,30,6",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(data.debet)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1299,17 +1314,18 @@
               "Ident": "StiText",
               "Name": "Text26",
               "Guid": "1ed34ce2b329f520a9e2cf8983429fd8",
-              "ClientRectangle": "142,1.54,30,6",
+              "ClientRectangle": "140,1.54,30,6",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(data.kredit)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1328,17 +1344,18 @@
               "Ident": "StiText",
               "Name": "Text29",
               "Guid": "ea3aebcb1dc6067cc4280023d92a3875",
-              "ClientRectangle": "174,1.54,30,6",
+              "ClientRectangle": "172,1.54,30,6",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{data.Saldo}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
