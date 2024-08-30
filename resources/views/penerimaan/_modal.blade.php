@@ -1294,7 +1294,7 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val('')
+                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
