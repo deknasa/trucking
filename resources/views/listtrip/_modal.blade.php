@@ -959,6 +959,15 @@
                             setJobTruckingFromTripAsal()
                         }
                         moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
+                        if(jobmanual == 'YA'){
+                            let jobtrucking = $('#crudForm [name=jobtrucking]')
+                            let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
+                                
+                            jobtrucking.attr('hidden', true)
+                            labeljobtrucking.attr('hidden', true)
+                            jobtrucking.parents('.input-group').find('.input-group-append').hide()
+                            jobtrucking.parents('.input-group').find('.button-clear').hide()
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.statusText)
@@ -1014,6 +1023,15 @@
                             setJobTruckingFromTripAsal()
                         }
                         moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
+                        if(jobmanual == 'YA'){
+                            let jobtrucking = $('#crudForm [name=jobtrucking]')
+                            let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
+                                
+                            jobtrucking.attr('hidden', true)
+                            labeljobtrucking.attr('hidden', true)
+                            jobtrucking.parents('.input-group').find('.input-group-append').hide()
+                            jobtrucking.parents('.input-group').find('.button-clear').hide()
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.statusText)
