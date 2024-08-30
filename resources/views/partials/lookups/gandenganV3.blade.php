@@ -20,9 +20,10 @@ $idLookup = isset($id) ? $id : null;
     var idTop
 
     selector = $(`#gandenganLookup{{ isset($id) ? $id : null }} `)
-
+    var isToolbarSearch = false;
 
     var singleColumn = `{{ $singleColumn ?? '' }}`
+    var filterToolbar = `{{ $filterToolbar ?? '' }}`
     label = `{{ $labelColumn ?? '' }}`
 
     width = ''
@@ -105,9 +106,19 @@ $idLookup = isset($id) ? $id : null;
         selectedIndex: 0,
         triggerClick: false,
         search: true,
-        serializeGridData: function(postData, searching) {
+        serializeGridData: function(postData) {
             searching = `{{ $searching }}`
             searchText = `.{{ $searchText }} `
+
+            var colModel = $(this).jqGrid("getGridParam", "colModel"),
+                rules = [],
+                searchValue = $(searchText).val(),
+                i,
+                cm;
+            l = colModel.length
+
+
+
 
             if (searching != '') {
                 searching = searching.split(',');
@@ -120,71 +131,81 @@ $idLookup = isset($id) ? $id : null;
             postData.sort_indexes = [postData.sort_index];
             postData.sort_orders = [postData.sort_order];
 
-            var colModel = $(this).jqGrid("getGridParam", "colModel"),
-                l = colModel.length,
-                i,
-                rules = [],
-                searchValue = $(searchText).val(),
-                cm;
 
             input = $(searchText).data('input')
 
-            if (input) {
-                if (searching.length == 0) {
-                    for (i = 0; i < l; i++) {
-                        cm = colModel[i];
+            if (isToolbarSearch) {
+                colModel.forEach(function(cm) {
+                    var searchField = $("#gs_" + cm.name).val();
 
-                        if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
-                            rules.push({
-                                field: cm.name,
-                                op: "cn",
-                                data: searchValue.toUpperCase(),
-                            });
-                        }
+                    if (searchField && cm.search !== false && (cm.stype === undefined || cm
+                            .stype === "text")) {
+                        isToolbarSearch = true;
+                        rules.push({
+                            field: cm.name,
+                            op: "cn", // Contains operation
+                            data: searchField.toUpperCase()
+                        });
                     }
+                });
 
+                // Logic for toolbar search with AND
+                postData.filters = JSON.stringify({
+                    "groupOp": "AND",
+                    "rules": rules
+                });
+                postData.filter_group = "AND";
 
-                    postData.filters = JSON.stringify({
-                        groupOp: "OR",
-                        rules: rules,
-                    });
+            } else {
+                if (input) {
+                    if (searching.length == 0) {
+                        for (i = 0; i < l; i++) {
+                            cm = colModel[i];
 
-                    postData.searching = searching;
-                    postData.searchText = searchText;
-                } else if (searching.length >= 1) {
-
-                    for (i = 0; i < l; i++) {
-                        cm = colModel[i];
-
-
-
-                        // Check if the column name is in the 'searching' array
-                        if (searching.includes(cm.name)) {
-                            // Check for valid search options
-                            if (
-                                cm.search !== false &&
-                                (cm.stype === undefined || cm.stype === "text")
-                            ) {
+                            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
                                 rules.push({
                                     field: cm.name,
-                                    op: "cn", // Contains operation
+                                    op: "cn",
                                     data: searchValue.toUpperCase(),
                                 });
                             }
                         }
+
+                        postData.filters = JSON.stringify({
+                            groupOp: "OR",
+                            rules: rules,
+                        });
+
+                        postData.searching = searching;
+                        postData.searchText = searchText;
+                    } else if (searching.length >= 1) {
+                        for (i = 0; i < l; i++) {
+                            cm = colModel[i];
+                            // Check if the column name is in the 'searching' array
+                            if (searching.includes(cm.name)) {
+                                // Check for valid search options
+                                if (
+                                    cm.search !== false &&
+                                    (cm.stype === undefined || cm.stype === "text")
+                                ) {
+                                    rules.push({
+                                        field: cm.name,
+                                        op: "cn", // Contains operation
+                                        data: searchValue.toUpperCase(),
+                                    });
+                                }
+                            }
+                        }
+                        postData.filter_group = "OR";
+
+                        postData.filters = JSON.stringify({
+                            groupOp: "OR",
+                            rules: rules,
+                        });
+
+                        postData.searching = searching;
+                        postData.searchText = searchText;
                     }
-
-
-
-                    postData.filter_group = "OR";
-
-                    postData.filters = JSON.stringify({
-                        groupOp: "OR",
-                        rules: rules,
-                    });
-
-                    postData.searching = searching;
-                    postData.searchText = searchText;
                 }
             }
 
@@ -204,8 +225,7 @@ $idLookup = isset($id) ? $id : null;
 
                 $(`#gview_${idTop} .ui-th-column `).css('font-size', '1rem')
 
-                var title = '{{ $title ?? '
-                ' }}'
+                var title = `{{ $title ?? '' }}`
                 var label = $("<label>").attr("for", "searchText")
                     .css({
                         "font-weight": "normal",
@@ -220,8 +240,7 @@ $idLookup = isset($id) ? $id : null;
                 })
 
             } else {
-                var title = '{{ $title ?? '
-                ' }}'
+                var title = `{{ $title ?? '' }}`
                 var label = $("<label>").attr("for", "searchText")
                     .css({
                         "font-weight": "normal",
@@ -247,8 +266,7 @@ $idLookup = isset($id) ? $id : null;
             }
 
 
-            var labelColumn = '{{ $labelColumn ?? '
-            ' }}'
+            var labelColumn = `{{ $labelColumn ?? '' }}`
 
             if (labelColumn == 'false') {
                 $(`#gbox_${idTop}`).find('.ui-jqgrid-hdiv').hide()
@@ -311,8 +329,10 @@ $idLookup = isset($id) ? $id : null;
             }
 
             if (detectDeviceType() == 'desktop') {
-                $(document).unbind('keydown')
-                // setCustomBindKeys($(this))
+                console.log('desktop');
+
+                // $(document).unbind('keydown')
+
                 initResize($(this))
 
 
@@ -331,9 +351,7 @@ $idLookup = isset($id) ? $id : null;
                     $(this).jqGrid("setGridParam", {
                         triggerClick: false,
                     });
-                } else {
 
-                    // $(this).setSelection($(this).getDataIDs()[selectedIndex]);
                 }
             }
 
@@ -343,9 +361,37 @@ $idLookup = isset($id) ? $id : null;
 
             $(this).setGridWidth($('#lookupCabang').prev().width())
             setHighlight($(this))
+            // $(this).jqGrid('setSelection', 1);
         },
-
     })
+    
+    if (filterToolbar == 'true') {
+        if (detectDeviceType() == 'mobile') {
+            $('.loadingMessage').css('top', '125%')
+            $('.loading-text').css('margin-top', '13px')
+        }
+        selector.jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            groupOp: 'AND',
+            beforeSearch: function() {
+                isToolbarSearch = true;
+
+                var postData = $(this).jqGrid("getGridParam", "postData");
+                postData.filters = "";
+                $(this).jqGrid("setGridParam", {
+                    search: false
+                });
+
+                $(searchText).val('');
+            },
+            afterSearch: function() {
+                isToolbarSearch = false;
+
+            }
+        });
+    }
 </script>
 
 </html>

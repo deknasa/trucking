@@ -1267,11 +1267,27 @@ span.textCard {
 		
 	
     .ui-jqgrid .ui-jqgrid-bdiv:not(.bdiv-lookup) {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+        z-index: 101;
+        overscroll-behavior: auto !important;
+        /* height: 317px!important; */
+    }
+
+    .ui-jqgrid .ui-jqgrid-bdiv:not(.bdiv-lookup) {
         height: 447px !important;
     }
 
     .ui-jqgrid .ui-jqgrid-bdiv {
         height: 250px !important;
+    }
+
+    .bdiv-lookup {
+        height: 289px !important;
+        overscroll-behavior: contain !important;
+        font-size: 13px !important;
     }
 	
 	.loadingMessage {
@@ -1281,7 +1297,7 @@ span.textCard {
         /* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
         color: red;
         transform: translateY(-50%);
-        display: none;
+        /* display: none; */
         background-color: #e0ecff;
         padding: 2px;
         /* border-radius: 5px; */
@@ -1293,12 +1309,11 @@ span.textCard {
         max-width: 100%;
         text-align: left; /* Atur teks menjadi kiri */
     }
-	.loading-text {
-		margin-top: 7px;
-		display: inline-block;
-		color: black;
-		
-	}
+    .loading-text {
+        margin-top: 7px;
+        display: inline-block;
+        color: black;
+    }
 
 	input[type=text],  
 	input[type=password] { 
