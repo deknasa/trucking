@@ -22,10 +22,10 @@ $idLookup = isset($id) ? $id : null;
     selector = $(`#akunpusatLookup{{ isset($id) ? $id : null }} `)
     var isToolbarSearch = false;
 
-    var singleColumn = '{{ $singleColumn ?? '' }}'
-    var filterToolbar = '{{ $filterToolbar ?? '' }}'
+    var singleColumn = `{{ $singleColumn ?? '' }}`
+    var filterToolbar = `{{ $filterToolbar ?? '' }}`
 
-    label = '{{ $labelColumn ?? '' }}'
+    label = `{{ $labelColumn ?? '' }}`
 
     width = ''
     //  use this witdh if single column lookup
@@ -238,7 +238,7 @@ $idLookup = isset($id) ? $id : null;
 
                 $(`#gview_${idTop} .ui-th-column `).css('font-size', '1rem')
 
-                var title = '{{ $title ?? '' }}'
+                var title = `{{ $title ?? '' }}`
                 var label = $("<label>").attr("for", "searchText")
                     .css({
                         "font-weight": "normal",
@@ -253,7 +253,7 @@ $idLookup = isset($id) ? $id : null;
                 })
 
             } else {
-                var title = '{{ $title ?? '' }}'
+                var title = `{{ $title ?? '' }}`
                 var label = $("<label>").attr("for", "searchText")
                     .css({
                         "font-weight": "normal",
@@ -279,7 +279,7 @@ $idLookup = isset($id) ? $id : null;
             }
 
 
-            var labelColumn = '{{ $labelColumn ?? '' }}'
+            var labelColumn = `{{ $labelColumn ?? '' }}`
 
             if (labelColumn == 'false') {
                 $(`#gbox_${idTop}`).find('.ui-jqgrid-hdiv').hide()
@@ -383,6 +383,10 @@ $idLookup = isset($id) ? $id : null;
     })
 
     if (filterToolbar == 'true') {
+        if (detectDeviceType() == 'mobile') {
+            $('.loadingMessage').css('top', '125%')
+            $('.loading-text').css('margin-top', '13px')
+        }
         selector.jqGrid('filterToolbar', {
             stringResult: true,
             searchOnEnter: false,

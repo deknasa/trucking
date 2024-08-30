@@ -243,7 +243,7 @@
                                 {{-- <span class="text-danger">*</span> --}}
                             </label>
                             <div class="col-sm-12">
-                                <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
+                                <input type="text" name="jobtrucking" id="jobtrucking" class="form-control jobtrucking-lookup">
                             </div>
                         </div>
 
@@ -1987,6 +1987,7 @@
             fileName: 'jobtruckingV3',
             searching: ['jobtrucking'],
             labelColumn: true,
+            filterToolbar: true,
             beforeProcess: function(test) {
 
                 this.postData = {
@@ -2852,6 +2853,7 @@
             fileName: 'upahsupirrincianV3',
             searching: ['kotadarisampai'],
             labelColumn: true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
