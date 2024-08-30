@@ -1328,7 +1328,7 @@
             }
         },
         onSelectRow: (akunpusat, element) => {
-            $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+            element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
             element.val(akunpusat.keterangancoa)
             element.data('currentValue', element.val())
 
@@ -1340,7 +1340,7 @@
           enableTglJatuhTempo($(`#crudForm`))
         },
         onClear: (element) => {
-          $(`#crudForm [name="coadebet[]"]`).last().val('')
+          element.parents('td').find(`[name="coadebet[]"]`).val('')
           element.val('')
           element.data('currentValue', element.val())
 
