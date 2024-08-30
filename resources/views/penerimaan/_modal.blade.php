@@ -1286,7 +1286,7 @@
                 }
             },
             onSelectRow: (bankpelanggan, element) => {
-                element.parents('td').find([name="bankpelanggan_id[]"]).val(bankpelanggan.id)
+                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
                 element.val(bankpelanggan.namabank)
                 element.data('currentValue', element.val())
             },
