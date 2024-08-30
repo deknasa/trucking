@@ -1,9 +1,9 @@
 <?php
     if (isset($id)) { ?>
-<table id="bankLookup<?= $id ?>" class="lookup-grid"></table>
+<table id="akunpusatLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
     } else { ?>
-<table id="bankLookup" class="lookup-grid"></table>
+<table id="akunpusatLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
     <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
     var idLookup = '{{ $idLookup }}';
     var idTop
 
-    selector = $(`#bankLookup{{ isset($id) ? $id : null }} `)
+    selector = $(`#akunpusatLookup{{ isset($id) ? $id : null }} `)
     var isToolbarSearch = false;
 
     var singleColumn = '{{ $singleColumn ?? '' }}'
