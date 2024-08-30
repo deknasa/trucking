@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="col-12 col-md-10">
                                     <input type="hidden" name="bankdari_id">
-                                    <input type="text" name="bankdari" class="form-control bankdari-lookup">
+                                    <input type="text" name="bankdari" id="bankdari" class="form-control bankdari-lookup">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="col-12 col-md-10">
                                     <input type="hidden" name="bankke_id">
-                                    <input type="text" name="bankke" class="form-control bankke-lookup">
+                                    <input type="text" name="bankke" id="bankke" class="form-control bankke-lookup">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-12 col-md-10">
                                     <input type="hidden" name="alatbayar_id">
-                                    <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                                    <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -628,9 +628,45 @@
 
     function initLookup() {
 
-        $('.bankdari-lookup').lookup({
-            title: 'Bank Dari Lookup',
-            fileName: 'bank',
+        // $('.bankdari-lookup').lookup({
+        //     title: 'Bank Dari Lookup',
+        //     fileName: 'bank',
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             bankExclude: bankKeId,
+        //             Aktif: 'AKTIF',
+        //         }
+        //     },
+        //     onSelectRow: (bank, element) => {
+        //         bankDariId = bank.id
+        //         bankId = bank.id
+        //         $('#crudForm [name=bankdari_id]').first().val(bank.id)
+        //         element.val(bank.namabank)
+        //         element.data('currentValue', element.val())
+        //         $('#crudForm [name=alatbayar_id]').first().val('')
+        //         $('#crudForm [name=alatbayar]').first().val('')
+        //         $('#crudForm [name=alatbayar]').data('currentValue', '')
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=bankdari_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //         bankDariId = ''
+        //         $('#crudForm [name=alatbayar_id]').first().val('')
+        //         $('#crudForm [name=alatbayar]').first().val('')
+        //         $('#crudForm [name=alatbayar]').data('currentValue', '')
+        //     }
+        // })
+
+        $('.bankdari-lookup').lookupV3({
+            title: 'Bank dari Lookup',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
+            // filterToolbar:true,
             beforeProcess: function(test) {
                 this.postData = {
                     bankExclude: bankKeId,
@@ -661,9 +697,39 @@
             }
         })
 
-        $('.bankke-lookup').lookup({
-            title: 'Bank Sampai Lookup',
-            fileName: 'bank',
+        // $('.bankke-lookup').lookup({
+        //     title: 'Bank Sampai Lookup',
+        //     fileName: 'bank',
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             bankExclude: bankDariId,
+        //             Aktif: 'AKTIF',
+        //         }
+        //     },
+        //     onSelectRow: (bank, element) => {
+
+        //         bankKeId = bank.id
+        //         $('#crudForm [name=bankke_id]').first().val(bank.id)
+        //         element.val(bank.namabank)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=bankke_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //         bankKeId = ''
+        //     }
+        // })
+
+        $('.bankke-lookup').lookupV3({
+            title: 'Bank dari Lookup',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
+            // filterToolbar:true,
             beforeProcess: function(test) {
                 this.postData = {
                     bankExclude: bankDariId,
@@ -671,7 +737,6 @@
                 }
             },
             onSelectRow: (bank, element) => {
-
                 bankKeId = bank.id
                 $('#crudForm [name=bankke_id]').first().val(bank.id)
                 element.val(bank.namabank)
@@ -688,10 +753,40 @@
             }
         })
 
-        $('.alatbayar-lookup').lookup({
+        // $('.alatbayar-lookup').lookup({
+        //     title: 'Alat Bayar Lookup',
+        //     fileName: 'alatbayar',
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             bank_Id: bankId,
+        //             Aktif: 'AKTIF',
+        //             from: 'pindahbuku'
+        //         }
+        //     },
+        //     onSelectRow: (alatbayar, element) => {
+        //         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+        //         element.val(alatbayar.namaalatbayar)
+        //         element.data('currentValue', element.val())
+        //         enableTglJatuhTempo($(`#crudForm`))
+        //         enableNoWarkat($(`#crudForm`))
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=alatbayar_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+
+        $('.alatbayar-lookup').lookupV3({
             title: 'Alat Bayar Lookup',
-            fileName: 'alatbayar',
+            fileName: 'alatbayarV3',
+            searching: ['namaalatbayar'],
+            labelColumn: false,
             beforeProcess: function(test) {
+                // const bank_ID=0        
                 this.postData = {
                     bank_Id: bankId,
                     Aktif: 'AKTIF',

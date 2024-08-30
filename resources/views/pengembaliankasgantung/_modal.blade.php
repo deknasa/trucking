@@ -97,8 +97,8 @@
                     POSTING </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="bank" class="form-control bank-lookup">
                   <input type="hidden" id="bankId" name="bank_id">
+                  <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -1622,32 +1622,60 @@
     //     element.data('currentValue', element.val())
     //   }
     // })
-    $('.bank-lookup').lookup({
-      title: 'bank Lookup',
-      fileName: 'bank',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
+    // $('.bank-lookup').lookup({
+    //   title: 'bank Lookup',
+    //   fileName: 'bank',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
 
-          Aktif: 'AKTIF',
-          tipe: 'KAS'
+    //       Aktif: 'AKTIF',
+    //       tipe: 'KAS'
+    //     }
+    //   },
+    //   onSelectRow: (bank, element) => {
+    //     element.val(bank.namabank)
+    //     $(`#${element[0]['name']}Id`).val(bank.id)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $(`#${element[0]['name']}Id`).val('')
+
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+    $('.bank-lookup').lookupV3({
+        title: 'Bank Lookup',
+        fileName: 'bankV3',
+        searching: ['namabank'],
+        labelColumn: false,
+        // filterToolbar:true,
+        beforeProcess: function(test) {
+            this.postData = {
+              Aktif: 'AKTIF',
+              tipe: 'KAS',
+            }
+        },
+        onSelectRow: (bank, element) => {
+          element.val(bank.namabank)
+          $(`#${element[0]['name']}Id`).val(bank.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $(`#${element[0]['name']}Id`).val('')
+
+          element.val('')
+          element.data('currentValue', element.val())
         }
-      },
-      onSelectRow: (bank, element) => {
-        element.val(bank.namabank)
-        $(`#${element[0]['name']}Id`).val(bank.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#${element[0]['name']}Id`).val('')
-
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+      })
 
   }
 

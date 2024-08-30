@@ -958,6 +958,7 @@
         })
     }
 
+    let lastIndex = 0;
     function showPenerimaanGiro(form, id) {
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
@@ -1004,11 +1005,11 @@
                             </td>
                             <td>
                                 <input type="hidden" name="bank_id[]">
-                                <input type="text" name="bank[]" id="bank_${selectIndex}" data-current-value="${detail.bank}" class="form-control bank-lookup${selectIndex}">
+                                <input type="text" name="bank[]" id="bank_${index}" data-current-value="${detail.bank}" class="form-control bank-lookup${index}">
                             </td>
                             <td>
                                 <input type="hidden" name="bankpelanggan_id[]">
-                                <input type="text" name="bankpelanggan[]" id="bankpelanggan_${selectIndex}" data-current-value="${detail.bankpelanggan}" class="form-control lg-forms bankpelanggan-lookup${selectIndex}">
+                                <input type="text" name="bankpelanggan[]" id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control lg-forms bankpelanggan-lookup${index}">
                             </td>
                             <td>
                                 <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="" ${readOnly}></textarea>
@@ -1048,7 +1049,7 @@
 
                         // TAMBAHIN INI
                         initLookupDetail(index);
-                        selectIndex = index + 1
+                        lastIndex = index;
 
                         setTotal();
 
@@ -1118,9 +1119,12 @@
         })
     }
 
-    let selectIndex = 0;
+    // let selectIndex = 0;
 
     function addRow() {
+
+        lastIndex += 1; 
+
         let detailRow = $(`
       <tr>
         <td></td>
@@ -1134,11 +1138,11 @@
         </td>
         <td>
             <input type="hidden" name="bank_id[]">
-            <input type="text" name="bank[]" id="bank_${selectIndex}" class="form-control bank-lookup${selectIndex}">
+            <input type="text" name="bank[]" id="bank_${lastIndex}" class="form-control bank-lookup${lastIndex}">
         </td>
         <td>
             <input type="hidden" name="bankpelanggan_id[]">
-            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${selectIndex}" class="form-control bankpelanggan-lookup${selectIndex}">
+            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${lastIndex}" class="form-control bankpelanggan-lookup${lastIndex}">
         </td>
         <td>
             <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="" ></textarea>
@@ -1161,7 +1165,7 @@
     `)
 
         $('#detailList>#table_body').append(detailRow)
-        initLookupDetail(selectIndex);
+        initLookupDetail(lastIndex);
         initAutoNumeric(detailRow.find('.autonumeric'))
         if ($('#crudForm [name=agen]').val() != '') {
             detailRow.find(`[name="tgljatuhtempo[]"]`).val(formattedDate).trigger('change');
@@ -1179,22 +1183,50 @@
     function initLookupDetail(index) {
         let rowLookup = index;
 
-        $(`.bank-lookup${rowLookup}`).lookupMaster({
+        // $(`.bank-lookup${rowLookup}`).lookupMaster({
+        //     title: 'Bank Lookup',
+        //     fileName: 'bankMaster',
+        //     detail: true,
+        //     miniSize: true,
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function() {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: `bank_id_${index}`,
+        //             searchText: `bank-lookup${rowLookup}`,
+        //             title: 'Bank',
+        //             tipe: 'BANK',
+        //             typeSearch: 'ALL',
+        //         };
+        //     },
+        //     onSelectRow: (bank, element) => {
+        //         element.parents('td').find(`[name="bank_id[]"]`).val(bank.id);
+        //         element.val(bank.namabank);
+        //         element.data('currentValue', element.val());
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'));
+        //     },
+        //     onClear: (element) => {
+        //         element.parents('td').find(`[name="bank_id[]"]`).val('');
+        //         element.val('');
+        //         element.data('currentValue', element.val());
+        //     },
+        // });
+
+        $(`.bank-lookup${rowLookup}`).lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bankMaster',
-            detail: true,
-            miniSize: true,
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
             beforeProcess: function() {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: `bank_id_${index}`,
-                    searchText: `bank-lookup${rowLookup}`,
-                    title: 'Bank',
                     tipe: 'BANK',
-                    typeSearch: 'ALL',
                 };
             },
             onSelectRow: (bank, element) => {
@@ -1212,22 +1244,49 @@
             },
         });
 
-        $(`.bankpelanggan-lookup${rowLookup}`).lookupMaster({
+        // $(`.bankpelanggan-lookup${rowLookup}`).lookupMaster({
+        //     title: 'Bank Pelanggan Lookup',
+        //     fileName: 'bankpelangganMaster',
+        //     detail: true,
+        //     miniSize: true,
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function() {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: `bankpelanggan_id_${index}`,
+        //             searchText: `bankpelanggan-lookup${rowLookup}`,
+        //             title: 'Bank Pelanggan',
+        //             typeSearch: 'ALL',
+        //         };
+        //     },
+        //     onSelectRow: (bankpelanggan, element) => {
+        //         element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id);
+        //         element.val(bankpelanggan.namabank);
+        //         element.data('currentValue', element.val());
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'));
+        //     },
+        //     onClear: (element) => {
+        //         element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('');
+        //         element.val('');
+        //         element.data('currentValue', element.val());
+        //     },
+        // });
+
+        $(`.bankpelanggan-lookup${rowLookup}`).lookupV3({
             title: 'Bank Pelanggan Lookup',
-            fileName: 'bankpelangganMaster',
-            detail: true,
-            miniSize: true,
-            typeSearch: 'ALL',
-            searching: 1,
-            beforeProcess: function() {
+            fileName: 'bankpelangganV3', 
+            searching: ['coa','keterangancoa'],
+            labelColumn: false,
+            extendSize: md_extendSize_3,
+            multiColumnSize:true,
+            beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: `bankpelanggan_id_${index}`,
-                    searchText: `bankpelanggan-lookup${rowLookup}`,
-                    title: 'Bank Pelanggan',
-                    typeSearch: 'ALL',
-                };
+                }
             },
             onSelectRow: (bankpelanggan, element) => {
                 element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id);
@@ -1235,14 +1294,14 @@
                 element.data('currentValue', element.val());
             },
             onCancel: (element) => {
-                element.val(element.data('currentValue'));
+                element.val(element.data('currentValue'))
             },
             onClear: (element) => {
                 element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('');
                 element.val('');
                 element.data('currentValue', element.val());
-            },
-        });
+            }
+        })
     }
 
     function deleteRow(row) {
@@ -1338,19 +1397,48 @@
 
     function initLookup() {
 
-        $('.agen-lookup').lookupMaster({
+        // $('.agen-lookup').lookupMaster({
+        //     title: 'Customer Lookup',
+        //     fileName: 'agenMaster',
+        //     typeSearch: 'ALL',
+        //     searching: 1,
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             searching: 1,
+        //             valueName: 'agen_id',
+        //             searchText: 'agen-lookup',
+        //             title: 'Customer',
+        //             typeSearch: 'ALL',
+        //         }
+        //     },
+        //     onSelectRow: (agen, element) => {
+        //         $('#crudForm [name=agen_id]').first().val(agen.id)
+        //         let dateNow = new Date();
+        //         dateNow.setDate(dateNow.getDate() + parseInt(agen.top));
+        //         let end_date = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate());
+        //         formattedDate = end_date.getDate().toString().padStart(2, '0') + '-' + (end_date.getMonth() + 1).toString().padStart(2, '0') + '-' + end_date.getFullYear();
+
+        //         $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(formattedDate).trigger('change');
+        //         element.val(agen.namaagen)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=agen_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+        $(`.agen-lookup`).lookupV3({
             title: 'Customer Lookup',
-            fileName: 'agenMaster',
-            typeSearch: 'ALL',
-            searching: 1,
-            beforeProcess: function(test) {
+            fileName: 'agenV3',
+            labelColumn: false,
+            beforeProcess: function(test) {    
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'agen_id',
-                    searchText: 'agen-lookup',
-                    title: 'Customer',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (agen, element) => {
@@ -1373,6 +1461,7 @@
                 element.data('currentValue', element.val())
             }
         })
+
     }
     const setTglBukti = function(form) {
         return new Promise((resolve, reject) => {

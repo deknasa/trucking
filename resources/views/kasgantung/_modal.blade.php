@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control bank-lookup">
+                  <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -925,30 +925,60 @@
       }
     })
 
-    $('.bank-lookup').lookup({
-      title: 'Bank Lookup',
-      fileName: 'bank',
-      beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-          tipe: 'KAS',
+    // $('.bank-lookup').lookup({
+    //   title: 'Bank Lookup',
+    //   fileName: 'bank',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //       tipe: 'KAS',
+    //     }
+    //   },
+    //   onSelectRow: (bank, element) => {
+    //     $('#crudForm [name=bank_id]').first().val(bank.id)
+    //     element.val(bank.namabank)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     $('#crudForm [name=bank_id]').first().val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
+
+    $('.bank-lookup').lookupV3({
+        title: 'Bank Lookup',
+        fileName: 'bankV3',
+        searching: ['namabank'],
+        labelColumn: false,
+        // filterToolbar:true,
+        beforeProcess: function(test) {
+            this.postData = {
+              Aktif: 'AKTIF',
+              tipe: 'KAS',
+            }
+        },
+        onSelectRow: (bank, element) => {
+          $('#crudForm [name=bank_id]').first().val(bank.id)
+          element.val(bank.namabank)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $('#crudForm [name=bank_id]').first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
         }
-      },
-      onSelectRow: (bank, element) => {
-        $('#crudForm [name=bank_id]').first().val(bank.id)
-        element.val(bank.namabank)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=bank_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+      })
   }
+
+   
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];
