@@ -320,6 +320,9 @@
         $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
         $(`.jeniskendaraan-lookup-${index}`).last().parents('td').children().find('.button-clear').attr('disabled', true)
         detailRow.find(`.delete-row`).attr('disabled', true);
+        $(`.absentrado-lookup-${index}`).last().parents('td').children().find('input').attr('readonly',false)
+        $(`.absentrado-lookup-${index}`).last().parents('td').children().find('.lookup-toggler').attr('disabled', false)
+        $(`.absentrado-lookup-${index}`).last().parents('td').children().find('.button-clear').attr('disabled', false)
       }
 
       if (!activeKolomJenisKendaraan) {
