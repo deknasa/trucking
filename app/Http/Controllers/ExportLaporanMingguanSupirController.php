@@ -811,6 +811,7 @@ class ExportLaporanMingguanSupirController extends MyController
 
         $writer->save('php://output');
     }
+    
     public function export4($data, $dari, $sampai, $tradodari_id, $tradosampai_id, $tradodari, $tradosampai)
     {
         $spreadsheet = new Spreadsheet();

@@ -69,8 +69,8 @@
   function checkboxHandler(element) {
     let value = $(element).val();
 
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
@@ -129,7 +129,7 @@
       $('#gs_').prop('checked', false)
     })
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `${apiUrl}hutangheader`,
         mtype: "GET",
@@ -426,10 +426,10 @@
         onSelectRow: function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
 
-          activeGrid =  grid
-          indexRow =  grid.jqGrid('getCell', id, 'rn') - 1
-          page =  grid.jqGrid('getGridParam', 'page')
-          let limit =  grid.jqGrid('getGridParam', 'postData').limit
+          activeGrid = grid
+          indexRow = grid.jqGrid('getCell', id, 'rn') - 1
+          page = grid.jqGrid('getGridParam', 'page')
+          let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) {
             indexRow = (indexRow - limit * (page - 1))
           }
@@ -504,7 +504,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          getQueryParameter()          
+          getQueryParameter()
           permission()
           setHighlight($(this))
           $('#gs_').prop('disabled', false)
@@ -627,10 +627,42 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('hutangheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('hutangheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}hutangheader/${selectedId}/export`,
+                  type: 'GET',
+                  data : {
+                    hutang_id : selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN HUTANG' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
-          }, 
+          },
           {
             id: 'approve',
             title: 'Approve',
@@ -649,7 +681,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Hutang",
                 color: "btn-success",
-                hidden :(!`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -664,7 +696,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas Hutang",
                 color: "btn-info",
-                hidden :(!`{{ $myAuth->hasPermission('hutangheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('hutangheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('hutangheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

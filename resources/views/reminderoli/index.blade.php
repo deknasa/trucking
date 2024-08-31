@@ -294,8 +294,13 @@
                         statusReminder = $('#crudForm').find('[name=status]').val();
                         $('#processingLoader').removeClass('d-none')
                         $.ajax({
-                            url: `{{ route('reminderoli.export') }}?status=${statusReminder}`,
+                            url: `${apiUrl}reminderoli/export`,
+                            // url: `{{ route('reminderoli.export') }}?status=${statusReminder}`,
                             type: 'GET',
+                            data : {
+                                forExport : true,
+                                status : statusReminder
+                            },
                             beforeSend: function(xhr) {
                                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                             },

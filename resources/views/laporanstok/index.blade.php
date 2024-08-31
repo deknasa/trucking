@@ -207,8 +207,12 @@
 
         if (sampai != '') {
             $.ajax({
-                url: `{{ route('laporanstok.export') }}?sampai=${sampai}&jenislaporan=${jenislaporan}`,
+                url: `${apiUrl}laporanstok/export?sampai=${sampai}&jenislaporan=${jenislaporan}`,
+                // url: `{{ route('laporanstok.export') }}?sampai=${sampai}`,
                 type: 'GET',
+                data : {
+                    sampai : sampai
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },

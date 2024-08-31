@@ -132,7 +132,7 @@
     @isset($request['tglsampai'])
     tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    
+
     @isset($request['bank_id'])
     $('#bankheader').val(`{{ $request['bank_id'] }}`).trigger('change')
     @endisset
@@ -658,7 +658,41 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('penerimaanheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('penerimaanheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}penerimaanheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    penerimaan_id: selectedId,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename');
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -673,8 +707,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status penerimaan",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
                     // console.log(selectedbukti )
@@ -685,8 +719,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak penerimaan",
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -699,8 +733,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas penerimaan",
-                color:'btn-primary',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalkirimberkas') }}`),
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

@@ -37,42 +37,42 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
+  function checkboxHandler(element) {
+    let value = $(element).val();
 
-  var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
-      
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
-      }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
 
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
   setSpaceBarCheckedHandler()
   reloadGrid()
@@ -93,7 +93,7 @@ function checkboxHandler(element) {
       activeGrid = '#jqGrid'
     })
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'rekappengeluaranheader' }}`,
         mtype: "GET",
@@ -367,7 +367,7 @@ function checkboxHandler(element) {
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
 
           loadDetailData(id)
           activeGrid = grid
@@ -510,7 +510,41 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('rekappengeluaranheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('rekappengeluaranheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}rekappengeluaranheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    rekappengeluaran_id: selectedId,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename');
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -523,8 +557,8 @@ function checkboxHandler(element) {
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status REKAP PENGELUARAN",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
                     handleApproval()
@@ -534,8 +568,8 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak REKAP PENGELUARAN",
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -547,8 +581,8 @@ function checkboxHandler(element) {
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas REKAP PENGELUARAN",
-                color:'btn-primary',
-                hidden:(!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`),
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -771,7 +805,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

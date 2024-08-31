@@ -205,7 +205,40 @@
                         innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
                         class: 'btn btn-warning btn-sm mr-1',
                         onClick: () => {
-                            window.open(`{{ route('logabsensi.export') }}?tgldari=${$('#tgldariheader').val()}&tglsampai=${$('#tglsampaiheader').val()}&limit=0`)
+                            // window.open(`{{ route('logabsensi.export') }}?tgldari=${$('#tgldariheader').val()}&tglsampai=${$('#tglsampaiheader').val()}&limit=0`)
+                            $.ajax({
+                                url: `${apiUrl}logabsensi/export`,
+                                type: 'GET',
+                                data: {
+                                    tgldari: $('#tgldariheader').val(),
+                                    tglsampai: $('#tglsampaiheader').val(),
+                                    limit : 0
+                                },
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'cabang/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'LAPORAN LOG ABSENSI' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                    }
+                                    $('#processingLoader').addClass('d-none')
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
+                                    showDialog('TIDAK ADA DATA')
+                                }
+                            })
                         }
                     },
                 ]

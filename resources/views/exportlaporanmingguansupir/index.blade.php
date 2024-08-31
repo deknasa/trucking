@@ -159,13 +159,22 @@
                 let tradosampai_id = $('#crudForm').find('[name=tradosampai_id]').val()
                 let tradosampai = $('#crudForm').find('[name=tradosampai]').val()
 
-                getCekExport().then((response) => {
+                // getCekExport().then((response) => {
                     
                     $('#processingLoader').removeClass('d-none')
                     
                     $.ajax({
-                        url: `{{ route('exportlaporanmingguansupir.export') }}?dari=${dari}&sampai=${sampai}&tradodari=${tradodari}&tradodari_id=${tradodari_id}&tradosampai=${tradosampai}&tradosampai_id=${tradosampai_id}`,
+                        url: `${apiUrl}exportlaporanmingguansupir/export`,
+                        // url: `{{ route('exportlaporanmingguansupir.export') }}?dari=${dari}&sampai=${sampai}&tradodari=${tradodari}&tradodari_id=${tradodari_id}&tradosampai=${tradosampai}&tradosampai_id=${tradosampai_id}`,
                         type: 'GET',
+                        data : {
+                            dari : dari,
+                            sampai : sampai,
+                            tradodari_id : tradodari_id,
+                            tradodari : tradodari,
+                            tradosampai_id : tradosampai_id,
+                            tradosampai : tradosampai
+                        },
                         beforeSend: function(xhr) {
                             xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                         },
@@ -192,17 +201,17 @@
                             showDialog('TIDAK ADA DATA')
                         }
                     })
-                }).catch((error) => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
+                // }).catch((error) => {
+                //     if (error.status === 422) {
+                //         $('.is-invalid').removeClass('is-invalid')
+                //         $('.invalid-feedback').remove()
 
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.statusText, error.responseJSON.message)
+                //         setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                //     } else {
+                //         showDialog(error.statusText, error.responseJSON.message)
 
-                    }
-                })
+                //     }
+                // })
 
             })
 

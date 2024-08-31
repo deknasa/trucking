@@ -62,14 +62,14 @@
   let currentTab = 'detail'
   let tgldariheader
   let tglsampaiheader
-  let activeGrid 
+  let activeGrid
 
   let selectedbukti = [];
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
@@ -129,7 +129,7 @@
     })
 
 
-     var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'notakreditheader' }}`,
         mtype: "GET",
@@ -323,7 +323,7 @@
             align: 'left',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpelunasanpiutangheader
@@ -535,7 +535,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti_pelunasan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pelunasanpiutang_nobukti"]`).attr('title') ?? '';
           let nobukti_jurnal = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobuktihidden"]`).attr('title') ?? '';
           let nobukti_pengeluaran = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
@@ -691,7 +691,39 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('notakreditheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('notakreditheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}notakreditheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    notakredit_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN NOTA KREDIT' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -704,8 +736,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status NOTA KREDIT",
-                color:'btn-success',
-                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) ,
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
                     approve()
@@ -715,8 +747,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak NOTA KREDIT",
-                color:'btn-info',
-                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`) ,
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -730,8 +762,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas NOTA KREDIT",
-                color:'btn-primary',
-                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`) ,
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

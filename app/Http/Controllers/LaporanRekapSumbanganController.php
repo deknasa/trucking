@@ -27,23 +27,23 @@ class LaporanRekapSumbanganController extends MyController
         return view('laporanrekapsumbangan.index', compact('title'));
     }
 
-    public function report(Request $request)
-    {
-        $detailParams = [
-            'sampai' => $request->sampai,
-            'dari' => $request->dari,
-        ];
+    // public function report(Request $request)
+    // {
+    //     $detailParams = [
+    //         'sampai' => $request->sampai,
+    //         'dari' => $request->dari,
+    //     ];
 
-        $header = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanrekapsumbangan/report', $detailParams);
+    //     $header = Http::withHeaders(request()->header())
+    //         ->withOptions(['verify' => false])
+    //         ->withToken(session('access_token'))
+    //         ->get(config('app.api_url') . 'laporanrekapsumbangan/report', $detailParams);
 
-        $data = $header['data'];
-        $dataCabang['namacabang'] = $header['namacabang'];
-        $user = Auth::user();
-        return view('reports.laporanrekapsumbangan', compact('data','dataCabang', 'user', 'detailParams'));
-    }
+    //     $data = $header['data'];
+    //     $dataCabang['namacabang'] = $header['namacabang'];
+    //     $user = Auth::user();
+    //     return view('reports.laporanrekapsumbangan', compact('data','dataCabang', 'user', 'detailParams'));
+    // }
 
     public function export(Request $request): void
     {

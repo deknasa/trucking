@@ -66,42 +66,42 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
+  function checkboxHandler(element) {
+    let value = $(element).val();
 
-  var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
 
   setSpaceBarCheckedHandler()
@@ -130,7 +130,7 @@ function checkboxHandler(element) {
       $('#gs_').prop('checked', false)
     })
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'pelunasanhutangheader' }}`,
         mtype: "GET",
@@ -448,7 +448,7 @@ function checkboxHandler(element) {
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           activeGrid = grid
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
@@ -601,7 +601,40 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('pelunasanhutangheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pelunasanhutangheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}pelunasanhutangheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    PelunasanHutang_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PELUNASAN HUTANG' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -616,8 +649,8 @@ function checkboxHandler(element) {
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status PELUNASAN HUTANG",
-                color:'btn-success',
-                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) ,
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) {
                     approve()
@@ -627,8 +660,8 @@ function checkboxHandler(element) {
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PELUNASAN HUTANG",
-                color:'btn-info',
-                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) ,
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -644,8 +677,8 @@ function checkboxHandler(element) {
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PELUNASAN HUTANG",
-                color:'btn-primary',
-                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) ,
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -759,7 +792,7 @@ function checkboxHandler(element) {
       if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) {
         hakApporveCount--
@@ -787,7 +820,7 @@ function checkboxHandler(element) {
 
   function clearSelectedRows() {
     selectedRows = []
-selectedbukti =[]
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }

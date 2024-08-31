@@ -38,7 +38,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -60,7 +66,7 @@
 
     $(document).ready(function() {
         initLookup()
-       
+
         if (!`{{ $myAuth->hasPermission('laporanpinjamanperunittrado', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -73,33 +79,93 @@
         let trado_id = $('#crudForm').find('[name=trado_id]').val()
         let trado = $('#crudForm').find('[name=trado]').val()
 
-        getCekReport().then((response) => {
-            
-            window.open(`{{ route('laporanpinjamanperunittrado.report') }}?trado=${trado}&trado_id=${trado_id}`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
-            }
-        })
+        $.ajax({
+                url: `${apiUrl}laporanpinjamanperunittrado/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    trado_id: trado_id,
+                    trado: trado
+                },
+                success: function(response) {
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let detailParams = {
+                        trado_id: trado_id,
+                        trado: trado
+                    };
+                    laporanpinjamanperunittrado(data, detailParams, dataCabang);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
 
     })
+
+    function laporanpinjamanperunittrado(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanPerUnitTrado.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
 
         let trado_id = $('#crudForm').find('[name=trado_id]').val()
         let trado = $('#crudForm').find('[name=trado]').val()
-        
+
         if (trado_id != '') {
             $.ajax({
-                url: `{{ route('laporanpinjamanperunittrado.export') }}?trado=${trado}&trado_id=${trado_id}`,
+                url: `${apiUrl}laporanpinjamanperunittrado/export`,
+                // url: `{{ route('laporanpinjamanperunittrado.export') }}?trado=${trado}&trado_id=${trado_id}`,
                 type: 'GET',
+                data : {
+                    trado : trado, 
+                    trado_id : trado_id
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -118,7 +184,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -192,11 +258,11 @@
             searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
-                searching: 1,
-                valueName: 'trado_id',
-                searchText: 'trado-lookup',
-                title: 'trado',
-                typeSearch: 'ALL',
+                    searching: 1,
+                    valueName: 'trado_id',
+                    searchText: 'trado-lookup',
+                    title: 'trado',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {

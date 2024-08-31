@@ -95,8 +95,12 @@
 
     $('#processingLoader').removeClass('d-none')
     $.ajax({
-        url: `{{ route('laporanritasigandengan.export') }}?periode=${periode}`,
+      url: `${apiUrl}laporanritasigandengan/export`,
+        // url: `{{ route('laporanritasigandengan.export') }}?periode=${periode}`,
         type: 'GET',
+        data : {
+          periode : periode
+        },
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
         },

@@ -744,49 +744,77 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-
       let formRange = $('#formRangeTgl')
       let dari = formRange.find('[name=dari]').val()
       let sampai = formRange.find('[name=sampai]').val()
       params += `&dari=${dari}&sampai=${sampai}`
 
-      getCekExport()
-        .then((response) => {
-          if ($('#formRangeTgl').data('action') == 'export') {
-            let actionUrl = `{{ route('orderantrucking.export') }}`
-            /* Clear validation messages */
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-            window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
-          } else if ($('#formRangeTgl').data('action') == 'report') {
-            window.open(`{{ route('orderantrucking.report') }}?${params}`)
-          }
-        })
-    })
-
-    function getCekExport() {
-      return new Promise((resolve, reject) => {
+      if ($('#formRangeTgl').data('action') == 'export') {
+        let actionUrl = `{{ route('orderantrucking.export') }}`
+        /* Clear validation messages */
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        // window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
         $.ajax({
           url: `${apiUrl}orderantrucking/export`,
-          dataType: "JSON",
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
+          type: 'GET',
           data: {
-            dari: $('#formRangeTgl').find('[name=dari]').val(),
-            sampai: $('#formRangeTgl').find('[name=sampai]').val()
+            dari: dari,
+            sampai: sampai,
+            export: true
           },
-          success: (response) => {
-            resolve(response);
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
           },
-          error: error => {
-            reject(error)
+          xhrFields: {
+            responseType: 'arraybuffer'
+          },
+          success: function(response, status, xhr) {
+            if (xhr.status === 200) {
+              if (response !== undefined) {
+                var blob = new Blob([response], {
+                  type: 'cabang/vnd.ms-excel'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'LAPORAN ORDERAN TRUCKING' + new Date().getTime() + '.xlsx';
+                link.click();
+              }
+            }
+            $('#processingLoader').addClass('d-none')
+          },
+          error: function(xhr, status, error) {
+            $('#processingLoader').addClass('d-none')
+            showDialog('TIDAK ADA DATA')
+          }
+        })
+      } else if ($('#formRangeTgl').data('action') == 'report') {
+        window.open(`{{ route('orderantrucking.report') }}?${params}`)
+      }
+    })
 
-          },
-        });
-      });
-    }
+    // function getCekExport() {
+    //   return new Promise((resolve, reject) => {
+    //     $.ajax({
+    //       url: `${apiUrl}orderantrucking/export`,
+    //       dataType: "JSON",
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`
+    //       },
+    //       data: {
+    //         dari: $('#formRangeTgl').find('[name=dari]').val(),
+    //         sampai: $('#formRangeTgl').find('[name=sampai]').val()
+    //       },
+    //       success: (response) => {
+    //         resolve(response);
+    //       },
+    //       error: error => {
+    //         reject(error)
+
+    //       },
+    //     });
+    //   });
+    // }
 
     function permission() {
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {

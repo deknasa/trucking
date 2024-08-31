@@ -138,8 +138,13 @@
 
         if (dari != '' && sampai != '') {
             $.ajax({
-                url: `{{ route('laporandatajurnal.export') }}?dari=${dari}&sampai=${sampai}`,
+                url: `${apiUrl}laporandatajurnal/export`,
+                // url: `{{ route('laporandatajurnal.export') }}?dari=${dari}&sampai=${sampai}`,
                 type: 'GET',
+                data : {
+                    dari : dari,
+                    sampai : sampai
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },

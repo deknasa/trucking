@@ -338,6 +338,7 @@ Route::middleware('guest')->group(function () {
 Route::get('reset-password/expired', [ResetPasswordController::class, 'expired'])->name('reset-password.expired');
 Route::get('reset-password/success', [ResetPasswordController::class, 'success'])->name('reset-password.success');
 
+Route::get('reminderspkdetail/export', [ReminderSpkController::class, 'export'])->name('reminderspkdetail.export');
 
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
 
@@ -1685,7 +1686,6 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('statusolitrado/index', [StatusOliTradoController::class, 'index']);
     Route::resource('statusolitrado', StatusOliTradoController::class);
 
-    Route::get('reminderspkdetail/export', [ReminderSpkController::class, 'export'])->name('reminderspkdetail.export');
     Route::get('reminderspk/index', [ReminderSpkController::class, 'index']);
     Route::resource('reminderspk', ReminderSpkController::class);
     Route::get('spkharian/index', [SpkHarianController::class, 'index']);

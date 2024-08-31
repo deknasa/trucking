@@ -38,7 +38,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -81,11 +87,45 @@
 
         if (sampai != '') {
 
-            window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
+            // window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
+
+            $.ajax({
+                    url: `${apiUrl}laporanhutangbbm/report`,
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        sampai: sampai,
+                    },
+                    success: function(response) {
+                        // console.log(response)
+                        let data = response.data
+                        let dataCabang = response.namacabang
+                        let detailParams = {
+                            sampai: sampai,
+                        };
+                        laporanhutangbbm(data, detailParams, dataCabang);
+                    },
+                    error: function(error) {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+                            $('#rangeTglModal').modal('hide')
+                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON.message);
+                        }
+                    }
+                })
+                .always(() => {
+                    $('#processingLoader').addClass('d-none')
+                });
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
 
@@ -93,8 +133,12 @@
             $('#processingLoader').removeClass('d-none')
 
             $.ajax({
-                url: `{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`,
+                url: `${apiUrl}laporanhutangbbm/export`,
+                // url: `{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`,
                 type: 'GET',
+                data : {
+                    sampai : sampai
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -113,7 +157,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -125,6 +169,42 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
+    function laporanhutangbbm(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanHutangBBM.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
 </script>
 @endpush()
 @endsection

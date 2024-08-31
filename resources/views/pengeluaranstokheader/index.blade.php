@@ -97,8 +97,8 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
@@ -218,7 +218,7 @@
 
 
 
-      var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",
@@ -601,10 +601,10 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
 
-          loadDetailData(id,nobukti)
+          loadDetailData(id, nobukti)
           activeGrid = grid
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
           page = grid.jqGrid('getGridParam', 'page')
@@ -832,7 +832,47 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog(pleaseSelectARow)
               } else {
-                window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
+                let formRange = $('#formRange')
+                let dari = parseInt(formRange.find('[name=dari]').val())
+                let sampai = parseInt(formRange.find('[name=sampai]').val())
+                $.ajax({
+                  url: `${apiUrl}pengeluaranstokheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    pengeluaranstokheader_id: selectedId,
+                    limit: 0,
+                    offset: dari - 1,
+                    rows: sampai - dari + 1,
+                    withRelations: true,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename');
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -845,8 +885,8 @@
             item: [{
                 id: 'approvalEdit',
                 text: ' APPROVAL/UN status Edit',
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -861,8 +901,8 @@
               {
                 id: 'approvalEditKeterangan',
                 text: ' APPROVAL/UN status Edit Keterangan',
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -877,8 +917,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENGELUARAN STOK",
-                color:'btn-primary',
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`),
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -895,8 +935,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PENGELUARAN STOK",
-                color:'btn-purple',
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`),
+                color: 'btn-purple',
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -1161,11 +1201,11 @@
       $('#approval-buka-cetak').hide()
       // $('#approval-buka-cetak').attr('disabled', 'disabled')
     }
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
-        hakApporveCount--
-        $('#approval-kirim-berkas').hide()
-      }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
+      hakApporveCount--
+      $('#approval-kirim-berkas').hide()
+    }
     if (hakApporveCount < 1) {
       $('#approve').hide()
       // $('#approve').attr('disabled', 'disabled')

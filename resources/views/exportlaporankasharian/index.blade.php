@@ -153,8 +153,14 @@
         }
 
         $.ajax({
-            url: `{{ route('exportlaporankasharian.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
+            url: `${apiUrl}exportlaporankasharian/export`,
+            // url: `{{ route('exportlaporankasharian.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
             type: 'GET',
+            data : {
+                periode : periode,
+                bank_id : bank_id,
+                bank : bank,
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },

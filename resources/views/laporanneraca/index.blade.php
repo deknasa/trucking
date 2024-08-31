@@ -130,48 +130,51 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
 
-        getCekReport().then((response) => {
-            // $.ajax({
-            //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
-            // });
-            window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}&cabang_id=${cabang_id}&printer=reportPrinterBesar`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
+        // getCekReport().then((response) => {
+        //     // $.ajax({
+        //     //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
+        //     // });
+        //     window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}&cabang_id=${cabang_id}&printer=reportPrinterBesar`)
+        // }).catch((error) => {
+        //     if (error.status === 422) {
+        //         $('.is-invalid').removeClass('is-invalid')
+        //         $('.invalid-feedback').remove()
 
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
+        //         setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        //     } else {
+        //         showDialog(error.statusText, error.responseJSON.message)
 
-            }
-        })
+        //     }
+        // })
 
+        getCekReport(sampai, cabang_id, 'reportPrinterBesar')
     })
+
     $(document).on('click', `#reportPrinterKecil`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
 
 
-        getCekReport().then((response) => {
-            // $.ajax({
-            //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
-            // });
-            window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}&cabang_id=${cabang_id}&printer=reportPrinterKecil`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
+        // getCekReport().then((response) => {
+        //     // $.ajax({
+        //     //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
+        //     // });
+        //     window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}&cabang_id=${cabang_id}&printer=reportPrinterKecil`)
+        // }).catch((error) => {
+        //     if (error.status === 422) {
+        //         $('.is-invalid').removeClass('is-invalid')
+        //         $('.invalid-feedback').remove()
 
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
+        //         setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        //     } else {
+        //         showDialog(error.statusText, error.responseJSON.message)
 
-            }
-        })
+        //     }
+        // })
+
+        getCekReport(sampai, cabang_id, 'reportPrinterKecil')
 
     })
-
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
@@ -180,8 +183,13 @@
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
 
         $.ajax({
-            url: `{{ route('laporanneraca.export') }}?sampai=${sampai}&cabang_id=${cabang_id}`,
+            url: `${apiUrl}laporanneraca/export`,
+            // url: `{{ route('laporanneraca.export') }}?sampai=${sampai}&cabang_id=${cabang_id}`,
             type: 'GET',
+            data : {
+                sampai : sampai,
+                cabang_id : cabang_id
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },
@@ -200,7 +208,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -211,29 +219,68 @@
 
     })
 
-    function getCekReport() {
+    // function getCekReport() {
 
-        return new Promise((resolve, reject) => {
-            $.ajax({
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url: `${apiUrl}laporanneraca/report`,
+    //             dataType: "JSON",
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 sampai: $('#crudForm').find('[name=sampai]').val(),
+    //                 cabang_id: $('#crudForm').find('[name=cabang_id]').val(),
+    //                 isCheck: true,
+    //             },
+    //             success: (response) => {
+    //                 resolve(response);
+    //             },
+    //             error: error => {
+    //                 reject(error)
+
+    //             },
+    //         });
+    //     });
+    // }
+
+    function getCekReport(sampai, cabang_id, printer) {
+        $.ajax({
                 url: `${apiUrl}laporanneraca/report`,
-                dataType: "JSON",
+                method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    cabang_id: $('#crudForm').find('[name=cabang_id]').val(),
-                    isCheck: true,
+                    sampai: sampai,
+                    cabang_id: cabang_id
                 },
-                success: (response) => {
-                    resolve(response);
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataheader = response.dataheader
+                    let detailParams = {
+                        sampai: sampai,
+                        cabang_id: cabang_id,
+                        judullaporan: 'Laporan Neraca',
+                        tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+                    };
+                    laporanneraca(data, detailParams, dataheader, printer);
                 },
-                error: error => {
-                    reject(error)
-
-                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
             });
-        });
     }
 
     function getCekExport() {
@@ -258,6 +305,46 @@
 
                 },
             });
+        });
+    }
+
+    function laporanneraca(data, detailParams, dataheader, printer) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        if (printer == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanNeracaBesar.mrt') }}`);
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanNeraca.mrt') }}`);
+        }
+
+        dataSet.readJson({
+            'data': data,
+            'dataheader': dataheader,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
 

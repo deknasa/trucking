@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "ffcdbe17af71e69e47e27683fe0f583e",
+  "ReportGuid": "3fdb71d5295691288da49bb700ca07c2",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPemotonganPinjamanperEBS (1) (2).mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPemotonganPinjamanperEBSS.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1712567749000+0700)/",
+  "ReportChanged": "/Date(1724224078000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -25,8 +25,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "data",
-        "Alias": "data",
+        "Name": "root_data",
+        "Alias": "root_data",
         "Columns": {
           "0": {
             "Name": "nobukti",
@@ -183,263 +183,95 @@
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
+          },
+          "26": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
           }
         },
-        "NameInSource": "Data.data"
+        "NameInSource": "Data.root_data"
       },
       "1": {
         "Ident": "StiDataTableSource",
-        "Name": "dataCabang",
-        "Alias": "dataCabang",
+        "Name": "root_parameter",
+        "Alias": "root_parameter",
         "Columns": {
           "0": {
-            "Name": "namacabang",
-            "NameInSource": "namacabang",
-            "Alias": "namacabang",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.dataCabang"
-      },
-      "2": {
-        "Ident": "StiDataTableSource",
-        "Name": "user_roles_pivot",
-        "Alias": "user_roles_pivot",
-        "Columns": {
-          "0": {
-            "Name": "user_id",
-            "NameInSource": "user_id",
-            "Alias": "user_id",
+            "Name": "dari",
+            "NameInSource": "dari",
+            "Alias": "dari",
             "Type": "System.String"
           },
           "1": {
-            "Name": "role_id",
-            "NameInSource": "role_id",
-            "Alias": "role_id",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "relationId",
-            "NameInSource": "relationId",
-            "Alias": "relationId",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.user_roles_pivot"
-      },
-      "3": {
-        "Ident": "StiDataTableSource",
-        "Name": "user_roles",
-        "Alias": "user_roles",
-        "Columns": {
-          "0": {
-            "Name": "id",
-            "NameInSource": "id",
-            "Alias": "id",
-            "Type": "System.Decimal"
-          },
-          "1": {
-            "Name": "rolename",
-            "NameInSource": "rolename",
-            "Alias": "rolename",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "modifiedby",
-            "NameInSource": "modifiedby",
-            "Alias": "modifiedby",
-            "Type": "System.String"
-          },
-          "4": {
-            "Name": "created_at",
-            "NameInSource": "created_at",
-            "Alias": "created_at",
-            "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "updated_at",
-            "NameInSource": "updated_at",
-            "Alias": "updated_at",
-            "Type": "System.DateTime"
-          },
-          "6": {
-            "Name": "pivot",
-            "NameInSource": "pivot",
-            "Alias": "pivot",
-            "Type": "System.String"
-          },
-          "7": {
-            "Name": "relationId",
-            "NameInSource": "relationId",
-            "Alias": "relationId",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.user_roles"
-      },
-      "4": {
-        "Ident": "StiDataTableSource",
-        "Name": "user",
-        "Alias": "user",
-        "Columns": {
-          "0": {
-            "Name": "id",
-            "NameInSource": "id",
-            "Alias": "id",
-            "Type": "System.Decimal"
-          },
-          "1": {
-            "Name": "user",
-            "NameInSource": "user",
-            "Alias": "user",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "name",
-            "NameInSource": "name",
-            "Alias": "name",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "cabang_id",
-            "NameInSource": "cabang_id",
-            "Alias": "cabang_id",
-            "Type": "System.String"
-          },
-          "4": {
-            "Name": "karyawan_id",
-            "NameInSource": "karyawan_id",
-            "Alias": "karyawan_id",
-            "Type": "System.String"
-          },
-          "5": {
-            "Name": "dashboard",
-            "NameInSource": "dashboard",
-            "Alias": "dashboard",
-            "Type": "System.String"
-          },
-          "6": {
-            "Name": "statusaktif",
-            "NameInSource": "statusaktif",
-            "Alias": "statusaktif",
-            "Type": "System.String"
-          },
-          "7": {
-            "Name": "statusakses",
-            "NameInSource": "statusakses",
-            "Alias": "statusakses",
-            "Type": "System.String"
-          },
-          "8": {
-            "Name": "email",
-            "NameInSource": "email",
-            "Alias": "email",
-            "Type": "System.String"
-          },
-          "9": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "10": {
-            "Name": "modifiedby",
-            "NameInSource": "modifiedby",
-            "Alias": "modifiedby",
-            "Type": "System.String"
-          },
-          "11": {
-            "Name": "created_at",
-            "NameInSource": "created_at",
-            "Alias": "created_at",
-            "Type": "System.DateTime"
-          },
-          "12": {
-            "Name": "updated_at",
-            "NameInSource": "updated_at",
-            "Alias": "updated_at",
-            "Type": "System.DateTime"
-          },
-          "13": {
-            "Name": "roles",
-            "NameInSource": "roles",
-            "Alias": "roles",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.user"
-      },
-      "5": {
-        "Ident": "StiDataTableSource",
-        "Name": "parameter",
-        "Alias": "parameter",
-        "Columns": {
-          "0": {
-            "Name": "judul",
-            "NameInSource": "judul",
-            "Alias": "judul",
-            "Type": "System.String"
-          },
-          "1": {
-            "Name": "judullaporan",
-            "NameInSource": "judullaporan",
-            "Alias": "judullaporan",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "tanggal_cetak",
-            "NameInSource": "tanggal_cetak",
-            "Alias": "tanggal_cetak",
-            "Type": "System.String"
-          },
-          "3": {
             "Name": "sampai",
             "NameInSource": "sampai",
             "Alias": "sampai",
             "Type": "System.String"
           },
-          "4": {
-            "Name": "dari",
-            "NameInSource": "dari",
-            "Alias": "dari",
+          "2": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.parameter"
+        "NameInSource": "Data.root_parameter"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
+        "Name": "root",
+        "Alias": "root",
+        "Columns": {
+          "0": {
+            "Name": "data",
+            "NameInSource": "data",
+            "Alias": "data",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "dataCabang",
+            "NameInSource": "dataCabang",
+            "Alias": "dataCabang",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.root"
       }
     },
     "Relations": {
       "0": {
-        "Name": "user_roles",
+        "Name": "root",
         "ChildColumns": {
           "0": "relationId"
         },
         "ParentColumns": {
-          "0": "pivot"
+          "0": "data"
         },
-        "NameInSource": "user_roles_pivot",
-        "Alias": "user_roles",
-        "ParentSource": "user_roles",
-        "ChildSource": "user_roles_pivot"
+        "NameInSource": "root_data",
+        "Alias": "root",
+        "ParentSource": "root",
+        "ChildSource": "root_data"
       },
       "1": {
-        "Name": "user",
+        "Name": "root",
         "ChildColumns": {
           "0": "relationId"
         },
         "ParentColumns": {
-          "0": "roles"
+          "0": "parameter"
         },
-        "NameInSource": "user_roles",
-        "Alias": "user",
-        "ParentSource": "user",
-        "ChildSource": "user_roles"
+        "NameInSource": "root_parameter",
+        "Alias": "root",
+        "ParentSource": "root",
+        "ChildSource": "root_parameter"
       }
     }
   },
@@ -479,7 +311,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -505,7 +337,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -531,7 +363,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -557,7 +389,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -583,7 +415,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -609,7 +441,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -635,7 +467,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -661,7 +493,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -687,7 +519,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -713,7 +545,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -739,7 +571,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -765,7 +597,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -791,7 +623,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -817,7 +649,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -843,7 +675,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -869,7 +701,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -895,7 +727,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -921,7 +753,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -947,7 +779,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -973,7 +805,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -999,7 +831,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
+              "Font": "Comic Sans MS3;;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -1020,14 +852,15 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judul}"
+                "Value": "{root_data.judul}"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
-              "TextBrush": "solid:Black"
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
             },
             "22": {
               "Ident": "StiText",
@@ -1038,11 +871,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{dataCabang.namacabang}"
+                "Value": "{root.dataCabang}"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1058,15 +891,15 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Tgl Cetak : {parameter.tanggal_cetak}"
+                "Value": "{root_data.tglcetak}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";;Italic;",
+              "Font": "Comic Sans MS3;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "24": {
               "Ident": "StiText",
@@ -1082,6 +915,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1097,15 +931,15 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "User : {user_roles.rolename}"
+                "Value": "{root_data.usercetak}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";;Italic;",
+              "Font": "Comic Sans MS3;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "26": {
               "Ident": "StiText",
@@ -1117,14 +951,15 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judullaporan}"
+                "Value": "{root_data.judulLaporan}"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "Comic Sans MS3;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
-              "TextBrush": "solid:Black"
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
             }
           }
         },
@@ -1151,15 +986,18 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nobukti}"
+                "Value": "{root_data.nobukti}&nbsp;"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1185,6 +1023,7 @@
                 "Value": "{Line}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1211,9 +1050,10 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tglbukti}"
+                "Value": "{root_data.tglbukti}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1244,15 +1084,18 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.gajisupir_nobukti}"
+                "Value": "{root_data.gajisupir_nobukti}&nbsp;"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1276,9 +1119,10 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.namasupir}"
+                "Value": "{root_data.namasupir}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1308,10 +1152,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.total}"
+                "Value": "{root_data.total}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1343,10 +1188,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.uangjalan}"
+                "Value": "{root_data.uangjalan}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1379,10 +1225,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.bbm}"
+                "Value": "{root_data.bbm}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1415,10 +1262,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.potonganpinjaman}"
+                "Value": "{root_data.potonganpinjaman}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1451,10 +1299,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.deposito}"
+                "Value": "{root_data.deposito}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1487,10 +1336,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.potonganpinjamansemua}"
+                "Value": "{root_data.potonganpinjamansemua}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1523,15 +1373,18 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nopolisi}"
+                "Value": "{root_data.nopolisi}&nbsp;"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1555,9 +1408,10 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tgldari}"
+                "Value": "{root_data.tgldari}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1588,9 +1442,10 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tglsampai}"
+                "Value": "{root_data.tglsampai}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1621,10 +1476,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.komisisupir}"
+                "Value": "{root_data.komisisupir}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1657,10 +1513,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tolsupir}"
+                "Value": "{root_data.tolsupir}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1693,10 +1550,11 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.voucher}"
+                "Value": "{root_data.voucher}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1729,9 +1587,10 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tanggaldari}"
+                "Value": "{root_data.tanggaldari}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1762,9 +1621,10 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tanggalsampai}"
+                "Value": "{root_data.tanggalsampai}"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1795,15 +1655,18 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keteranganpinjamansupir}"
+                "Value": "{root_data.keteranganpinjamansupir}&nbsp;"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1827,15 +1690,18 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keteranganpinjamansupirsemua}"
+                "Value": "{root_data.keteranganpinjamansupirsemua}&nbsp;"
               },
               "CanBreak": true,
+              "Font": "Comic Sans MS3;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1848,7 +1714,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "data"
+          "DataSourceName": "root_data"
         }
       },
       "Orientation": "Landscape",

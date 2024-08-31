@@ -431,7 +431,7 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              window.open(`{{ route('invoicelunaskepusat.report') }}?periode=` + $('#periode').val()+`&invId=${selectedRows}`)
+              window.open(`{{ route('invoicelunaskepusat.report') }}?periode=` + $('#periode').val() + `&invId=${selectedRows}`)
             }
           },
           {
@@ -439,7 +439,40 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              window.open(`{{ route('invoicelunaskepusat.export') }}?periode=` + $('#periode').val())
+              // window.open(`{{ route('invoicelunaskepusat.export') }}?periode=` + $('#periode').val())
+              $.ajax({
+                url: `${apiUrl}invoicelunaskepusat/export`,
+                type: 'GET',
+                data: {
+                  sortIndex: 'invoiceheader_id',
+                  limit: 0,
+                  periode : $('#periode').val(),
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                  responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                    if (response !== undefined) {
+                      var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                      });
+                      var link = document.createElement('a');
+                      link.href = window.URL.createObjectURL(blob);
+                      link.download = 'LAPORAN INVOICE LUNAS KE PUSAT' + new Date().getTime() + '.xlsx';
+                      link.click();
+                    }
+                  }
+                  $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                  $('#processingLoader').addClass('d-none')
+                  showDialog('TIDAK ADA DATA')
+                }
+              })
             }
           },
 

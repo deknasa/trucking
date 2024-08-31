@@ -85,9 +85,14 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         // window.open(` {{ route('laporanbiayasupir.export') }}?dari=${dari}&sampai=${sampai}`)
         $.ajax({
-            url: `{{ route('laporanbiayasupir.export') }}?dari=${dari}&sampai=${sampai}`,
+            url: `${apiUrl}laporanbiayasupir/export`,
+            // url: `{{ route('laporanbiayasupir.export') }}?dari=${dari}&sampai=${sampai}`,
             // url: `${apiUrl}laporanbiayasupir/export?dari=${dari}&sampai=${sampai}`,
             type: 'GET',
+            data : {
+                dari : dari,
+                sampai : sampai
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },
