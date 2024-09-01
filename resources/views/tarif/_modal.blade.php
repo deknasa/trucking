@@ -1138,22 +1138,16 @@
   }
 
   function initLookup() {
-    $('.statuspenyesuaianharga-lookup').lookupMaster({
+    $('.statuspenyesuaianharga-lookup').lookupV3({
       title: 'Penyesuaian Harga Lookup',
-      fileName: 'parameterMaster',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'PENYESUAIAN HARGA',
           subgrp: 'PENYESUAIAN HARGA',
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'statuspenyesuaianharga_id',
-          searchText: 'statuspenyesuaianharga-lookup',
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Penyesuaian Harga',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (statuspenyesuaianharga, element) => {
@@ -1170,22 +1164,16 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.statuspostingtnl-lookup').lookupMaster({
+    $('.statuspostingtnl-lookup').lookupV3({
       title: 'Posting TNL Lookup',
-      fileName: 'parameterMaster',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS POSTING TNL',
           subgrp: 'STATUS POSTING TNL',
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'statuspostingtnl_id',
-          searchText: 'statuspostingtnl-lookup',
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Posting TNL',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (statuspostingtnl, element) => {
@@ -1202,54 +1190,22 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.container-lookup').lookup({
-      title: 'Container Lookup',
-      fileName: 'container',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (container, element) => {
-        $('#crudForm [name=container_id]').first().val(container.id)
-        element.val(container.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=container_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-    $('.kota-lookup').lookupMaster({
+    $('.kota-lookup').lookupV3({
       title: 'Kota Lookup',
-      fileName: 'kotaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kotaV3',
+      searching: ['kodekota'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kota_id',
-          searchText: 'kota-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'kota',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kota_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
-        $('#crudForm [name=tujuan]').val(kota.keterangan)
+        $('#crudForm [name=tujuan]').val(kota.kodekota)
 
       },
       onCancel: (element) => {
@@ -1261,9 +1217,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.pelabuhan-lookup').lookup({
+    $('.pelabuhan-lookup').lookupV3({
       title: 'pelabuhan Lookup',
-      fileName: 'kota',
+      fileName: 'kotaV3',
+      searching: ['kodekota'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1290,23 +1248,16 @@
 
     
 
-    $('.zona-lookup').lookupMaster({
+    $('.zona-lookup').lookupV3({
       title: 'Zona Lookup',
-      fileName: 'zonaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'zonaV3',
+      searching: ['zona','keterangan'],
+      labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'zona_id',
-          searchText: 'zona-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'zona Lookup',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (zona, element) => {
@@ -1323,21 +1274,16 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.jenisorder-lookup').lookupMaster({
+    $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorderMaster',
+      fileName: 'jenisorderV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'jenisorder_id',
-          searchText: 'jenisorder-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'jenisorder',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (jenisorder, element) => {
@@ -1354,11 +1300,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.parent-lookup').lookupMaster({
+    $('.parent-lookup').lookupV3({
       title: 'Tarif Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'tarifV3',
+      searching: ['upahsupir','tujuan','penyesuaian'],
+      labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1366,13 +1312,6 @@
           Aktif: 'AKTIF',
           jenisOrder: $('#crudForm [name=jenisorder]').val(),
           isParent: true,
-          searching: 1,
-          valueName: 'parent_id',
-          searchText: 'parent-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'parent',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (tarif, element) => {
@@ -1391,24 +1330,15 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.upahsupir-lookup').lookupMaster({
+    $('.upahsupir-lookup').lookupV3({
       title: 'Upah Supir Lookup',
-      fileName: 'upahsupirMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'upahsupirV3',
+      searching: ['kotasampai_id','kotadari_id','penyesuaian','jarak','zona_id'],
+      labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
-
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'upahsupir_id',
-          searchText: 'upahsupir-lookup',
-          singleColumn: '',
-          hideLabel: '',
-          title: 'upahsupir',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (upahsupir, element) => {
@@ -1434,22 +1364,16 @@
       }
     })
 
-    $(`.statuslangsir-lookup`).lookupMaster({
+    $(`.statuslangsir-lookup`).lookupV3({
       title: 'Status Langsir Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS langsir',
           subgrp: 'STATUS langsir',
-          searching: 1,
-          valueName: `statuslangsir`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status langsir'
         };
       },
       onSelectRow: (status, element) => {
@@ -1467,22 +1391,16 @@
         element.data('currentValue', element.val());
       },
     })
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -1501,22 +1419,16 @@
       },
     });
 
-    $(`.statussistemton-lookup`).lookupMaster({
+    $(`.statussistemton-lookup`).lookupV3({
       title: 'Status Sistem Ton Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'SISTEM TON',
           subgrp: 'SISTEM TON',
-          searching: 1,
-          valueName: `statussistemton`,
-          searchText: `statussistemton-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Sistem Ton'
         };
       },
       onSelectRow: (statussistemton, element) => {
