@@ -183,30 +183,30 @@
 
 
 
-                $('#jqGrid').jqGrid('setGridParam', {
-                    url: `${apiUrl}kartustok`,
-                    postData: {
-                        dari: $('#crudForm').find('[name=dari]').val(),
-                        sampai: $('#crudForm').find('[name=sampai]').val(),
-                        stokdari_id: $('#crudForm').find('[name=stokdari_id]').val(),
-                        stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
-                        filter: $('#crudForm').find('[name=filter]').val(),
-                        stokdari: $('#crudForm').find('[name=stokdari]').val(),
-                        stoksampai: $('#crudForm').find('[name=stoksampai]').val(),
-                        gudang: $('#crudForm').find('[name=gudang]').val(),
-                        gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
-                        gandengan: $('#crudForm').find('[name=gandengan]').val(),
-                        gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
-                        trado: $('#crudForm').find('[name=trado]').val(),
-                        trado_id: $('#crudForm').find('[name=trado_id]').val(),
-                        proses: 'reload',
-                        kelompok_id: $('#crudForm').find('[name=kelompok_id]').val(),
-                        statustampil: $('#crudForm').find('[name=statustampil]').val(),
-                        datafilter: dataFilter,
+                // $('#jqGrid').jqGrid('setGridParam', {
+                //     url: `${apiUrl}kartustok`,
+                //     postData: {
+                //         dari: $('#crudForm').find('[name=dari]').val(),
+                //         sampai: $('#crudForm').find('[name=sampai]').val(),
+                //         stokdari_id: $('#crudForm').find('[name=stokdari_id]').val(),
+                //         stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
+                //         filter: $('#crudForm').find('[name=filter]').val(),
+                //         stokdari: $('#crudForm').find('[name=stokdari]').val(),
+                //         stoksampai: $('#crudForm').find('[name=stoksampai]').val(),
+                //         gudang: $('#crudForm').find('[name=gudang]').val(),
+                //         gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
+                //         gandengan: $('#crudForm').find('[name=gandengan]').val(),
+                //         gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
+                //         trado: $('#crudForm').find('[name=trado]').val(),
+                //         trado_id: $('#crudForm').find('[name=trado_id]').val(),
+                //         proses: 'reload',
+                //         kelompok_id: $('#crudForm').find('[name=kelompok_id]').val(),
+                //         statustampil: $('#crudForm').find('[name=statustampil]').val(),
+                //         datafilter: dataFilter,
 
-                    },
-                    datatype: "json"
-                }).trigger('reloadGrid');
+                //     },
+                //     datatype: "json"
+                // }).trigger('reloadGrid');
             })
             .catch(error => {
                 console.error(error);
@@ -251,6 +251,7 @@
             if (dari != '' && sampai != '' && filter != '') {
 
                 $('#jqGrid').jqGrid('setGridParam', {
+                    url: `${apiUrl}kartustok`,
                     postData: {
                         stokdari_id: stokdari_id,
                         stoksampai_id: stoksampai_id,
@@ -259,9 +260,16 @@
                         dari: dari,
                         sampai: sampai,
                         filter: filter,
+                        gudang: $('#crudForm').find('[name=gudang]').val(),
+                        gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
+                        gandengan: $('#crudForm').find('[name=gandengan]').val(),
+                        gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
+                        trado: $('#crudForm').find('[name=trado]').val(),
+                        trado_id: $('#crudForm').find('[name=trado_id]').val(),
                         datafilter: dataFilter,
                         proses: 'reload'
                     },
+                    datatype: "json"
                 }).trigger('reloadGrid');
 
             } else {
