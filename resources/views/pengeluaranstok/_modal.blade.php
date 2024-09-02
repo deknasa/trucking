@@ -586,21 +586,19 @@
   }
 
   function initLookup() {
-    $('.akunpusat-lookup').lookupMaster({
+    $('.akunpusat-lookup').lookupV3({
       title: 'akun pusat Lookup',
-      fileName: 'akunpusatMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
-          searching: 1,
-          typeSearch: 'ALL',
-          valueName: `keterangancoa`,
-          searchText: `akunpusat-lookup`,
-          title: 'COA'
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -618,21 +616,15 @@
       }
     })
 
-    $(`.format-lookup`).lookupMaster({
+    $(`.format-lookup`).lookupV3({
       title: 'Status Format',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'PENGELUARAN STOK',
-          searching: 1,
-          valueName: `format`,
-          searchText: `format-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Format'
         };
       },
       onSelectRow: (status, element) => {
@@ -651,21 +643,15 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statushitungstok-lookup`).lookupMaster({
+    $(`.statushitungstok-lookup`).lookupV3({
       title: 'status hitung stok',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS HITUNG STOK',
-          searching: 1,
-          valueName: `statushitungstok`,
-          searchText: `statushitungstok-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'status hitung stok'
         };
       },
       onSelectRow: (status, element) => {
@@ -684,22 +670,16 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {

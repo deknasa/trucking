@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-    <table id="kelompokLookup<?= $id ?>" class="lookup-grid"></table>
+    <table id="mainakunpusatLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-    <table id="kelompokLookup" class="lookup-grid"></table>
+    <table id="mainakunpusatLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
     <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -18,7 +18,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#kelompokLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#mainakunpusatLookup{{ isset($id) ? $id : null }} `)
   var isToolbarSearch = false;
   
   var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -44,19 +44,22 @@ $idLookup = isset($id) ? $id : null;
       search: false,
     },
     {
-      label: "KODE kelompok",
-      name: "kodekelompok",
-      width: width,
+      label: 'KODE PERKIRAAN',
+      name: 'coa',
+      width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+      align: 'left'
     },
     {
-      label: 'Keterangan',
-      name: 'keterangan',
-      width: width,
+      label: 'NAMA',
+      name: 'keterangancoa',
+      width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+      align: 'left'
     },
   ]
+  
 
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'kelompok' }}`,
+    url: `{{ config('app.api_url') . 'mainakunpusat' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
@@ -287,7 +290,7 @@ $idLookup = isset($id) ? $id : null;
       
       if (data.data.length === 0) {
         
-        $('#subkelompokGrid').each((index, element) => {
+        $('#submainakunpusatGrid').each((index, element) => {
           abortGridLastRequest($(element))
           clearGridHeader($(element))
         })

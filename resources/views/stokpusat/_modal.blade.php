@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="hidden" name="kelompok_id">
-                                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                                <input type="text" name="kelompok" id="kelompok" class="form-control kelompok-lookup">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -2488,9 +2488,11 @@
     }
 
     function initLookup() {
-        $('.kelompok-lookup').lookup({
+        $('.kelompok-lookup').lookupV3({
             title: 'Kelompok Lookup',
-            fileName: 'kelompok',
+            fileName: 'kelompokV3',
+            searching: ['kodekelompok'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
