@@ -1707,16 +1707,22 @@
           table: 'surat pengantar'
         },
         success: response => {
-          // clearSelectedRows()
-          selectedRows = []
-          selectedbukti = []
-          $('#gs_').prop('checked', false);
-          console.log(response.nobukti)
-          loadDataHeader('suratpengantar', {
-            nobukti: response.nobukti,
-            proses: 'reload',
-            reload: true,
-          })
+          var error = response.error
+          if (error) {
+            showDialog(response)
+            // showDialog(response.message['keterangan'])
+          } else {
+            selectedRows = []
+            selectedbukti = []
+            $('#gs_').prop('checked', false);
+            console.log(response.nobukti)
+            loadDataHeader('suratpengantar', {
+              nobukti: response.nobukti,
+              proses: 'reload',
+              reload: true,
+            })
+          }
+
         },
         error: error => {
           if (error.status === 422) {
