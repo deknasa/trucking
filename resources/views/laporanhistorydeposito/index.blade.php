@@ -114,7 +114,7 @@
                             supirdari_id: supirdari_id,
                             supirdari: supirdari,
                         };
-                        let user = response.data[0].username;
+                        let user = `{{ auth()->user()->name }}`;
                         // console.log(JSON.stringify(data))
                         laporanhistorydeposito(data, detailParams, dataCabang, user);
                     },

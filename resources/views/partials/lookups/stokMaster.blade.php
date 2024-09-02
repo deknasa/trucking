@@ -241,7 +241,7 @@ $idLookup = isset($id) ? $id : null;
     fixed: true,
     rownumbers: false,
     rownumWidth: 0,
-    rowNum: `{!! $limit ?? 11 !!}`,
+    rowNum: `{!! $limit ?? 14 !!}`,
     rowList: [10, 20, 50, 0],
     sortable: true,
     sortname: 'id',

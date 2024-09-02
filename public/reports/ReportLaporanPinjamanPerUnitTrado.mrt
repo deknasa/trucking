@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "646ae71823c2b27dbaf059e8b714ce5d",
+  "ReportGuid": "6070f7b316aaec909bbcf7c81e48f7e3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanPinjamanPerUnitTrado.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanPinjamanPerUnitTrado.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724901276000+0700)/",
+  "ReportChanged": "/Date(1725246352000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -734,8 +734,9 @@
             },
             "4": {
               "Ident": "StiShape",
-              "Name": "Shape1",
-              "ClientRectangle": "0,-0.2,0.4,1.2",
+              "Name": "Shape4",
+              "Guid": "1003047656ea32979a68d9cf04f1cdfa",
+              "ClientRectangle": "20.2,-0.4,0.4,2.8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -751,9 +752,8 @@
             },
             "5": {
               "Ident": "StiShape",
-              "Name": "Shape4",
-              "Guid": "1003047656ea32979a68d9cf04f1cdfa",
-              "ClientRectangle": "20.2,-0.2,0.4,1.2",
+              "Name": "Shape1",
+              "ClientRectangle": "0,-0.4,0.4,2.8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
