@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d53a577f7086e114ba321272e6eb1c01",
+  "ReportGuid": "b9e5c2bb79752e81bb28d17d5b269619",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportLaporanPinjamanSupirKaryawan.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanPinjamanSupirKaryawan.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724228187000+0700)/",
+  "ReportChanged": "/Date(1725263541000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -846,7 +846,7 @@
               "ReferenceToGuid": "7bfc7495d8bdff96e2c40cf036ddb951"
             }
           },
-          "DataSourceName": "data",
+          "DataSourceName": "root_data",
           "Sort": {
             "0": "ASC",
             "1": "FNInvoice",
