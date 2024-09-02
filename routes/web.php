@@ -303,6 +303,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\StatusGandenganTradoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1798,7 +1799,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('upahsupirtangki', UpahSupirTangkiController::class);
 
     Route::get('biayaextrasupirheader/index', [BiayaExtraSupirHeaderController::class, 'index']);
-    Route::resource('biayaextrasupirheader', BiayaExtraSupirHeaderController::class);
+    Route::resource('biayaextrasupirheader', BiayaExtraSupirHeaderController::class); 
+    
+    Route::get('statusgandengantrado/index', [StatusGandenganTradoController::class, 'index']);
+    Route::resource('statusgandengantrado', StatusGandenganTradoController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
