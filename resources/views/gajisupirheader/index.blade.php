@@ -716,7 +716,41 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('gajisupirheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('gajisupirheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}gajisupirheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    sortIndex : 'suratpengantar_nobukti',
+                    gajisupir_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN RINCIAN GAJI SUPIR' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },

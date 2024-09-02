@@ -93,8 +93,13 @@
 
         if (dari != '' && sampai != '') {
             $.ajax({
-                url: `{{ route('tarikdataabsensi.export') }}?dari=${dari}&sampai=${sampai}`,
+                url: `${apiUrl}tarikdataabsensi/export`,
+                // url: `{{ route('tarikdataabsensi.export') }}?dari=${dari}&sampai=${sampai}`,
                 type: 'GET',
+                data : {
+                    dari : dari,
+                    sampai : sampai
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },

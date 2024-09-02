@@ -300,7 +300,7 @@
                     class: 'btn btn-warning btn-sm mr-1',
                     onClick: () => {
                         let status = $('#crudForm').find('[name=status]').val();
-                        let statustext = $('#crudForm').find('[name=status] option:selected').text();
+                        let statustext = $('#crudForm').find('[name=statusnama]').val();
                         let dari = $('#crudForm').find('[name=dari]').val();
                         let sampai = $('#crudForm').find('[name=sampai]').val();
                         let trado_id = $('#crudForm').find('[name=trado_id]').val();
@@ -308,8 +308,18 @@
                         $('#processingLoader').removeClass('d-none')
 
                         $.ajax({
-                            url: `{{ route('statusolitrado.export') }}?status=${status}&dari=${dari}&sampai=${sampai}&trado_id=${trado_id}&trado=${trado}&statustext=${statustext}`,
+                            url: `${apiUrl}statusolitrado/export`,
+                            // url: `{{ route('statusolitrado.export') }}?status=${status}&dari=${dari}&sampai=${sampai}&trado_id=${trado_id}&trado=${trado}&statustext=${statustext}`,
                             type: 'GET',
+                            data : {
+                                forExport : true,
+                                status : status,
+                                statustext : statustext,
+                                dari : dari,
+                                sampai : sampai,
+                                trado_id : trado_id,
+                                trado : trado
+                            },
                             beforeSend: function(xhr) {
                                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                             },

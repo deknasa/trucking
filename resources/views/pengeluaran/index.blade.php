@@ -61,7 +61,7 @@
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
-  let activeGrid 
+  let activeGrid
   let limit
   let postData
   let sortname = 'nobukti'
@@ -78,11 +78,11 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -99,7 +99,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -111,7 +111,7 @@
     }
 
   }
-  
+
   setSpaceBarCheckedHandler()
   reloadGrid()
   $(document).ready(function() {
@@ -135,7 +135,7 @@
 
     @isset($request['bank_id'])
     $('#bankheader').val(`{{ $request['bank_id'] }}`).trigger('change')
-    @endisset    
+    @endisset
 
     setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
@@ -149,7 +149,7 @@
       $('#gs_').prop('checked', false)
     })
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranheader' }}`,
         mtype: "GET",
@@ -513,7 +513,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
 
           activeGrid = grid
@@ -678,7 +678,41 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('pengeluaranheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pengeluaranheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}pengeluaranheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    pengeluaran_id: selectedId,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename');
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -693,8 +727,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status PENGELUARAN",
-                color:"btn-success",
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`),
+                color: "btn-success",
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
                     approve()
@@ -704,8 +738,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENGELUARAN",
-                color:"btn-info",
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`),
+                color: "btn-info",
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -719,8 +753,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PENGELUARAN",
-                color:"btn-primary",
-                hidden:(!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalkirimberkas') }}`),
+                color: "btn-primary",
+                hidden: (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -906,7 +940,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

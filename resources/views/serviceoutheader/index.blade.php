@@ -286,7 +286,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
 
           loadDetailData(id)
           activeGrid = grid
@@ -477,7 +477,39 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('serviceoutheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('serviceoutheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}serviceoutheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    serviceout_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN SERVICE OUT' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -499,7 +531,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak SERVICE OUT",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('serviceoutheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('serviceoutheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('serviceoutheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -514,7 +546,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas SERVICE OUT",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('serviceoutheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('serviceoutheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('serviceoutheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

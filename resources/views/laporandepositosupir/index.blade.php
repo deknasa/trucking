@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" hidden >
+                        <div class="row" hidden>
                             <label class="col-12 col-sm-2 col-form-label mt-2">PERIODE DATA<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
@@ -26,7 +26,7 @@
                                     <input type="text" id="periodedata" value="{{$data['defaultperiode']['text']}}" name="periodedata" class="form-control periodedata-lookup">
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                         <div class="row">
                             <div class="col-sm-6 mt-4">
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
@@ -44,9 +44,14 @@
             </div>
             <table id="jqGrid"></table>
         </div>
-    </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -73,7 +78,7 @@
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        
+
         if (!`{{ $myAuth->hasPermission('laporandepositosupir', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -90,7 +95,41 @@
         if (sampai != '') {
 
             // window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`)
-            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
+            // window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
+            $.ajax({
+                    url: `${apiUrl}laporandepositosupir/report`,
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        sampai: sampai,
+                    },
+                    success: function(response) {
+                        // console.log(response)
+                        let data = response.data
+                        let dataCabang = response.namacabang
+                        let detailParams = {
+                            sampai: sampai,
+                        };
+                        let user = response.data[0].username;
+
+                        laporandepositosupir(data, dataCabang, detailParams, user);
+                    },
+                    error: function(error) {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+                            $('#rangeTglModal').modal('hide')
+                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON.message);
+                        }
+                    }
+                })
+                .always(() => {
+                    $('#processingLoader').addClass('d-none')
+                });
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -106,8 +145,12 @@
         if (sampai != '') {
             $.ajax({
                 // url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`,
-                url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}`,
+                // url: `{{ route('laporandepositosupir.export') }}?sampai=${sampai}`,
+                url: `${apiUrl}laporandepositosupir/export`,
                 type: 'GET',
+                data: {
+                    sampai: sampai
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -126,7 +169,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -134,11 +177,48 @@
                     showDialog('TIDAK ADA DATA')
                 }
             })
-            
+
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
+    function laporandepositosupir(data, dataCabang, detailParams, user) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanDepositoSupir.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'user': user,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
 
     const setJenisKaryawanOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {
@@ -171,7 +251,7 @@
                     relatedForm.find('[name=jenis]').append(option).trigger('change')
                 });
 
-               
+
                 relatedForm
                     .find('[name=jenis]')
                     .val($(`#crudForm [name=jenis] option:eq(1)`).val())
@@ -183,7 +263,7 @@
     }
 
     function initLookup() {
-       
+
         $(`.periodedata-lookup`).lookupMaster({
             title: 'PERIODE DATA Lookup',
             fileName: 'parameterMaster',
@@ -191,15 +271,15 @@
             searching: 1,
             beforeProcess: function() {
                 this.postData = {
-                url: `${apiUrl}parameter/combo`,
-                grp: 'PERIODE DATA',
-                subgrp: 'PERIODE DATA',
-                searching: 1,
-                valueName: `periodedata_id`,
-                searchText: `periodedata-lookup`,
-                singleColumn: true,
-                hideLabel: true,
-                title: 'PERIODE DATA'
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'PERIODE DATA',
+                    subgrp: 'PERIODE DATA',
+                    searching: 1,
+                    valueName: `periodedata_id`,
+                    searchText: `periodedata-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'PERIODE DATA'
                 };
             },
             onSelectRow: (status, element) => {
@@ -218,7 +298,6 @@
             },
         });
     }
-
 </script>
 @endpush()
 @endsection

@@ -104,11 +104,17 @@
         let periode = $('#crudForm').find('[name=periode]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
+
         $.ajax({
-            url: `{{ route('exportlaporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
+            url: `${apiUrl}exportlaporankasgantung/export`,
             type: 'GET',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            data: {
+                periode: periode,
+                bank_id: bank_id,
+                bank: bank,
             },
             xhrFields: {
                 responseType: 'arraybuffer'
@@ -121,7 +127,7 @@
                         });
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = 'LAPORAN KAS GANTUNG ' + bank + ' '+ new Date().getTime() + '.xlsx';
+                        link.download = `LAPORAN ${bank} ${new Date().getTime()}.xlsx`;
                         link.click();
                     }
                 }
@@ -133,19 +139,6 @@
                 showDialog('TIDAK ADA DATA')
             }
         })
-        // getCekExport().then((response) => {
-        //     window.open(` {{ route('exportlaporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`)
-        // }).catch((error) => {
-        //     if (error.status === 422) {
-        //         $('.is-invalid').removeClass('is-invalid')
-        //         $('.invalid-feedback').remove()
-
-        //         setErrorMessages($('#crudForm'), error.responseJSON.errors);
-        //     } else {
-        //         showDialog(error.statusText, error.responseJSON.message)
-
-        //     }
-        // })
     })
 
     function getCekExport() {

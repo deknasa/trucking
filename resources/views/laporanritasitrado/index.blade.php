@@ -105,8 +105,12 @@
         if (periode != '') {
             $('#processingLoader').removeClass('d-none')
             $.ajax({
-                url: `{{ route('laporanritasitrado.export') }}?periode=${periode}`,
+                url: `${apiUrl}laporanritasitrado/export`,
+                // url: `{{ route('laporanritasitrado.export') }}?periode=${periode}`,
                 type: 'GET',
+                data : {
+                    periode : periode
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },

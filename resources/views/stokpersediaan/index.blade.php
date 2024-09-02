@@ -319,9 +319,42 @@
 
                         if (filter != '' && dataFilter != '') {
 
-                            window.open(
-                                `{{ route('stokpersediaan.export') }}?filter=${filter}&datafilter=${dataFilter}`
-                            )
+                            // window.open(
+                            //     `{{ route('stokpersediaan.export') }}?filter=${filter}&datafilter=${dataFilter}`
+                            // )
+                            $.ajax({
+                                url: `${apiUrl}stokpersediaan/export`, 
+                                type: 'GET',
+                                data: {
+                                    forReport : true,
+                                    filter : filter,
+                                    datafilter: dataFilter,
+                                },
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'cabang/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'LAPORAN STOK PERSEDIAAN' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                    }
+                                    $('#processingLoader').addClass('d-none')
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
+                                    showDialog('TIDAK ADA DATA')
+                                }
+                            })
                         } else {
                             showDialog('ISI SELURUH KOLOM')
                         }

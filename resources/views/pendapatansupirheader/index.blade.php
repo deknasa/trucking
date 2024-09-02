@@ -74,37 +74,37 @@
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
   reloadGrid()
   setSpaceBarCheckedHandler()
@@ -595,7 +595,42 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('pendapatansupirheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pendapatansupirheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}pendapatansupirheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport: true,
+                    pendapatansupir_id: selectedId,
+                    export: true,
+                    grp : 'FORMAT CETAK',
+                    subgrp : 'KOMISI SUPIR',
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PENDAPATAN SUPIR' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -611,7 +646,7 @@ function checkboxHandler(element) {
                 id: 'approveun',
                 text: "APPROVAL/UN Status PENDAPATAN SUPIR",
                 color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`) {
                     approve()
@@ -622,7 +657,7 @@ function checkboxHandler(element) {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENDAPATAN SUPIR",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -639,7 +674,7 @@ function checkboxHandler(element) {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PENDAPATAN SUPIR",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -900,7 +935,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

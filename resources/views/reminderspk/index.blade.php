@@ -232,7 +232,8 @@
                     class: 'btn btn-warning btn-sm mr-1',
                     onClick: function(event) {
                         $.ajax({
-                            url: `{{ route('reminderspkdetail.export') }}`,
+                            url: `${apiUrl}reminderspkdetail/export`,
+                            // url: `{{ route('reminderspkdetail.export') }}`,
                             type: 'GET',
                             beforeSend: function(xhr) {
                                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);

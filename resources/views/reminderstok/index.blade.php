@@ -231,8 +231,12 @@
                     onClick: () => {
                         $('#processingLoader').removeClass('d-none')
                         $.ajax({
-                            url: `{{ route('reminderstok.export') }}`,
+                            url: `${apiUrl}reminderstok/export`,
+                            // url: `{{ route('reminderstok.export') }}`,
                             type: 'GET',
+                            data : {
+                                forExport : true
+                            },
                             beforeSend: function(xhr) {
                                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                             },

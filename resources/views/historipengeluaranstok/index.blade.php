@@ -108,29 +108,29 @@
         $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
 
         showDefault($('#crudForm'))
-    .then(response => {
-        $.each(response.data, (index, value) => {
-            console.log(value);
-            let element = $('#crudForm').find(`[name="${index}"]`);
+            .then(response => {
+                $.each(response.data, (index, value) => {
+                    console.log(value);
+                    let element = $('#crudForm').find(`[name="${index}"]`);
 
-            if (element.is('select')) {
-                element.val(value).trigger('change');
-            } else {
-                element.val(value);
-            }
-        });
+                    if (element.is('select')) {
+                        element.val(value).trigger('change');
+                    } else {
+                        element.val(value);
+                    }
+                });
 
-        grid();
-        // loadDetailGrid($('#crudForm').find('[name=invoice]').val());
-    })
-    .catch(error => {
-        console.error(error);
-    });
+                grid();
+                // loadDetailGrid($('#crudForm').find('[name=invoice]').val());
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
 
 
         $('#btnPreview').click(function(event) {
-            
+
             let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
             let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
             let dari = $('#crudForm').find('[name=dari]').val()
@@ -329,7 +329,7 @@
                     }
 
                     $('#left-nav').find('button').attr('disabled', false)
-                    permission() 
+                    permission()
                     setHighlight($(this))
                 },
             })
@@ -348,8 +348,7 @@
             })
 
             .customPager({
-                buttons: [
-                    {
+                buttons: [{
                     id: 'report',
                     innerHTML: '<i class="fa fa-print"></i> REPORT',
                     class: 'btn btn-info btn-sm mr-1',
@@ -381,7 +380,44 @@
 
                         if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
 
-                            window.open(`{{ route('historipengeluaranstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
+                            // window.open(`{{ route('historipengeluaranstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
+                            $.ajax({
+                                url: `${apiUrl}historipengeluaranstok/report`,
+                                type: 'GET',
+                                data: {
+                                    stokdari_id : stokdari_id,
+                                    stoksampai_id : stoksampai_id,
+                                    dari : dari,
+                                    sampai : sampai,
+                                    filter : filter,
+                                    action : 'report',
+                                    export : true
+                                },
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'cabang/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'LAPORAN HISTORI PENGELUARAN STOK' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                    }
+                                    $('#processingLoader').addClass('d-none')
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
+                                    showDialog('TIDAK ADA DATA')
+                                }
+                            })
                         } else {
                             showDialog('ISI SELURUH KOLOM')
                         }
@@ -396,33 +432,34 @@
         loadGlobalSearch($('#jqGrid'))
 
         function permission() {
-        if (!`{{ $myAuth->hasPermission('historipengeluaranstok', 'report') }}`) {
-            $('#export').attr('disabled', 'disabled')
-        }
+            if (!`{{ $myAuth->hasPermission('historipengeluaranstok', 'report') }}`) {
+                $('#export').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('historipengeluaranstok', 'report') }}`) {
-            $('#report').attr('disabled', 'disabled')
-        }}
+            if (!`{{ $myAuth->hasPermission('historipengeluaranstok', 'report') }}`) {
+                $('#report').attr('disabled', 'disabled')
+            }
+        }
     }
 
     function showDefault(form) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: `${apiUrl}historipengeluaranstok/default`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                resolve(response);
-            },
-            error: error => {
-                reject(error);
-            }
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}historipengeluaranstok/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error);
+                }
+            });
         });
-    });
-}
+    }
 
     $(document).on('change', `#crudForm [name="filter"]`, function(event) {
         let filter = $(this).val();

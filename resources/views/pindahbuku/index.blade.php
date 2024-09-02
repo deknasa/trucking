@@ -42,9 +42,9 @@
   function checkboxHandler(element) {
     let value = $(element).val();
 
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
-    onSelectRowExisting(value)    
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -90,7 +90,7 @@
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
     loadJurnalUmumGrid(nobukti)
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `${apiUrl}pindahbuku`,
         mtype: "GET",
@@ -400,7 +400,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
 
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           activeGrid = grid
@@ -613,7 +613,38 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('pindahbuku.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pindahbuku.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}pindahbuku/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PINDAH BUKU' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -626,8 +657,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN pindah buku",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('pindahbuku', 'approval') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('pindahbuku', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pindahbuku', 'approval') }}`) {
                     approve()
@@ -637,8 +668,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PINDAH BUKU",
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -652,8 +683,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PINDAH BUKU",
-                color:'btn-primary',
-                hidden:(!`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`),
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

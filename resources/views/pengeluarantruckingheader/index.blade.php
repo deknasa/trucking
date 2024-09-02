@@ -86,9 +86,9 @@
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
 
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
-    onSelectRowExisting(value)    
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
 
     if (element.checked) {
@@ -170,7 +170,7 @@
       $('#gs_').prop('checked', false)
     })
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
         mtype: "GET",
@@ -407,7 +407,7 @@
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
               return formattedValue[0].outerHTML
-            }            
+            }
           },
           {
             label: 'KODE PERKIRAAN',
@@ -574,7 +574,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           //loadDetailData(id)
           activeGrid = grid
@@ -773,7 +773,41 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('pengeluarantruckingheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pengeluarantruckingheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}pengeluarantruckingheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport: true,
+                    pengeluarantruckingheader_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename');
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           }, {
@@ -794,7 +828,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENGELUARAN TRUCKING",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -809,7 +843,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PENGELUARAN TRUCKING",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

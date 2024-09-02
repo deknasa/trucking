@@ -595,7 +595,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('invoiceheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('invoiceheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}invoiceheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    invoice_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN INVOICE' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -611,7 +644,7 @@
                 id: 'approveun',
                 text: "APPROVAL/UN Status INVOICE",
                 color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`),
                 onClick: () => {
 
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
@@ -623,7 +656,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak INVOICE",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -640,7 +673,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas INVOICE",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

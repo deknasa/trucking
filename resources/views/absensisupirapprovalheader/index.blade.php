@@ -501,7 +501,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
 
           activeGrid = grid
@@ -515,8 +515,8 @@
           if (absensiTangki) {
             referen = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           }
-          loadPengeluaranData(id,referen,absensiTangki)
-          loadJurnalUmumData(id, referen,absensiTangki)
+          loadPengeluaranData(id, referen, absensiTangki)
+          loadJurnalUmumData(id, referen, absensiTangki)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -654,7 +654,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('absensisupirapprovalheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('absensisupirapprovalheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}absensisupirapprovalheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    absensisupirapproval_id: selectedId,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN ABSENSI SUPIR POSTING' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -676,7 +709,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Absensi SUpir Approval",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -691,7 +724,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas Absensi Supir Approval",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -937,7 +970,7 @@
             $("#jqGrid").jqGrid('showCol', 'pengeluaran');
             $("#jqGrid").jqGrid('hideCol', 'pengeluaran_nobukti')
             absensiTangki = true;
-          }else{
+          } else {
             $("#jqGrid").jqGrid('showCol', 'pengeluaran_nobukti');
             $("#jqGrid").jqGrid('hideCol', 'pengeluaran')
             absensiTangki = false;
@@ -946,7 +979,6 @@
       })
     })
   }
-  
 </script>
 @endpush()
 @endsection

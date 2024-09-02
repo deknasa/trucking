@@ -39,9 +39,7 @@
                                     <input type="text" name="ricsampai" class="form-control datepicker">
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -53,10 +51,7 @@
                                 <input type="hidden" name="supirsampai_id">
                                 <input type="text" name="supirsampai" id="supirsampai" class="form-control supirsampai-lookup">
                             </div>
-
                         </div>
-
-
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">TGL AMBIL UANG JALAN (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -100,7 +95,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -149,7 +150,52 @@
         let status = $('#crudForm').find('[name=status]').val()
         if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai && supirdari != '' && supirsampai && status != '') {
 
-            window.open(`{{ route('laporanuangjalan.report') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}&status=${status}`)
+            // window.open(`{{ route('laporanuangjalan.report') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}&status=${status}`)
+
+            $.ajax({
+                    url: `${apiUrl}laporanuangjalan/report`,
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        ricdari: ricdari,
+                        ricsampai: ricsampai,
+                        ambildari: ambildari,
+                        ambilsampai: ambilsampai,
+                        supirdari: supirdari,
+                        supirsampai: supirsampai,
+                        status: status
+                    },
+                    success: function(response) {
+                        // console.log(response)
+                        let data = response.data
+                        let dataCabang = response.namacabang
+                        let detailParams = {
+                            ricdari: ricdari,
+                            ricsampai: ricsampai,
+                            ambildari: ambildari,
+                            ambilsampai: ambilsampai,
+                            supirdari: supirdari,
+                            supirsampai: supirsampai,
+                            status: status
+                        };
+                        laporanuangjalan(data, detailParams, dataCabang);
+                    },
+                    error: function(error) {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+                            $('#rangeTglModal').modal('hide')
+                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON.message);
+                        }
+                    }
+                })
+                .always(() => {
+                    $('#processingLoader').addClass('d-none')
+                });
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -167,8 +213,18 @@
             $('#processingLoader').removeClass('d-none')
 
             $.ajax({
-                url: `{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`,
+                url: `${apiUrl}laporanuangjalan/export`,
+                // url: `{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`,
                 type: 'GET',
+                data : {
+                    ricdari : ricdari,
+                    ricsampai : ricsampai,
+                    ambildari : ambildari,
+                    ambilsampai : ambilsampai,
+                    supirdari : supirdari,
+                    supirsampai : supirsampai,
+                    status : status,
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -201,6 +257,42 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
+    function laporanuangjalan(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalan.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
 
     function initLookup() {
         $('.supirdari-lookup').lookupMaster({
@@ -270,20 +362,20 @@
             searching: 1,
             beforeProcess: function() {
                 this.postData = {
-                url: `${apiUrl}parameter/combo`,
-                grp: 'STATUS KEMBALI',
-                subgrp: 'STATUS KEMBALI',
-                searching: 1,
-                valueName: `jenis`,
-                searchText: `jenis-lookup`,
-                singleColumn: true,
-                hideLabel: true,
-                title: 'status Lookup'
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'STATUS KEMBALI',
+                    subgrp: 'STATUS KEMBALI',
+                    searching: 1,
+                    valueName: `jenis`,
+                    searchText: `jenis-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'status Lookup'
                 };
             },
             onSelectRow: (status, element) => {
                 let elId = element.data('targetName')
-                $(`#crudForm [name=${elId}]`).first().val(status.id)
+                $(`#crudForm [name="status"]`).first().val(status.id)
                 element.val(status.text)
                 element.data('currentValue', element.val())
             },
@@ -292,7 +384,7 @@
             },
             onClear: (element) => {
                 let elId = element.data('targetName')
-                $(`#crudForm [name=${elId}]`).first().val('')
+                $(`#crudForm [name="status"]`).first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             },

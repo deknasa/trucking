@@ -18,11 +18,7 @@
                                 <input type="text" name="supirdari" id="supirdari" class="form-control supirdari-lookup">
                             </div>
                         </div>
-
-
-
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
@@ -42,7 +38,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -141,11 +143,17 @@
         let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
         let supirdari = $('#crudForm').find('[name=supirdari]').val()
         let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
+
         if (supirdari_id != '') {
             $.ajax({
-
-                url: `{{ route('laporanhistorydeposito.export') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`,
+                url: `${apiUrl}laporanhistorydeposito/export`,
+                // url: `{{ route('laporanhistorydeposito.export') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`,
                 type: 'GET',
+                data: {
+                    supirdari_id: supirdari_id,
+                    supirdari: supirdari,
+                    supirsampai: supirsampai,
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -238,7 +246,7 @@
     function laporanhistorydeposito(data, detailParams, dataCabang, user) {
 
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
-        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
@@ -262,8 +270,6 @@
         // designer.renderHtml('content');
 
         report.renderAsync(function() {
-            console.log("Laporan berhasil dirender.");
-
             report.exportDocumentAsync(function(pdfData) {
                 let blob = new Blob([new Uint8Array(pdfData)], {
                     type: 'application/pdf'
@@ -271,7 +277,6 @@
                 let fileURL = URL.createObjectURL(blob);
                 window.open(fileURL, '_blank');
                 manipulatePdfWithJsPdf(pdfData);
-
             }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }

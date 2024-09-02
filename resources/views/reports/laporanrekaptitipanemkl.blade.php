@@ -25,7 +25,7 @@
       var report = new Stimulsoft.Report.StiReport()
 
      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+     //  options.appearance.fullScreenMode = truea
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
@@ -40,7 +40,7 @@
         'data': <?= json_encode($data); ?>,
         'dataCabang': <?= json_encode($dataCabang); ?>,
         'user': <?= json_encode($user); ?>,
-        'parameter': <?= json_encode($detailParams); ?>
+        'parameter': <?= json_encode($detailParams); ?>plaporan
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)

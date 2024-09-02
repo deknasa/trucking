@@ -431,49 +431,49 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS APPROVAL',
-                    subgrp: 'STATUS APPROVAL'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.id,
-                      text: row.text
-                    }));
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4",
+                  ajax: {
+                    url: `${apiUrl}parameter/combo`,
+                    dataType: 'JSON',
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                      grp: 'STATUS APPROVAL',
+                      subgrp: 'STATUS APPROVAL'
+                    },
+                    beforeSend: () => {
+                      // clear options
+                      $(element).data('select2').$results.children().filter((index, element) => {
+                        // clear options except index 0, which
+                        // is the "searching..." label
+                        if (index > 0) {
+                          element.remove()
+                        }
+                      })
+                    },
+                    processResults: (response) => {
+                      let formattedResponse = response.data.map(row => ({
+                        id: row.id,
+                        text: row.text
+                      }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+                      formattedResponse.unshift({
+                        id: '',
+                        text: 'ALL'
+                      });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
+                      return {
+                        results: formattedResponse
+                      };
+                    },
+                  }
+                });
+              }
+            },
             formatter: (value, options, rowData) => {
               if (!value) {
                 return ``
@@ -639,10 +639,10 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let penerimaanstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaanstok"]`).attr('title') ?? '';
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
-          loadDetailData(id,nobukti)
+          loadDetailData(id, nobukti)
           if (penerimaanstok == "SPB" || penerimaanstok == "SPBS") {
             nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutang_nobukti"]`).attr('title') ?? '';
           }
@@ -653,7 +653,7 @@
           let limit = grid.jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          
+
           loadHutangData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
         },
@@ -856,7 +856,46 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('penerimaanstokheader.export') }}?id=${selectedId}`)
+                let formRange = $('#formRange')
+                let dari = parseInt(formRange.find('[name=dari]').val())
+                let sampai = parseInt(formRange.find('[name=sampai]').val())
+                // window.open(`{{ route('penerimaanstokheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}penerimaanstokheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    penerimaanstokheader_id : selectedId,
+                    offset: dari - 1,
+                    rows: sampai - dari + 1,
+                    withRelations: true,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename'); 
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -869,8 +908,8 @@
             item: [{
                 id: 'approvalEdit',
                 text: ' APPROVAL/UN status Edit',
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -885,8 +924,8 @@
               {
                 id: 'approvalEditKeterangan',
                 text: ' APPROVAL/UN status Edit Keterangan',
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -901,8 +940,8 @@
               {
                 id: 'approvalBukaTglBatasPG',
                 text: ' approval/un Buka Tgl Batas PG',
-                color:'btn-primary',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`),
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalBukaTglBatasPG') }}`) {
                     var selectedOne = selectedOnlyOne();
@@ -917,8 +956,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PENERIMAAN STOK",
-                color:'btn-orange',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`),
+                color: 'btn-orange',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -935,8 +974,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PENERIMAAN STOK",
-                color:'btn-dark-blue',
-                hidden:(!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`),
+                color: 'btn-dark-blue',
+                hidden: (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -1098,13 +1137,14 @@
         },
       })
     }
+
     function approvalBukaTglBatasPG() {
       event.preventDefault()
-      
+
       let form = $('#crudForm')
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
-      
+
       $.ajax({
         url: `${apiUrl}penerimaanstokheader/approvalbukatglbataspg`,
         method: 'POST',
@@ -1114,12 +1154,12 @@
         },
         data: {
           Id: selectedRows,
-          nobukti:selectedbukti,
+          nobukti: selectedbukti,
         },
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-      
+
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
               proses: 'reload'
@@ -1132,7 +1172,7 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-      
+
             setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.responseJSON)

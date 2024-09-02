@@ -76,9 +76,9 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
-    onSelectRowExisting(value)    
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
+    onSelectRowExisting(value)
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
@@ -166,7 +166,7 @@
       $('#gs_').prop('checked', false)
     })
 
-  var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'pelunasanpiutangheader' }}`,
         mtype: "GET",
@@ -489,7 +489,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobuktihidden"]`).attr('title') ?? '';
           let nobuktiPengeluaran = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           if (nobukti == '-') {
@@ -688,7 +688,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('pelunasanpiutangheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('pelunasanpiutangheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}pelunasanpiutangheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    pelunasanpiutang_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PENERIMAAN PIUTANG' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -709,8 +742,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PELUNASAN PIUTANG",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -724,8 +757,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PELUNASAN PIUTANG",
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

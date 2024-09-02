@@ -126,8 +126,17 @@
             $('#processingLoader').removeClass('d-none')
             
             $.ajax({
-                url: `{{ route('laporantripgandengandetail.export') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}&gandengandari=${gandengandari}&gandengansampai=${gandengansampai}`,
+                url: `${apiUrl}laporantripgandengandetail/export`,
+                // url: `{{ route('laporantripgandengandetail.export') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}&gandengandari=${gandengandari}&gandengansampai=${gandengansampai}`,
                 type: 'GET',
+                data : {
+                    dari : dari,
+                    sampai : sampai,
+                    gandengandari_id : gandengandari_id,
+                    gandengansampai_id : gandengansampai_id,
+                    gandengandari : gandengandari,
+                    gandengansampai : gandengansampai,
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },

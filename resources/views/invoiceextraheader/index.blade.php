@@ -427,7 +427,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
 
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_piutang_nobukti"]`).attr('title') ?? '';
 
@@ -584,7 +584,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('invoiceextraheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('invoiceextraheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}invoiceextraheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    invoiceextra_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN INVOICE EXTRA' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -600,7 +633,7 @@
                 id: 'approveun',
                 text: "APPROVAL/UN Status INVOICE EXTRA",
                 color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
                     approve()
@@ -611,7 +644,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak INVOICE EXTRA",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -628,7 +661,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas INVOICE EXTRA",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden :(!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

@@ -583,7 +583,39 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('piutangheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('piutangheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}piutangheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    piutang_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PIUTANG' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -604,8 +636,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak PIUTANGHEADER",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -619,8 +651,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas PIUTANGHEADER",
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

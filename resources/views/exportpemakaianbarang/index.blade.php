@@ -100,7 +100,41 @@
 
         if (periode != '' && jenis != '') {
 
-            window.open(`{{ route('exportpemakaianbarang.export') }}?periode=${periode}&jenis=${jenis}`)
+            // window.open(`{{ route('exportpemakaianbarang.export') }}?periode=${periode}&jenis=${jenis}`)
+            $.ajax({
+                url: `${apiUrl}exportpemakaianbarang/export`,
+                // url: `{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`,
+                type: 'GET',
+                data: {
+                    periode: periode,
+                    jenis: jenis
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. PEMAKAIAN BARANG ' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

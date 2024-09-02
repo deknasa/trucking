@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="row">
+                        <div class="row">
                             <div class="col-sm-6 mt-4">
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
@@ -44,7 +44,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -70,7 +76,7 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        
+
         if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -86,7 +92,41 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanrekapsumbangan.report') }}?sampai=${sampai}&dari=${dari}`)
+            // window.open(`{{ route('laporanrekapsumbangan.report') }}?sampai=${sampai}&dari=${dari}`)
+            $.ajax({
+                    url: `${apiUrl}laporanrekapsumbangan/report`,
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        sampai: sampai,
+                        dari: dari
+                    },
+                    success: function(response) {
+                        // console.log(response)
+                        let data = response.data
+                        let dataCabang = response.namacabang
+                        let detailParams = {
+                            sampai: sampai,
+                            dari: dari
+                        };
+                        laporanrekapsumbangan(data, detailParams, dataCabang);
+                    },
+                    error: function(error) {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+                            $('#rangeTglModal').modal('hide')
+                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON.message);
+                        }
+                    }
+                })
+                .always(() => {
+                    $('#processingLoader').addClass('d-none')
+                });
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -100,8 +140,13 @@
             $('#processingLoader').removeClass('d-none')
 
             $.ajax({
-                url: `{{ route('laporanrekapsumbangan.export') }}?sampai=${sampai}&dari=${dari}`,
+                url: `${apiUrl}laporanrekapsumbangan/export`,
+                // url: `{{ route('laporanrekapsumbangan.export') }}?sampai=${sampai}&dari=${dari}`,
                 type: 'GET',
+                data : {
+                    dari : dari, 
+                    sampai : sampai
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -120,7 +165,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -133,8 +178,41 @@
         }
     })
 
+    function laporanrekapsumbangan(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
 
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
+        report.loadFile(`{{ asset('public/reports/ReportLaporanRekapSumbangan.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
 </script>
 @endpush()
 @endsection

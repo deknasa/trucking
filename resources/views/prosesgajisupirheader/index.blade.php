@@ -549,7 +549,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           pengeluaran_nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           activeGrid = grid
@@ -751,7 +751,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('prosesgajisupirheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('prosesgajisupirheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}prosesgajisupirheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    prosesgajisupir_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PROSES GAJI SUPIR' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -765,7 +798,7 @@
           item: [{
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak PROSES  GAJI SUPIR",
-              color:'btn-success',
+              color: 'btn-success',
               color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
@@ -782,7 +815,7 @@
               id: 'approval-kirim-berkas',
               text: "APPROVAL/UN Kirim Berkas PROSES  GAJI SUPIR",
               color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-              hidden:(!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`),
+              hidden: (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`),
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`) {
                   let tglkirimberkas = $('#tgldariheader').val().split('-');

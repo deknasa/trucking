@@ -53,7 +53,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -121,31 +127,43 @@
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
+
         $.ajax({
-            url: `{{ route('laporanlabarugi.report') }}`,
-            method: 'GET',
-            data: {
-                sampai: sampai,
-                cabang_id: cabang_id
-            },
-            success: function(response) {
-                // Handle the success response
-                var newWindow = window.open('', '_blank');
-                newWindow.document.open();
-                newWindow.document.write(response);
-                newWindow.document.close();
-            },
-            error: function(error) {
-                console.log(error)
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid');
-                    $('.invalid-feedback').remove();
-                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON.message);
+                url: `${apiUrl}laporanlabarugi/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    sampai: sampai,
+                    cabang_id: cabang_id
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataheader = response.dataheader
+                    let detailParams = {
+                        sampai: sampai,
+                        cabang_id: cabang_id,
+                        tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+                        judullaporan: 'Laporan Laba Rugi',
+                    };
+                    laporanlabarugi(data, detailParams, dataheader);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
                 }
-            }
-        });
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
     })
 
     $(document).on('click', `#btnExport`, function(event) {
@@ -154,8 +172,13 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
         $.ajax({
-            url: `{{ route('laporanlabarugi.export') }}?sampai=${sampai}&cabang_id=${cabang_id}`,
+            url: `${apiUrl}laporanlabarugi/export`,
+            // url: `{{ route('laporanlabarugi.export') }}?sampai=${sampai}&cabang_id=${cabang_id}`,
             type: 'GET',
+            data: {
+                sampai: sampai,
+                cabang_id: cabang_id
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },
@@ -174,7 +197,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -183,6 +206,42 @@
             }
         })
     })
+
+    function laporanlabarugi(data, detailParams, dataheader) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanLabaRugi.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataheader': dataheader,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
 
     function getCekReport() {
 

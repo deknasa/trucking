@@ -67,7 +67,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -116,26 +122,43 @@
         let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
         let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
         let suppliersampai = $('#crudForm').find('[name=suppliersampai]').val()
-        let status = $('#crudForm').find('[name=status]').val()
+        let status = $('#crudForm').find('[name=statusnama]').val()
 
-        getCekReport().then((response) => {
-            window.open(
-                `{{ route('laporanpembelian.report') }}?dari=${dari}&sampai=${sampai}&supplierdari=${supplierdari}&supplierdari_id=${supplierdari_id}&suppliersampai=${suppliersampai}&suppliersampai_id=${suppliersampai_id}&status=${status}`
-            )
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                // return showDialog(error.responseJSON.errors.export);
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `${apiUrl}laporanpembelian/report`,
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                dari: dari,
+                sampai: sampai,
+                supplierdari_id: supplierdari_id,
+                suppliersampai_id: suppliersampai_id,
+                supplierdari: supplierdari,
+                suppliersampai: suppliersampai,
+                status: status,
+            },
+            success: function(response) {
+                // console.log(response)
+                let data = response.data
+                let dataCabang = response.namacabang
+                let detailParams = {
+                    dari: dari,
+                    sampai: sampai,
+                    supplierdari_id: supplierdari_id,
+                    suppliersampai_id: suppliersampai_id,
+                    supplierdari: supplierdari,
+                    suppliersampai: suppliersampai,
+                    status: status,
+                };
+                laporanpembelian(data, detailParams, dataCabang);
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
             }
         })
-
     })
 
     $(document).on('click', `#btnExport`, function(event) {
@@ -147,10 +170,20 @@
         let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
         let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
         let suppliersampai = $('#crudForm').find('[name=suppliersampai]').val()
-        let status = $('#crudForm').find('[name=status]').val()
+        let status = $('#crudForm').find('[name=statusnama]').val()
         $.ajax({
-            url: `{{ route('laporanpembelian.export') }}?dari=${dari}&sampai=${sampai}&supplierdari=${supplierdari}&supplierdari_id=${supplierdari_id}&suppliersampai=${suppliersampai}&suppliersampai_id=${suppliersampai_id}&status=${status}`,
+            url: `${apiUrl}laporanpembelian/export`,
+            // url: `{{ route('laporanpembelian.export') }}?dari=${dari}&sampai=${sampai}&supplierdari=${supplierdari}&supplierdari_id=${supplierdari_id}&suppliersampai=${suppliersampai}&suppliersampai_id=${suppliersampai_id}&status=${status}`,
             type: 'GET',
+            data: {
+                dari: dari,
+                sampai: sampai,
+                supplierdari_id: supplierdari_id,
+                suppliersampai_id: suppliersampai_id,
+                supplierdari: supplierdari,
+                suppliersampai: suppliersampai,
+                status: status
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },
@@ -180,34 +213,70 @@
 
     })
 
-    function getCekReport() {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}laporanpembelian/report`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    dari: $('#crudForm').find('[name=dari]').val(),
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    supplierdari: $('#crudForm').find('[name=supplierdari]').val(),
-                    supplierdari_id: $('#crudForm').find('[name=supplierdari_id]').val(),
-                    suppliersampai: $('#crudForm').find('[name=suppliersampai]').val(),
-                    suppliersampai_id: $('#crudForm').find('[name=suppliersampai_id]').val(),
-                    status: $('#crudForm').find('[name=status]').val(),
-                    isCheck: true,
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
+    function laporanpembelian(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
-                },
-            });
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportPembelian3.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
+
+    // function getCekReport() {
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url: `${apiUrl}laporanpembelian/report`,
+    //             dataType: "JSON",
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 dari: $('#crudForm').find('[name=dari]').val(),
+    //                 sampai: $('#crudForm').find('[name=sampai]').val(),
+    //                 supplierdari: $('#crudForm').find('[name=supplierdari]').val(),
+    //                 supplierdari_id: $('#crudForm').find('[name=supplierdari_id]').val(),
+    //                 suppliersampai: $('#crudForm').find('[name=suppliersampai]').val(),
+    //                 suppliersampai_id: $('#crudForm').find('[name=suppliersampai_id]').val(),
+    //                 status: $('#crudForm').find('[name=statusnama]').val(),
+    //                 isCheck: true,
+    //             },
+    //             success: (response) => {
+    //                 resolve(response);
+    //             },
+    //             error: error => {
+    //                 reject(error)
+
+    //             },
+    //         });
+    //     });
+    // }
 
     function getCekExport() {
 
