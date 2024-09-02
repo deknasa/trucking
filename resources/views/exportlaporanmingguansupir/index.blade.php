@@ -70,6 +70,16 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <label class="col-12 col-sm-2 col-form-label mt-2">JENIS LAPORAN</label>
+                                <div class="col-sm-4 mt-2">
+                                    <div class="input-group">
+                                    <select name="jenislaporan" id="jenislaporan" class="form-select select2bs4" style="width: 100%;">
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
                                 <div class="col-sm-6 mt-4">
                                     <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                         <i class="fas fa-file-export"></i>
@@ -107,6 +117,8 @@
             $(document).ready(function() {
                 initLookup()
                 initDatepicker()
+                initSelect2($('#crudForm').find('[name=jenislaporan]'), false)
+                setJenisLaporanOptions($('#crudForm'))
                 $('#crudForm').find('[name=bulan]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
                 $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
                     'change');
@@ -158,6 +170,7 @@
                 let tradodari = $('#crudForm').find('[name=tradodari]').val()
                 let tradosampai_id = $('#crudForm').find('[name=tradosampai_id]').val()
                 let tradosampai = $('#crudForm').find('[name=tradosampai]').val()
+                let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
 
                 // getCekExport().then((response) => {
                     
@@ -173,7 +186,8 @@
                             tradodari_id : tradodari_id,
                             tradodari : tradodari,
                             tradosampai_id : tradosampai_id,
-                            tradosampai : tradosampai
+                            tradosampai : tradosampai,
+                            jenislaporan : jenislaporan
                         },
                         beforeSend: function(xhr) {
                             xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -339,6 +353,47 @@
                     }
                 })
             }
+            
+            const setJenisLaporanOptions = function(relatedForm) {
+                return new Promise((resolve, reject) => {
+                    relatedForm.find('[name=jenislaporan]').empty()
+                    relatedForm.find('[name=jenislaporan]').append(
+                        new Option('-- PILIH JENIS LAPORAN --', '', false, true)
+                    ).trigger('change')
+                    $.ajax({
+                        url: `${apiUrl}parameter`,
+                        method: 'GET',
+                        dataType: 'JSON',
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        data: {
+                            filters: JSON.stringify({
+                                "groupOp": "AND",
+                                "rules": [{
+                                    "field": "grp",
+                                    "op": "cn",
+                                    "data": "JENIS RINCIAN MINGGUAN"
+                                }]
+                            })
+                        },
+                        success: response => {
+                            response.data.forEach(statusReuse => {
+                                let option = new Option(statusReuse.text, statusReuse.id)
+                                relatedForm.find('[name=jenislaporan]').append(option).trigger('change')
+                                if (statusReuse.default == 'YA') {
+                                    relatedForm.find('[name=jenislaporan]').val(statusReuse.id).trigger('change');
+                                }
+                            });
+                            
+                            resolve()
+                        },
+                        error: error => {
+                            reject(error)
+                        }
+                    })
+                })
+            }    
         </script>
     @endpush()
 @endsection
