@@ -27,29 +27,29 @@ class LaporanKartuPiutangPerAgenController extends MyController
         return view('laporankartupiutangperagen.index', compact('title'));
     }
 
-    public function report(Request $request)
-    {
-        $detailParams = [
-            'dari' => $request->dari,
-            'sampai' => $request->sampai,
-            'agendari' => $request->agendari,
-            'agensampai' => $request->agensampai,
-            'agendari_id' => $request->agendari_id,
-            'agensampai_id' => $request->agensampai_id,
+    // public function report(Request $request)
+    // {
+    //     $detailParams = [
+    //         'dari' => $request->dari,
+    //         'sampai' => $request->sampai,
+    //         'agendari' => $request->agendari,
+    //         'agensampai' => $request->agensampai,
+    //         'agendari_id' => $request->agendari_id,
+    //         'agensampai_id' => $request->agensampai_id,
 
-        ];
-        // dd($detailParams);
-        $header = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporankartupiutangperagen/report', $detailParams);
+    //     ];
+    //     // dd($detailParams);
+    //     $header = Http::withHeaders(request()->header())
+    //         ->withOptions(['verify' => false])
+    //         ->withToken(session('access_token'))
+    //         ->get(config('app.api_url') . 'laporankartupiutangperagen/report', $detailParams);
 
-        $data = $header['data'];
-        $dataCabang['namacabang'] = $header['namacabang'];
-        $user = Auth::user();
+    //     $data = $header['data'];
+    //     $dataCabang['namacabang'] = $header['namacabang'];
+    //     $user = Auth::user();
 
-        return view('reports.laporankartupiutangperagen', compact('data','dataCabang', 'user', 'detailParams'));
-    }
+    //     return view('reports.laporankartupiutangperagen', compact('data','dataCabang', 'user', 'detailParams'));
+    // }
 
     public function export(Request $request): void
     {

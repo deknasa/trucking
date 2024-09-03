@@ -512,7 +512,41 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('rekappenerimaanheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('rekappenerimaanheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}rekappenerimaanheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    rekappenerimaan_id: selectedId,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      var filename = xhr.getResponseHeader('Filename');
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -525,8 +559,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status REKAP PENERIMAAN",
-                color:'btn-success',
-                hidden:(!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`),
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`) {
                     handleApproval()
@@ -536,8 +570,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak REKAP PENERIMAAN",
-                color:'btn-info',
-                hidden:(!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalbukacetak') }}`),
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -553,8 +587,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas REKAP PENERIMAAN",
-                color:'btn-primary',
-                hidden:(!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalkirimberkas') }}`),
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

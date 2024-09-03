@@ -628,12 +628,45 @@
                         innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
                         class: 'btn btn-warning btn-sm mr-1',
                         onClick: () => {
-
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                window.open(`{{ route('penerimaangiroheader.export') }}?id=${selectedId}`)
+                                // window.open(`{{ route('penerimaangiroheader.export') }}?id=${selectedId}`)
+                                $.ajax({
+                                    url: `${apiUrl}penerimaangiroheader/${selectedId}/export`,
+                                    type: 'GET',
+                                    data: {
+                                        forReport : true,
+                                        penerimaangiro_id: selectedId,
+                                        export : true
+                                    },
+                                    beforeSend: function(xhr) {
+                                        xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                                    },
+                                    xhrFields: {
+                                        responseType: 'arraybuffer'
+                                    },
+                                    success: function(response, status, xhr) {
+                                        if (xhr.status === 200) {
+                                            var filename = xhr.getResponseHeader('Filename');
+                                            if (response !== undefined) {
+                                                var blob = new Blob([response], {
+                                                    type: 'cabang/vnd.ms-excel'
+                                                });
+                                                var link = document.createElement('a');
+                                                link.href = window.URL.createObjectURL(blob);
+                                                link.download = filename + '.xlsx';
+                                                link.click();
+                                            }
+                                        }
+                                        $('#processingLoader').addClass('d-none')
+                                    },
+                                    error: function(xhr, status, error) {
+                                        $('#processingLoader').addClass('d-none')
+                                        showDialog('TIDAK ADA DATA')
+                                    }
+                                })
                             }
                             clearSelectedRows()
                             $('#gs_').prop('checked', false)
@@ -648,8 +681,8 @@
                         item: [{
                                 id: 'approveun',
                                 text: "APPROVAL/UN Status PENERIMAAN GIRO",
-                                color:'btn-success',
-                                hidden:(!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`),
+                                color: 'btn-success',
+                                hidden: (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
                                         approve()
@@ -659,8 +692,8 @@
                             {
                                 id: 'approval-buka-cetak',
                                 text: "Approval Buka Cetak PENERIMAAN GIRO",
-                                color:'btn-info',
-                                hidden:(!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`),
+                                color: 'btn-info',
+                                hidden: (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
                                         let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -672,8 +705,8 @@
                             {
                                 id: 'approval-kirim-berkas',
                                 text: "APPROVAL/UN Kirim Berkas PENERIMAAN GIRO",
-                                color:'btn-primary',
-                                hidden:(!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalkirimberkas') }}`),
+                                color: 'btn-primary',
+                                hidden: (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalkirimberkas') }}`),
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalkirimberkas') }}`) {
                                         let tglkirimberkas = $('#tgldariheader').val().split('-');

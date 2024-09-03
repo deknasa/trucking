@@ -41,12 +41,12 @@
   function checkboxHandler(element) {
     let value = $(element).val();
 
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
-    
-    
-    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
+
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -63,14 +63,14 @@
         $('#gs_').prop('checked', false)
       }
       for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
       }
-    }
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-    
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
@@ -90,7 +90,7 @@
     })
 
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",
@@ -297,7 +297,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
 
           activeGrid = grid
           indexRow = grid.jqGrid('getCell', id, 'rn') - 1
@@ -450,7 +450,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('jurnalumumheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('jurnalumumheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}jurnalumumheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forExport : true,
+                    jurnalumum_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN JURNAL UMUM' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)
@@ -465,8 +498,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Jurnal Umum",
-                color:'btn-success',
-                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) ,
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
                     approve()
@@ -476,8 +509,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak JURNAL",
-                color:'btn-info',
-                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) ,
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -489,8 +522,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas JURNAL",
-                color:'btn-primary',
-                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) ,
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
@@ -498,7 +531,7 @@
                     approvalKirimberkas(tglkirimberkas, 'JURNALUMUMHEADER', selectedRows, selectedbukti);
                   }
                 }
-              },              
+              },
             ],
           },
           {
@@ -510,7 +543,7 @@
             item: [{
                 id: 'copy',
                 text: "COPY",
-                color:'btn-success',
+                color: 'btn-success',
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -767,7 +800,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

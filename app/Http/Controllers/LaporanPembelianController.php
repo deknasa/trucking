@@ -51,43 +51,31 @@ class laporanpembelianController extends MyController
         return $data;
     }
 
-
-    public function report(Request $request)
-    {
-        date_default_timezone_set('Asia/Jakarta');
-        $detailParams = [
-            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-            'judullaporan' => 'Laporan  Pembelian',
-            'tanggal_cetak' => date('d-m-Y H:i:s'),
-            'dari' => $request->dari,
-            'sampai' => $request->sampai,
-            'supplierdari' => $request->supplierdari,
-            'suppliersampai' => $request->suppliersampai,
-            'supplierdari_id' => $request->supplierdari_id,
-            'suppliersampai_id' => $request->suppliersampai_id,
-            'status' => $request->status,
-            'dari' => $request->dari,
-
-        ];
-        // dd($detailParams);
-        $header = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpembelian/report', $detailParams);
-        $data = $header['data'];
-        $dataCabang['namacabang'] = $header['namacabang'];
-
-
-        // dd($data);
-        // $dataHeader = $header['dataheader'];
-        $user = Auth::user();
-
-        return view('reports.laporanpembelian', compact('data','dataCabang', 'user', 'detailParams'));
-    }
-
-
-
-
+    // public function report(Request $request)
+    // {
+    //     date_default_timezone_set('Asia/Jakarta');
+    //     $detailParams = [
+    //         'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+    //         'judullaporan' => 'Laporan  Pembelian',
+    //         'tanggal_cetak' => date('d-m-Y H:i:s'),
+    //         'dari' => $request->dari,
+    //         'sampai' => $request->sampai,
+    //         'supplierdari' => $request->supplierdari,
+    //         'suppliersampai' => $request->suppliersampai,
+    //         'supplierdari_id' => $request->supplierdari_id,
+    //         'suppliersampai_id' => $request->suppliersampai_id,
+    //         'status' => $request->status,
+    //         'dari' => $request->dari,
+    //     ];
+    //     $header = Http::withHeaders(request()->header())
+    //         ->withOptions(['verify' => false])
+    //         ->withToken(session('access_token'))
+    //         ->get(config('app.api_url') . 'laporanpembelian/report', $detailParams);
+    //     $data = $header['data'];
+    //     $dataCabang['namacabang'] = $header['namacabang'];
+    //     $user = Auth::user();
+    //     return view('reports.laporanpembelian', compact('data','dataCabang', 'user', 'detailParams'));
+    // }
 
     public function export(Request $request): void
     {
@@ -103,8 +91,6 @@ class laporanpembelianController extends MyController
             'suppliersampai_id' => $request->suppliersampai_id,
             'status' => $request->status,
             'dari' => $request->dari,
-
-
         ];
 
         $responses = Http::withHeaders($request->header())

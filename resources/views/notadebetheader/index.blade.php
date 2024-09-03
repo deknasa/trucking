@@ -69,8 +69,8 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow'); 
-    $("#jqGrid").jqGrid('setSelection', value,false);
+    var onSelectRowExisting = $("#jqGrid").jqGrid('getGridParam', 'onSelectRow');
+    $("#jqGrid").jqGrid('setSelection', value, false);
     onSelectRowExisting(value)
 
     let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
@@ -132,7 +132,7 @@
     })
 
 
-    var grid= $("#jqGrid");  
+    var grid = $("#jqGrid");
     grid.jqGrid({
         url: `{{ config('app.api_url') . 'notadebetheader' }}`,
         mtype: "GET",
@@ -524,7 +524,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           // let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
           // let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           // let nobukti_penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
@@ -685,7 +685,39 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('notadebetheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('notadebetheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}notadebetheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    notadebet_id: selectedId,
+                    export : true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN NOTA DEBET' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -698,8 +730,8 @@
             item: [{
                 id: 'approveun',
                 text: "APPROVAL/UN Status NOTA DEBET",
-                color:'btn-success',
-                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) ,
+                color: 'btn-success',
+                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
                     approve()
@@ -709,8 +741,8 @@
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak NOTA DEBET",
-                color:'btn-info',
-                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) ,
+                color: 'btn-info',
+                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -724,8 +756,8 @@
               {
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas NOTA DEBET",
-                color:'btn-primary',
-                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`) ,
+                color: 'btn-primary',
+                hidden: (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

@@ -303,6 +303,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\StatusGandenganTradoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -338,6 +339,7 @@ Route::middleware('guest')->group(function () {
 Route::get('reset-password/expired', [ResetPasswordController::class, 'expired'])->name('reset-password.expired');
 Route::get('reset-password/success', [ResetPasswordController::class, 'success'])->name('reset-password.success');
 
+Route::get('reminderspkdetail/export', [ReminderSpkController::class, 'export'])->name('reminderspkdetail.export');
 
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
 
@@ -1685,7 +1687,6 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('statusolitrado/index', [StatusOliTradoController::class, 'index']);
     Route::resource('statusolitrado', StatusOliTradoController::class);
 
-    Route::get('reminderspkdetail/export', [ReminderSpkController::class, 'export'])->name('reminderspkdetail.export');
     Route::get('reminderspk/index', [ReminderSpkController::class, 'index']);
     Route::resource('reminderspk', ReminderSpkController::class);
     Route::get('spkharian/index', [SpkHarianController::class, 'index']);
@@ -1798,7 +1799,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('upahsupirtangki', UpahSupirTangkiController::class);
 
     Route::get('biayaextrasupirheader/index', [BiayaExtraSupirHeaderController::class, 'index']);
-    Route::resource('biayaextrasupirheader', BiayaExtraSupirHeaderController::class);
+    Route::resource('biayaextrasupirheader', BiayaExtraSupirHeaderController::class); 
+    
+    Route::get('statusgandengantrado/index', [StatusGandenganTradoController::class, 'index']);
+    Route::resource('statusgandengantrado', StatusGandenganTradoController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

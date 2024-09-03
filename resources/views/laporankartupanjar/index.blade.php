@@ -70,7 +70,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -100,7 +106,7 @@
         $('#crudForm').find('[name=ambildari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambilsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        
+
         if (!`{{ $myAuth->hasPermission('laporankartupanjar', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -118,18 +124,48 @@
         let agendari = $('#crudForm').find('[name=agendari]').val()
         let agensampai = $('#crudForm').find('[name=agensampai]').val()
 
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporankartupanjar.report') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-            }
-        })
+        $.ajax({
+                url: `${apiUrl}laporankartupanjar/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: dari,
+                    sampai: sampai,
+                    agendari: agendari,
+                    agensampai: agensampai,
+                    agendari_id: agendari_id,
+                    agensampai_id: agensampai_id,
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let detailParams = {
+                        dari: dari,
+                        sampai: sampai,
+                        agendari: agendari,
+                        agensampai: agensampai,
+                        agendari_id: agendari_id,
+                        agensampai_id: agensampai_id,
+                    };
+                    laporankartupanjar(data, detailParams, dataCabang);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
 
     })
 
@@ -144,8 +180,17 @@
         let agensampai = $('#crudForm').find('[name=agensampai]').val()
 
         $.ajax({
-            url: `{{ route('laporankartupanjar.export') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}`,
+            url: `${apiUrl}laporankartupanjar/export`,
+            // url: `{{ route('laporankartupanjar.export') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}`,
             type: 'GET',
+            data: {
+                dari: dari,
+                sampai: sampai,
+                agendari_id: agendari_id,
+                agensampai_id: agensampai_id,
+                agendari: agendari,
+                agensampai: agensampai,
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },
@@ -164,7 +209,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -174,34 +219,70 @@
         })
     })
 
-    function getCekReport() {
+    function laporankartupanjar(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
 
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}laporankartupanjar/report`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    dari: $('#crudForm').find('[name=dari]').val(),
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    agendari_id: $('#crudForm').find('[name=agendari_id]').val(),
-                    agensampai_id: $('#crudForm').find('[name=agensampai_id]').val(),
-                    agendari: $('#crudForm').find('[name=agendari]').val(),
-                    agensampai: $('#crudForm').find('[name=agensampai]').val(),
-                    isCheck: true,
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-                },
-            });
+        report.loadFile(`{{ asset('public/reports/ReportLaporanKartuPanjar.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
+
+    // function getCekReport() {
+
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url: `${apiUrl}laporankartupanjar/report`,
+    //             dataType: "JSON",
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 dari: $('#crudForm').find('[name=dari]').val(),
+    //                 sampai: $('#crudForm').find('[name=sampai]').val(),
+    //                 agendari_id: $('#crudForm').find('[name=agendari_id]').val(),
+    //                 agensampai_id: $('#crudForm').find('[name=agensampai_id]').val(),
+    //                 agendari: $('#crudForm').find('[name=agendari]').val(),
+    //                 agensampai: $('#crudForm').find('[name=agensampai]').val(),
+    //                 isCheck: true,
+    //             },
+    //             success: (response) => {
+    //                 resolve(response);
+    //             },
+    //             error: error => {
+    //                 reject(error)
+
+    //             },
+    //         });
+    //     });
+    // }
 
     function getCekExport() {
 

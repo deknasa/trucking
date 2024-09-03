@@ -76,7 +76,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -125,20 +131,10 @@
         let coadari = $('#crudForm').find('[name=coadari]').val()
         let coasampai = $('#crudForm').find('[name=coasampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}&printer=reportPrinterBesar`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
 
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
-            }
-        })
+        getCekReport(dari, sampai, coadari_id, coasampai_id, coadari, coasampai, cabang_id, 'reportPrinterBesar')
     })
+
     $(document).on('click', `#reportPrinterKecil`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
@@ -147,19 +143,7 @@
         let coadari = $('#crudForm').find('[name=coadari]').val()
         let coasampai = $('#crudForm').find('[name=coasampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}&printer=reportPrinterKecil`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
-            }
-        })
+        getCekReport(dari, sampai, coadari_id, coasampai_id, coadari, coasampai, cabang_id, 'reportPrinterKecil')
     })
 
     $(document).on('click', `#btnExport`, function(event) {
@@ -176,8 +160,18 @@
         if (dari != '' && sampai != '') {
 
             $.ajax({
-                url: `{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}`,
+                url: `${apiUrl}laporanbukubesar/export`,
+                // url: `{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}`,
                 type: 'GET',
+                data: {
+                    dari: dari,
+                    sampai: sampai,
+                    coadari_id: coadari_id,
+                    coasampai_id: coasampai_id,
+                    coadari: coadari,
+                    coasampai: coasampai,
+                    cabang_id: cabang_id,
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -196,7 +190,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -209,33 +203,82 @@
         }
     })
 
-    function getCekReport() {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
+    function getCekReport(dari, sampai, coadari_id, coasampai_id, coadari, coasampai, cabang_id, printer) {
+        $.ajax({
                 url: `${apiUrl}laporanbukubesar/report`,
-                dataType: "JSON",
+                method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
-                    dari: $('#crudForm').find('[name=dari]').val(),
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    coadari: $('#crudForm').find('[name=coadari]').val(),
-                    coadari_id: $('#crudForm').find('[name=coadari_id]').val(),
-                    coasampai: $('#crudForm').find('[name=coasampai]').val(),
-                    coasampai_id: $('#crudForm').find('[name=coasampai_id]').val(),
-                    cabang_id: $('#crudForm').find('[name=cabang_id]').val(),
-                    isCheck: true,
+                    dari: dari,
+                    sampai: sampai,
+                    coadari_id: coadari_id,
+                    coasampai_id: coasampai_id,
+                    coadari: coadari,
+                    coasampai: coasampai,
+                    cabang_id: cabang_id
                 },
-                success: (response) => {
-                    resolve(response);
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let dataheader = response.dataheader
+                    laporanbukubesar(data, dataheader, dataCabang, printer);
                 },
-                error: error => {
-                    reject(error)
-
-                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
             });
+    }
+
+    function laporanbukubesar(data, dataheader, dataCabang, printer) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        if (printer == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesarBesar.mrt') }}`);
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesar.mrt') }}`);
+        }
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'dataheader': dataheader
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
 

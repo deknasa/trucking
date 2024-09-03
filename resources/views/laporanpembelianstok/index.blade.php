@@ -60,7 +60,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -112,23 +118,50 @@
         let stoksampai = $('#crudForm').find('[name=stoksampai]').val()
         let status = $('#crudForm').find('[name=status]').val()
 
-        getCekReport().then((response) => {
-            window.open(
-                `{{ route('laporanpembelianstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`
-            )
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                // return showDialog(error.responseJSON.errors.export);
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
-            }
-        })
+        $.ajax({
+                url: `${apiUrl}laporanpembelianstok/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: dari,
+                    sampai: sampai,
+                    stokdari_id: stokdari_id,
+                    stoksampai_id: stoksampai_id,
+                    stokdari: stokdari,
+                    stoksampai: stoksampai,
+                    status: status,
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let detailParams = {
+                        dari: dari,
+                        sampai: sampai,
+                        stokdari_id: stokdari_id,
+                        stoksampai_id: stoksampai_id,
+                        stokdari: stokdari,
+                        stoksampai: stoksampai,
+                        status: status,
+                    };
+                    laporanpembelianstok(data, detailParams, dataCabang);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
 
     })
 
@@ -142,10 +175,20 @@
         let stokdari = $('#crudForm').find('[name=stokdari]').val()
         let stoksampai = $('#crudForm').find('[name=stoksampai]').val()
         let status = $('#crudForm').find('[name=status]').val()
-        
+
         $.ajax({
-            url: `{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`,
+            url: `${apiUrl}laporanpembelianstok/export`,
+            // url: `{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`,
             type: 'GET',
+            data: {
+                dari: dari,
+                sampai: sampai,
+                stokdari_id: stokdari_id,
+                stoksampai_id: stoksampai_id,
+                stokdari: stokdari,
+                stoksampai: stoksampai,
+                status: status
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
             },
@@ -164,7 +207,7 @@
                         link.click();
                     }
                 }
-                
+
                 $('#processingLoader').addClass('d-none')
             },
             error: function(xhr, status, error) {
@@ -228,6 +271,42 @@
 
                 },
             });
+        });
+    }
+
+    function laporanpembelianstok(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportPembelianStok.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
 

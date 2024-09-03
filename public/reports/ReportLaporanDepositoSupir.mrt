@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d1a9e15ee4022fb59aaca918bf487cf9",
+  "ReportGuid": "d5d7cd5d1ae45b9ea033f1a8c160dbdd",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanDepositoSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1721977370000+0700)/",
+  "ReportChanged": "/Date(1725245807000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -24,8 +24,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "data",
-        "Alias": "data",
+        "Name": "root_data",
+        "Alias": "root_data",
         "Columns": {
           "0": {
             "Name": "id",
@@ -122,202 +122,26 @@
             "NameInSource": "diperiksa",
             "Alias": "diperiksa",
             "Type": "System.String"
+          },
+          "16": {
+            "Name": "username",
+            "NameInSource": "username",
+            "Alias": "username",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
           }
         },
-        "NameInSource": "Data.data"
+        "NameInSource": "Data.root_data"
       },
       "1": {
         "Ident": "StiDataTableSource",
-        "Name": "dataCabang",
-        "Alias": "dataCabang",
-        "Columns": {
-          "0": {
-            "Name": "namacabang",
-            "NameInSource": "namacabang",
-            "Alias": "namacabang",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.dataCabang"
-      },
-      "2": {
-        "Ident": "StiDataTableSource",
-        "Name": "user_roles_pivot",
-        "Alias": "user_roles_pivot",
-        "Columns": {
-          "0": {
-            "Name": "user_id",
-            "NameInSource": "user_id",
-            "Alias": "user_id",
-            "Type": "System.String"
-          },
-          "1": {
-            "Name": "role_id",
-            "NameInSource": "role_id",
-            "Alias": "role_id",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "relationId",
-            "NameInSource": "relationId",
-            "Alias": "relationId",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.user_roles_pivot"
-      },
-      "3": {
-        "Ident": "StiDataTableSource",
-        "Name": "user_roles",
-        "Alias": "user_roles",
-        "Columns": {
-          "0": {
-            "Name": "id",
-            "NameInSource": "id",
-            "Alias": "id",
-            "Type": "System.Decimal"
-          },
-          "1": {
-            "Name": "rolename",
-            "NameInSource": "rolename",
-            "Alias": "rolename",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "modifiedby",
-            "NameInSource": "modifiedby",
-            "Alias": "modifiedby",
-            "Type": "System.String"
-          },
-          "4": {
-            "Name": "created_at",
-            "NameInSource": "created_at",
-            "Alias": "created_at",
-            "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "updated_at",
-            "NameInSource": "updated_at",
-            "Alias": "updated_at",
-            "Type": "System.DateTime"
-          },
-          "6": {
-            "Name": "pivot",
-            "NameInSource": "pivot",
-            "Alias": "pivot",
-            "Type": "System.String"
-          },
-          "7": {
-            "Name": "relationId",
-            "NameInSource": "relationId",
-            "Alias": "relationId",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.user_roles"
-      },
-      "4": {
-        "Ident": "StiDataTableSource",
-        "Name": "user",
-        "Alias": "user",
-        "Columns": {
-          "0": {
-            "Name": "id",
-            "NameInSource": "id",
-            "Alias": "id",
-            "Type": "System.Decimal"
-          },
-          "1": {
-            "Name": "user",
-            "NameInSource": "user",
-            "Alias": "user",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "name",
-            "NameInSource": "name",
-            "Alias": "name",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "cabang_id",
-            "NameInSource": "cabang_id",
-            "Alias": "cabang_id",
-            "Type": "System.String"
-          },
-          "4": {
-            "Name": "karyawan_id",
-            "NameInSource": "karyawan_id",
-            "Alias": "karyawan_id",
-            "Type": "System.String"
-          },
-          "5": {
-            "Name": "dashboard",
-            "NameInSource": "dashboard",
-            "Alias": "dashboard",
-            "Type": "System.String"
-          },
-          "6": {
-            "Name": "statusaktif",
-            "NameInSource": "statusaktif",
-            "Alias": "statusaktif",
-            "Type": "System.String"
-          },
-          "7": {
-            "Name": "statusakses",
-            "NameInSource": "statusakses",
-            "Alias": "statusakses",
-            "Type": "System.String"
-          },
-          "8": {
-            "Name": "email",
-            "NameInSource": "email",
-            "Alias": "email",
-            "Type": "System.String"
-          },
-          "9": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "10": {
-            "Name": "modifiedby",
-            "NameInSource": "modifiedby",
-            "Alias": "modifiedby",
-            "Type": "System.String"
-          },
-          "11": {
-            "Name": "created_at",
-            "NameInSource": "created_at",
-            "Alias": "created_at",
-            "Type": "System.DateTime"
-          },
-          "12": {
-            "Name": "updated_at",
-            "NameInSource": "updated_at",
-            "Alias": "updated_at",
-            "Type": "System.DateTime"
-          },
-          "13": {
-            "Name": "roles",
-            "NameInSource": "roles",
-            "Alias": "roles",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.user"
-      },
-      "5": {
-        "Ident": "StiDataTableSource",
-        "Name": "parameter",
-        "Alias": "parameter",
+        "Name": "root_parameter",
+        "Alias": "root_parameter",
         "Columns": {
           "0": {
             "Name": "sampai",
@@ -326,41 +150,73 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "periodedata_id",
-            "NameInSource": "periodedata_id",
-            "Alias": "periodedata_id",
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.parameter"
+        "NameInSource": "Data.root_parameter"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
+        "Name": "root",
+        "Alias": "root",
+        "Columns": {
+          "0": {
+            "Name": "data",
+            "NameInSource": "data",
+            "Alias": "data",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "dataCabang",
+            "NameInSource": "dataCabang",
+            "Alias": "dataCabang",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "user",
+            "NameInSource": "user",
+            "Alias": "user",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.root"
       }
     },
     "Relations": {
       "0": {
-        "Name": "user_roles",
+        "Name": "root",
         "ChildColumns": {
           "0": "relationId"
         },
         "ParentColumns": {
-          "0": "pivot"
+          "0": "data"
         },
-        "NameInSource": "user_roles_pivot",
-        "Alias": "user_roles",
-        "ParentSource": "user_roles",
-        "ChildSource": "user_roles_pivot"
+        "NameInSource": "root_data",
+        "Alias": "root",
+        "ParentSource": "root",
+        "ChildSource": "root_data"
       },
       "1": {
-        "Name": "user",
+        "Name": "root",
         "ChildColumns": {
           "0": "relationId"
         },
         "ParentColumns": {
-          "0": "roles"
+          "0": "parameter"
         },
-        "NameInSource": "user_roles",
-        "Alias": "user",
-        "ParentSource": "user",
-        "ChildSource": "user_roles"
+        "NameInSource": "root_parameter",
+        "Alias": "root",
+        "ParentSource": "root",
+        "ChildSource": "root_parameter"
       }
     }
   },
@@ -376,9 +232,69 @@
       "Brush": "solid:",
       "Components": {
         "0": {
+          "Ident": "StiText",
+          "Name": "Text3",
+          "Guid": "dfcb60f41c225efca961526702d63cf7",
+          "GrowToHeight": true,
+          "ClientRectangle": "-2.03,11.94,210,6",
+          "ComponentPlacement": "gh.GroupHeaderBand1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Text": {
+            "Value": "{root.dataCabang}"
+          },
+          "HorAlignment": "Center",
+          "Font": "SourceSansPro;10;Bold;",
+          "Border": ";;;;;;;solid:0,0,0",
+          "Brush": "solid:",
+          "TextBrush": "solid:0,0,0",
+          "Type": "DataColumn"
+        },
+        "1": {
+          "Ident": "StiText",
+          "Name": "Text2",
+          "Guid": "7a4ed75988d2da0b1fa0909e8f1f6af9",
+          "GrowToHeight": true,
+          "ClientRectangle": "-1.78,6.1,209.9,6.6",
+          "ComponentPlacement": "gh.GroupHeaderBand1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Text": {
+            "Value": "{root_data.judul}"
+          },
+          "HorAlignment": "Center",
+          "Font": "SourceSansPro;10;Bold;",
+          "Border": ";;;;;;;solid:0,0,0",
+          "Brush": "solid:",
+          "TextBrush": "solid:0,0,0",
+          "Type": "DataColumn"
+        },
+        "2": {
+          "Ident": "StiText",
+          "Name": "Text9",
+          "Guid": "a553dbe451de44bfac33d900bdddadae",
+          "GrowToHeight": true,
+          "ClientRectangle": "-2.03,18.03,210,6",
+          "ComponentPlacement": "gh.GroupHeaderBand1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Text": {
+            "Value": "{root_data.judulLaporan}"
+          },
+          "HorAlignment": "Center",
+          "Font": "SourceSansPro;10;Bold;",
+          "Border": ";;;;;;;solid:0,0,0",
+          "Brush": "solid:",
+          "TextBrush": "solid:0,0,0",
+          "Type": "DataColumn"
+        },
+        "3": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,4,215.7,34",
+          "ClientRectangle": "0,4,209.9,34",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -388,29 +304,9 @@
           "Components": {
             "0": {
               "Ident": "StiText",
-              "Name": "Text9",
-              "Guid": "a553dbe451de44bfac33d900bdddadae",
-              "GrowToHeight": true,
-              "ClientRectangle": "2,14,210,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{data.judulLaporan}"
-              },
-              "HorAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
-            },
-            "1": {
-              "Ident": "StiText",
               "Name": "Text10",
               "Guid": "facac79a1db858ca33450c607cc4998b",
-              "ClientRectangle": "4.03,25.97,44,8",
+              "ClientRectangle": "4.03,25.97,38,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -420,17 +316,17 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "SourceSansPro;10;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "2": {
+            "1": {
               "Ident": "StiText",
               "Name": "Text11",
               "Guid": "c163f661b82e7df3fce00556394c0991",
-              "ClientRectangle": "48.01,25.97,56,8",
+              "ClientRectangle": "42.01,25.97,56,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -440,17 +336,17 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "SourceSansPro;10;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "3": {
+            "2": {
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "fc0890bc8886c633ab72f55ab35cb740",
-              "ClientRectangle": "103.98,25.97,28,8",
+              "ClientRectangle": "97.98,25.97,28,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -460,17 +356,17 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "SourceSansPro;10;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "4": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text13",
               "Guid": "bd0bf615adac2d77a8e7c42cbb447c3c",
-              "ClientRectangle": "131.92,25.97,28,8",
+              "ClientRectangle": "125.92,25.97,26,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -480,17 +376,17 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "SourceSansPro;10;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "5": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text14",
               "Guid": "96b5428ad22bd429594a79a12a6ec6da",
-              "ClientRectangle": "188.05,25.97,26,8",
+              "ClientRectangle": "180.05,25.97,26,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -500,17 +396,17 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "SourceSansPro;10;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "6": {
+            "5": {
               "Ident": "StiText",
               "Name": "Text6",
               "Guid": "102fbdd05867cfd3d55c3f05b8a610bc",
-              "ClientRectangle": "159.86,25.97,28,8",
+              "ClientRectangle": "151.86,25.97,28,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -520,84 +416,50 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": "SourceSansPro;10;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "7": {
-              "Ident": "StiText",
-              "Name": "Text2",
-              "Guid": "7a4ed75988d2da0b1fa0909e8f1f6af9",
-              "GrowToHeight": true,
-              "ClientRectangle": "2.3,2,209.9,6.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{data.judul}"
-              },
-              "HorAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
-            },
-            "8": {
-              "Ident": "StiText",
-              "Name": "Text3",
-              "Guid": "dfcb60f41c225efca961526702d63cf7",
-              "GrowToHeight": true,
-              "ClientRectangle": "2,8,210,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{dataCabang.namacabang}"
-              },
-              "HorAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
-            },
-            "9": {
+            "6": {
               "Ident": "StiText",
               "Name": "Text15",
               "Guid": "1e8885a230db464e5c729b032649515d",
               "CanGrow": true,
-              "ClientRectangle": "130,4,82,4",
+              "ClientRectangle": "122,4,82,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{data.tglcetak}"
+                "Value": "{root_data.tglcetak}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";;Italic;",
+              "Font": "SourceSansPro;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
+              "Margins": {
+                "Left": 0,
+                "Right": 3,
+                "Top": 0,
+                "Bottom": 0
+              },
               "TextFormat": {
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             },
-            "10": {
+            "7": {
               "Ident": "StiText",
               "Name": "Text16",
               "Guid": "7091cfbd6bcb563eeaaf2001e958b801",
               "CanGrow": true,
-              "ClientRectangle": "132,12,80,4",
+              "ClientRectangle": "124,12,80,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -608,42 +470,55 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
+              "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
+              "Margins": {
+                "Left": 0,
+                "Right": 3,
+                "Top": 0,
+                "Bottom": 0
+              },
               "TextFormat": {
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
               },
               "Type": "Expression"
             },
-            "11": {
+            "8": {
               "Ident": "StiText",
               "Name": "Text17",
               "Guid": "5c172a54127a7190258d6a668aba8b4e",
               "CanGrow": true,
-              "ClientRectangle": "130,8,82,4",
+              "ClientRectangle": "122,8,82,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{data.usercetak}"
+                "Value": "{root_data.usercetak}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";;Italic;",
+              "Font": "SourceSansPro;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
+              "Margins": {
+                "Left": 0,
+                "Right": 3,
+                "Top": 0,
+                "Bottom": 0
+              },
               "TextFormat": {
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             },
-            "12": {
+            "9": {
               "Ident": "StiText",
               "Name": "Text4",
               "Guid": "e6b3b1da81645908279aed502d5b0a5d",
@@ -656,13 +531,13 @@
                 "Value": "Periode"
               },
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "13": {
+            "10": {
               "Ident": "StiText",
               "Name": "Text7",
               "Guid": "06cace187f36620dc1de6181f165289d",
@@ -675,11 +550,12 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
             },
-            "14": {
+            "11": {
               "Ident": "StiText",
               "Name": "Text5",
               "Guid": "be46c33947557164bd88427541e224e9",
@@ -691,10 +567,10 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{parameter.sampai}"
+                "Value": "{root_parameter.sampai}"
               },
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -708,7 +584,7 @@
               },
               "Type": "DataColumn"
             },
-            "15": {
+            "12": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive1",
               "Guid": "28e023b1d15c626816e66934e26c185d",
@@ -724,10 +600,10 @@
           },
           "PrintOnAllPages": true
         },
-        "1": {
+        "4": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand2",
-          "ClientRectangle": "0,46,215.7,8",
+          "ClientRectangle": "0,46,209.9,8",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -744,22 +620,25 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keterangan}"
+                "Value": "<font face=\"SourceSansPro\">{root_data.keterangan}&nbsp;</font>"
               },
-              "Font": ";10;;",
+              "Font": "Comic Sans MS3;10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
-              "TextBrush": "solid:Black"
+              "TextBrush": "solid:Black",
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
+              "Type": "Expression"
             }
           },
           "Condition": {
-            "Value": "{data.id}"
+            "Value": "{root_data.id}"
           }
         },
-        "2": {
+        "5": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,62,215.7,8",
+          "ClientRectangle": "0,62,209.9,8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -772,60 +651,65 @@
               "Name": "Text21",
               "Guid": "91a448fde875072e545ba98196f18e97",
               "CanGrow": true,
-              "ClientRectangle": "4,0,44,8",
+              "ClientRectangle": "4,0,38,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.namasupir}"
+                "Value": "<font face=\"SourceSansPro\">{root_data.namasupir}&nbsp;</font>"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "TextOptions": {
                 "WordWrap": true
               },
-              "Type": "DataColumn"
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
+              "Type": "Expression"
             },
             "1": {
               "Ident": "StiText",
               "Name": "Text22",
               "Guid": "2b643fa7e677a9a771103263ed36bfae",
               "CanGrow": true,
-              "ClientRectangle": "50,0,54,8",
+              "ClientRectangle": "42,0,56,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keterangandeposito}"
+                "Value": "<font face=\"SourceSansPro\">{root_data.keterangandeposito}&nbsp;</font>"
               },
-              "Font": ";9;;",
+              "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "TextOptions": {
                 "WordWrap": true
               },
-              "Type": "DataColumn"
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
+              "Type": "Expression"
             },
             "2": {
               "Ident": "StiText",
               "Name": "Text23",
               "Guid": "a91f497eb014c8dfc40781c6188f9f19",
               "CanGrow": true,
-              "ClientRectangle": "106,0,26,8",
+              "ClientRectangle": "100,0,24,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{data.saldo}"
+                "Value": "{root_data.saldo}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -845,16 +729,17 @@
               "Name": "Text25",
               "Guid": "fb18c7d15c1504b2606ae173c01c0e04",
               "CanGrow": true,
-              "ClientRectangle": "134,0,26,8",
+              "ClientRectangle": "128,0,26,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{data.deposito}"
+                "Value": "{root_data.deposito}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -874,16 +759,17 @@
               "Name": "Text27",
               "Guid": "d58d2714a378f7fa0793a745b2ba9db2",
               "CanGrow": true,
-              "ClientRectangle": "190,0,24,8",
+              "ClientRectangle": "180,0,24,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{data.total}"
+                "Value": "{root_data.total}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -903,16 +789,17 @@
               "Name": "Text8",
               "Guid": "9ace5f70349aa0fedc4adc4a52e6f848",
               "CanGrow": true,
-              "ClientRectangle": "162,0,26,8",
+              "ClientRectangle": "154,0,26,8",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{data.penarikan}"
+                "Value": "{root_data.penarikan}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -928,12 +815,12 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "data"
+          "DataSourceName": "root_data"
         },
-        "3": {
+        "6": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand2",
-          "ClientRectangle": "0,78,215.7,12",
+          "ClientRectangle": "0,78,209.9,8",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -943,19 +830,42 @@
           "Components": {
             "0": {
               "Ident": "StiText",
-              "Name": "Text31",
-              "Guid": "10d25b6d771da73dc38cc7127a77baf7",
-              "ClientRectangle": "190,0,24,6",
+              "Name": "Text32",
+              "Guid": "789eb20d84b3febab821cda889ad3ed9",
+              "ClientRectangle": "4,0,30,6",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(data.total)}"
+                "Value": "Sub Total"
+              },
+              "VertAlignment": "Center",
+              "Font": "SourceSansPro;9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text33",
+              "Guid": "95179a6e4c8d29dbdd202050c66e3b0a",
+              "ClientRectangle": "153.96,-0.02,26,6",
+              "ComponentPlacement": "gf.GroupFooterBand2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "HideZeros": true,
+              "Text": {
+                "Value": "{Sum(root_data.penarikan)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -970,43 +880,22 @@
               },
               "Type": "Expression"
             },
-            "1": {
-              "Ident": "StiText",
-              "Name": "Text32",
-              "Guid": "789eb20d84b3febab821cda889ad3ed9",
-              "ClientRectangle": "4,0,30,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "Sub Total"
-              },
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Type": "Expression"
-            },
             "2": {
               "Ident": "StiText",
-              "Name": "Text33",
-              "Guid": "95179a6e4c8d29dbdd202050c66e3b0a",
-              "ClientRectangle": "164,0,24,6",
+              "Name": "Text35",
+              "Guid": "513bbc1c81b9dca27e9d40f771a7f4da",
+              "ClientRectangle": "128.02,-0.02,26,6",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(data.penarikan)}"
+                "Value": "{Sum(root_data.deposito)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1023,19 +912,20 @@
             },
             "3": {
               "Ident": "StiText",
-              "Name": "Text35",
-              "Guid": "513bbc1c81b9dca27e9d40f771a7f4da",
-              "ClientRectangle": "136,0,24,6",
+              "Name": "Text20",
+              "Guid": "74376227a120562fd0fe4736205777d1",
+              "ClientRectangle": "99.85,-0.02,24,6",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(data.deposito)}"
+                "Value": "{Sum(root_data.saldo)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1052,19 +942,20 @@
             },
             "4": {
               "Ident": "StiText",
-              "Name": "Text20",
-              "Guid": "74376227a120562fd0fe4736205777d1",
-              "ClientRectangle": "108,0,24,6",
+              "Name": "Text31",
+              "Guid": "e6116d6f39d7feab672f365bdff5575f",
+              "ClientRectangle": "180,0,24,6",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(data.saldo)}"
+                "Value": "{Sum(root_data.total)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1083,7 +974,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive4",
               "Guid": "d5cd76b410d158a955fcb1d0a1edcba7",
-              "ClientRectangle": "4,0,210,0.254",
+              "ClientRectangle": "4,0,202,0.254",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1095,7 +986,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive8",
               "Guid": "6f5c0e88f0b22bcc5d86298fff7cfeb5",
-              "ClientRectangle": "4,6,210,0.254",
+              "ClientRectangle": "4,6,202,0.254",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1105,11 +996,11 @@
             }
           }
         },
-        "4": {
+        "7": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
-          "ClientRectangle": "0,98,215.7,46",
+          "ClientRectangle": "0,94,209.9,44",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1130,7 +1021,7 @@
                 "Value": "Grand Total"
               },
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1143,17 +1034,18 @@
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "cb0f6f9f84d170271ec790e71e997944",
-              "ClientRectangle": "136,6,26,6",
+              "ClientRectangle": "130,6,26,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(DataBand1,data.deposito)}"
+                "Value": "{Sum(DataBand1, root_data.deposito)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1172,17 +1064,18 @@
               "Ident": "StiText",
               "Name": "Text26",
               "Guid": "731e7bb600ab69d7f68b1f523defcf78",
-              "ClientRectangle": "164,6,24,6",
+              "ClientRectangle": "156,6,26,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(DataBand1,data.penarikan)}"
+                "Value": "{Sum(DataBand1,root_data.penarikan)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1201,17 +1094,18 @@
               "Ident": "StiText",
               "Name": "Text29",
               "Guid": "c01e393432afca0f0459e3de14561c18",
-              "ClientRectangle": "190,6,24,6",
+              "ClientRectangle": "182,6,24,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(data.total)}"
+                "Value": "{Sum(root_data.total)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1240,6 +1134,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
+              "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1259,6 +1154,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
+              "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1278,6 +1174,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
+              "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1297,6 +1194,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
+              "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1306,17 +1204,18 @@
               "Ident": "StiText",
               "Name": "Text36",
               "Guid": "d9c2b7b0f0e4fbed95ef51190a01e0bf",
-              "ClientRectangle": "108,6,24,6",
+              "ClientRectangle": "100,6,24,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
-                "Value": "{Sum(data.saldo)}"
+                "Value": "{Sum(root_data.saldo)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1335,7 +1234,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive2",
               "Guid": "7bb6309d88bc5b7685f5d7eb543f6339",
-              "ClientRectangle": "4,6,210,0.254",
+              "ClientRectangle": "4,6,202,0.254",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1347,7 +1246,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive3",
               "Guid": "2001a98d88e3c71d5169c09d46f7673f",
-              "ClientRectangle": "4,12,210,0.254",
+              "ClientRectangle": "4,12,202,0.254",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1494,11 +1393,11 @@
           },
           "KeepGroupFooterTogether": false
         },
-        "5": {
+        "8": {
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,152,215.7,2.2",
+          "ClientRectangle": "0,146,209.9,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {
@@ -1519,47 +1418,11 @@
           "Brush": "solid:",
           "PrintOnAllPages": true
         },
-        "6": {
+        "9": {
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive1",
           "Guid": "7ba62f19139f5ec7936cb189425c2271",
-          "ClientRectangle": "56,118,0.254,24",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "StartCap": ";;;",
-          "EndCap": ";;;"
-        },
-        "7": {
-          "Ident": "StiVerticalLinePrimitive",
-          "Name": "VerticalLinePrimitive2",
-          "Guid": "f553ff70544492e6f5cb2ba10cea2d8d",
-          "ClientRectangle": "82,118,0.254,24",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "StartCap": ";;;",
-          "EndCap": ";;;"
-        },
-        "8": {
-          "Ident": "StiVerticalLinePrimitive",
-          "Name": "VerticalLinePrimitive3",
-          "Guid": "31b1997bcf461e8ef93357be8918200d",
-          "ClientRectangle": "4,118,0.254,24",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "StartCap": ";;;",
-          "EndCap": ";;;"
-        },
-        "9": {
-          "Ident": "StiVerticalLinePrimitive",
-          "Name": "VerticalLinePrimitive4",
-          "Guid": "77f2f253d1fb1f3621828c5d4cf5c9c7",
-          "ClientRectangle": "30,118,0.254,24",
+          "ClientRectangle": "56,114,0.254,24",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1569,9 +1432,45 @@
         },
         "10": {
           "Ident": "StiVerticalLinePrimitive",
+          "Name": "VerticalLinePrimitive2",
+          "Guid": "f553ff70544492e6f5cb2ba10cea2d8d",
+          "ClientRectangle": "82,114,0.254,24",
+          "ComponentPlacement": "p.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "StartCap": ";;;",
+          "EndCap": ";;;"
+        },
+        "11": {
+          "Ident": "StiVerticalLinePrimitive",
+          "Name": "VerticalLinePrimitive3",
+          "Guid": "31b1997bcf461e8ef93357be8918200d",
+          "ClientRectangle": "4,114,0.254,24",
+          "ComponentPlacement": "p.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "StartCap": ";;;",
+          "EndCap": ";;;"
+        },
+        "12": {
+          "Ident": "StiVerticalLinePrimitive",
+          "Name": "VerticalLinePrimitive4",
+          "Guid": "77f2f253d1fb1f3621828c5d4cf5c9c7",
+          "ClientRectangle": "30,114,0.254,24",
+          "ComponentPlacement": "p.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "StartCap": ";;;",
+          "EndCap": ";;;"
+        },
+        "13": {
+          "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive17",
           "Guid": "e82a043ac402296e4f7818a61405c82d",
-          "ClientRectangle": "108,118,0.254,24",
+          "ClientRectangle": "108,114,0.254,24",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1580,9 +1479,9 @@
           "EndCap": ";;;"
         }
       },
-      "PaperSize": "Letter",
-      "PageWidth": 215.9,
-      "PageHeight": 279.4,
+      "PaperSize": "A4",
+      "PageWidth": 210.1,
+      "PageHeight": 296.9,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },

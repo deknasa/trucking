@@ -288,7 +288,7 @@
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
                 },
                 // loaderror: function(xhr, status, error) {
-                                    // $('#processingLoader').addClass('d-none')
+                // $('#processingLoader').addClass('d-none')
                 //     if (xhr.status === 422) {
                 //         $('.is-invalid').removeClass('is-invalid');
                 //         $('.invalid-feedback').remove();
@@ -390,7 +390,44 @@
 
                         if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
 
-                            window.open(`{{ route('historipenerimaanstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
+                            // window.open(`{{ route('historipenerimaanstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
+                            $.ajax({
+                                url: `${apiUrl}historipenerimaanstok/report`,
+                                type: 'GET',
+                                data: {
+                                    stokdari_id : stokdari_id,
+                                    stoksampai_id : stoksampai_id,
+                                    dari : dari,
+                                    sampai : sampai,
+                                    filter : filter,
+                                    action : 'report',
+                                    export : true
+                                },
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'cabang/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'LAPORAN HISTORI PENERIMAAN STOK' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                    }
+                                    $('#processingLoader').addClass('d-none')
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
+                                    showDialog('TIDAK ADA DATA')
+                                }
+                            })
                         } else {
                             showDialog('ISI SELURUH KOLOM')
                         }

@@ -45,11 +45,6 @@
                                 </button>
                             </div>
                         </div>
-
-
-
-
-
                     </div>
                 </form>
             </div>
@@ -57,7 +52,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -111,21 +112,7 @@
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
 
-
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}&printer=reportPrinterBesar`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
-            }
-        })
-
+        getCekReport(periode, bank_id, bank, 'reportPrinterBesar')
     })
 
     $(document).on('click', `#reportPrinterKecil`, function(event) {
@@ -133,26 +120,49 @@
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
 
-
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}&printer=reportPrinterKecil`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
-            }
-        })
-
+        getCekReport(periode, bank_id, bank, 'reportPrinterKecil')
     })
 
+    function getCekReport(periode, bank_id, bank, printer) {
+        $.ajax({
+                url: `${apiUrl}laporankasgantung/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    periode: periode,
+                    bank_id: bank_id,
+                    bank: bank
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let detailParams = {
+                        periode: periode,
+                        bank_id: bank_id,
+                        bank: bank
+                    };
+                    laporankasgantung(data, detailParams, dataCabang, printer);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
+    }
 
     $(document).on('click', `#btnExport`, function(event) {
-
         let periode = $('#crudForm').find('[name=periode]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
@@ -161,8 +171,14 @@
             $('#processingLoader').removeClass('d-none')
 
             $.ajax({
-                url: `{{ route('laporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
+                url: `${apiUrl}laporankasgantung/export`,
+                // url: `{{ route('laporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
                 type: 'GET',
+                data : {
+                    periode : periode,
+                    bank_id : bank_id,
+                    bank : bank,
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -194,27 +210,43 @@
         }
     })
 
-    function getCekReport() {
+    function laporankasgantung(data, detailParams, dataCabang, printer) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}laporankasgantung/report`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    periode: $('#crudForm').find('[name=periode]').val(),
-                    isCheck: true,
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-                },
-            });
+        if (printer == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantungBesar.mrt') }}`);
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantung.mrt') }}`);
+        }
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
 

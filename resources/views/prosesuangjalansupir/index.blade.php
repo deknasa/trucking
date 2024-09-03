@@ -435,7 +435,7 @@
 
           setGridLastRequest($(this), jqXHR)
         },
-        onSelectRow: onSelectRowFunction =function(id) {
+        onSelectRow: onSelectRowFunction = function(id) {
           // let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/prosesuangjalansupirdetail/${currentTab}/grid`, function() {
           //   loadGrid(id,nobukti)
@@ -587,7 +587,40 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('prosesuangjalansupirheader.export') }}?id=${selectedId}`)
+                // window.open(`{{ route('prosesuangjalansupirheader.export') }}?id=${selectedId}`)
+                $.ajax({
+                  url: `${apiUrl}prosesuangjalansupirheader/${selectedId}/export`,
+                  type: 'GET',
+                  data: {
+                    forReport : true,
+                    prosesuangjalansupir_id: selectedId,
+                    export: true
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                  },
+                  xhrFields: {
+                    responseType: 'arraybuffer'
+                  },
+                  success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                      if (response !== undefined) {
+                        var blob = new Blob([response], {
+                          type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN PROSES UANG JALAN SUPIR' + new Date().getTime() + '.xlsx';
+                        link.click();
+                      }
+                    }
+                    $('#processingLoader').addClass('d-none')
+                  },
+                  error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                  }
+                })
               }
             }
           },
@@ -601,7 +634,7 @@
                 id: 'approval',
                 text: "APPROVAL/UN Proses Uang Jalan",
                 color: `<?php echo $data['listbtn']->btn->approvaldata; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approval') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approval') }}`),
                 onClick: () => {
                   approvalData()
                 }
@@ -610,7 +643,7 @@
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Proses Uang Jalan",
                 color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -627,7 +660,7 @@
                 id: 'approval-kirim-berkas',
                 text: "APPROVAL/UN Kirim Berkas Proses Uang Jalan",
                 color: `<?php echo $data['listbtn']->btn->approvalkirimberkas; ?>`,
-                hidden:(!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`),
+                hidden: (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`),
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');

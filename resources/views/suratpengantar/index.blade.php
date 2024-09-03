@@ -1245,13 +1245,15 @@
             onClick: () => {
               $('#processingLoader').removeClass('d-none')
               $.ajax({
-                url: `{{ route('suratpengantar.export') }}`,
+                // url: `{{ route('suratpengantar.export') }}`,
+                url: `${apiUrl}suratpengantar/export`,
                 type: 'GET',
                 data: {
                   limit: 0,
                   tgldari: $('#tgldariheader').val(),
                   tglsampai: $('#tglsampaiheader').val(),
-                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters,
+                  export : true
                 },
                 beforeSend: function(xhr) {
                   xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -1707,16 +1709,22 @@
           table: 'surat pengantar'
         },
         success: response => {
-          // clearSelectedRows()
-          selectedRows = []
-          selectedbukti = []
-          $('#gs_').prop('checked', false);
-          console.log(response.nobukti)
-          loadDataHeader('suratpengantar', {
-            nobukti: response.nobukti,
-            proses: 'reload',
-            reload: true,
-          })
+          var error = response.error
+          if (error) {
+            showDialog(response)
+            // showDialog(response.message['keterangan'])
+          } else {
+            selectedRows = []
+            selectedbukti = []
+            $('#gs_').prop('checked', false);
+            console.log(response.nobukti)
+            loadDataHeader('suratpengantar', {
+              nobukti: response.nobukti,
+              proses: 'reload',
+              reload: true,
+            })
+          }
+
         },
         error: error => {
           if (error.status === 422) {

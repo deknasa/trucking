@@ -577,9 +577,48 @@
 
                         if (dari != '' && sampai != '' && filter != '') {
 
-                            window.open(
-                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
-                            )
+                            // window.open(
+                            //     `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                            // )
+                            $.ajax({
+                                url: `${apiUrl}kartustok/export`,
+                                type: 'GET',
+                                data: {
+                                    stokdari_id : stokdari_id,
+                                    stoksampai_id : stoksampai_id,
+                                    dari : dari,
+                                    sampai : sampai,
+                                    filter : filter,
+                                    datafilter : dataFilter,
+                                    statustampil : statustampil,
+                                    kelompok_id : kelompok_id,
+                                    limit : 0
+                                },
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'cabang/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'KARTU STOK' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                    }
+                                    $('#processingLoader').addClass('d-none')
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
+                                    showDialog('TIDAK ADA DATA')
+                                }
+                            })
                         } else {
                             showDialog('ISI SELURUH KOLOM')
                         }
@@ -779,7 +818,7 @@
         //         element.data('currentValue', element.val())
         //     }
         // })
-        
+
         $('.kelompok-lookup').lookup({
             title: 'Kelompok Lookup',
             fileName: 'kelompok',

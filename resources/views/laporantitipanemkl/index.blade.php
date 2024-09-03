@@ -59,11 +59,6 @@
                                 </button>
                             </div>
                         </div>
-
-
-
-
-
                     </div>
                 </form>
             </div>
@@ -71,7 +66,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -119,18 +120,44 @@
         let tglsampai = $('#crudForm').find('[name=tglsampai]').val()
         let periode = $('#crudForm').find('[name=periode]').val()
 
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporantitipanemkl.report') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
-            }
-        })
+        $.ajax({
+                url: `${apiUrl}laporantitipanemkl/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    jenisorder: jenisorder,
+                    tgldari: tgldari,
+                    tglsampai: tglsampai,
+                    periode: periode,
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let detailParams = {
+                        jenisorder: jenisorder,
+                        tgldari: tgldari,
+                        tglsampai: tglsampai,
+                        periode: periode,
+                    };
+                    laporantitipanemkl(data, detailParams, dataCabang);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
+                }
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
     })
 
     $(document).on('click', `#btnExport`, function(event) {
@@ -142,8 +169,15 @@
         let periode = $('#crudForm').find('[name=periode]').val()
 
         $.ajax({
-            url: `{{ route('laporantitipanemkl.export') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`,
+            url: `${apiUrl}laporantitipanemkl/export`,
+            // url: `{{ route('laporantitipanemkl.export') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`,
             type: 'GET',
+            data: {
+                jenisorder: jenisorder,
+                tgldari: tgldari,
+                tglsampai: tglsampai,
+                periode: periode,
+            },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
             },
@@ -173,28 +207,64 @@
 
     })
 
-    function getCekReport() {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}laporantitipanemkl/report`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    jenisorder: $('#crudForm').find('[name=jenisorder]').val(),
-                    tgldari: $('#crudForm').find('[name=periode]').val(),
-                    tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                    periode: $('#crudForm').find('[name=periode]').val(),
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
+    // function getCekReport() {
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url: `${apiUrl}laporantitipanemkl/report`,
+    //             dataType: "JSON",
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 jenisorder: $('#crudForm').find('[name=jenisorder]').val(),
+    //                 tgldari: $('#crudForm').find('[name=periode]').val(),
+    //                 tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+    //                 periode: $('#crudForm').find('[name=periode]').val(),
+    //             },
+    //             success: (response) => {
+    //                 resolve(response);
+    //             },
+    //             error: error => {
+    //                 reject(error)
 
-                },
-            });
+    //             },
+    //         });
+    //     });
+    // }
+
+    function laporantitipanemkl(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportTitipanEmkl.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }
 
@@ -239,7 +309,7 @@
                     searchText: 'jenisorder-lookup',
                     title: 'Jenis Order Lookup',
                     // typeSearch: 'ALL',
-                    singleColumn : true,
+                    singleColumn: true,
                     hideLabel: true,
                 }
             },

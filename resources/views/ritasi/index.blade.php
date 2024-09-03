@@ -358,13 +358,14 @@
             onClick: () => {
               $('#processingLoader').removeClass('d-none')
               $.ajax({
-                url: `{{ route('ritasi.export') }}`,
+                url: `${apiUrl}ritasi/export`,
                 type: 'GET',
                 data: {
                   limit: 0,
                   tgldari: $('#tgldariheader').val(),
                   tglsampai: $('#tglsampaiheader').val(),
-                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                  filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters,
+                  export: true
                 },
                 beforeSend: function(xhr) {
                   xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -380,11 +381,10 @@
                       });
                       var link = document.createElement('a');
                       link.href = window.URL.createObjectURL(blob);
-                      link.download = `LAPORAN RITASI ${new Date().getTime()}.xlsx`;
+                      link.download = 'LAPORAN RITASI' + new Date().getTime() + '.xlsx';
                       link.click();
                     }
                   }
-
                   $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {

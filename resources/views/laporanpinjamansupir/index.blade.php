@@ -48,7 +48,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -82,7 +88,6 @@
         if (!`{{ $myAuth->hasPermission('laporanpinjamansupir', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
-
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -90,42 +95,55 @@
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
         $.ajax({
-            url: `{{ route('laporanpinjamansupir.report') }}`,
-            method: 'GET',
-            data: {
-                sampai: sampai,
-                jenis: jenis,
-            },
-            success: function(response) {
-                // Handle the success response
-                var newWindow = window.open('', '_blank');
-                newWindow.document.open();
-                newWindow.document.write(response);
-                newWindow.document.close();
-            },
-            error: function(error) {
-                console.log(error)
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid');
-                    $('.invalid-feedback').remove();
-                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON.message);
+                url: `${apiUrl}laporanpinjamansupir/report`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    sampai: sampai,
+                    jenis: jenis
+                },
+                success: function(response) {
+                    let data = response.data
+                    let dataCabang = response.namacabang
+                    let detailParams = {
+                        sampai: sampai,
+                        jenis: jenis
+                    };
+                    laporanpinjamansupir(data, detailParams, dataCabang);
+                },
+                error: function(error) {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+                        $('#rangeTglModal').modal('hide')
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON.message);
+                    }
                 }
-            }
-        });
-
+            })
+            .always(() => {
+                $('#processingLoader').addClass('d-none')
+            });
     })
+
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if ( sampai != '') {
+        if (sampai != '') {
             $('#processingLoader').removeClass('d-none')
-            
+
             $.ajax({
-                url: `{{ route('laporanpinjamansupir.export') }}?sampai=${sampai}&jenis=${jenis}`,
+                // url: `{{ route('laporanpinjamansupir.export') }}?sampai=${sampai}&jenis=${jenis}`,
+                url: `${apiUrl}laporanpinjamansupir/export`,
                 type: 'GET',
+                data : {
+                    sampai : sampai, 
+                    jenis : jenis
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                 },
@@ -144,7 +162,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -157,7 +175,43 @@
         }
     })
 
-    function initLookup(){
+    function laporanpinjamansupir(data, detailParams, dataCabang) {
+        Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+
+        var report = new Stimulsoft.Report.StiReport();
+        var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+
+        report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupir.mrt') }}`);
+
+        dataSet.readJson({
+            'data': data,
+            'dataCabang': dataCabang,
+            'parameter': detailParams
+        });
+
+        report.regData(dataSet.dataSetName, '', dataSet);
+        report.dictionary.synchronize();
+
+        // var options = new Stimulsoft.Designer.StiDesignerOptions()
+        // options.appearance.fullScreenMode = true
+        // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+        // designer.report = report;
+        // designer.renderHtml('content');
+
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
+    }
+
+    function initLookup() {
         $(`.jenis-lookup`).lookupMaster({
             title: 'Jenis Lookup',
             fileName: 'parameterMaster',
@@ -165,15 +219,15 @@
             searching: 1,
             beforeProcess: function() {
                 this.postData = {
-                url: `${apiUrl}parameter/combo`,
-                grp: 'STATUS POSTING',
-                subgrp: 'STATUS POSTING',
-                searching: 1,
-                valueName: `jenis`,
-                searchText: `jenis-lookup`,
-                singleColumn: true,
-                hideLabel: true,
-                title: 'jenis lookup'
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'STATUS POSTING',
+                    subgrp: 'STATUS POSTING',
+                    searching: 1,
+                    valueName: `jenis`,
+                    searchText: `jenis-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'jenis lookup'
                 };
             },
             onSelectRow: (status, element) => {
