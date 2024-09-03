@@ -627,6 +627,9 @@
                         let option = new Option(statusReuse.text, statusReuse.id)
 
                         relatedForm.find('[name=jenislaporan]').append(option).trigger('change')
+                        if (statusReuse.default == 'YA') {
+                            relatedForm.find('[name=jenislaporan]').val(statusReuse.id).trigger('change');
+                        }
                     });
 
                     resolve()
