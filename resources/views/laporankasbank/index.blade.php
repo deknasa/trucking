@@ -357,8 +357,14 @@
             }
         } else {
             if (printer == 'reportPrinterBesar') {
-                // console.log()
-                report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
+                // console.log(cabang)
+                if(cabang=='MEDAN'){
+                    report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarA4.mrt') }}`)
+                }else if(cabang == 'MAKASSAR'){
+                    report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarLetter.mrt') }}`)
+                } else {
+                    report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
+                }
             } else {
                 report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
             }
