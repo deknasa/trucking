@@ -31,4 +31,20 @@ class StokPusatController extends MyController
             'data' => $token
         ]);
     }
+    public function tokenMks(Request $request)
+    {
+        session(['access_token_mks' => $request->token]);
+        $token = session('access_token_mks');
+        return response([
+            'data' => $token
+        ]);
+    }
+    public function tokenMdn(Request $request)
+    {
+        session(['access_token_mdn' => $request->token]);
+        $token = session('access_token_mdn');
+        return response([
+            'data' => $token
+        ]);
+    }
 }
