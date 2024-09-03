@@ -337,6 +337,16 @@
                         }
                     },
                     {
+                        label: 'NILAI MASUK SATUAN',
+                        name: 'satuan_masuk',
+                        align: 'right',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+                    {
                         label: 'QTY KELUAR',
                         name: 'qtykeluar',
                         align: 'right',
@@ -349,6 +359,16 @@
                     {
                         label: 'NILAI KELUAR',
                         name: 'nilaikeluar',
+                        align: 'right',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+                    {
+                        label: 'NILAI KELUAR SATUAN',
+                        name: 'satuan_keluar',
                         align: 'right',
                         formatter: 'number',
                         formatoptions: {
