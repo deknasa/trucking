@@ -704,7 +704,7 @@
     $('.akuntansi-lookup').lookupV3({
       title: 'akuntansi Lookup',
       fileName: 'akuntansiV3',
-      searching: ['text'],
+      searching: ['kodeakuntansi','keterangan'],
       labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();

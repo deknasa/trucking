@@ -39,7 +39,7 @@
                   KODE PERKIRAAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="coa" class="form-control coa-lookup">
+                <input type="text" name="coa" id="coa" class="form-control coa-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -59,9 +59,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -71,9 +70,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="formatpenerimaan" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH FORMAT PENERIMAAN --</option>
-                </select>
+                <input type="hidden" name="formatpenerimaan">
+                <input type="text" name="formatpenerimaannama" id="formatpenerimaannama" class="form-control lg-form formatpenerimaan-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -83,9 +81,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="formatpengeluaran" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH FORMAT PENGELUARAN --</option>
-                </select>
+                <input type="hidden" name="formatpengeluaran">
+                <input type="text" name="formatpengeluarannama" id="formatpengeluarannama" class="form-control lg-form formatpengeluaran-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -95,9 +92,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="formatcetakan" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH FORMAT cetakan --</option>
-                </select>
+                <input type="hidden" name="formatcetakan">
+                <input type="text" name="formatcetakannama" id="formatcetakannama" class="form-control lg-form formatcetakan-lookup">
               </div>
             </div>
           </div>
@@ -298,13 +294,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusFormatPenerimaanOptions(form)
-    setStatusFormatPengeluaranOptions(form)
-    setStatusFormatCetakanOptions(form)
+    // setStatusFormatPenerimaanOptions(form)
+    // setStatusFormatPengeluaranOptions(form)
+    // setStatusFormatCetakanOptions(form)
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        
         getMaxLength(form)
       ])
       .then(() => {
@@ -343,10 +339,10 @@
 
     Promise
       .all([
-        setStatusFormatPenerimaanOptions(form),
-        setStatusFormatPengeluaranOptions(form),
-        setStatusFormatCetakanOptions(form),
-        setStatusAktifOptions(form),
+        // setStatusFormatPenerimaanOptions(form),
+        // setStatusFormatPengeluaranOptions(form),
+        // setStatusFormatCetakanOptions(form),
+        
         getMaxLength(form)
 
       ])
@@ -386,10 +382,10 @@
 
     Promise
       .all([
-        setStatusFormatPenerimaanOptions(form),
-        setStatusFormatPengeluaranOptions(form),
-        setStatusFormatCetakanOptions(form),
-        setStatusAktifOptions(form),
+        // setStatusFormatPenerimaanOptions(form),
+        // setStatusFormatPengeluaranOptions(form),
+        // setStatusFormatCetakanOptions(form),
+        
         getMaxLength(form)
 
       ])
@@ -429,10 +425,10 @@
 
     Promise
       .all([
-        setStatusFormatPenerimaanOptions(form),
-        setStatusFormatPengeluaranOptions(form),
-        setStatusFormatCetakanOptions(form),
-        setStatusAktifOptions(form),
+        // setStatusFormatPenerimaanOptions(form),
+        // setStatusFormatPengeluaranOptions(form),
+        // setStatusFormatCetakanOptions(form),
+        
         getMaxLength(form)
 
       ])
@@ -514,46 +510,6 @@
         resolve()
       })
     }
-  }
-
-  const setStatusAktifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS AKTIF"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
-
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-          });
-
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
   }
 
   const setStatusFormatPenerimaanOptions = function(relatedForm) {
@@ -691,7 +647,9 @@
             console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
-
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else {
@@ -730,6 +688,9 @@
             if (index == 'coa') {
               element.data('current-value', value)
             }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
 
           })
           if (form.data('action') === 'delete') {
@@ -746,9 +707,14 @@
   }
 
   function initLookup() {
-    $('.coa-lookup').lookup({
+    $('.coa-lookup').lookupV3({
       title: 'COA Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -768,6 +734,133 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.status-lookup`).lookupV3({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+    $(`.formatpenerimaan-lookup`).lookupV3({
+      title: 'PENERIMAAN BANK Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          // url: `${apiUrl}parameter/combo`,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "kelompok",
+              "op": "cn",
+              "data": "PENERIMAAN BANK"
+            }]
+          })
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=formatpenerimaan]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+    $(`.formatpengeluaran-lookup`).lookupV3({
+      title: 'PENGELUARAN BANK Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          // url: `${apiUrl}parameter/combo`,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "kelompok",
+              "op": "cn",
+              "data": "PENGELUARAN BANK"
+            }]
+          })
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=formatpengeluaran]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+    $(`.formatcetakan-lookup`).lookupV3({
+      title: 'FORMAT CETAKAN BANK Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          // url: `${apiUrl}parameter/combo`,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "kelompok",
+              "op": "cn",
+              "data": "FORMAT CETAKAN BANK"
+            }]
+          })
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=formatcetakan]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
 
   }
 

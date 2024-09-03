@@ -729,19 +729,14 @@
     //   }
     // })
 
-    $('.bank-lookup').lookupMaster({
+    $('.bank-lookup').lookupV3({
       title: 'Bank Lookup',
-      fileName: 'bankMaster',
-      typeSearch: 'ALL',
-      searching: 1,
-      beforeProcess: function(test) {
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
+      beforeProcess: function(test) {  
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'bank_id',
-          searchText: 'bank-lookup',
-          title: 'Bank Lookup',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (bank, element) => {
@@ -759,40 +754,17 @@
       }
     })
     
-    $('.coa-lookup').lookup({
-      title: 'COA Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (coa, element) => {
-        $('#crudForm [name=coa]').first().val(coa.coa)
-        element.val(coa.keterangancoa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=coa]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
 
-    $(`.statuslangsungcair-lookup`).lookupMaster({
+    $(`.statuslangsungcair-lookup`).lookupV3({
       title: 'Status Lansung Cair Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS LANGSUNG CAIR',
           subgrp: 'STATUS LANGSUNG CAIR',
-          searching: 1,
-          valueName: `statuslansungcair`,
-          searchText: `statuslansungcair-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Lansung Cair',
         };
       },
       onSelectRow: (statuslansungcair, element) => {
@@ -811,22 +783,16 @@
       },
     });
 
-    $(`.statusdefault-lookup`).lookupMaster({
+    $(`.statusdefault-lookup`).lookupV3({
       title: 'Status Default Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS DEFAULT',
           subgrp: 'STATUS DEFAULT',
-          searching: 1,
-          valueName: `statusdefault`,
-          searchText: `statusdefault-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Default'
         };
       },
       onSelectRow: (statusdefault, element) => {
@@ -845,22 +811,16 @@
       },
     });
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
