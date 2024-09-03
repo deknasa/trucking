@@ -159,7 +159,7 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: (value, row) => {
                             let images = []
-                            if (value.length) {
+                            try{
                                 let files = JSON.parse(value)
 
                                 files.forEach(file => {
@@ -175,7 +175,7 @@
                                 });
 
                                 return images.join(' ')
-                            } else {
+                            } catch {
                                 let image = new Image()
                                 image.width = 25
                                 image.height = 25
