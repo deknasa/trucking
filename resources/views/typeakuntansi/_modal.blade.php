@@ -697,21 +697,15 @@
   }
 
   function initLookup() {
-    $('.akuntansi-lookup').lookupMaster({
+    $('.akuntansi-lookup').lookupV3({
       title: 'akuntansi Lookup',
-      fileName: 'akuntansiMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akuntansiV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `akuntansi_id`,
-          searchText: `akuntansi-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         }
       },
       onSelectRow: (akuntansi, element) => {
@@ -730,22 +724,16 @@
       }
     })
 
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {

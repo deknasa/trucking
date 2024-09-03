@@ -145,56 +145,66 @@ class KartuStokController extends MyController
     //     //     ],
     //     // ];
 
-    //     $detail_columns = [
-    //         [
-    //             'label' => 'Kd Brg',
-    //             'index' => 'kodebarang',
-    //         ],
-    //         [
-    //             'label' => 'Nama Barang',
-    //             'index' => 'namabarang',
-    //         ],
-    //         [
-    //             'label' => 'Tanggal',
-    //             'index' => 'tglbukti',
-    //         ],
-    //         [
-    //             'label' => 'No Bukti',
-    //             'index' => 'nobukti',
-    //         ],
-    //         [
-    //             'label' => 'Kategori',
-    //             'index' => 'kategori_id',
-    //         ],
-    //         [
-    //             'label' => 'QTY',
-    //             'index' => 'qtymasuk'
-    //         ],
-    //         [
-    //             'label' => 'Nominal',
-    //             'index' => 'nilaimasuk'
-    //         ],
-    //         [
-    //             'label' => 'QTY',
-    //             'index' => 'qtykeluar'
-    //         ],
-    //         [
-    //             'label' => 'Nominal',
-    //             'index' => 'nilaikeluar'
-    //         ],
-    //         [
-    //             'label' => 'QTY',
-    //             'index' => 'qtysaldo'
-    //         ],
-    //         [
-    //             'label' => 'Nominal',
-    //             'index' => 'nilaisaldo'
-    //         ],
-    //     ];
-    //     // foreach ($header_columns as $header_column) {
-    //     //     $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
-    //     //     $sheet->setCellValue('B' . $header_start_row++, ': ' . $dataHeader[$header_column['index']]);
-    //     // }
+        // $detail_columns = [
+        //     [
+        //         'label' => 'Kd Brg',
+        //         'index' => 'kodebarang',
+        //     ],
+        //     [
+        //         'label' => 'Nama Barang',
+        //         'index' => 'namabarang',
+        //     ],
+        //     [
+        //         'label' => 'Tanggal',
+        //         'index' => 'tglbukti',
+        //     ],
+        //     [
+        //         'label' => 'No Bukti',
+        //         'index' => 'nobukti',
+        //     ],
+        //     [
+        //         'label' => 'Kategori',
+        //         'index' => 'kategori_id',
+        //     ],
+        //     [
+        //         'label' => '@',
+        //         'index' => 'satuan_masuk'
+        //     ],
+        //     [
+        //         'label' => 'QTY',
+        //         'index' => 'qtymasuk'
+        //     ],
+        //     [
+        //         'label' => 'Nominal',
+        //         'index' => 'nilaimasuk'
+        //     ],
+        //     [
+        //         'label' => '@',
+        //         'index' => 'satuan_keluar'
+        //     ],
+        //     [
+        //         'label' => 'QTY',
+        //         'index' => 'qtykeluar'
+        //     ],
+        //     [
+        //         'label' => 'Nominal',
+        //         'index' => 'nilaikeluar'
+        //     ],
+        //     [
+        //         'label' => 'QTY',
+        //         'index' => 'qtysaldo'
+        //     ],
+        //     [
+        //         'label' => 'Nominal',
+        //         'index' => 'nilaisaldo'
+        //     ],
+        // ];
+
+
+        // foreach ($header_columns as $header_column) {
+        //     $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
+        //     $sheet->setCellValue('B' . $header_start_row++, ': ' . $dataHeader[$header_column['index']]);
+        // }
 
     //     // foreach ($header_right_columns as $header_right_column) {
     //     //     $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
@@ -206,16 +216,19 @@ class KartuStokController extends MyController
     //     // }
 
 
-    //     foreach ($detail_columns as $detail_columns_index => $detail_column) {
-    //         $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
-    //     }
-    //     $styleArray = array(
-    //         'borders' => array(
-    //             'allBorders' => array(
-    //                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-    //             ),
-    //         ),
-    //     );
+        // foreach ($detail_columns as $detail_columns_index => $detail_column) {
+        //     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        //     if ($detail_column['label']=='@') {
+        //         $sheet->getStyle($alphabets[$detail_columns_index] . $detail_table_header_row)->getAlignment()->setHorizontal('center');
+        //     }
+        // }
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //         ),
+        //     ),
+        // );
 
     //     $style_number = [
     //         'alignment' => [
@@ -230,7 +243,7 @@ class KartuStokController extends MyController
     //         ]
     //     ];
 
-    //     $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->applyFromArray($styleArray);
+        // $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
 
     //     // LOOPING DETAIL
     //     foreach ($kartustok as $response_index => $response_detail) {
@@ -242,48 +255,52 @@ class KartuStokController extends MyController
     //         $sheet->setCellValue("A$detail_start_row", $response_detail['kodebarang']);
     //         $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
 
-    //         $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
-    //         $sheet->setCellValue("C$detail_start_row", $dateValue);
-    //         $sheet->getStyle("C$detail_start_row")
-    //             ->getNumberFormat()
-    //             ->setFormatCode('dd-mm-yyyy');
-    //         $sheet->setCellValue("D$detail_start_row", $response_detail['nobukti']);
-    //         $sheet->setCellValue("E$detail_start_row", $response_detail['kategori_id']);
-    //         $sheet->setCellValue("F$detail_start_row",  $response_detail['qtymasuk'])->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-    //         $sheet->setCellValue("G$detail_start_row",  $response_detail['nilaimasuk'])->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-    //         $sheet->setCellValue("H$detail_start_row",  $response_detail['qtykeluar'])->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-    //         $sheet->setCellValue("I$detail_start_row",  $response_detail['nilaikeluar'])->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-    //         $sheet->setCellValue("J$detail_start_row",  $response_detail['qtysaldo'])->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-    //         $sheet->setCellValue("K$detail_start_row",  $response_detail['nilaisaldo'])->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+        //     $sheet->setCellValue("C$detail_start_row", $dateValue);
+        //     $sheet->getStyle("C$detail_start_row")
+        //         ->getNumberFormat()
+        //         ->setFormatCode('dd-mm-yyyy');
+        //     $sheet->setCellValue("D$detail_start_row", $response_detail['nobukti']);
+        //     $sheet->setCellValue("E$detail_start_row", $response_detail['kategori_id']);
+        //     $sheet->setCellValue("F$detail_start_row",  $response_detail['satuan_masuk'])->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("G$detail_start_row",  $response_detail['qtymasuk'])->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("H$detail_start_row",  $response_detail['nilaimasuk'])->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("I$detail_start_row",  $response_detail['satuan_keluar'])->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("J$detail_start_row",  $response_detail['qtykeluar'])->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("K$detail_start_row",  $response_detail['nilaikeluar'])->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("L$detail_start_row",  $response_detail['qtysaldo'])->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        //     $sheet->setCellValue("M$detail_start_row",  $response_detail['nilaisaldo'])->getStyle("M$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-    //         $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-    //         $sheet->getStyle("F$detail_start_row:K$detail_start_row")->applyFromArray($style_number);
-    //         $detail_start_row++;
-    //     }
+        //     $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
+        //     $sheet->getStyle("F$detail_start_row:M$detail_start_row")->applyFromArray($style_number);
+        //     $detail_start_row++;
+        // }
 
-    //     $sheet->mergeCells('A' . $mergecell_start_row . ':E' . $mergecell_start_row);
-    //     $sheet->mergeCells('F' . $mergecell_start_row . ':G' . $mergecell_start_row);
-    //     $sheet->mergeCells('H' . $mergecell_start_row . ':I' . $mergecell_start_row);
-    //     $sheet->mergeCells('J' . $mergecell_start_row . ':K' . $mergecell_start_row);
-    //     $sheet->setCellValue("A$mergecell_start_row", '')->getStyle('A' . $mergecell_start_row . ':E' . $mergecell_start_row)->applyFromArray($styleArray);
-    //     $sheet->setCellValue("F$mergecell_start_row", 'Masuk')->getStyle('F' . $mergecell_start_row . ':G' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
-    //     $sheet->getStyle("F$mergecell_start_row")->getAlignment()->setHorizontal('center');
-    //     $sheet->setCellValue("H$mergecell_start_row", 'Keluar')->getStyle('H' . $mergecell_start_row . ':I' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
-    //     $sheet->getStyle("H$mergecell_start_row")->getAlignment()->setHorizontal('center');
-    //     $sheet->setCellValue("J$mergecell_start_row", 'Saldo')->getStyle('J' . $mergecell_start_row . ':K' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
-    //     $sheet->getStyle("J$mergecell_start_row")->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A' . $mergecell_start_row . ':E' . $mergecell_start_row);
+        // $sheet->mergeCells('F' . $mergecell_start_row . ':H' . $mergecell_start_row);
+        // $sheet->mergeCells('I' . $mergecell_start_row . ':K' . $mergecell_start_row);
+        // $sheet->mergeCells('L' . $mergecell_start_row . ':M' . $mergecell_start_row);
+        // $sheet->setCellValue("A$mergecell_start_row", '')->getStyle('A' . $mergecell_start_row . ':E' . $mergecell_start_row)->applyFromArray($styleArray);
+        // $sheet->setCellValue("F$mergecell_start_row", 'Masuk')->getStyle('F' . $mergecell_start_row . ':H' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
+        // $sheet->getStyle("F$mergecell_start_row")->getAlignment()->setHorizontal('center');
+        // $sheet->setCellValue("I$mergecell_start_row", 'Keluar')->getStyle('I' . $mergecell_start_row . ':K' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
+        // $sheet->getStyle("I$mergecell_start_row")->getAlignment()->setHorizontal('center');
+        // $sheet->setCellValue("L$mergecell_start_row", 'Saldo')->getStyle('L' . $mergecell_start_row . ':M' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
+        // $sheet->getStyle("L$mergecell_start_row")->getAlignment()->setHorizontal('center');
 
-    //     $sheet->getColumnDimension('A')->setWidth(39);
-    //     $sheet->getColumnDimension('B')->setWidth(39);
-    //     $sheet->getColumnDimension('C')->setAutoSize(true);
-    //     $sheet->getColumnDimension('D')->setAutoSize(true);
-    //     $sheet->getColumnDimension('E')->setAutoSize(true);
-    //     $sheet->getColumnDimension('F')->setAutoSize(true);
-    //     $sheet->getColumnDimension('G')->setAutoSize(true);
-    //     $sheet->getColumnDimension('H')->setAutoSize(true);
-    //     $sheet->getColumnDimension('I')->setAutoSize(true);
-    //     $sheet->getColumnDimension('J')->setAutoSize(true);
-    //     $sheet->getColumnDimension('K')->setAutoSize(true);
+        // $sheet->getColumnDimension('A')->setWidth(39);
+        // $sheet->getColumnDimension('B')->setWidth(39);
+        // $sheet->getColumnDimension('C')->setAutoSize(true);
+        // $sheet->getColumnDimension('D')->setAutoSize(true);
+        // $sheet->getColumnDimension('E')->setAutoSize(true);
+        // $sheet->getColumnDimension('F')->setAutoSize(true);
+        // $sheet->getColumnDimension('G')->setAutoSize(true);
+        // $sheet->getColumnDimension('H')->setAutoSize(true);
+        // $sheet->getColumnDimension('I')->setAutoSize(true);
+        // $sheet->getColumnDimension('J')->setAutoSize(true);
+        // $sheet->getColumnDimension('K')->setAutoSize(true);
+        // $sheet->getColumnDimension('L')->setAutoSize(true);
+        // $sheet->getColumnDimension('M')->setAutoSize(true);
 
     //     $writer = new Xlsx($spreadsheet);
     //     $filename = 'Kartu Stok  ' . date('dmYHis');

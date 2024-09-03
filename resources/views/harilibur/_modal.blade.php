@@ -47,9 +47,8 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="">-- PILIH STATUS AKTIF --</option>
-                                </select>
+                                <input type="hidden" name="statusaktif">
+                                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
                             </div>
                         </div>
                     </div>
@@ -186,8 +185,9 @@
 
         activeGrid = null
 
-        initSelect2($(`[name="statusaktif"]`), true)
+        // initSelect2($(`[name="statusaktif"]`), true)
         initDatepicker()
+        initLookup()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -281,7 +281,7 @@
 
         Promise
             .all([
-                setStatusAktifOptions(form),
+                // setStatusAktifOptions(form),
         getMaxLength(form)
             ])
             .then(() => {
@@ -318,7 +318,7 @@
 
         Promise
             .all([
-                setStatusAktifOptions(form),
+                // setStatusAktifOptions(form),
         getMaxLength(form)
 
             ])
@@ -354,7 +354,7 @@
 
         Promise
             .all([
-                setStatusAktifOptions(form),
+                // setStatusAktifOptions(form),
         getMaxLength(form)
 
             ])
@@ -411,6 +411,35 @@
         resolve()
       })
         }
+    }
+
+    function initLookup() {
+        $(`.status-lookup`).lookupV3({
+            title: 'Status Aktif Lookup',
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
+            beforeProcess: function() {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'STATUS AKTIF',
+                    subgrp: 'STATUS AKTIF',
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=statusaktif]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                $('#crudForm [name=statusaktif]').first().val('')
+                element.val('');
+                element.data('currentValue', element.val());
+            },
+        });
     }
 
     const setStatusAktifOptions = function(relatedForm) {

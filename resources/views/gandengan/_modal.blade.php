@@ -482,20 +482,16 @@
 
   function initLookup() {
     if (!$('.trado-lookup').data('hasLookup')) {
-      $('.trado-lookup').lookupMaster({
+      $('.trado-lookup').lookupV3({
         title: 'trado Lookup',
-        fileName: 'tradoMaster',
-        typeSearch: 'ALL',
-        searching: 1,
+        fileName: 'tradoV3',
+        searching: ['kodetrado','kmakhirgantioli','merek','norangka','nomesin','nostnk' ],
+        extendSize: md_extendSize_1,
+        multiColumnSize:true,
+        filterToolbar: true,
         beforeProcess: function(test) {
           this.postData = {
-
             Aktif: 'AKTIF',
-            searching: 1,
-            valueName: 'trado',
-            searchText: 'trado-lookup',
-            title: 'TRADO',
-            typeSearch: 'ALL',
           }
         },
         onSelectRow: (trado, element) => {
@@ -515,20 +511,15 @@
       })
     }
     if (!$('.container-lookup').data('hasLookup')) {
-      $('.container-lookup').lookupMaster({
-        title: 'container Lookup',
-        fileName: 'containerMaster',
-        typeSearch: 'ALL',
-        searching: 1,
+      $('.container-lookup').lookupV3({
+        title: 'Container Lookup',
+        fileName: 'containerV3',
+        // searching: ['kodecontainer'],
+        labelColumn: false,
         beforeProcess: function(test) {
-          this.postData = {
-
+          // var levelcoa = $(`#levelcoa`).val();
+          this.postData = {    
             Aktif: 'AKTIF',
-            searching: 1,
-            valueName: 'container',
-            searchText: 'container-lookup',
-            title: 'CONTAINER',
-            typeSearch: 'ALL',
           }
         },
         onSelectRow: (container, element) => {
@@ -549,22 +540,16 @@
     }
 
 
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+     fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {

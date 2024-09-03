@@ -1957,19 +1957,14 @@
   }
 
   function initLookup() {
-    $('.upahsupir-lookup').lookupMaster({
+    $('.upahsupir-lookup').lookupV3({
       title: 'Upah Supir Lookup',
-      fileName: 'upahsupirMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'upahsupirV3',
+      searching: ['kotasampai_id','kotadari_id','penyesuaian','jarak','zona_id'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'upahsupir_id',
-          searchText: 'upahsupir-lookup',
-          title: 'Upah Supir Lookup',
-          typeSearch: 'ALL',
           isParent: true
         }
       },
@@ -2018,19 +2013,14 @@
       }
     })
 
-    $('.kotadari-lookup').lookupMaster({
+    $('.kotadari-lookup').lookupV3({
       title: 'Kota Dari Lookup',
-      fileName: 'kotaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kotaV3',
+      searching: ['kodekota'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kotadari_id',
-          searchText: 'kotadari-lookup',
-          title: 'Kota Dari Lookup',
-          typeSearch: 'ALL',
           upahSupirDariKe: 'dari',
         }
       },
@@ -2049,19 +2039,14 @@
       }
     })
 
-    $('.kotasampai-lookup').lookupMaster({
+    $('.kotasampai-lookup').lookupV3({
       title: 'Kota Sampai Lookup',
-      fileName: 'kotaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kotaV3',
+      searching: ['kodekota'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kotasampai_id',
-          searchText: 'kotasampai-lookup',
-          title: 'Kota Sampai Lookup',
-          typeSearch: 'ALL',
           upahSupirDariKe: 'ke',
           upahSupirKotaDari: $('#crudForm [name=kotadari_id]').first().val(),
         }
@@ -2082,11 +2067,11 @@
       }
     })
 
-    $('.tarif-lookup').lookupMaster({
+    $('.tarif-lookup').lookupV3({
       title: 'Tarif Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'tarifV3',
+      searching: ['upahsupir','tujuan','penyesuaian'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -2135,9 +2120,11 @@
       }
     })
 
-    $('.zonadari-lookup').lookup({
+    $('.zonadari-lookup').lookupV3({
       title: 'Zona Dari Lookup',
-      fileName: 'zona',
+      fileName: 'zonaV3',
+      searching: ['zona','keterangan'],
+      labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2160,9 +2147,11 @@
       }
     })
 
-    $('.zonasampai-lookup').lookup({
+    $('.zonasampai-lookup').lookupV3({
       title: 'Zona Sampai Lookup',
-      fileName: 'zona',
+      fileName: 'zonaV3',
+      searching: ['zona','keterangan'],
+      labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2185,19 +2174,14 @@
       }
     })
 
-    $('.tarifmuatan-lookup').lookupMaster({
+    $('.tarifmuatan-lookup').lookupV3({
       title: 'Tarif Muatan Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'tarifV3',
+      searching: ['upahsupir','tujuan','penyesuaian'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'tarifmuatan_id',
-          searchText: 'tarifmuatan-lookup',
-          title: 'Tarif Muatan Lookup',
-          typeSearch: 'ALL',
           jenisOrder: 'MUATAN'
         }
       },
@@ -2216,19 +2200,14 @@
       }
     })
 
-    $('.tarifbongkaran-lookup').lookupMaster({
+    $('.tarifbongkaran-lookup').lookupV3({
       title: 'Tarif Bongkaran Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'tarifV3',
+      searching: ['upahsupir','tujuan','penyesuaian'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'tarifbongkaran_id',
-          searchText: 'tarifbongkaran-lookup',
-          title: 'Tarif Bongkaran Lookup',
-          typeSearch: 'ALL',
           jenisOrder: 'BONGKARAN'
         }
       },
@@ -2247,19 +2226,14 @@
       }
     })
 
-    $('.tarifexport-lookup').lookupMaster({
+    $('.tarifexport-lookup').lookupV3({
       title: 'Tarif Export Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'tarifV3',
+      searching: ['upahsupir','tujuan','penyesuaian'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'tarifexport_id',
-          searchText: 'tarifexport-lookup',
-          title: 'Tarif Export Lookup',
-          typeSearch: 'ALL',
           jenisOrder: 'EKSPORT'
         }
       },
@@ -2278,19 +2252,14 @@
       }
     })
 
-    $('.tarifimport-lookup').lookupMaster({
+    $('.tarifimport-lookup').lookupV3({
       title: 'Tarif Import Lookup',
-      fileName: 'tarifMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'tarifV3',
+      searching: ['upahsupir','tujuan','penyesuaian'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'tarifimport_id',
-          searchText: 'tarifimport-lookup',
-          title: 'Tarif Import Lookup',
-          typeSearch: 'ALL',
           jenisOrder: 'IMPORT'
         }
       },
@@ -2309,22 +2278,16 @@
       }
     })
 
-    $(`.statuslangsir-lookup`).lookupMaster({
+    $(`.statuslangsir-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS langsir',
           subgrp: 'STATUS langsir',
-          searching: 1,
-          valueName: `statuslangsir`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status langsir'
         };
       },
       onSelectRow: (status, element) => {
@@ -2343,11 +2306,11 @@
       },
     });
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
@@ -2377,11 +2340,11 @@
       },
     });
 
-    $('.zona-lookup').lookupMaster({
+    $('.zona-lookup').lookupV3({
       title: 'Zona Lookup',
-      fileName: 'zonaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'zonaV3',
+      searching: ['zona','keterangan'],
+      labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',

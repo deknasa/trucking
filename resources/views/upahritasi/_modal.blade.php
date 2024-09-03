@@ -1003,9 +1003,11 @@
   }
 
   function initLookup() {
-    $('.upahritasi-lookup').lookup({
+    $('.upahritasi-lookup').lookupV3({
       title: 'upah ritasi Lookup',
-      fileName: 'upahritasi',
+      fileName: 'upahritasiV3',
+      searching: ['kotadari_id','kotasampai_id','jarak'],
+      labelColumn: true,
       onSelectRow: (upahritasi, element) => {
 
         $('#crudForm [name=parent_id]').first().val(upahritasi.id)
@@ -1023,19 +1025,14 @@
       }
     })
 
-    $('.kotadari-lookup').lookupMaster({
+    $('.kotadari-lookup').lookupV3({
       title: 'Kota Dari Lookup',
-      fileName: 'kotaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kotaV3',
+      searching: ['kodekota'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kotadari_id',
-          searchText: 'kotadari-lookup',
-          title: 'Kota Dari Lookup',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kota, element) => {
@@ -1053,19 +1050,14 @@
       }
     })
 
-    $('.kotasampai-lookup').lookupMaster({
+    $('.kotasampai-lookup').lookupV3({
       title: 'Kota Sampai Lookup',
-      fileName: 'kotaMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kotaV3',
+      searching: ['kodekota'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kotasampai_id',
-          searchText: 'kotasampai-lookup',
-          title: 'Kota Sampai Lookup',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kota, element) => {
@@ -1083,22 +1075,16 @@
       }
     })
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -1117,9 +1103,11 @@
       },
     });
 
-    $('.zona-lookup').lookup({
+    $('.zona-lookup').lookupV3({
       title: 'Zona Lookup',
-      fileName: 'zona',
+      fileName: 'zonaV3',
+      searching: ['zona','keterangan'],
+      labelColumn: true,
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)

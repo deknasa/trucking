@@ -570,22 +570,16 @@
   }
 
   function initLookup() {
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -604,19 +598,14 @@
         element.data('currentValue', element.val())
       },
     });
-    $('.kelompok-lookup').lookupMaster({
+    $('.kelompok-lookup').lookupV3({
       title: 'Kelompok Lookup',
-      fileName: 'kelompokMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'kelompokV3',
+      searching: ['kodekelompok'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kelompok_id',
-          searchText: 'kelompok-lookup',
-          title: 'Kelompok',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kelompok, element) => {

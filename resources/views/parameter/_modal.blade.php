@@ -695,20 +695,13 @@
   }
 
   function initLookup() {
-    $('.parameter-lookup').lookupMaster({
+    $('.parameter-lookup').lookupV3({
       title: 'Parameter Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
-      beforeProcess: function() {
-        this.postData = {
-          searching: 1,
-          valueName: `type`,
-          searchText: `parameter-lookup`,
-          title: 'Parameter',
-          typeSearch: 'ALL',
-        };
-      },
+      fileName: 'parameterAllV3',
+      searching: ['grp','subgrp','kelompok','text'],
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       onSelectRow: (parameter, element) => {
         $(`#crudForm [name="type"]`).first().val(parameter.id)
         element.val(parameter.grp)
@@ -724,21 +717,15 @@
       }
     })
 
-    $(`.default-lookup`).lookupMaster({
+    $(`.default-lookup`).lookupV3({
       title: 'default Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS DEFAULT PARAMETER',
-          searching: 1,
-          valueName: `defaultname`,
-          searchText: `default-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'default'
         };
       },
       onSelectRow: (status, element) => {
