@@ -995,19 +995,14 @@
 
   function initLookup() {
 
-    $('.cabang-lookup').lookupMaster({
+    $('.cabang-lookup').lookupV3({
       title: 'Cabang Lookup',
-      fileName: 'cabangMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'cabangV3',
+      searching: ['namacabang'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'cabang',
-          searchText: 'cabang-lookup',
-          title: 'CABANG',
-          typeSearch: 'ALL',
+          Aktif: 'AKTIF'
         }
       },
       onSelectRow: (cabang, element) => {
@@ -1025,22 +1020,16 @@
       }
     })
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktifnama`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
+          subgrp: 'STATUS AKTIF'
         };
       },
       onSelectRow: (status, element) => {
@@ -1058,22 +1047,16 @@
       },
     });
 
-    $(`.statusakses-lookup`).lookupMaster({
+    $(`.statusakses-lookup`).lookupV3({
       title: 'Status Akses Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKSES',
-          subgrp: 'STATUS AKSES',
-          searching: 1,
-          valueName: `statusaksesnama`,
-          searchText: `statusakses-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Akses'
+          subgrp: 'STATUS AKSES'
         };
       },
       onSelectRow: (status, element) => {

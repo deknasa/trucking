@@ -406,7 +406,7 @@
 
   })
   $('#crudModal').on('hidden.bs.modal', () => {
-    // $('#crudModal').find('.modal-body').html(modalBody)
+    $('#crudModal').find('.modal-body').html(modalBody)
     removeEditingBy(data_id)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
@@ -945,22 +945,16 @@
       })
     }
 
-    $(`.statusabsensisupir-lookup`).lookupMaster({
+    $(`.statusabsensisupir-lookup`).lookupV3({
       title: 'Status Absensi Supir Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS ABSENSI SUPIR',
           subgrp: 'STATUS ABSENSI SUPIR',
-          searching: 1,
-          valueName: `statusabsensisupir`,
-          searchText: `statusabsensisupir-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Absensi Supir'
         };
       },
       onSelectRow: (statusabsensisupir, element) => {
@@ -979,22 +973,16 @@
       },
     });
 
-    $(`.statusjenisplat-lookup`).lookupMaster({
+    $(`.statusjenisplat-lookup`).lookupV3({
       title: 'Status Jenis Plat Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'JENIS PLAT',
           subgrp: 'JENIS PLAT',
-          searching: 1,
-          valueName: `statusjenisplat`,
-          searchText: `statusjenisplat-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Jenis Plat'
         };
       },
       onSelectRow: (statusjenisplat, element) => {
@@ -1013,22 +1001,16 @@
       },
     });
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -1047,27 +1029,21 @@
       },
     });
 
-    $(`.statusgerobak-lookup`).lookupMaster({
-      title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+    $(`.statusgerobak-lookup`).lookupV3({
+      title: 'STATUS GEROBAK',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS GEROBAK',
           subgrp: 'STATUS GEROBAK',
-          searching: 1,
-          valueName: `statusgerobak`,
-          searchText: `statusgerobak-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Gerobak'
         };
       },
       onSelectRow: (status, element) => {
         $('#crudForm [name=statusgerobak]').first().val(status.id)
-        element.val(statusgerobak.text)
+        element.val(status.text)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

@@ -1,9 +1,9 @@
 <?php
-if (isset($id)) { ?>
-    <table id="kotaLookup<?= $id ?>" class="lookup-grid"></table>
+    if (isset($id)) { ?>
+<table id="zonaLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
-} else { ?>
-    <table id="kotaLookup" class="lookup-grid"></table>
+    } else { ?>
+<table id="zonaLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
     <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,11 +19,12 @@ $idLookup = isset($id) ? $id : null;
     var idLookup = '{{ $idLookup }}';
     var idTop
 
-    selector = $(`#kotaLookup{{ isset($id) ? $id : null }} `)
+    selector = $(`#zonaLookup{{ isset($id) ? $id : null }} `)
     var isToolbarSearch = false;
 
     var singleColumn = `{{ $singleColumn ?? '' }}`
     var filterToolbar = `{{ $filterToolbar ?? '' }}`
+
     label = `{{ $labelColumn ?? '' }}`
 
     width = ''
@@ -36,192 +37,174 @@ $idLookup = isset($id) ? $id : null;
     }
 
 
-    column = [{
-            label: "ID",
-            name: "id",
-            width: "50px",
-            hidden: true,
-            sortable: false,
-            search: false,
-        },
-
-        {
-            label: 'KOTA',
-            name: 'kodekota',
-            align: 'left',
-            width: width,
-        },
-    ]
-
-
+    column = [
+      {
+        label: "ID",
+        name: "id",
+        width: "50px",
+        hidden: true,
+        sortable: false,
+        search: false,
+      },
+      {
+        label: 'ZONA',
+        name: 'zona',
+      },
+      {
+        label: 'KETERANGAN',
+        name: 'keterangan',
+      },
+    ];
+    
 
     selector.jqGrid({
-        url: `{{ config('app.api_url') . 'kota' }}`,
-        mtype: "GET",
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        datatype: "json",
-        postData: {
-            aktif: `{!! $Aktif ?? '' !!}`,
-            statuspelabuhan: `{!! $StatusPelabuhan ?? '' !!}`,
-            kotadari_id: `{!! $kotadari_id ?? '' !!}`,
-            kotasampai_id: `{!! $kotasampai_id ?? '' !!}`,
-            pilihkota_id: `{!! $pilihkota_id ?? '' !!}`,
-            dataritasi_id: `{!! $DataRitasi ?? '' !!}`,
-            ritasidarike: `{!! $RitasiDariKe ?? '' !!}`,
-            zonadari_id: `{!! $zonadari_id ?? '' !!}`,
-            zonasampai_id: `{!! $zonasampai_id ?? '' !!}`,
-            upahSupirDariKe: `{!! $upahSupirDariKe ?? '' !!}`,
-            upahSupirKotaDari: `{!! $upahSupirKotaDari ?? '' !!}`,
-            forLookup: true,
-        },
-        idPrefix: '',
-        colModel: column,
-        height: 350,
-        fixed: true,
-        rownumbers: false,
-        rownumWidth: 0,
-        rowNum: `{!! $limit ?? 20 !!}`,
-        rowList: [10, 20, 50, 0],
-        sortable: true,
-        sortname: 'id',
-        sortorder: 'asc',
-        page: 1,
-        toolbar: [true, "top"],
-        viewrecords: true,
-        prmNames: {
-            sort: 'sortIndex',
-            order: 'sortOrder',
-            rows: 'limit'
-        },
-        jsonReader: {
-            root: 'data',
-            total: 'attributes.totalPages',
-            records: 20,
-        },
-        autowidth: true,
-        scrollOffset: 1,
-        scrollrows: false,
-        shrinkToFit: false,
-        scrollLeftOffset: "25%",
-        scroll: true,
-        height: 350,
-        page: 1,
-        selectedIndex: 0,
-        triggerClick: false,
-        search: true,
-        serializeGridData: function(postData) {
-            searching = `{{ $searching }}`
-            searchText = `.{{ $searchText }} `
+      url: `{!! $url ?? config('app.api_url').'zona' !!}`,
+      mtype: "GET",
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "json",
+      postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,
+      },
+      idPrefix: '',
+      colModel: column,
+      height: 350,
+      fixed: true,
+      rownumbers: false,
+      rownumWidth: 0,
+      rowNum: `{!! $limit ?? 20 !!}`,
+      rowList: [10, 20, 50, 0],
+      sortable: true,
+      sortname: 'id',
+      sortorder: 'asc',
+      page: 1,
+      toolbar: [true, "top"],
+      viewrecords: true,
+      prmNames: {
+        sort: 'sortIndex',
+        order: 'sortOrder',
+        rows: 'limit'
+      },
+      jsonReader: {
+        root: 'data',
+        total: 'attributes.totalPages',
+        records: 20,
+      },
+      autowidth: true,
+      scrollOffset: 1,
+      scrollrows: false,
+      shrinkToFit: false,
+      scrollLeftOffset: "25%",
+      scroll: true,
+      height: 350,
+      page: 1,
+      selectedIndex: 0,
+      triggerClick: false,
+      search: true,
+      serializeGridData: function(postData) {
+        searching = `{{ $searching }}`
+        searchText = `.{{ $searchText }} `
+        
+        var colModel = $(this).jqGrid("getGridParam", "colModel"),
+        rules = [],
+        searchValue = $(searchText).val(),
+        i,
+        cm;
+        l = colModel.length
+        
+        if (searching != '') {
+          searching = searching.split(',');
+        }
+        aksi = `{!! $aksi ?? '' !!}`
+        postData.sort_indexes = [postData.sort_index];
+        postData.sort_orders = [postData.sort_order];
+        input = $(searchText).data('input')
 
-            var colModel = $(this).jqGrid("getGridParam", "colModel"),
-                rules = [],
-                searchValue = $(searchText).val(),
-                i,
-                cm;
-            l = colModel.length
+        if (isToolbarSearch) {
+          colModel.forEach(function(cm) {
+            var searchField = $("#crudForm #gs_" + cm.name).val();
 
-
-
-
-            if (searching != '') {
-                searching = searching.split(',');
-            }
-
-
-            aksi = `{!! $aksi ?? '' !!}`
-
-
-            postData.sort_indexes = [postData.sort_index];
-            postData.sort_orders = [postData.sort_order];
-
-
-            input = $(searchText).data('input')
-
-            if (isToolbarSearch) {
-                colModel.forEach(function(cm) {
-                    var searchField = $("#gs_" + cm.name).val();
-
-                    if (searchField && cm.search !== false && (cm.stype === undefined || cm
-                            .stype === "text")) {
-                        isToolbarSearch = true;
-                        rules.push({
-                            field: cm.name,
-                            op: "cn", // Contains operation
-                            data: searchField.toUpperCase()
-                        });
-                    }
-                });
-
-                // Logic for toolbar search with AND
-                postData.filters = JSON.stringify({
-                    "groupOp": "AND",
-                    "rules": rules
-                });
-                postData.filter_group = "AND";
-
-            } else {
-                if (input) {
-                    if (searching.length == 0) {
-                        for (i = 0; i < l; i++) {
-                            cm = colModel[i];
-
-                            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
-                                rules.push({
-                                    field: cm.name,
-                                    op: "cn",
-                                    data: searchValue.toUpperCase(),
-                                });
-                            }
-                        }
-
-                        postData.filters = JSON.stringify({
-                            groupOp: "OR",
-                            rules: rules,
-                        });
-
-                        postData.searching = searching;
-                        postData.searchText = searchText;
-                    } else if (searching.length >= 1) {
-                        for (i = 0; i < l; i++) {
-                            cm = colModel[i];
-                            // Check if the column name is in the 'searching' array
-                            if (searching.includes(cm.name)) {
-                                // Check for valid search options
-                                if (
-                                    cm.search !== false &&
-                                    (cm.stype === undefined || cm.stype === "text")
-                                ) {
-                                    rules.push({
-                                        field: cm.name,
-                                        op: "cn", // Contains operation
-                                        data: searchValue.toUpperCase(),
-                                    });
-                                }
-                            }
-                        }
-                        postData.filter_group = "OR";
-
-                        postData.filters = JSON.stringify({
-                            groupOp: "OR",
-                            rules: rules,
-                        });
-
-                        postData.searching = searching;
-                        postData.searchText = searchText;
-                    }
+                if (searchField && cm.search !== false && (cm.stype === undefined || cm
+                        .stype === "text")) {
+                    isToolbarSearch = true;
+                    rules.push({
+                        field: cm.name,
+                        op: "cn", // Contains operation
+                        data: searchField.toUpperCase()
+                    });
                 }
-            }
+            });
 
+            // Logic for toolbar search with AND
+            postData.filters = JSON.stringify({
+                "groupOp": "AND",
+                "rules": rules
+            });
+            postData.filter_group = "AND";
+            } else {
+              if (input) {
+                if (searching.length == 0) {
+                  for (i = 0; i < l; i++) {
+                    cm = colModel[i];
+                    
+                    if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+                      rules.push({
+                        field: cm.name,
+                        op: "cn",
+                        data: searchValue.toUpperCase(),
+                      });
+                    }
+                  }
+                  
+                  postData.filters = JSON.stringify({
+                    groupOp: "OR",
+                    rules: rules,
+                  });
+                  
+                  postData.searching = searching;
+                  postData.searchText = searchText;
+                } else if (searching.length > 1) {
+                  for (i = 0; i < l; i++) {
+                    cm = colModel[i];
+                    // Check if the column name is in the 'searching' array
+                    if (searching.includes(cm.name)) {
+                      // Check for valid search options
+                      if (
+                        cm.search !== false &&
+                        (cm.stype === undefined || cm.stype === "text")
+                      ) {
+                        rules.push({
+                          field: cm.name,
+                          
+                          op: "cn", // Contains operation
+                          data: searchValue.toUpperCase(),
+                        });
+                      }
+                    }
+                    
+                  }
+                  postData.filter_group = "OR";
+                  postData.filters = JSON.stringify({
+                    groupOp: "OR",
+                    rules: rules,
+                  });
+                  
+                  postData.searching = searching;
+                  postData.searchText = searchText;
+                }
+              }
+            }
+            
             return postData;
-        },
-        loadBeforeSend: function(jqXHR) {
+          },
+          loadBeforeSend: function(jqXHR) {
             $('.loadingMessage').show();
             idTop = selector.attr('id')
-
-
+            
+            
             $(`#load_${idTop}`).remove()
-
+            
+            
             if (detectDeviceType() == 'mobile') {
 
                 $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
@@ -323,7 +306,7 @@ $idLookup = isset($id) ? $id : null;
 
             if (data.data.length === 0) {
 
-                $('#parameterGrid').each((index, element) => {
+                $('#zonaGrid').each((index, element) => {
                     abortGridLastRequest($(element))
                     clearGridHeader($(element))
                 })
@@ -333,15 +316,14 @@ $idLookup = isset($id) ? $id : null;
             }
 
             if (detectDeviceType() == 'desktop') {
-                console.log('desktop');
 
                 // $(document).unbind('keydown')
-
+               
                 initResize($(this))
 
 
                 let selectedIndex = $(this).jqGrid("getGridParam").selectedIndex;
-
+             
                 if (selectedIndex > $(this).getDataIDs().length - 1) {
                     selectedIndex = $(this).getDataIDs().length - 1;
                 }
@@ -355,8 +337,8 @@ $idLookup = isset($id) ? $id : null;
                     $(this).jqGrid("setGridParam", {
                         triggerClick: false,
                     });
-
-                }
+                    
+                } 
             }
 
             $('.clearsearchclass').click(function() {
@@ -366,10 +348,13 @@ $idLookup = isset($id) ? $id : null;
             $(this).setGridWidth($('#lookupCabang').prev().width())
             setHighlight($(this))
             // $(this).jqGrid('setSelection', 1);
+
+        
+
         },
 
     })
-    
+
     if (filterToolbar == 'true') {
         if (detectDeviceType() == 'mobile') {
             $('.loadingMessage').css('top', '125%')

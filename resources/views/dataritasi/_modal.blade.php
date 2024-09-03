@@ -656,22 +656,16 @@
   }
 
   function initLookup() {
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -690,20 +684,16 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statusritasi-lookup`).lookupMaster({
+    $(`.statusritasi-lookup`).lookupV3({
       title: 'Status ritasi Lookup',
-      fileName: 'parameterMaster',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS RITASI',
           subgrp: 'STATUS RITASI',
-          searching: 1,
-          valueName: `statusritasi`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'STATUS RITASI'
         };
       },
       onSelectRow: (status, element) => {

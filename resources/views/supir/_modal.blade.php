@@ -956,22 +956,16 @@
       })
     }
 
-    $(`.statuspostingtnl-lookup`).lookupMaster({
+    $(`.statuspostingtnl-lookup`).lookupV3({
       title: 'Status Posting TNL Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS POSTING TNL',
           subgrp: 'STATUS POSTING TNL',
-          searching: 1,
-          valueName: `statuspostingtnl`,
-          searchText: `statuspostingtnl-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Posting TNL'
         };
       },
       onSelectRow: (statuspostingtnl, element) => {
@@ -990,22 +984,16 @@
       },
     });
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (statusaktif, element) => {
