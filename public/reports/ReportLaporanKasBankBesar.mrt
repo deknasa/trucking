@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3e1b7e9ad395ad94a02579bb1f707377",
+  "ReportGuid": "c401159c3e67b9b63cbb7115ba3c6999",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanKasBankBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724744159000+0700)/",
+  "ReportChanged": "/Date(1725339014000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -133,6 +133,12 @@
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "tglbukti2",
+            "NameInSource": "tglbukti2",
+            "Alias": "tglbukti2",
             "Type": "System.String"
           }
         },
@@ -1038,54 +1044,6 @@
             },
             "1": {
               "Ident": "StiText",
-              "Name": "Text21",
-              "Guid": "91a448fde875072e545ba98196f18e97",
-              "CanGrow": true,
-              "ClientRectangle": "45.38,0.08,30.68,6.09",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "<font style=\"\" face=\"SourceSansPro\">{root_data.keterangancoa}</font>"
-              },
-              "Font": "Comic Sans MS3;;;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "TextQuality": "Wysiwyg",
-              "AllowHtmlTags": true,
-              "Type": "Expression"
-            },
-            "2": {
-              "Ident": "StiText",
-              "Name": "Text22",
-              "Guid": "2b643fa7e677a9a771103263ed36bfae",
-              "CanGrow": true,
-              "ClientRectangle": "77,0,41,6.09",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "<font style=\"\" face=\"SourceSansPro\">{root_data.keterangan}&nbsp;</font>"
-              },
-              "Font": "Comic Sans MS3;;;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "TextQuality": "Wysiwyg",
-              "AllowHtmlTags": true,
-              "Type": "Expression"
-            },
-            "3": {
-              "Ident": "StiText",
               "Name": "Text23",
               "Guid": "a91f497eb014c8dfc40781c6188f9f19",
               "CanGrow": true,
@@ -1123,7 +1081,7 @@
               },
               "Type": "DataColumn"
             },
-            "4": {
+            "2": {
               "Ident": "StiText",
               "Name": "Text25",
               "Guid": "fb18c7d15c1504b2606ae173c01c0e04",
@@ -1162,7 +1120,7 @@
               },
               "Type": "DataColumn"
             },
-            "5": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "d58d2714a378f7fa0793a745b2ba9db2",
@@ -1191,7 +1149,7 @@
               },
               "Type": "DataColumn"
             },
-            "6": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text32",
               "Guid": "da2f25dfcfb46d3b4d765e109f348641",
@@ -1214,6 +1172,50 @@
               "TextFormat": {
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
+              },
+              "Type": "DataColumn"
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text21",
+              "Guid": "fa3712c62c036c108508535605447178",
+              "CanGrow": true,
+              "ClientRectangle": "46,0.27,29,8.09",
+              "ComponentPlacement": "d.DataBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{root_data.keterangancoa}"
+              },
+              "Font": "SourceSansPro;9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "DataColumn"
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text22",
+              "Guid": "3c758e8567a58a4f1c925e0daa27e893",
+              "CanGrow": true,
+              "ClientRectangle": "78,0.27,39,8.09",
+              "ComponentPlacement": "d.DataBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{root_data.keterangan}"
+              },
+              "Font": "SourceSansPro;9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
               },
               "Type": "DataColumn"
             }
