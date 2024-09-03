@@ -316,6 +316,16 @@
                         name: 'kategori_id',
                     },
                     {
+                        label: 'HARGA SATUAN',
+                        name: 'hrg_satuan',
+                        align: 'right',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+                    {
                         label: 'QTY MASUK',
                         name: 'qtymasuk',
                         align: 'right',
