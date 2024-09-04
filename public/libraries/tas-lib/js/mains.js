@@ -1377,6 +1377,32 @@ function initMonthpicker(classDatepicker ="monthpicker"){
         element.MonthPicker('Close')
     });
 
+    // Validasi format pada blur
+    element.on("blur", function () {
+        let value = $(this).val();
+        let regex = /^(0[1-9]|1[0-2])-\d{4}$/; // Format mm-yyyy
+
+        // Hapus pesan kesalahan sebelumnya jika ada
+        $(this).removeClass("is-invalid");
+        $(this).siblings(".invalid-feedback").remove();
+
+        if (!regex.test(value)) {
+            let error = "Format salah! Harus dalam format mm-yyyy.";
+
+            // Tambahkan class is-invalid
+            $(this).addClass("is-invalid");
+
+            // Tambahkan pesan kesalahan
+            $(`
+                <div class="invalid-feedback">
+                ${error}
+                </div>
+            `).appendTo($(this).parent());
+
+            $(this).focus(); // Kembali ke input jika format salah
+        }
+    });
+
 }
 
 // function initMonthpicker(classDatepicker = "monthpicker") {
