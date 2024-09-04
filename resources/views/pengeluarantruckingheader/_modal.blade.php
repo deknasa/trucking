@@ -234,6 +234,16 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Nominal Penarikan <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="nominalpenarikan" class="form-control text-right">
+              </div>
+            </div>
+
             <div class="row mb-3">
               <div class="col-sm-6 m-1">
                 <button id="btnReloadOtokGrid" class="btn btn-primary mr-2 ">
@@ -774,40 +784,45 @@
           name: 'pengeluaran_nobukti',
           value: form.find(`[name="pengeluaran_nobukti"]`).val()
         })
-        let selectedRowsDeposito = $("#tableDeposito").getGridParam("selectedRowIds");
         data.push({
-          name: 'jumlahdetail',
-          value: selectedRowsDeposito
+          name: 'nominalpenarikan',
+          value: AutoNumeric.getNumber($(`#crudForm [name="nominalpenarikan"]`)[0])
         })
-        $.each(selectedRowsDeposito, function(index, value) {
-          dataDeposito = $("#tableDeposito").jqGrid("getLocalRow", value);
-          let selectedSisa = dataDeposito.sisa
-          let selectedNominal = (dataDeposito.nominal == undefined) ? 0 : dataDeposito.nominal;
-          data.push({
-            name: 'nominal[]',
-            value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
-          })
-          data.push({
-            name: 'sisa[]',
-            value: selectedSisa
-          })
-          data.push({
-            name: 'keterangan[]',
-            value: dataDeposito.keterangan
-          })
-          data.push({
-            name: 'penerimaantruckingheader_nobukti[]',
-            value: dataDeposito.nobukti
-          })
-          data.push({
-            name: 'supir_id[]',
-            value: form.find(`[name="supirheader_id"]`).val()
-          })
-          data.push({
-            name: 'tde_id[]',
-            value: dataDeposito.id
-          })
-        });
+
+        // let selectedRowsDeposito = $("#tableDeposito").getGridParam("selectedRowIds");
+        // data.push({
+        //   name: 'jumlahdetail',
+        //   value: selectedRowsDeposito
+        // })
+        // $.each(selectedRowsDeposito, function(index, value) {
+        //   dataDeposito = $("#tableDeposito").jqGrid("getLocalRow", value);
+        //   let selectedSisa = dataDeposito.sisa
+        //   let selectedNominal = (dataDeposito.nominal == undefined) ? 0 : dataDeposito.nominal;
+        //   data.push({
+        //     name: 'nominal[]',
+        //     value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
+        //   })
+        //   data.push({
+        //     name: 'sisa[]',
+        //     value: selectedSisa
+        //   })
+        //   data.push({
+        //     name: 'keterangan[]',
+        //     value: dataDeposito.keterangan
+        //   })
+        //   data.push({
+        //     name: 'penerimaantruckingheader_nobukti[]',
+        //     value: dataDeposito.nobukti
+        //   })
+        //   data.push({
+        //     name: 'supir_id[]',
+        //     value: form.find(`[name="supirheader_id"]`).val()
+        //   })
+        //   data.push({
+        //     name: 'tde_id[]',
+        //     value: dataDeposito.id
+        //   })
+        // });
       } else if (KodePengeluaranId == "TDEK") {
         data = []
 
@@ -866,42 +881,46 @@
         data.push({
           name: 'pengeluaran_nobukti',
           value: form.find(`[name="pengeluaran_nobukti"]`).val()
-        })
-        let selectedRowsDepositoKaryawan = $("#tableDepositoKaryawan").getGridParam("selectedRowIds");
+        })        
         data.push({
-          name: 'jumlahdetail',
-          value: selectedRowsDepositoKaryawan.length
+          name: 'nominalpenarikan',
+          value: AutoNumeric.getNumber($(`#crudForm [name="nominalpenarikan"]`)[0])
         })
-        $.each(selectedRowsDepositoKaryawan, function(index, value) {
-          dataDepositoKaryawan = $("#tableDepositoKaryawan").jqGrid("getLocalRow", value);
-          let selectedSisaDepoKaryawan = dataDepositoKaryawan.sisa
-          let selectedNominalDepoKaryawan = (dataDepositoKaryawan.nominal == undefined || dataDepositoKaryawan.nominal == '') ? 0 : dataDepositoKaryawan.nominal;
+        // let selectedRowsDepositoKaryawan = $("#tableDepositoKaryawan").getGridParam("selectedRowIds");
+        // data.push({
+        //   name: 'jumlahdetail',
+        //   value: selectedRowsDepositoKaryawan.length
+        // })
+        // $.each(selectedRowsDepositoKaryawan, function(index, value) {
+        //   dataDepositoKaryawan = $("#tableDepositoKaryawan").jqGrid("getLocalRow", value);
+        //   let selectedSisaDepoKaryawan = dataDepositoKaryawan.sisa
+        //   let selectedNominalDepoKaryawan = (dataDepositoKaryawan.nominal == undefined || dataDepositoKaryawan.nominal == '') ? 0 : dataDepositoKaryawan.nominal;
 
-          data.push({
-            name: 'nominal[]',
-            value: (isNaN(selectedNominalDepoKaryawan)) ? parseFloat(selectedNominalDepoKaryawan.replaceAll(',', '')) : selectedNominalDepoKaryawan
-          })
-          data.push({
-            name: 'sisa[]',
-            value: selectedSisaDepoKaryawan
-          })
-          data.push({
-            name: 'keterangan[]',
-            value: dataDepositoKaryawan.keterangan
-          })
-          data.push({
-            name: 'penerimaantruckingheader_nobukti[]',
-            value: dataDepositoKaryawan.nobukti
-          })
-          data.push({
-            name: 'karyawan_id[]',
-            value: form.find(`[name="karyawanheader_id"]`).val()
-          })
-          data.push({
-            name: 'tdek_id[]',
-            value: dataDepositoKaryawan.id
-          })
-        });
+        //   data.push({
+        //     name: 'nominal[]',
+        //     value: (isNaN(selectedNominalDepoKaryawan)) ? parseFloat(selectedNominalDepoKaryawan.replaceAll(',', '')) : selectedNominalDepoKaryawan
+        //   })
+        //   data.push({
+        //     name: 'sisa[]',
+        //     value: selectedSisaDepoKaryawan
+        //   })
+        //   data.push({
+        //     name: 'keterangan[]',
+        //     value: dataDepositoKaryawan.keterangan
+        //   })
+        //   data.push({
+        //     name: 'penerimaantruckingheader_nobukti[]',
+        //     value: dataDepositoKaryawan.nobukti
+        //   })
+        //   data.push({
+        //     name: 'karyawan_id[]',
+        //     value: form.find(`[name="karyawanheader_id"]`).val()
+        //   })
+        //   data.push({
+        //     name: 'tdek_id[]',
+        //     value: dataDepositoKaryawan.id
+        //   })
+        // });
       } else if (KodePengeluaranId == "KBBM") {
         data = []
 
@@ -1415,7 +1434,7 @@
             let tglsampaiVal = $('#crudForm').find('[name="tglsampai"]').val();
             let pengeluaranTruckingIdVal = $('#crudForm').find('[name="pengeluarantrucking_id"]').val();
             // showSuccessDialog(response.message, response.data.nobukti)
-            createPengeluaranTruckingHeader()
+            createPengeluaranTruckingHeader(true)
             $('#crudForm').find('input[type="text"]').not('[name="pengeluarantrucking"]').data('current-value', '')
             $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
             $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
@@ -1428,25 +1447,6 @@
               $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
               $('#tablePelunasanbbm').jqGrid("clearGridData");
               $("#tablePelunasanbbm")
-                .jqGrid("setGridParam", {
-                  selectedRowIds: []
-                })
-                .trigger("reloadGrid");
-            }
-            if (KodePengeluaranId == 'TDE') {
-              $("#tableDeposito")[0].p.selectedRowIds = [];
-              $('#tableDeposito').jqGrid("clearGridData");
-              $("#tableDeposito")
-                .jqGrid("setGridParam", {
-                  selectedRowIds: []
-                })
-                .trigger("reloadGrid");
-
-            }
-            if (KodePengeluaranId == 'TDEK') {
-              $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
-              $('#tableDepositoKaryawan').jqGrid("clearGridData");
-              $("#tableDepositoKaryawan")
                 .jqGrid("setGridParam", {
                   selectedRowIds: []
                 })
@@ -1468,7 +1468,7 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            if (KodePengeluaranId == "TDE" || KodePengeluaranId == "TDEK" || KodePengeluaranId == "BST" || KodePengeluaranId == "KBBM") {
+            if (KodePengeluaranId == "BST" || KodePengeluaranId == "KBBM") {
               console.log(error)
               errors = error.responseJSON.errors
               $(".ui-state-error").removeClass("ui-state-error");
@@ -1477,13 +1477,14 @@
                 let angka = indexes[1]
                 row = parseInt(selectedRows[angka]) - 1;
 
-                if (KodePengeluaranId == 'TDE') {
-                  tableError = 'tableDeposito'
-                  selectedRowsError = $("#tableDeposito").getGridParam("selectedRowIds");
-                } else if (KodePengeluaranId == 'TDEK') {
-                  tableError = 'tableDepositoKaryawan'
-                  selectedRowsError = $("#tableDepositoKaryawan").getGridParam("selectedRowIds");
-                } else if (KodePengeluaranId == 'BST') {
+                // if (KodePengeluaranId == 'TDE') {
+                //   tableError = 'tableDeposito'
+                //   selectedRowsError = $("#tableDeposito").getGridParam("selectedRowIds");
+                // } else if (KodePengeluaranId == 'TDEK') {
+                //   tableError = 'tableDepositoKaryawan'
+                //   selectedRowsError = $("#tableDepositoKaryawan").getGridParam("selectedRowIds");
+                // } else 
+                if (KodePengeluaranId == 'BST') {
                   tableError = 'tableSumbangan'
 
                 } else if (KodePengeluaranId == 'KBBM') {
@@ -1513,7 +1514,8 @@
                     return showDialog(error);
                   }
                 } else {
-                  if (KodePengeluaranId == "TDE" || KodePengeluaranId == "TDEK" || KodePengeluaranId == "KBBM") {
+                  // if (KodePengeluaranId == "TDE" || KodePengeluaranId == "TDEK" || KodePengeluaranId == "KBBM") {
+                  if (KodePengeluaranId == "KBBM") {
                     element = $(`#${tableError} tr#${parseInt(selectedRowsError[angka])}`).find(`td[aria-describedby="${tableError}_${indexes[0]}"]`)
                     $(element).addClass("ui-state-error");
                     $(element).attr("title", error[0].toLowerCase())
@@ -1537,60 +1539,60 @@
 
   $(document).on("change", `[name=tglbukti]`, function(event) {
 
-    if (KodePengeluaranId == 'TDE' && $('#crudForm [name=supirheader_id]').val() != '') {
-      $("#tableDeposito")[0].p.selectedRowIds = [];
-      $('#tableDeposito').jqGrid("clearGridData");
-      $("#tableDeposito")
-        .jqGrid("setGridParam", {
-          selectedRowIds: []
-        })
-        .trigger("reloadGrid");
+    // if (KodePengeluaranId == 'TDE' && $('#crudForm [name=supirheader_id]').val() != '') {
+    //   $("#tableDeposito")[0].p.selectedRowIds = [];
+    //   $('#tableDeposito').jqGrid("clearGridData");
+    //   $("#tableDeposito")
+    //     .jqGrid("setGridParam", {
+    //       selectedRowIds: []
+    //     })
+    //     .trigger("reloadGrid");
 
-      getDataDeposito($('#crudForm [name=supirheader_id]').val()).then((response) => {
+    //   getDataDeposito($('#crudForm [name=supirheader_id]').val()).then((response) => {
 
-        setTimeout(() => {
+    //     setTimeout(() => {
 
-          $("#tableDeposito")
-            .jqGrid("setGridParam", {
-              datatype: "local",
-              data: response.data,
-              originalData: response.data,
-              rowNum: response.data.length,
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
-        }, 100);
+    //       $("#tableDeposito")
+    //         .jqGrid("setGridParam", {
+    //           datatype: "local",
+    //           data: response.data,
+    //           originalData: response.data,
+    //           rowNum: response.data.length,
+    //           selectedRowIds: []
+    //         })
+    //         .trigger("reloadGrid");
+    //     }, 100);
 
-      });
-    }
+    //   });
+    // }
 
-    if (KodePengeluaranId == 'TDEK' && $('#crudForm [name=karyawanheader_id]').val() != '') {
+    // if (KodePengeluaranId == 'TDEK' && $('#crudForm [name=karyawanheader_id]').val() != '') {
 
-      $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
-      $('#tableDepositoKaryawan').jqGrid("clearGridData");
-      $("#tableDepositoKaryawan")
-        .jqGrid("setGridParam", {
-          selectedRowIds: []
-        })
-        .trigger("reloadGrid");
+    //   $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
+    //   $('#tableDepositoKaryawan').jqGrid("clearGridData");
+    //   $("#tableDepositoKaryawan")
+    //     .jqGrid("setGridParam", {
+    //       selectedRowIds: []
+    //     })
+    //     .trigger("reloadGrid");
 
-      getDataDepositoKaryawan($('#crudForm [name=karyawanheader_id]').val()).then((response) => {
+    //   getDataDepositoKaryawan($('#crudForm [name=karyawanheader_id]').val()).then((response) => {
 
-        setTimeout(() => {
+    //     setTimeout(() => {
 
-          $("#tableDepositoKaryawan")
-            .jqGrid("setGridParam", {
-              datatype: "local",
-              data: response.data,
-              originalData: response.data,
-              rowNum: response.data.length,
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
-        }, 100);
+    //       $("#tableDepositoKaryawan")
+    //         .jqGrid("setGridParam", {
+    //           datatype: "local",
+    //           data: response.data,
+    //           originalData: response.data,
+    //           rowNum: response.data.length,
+    //           selectedRowIds: []
+    //         })
+    //         .trigger("reloadGrid");
+    //     }, 100);
 
-      });
-    }
+    //   });
+    // }
   })
 
   function setKodePengeluaran(kode) {
@@ -1693,6 +1695,7 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=statustanpabukti]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1747,6 +1750,7 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=statustanpabukti]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1806,6 +1810,7 @@
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').show()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1860,6 +1865,7 @@
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').show()
     $('.tbl_supir_id').hide()
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
@@ -1878,7 +1884,7 @@
     $('.tbl_harga').hide()
     $('.cabang').hide()
     $('.tbl_karyawan_id').hide()
-    $('#detail-tde-section').show()
+    $('#detail-tde-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
@@ -1893,7 +1899,7 @@
     $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
-    loadDepositoGrid()
+    // loadDepositoGrid()
   }
 
   function tampilanTDEK() {
@@ -1910,6 +1916,7 @@
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').show()
     $('.tbl_supir_id').hide()
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
@@ -1940,10 +1947,10 @@
     $('#detail-bsm-section').hide()
     $('#detail-otok-section').hide()
     $('#detail-otol-section').hide()
-    $('#detail-tdek-section').show()
+    $('#detail-tdek-section').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('#detail-default-section').parents('.card').hide()
-    loadDepositoKaryawanGrid()
+    // loadDepositoKaryawanGrid()
   }
 
   function tampilanBST() {
@@ -2001,6 +2008,7 @@
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
     $('.cabang').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     // $('.colmn-offset').hide()
     loadModalGrid()
@@ -2022,6 +2030,7 @@
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $(".tgldari").text("TGL DARI ");
     $(".tglsampai").text("TGL SAMPAI ");
@@ -2080,6 +2089,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
@@ -2139,6 +2149,7 @@
     $('[name=tradoheader_id]').parents('.form-group').show()
     $('[name=gandenganheader_id]').parents('.form-group').show()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
     $('[name=tgldari]').parents('.form-group').hide()
@@ -2207,6 +2218,7 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
@@ -2291,6 +2303,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2374,6 +2387,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2458,6 +2472,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2541,6 +2556,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2625,6 +2641,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2707,6 +2724,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2790,6 +2808,7 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $(".tgldari").text("PERIODE DARI ");
@@ -2849,6 +2868,7 @@
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
@@ -2911,6 +2931,7 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $(".tgldari").text("PERIODE DARI ");
@@ -3007,6 +3028,7 @@
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=nominalpenarikan]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -3048,20 +3070,20 @@
     $('#tbl_addRow').hide()
     $('.tbl_aksi').hide()
     $('.cabang').hide()
-    $('#tableDeposito').jqGrid("clearGridData");
-    $('#tableDepositoKaryawan').jqGrid("clearGridData");
+    // $('#tableDeposito').jqGrid("clearGridData");
+    // $('#tableDepositoKaryawan').jqGrid("clearGridData");
 
-    if ($('#crudForm').data('action') == 'add') {
+    // if ($('#crudForm').data('action') == 'add') {
 
-      $('[name=supirheader_id]').val('')
-      $('[name=supirheader]').val('')
-      $('[name=karyawanheader_id]').val('')
-      $('[name=karyawanheader]').val('')
-    }
-    setTotalNominalDeposito()
-    setTotalSisaDeposito()
-    setTotalNominalDepositoKaryawan()
-    setTotalSisaDepositoKaryawan()
+    //   $('[name=supirheader_id]').val('')
+    //   $('[name=supirheader]').val('')
+    //   $('[name=karyawanheader_id]').val('')
+    //   $('[name=karyawanheader]').val('')
+    // }
+    // setTotalNominalDeposito()
+    // setTotalSisaDeposito()
+    // setTotalNominalDepositoKaryawan()
+    // setTotalSisaDepositoKaryawan()
   }
 
   function klaimTanpaNobukti() {
@@ -3351,7 +3373,7 @@
     new AutoNumeric('#totalTambahan').set(total)
   }
 
-  function createPengeluaranTruckingHeader() {
+  function createPengeluaranTruckingHeader(isSaveAdd = false) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -3372,6 +3394,12 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+    if (!isSaveAdd) {
+      initAutoNumeric(form.find(`[name="nominalpenarikan"]`), {
+        minimumValue: 0
+      })
+    }
 
     Promise
       .all([
@@ -5238,6 +5266,9 @@
             }
           })
 
+          initAutoNumeric(form.find(`[name="nominalpenarikan"]`), {
+            minimumValue: 0
+          })
           if (kodepengeluaran === "TDE") {
             getDataDeposito(response.data.supirheader_id, id).then((response) => {
 
@@ -9301,39 +9332,39 @@
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
         selectedSupirKaryawan('supir')
-        if (KodePengeluaranId != "KLAIM") {
+        // if (KodePengeluaranId != "KLAIM") {
 
-          $('#btnSubmit').prop('disabled', true)
-          $('#btnSaveAdd').prop('disabled', true)
-          $("#tableDeposito")[0].p.selectedRowIds = [];
-          $('#tableDeposito').jqGrid("clearGridData");
-          $("#tableDeposito")
-            .jqGrid("setGridParam", {
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
+        //   $('#btnSubmit').prop('disabled', true)
+        //   $('#btnSaveAdd').prop('disabled', true)
+        //   $("#tableDeposito")[0].p.selectedRowIds = [];
+        //   $('#tableDeposito').jqGrid("clearGridData");
+        //   $("#tableDeposito")
+        //     .jqGrid("setGridParam", {
+        //       selectedRowIds: []
+        //     })
+        //     .trigger("reloadGrid");
 
-          getDataDeposito(supir.id).then((response) => {
+        //   getDataDeposito(supir.id).then((response) => {
 
-            console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
-            setTimeout(() => {
+        //     console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
+        //     setTimeout(() => {
 
-              $("#tableDeposito")
-                .jqGrid("setGridParam", {
-                  datatype: "local",
-                  data: response.data,
-                  originalData: response.data,
-                  rowNum: response.data.length,
-                  selectedRowIds: []
-                })
-                .trigger("reloadGrid");
+        //       $("#tableDeposito")
+        //         .jqGrid("setGridParam", {
+        //           datatype: "local",
+        //           data: response.data,
+        //           originalData: response.data,
+        //           rowNum: response.data.length,
+        //           selectedRowIds: []
+        //         })
+        //         .trigger("reloadGrid");
 
-              $('#btnSubmit').prop('disabled', false)
-              $('#btnSaveAdd').prop('disabled', false)
-            }, 100);
+        //       $('#btnSubmit').prop('disabled', false)
+        //       $('#btnSaveAdd').prop('disabled', false)
+        //     }, 100);
 
-          });
-        }
+        //   });
+        // }
 
       },
       onCancel: (element) => {
@@ -9365,39 +9396,39 @@
         selectedSupirKaryawan('karyawan')
         $('#crudModal').find("[name=statustanpabukti]").val(3).trigger('change')
         klaimTanpaNobukti()
-        if (KodePengeluaranId != "KLAIM") {
+        // if (KodePengeluaranId != "KLAIM") {
 
-          $('#btnSubmit').prop('disabled', true)
-          $('#btnSaveAdd').prop('disabled', true)
-          $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
-          $('#tableDepositoKaryawan').jqGrid("clearGridData");
-          $("#tableDepositoKaryawan")
-            .jqGrid("setGridParam", {
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
+        //   $('#btnSubmit').prop('disabled', true)
+        //   $('#btnSaveAdd').prop('disabled', true)
+        //   $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
+        //   $('#tableDepositoKaryawan').jqGrid("clearGridData");
+        //   $("#tableDepositoKaryawan")
+        //     .jqGrid("setGridParam", {
+        //       selectedRowIds: []
+        //     })
+        //     .trigger("reloadGrid");
 
-          getDataDepositoKaryawan(karyawan.id).then((response) => {
+        //   getDataDepositoKaryawan(karyawan.id).then((response) => {
 
-            console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
-            setTimeout(() => {
+        //     console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+        //     setTimeout(() => {
 
-              $("#tableDepositoKaryawan")
-                .jqGrid("setGridParam", {
-                  datatype: "local",
-                  data: response.data,
-                  originalData: response.data,
-                  rowNum: response.data.length,
-                  selectedRowIds: []
-                })
-                .trigger("reloadGrid");
+        //       $("#tableDepositoKaryawan")
+        //         .jqGrid("setGridParam", {
+        //           datatype: "local",
+        //           data: response.data,
+        //           originalData: response.data,
+        //           rowNum: response.data.length,
+        //           selectedRowIds: []
+        //         })
+        //         .trigger("reloadGrid");
 
-              $('#btnSubmit').prop('disabled', false)
-              $('#btnSaveAdd').prop('disabled', false)
-            }, 100);
+        //       $('#btnSubmit').prop('disabled', false)
+        //       $('#btnSaveAdd').prop('disabled', false)
+        //     }, 100);
 
-          });
-        }
+        //   });
+        // }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
