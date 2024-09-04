@@ -41,7 +41,6 @@
   <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/MonthPicker.min.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\MonthPicker.min.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
-  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/Print.js-1.5.0/print.min.css') }}">
   @stack('style')
 
 </head>
@@ -411,7 +410,6 @@
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
-  <script src="{{ asset('libraries/Print.js-1.5.0/print.min.js') }}"></script>
 
 
 
