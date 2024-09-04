@@ -38,6 +38,7 @@
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/styles.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\pager.css')) }}">
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/MonthPicker.min.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\MonthPicker.min.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
   <link rel="stylesheet" type="text/css" href="{{ asset('libraries/Print.js-1.5.0/print.min.css') }}">
@@ -424,6 +425,7 @@
   <script src="{{ asset('libraries/tas-lib/js/lookupMaster.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupMaster.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookupV3.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupV3.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\mains.js')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/MonthPicker.min.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\MonthPicker.min.js')) }}"></script>
   {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script> --}}
 
   <!-- Pusher -->
