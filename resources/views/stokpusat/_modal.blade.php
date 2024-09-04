@@ -160,7 +160,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let jumlahRow = 0;
     let kelompokId
-    let sortnameMdn = 'FKStck';
+    let sortnameMdn = 'namastok';
     let sortorderMdn = 'asc';
     let pageMdn = 0;
     let totalRecordMdn
@@ -208,7 +208,7 @@
     let selectedGbrSby
     let selectedNamaSby
 
-    let sortnameMks = 'FKStck';
+    let sortnameMks = 'namastok';
     let sortorderMks = 'asc';
     let pageMks = 0;
     let totalRecordMks
@@ -238,42 +238,175 @@
 
         $(document).on('click', '#btnTampil', function(event) {
             event.preventDefault()
-            $('#tableMedan')
-                .jqGrid('setGridParam', {
+            
+            if (accessTokenMdn == '') {
+
+                $.ajax({
                     url: `${apiUrl}stokpusat/datamdn`,
-                    mtype: "GET",
-                    datatype: "json",
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
+                    method: "GET",
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
                     },
-                    loadError: function(jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.status == 500) {
-                            showDialog("SERVER MEDAN TIDAK BISA DIAKSES")
+                    success: response => {
+
+                        $.ajax({
+                            url: `${appUrl}/stokpusat/tokenmdn?token=${response.data}`,
+                            method: "GET",
+                            dataType: 'JSON',
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            success: response => {
+
+                                accessTokenMdn = response.data
+                                $('#tableMedan')
+                                    .jqGrid('setGridParam', {
+                                        url: `${apiTruckingMdnUrl}stok`,
+                                        mtype: "GET",
+                                        datatype: "json",
+                                        postData: {
+                                            kelompok_id: kelompokId,
+                                            aktif: "AKTIF",
+                                        },
+                                        loadBeforeSend: function(jqXHR) {
+                                            jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                        },
+                                    }).trigger('reloadGrid');
+                            }
+                        })
+
+
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
                         }
                     },
+                })
+
+            } else {
+                    $('#tableMedan')
+                    .jqGrid('setGridParam', {
+                        url: `${apiTruckingMdnUrl}stok`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                    },
                     loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMdn}`)
                     },
                 }).trigger('reloadGrid');
-            $('#tableMks')
-                .jqGrid('setGridParam', {
+            }
+            // $('#tableMedan')
+            //     .jqGrid('setGridParam', {
+            //         url: `${apiUrl}stokpusat/datamdn`,
+            //         mtype: "GET",
+            //         datatype: "json",
+            //         postData: {
+            //             kelompok_id: kelompokId,
+            //             aktif: "AKTIF",
+            //         },
+            //         loadError: function(jqXHR, textStatus, errorThrown) {
+            //             if (jqXHR.status == 500) {
+            //                 showDialog("SERVER MEDAN TIDAK BISA DIAKSES")
+            //             }
+            //         },
+            //         loadBeforeSend: function(jqXHR) {
+            //             jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+            //         },
+            //     }).trigger('reloadGrid');
+            if (accessTokenMks == '') {
+
+                $.ajax({
                     url: `${apiUrl}stokpusat/datamks`,
-                    mtype: "GET",
-                    datatype: "json",
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
+                    method: "GET",
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
                     },
-                    loadError: function(jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.status == 500) {
-                            showDialog("SERVER MAKASSAR TIDAK BISA DIAKSES")
+                    success: response => {
+
+                        $.ajax({
+                            url: `${appUrl}/stokpusat/tokenmks?token=${response.data}`,
+                            method: "GET",
+                            dataType: 'JSON',
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            success: response => {
+
+                                accessTokenMks = response.data
+                                $('#tableMks')
+                                    .jqGrid('setGridParam', {
+                                        url: `${apiTruckingMksUrl}stok`,
+                                        mtype: "GET",
+                                        datatype: "json",
+                                        postData: {
+                                            kelompok_id: kelompokId,
+                                            aktif: "AKTIF",
+                                        },
+                                        loadBeforeSend: function(jqXHR) {
+                                            jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                        },
+                                    }).trigger('reloadGrid');
+                            }
+                        })
+
+
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
                         }
                     },
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-                    },
-                }).trigger('reloadGrid');
+                })
+
+            } else {
+                $('#tableMks')
+                    .jqGrid('setGridParam', {
+                        url: `${apiTruckingMksUrl}stok`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMks}`)
+                        },
+                    }).trigger('reloadGrid');
+            }
+            // $('#tableMks')
+            //     .jqGrid('setGridParam', {
+            //         url: `${apiUrl}stokpusat/datamks`,
+            //         mtype: "GET",
+            //         datatype: "json",
+            //         postData: {
+            //             kelompok_id: kelompokId,
+            //             aktif: "AKTIF",
+            //         },
+            //         loadError: function(jqXHR, textStatus, errorThrown) {
+            //             if (jqXHR.status == 500) {
+            //                 showDialog("SERVER MAKASSAR TIDAK BISA DIAKSES")
+            //             }
+            //         },
+            //         loadBeforeSend: function(jqXHR) {
+            //             jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+            //         },
+            //     }).trigger('reloadGrid');
             $('#tableSby')
                 .jqGrid('setGridParam', {
                     url: `${apiUrl}stokpusat/datasby`,
@@ -792,19 +925,80 @@
                 }
 
                 $('#tableMedan').jqGrid("clearGridData");
-                $('#tableMedan')
-                    .jqGrid('setGridParam', {
+                if (accessTokenMdn == '') {
+                    $.ajax({
                         url: `${apiUrl}stokpusat/datamdn`,
-                        mtype: "GET",
-                        datatype: "json",
-                        postData: {
-                            kelompok_id: kelompokId,
-                            aktif: "AKTIF",
+                        method: "GET",
+                        dataType: 'JSON',
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
                         },
-                        loadBeforeSend: function(jqXHR) {
-                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        success: response => {
+                            $.ajax({
+                                url: `${appUrl}/stokpusat/tokenmdn?token=${response.data}`,
+                                method: "GET",
+                                dataType: 'JSON',
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`
+                                },
+                                success: response => {
+
+                                    accessTokenMdn = response.data
+                                    $('#tableMedan')
+                                        .jqGrid('setGridParam', {
+                                            url: `${apiTruckingMdnUrl}stok`,
+                                            mtype: "GET",
+                                            datatype: "json",
+                                            postData: {
+                                                kelompok_id: kelompokId,
+                                                aktif: "AKTIF",
+                                            },
+                                            loadBeforeSend: function(jqXHR) {
+                                                jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                            },
+                                        }).trigger('reloadGrid');
+                                }
+                            })
                         },
-                    }).trigger('reloadGrid');
+                        error: error => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+
+                                setErrorMessages(form, error.responseJSON.errors);
+                            } else {
+                                showDialog(error.responseJSON)
+                            }
+                        },
+                    })
+                } else {
+                    $('#tableMedan')
+                        .jqGrid('setGridParam', {
+                            url: `${apiTruckingMdnUrl}stok`,
+                            mtype: "GET",
+                            datatype: "json",
+                            postData: {
+                                kelompok_id: kelompokId,
+                                aktif: "AKTIF",
+                            },
+                            loadBeforeSend: function(jqXHR) {
+                                jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMdn}`)
+                            },
+                        }).trigger('reloadGrid');
+                }
+                // $('#tableMedan')
+                //     .jqGrid('setGridParam', {
+                //         url: `${apiUrl}stokpusat/datamdn`,
+                //         mtype: "GET",
+                //         datatype: "json",
+                //         postData: {
+                //             kelompok_id: kelompokId,
+                //             aktif: "AKTIF",
+                //         },
+                //         loadBeforeSend: function(jqXHR) {
+                //             jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                //         },
+                //     }).trigger('reloadGrid');
 
                 loadGridSurabaya()
                 if (response.sby != null) {
@@ -1005,19 +1199,80 @@
                 }
 
                 $('#tableMks').jqGrid("clearGridData");
-                $('#tableMks')
-                    .jqGrid('setGridParam', {
+                if (accessTokenMks == '') {
+                    $.ajax({
                         url: `${apiUrl}stokpusat/datamks`,
-                        mtype: "GET",
-                        datatype: "json",
-                        postData: {
-                            kelompok_id: kelompokId,
-                            aktif: "AKTIF",
+                        method: "GET",
+                        dataType: 'JSON',
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
                         },
-                        loadBeforeSend: function(jqXHR) {
-                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        success: response => {
+                            $.ajax({
+                                url: `${appUrl}/stokpusat/tokenmks?token=${response.data}`,
+                                method: "GET",
+                                dataType: 'JSON',
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`
+                                },
+                                success: response => {
+
+                                    accessTokenMks = response.data
+                                    $('#tableMks')
+                                        .jqGrid('setGridParam', {
+                                            url: `${apiTruckingMksUrl}stok`,
+                                            mtype: "GET",
+                                            datatype: "json",
+                                            postData: {
+                                                kelompok_id: kelompokId,
+                                                aktif: "AKTIF",
+                                            },
+                                            loadBeforeSend: function(jqXHR) {
+                                                jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                            },
+                                        }).trigger('reloadGrid');
+                                }
+                            })
                         },
-                    }).trigger('reloadGrid');
+                        error: error => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+
+                                setErrorMessages(form, error.responseJSON.errors);
+                            } else {
+                                showDialog(error.responseJSON)
+                            }
+                        },
+                    })
+                } else {
+                    $('#tableMks')
+                        .jqGrid('setGridParam', {
+                            url: `${apiTruckingMksUrl}stok`,
+                            mtype: "GET",
+                            datatype: "json",
+                            postData: {
+                                kelompok_id: kelompokId,
+                                aktif: "AKTIF",
+                            },
+                            loadBeforeSend: function(jqXHR) {
+                                jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMks}`)
+                            },
+                        }).trigger('reloadGrid');
+                }
+                // $('#tableMks')
+                //     .jqGrid('setGridParam', {
+                //         url: `${apiUrl}stokpusat/datamks`,
+                //         mtype: "GET",
+                //         datatype: "json",
+                //         postData: {
+                //             kelompok_id: kelompokId,
+                //             aktif: "AKTIF",
+                //         },
+                //         loadBeforeSend: function(jqXHR) {
+                //             jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                //         },
+                //     }).trigger('reloadGrid');
 
                 loadGridBitung()
                 if (response.btg != null) {
@@ -1063,6 +1318,9 @@
                 datatype: "local",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    'dari': 'index'
+                },
                 colModel: [{
                         label: 'Pilih',
                         name: 'pilih',
@@ -1088,7 +1346,7 @@
                             if (rowData.gambar == '') {
                                 return `<input type="checkbox" name="stokmdn_gbr[]" value="${rowData.gambar}" disabled>`
                             } else {
-                                return `<input type="checkbox" name="stokmdn_gbr[]" value="${rowData.gambar}" checked disabled>`
+                                return `<input type="checkbox" name="stokmdn_gbr[]" value="${rowData.gambar[0]}" checked disabled>`
                             }
                         },
                     },
@@ -1524,6 +1782,9 @@
                 datatype: "local",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    'dari': 'index'
+                },
                 colModel: [{
                         label: 'Pilih',
                         name: 'pilih',
@@ -1550,7 +1811,7 @@
                             if (rowData.gambar == '') {
                                 return `<input type="checkbox" name="stokmks_gbr[]" value="${rowData.gambar}" disabled>`
                             } else {
-                                return `<input type="checkbox" name="stokmks_gbr[]" value="${rowData.gambar}" checked disabled>`
+                                return `<input type="checkbox" name="stokmks_gbr[]" value="${rowData.gambar[0]}" checked disabled>`
                             }
                         },
                     },
@@ -1972,54 +2233,54 @@
     }
 
     function getGambarMdn(id, checkRow = false) {
-        let gbrmdn = $(`#tableMedan tbody tr#${id}`).find(`td [name="stokmdn_gbr[]"]`).val()
-        // if (!checkRow) {
-        if (gbrmdn != '') {
-            $('#imgMedan').attr('src', `{{ config('app.pic_url_mdn') }}view.php?path=${gbrmdn}`);
-        } else {
-            $('#imgMedan').attr('src', `{{ config('app.pic_url_mdn') }}no-image.jpg`);
-        }
+        // let gbrmdn = $(`#tableMedan tbody tr#${id}`).find(`td [name="stokmdn_gbr[]"]`).val()
+        // // if (!checkRow) {
+        // if (gbrmdn != '') {
+        //     $('#imgMedan').attr('src', `{{ config('app.pic_url_mdn') }}view.php?path=${gbrmdn}`);
+        // } else {
+        //     $('#imgMedan').attr('src', `{{ config('app.pic_url_mdn') }}no-image.jpg`);
         // }
-        if (id == selectedRowsMdn[0]) {
-            selectedGbrMdn = gbrmdn
-        }
-        // $.ajax({
-        //     url: `${apiTruckingMdnUrl}stok/getGambar`,
-        //     method: 'GET',
-        //     dataType: 'JSON',
-        //     headers: {
-        //         Authorization: `Bearer ${accessTokenMdn}`
-        //     },
-        //     data: {
-        //         id: id
-        //     },
-        //     success: response => {
-        //         if (!checkRow) {
-        //             $('#imgMedan').attr('src', `${apiTruckingMdnUrl}stok/${response.gambar}/medium`);
-        //         }
+        // // }
+        // if (id == selectedRowsMdn[0]) {
+        //     selectedGbrMdn = gbrmdn
+        // }
+        $.ajax({
+            url: `${apiTruckingMdnUrl}stok/getGambar`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessTokenMdn}`
+            },
+            data: {
+                id: id
+            },
+            success: response => {
+                if (!checkRow) {
+                    $('#imgMedan').attr('src', `${apiTruckingMdnUrl}stok/${response.gambar}/medium`);
+                }
 
-        //         if (response.gambar != 'no-image') {
-        //             let cekGambarMdn = $(`#tableMedan tbody tr#${selectedRowsMdn[0]}`).find(`td [name="stokmdn_gbr[]"]`).val();
-        //             if (cekGambarMdn == response.gambar) {
-        //                 selectedGbrMdn = response.gambar
-        //             } else {
-        //                 if (id == selectedRowsMdn[0]) {
-        //                     selectedGbrMdn = response.gambar
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     error: error => {
-        //         if (error.status === 422) {
-        //             $('.is-invalid').removeClass('is-invalid')
-        //             $('.invalid-feedback').remove()
+                if (response.gambar != 'no-image') {
+                    let cekGambarMdn = $(`#tableMedan tbody tr#${selectedRowsMdn[0]}`).find(`td [name="stokmdn_gbr[]"]`).val();
+                    if (cekGambarMdn == response.gambar) {
+                        selectedGbrMdn = response.gambar
+                    } else {
+                        if (id == selectedRowsMdn[0]) {
+                            selectedGbrMdn = response.gambar
+                        }
+                    }
+                }
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-        //             setErrorMessages(form, error.responseJSON.errors);
-        //         } else {
-        //             showDialog(error.responseJSON)
-        //         }
-        //     },
-        // })
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
     }
 
     function getGambarJkt(id, checkRow = false) {
@@ -2103,54 +2364,54 @@
 
 
     function getGambarMks(id, checkRow = false) {
-        let gbrmks = $(`#tableMks tbody tr#${id}`).find(`td [name="stokmks_gbr[]"]`).val()
-        // if (!checkRow) {
-        if (gbrmks != '') {
-            $('#imgMks').attr('src', `{{ config('app.pic_url_mks') }}view.php?path=${gbrmks}`);
-        } else {
-            $('#imgMks').attr('src', `{{ config('app.pic_url_mks') }}no-image.jpg`);
-        }
+        // let gbrmks = $(`#tableMks tbody tr#${id}`).find(`td [name="stokmks_gbr[]"]`).val()
+        // // if (!checkRow) {
+        // if (gbrmks != '') {
+        //     $('#imgMks').attr('src', `{{ config('app.pic_url_mks') }}view.php?path=${gbrmks}`);
+        // } else {
+        //     $('#imgMks').attr('src', `{{ config('app.pic_url_mks') }}no-image.jpg`);
         // }
-        if (id == selectedRowsMks[0]) {
-            selectedGbrMks = gbrmks
-        }
-        // $.ajax({
-        //     url: `${apiTruckingMksUrl}stok/getGambar`,
-        //     method: 'GET',
-        //     dataType: 'JSON',
-        //     headers: {
-        //         Authorization: `Bearer ${accessTokenMks}`
-        //     },
-        //     data: {
-        //         id: id
-        //     },
-        //     success: response => {
-        //         if (!checkRow) {
-        //             $('#imgMks').attr('src', `${apiTruckingMksUrl}stok/${response.gambar}/medium`);
-        //         }
+        // // }
+        // if (id == selectedRowsMks[0]) {
+        //     selectedGbrMks = gbrmks
+        // }
+        $.ajax({
+            url: `${apiTruckingMksUrl}stok/getGambar`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessTokenMks}`
+            },
+            data: {
+                id: id
+            },
+            success: response => {
+                if (!checkRow) {
+                    $('#imgMks').attr('src', `${apiTruckingMksUrl}stok/${response.gambar}/medium`);
+                }
 
-        //         if (response.gambar != 'no-image') {
-        //             let cekGambarMks = $(`#tableMks tbody tr#${selectedRowsMks[0]}`).find(`td [name="stokmks_gbr[]"]`).val();
-        //             if (cekGambarMks == response.gambar) {
-        //                 selectedGbrMks = response.gambar
-        //             } else {
-        //                 if (id == selectedRowsMks[0]) {
-        //                     selectedGbrMks = response.gambar
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     error: error => {
-        //         if (error.status === 422) {
-        //             $('.is-invalid').removeClass('is-invalid')
-        //             $('.invalid-feedback').remove()
+                if (response.gambar != 'no-image') {
+                    let cekGambarMks = $(`#tableMks tbody tr#${selectedRowsMks[0]}`).find(`td [name="stokmks_gbr[]"]`).val();
+                    if (cekGambarMks == response.gambar) {
+                        selectedGbrMks = response.gambar
+                    } else {
+                        if (id == selectedRowsMks[0]) {
+                            selectedGbrMks = response.gambar
+                        }
+                    }
+                }
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-        //             setErrorMessages(form, error.responseJSON.errors);
-        //         } else {
-        //             showDialog(error.responseJSON)
-        //         }
-        //     },
-        // })
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
     }
 
     function getGambarSby(id, checkRow = false) {

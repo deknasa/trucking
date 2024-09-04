@@ -174,10 +174,10 @@
                 url: `${apiUrl}laporankasgantung/export`,
                 // url: `{{ route('laporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
                 type: 'GET',
-                data : {
-                    periode : periode,
-                    bank_id : bank_id,
-                    bank : bank,
+                data: {
+                    periode: periode,
+                    bank_id: bank_id,
+                    bank: bank,
                 },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -218,7 +218,13 @@
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
         if (printer == 'reportPrinterBesar') {
-            report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantungBesar.mrt') }}`);
+            if (accessCabang == 'MEDAN') {
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantungBesarA4.mrt') }}`)
+            } else if (accessCabang == 'MAKASSAR') {
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantungBesarLetter.mrt') }}`)
+            } else {
+                report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantungBesar.mrt') }}`);
+            }
         } else {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKasGantung.mrt') }}`);
         }
