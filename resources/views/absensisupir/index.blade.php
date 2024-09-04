@@ -75,6 +75,7 @@
   let isTradoMilikSupir = ''
   let selectedRows = [];
   let selectedbukti = [];
+  let activeGrid
 
   function checkboxHandler(element) {
     let value = $(element).val();

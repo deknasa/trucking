@@ -1098,25 +1098,23 @@
 
   function initLookup() {
 
-    $('.akunpusat-lookup').lookupMaster({
+    $('.akunpusat-lookup').lookupV3({
       title: 'Akun Pusat Lookup',
-      fileName: 'akunpusatMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
           levelCoa: '3',
-          searching: 1,
-          valueName: 'akunpusat_id',
-          searchText: 'akunpusat-lookup',
-          title: 'Akun Pusat Lookup',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coa]').first().val(akunpusat.coa)
-        element.val(akunpusat.kodeket)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1129,22 +1127,16 @@
       }
     })
 
-    $(`.statusdaftarharga-lookup`).lookupMaster({
+    $(`.statusdaftarharga-lookup`).lookupV3({
       title: 'Status Daftar Harga Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS DAFTAR HARGA',
           subgrp: 'STATUS DAFTAR HARGA',
-          searching: 1,
-          valueName: `statusdaftarharga`,
-          searchText: `statusdaftarharga-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Daftar Harga'
         };
       },
       onSelectRow: (statusdaftarharga, element) => {
@@ -1163,22 +1155,16 @@
       },
     });
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {

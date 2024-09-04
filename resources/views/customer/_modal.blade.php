@@ -830,26 +830,24 @@
     //   }
     // })
 
-    $('.coa-lookup').lookupMaster({
+    $('.coa-lookup').lookupV3({
       title: 'Coa Lookup',
-      fileName: 'akunpusatMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
           KeteranganCoa: 'PIUTANG USAHA',
-          searching: 1,
-          typeSearch: 'ALL',
-          valueName: 'coa_id',
-          searchText: 'coa-lookup',
-          title: 'Akun pusat',
         }
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coa]').first().val(akunpusat.coa)
-        element.val(akunpusat.kodeket)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -862,26 +860,24 @@
       }
     })
 
-    $('.coapendapatan-lookup').lookupMaster({
+    $('.coapendapatan-lookup').lookupV3({
       title: 'Coa Pendapatan Lookup',
-      fileName: 'akunpusatMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
           KeteranganCoa: 'PENDAPATAN -',
-          searching: 1,
-          valueName: 'coapendapatan_id',
-          searchText: 'coapendapatan-lookup',
-          title: 'Akun Pusat',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coapendapatan]').first().val(akunpusat.coa)
-        element.val(akunpusat.kodeket)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -894,22 +890,16 @@
       }
     })
 
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -928,22 +918,16 @@
       },
     });
 
-    $(`.statustas-lookup`).lookupMaster({
+    $(`.statustas-lookup`).lookupV3({
       title: 'Status Tas Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS TAS',
           subgrp: 'STATUS TAS',
-          searching: 1,
-          valueName: `statustas`,
-          searchText: `statustas-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Tas'
         };
       },
       onSelectRow: (statustas, element) => {
@@ -962,22 +946,16 @@
       },
     });
 
-    $(`.statusinvoiceextra-lookup`).lookupMaster({
+    $(`.statusinvoiceextra-lookup`).lookupV3({
       title: 'Status Invoice Extra Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusinvoiceextra`,
-          searchText: `statusinvoiceextra-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Invoice Extra'
         };
       },
       onSelectRow: (statusinvoiceextra, element) => {

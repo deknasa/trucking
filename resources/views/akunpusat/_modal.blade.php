@@ -891,19 +891,14 @@
   }
 
   function initLookup() {
-    $('.type-lookup').lookupMaster({
+    $('.type-lookup').lookupV3({
       title: 'Type Akuntansi Lookup',
-      fileName: 'typeakuntansiMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'typeakuntansiV3',
+      searching: ['kodetype','akuntansi'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `type_id`,
-          searchText: `type-lookup`,
-          // singleColumn: false,
-          title: 'Tipe akuntansi'
         }
       },
       onSelectRow: (type, element) => {
@@ -923,20 +918,15 @@
       }
     })
 
-    $('.akuntansi-lookup').lookupMaster({
+    $('.akuntansi-lookup').lookupV3({
       title: 'akuntansi Lookup',
-      fileName: 'akuntansiMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akuntansiV3',
+      searching: ['kodeakuntansi','keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `akuntansi_id`,
-          searchText: `akuntansi-lookup`,
-          // singleColumn: false,
-          title: 'akuntansi'
         }
       },
       onSelectRow: (akuntansi, element) => {
@@ -955,28 +945,21 @@
       }
     })
 
-    $('.parent-lookup').lookupMaster({
+    $('.parent-lookup').lookupV3({
       title: 'Akun Pusat Lookup',
-      fileName: 'akunpusatMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `parentnama`,
-          searchText: `parent-lookup`,
-          // singleColumn: true,
-          title: 'Akun Pusat Lookup',
-          isParent: true,
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=parent]').val(akunpusat.coa)
-        element.val(akunpusat.kodeket)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -989,20 +972,14 @@
       }
     })
 
-    $('.coamain-lookup').lookupMaster({
+    $('.coamain-lookup').lookupV3({
       title: 'Main Akun Pusat Lookup',
-      fileName: 'mainakunpusatMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'mainakunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: `coamain`,
-          searchText: `coamain-lookup`,
-          typeSearch: 'ALL',
-          // singleColumn: true,
-          title: 'Main Akun Pusat Lookup'
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -1020,11 +997,11 @@
       }
     })
 
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
@@ -1054,22 +1031,16 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statusparent-lookup`).lookupMaster({
+    $(`.statusparent-lookup`).lookupV3({
       title: 'status parent Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS PARENT',
           // subgrp: 'STATUS PARENT',
-          searching: 1,
-          valueName: `statusparent`,
-          searchText: `statusparent-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'STATUS PARENT'
         };
       },
       onSelectRow: (status, element) => {
@@ -1090,21 +1061,15 @@
         activateParent('')
       },
     });
-    $(`.statusneraca-lookup`).lookupMaster({
+    $(`.statusneraca-lookup`).lookupV3({
       title: 'status neraca Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS NERACA',
-          searching: 1,
-          valueName: `statusneraca`,
-          searchText: `statusneraca-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'STATUS NERACA'
         };
       },
       onSelectRow: (status, element) => {
@@ -1123,22 +1088,15 @@
         element.data('currentValue', element.val())
       },
     });
-    $(`.statuslabarugi-lookup`).lookupMaster({
+    $(`.statuslabarugi-lookup`).lookupV3({
       title: 'Status status labarugi Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS LABA RUGI',
-          // subgrp: 'STATUS LABA RUGI',
-          searching: 1,
-          valueName: `statuslabarugi`,
-          searchText: `statuslabarugi-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'STATUS LABA RUGI'
         };
       },
       onSelectRow: (status, element) => {

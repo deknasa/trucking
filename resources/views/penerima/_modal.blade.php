@@ -727,22 +727,16 @@
   }
 
   function initLookup() {
-    $(`.statusaktif-lookup`).lookupMaster({
+    $(`.statusaktif-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `statusaktif-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -761,22 +755,16 @@
       },
     });
 
-    $(`.statuskaryawan-lookup`).lookupMaster({
+    $(`.statuskaryawan-lookup`).lookupV3({
       title: 'Status Karyawan Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS KARYAWAN',
           subgrp: 'STATUS KARYAWAN',
-          searching: 1,
-          valueName: `statuskaryawan`,
-          searchText: `statuskaryawan-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Karyawan'
         };
       },
       onSelectRow: (statuskaryawan, element) => {

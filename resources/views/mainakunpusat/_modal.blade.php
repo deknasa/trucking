@@ -875,7 +875,7 @@
     $('.akuntansi-lookup').lookupV3({
       title: 'akuntansi Lookup',
       fileName: 'akuntansiV3',
-      searching: ['text'],
+      searching: ['kodeakuntansi','keterangan'],
       labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -1014,7 +1014,7 @@
     $('.parent-lookup').lookupV3({
       title: 'Main Akun Pusat Lookup',
       fileName: 'mainakunpusatV3',
-      searching: ['text'],
+      searching: ['coa','keterangancoa'],
       labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
@@ -1024,7 +1024,7 @@
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=parent]').val(akunpusat.coa)
-        element.val(akunpusat.kodeket)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
