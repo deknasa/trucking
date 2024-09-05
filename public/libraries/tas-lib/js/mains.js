@@ -1380,19 +1380,17 @@ function initMonthpicker(classDatepicker ="monthpicker"){
     // Validasi format pada blur
     element.on("blur", function () {
         let value = $(this).val();
-        let regex = /^(0[1-9]|1[0-2])-\d{4}$/; // Format mm-yyyy
+        let regex = /^(0[1-9]|1[0-2])-\d{4}$/; 
 
-        // Hapus pesan kesalahan sebelumnya jika ada
         $(this).removeClass("is-invalid");
         $(this).siblings(".invalid-feedback").remove();
 
         if (!regex.test(value)) {
             let error = "Format salah! Harus dalam format mm-yyyy.";
 
-            // Tambahkan class is-invalid
+           
             $(this).addClass("is-invalid");
 
-            // Tambahkan pesan kesalahan
             $(`
                 <div class="invalid-feedback">
                 ${error}
