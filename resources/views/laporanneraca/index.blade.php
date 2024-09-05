@@ -94,27 +94,6 @@
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('mm-yy', new Date())).trigger(
             'change');
 
-        // $('.datepicker').datepicker({
-        //         changeMonth: true,
-        //         changeYear: true,
-        //         showButtonPanel: true,
-        //         showOn: "button",
-        //         dateFormat: 'mm-yy',
-        //         onClose: function(dateText, inst) {
-        //             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        //         }
-        //     }).siblings(".ui-datepicker-trigger")
-        //     .wrap(
-        //         `
-		// 	<div class="input-group-append">
-		// 	</div>
-		// `
-        //     )
-        //     .addClass("ui-datepicker-trigger btn btn-easyui text-easyui-dark").html(`
-		// 	<i class="fa fa-calendar-alt"></i>
-		// `);
-
-
         // let idcabang = `<?php $data['idcabang']['text'] ?>`;
         let idcabang = `<?= $cabang['id'] ?>`;
         if (idcabang != 1) {

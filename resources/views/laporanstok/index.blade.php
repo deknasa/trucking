@@ -32,7 +32,7 @@
                                     <label class="col-12 col-sm-3  col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
-                                            <input type="text" name="sampai" class="form-control datepicker">
+                                            <input type="text" name="sampai" class="form-control monthpicker">
                                         </div>
                                     </div>
                                 </div>
@@ -93,32 +93,12 @@
 
 
     $(document).ready(function() {
-
+        initMonthpicker()
         initSelect2($('#crudForm').find('[name=jenislaporan]'), false)
 
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
         setJenisLaporanOptions($('#crudForm'))
-        
-        $('.datepicker').datepicker({
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                showOn: "button",
-                dateFormat: 'mm-yy',
-                onClose: function(dateText, inst) {
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                }
-            }).siblings(".ui-datepicker-trigger")
-            .wrap(
-                `
-			<div class="input-group-append">
-			</div>
-		`
-            )
-            .addClass("ui-datepicker-trigger btn btn-easyui text-easyui-dark").html(`
-			<i class="fa fa-calendar-alt"></i>
-		`);
-
+       
         if (!`{{ $myAuth->hasPermission('laporanstok', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
