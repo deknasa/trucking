@@ -1457,6 +1457,8 @@
           } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
+            
+            showSuccessDialog(response.message, response.data.nobukti)
             let pengeluaranTruckingVal = $('#crudForm').find('[name="pengeluarantrucking"]').val();
             let tgldariVal = $('#crudForm').find('[name="tgldari"]').val();
             let tglsampaiVal = $('#crudForm').find('[name="tglsampai"]').val();
