@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "76a1e2ba56b8371f0db14a7dd8e6f0bf",
+  "ReportGuid": "f80836659c4825b255ffec303198819f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportProsesGajiSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689820695000+0700)/",
+  "ReportChanged": "/Date(1725530513000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -78,138 +78,42 @@
             "Type": "System.DateTime"
           },
           "3": {
-            "Name": "tgldari",
-            "NameInSource": "tgldari",
-            "Alias": "tgldari",
-            "Type": "System.DateTime"
-          },
-          "4": {
-            "Name": "tglsampai",
-            "NameInSource": "tglsampai",
-            "Alias": "tglsampai",
-            "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "periode",
-            "NameInSource": "periode",
-            "Alias": "periode",
-            "Type": "System.DateTime"
-          },
-          "6": {
             "Name": "keterangan",
             "NameInSource": "keterangan",
             "Alias": "keterangan",
             "Type": "System.String"
           },
-          "7": {
-            "Name": "userapproval",
-            "NameInSource": "userapproval",
-            "Alias": "userapproval",
-            "Type": "System.String"
-          },
-          "8": {
-            "Name": "statusapproval",
-            "NameInSource": "statusapproval",
-            "Alias": "statusapproval",
-            "Type": "System.String"
-          },
-          "9": {
-            "Name": "statuscetak",
-            "NameInSource": "statuscetak",
-            "Alias": "statuscetak",
-            "Type": "System.String"
-          },
-          "10": {
-            "Name": "statuscetak_id",
-            "NameInSource": "statuscetak_id",
-            "Alias": "statuscetak_id",
-            "Type": "System.String"
-          },
-          "11": {
-            "Name": "pengeluaran_nobukti",
-            "NameInSource": "pengeluaran_nobukti",
-            "Alias": "pengeluaran_nobukti",
-            "Type": "System.String"
-          },
-          "12": {
+          "4": {
             "Name": "jumlahcetak",
             "NameInSource": "jumlahcetak",
             "Alias": "jumlahcetak",
             "Type": "System.String"
           },
-          "13": {
-            "Name": "total",
-            "NameInSource": "total",
-            "Alias": "total",
-            "Type": "System.String"
-          },
-          "14": {
-            "Name": "totalposting",
-            "NameInSource": "totalposting",
-            "Alias": "totalposting",
-            "Type": "System.String"
-          },
-          "15": {
-            "Name": "uangjalan",
-            "NameInSource": "uangjalan",
-            "Alias": "uangjalan",
-            "Type": "System.String"
-          },
-          "16": {
-            "Name": "bbm",
-            "NameInSource": "bbm",
-            "Alias": "bbm",
-            "Type": "System.String"
-          },
-          "17": {
-            "Name": "uangmakanharian",
-            "NameInSource": "uangmakanharian",
-            "Alias": "uangmakanharian",
-            "Type": "System.String"
-          },
-          "18": {
-            "Name": "potonganpinjaman",
-            "NameInSource": "potonganpinjaman",
-            "Alias": "potonganpinjaman",
-            "Type": "System.String"
-          },
-          "19": {
-            "Name": "potonganpinjamansemua",
-            "NameInSource": "potonganpinjamansemua",
-            "Alias": "potonganpinjamansemua",
-            "Type": "System.String"
-          },
-          "20": {
-            "Name": "deposito",
-            "NameInSource": "deposito",
-            "Alias": "deposito",
-            "Type": "System.String"
-          },
-          "21": {
+          "5": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "22": {
+          "6": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "23": {
+          "7": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "24": {
+          "8": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "25": {
+          "9": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -230,9 +134,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "keterangan_detail",
-            "NameInSource": "keterangan_detail",
-            "Alias": "keterangan_detail",
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
             "Type": "System.String"
           }
         },
@@ -291,7 +195,7 @@
         "0": {
           "Ident": "StiPageHeaderBand",
           "Name": "PageHeaderBand1",
-          "ClientRectangle": "0,4,154.8,24",
+          "ClientRectangle": "0,4,162.8,24",
           "ComponentPlacement": "ph.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -304,7 +208,7 @@
               "Name": "Text4",
               "Guid": "2e431b25b5e3e7917142c2ffad302d29",
               "CanGrow": true,
-              "ClientRectangle": "124,10,28,4",
+              "ClientRectangle": "124,10,34,4",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -336,7 +240,7 @@
         "1": {
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
-          "ClientRectangle": "0,109.72,154.8,16",
+          "ClientRectangle": "0,122.72,162.8,24",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -413,7 +317,7 @@
         "3": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,36,154.8,6",
+          "ClientRectangle": "0,36,162.8,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -517,7 +421,7 @@
         "4": {
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
-          "ClientRectangle": "0,50,154.8,6",
+          "ClientRectangle": "0,50,162.8,6",
           "ComponentPlacement": "f.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -659,8 +563,8 @@
           "ReferenceToGuid": "76480edaba340629995c32021ff26b3f"
         }
       },
-      "PageWidth": 155,
-      "PageHeight": 90,
+      "PageWidth": 163,
+      "PageHeight": 105,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
