@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "f80836659c4825b255ffec303198819f",
+  "ReportGuid": "5382bd8d00f95419c5a1d333b875e4a5",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportProsesGajiSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1725530513000+0700)/",
+  "ReportChanged": "/Date(1725598701000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -260,7 +260,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{prosesgajisupir.tglcetak}"
+                "Value": "{prosesgajisupir.tglbukti}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
@@ -272,11 +272,8 @@
               },
               "ShrinkFontToFitMinimumSize": 5,
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "DecimalSeparator": ",",
-                "GroupSeparator": ",",
-                "State": "DecimalSeparator, GroupSeparator"
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             }
