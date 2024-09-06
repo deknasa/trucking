@@ -244,6 +244,26 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Sisa Deposito </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="saldopenarikan" class="form-control text-right" readonly>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Keterangan <span class="text-danger">*</span>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <textarea rows="1" placeholder="" name="keterangan_header" class="form-control"></textarea>
+              </div>
+            </div>
+
+
             <div class="row mb-3">
               <div class="col-sm-6 m-1">
                 <button id="btnReloadOtokGrid" class="btn btn-primary mr-2 ">
@@ -788,6 +808,10 @@
           name: 'nominalpenarikan',
           value: AutoNumeric.getNumber($(`#crudForm [name="nominalpenarikan"]`)[0])
         })
+        data.push({
+          name: 'keterangan_header',
+          value: form.find(`[name="keterangan_header"]`).val().toUpperCase()
+        })
 
         // let selectedRowsDeposito = $("#tableDeposito").getGridParam("selectedRowIds");
         // data.push({
@@ -881,10 +905,14 @@
         data.push({
           name: 'pengeluaran_nobukti',
           value: form.find(`[name="pengeluaran_nobukti"]`).val()
-        })        
+        })
         data.push({
           name: 'nominalpenarikan',
           value: AutoNumeric.getNumber($(`#crudForm [name="nominalpenarikan"]`)[0])
+        })
+        data.push({
+          name: 'keterangan_header',
+          value: form.find(`[name="keterangan_header"]`).val().toUpperCase()
         })
         // let selectedRowsDepositoKaryawan = $("#tableDepositoKaryawan").getGridParam("selectedRowIds");
         // data.push({
@@ -1429,6 +1457,8 @@
           } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
+            
+            showSuccessDialog(response.message, response.data.nobukti)
             let pengeluaranTruckingVal = $('#crudForm').find('[name="pengeluarantrucking"]').val();
             let tgldariVal = $('#crudForm').find('[name="tgldari"]').val();
             let tglsampaiVal = $('#crudForm').find('[name="tglsampai"]').val();
@@ -1696,6 +1726,8 @@
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1751,6 +1783,8 @@
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=statustanpabukti]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1811,6 +1845,8 @@
     $('[name=jenisorderan_id]').parents('.form-group').show()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=periode]').parents('.form-group').hide()
     $('[name=periode]').prop('disabled', true)
@@ -1866,6 +1902,8 @@
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').show()
+    $('[name=saldopenarikan]').parents('.form-group').show()
+    $('[name=keterangan_header]').parents('.form-group').show()
     $('.tbl_supir_id').hide()
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
@@ -1917,6 +1955,8 @@
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').show()
+    $('[name=saldopenarikan]').parents('.form-group').show()
+    $('[name=keterangan_header]').parents('.form-group').show()
     $('.tbl_supir_id').hide()
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
@@ -2009,6 +2049,8 @@
     $('.colmn-offset4').hide()
     $('.cabang').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     // $('.colmn-offset').hide()
     loadModalGrid()
@@ -2031,6 +2073,8 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $(".tgldari").text("TGL DARI ");
     $(".tglsampai").text("TGL SAMPAI ");
@@ -2090,6 +2134,8 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
@@ -2150,6 +2196,8 @@
     $('[name=gandenganheader_id]').parents('.form-group').show()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
     $('[name=tgldari]').parents('.form-group').hide()
@@ -2219,6 +2267,8 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
@@ -2304,6 +2354,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2388,6 +2440,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2473,6 +2527,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2557,6 +2613,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2642,6 +2700,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2725,6 +2785,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2809,6 +2871,8 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $(".tgldari").text("PERIODE DARI ");
@@ -2869,6 +2933,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
@@ -2932,6 +2998,8 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $(".tgldari").text("PERIODE DARI ");
@@ -3029,6 +3097,8 @@
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=nominalpenarikan]').parents('.form-group').hide()
+    $('[name=saldopenarikan]').parents('.form-group').hide()
+    $('[name=keterangan_header]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -4494,6 +4564,30 @@
     })
   })
 
+  function getSisaDeposito(supirId) {
+    
+    $.ajax({
+      url: `${apiUrl}pengeluarantruckingheader/getsisadeposito`,
+      dataType: "JSON",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        supir: supirId,
+        tglbukti: $('#crudForm').find("[name=tglbukti]").val(),
+        nobukti: $('#crudForm').find("[name=nobukti]").val(),
+        aksi: $('#crudForm').data('action')
+      },
+      success: (response) => {
+        $(`#crudForm`).find(`[name="saldopenarikan"]`).val(response.data.sisa)
+        initAutoNumeric($(`#crudForm`).find(`[name="saldopenarikan"]`))
+      },
+      error: error => {
+        showDialog(error.responseJSON)
+      }
+    });
+  }
+
   function getDataDeposito(supirId, id) {
     aksi = $('#crudForm').data('action')
     data = {}
@@ -5269,65 +5363,69 @@
           initAutoNumeric(form.find(`[name="nominalpenarikan"]`), {
             minimumValue: 0
           })
-          if (kodepengeluaran === "TDE") {
-            getDataDeposito(response.data.supirheader_id, id).then((response) => {
+          initAutoNumeric(form.find(`[name="saldopenarikan"]`), {
+            minimumValue: 0
+          })
+          // if (kodepengeluaran === "TDE") {
+          //   getDataDeposito(response.data.supirheader_id, id).then((response) => {
 
-              let selectedId = []
-              let totalBayar = 0
+          //     let selectedId = []
+          //     let totalBayar = 0
 
-              $.each(response.data, (index, value) => {
-                if (value.pengeluarantruckingheader_id != null) {
-                  selectedId.push(value.id)
-                  totalBayar += parseFloat(value.nominal)
-                }
-              })
-              $('#tableDeposito').jqGrid("clearGridData");
-              setTimeout(() => {
+          //     $.each(response.data, (index, value) => {
+          //       if (value.pengeluarantruckingheader_id != null) {
+          //         selectedId.push(value.id)
+          //         totalBayar += parseFloat(value.nominal)
+          //       }
+          //     })
+          //     $('#tableDeposito').jqGrid("clearGridData");
+          //     setTimeout(() => {
 
-                $("#tableDeposito")
-                  .jqGrid("setGridParam", {
-                    datatype: "local",
-                    data: response.data,
-                    originalData: response.data,
-                    rowNum: response.data.length,
-                    selectedRowIds: selectedId
-                  })
-                  .trigger("reloadGrid");
-              }, 100);
-              console.log(response.data)
-              initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(totalBayar))
+          //       $("#tableDeposito")
+          //         .jqGrid("setGridParam", {
+          //           datatype: "local",
+          //           data: response.data,
+          //           originalData: response.data,
+          //           rowNum: response.data.length,
+          //           selectedRowIds: selectedId
+          //         })
+          //         .trigger("reloadGrid");
+          //     }, 100);
+          //     console.log(response.data)
+          //     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(totalBayar))
 
-            });
-          } else if (kodepengeluaran === "TDEK") {
-            getDataDepositoKaryawan(response.data.karyawanheader_id, id).then((response) => {
+          //   });
+          // } else if (kodepengeluaran === "TDEK") {
+          //   getDataDepositoKaryawan(response.data.karyawanheader_id, id).then((response) => {
 
-              let selectedIdDepoKaryawan = []
-              let totalBayarDepoKaryawan = 0
+          //     let selectedIdDepoKaryawan = []
+          //     let totalBayarDepoKaryawan = 0
 
-              $.each(response.data, (index, value) => {
-                if (value.pengeluarantruckingheader_id != null) {
-                  selectedIdDepoKaryawan.push(value.id)
-                  totalBayarDepoKaryawan += parseFloat(value.nominal)
-                }
-              })
-              $('#tableDepositoKaryawan').jqGrid("clearGridData");
-              setTimeout(() => {
+          //     $.each(response.data, (index, value) => {
+          //       if (value.pengeluarantruckingheader_id != null) {
+          //         selectedIdDepoKaryawan.push(value.id)
+          //         totalBayarDepoKaryawan += parseFloat(value.nominal)
+          //       }
+          //     })
+          //     $('#tableDepositoKaryawan').jqGrid("clearGridData");
+          //     setTimeout(() => {
 
-                $("#tableDepositoKaryawan")
-                  .jqGrid("setGridParam", {
-                    datatype: "local",
-                    data: response.data,
-                    originalData: response.data,
-                    rowNum: response.data.length,
-                    selectedRowIds: selectedIdDepoKaryawan
-                  })
-                  .trigger("reloadGrid");
-              }, 100);
-              console.log(response.data)
-              initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDepositoKaryawan_nominal"]`).text(totalBayarDepoKaryawan))
+          //       $("#tableDepositoKaryawan")
+          //         .jqGrid("setGridParam", {
+          //           datatype: "local",
+          //           data: response.data,
+          //           originalData: response.data,
+          //           rowNum: response.data.length,
+          //           selectedRowIds: selectedIdDepoKaryawan
+          //         })
+          //         .trigger("reloadGrid");
+          //     }, 100);
+          //     console.log(response.data)
+          //     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDepositoKaryawan_nominal"]`).text(totalBayarDepoKaryawan))
 
-            });
-          } else if (kodepengeluaran === "BST") {
+          //   });
+          // } else 
+          if (kodepengeluaran === "BST") {
             $('#detailList tbody').html('')
             $.each(response.detail, (index, detail) => {
               if (detail.pengeluarantrucking_id != null) {
@@ -9332,39 +9430,40 @@
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
         selectedSupirKaryawan('supir')
-        // if (KodePengeluaranId != "KLAIM") {
+        if (KodePengeluaranId != "KLAIM") {
+          $(`#crudForm`).find(`[name="keterangan_header"]`).val("PENARIKAN DEPOSITO SUPIR " + supir.namasupir)
+          getSisaDeposito(supir.id)
+          //   $('#btnSubmit').prop('disabled', true)
+          //   $('#btnSaveAdd').prop('disabled', true)
+          //   $("#tableDeposito")[0].p.selectedRowIds = [];
+          //   $('#tableDeposito').jqGrid("clearGridData");
+          //   $("#tableDeposito")
+          //     .jqGrid("setGridParam", {
+          //       selectedRowIds: []
+          //     })
+          //     .trigger("reloadGrid");
 
-        //   $('#btnSubmit').prop('disabled', true)
-        //   $('#btnSaveAdd').prop('disabled', true)
-        //   $("#tableDeposito")[0].p.selectedRowIds = [];
-        //   $('#tableDeposito').jqGrid("clearGridData");
-        //   $("#tableDeposito")
-        //     .jqGrid("setGridParam", {
-        //       selectedRowIds: []
-        //     })
-        //     .trigger("reloadGrid");
+          //   getDataDeposito(supir.id).then((response) => {
 
-        //   getDataDeposito(supir.id).then((response) => {
+          //     console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
+          //     setTimeout(() => {
 
-        //     console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
-        //     setTimeout(() => {
+          //       $("#tableDeposito")
+          //         .jqGrid("setGridParam", {
+          //           datatype: "local",
+          //           data: response.data,
+          //           originalData: response.data,
+          //           rowNum: response.data.length,
+          //           selectedRowIds: []
+          //         })
+          //         .trigger("reloadGrid");
 
-        //       $("#tableDeposito")
-        //         .jqGrid("setGridParam", {
-        //           datatype: "local",
-        //           data: response.data,
-        //           originalData: response.data,
-        //           rowNum: response.data.length,
-        //           selectedRowIds: []
-        //         })
-        //         .trigger("reloadGrid");
+          //       $('#btnSubmit').prop('disabled', false)
+          //       $('#btnSaveAdd').prop('disabled', false)
+          //     }, 100);
 
-        //       $('#btnSubmit').prop('disabled', false)
-        //       $('#btnSaveAdd').prop('disabled', false)
-        //     }, 100);
-
-        //   });
-        // }
+          //   });
+        }
 
       },
       onCancel: (element) => {
@@ -9396,39 +9495,40 @@
         selectedSupirKaryawan('karyawan')
         $('#crudModal').find("[name=statustanpabukti]").val(3).trigger('change')
         klaimTanpaNobukti()
-        // if (KodePengeluaranId != "KLAIM") {
+        if (KodePengeluaranId != "KLAIM") {
 
-        //   $('#btnSubmit').prop('disabled', true)
-        //   $('#btnSaveAdd').prop('disabled', true)
-        //   $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
-        //   $('#tableDepositoKaryawan').jqGrid("clearGridData");
-        //   $("#tableDepositoKaryawan")
-        //     .jqGrid("setGridParam", {
-        //       selectedRowIds: []
-        //     })
-        //     .trigger("reloadGrid");
+          $(`#crudForm`).find(`[name="keterangan_header"]`).val("PENARIKAN DEPOSITO KARYAWAN " + karyawan.namakaryawan)
+          //   $('#btnSubmit').prop('disabled', true)
+          //   $('#btnSaveAdd').prop('disabled', true)
+          //   $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
+          //   $('#tableDepositoKaryawan').jqGrid("clearGridData");
+          //   $("#tableDepositoKaryawan")
+          //     .jqGrid("setGridParam", {
+          //       selectedRowIds: []
+          //     })
+          //     .trigger("reloadGrid");
 
-        //   getDataDepositoKaryawan(karyawan.id).then((response) => {
+          //   getDataDepositoKaryawan(karyawan.id).then((response) => {
 
-        //     console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
-        //     setTimeout(() => {
+          //     console.log('before', $("#tableDepositoKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+          //     setTimeout(() => {
 
-        //       $("#tableDepositoKaryawan")
-        //         .jqGrid("setGridParam", {
-        //           datatype: "local",
-        //           data: response.data,
-        //           originalData: response.data,
-        //           rowNum: response.data.length,
-        //           selectedRowIds: []
-        //         })
-        //         .trigger("reloadGrid");
+          //       $("#tableDepositoKaryawan")
+          //         .jqGrid("setGridParam", {
+          //           datatype: "local",
+          //           data: response.data,
+          //           originalData: response.data,
+          //           rowNum: response.data.length,
+          //           selectedRowIds: []
+          //         })
+          //         .trigger("reloadGrid");
 
-        //       $('#btnSubmit').prop('disabled', false)
-        //       $('#btnSaveAdd').prop('disabled', false)
-        //     }, 100);
+          //       $('#btnSubmit').prop('disabled', false)
+          //       $('#btnSaveAdd').prop('disabled', false)
+          //     }, 100);
 
-        //   });
-        // }
+          //   });
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
