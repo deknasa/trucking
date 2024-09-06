@@ -63,6 +63,11 @@ $idLookup = isset($id) ? $id : null;
 
       },
       {
+        label: 'tujuanpenyesuaian',
+        name: 'tujuanpenyesuaian',
+        hidden: true,
+      },
+      {
           label: 'KOTAID',
           name: 'kotaId',
           hidden: true,
