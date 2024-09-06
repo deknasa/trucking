@@ -51,11 +51,14 @@ class LaporanSaldoInventoryController extends MyController
         $opname['opname'] = $header['opname'];
         $dataCabang['namacabang'] = $header['namacabang'];
 
-        return view('reports.laporansaldoinventory', compact('data','dataCabang', 'user', 'detailParams', 'opname'));
+        return view('reports.laporansaldoinventory', compact('data', 'dataCabang', 'user', 'detailParams', 'opname'));
     }
 
     public function export(Request $request): void
     {
+        // dd('test');
+        $jenislaporan = $request->jenislaporan ?? 0;
+
         $detailParams = [
             'kelompok_id' => $request->kelompok_id,
             'statusreuse' => $request->statusreuse,
@@ -68,6 +71,7 @@ class LaporanSaldoInventoryController extends MyController
             'stoksampai_id' => $request->stoksampai_id,
             'dataFilter' => $request->dataFilter,
         ];
+        // dd($detailParams);
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
@@ -200,6 +204,8 @@ class LaporanSaldoInventoryController extends MyController
 
         // LOOPING DETAIL
         $previous_kategori = '';
+        $previous_namalokasi = '';
+        $previous_gabung = '';
         $start_row_main = 0;
         $no = 1;
         if (is_array($data) || is_iterable($data)) {
@@ -208,12 +214,19 @@ class LaporanSaldoInventoryController extends MyController
             foreach ($data as $response_index => $response_detail) {
 
                 $kategori = $response_detail['kategori'];
-                if ($kategori != $previous_kategori) {
-                    if ($previous_kategori != '') {
+                $namalokasi = $response_detail['namalokasi'];
+                $gabung = $kategori . $namalokasi;
+                if ($gabung != $previous_gabung) {
+                    if ($previous_gabung != '') {
 
                         $cellQty[] = "D$detail_start_row";
                         $cellTotal[] = "F$detail_start_row";
-                        $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
+                        if ($jenislaporan == 714) {
+                            $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_namalokasi - $previous_kategori");
+                        } else {
+                            $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
+                        }
+                        
                         $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
                         $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
 
@@ -224,7 +237,7 @@ class LaporanSaldoInventoryController extends MyController
                         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                         $detail_start_row += 2;
                     }
-                    if ($previous_kategori == '') {
+                    if ($previous_kategori == '' && $previous_namalokasi == '') {
                         foreach ($header_columns as $detail_columns_index => $detail_column) {
                             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
                         }
@@ -238,7 +251,11 @@ class LaporanSaldoInventoryController extends MyController
                     } else {
                         $sheet->setCellValue('A' . ($detail_start_row), 'No');
                     }
-                    $sheet->setCellValue('B' . ($detail_start_row), $response_detail['kategori']);
+                    if ($jenislaporan == 714) {
+                        $sheet->setCellValue('B' . ($detail_start_row), $namalokasi . ' - ' . $response_detail['kategori']);
+                    } else {
+                        $sheet->setCellValue('B' . ($detail_start_row), $response_detail['kategori']);
+                    }
                     $sheet->getStyle("A$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
                     $sheet->getStyle("B$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                     $detail_start_row++;
@@ -262,12 +279,21 @@ class LaporanSaldoInventoryController extends MyController
 
                 $detail_start_row++;
                 $previous_kategori = $kategori;
+                $previous_namalokasi = $namalokasi;
+                $previous_gabung = $previous_kategori . $previous_namalokasi;
             }
 
-            if ($previous_kategori != '') {
+            if ($previous_gabung != '') {
                 $cellQty[] = "D$detail_start_row";
                 $cellTotal[] = "F$detail_start_row";
-                $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
+                if ($jenislaporan == 714) {
+                    $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_namalokasi - $previous_kategori");
+
+                } else {
+                    $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
+
+                }
+
                 $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
                 $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
 
