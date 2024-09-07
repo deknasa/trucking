@@ -47,6 +47,17 @@
                   <input type="text" name="supir" class="form-control supir-lookup">
                 </div>
               </div>
+              <div class="row form-group">
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
+                    KARYAWAN <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-10">
+                  <input type="hidden" name="karyawan_id">
+                  <input type="text" name="karyawan" class="form-control karyawan-lookup">
+                </div>
+              </div>
 
               <div class="border p-3 mt-3">
                 <h6>Posting Penerimaan/Pengeluaran</h6>
@@ -282,6 +293,14 @@
       data.push({
         name: 'supir_id',
         value: form.find(`[name="supir_id"]`).val()
+      })
+      data.push({
+        name: 'karyawan',
+        value: form.find(`[name="karyawan"]`).val()
+      })
+      data.push({
+        name: 'karyawan_id',
+        value: form.find(`[name="karyawan_id"]`).val()
       })
       data.push({
         name: 'bank',
@@ -640,6 +659,8 @@
         }
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
+        $('#crudForm [name=karyawan]').siblings('.input-group-append').remove()
+        $('#crudForm [name=karyawan]').siblings('.button-clear').remove()
         $('#crudForm [name=bank]').siblings('.button-clear').remove()
         $('#crudForm [name=bank]').siblings('.input-group-append').remove()
       })
@@ -1101,6 +1122,11 @@
               element.parent('.input-group').find('.button-clear').remove()
               element.parent('.input-group').find('.input-group-append').remove()
             }
+            if (index == 'karyawan') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
             if (index == 'bank') {
               element.data('current-value', value).prop('readonly', true)
               element.parent('.input-group').find('.button-clear').remove()
@@ -1114,14 +1140,14 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
             tablePost(`${pemutihanId}/getDeletePost`)
-            selectAllRowsPosting(response.data.supir_id)
+            selectAllRowsPosting(response.data.supir_id,response.data.karyawan_id)
             tableNonPost(`${pemutihanId}/getDeleteNonPost`)
-            selectAllRowsNonPosting(response.data.supir_id)
+            selectAllRowsNonPosting(response.data.supir_id,response.data.karyawan_id)
           } else {
             tablePost(`${pemutihanId}/getEditPost`)
-            selectAllRowsPosting(response.data.supir_id)
+            selectAllRowsPosting(response.data.supir_id,response.data.karyawan_id)
             tableNonPost(`${pemutihanId}/getEditNonPost`)
-            selectAllRowsNonPosting(response.data.supir_id)
+            selectAllRowsNonPosting(response.data.supir_id,response.data.karyawan_id)
           }
           resolve()
         },
@@ -1224,10 +1250,14 @@
       },
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
-        selectAllRowsPosting(supir.id)
-        selectAllRowsNonPosting(supir.id)
+        selectAllRowsPosting(supir.id, 0)
+        selectAllRowsNonPosting(supir.id, 0)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
+
+        $('#crudForm').find(`[name="karyawan"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="karyawan"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="karyawan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1236,6 +1266,41 @@
         $('#crudForm [name=supir_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm').find(`[name="karyawan"]`).attr('disabled', false)
+        $('#crudForm').find(`[name="karyawan"]`).parents('.input-group').children().attr('disabled', false)
+        $('#crudForm').find(`[name="karyawan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
+      }
+    })
+    $('.karyawan-lookup').lookup({
+      title: 'Karyawan Lookup',
+      fileName: 'karyawan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (karyawan, element) => {
+        $('#crudForm [name=karyawan_id]').first().val(karyawan.id)
+        selectAllRowsPosting(0, karyawan.id)
+        selectAllRowsNonPosting(0, karyawan.id)
+        element.val(karyawan.namakaryawan)
+        element.data('currentValue', element.val())
+        $('#crudForm').find(`[name="supir"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="supir"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="supir"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=karyawan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm').find(`[name="supir"]`).attr('disabled', false)
+        $('#crudForm').find(`[name="supir"]`).parents('.input-group').children().attr('disabled', false)
+        $('#crudForm').find(`[name="supir"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
       }
     })
 
@@ -1265,7 +1330,7 @@
     })
   }
 
-  function selectAllRowsPosting(supirId) {
+  function selectAllRowsPosting(supirId, karyawanId) {
     let aksi = $('#crudForm').data('action')
     if (aksi == 'edit') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
@@ -1283,6 +1348,7 @@
       data: {
         limit: 0,
         supir_id: supirId,
+        karyawan_id: karyawanId,
         sortIndex: sortnamePosting,
         aksi: aksi
       },
@@ -1300,6 +1366,7 @@
           url: `${apiUrl}pemutihansupir/${url}`,
           postData: {
             supir_id: $('#crudForm').find('[name=supir_id]').val(),
+            karyawan_id: $('#crudForm').find('[name=karyawan_id]').val(),
             aksi: aksi
           },
         }).trigger('reloadGrid');
@@ -1318,6 +1385,7 @@
       data: {
         limit: 0,
         supir_id: $(`#crudForm`).find(`[name="supir_id"]`),
+        karyawan_id: $(`#crudForm`).find(`[name="karyawan_id"]`),
         sortIndex: sortnamePosting,
       },
       headers: {
@@ -1341,7 +1409,7 @@
     $('#posting').trigger('reloadGrid')
   }
 
-  function selectAllRowsNonPosting(supirId) {
+  function selectAllRowsNonPosting(supirId, karyawanId) {
 
     let aksi = $('#crudForm').data('action')
     if (aksi == 'edit') {
@@ -1360,6 +1428,7 @@
       data: {
         limit: 0,
         supir_id: supirId,
+        karyawan_id: karyawanId,
         sortIndex: sortnameNonPosting,
         aksi: aksi
       },
@@ -1377,6 +1446,7 @@
           url: `${apiUrl}pemutihansupir/${urlNon}`,
           postData: {
             supir_id: $('#crudForm').find('[name=supir_id]').val(),
+            karyawan_id: $('#crudForm').find('[name=karyawan_id]').val(),
             aksi: aksi
           },
         }).trigger('reloadGrid');
@@ -1395,6 +1465,7 @@
       data: {
         limit: 0,
         supir_id: $(`#crudForm`).find(`[name="supir_id"]`),
+        karyawan_id: $(`#crudForm`).find(`[name="karyawan_id"]`),
         sortIndex: sortnameNonPosting,
       },
       headers: {
