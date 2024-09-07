@@ -41,7 +41,7 @@ $idLookup = isset($id) ? $id : null;
             label: 'KODE ABSEN',
             name: 'kodeabsen',
             align: 'left',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
         },
         {
             label: 'KETERANGAN',

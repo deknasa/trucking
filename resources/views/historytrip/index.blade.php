@@ -23,7 +23,7 @@
 
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="supir_id">
-                <input type="text" name="supir" class="form-control supir-lookup">
+                <input type="text" name="supir" id="supir" class="form-control supir-lookup">
               </div>
             </div>
 
@@ -484,9 +484,10 @@
   })
 
   function initLookup() {
-    $('.supir-lookup').lookup({
+    $('.supir-lookup').lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      searching: ['namasupir',"namaalias"],
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {

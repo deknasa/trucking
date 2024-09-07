@@ -43,9 +43,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusapproval" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS APPROVAL --</option>
-                </select>
+                <input type="hidden" name="statusapproval">
+                <input type="text" name="statusapprovalnama" id="statusapprovalnama" class="form-control lg-form statusapproval-lookup">
               </div>
             </div>
 
@@ -58,7 +57,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="user_id">
-                <input type="text" name="user" class="user-lookup form-control">
+                <input type="text" name="user" id="user" class="user-lookup form-control">
               </div>
             </div>
           </div>
@@ -227,7 +226,7 @@
     }
 
     activeGrid = null
-    initSelect2($(`[name="statusapproval"]`), true)
+    // initSelect2($(`[name="statusapproval"]`), true)
     initDatepicker()
     initLookup()
   })
@@ -253,7 +252,7 @@
 
     Promise
       .all([
-        setStatusApprovalOptions(form)
+        // setStatusApprovalOptions(form)
       ])
       .then(() => {
         showDefault(form)
@@ -286,7 +285,7 @@
 
     Promise
       .all([
-        setStatusApprovalOptions(form)
+        // setStatusApprovalOptions(form)
       ])
       .then(() => {
         showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
@@ -319,7 +318,7 @@
 
     Promise
       .all([
-        setStatusApprovalOptions(form)
+        // setStatusApprovalOptions(form)
       ])
       .then(() => {
         showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
@@ -353,7 +352,7 @@
 
     Promise
       .all([
-        setStatusApprovalOptions(form)
+        // setStatusApprovalOptions(form)
       ])
       .then(() => {
         showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
@@ -515,9 +514,12 @@
   }
 
   function initLookup() {
-    $('.user-lookup').lookup({
+    $('.user-lookup').lookupV3({
       title: 'user Lookup',
-      fileName: 'user',
+      fileName: 'userV3',
+      searching: ['user'],
+      labelColumn: false,
+     
       beforeProcess: function(test) {
         this.postData = {
           role: 'MANDOR',
@@ -525,7 +527,7 @@
       },
       onSelectRow: (user, element) => {
         $(`#crudForm [name="user_id"]`).first().val(user.id)
-        element.val(user.name)
+        element.val(user.user)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -537,6 +539,34 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.statusapproval-lookup`).lookupV3({
+      title: 'STATUS APPROVAL Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS APPROVAL',
+          subgrp: 'STATUS APPROVAL',
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusapproval]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusapproval"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
 
   }
 </script>

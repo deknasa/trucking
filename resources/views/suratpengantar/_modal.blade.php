@@ -102,7 +102,7 @@
                   <label class="col-sm-12 col-form-label">FULL / EMPTY <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="statuscontainer_id">
-                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
+                    <input type="text" name="statuscontainer" id="statuscontainer" class="form-control statuscontainer-lookup">
                   </div>
                 </div>
                 <div class="form-group containers">
@@ -123,7 +123,7 @@
                   <label class="col-sm-12 col-form-label">UPAH SUPIR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="upah_id">
-                    <input type="text" name="upah" class="form-control upahsupirrincian-lookup">
+                    <input type="text" name="upah" id="upahsupirrincian" class="form-control upahsupirrincian-lookup">
                   </div>
                 </div>
 
@@ -196,7 +196,7 @@
                   <div class="col-sm-12">
                     <input type="hidden" name="trado_id">
                     <input type="hidden" name="absensidetail_id">
-                    <input type="text" name="trado" class="form-control absensisupirdetail-lookup">
+                    <input type="text" name="trado" id="absensisupirdetail" class="form-control absensisupirdetail-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
@@ -2366,9 +2366,11 @@
     })
 
 
-    $('.statuscontainer-lookup').lookup({
+    $('.statuscontainer-lookup').lookupV3({
       title: 'Status Container Lookup',
-      fileName: 'statuscontainer',
+      fileName: 'statuscontainerV3',
+       // searching: ['kodestatuscontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2379,7 +2381,7 @@
       onSelectRow: (statuscontainer, element) => {
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
         statuscontainerId = statuscontainer.id
-        element.val(statuscontainer.keterangan)
+        element.val(statuscontainer.kodestatuscontainer)
         element.data('currentValue', element.val())
         enabledUpahSupir()
         clearUpahSupir()
@@ -2409,9 +2411,12 @@
       }
     })
 
-    $('.upahsupirrincian-lookup').lookup({
+    $('.upahsupirrincian-lookup').lookupV3({
       title: 'Upah Supir Lookup',
-      fileName: 'upahsupirrincian',
+      fileName: 'upahsupirrincianV3',
+      searching: ['kotadarisampai'],
+      labelColumn: true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2489,9 +2494,13 @@
       }
     })
 
-    $('.absensisupirdetail-lookup').lookup({
+    $('.absensisupirdetail-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'absensisupirdetail',
+      fileName: 'absensisupirdetailV3',
+      // labelColumn: true,
+      // extendSize: md_extendSize_1,
+      // multiColumnSize:true,
+      // filterToolbar: true,      
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {

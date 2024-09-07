@@ -43,7 +43,13 @@ $idLookup = isset($id) ? $id : null;
       label: 'NAMA',
       name: 'namasupir',
       align: 'left',
-      width: width
+      width: '350px'
+    },
+    {
+      label: 'NAMA Alias',
+      name: 'namaalias',
+      align: 'left',
+      width: '350px'
     },
     
   ];
