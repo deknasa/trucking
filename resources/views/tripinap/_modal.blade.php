@@ -674,11 +674,11 @@
             }
         })
 
-        $('.suratpengantar-lookup').lookupMaster({
+        $('.suratpengantar-lookup').lookupV3({
             title: 'Surat Pengantar Lookup',
             fileName: 'suratpengantartripinap',
-            typeSearch: 'ALL',
-            searching: 1,
+           // searching: ['tradosupir'],
+           labelColumn: false,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
@@ -741,21 +741,16 @@
         //     }
         // })
 
-        $('.absensisupirdetail-lookup').lookupMaster({
+        $('.absensisupirdetail-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'absensisupirdetailMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'absensisupirdetailV3',
+            // searching: ['tradosupir'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
 
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'trado_id',
-                    searchText: 'absensisupirdetail-lookup',
-                    title: 'TRADO',
-                    typeSearch: 'ALL',
                     tgltrip: $('#crudForm [name=tglabsensi]').val(),
                     absensi_id: absensiId,
                     from: 'tripinap',
