@@ -210,6 +210,11 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
+            label: 'KARYAWAN',
+            name: 'karyawan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+          },
+          {
             label: 'BANK',
             name: 'bank',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
