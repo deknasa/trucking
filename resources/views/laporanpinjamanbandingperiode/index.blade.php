@@ -14,7 +14,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="periode" class="form-control datepicker">
+                                    <input type="text" name="periode" class="form-control monthpicker">
                                 </div>
                             </div>
                         </div>
@@ -72,15 +72,15 @@
 
 
     $(document).ready(function() {
-        initDatepicker()
+        initMonthpicker()
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
         initLookup()
-        if (!`{{ $myAuth->hasPermission('laporanketeranganpinjamansupir', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanpinjamanbandingperiode', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
-        if (!`{{ $myAuth->hasPermission('laporanketeranganpinjamansupir', 'export') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanpinjamanbandingperiode', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
     })
@@ -91,10 +91,10 @@
 
         if (jenis != '' && periode != '') {
 
-            // window.open(`{{ route('laporanketeranganpinjamansupir.report') }}?periode=${periode}&jenis=${jenis}`)
+            // window.open(`{{ route('laporanpinjamanbandingperiode.report') }}?periode=${periode}&jenis=${jenis}`)
 
             $.ajax({
-                    url: `${apiUrl}laporanketeranganpinjamansupir/report`,
+                    url: `${apiUrl}laporanpinjamanbandingperiode/report`,
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${accessToken}`
@@ -114,7 +114,7 @@
 
                         // console.log(data, detailParams, dataCabang)
 
-                        laporanketeranganpinjamansupir(data, detailParams, dataCabang, user);
+                        laporanpinjamanbandingperiode(data, detailParams, dataCabang, user);
                     },
                     error: function(error) {
                         if (error.status === 422) {
@@ -143,8 +143,8 @@
         if (jenis != '' && periode != '') {
             $.ajax({
 
-                // url: `{{ route('laporanketeranganpinjamansupir.export') }}?periode=${periode}&jenis=${jenis}`,
-                url: `${apiUrl}laporanketeranganpinjamansupir/export`,
+                // url: `{{ route('laporanpinjamanbandingperiode.export') }}?periode=${periode}&jenis=${jenis}`,
+                url: `${apiUrl}laporanpinjamanbandingperiode/export`,
                 type: 'GET',
                 data: {
                     periode: periode,
@@ -182,14 +182,14 @@
         }
     })
 
-    function laporanketeranganpinjamansupir(data, detailParams, dataCabang, user) {
+    function laporanpinjamanbandingperiode(data, detailParams, dataCabang, user) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanKeteranganPinjamanSupir.mrt') }}`);
+        report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanBandingPeriode.mrt') }}`);
 
         dataSet.readJson({
             'data': data,
