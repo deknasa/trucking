@@ -16,13 +16,13 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class LaporanPinjamanBandingPeriodeController extends MyController
 {
-    public $title = 'Laporan Keterangan Pinjaman Supir';
+    public $title = 'Laporan Pinjaman Banding periode';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Keterangan Pinjaman Banding Periode',
+            'pagename' => 'Menu Utama Laporan Pinjaman Banding Periode',
         ];
 
         return view('laporanpinjamanbandingperiode.index', compact('title'));
