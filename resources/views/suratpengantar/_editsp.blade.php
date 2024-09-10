@@ -530,6 +530,11 @@
                         },
                     },
                     {
+                        label: "GANDENGAN",
+                        name: "gandenganedit",
+                        sortable: true,
+                    },
+                    {
                         label: "EMKL",
                         name: "agenedit",
                         sortable: true,
