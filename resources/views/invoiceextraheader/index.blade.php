@@ -325,6 +325,22 @@
             },
           },
           {
+            label: 'NO BUKTI PELUNASAN',
+            name: 'pelunasan_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldaripelunasan = rowData.tgldariheaderpelunasanpiutangheader
+              let tglsampaipelunasan = rowData.tglsampaiheaderpelunasanpiutangheader
+              let url = "{{route('pelunasanpiutangheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldaripelunasan}&tglsampai=${tglsampaipelunasan}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
+          },            
+          {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
