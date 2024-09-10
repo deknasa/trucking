@@ -84,7 +84,7 @@
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
         let periode = $('#crudForm').find('[name=periode]').val()
-        let jenis = $('#crudForm').find('[name=jenisorder]').val()
+        let jenis = $('#crudForm').find('[name=jenisorder_id]').val()
 
         if (jenis != '' && periode != '') {
             $.ajax({
