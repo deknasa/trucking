@@ -73,7 +73,8 @@
 
     $(document).ready(function() {
         initMonthpicker()
-        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger(
+            'change');
 
 
         initLookup()
