@@ -31,45 +31,49 @@ $idLookup = isset($id) ? $id : null;
     width = '350px'
   }
   
-  column = [{
+  column = [
+    {
       label: "ID",
       name: "id",
       width: "50px",
       hidden: true,
       sortable: false,
       search: false,
+    }, 
+    {
+      label: 'NO BUKTI',
+      name: 'nobukti'
     },
     {
-      label: 'NAMA',
-      name: 'namasupir',
-      align: 'left',
-      width: '350px'
+      label: 'TGL BUKTI',
+      name: 'tglbukti',
+      formatter: "date",
+      width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+      formatoptions: {
+        srcformat: "ISO8601Long",
+        newformat: "d-m-Y"
+      }
     },
     {
-      label: 'NAMA Alias',
-      name: 'namaalias',
-      align: 'left',
-      width: '350px'
+      label: 'FULL/EMPTY',
+      name: 'statuscontainer_id',
+      width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
     },
-    
   ];
-
   
-
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'supir' }}`,
+    url: `{{ config('app.api_url') . 'user' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
-      absen: `{!! $AbsensiId ?? '' !!}`,
-      supir_id: `{!! $supir_id ?? '' !!}`,
-      tgltrip: `{!! $tgltrip ?? '' !!}`,
-      fromSupirSerap: `{!! $fromSupirSerap ?? '' !!}`,
+      tglabsensi: `{!! $tglabsensi ?? '' !!}`,
       trado_id: `{!! $trado_id ?? '' !!}`,
+      supir_id: `{!! $supir_id ?? '' !!}`,
       from: `{!! $from ?? '' !!}`,
+
     },
     idPrefix: '',
     colModel: column,

@@ -48,7 +48,7 @@ $idLookup = isset($id) ? $id : null;
         {
             label: 'TRADO - SUPIR',
             name: 'tradosupir',
-            width: width,
+            width: '1500px',
         },
         {
             label: 'trado_id',

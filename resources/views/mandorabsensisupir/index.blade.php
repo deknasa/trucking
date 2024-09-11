@@ -492,8 +492,12 @@
     $(`.supir-lookup-${rowLookup}`).last().lookupV3({
       title: 'Supir Lookup',
       fileName: 'supirV3',
-      searching: ['namasupir'],
-      labelColumn: false,
+      searching: ['namasupir',"namaalias"],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
+
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -557,6 +561,10 @@
       fileName: 'absentradoV3',
       searching: ['keterangan'],
       labelColumn: false,
+      // labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',

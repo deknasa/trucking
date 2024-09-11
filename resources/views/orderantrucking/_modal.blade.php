@@ -49,7 +49,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="container_id">
-                <input type="text" name="container" class="form-control container-lookup">
+                <input type="text" name="container" id="container" class="form-control container-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -59,7 +59,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="agen_id">
-                <input type="text" name="agen" class="form-control agen-lookup">
+                <input type="text" name="agen" id="agen" class="form-control agen-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -69,7 +69,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -1135,9 +1135,10 @@
 
   function initLookup() {
 
-    $('.container-lookup').lookup({
+    $('.container-lookup').lookupV3({
       title: 'Container Lookup',
-      fileName: 'container',
+      fileName: 'containerV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -1146,7 +1147,7 @@
       },
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
-        element.val(container.keterangan)
+        element.val(container.kodecontainer)
         containerId = container.id
         element.data('currentValue', element.val())
         getcont(containerId)
@@ -1219,9 +1220,11 @@
       }
     })
 
-    $('.agen-lookup').lookup({
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -1244,9 +1247,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.jenisorder-lookup').lookup({
+    $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderV3',
+      // searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -1267,9 +1272,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.pelanggan-lookup').lookup({
+    $('.pelanggan-lookup').lookupV3({
       title: 'Shipper Lookup',
-      fileName: 'pelanggan',
+      fileName: 'pelangganV3',
+      searching: ['kodepelanggan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -1278,7 +1285,7 @@
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
 
-        element.val(pelanggan.namapelanggan)
+        element.val(pelanggan.kodepelanggan)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

@@ -786,7 +786,7 @@
               </td>
               <td>
                 <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
-                <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
+                <input type="text" name="absen"  data-current-value="${detail.absen}" id="absentrado${index}" class="form-control absentrado-lookup" value="${detail.absen}">
               </td>
               <td>
                 <input type="text" class="form-control autonumeric" name="jlhtrip[]" value="${detail.jlhtrip}" disabled></input>
