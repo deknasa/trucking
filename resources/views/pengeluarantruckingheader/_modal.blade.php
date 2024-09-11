@@ -5692,7 +5692,7 @@
                     <td class="data_tbl tbl_stok_id">
                       <input type="hidden" id="stok_id_${index}" name="stok_id[]">
                       <input type="text" id="stok_${index}" name="stok[]" data-current-value="${detail.stok}" class="form-control stok-lookup">
-                      <input type="text" id="stok_${indexRow}_master" name="stok_master[]" class="form-control stok-lookup-master">
+                      <input type="text" id="stok_${index}_master" name="stok_master[]" class="form-control stok-lookup-master">
                     </td>
                     <td class="data_tbl tbl_qty">
                       <input type="text" id="qty_${index}" name="qty[]" class="form-control autonumeric qty"> 
@@ -5703,7 +5703,7 @@
                     </td>
                     <td class="data_tbl tbl_harga">
                     
-                      <input id="totalharga_${indexRow}" readonly type="text" name="totalharga[]" class="form-control autonumeric"> 
+                      <input id="totalharga_${index}" readonly type="text" name="totalharga[]" class="form-control autonumeric"> 
                       <input type="hidden" id="harga_${index}" name="harga[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td class="data_tbl tbl_nominal">
@@ -5996,7 +5996,7 @@
               //     element.data('currentValue', element.val())
               //   }
               // })
-              stokLookupDetail(indexRow);
+              stokLookupDetail(index);
 
               $('.penerimaantruckingheader-lookup').last().lookup({
                 title: 'Penerimaan Trucking Lookup',
@@ -6553,10 +6553,14 @@
 
   function stokLookupDetail(rowId) {
     let row = rowId
-    $('.stok-lookup').last().lookup({
+    $(`#stok_${row}`).lookup({
+    // $('.stok-lookup').last().lookup({
       title: 'stok Lookup',
       fileName: 'pengeluaranstokdetail',
       beforeProcess: function(test) {
+        // console.log($(`#penerimaanstok_nobukti_${row}`).val(),row);
+        // $(`#penerimaanstok_nobukti_${row}`).val(),
+        // $(`#pengeluaranstok_nobukti_${row}`).val(),
         this.postData = {
           cabang: statuscabang,
           penerimaanstokheader_id: penerimaanstokheader,
@@ -6597,7 +6601,8 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.stok-lookup-master').last().lookup({
+    $(`#stok_${indexRow}_master`).lookup({
+    // $('.stok-lookup-master').last().lookup({
       title: 'stok Lookup',
       fileName: 'stok',
       beforeProcess: function(test) {
