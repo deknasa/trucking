@@ -11,113 +11,37 @@
         <form action="" method="post">
           <div class="modal-body">
 
-
             <input type="text" name="id" class="form-control" hidden>
-                        
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger"></span>
+                  kode marketing <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nobukti" class="form-control" readonly>
+              <div class="col-8 col-md-10">
+                <input type="text" name="kodemarketing" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  TGL BUKTI <span class="text-danger">*</span>
+                  keterangan <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="tglbukti" class="form-control datepicker">
-                </div>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  SHIPPER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="shipper_id">
-                <input type="text" name="shipper" class="form-control shipper-lookup">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  tujuan <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="tujuan_id">
-                <input type="text" name="tujuan" class="form-control tujuan-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  CONTAINER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="container_id">
-                <input type="text" name="container" class="form-control container-lookup">
-              </div>
-            </div>
-            
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  JENIS ORDER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  kapal <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="kapal" class="form-control">
+              <div class="col-8 col-md-10">
+                <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
             
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  destination<span class="text-danger">*</span>
+                  STATUS AKTIF <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="destination" class="form-control">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  NO CONT<span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nocont" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  NO SEAL<span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="noseal" class="form-control">
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
             
@@ -152,7 +76,7 @@
       let method
       let url
       let form = $('#crudForm')
-      let jenisTradoId = form.find('[name=id]').val()
+      let marketingId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
       var data_id
@@ -193,19 +117,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}jobemkl`
+          url = `${apiUrl}marketing`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}jobemkl/${jenisTradoId}`
+          url = `${apiUrl}marketing/${marketingId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}jobemkl/${jenisTradoId}`
+          url = `${apiUrl}marketing/${marketingId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}jobemkl`
+          url = `${apiUrl}marketing`
           break;
       }
 
@@ -284,7 +208,7 @@
       data: {
         id: id,
         aksi: 'BATAL',
-        table: 'jobemkl'
+        table: 'marketing'
 
       },
       success: response => {
@@ -303,7 +227,7 @@
     })
   }
 
-  function createJenisTrado() {
+  function createMarketing() {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -321,7 +245,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -338,7 +262,7 @@
       })
   }
 
-  function editJenisTrado(jenisTradoId) {
+  function editMarketing(marketingId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -355,11 +279,11 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
-        showJobEmkl(form, jenisTradoId)
+        showMarketing(form, marketingId)
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -375,7 +299,7 @@
       })
   }
 
-  function deleteJenisTrado(jenisTradoId) {
+  function deleteMarketing(marketingId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -393,11 +317,11 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
-        showJobEmkl(form, jenisTradoId)
+        showMarketing(form, marketingId)
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -413,7 +337,7 @@
       })
   }
 
-  function viewJenisTrado(jenisTradoId) {
+  function viewMarketing(marketingId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -431,12 +355,12 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        // setStatusAktifOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
-        showJobEmkl(form, jenisTradoId)
-          .then(jenisTradoId => {
+        showMarketing(form, marketingId)
+          .then(marketingId => {
             // form.find('.aksi').hide()
             setFormBindKeys(form)
             form.find('[name]').attr('disabled', 'disabled').css({
@@ -464,7 +388,7 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}jobemkl/field_length`,
+          url: `${apiUrl}marketing/field_length`,
           method: 'GET',
           dataType: 'JSON',
           headers: {
@@ -541,10 +465,10 @@
     })
   }
 
-  function showJobEmkl(form, jenisTradoId) {
+  function showMarketing(form, marketingId) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}jobemkl/${jenisTradoId}`,
+        url: `${apiUrl}marketing/${marketingId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -579,7 +503,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}jobemkl/default`,
+        url: `${apiUrl}marketing/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -608,7 +532,7 @@
 
   function cekValidasi(Id, Aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}jobemkl/${Id}/cekValidasi`,
+      url: `{{ config('app.api_url') }}marketing/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -623,9 +547,9 @@
           showDialog(response.message['keterangan'])
         } else {
           if (Aksi == "EDIT") {
-            editJenisTrado(Id)
+            editMarketing(Id)
           } else if (Aksi == "DELETE") {
-            deleteJenisTrado(Id)
+            deleteMarketing(Id)
           }
         }
 
@@ -634,26 +558,21 @@
   }
 
   function initLookup() {
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
-        $('#crudForm [name=statusaktif]').first().val(status.id)
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
         element.val(status.text)
         element.data('currentValue', element.val())
       },
@@ -661,12 +580,12 @@
         element.val(element.data('currentValue'));
       },
       onClear: (element) => {
-        $('#crudForm [name=statusaktif]').first().val('')
-        element.val('');
-        element.data('currentValue', element.val());
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       },
     });
-
 
     $('.shipper-lookup').lookup({
       title: 'shipper Lookup',
