@@ -295,6 +295,8 @@ use App\Http\Controllers\LaporanPemotonganPinjamanDepoController;
 use App\Http\Controllers\LaporanHistorySupirMilikMandorController;
 use App\Http\Controllers\LaporanHistoryTradoMilikMandorController;
 use App\Http\Controllers\LaporanKeteranganPinjamanSupirController;
+use App\Http\Controllers\LaporanPinjamanBandingPeriodeController;
+use App\Http\Controllers\LaporanKalkulasiEmklController;
 use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
@@ -1373,6 +1375,15 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanketeranganpinjamansupir/export', [LaporanKeteranganPinjamanSupirController::class, 'export'])->name('laporanketeranganpinjamansupir.export');
     Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
     Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
+
+    Route::get('laporanpinjamanbandingperiode/report', [LaporanPinjamanBandingPeriodeController::class, 'report'])->name('laporanpinjamanbandingperiode.report');
+    Route::get('laporanpinjamanbandingperiode/export', [LaporanPinjamanBandingPeriodeController::class, 'export'])->name('laporanpinjamanbandingperiode.export');
+    Route::get('laporanpinjamanbandingperiode/index', [LaporanPinjamanBandingPeriodeController::class, 'index']);
+    Route::resource('laporanpinjamanbandingperiode', LaporanPinjamanBandingPeriodeController::class);
+
+    Route::get('laporankalkulasiemkl/export', [LaporanKalkulasiEmklController::class, 'export'])->name('laporankalkulasiemkl.export');
+    Route::get('laporankalkulasiemkl/index', [LaporanKalkulasiEmklController::class, 'index']);
+    Route::resource('laporankalkulasiemkl', LaporanKalkulasiEmklController::class);
 
     Route::get('laporankasharian/report', [LaporanKasHarianController::class, 'report'])->name('laporankasharian.report');
     Route::get('laporankasharian/export', [LaporanKasHarianController::class, 'export'])->name('laporankasharian.export');

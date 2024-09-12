@@ -806,7 +806,7 @@
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRows, selectedbukti);
+                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
 
                 }
               }
@@ -822,7 +822,7 @@
                   tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                  approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRows, selectedbukti);
+                  approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
 
                 }
               }

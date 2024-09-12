@@ -533,6 +533,24 @@
             }
           },
           {
+            label: 'NO BUKTI EBS',
+            name: 'prosesgajisupir_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarigajisupirheader
+              let tglsampai = rowData.tglsampaigajisupirheader
+              let url = "{{route('prosesgajisupirheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+          },
+
+          {
             label: 'STATUS GAJI SUPIR',
             name: 'statusgajisupir',
             stype: 'select',

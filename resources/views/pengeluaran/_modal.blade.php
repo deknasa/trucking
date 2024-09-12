@@ -108,6 +108,37 @@
               </div>
             </div>
 
+            <div class="row form-group statusreimbursement">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  REIMBURSEMENT </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="statusreimbursement">
+                <input type="text" name="statusreimbursementnama" id="statusreimbursement" class="form-control statusreimbursement-lookup">
+              </div>
+            </div>
+            <div class="row form-group cabang">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  CABANG </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="cabang_id">
+                <input type="text" name="cabang" id="cabang" class="form-control cabang-lookup">
+              </div>
+            </div>
+            <div class="row form-group statusjenisbiaya">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  BIAYA </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="statusjenisbiaya">
+                <input type="text" name="statusjenisbiayanama" id="statusjenisbiaya" class="form-control statusjenisbiaya-lookup">
+              </div>
+            </div>
+
 
             <div class="row form-group bmt" style="display: none;">
               <div class="col-12 col-sm-3 col-md-2">
@@ -573,6 +604,15 @@
           } else {
             $('.bmt').hide()
           }
+          if (accessCabang == 'BTG-EMKL') {
+            $('.statusreimbursement').show()
+            $('.cabang').hide()
+            $('.statusjenisbiaya').hide()
+          } else {
+            $('.statusreimbursement').hide()
+            $('.cabang').hide()
+            $('.statusjenisbiaya').hide()
+          }
           if (selectedRows.length > 0) {
             clearSelectedRows()
           }
@@ -600,6 +640,15 @@
                 $('.bmt').show()
               } else {
                 $('.bmt').hide()
+              }
+              if (accessCabang == 'BTG-EMKL') {
+                $('.statusreimbursement').show()
+                $('.cabang').hide()
+                $('.statusjenisbiaya').hide()
+              } else {
+                $('.statusreimbursement').hide()
+                $('.cabang').hide()
+                $('.statusjenisbiaya').hide()
               }
               if (selectedRows.length > 0) {
                 clearSelectedRows()
@@ -655,7 +704,7 @@
     })
   }
 
- 
+
   function editPengeluaran(id) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -684,6 +733,17 @@
               clearSelectedRows()
             }
 
+            if (accessCabang == 'BTG-EMKL') {
+              $('.statusreimbursement').show()
+              if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
+                $('.cabang').hide()
+                $('.statusjenisbiaya').hide()
+              }
+            } else {
+              $('.statusreimbursement').hide()
+              $('.cabang').hide()
+              $('.statusjenisbiaya').hide()
+            }
             enableTglJatuhTempo(form)
             enableNoWarkat(form)
             $('#crudModal').modal('show')
@@ -699,6 +759,16 @@
             $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
             $('#crudForm').find(`[name="alatbayar"]`).attr('disabled', false).attr('readonly', true)
             $('#crudForm').find('[name="alatbayar_id"]').attr('readonly', true);
+
+            $('#crudForm').find(`[name="cabang"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="cabang"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="cabang"]`).attr('readonly', true)
+            $('#crudForm').find(`[name="statusreimbursementnama"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="statusreimbursementnama"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="statusreimbursementnama"]`).attr('readonly', true)
+            $('#crudForm').find(`[name="statusjenisbiayanama"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="statusjenisbiayanama"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="statusjenisbiayanama"]`).attr('readonly', true)
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -805,6 +875,17 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            if (accessCabang == 'BTG-EMKL') {
+              $('.statusreimbursement').show()
+              if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
+                $('.cabang').hide()
+                $('.statusjenisbiaya').hide()
+              }
+            } else {
+              $('.statusreimbursement').hide()
+              $('.cabang').hide()
+              $('.statusjenisbiaya').hide()
+            }
             enableTglJatuhTempo(form)
             enableNoWarkat(form)
             $('#crudModal').modal('show')
@@ -862,6 +943,18 @@
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
+            }
+
+            if (accessCabang == 'BTG-EMKL') {
+              $('.statusreimbursement').show()
+              if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
+                $('.cabang').hide()
+                $('.statusjenisbiaya').hide()
+              }
+            } else {
+              $('.statusreimbursement').hide()
+              $('.cabang').hide()
+              $('.statusjenisbiaya').hide()
             }
             enableTglJatuhTempo(form)
             enableNoWarkat(form)
@@ -1023,6 +1116,7 @@
   }
 
   let lastIndex = 0;
+
   function showPengeluaran(form, id) {
     console.log(id);
     return new Promise((resolve, reject) => {
@@ -1173,7 +1267,7 @@
   }
 
   function addRow() {
-    lastIndex += 1; 
+    lastIndex += 1;
     let isTheFirstRow = $('#table_body tr').length;
     let detailRow = $(`
       <tr>
@@ -1260,7 +1354,7 @@
     setRowNumbers()
     rowCabangPusat()
     initLookupDetail(lastIndex);
-   
+
   }
 
   function enableTglJatuhTempo(el) {
@@ -1277,7 +1371,7 @@
     }
   }
 
-  function initLookupDetail(index){
+  function initLookupDetail(index) {
     let rowLookup = index
 
     // $('.akunpusat-lookup').last().lookup({
@@ -1313,39 +1407,39 @@
 
 
     $(`.akunpusat-lookup_${rowLookup}`).lookupV3({
-        title: 'Kode Perk. Lookup',
-        fileName: 'akunpusatV3',
-        searching: ['coa','keterangancoa'],
-        labelColumn: true,
-        extendSize: md_extendSize_3,
-        multiColumnSize:true,
-        filterToolbar: true,
-        beforeProcess: function(test) {    
-            // var levelcoa = $(`#levelcoa`).val();
-            this.postData = {
-                levelCoa: '3',
-                Aktif: 'AKTIF',
-            }
-        },
-        onSelectRow: (akunpusat, element) => {
-            element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
-            element.val(akunpusat.keterangancoa)
-            element.data('currentValue', element.val())
-
-            enableTglJatuhTempo($(`#crudForm`))
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-
-          enableTglJatuhTempo($(`#crudForm`))
-        },
-        onClear: (element) => {
-          element.parents('td').find(`[name="coadebet[]"]`).val('')
-          element.val('')
-          element.data('currentValue', element.val())
-
-          enableTglJatuhTempo($(`#crudForm`))
+      title: 'Kode Perk. Lookup',
+      fileName: 'akunpusatV3',
+      searching: ['coa', 'keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_3,
+      multiColumnSize: true,
+      filterToolbar: true,
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
         }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+
+        enableTglJatuhTempo($(`#crudForm`))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="coadebet[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
+      }
     })
   }
 
@@ -1531,33 +1625,138 @@
     // })
 
     $('.alatbayar-lookup').lookupV3({
-            title: 'Alat Bayar Lookup',
-            fileName: 'alatbayarV3',
-            searching: ['namaalatbayar'],
-            labelColumn: false,
-            beforeProcess: function(test) {
-                // const bank_ID=0        
-                this.postData = {
-                    bank_Id: bankId,
-                    Aktif: 'AKTIF',
-                }
-            },
-            onSelectRow: (alatbayar, element) => {
-              $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
-              element.val(alatbayar.namaalatbayar)
-              element.data('currentValue', element.val())
-              enableTglJatuhTempo($(`#crudForm`))
-              enableNoWarkat($(`#crudForm`))
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              $(`#crudForm [name="alatbayar_id"]`).first().val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-        })
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayarV3',
+      searching: ['namaalatbayar'],
+      labelColumn: false,
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          bank_Id: bankId,
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (alatbayar, element) => {
+        $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
+        element.data('currentValue', element.val())
+        enableTglJatuhTempo($(`#crudForm`))
+        enableNoWarkat($(`#crudForm`))
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="alatbayar_id"]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.cabang-lookup').lookupV3({
+      title: 'Cabang Lookup',
+      fileName: 'cabangV3',
+      labelColumn: false,
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (cabang, element) => {
+        $(`#crudForm [name="cabang_id"]`).first().val(cabang.id)
+        element.val(cabang.namacabang)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="cabang_id"]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+
+    $('.statusreimbursement-lookup').lookupV3({
+      title: 'Reimbursement Lookup',
+      fileName: 'parameterV3',
+      labelColumn: false,
+      singleColum: true,
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS REIMBURSE',
+          subgrp: 'STATUS REIMBURSE',
+        }
+      },
+      onSelectRow: (status, element) => {
+        $(`#crudForm [name="statusreimbursement"]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+        if (status.text == 'YA') {
+          $('.cabang').show()
+          $('.statusjenisbiaya').show()
+        } else {
+          $('.cabang').hide()
+          $('.statusjenisbiaya').hide()
+          $(`#crudForm [name="cabang"]`).val('')
+          $(`#crudForm [name="cabang_id"]`).val('')
+          $(`#crudForm [name="cabang"]`).data('currentValue', '')
+          $(`#crudForm [name="statusjenisbiayanama"]`).val('')
+          $(`#crudForm [name="statusjenisbiaya"]`).val('')
+          $(`#crudForm [name="statusjenisbiayanama"]`).data('currentValue', '')
+        }
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="statusreimbursement"]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+        $('.cabang').hide()
+        $('.statusjenisbiaya').hide()
+        $(`#crudForm [name="cabang"]`).val('')
+        $(`#crudForm [name="cabang_id"]`).val('')
+        $(`#crudForm [name="cabang"]`).data('currentValue', '')
+        $(`#crudForm [name="statusjenisbiayanama"]`).val('')
+        $(`#crudForm [name="statusjenisbiaya"]`).val('')
+        $(`#crudForm [name="statusjenisbiayanama"]`).data('currentValue', '')
+
+      }
+    })
+
+    $('.statusjenisbiaya-lookup').lookupV3({
+      title: 'Biaya Lookup',
+      fileName: 'parameterV3',
+      labelColumn: false,
+      singleColum: true,
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'BIAYA REIMBURSE EMKL',
+          subgrp: 'BIAYA REIMBURSE EMKL',
+        }
+      },
+      onSelectRow: (status, element) => {
+        $(`#crudForm [name="statusjenisbiaya"]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="statusjenisbiaya"]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
 
     // $('.bank-lookup').lookup({
     //   title: 'Bank Lookup',
@@ -1598,44 +1797,44 @@
     // })
 
     $('.bank-lookup').lookupV3({
-          title: 'Bank Lookup',
-          fileName: 'bankV3',
-          searching: ['namabank'],
-          labelColumn: false,
-          // filterToolbar:true,
-          beforeProcess: function(test) {
-              this.postData = {
-                  Aktif: 'AKTIF',
-                  from: 'pengeluaran'
-              }
-          },
-          onSelectRow: (bank, element) => {
-            $('#crudForm [name=bank_id]').first().val(bank.id)
+      title: 'Bank Lookup',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
+      // filterToolbar:true,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          from: 'pengeluaran'
+        }
+      },
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
 
-            bankId = bank.id
+        bankId = bank.id
 
-            if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
-              $('.bmt').show()
-            } else {
-              $('.bmt').hide()
-            }
-            element.val(bank.namabank)
-            element.data('currentValue', element.val())
-            $('#crudForm [name=alatbayar_id]').first().val('')
-            $('#crudForm [name=alatbayar]').first().val('')
-            $('#crudForm [name=alatbayar]').data('currentValue', '')
-          },
-          onCancel: (element) => {
-            element.val(element.data('currentValue'))
-          },
-          onClear: (element) => {
-            $('#crudForm [name=bank_id]').first().val('')
-            element.val('')
-            element.data('currentValue', element.val())
-            $('#crudForm [name=alatbayar_id]').first().val('')
-            $('#crudForm [name=alatbayar]').first().val('')
-            $('#crudForm [name=alatbayar]').data('currentValue', '')
-          }
+        if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
+          $('.bmt').show()
+        } else {
+          $('.bmt').hide()
+        }
+        element.val(bank.namabank)
+        element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
+      }
     })
 
     $('.bmt-lookup').lookup({

@@ -18,18 +18,16 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Jenis Order<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="jenis">
-                                <input type="text" id="jenis" name="jenisnama" class="form-control jenis-lookup">
+                                <input type="hidden" name="jenisorder_id">
+                                <input type="text" id="jenisorder" name="jenisorder" class="form-control jenisorder-lookup">
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
-                                <button type="button" id="btnExport" class="btn btn-warning mr-2 ">
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
                                 </button>
@@ -43,7 +41,13 @@
         </div>
     </div>
 </div>
-
+@push('report-scripts')
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}">
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
+@endpush()
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -64,25 +68,29 @@
 
 
     $(document).ready(function() {
-        initLookup()
         initMonthpicker()
-        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger(
+            'change');
 
-        if (!`{{ $myAuth->hasPermission('exportpemakaianbarang', 'export') }}`) {
+
+        initLookup()
+        if (!`{{ $myAuth->hasPermission('laporankalkulasiemkl', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
+    
+
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
         let periode = $('#crudForm').find('[name=periode]').val()
-        let jenis = $('#crudForm').find('[name=jenis]').val()
+        let jenis = $('#crudForm').find('[name=jenisorder_id]').val()
 
-        if (periode != '' && jenis != '') {
-
-            // window.open(`{{ route('exportpemakaianbarang.export') }}?periode=${periode}&jenis=${jenis}`)
+        if (jenis != '' && periode != '') {
             $.ajax({
-                url: `${apiUrl}exportpemakaianbarang/export`,
-                // url: `{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`,
+
+                // url: `{{ route('laporankalkulasiemkl.export') }}?periode=${periode}&jenis=${jenis}`,
+                url: `${apiUrl}laporankalkulasiemkl/export`,
                 type: 'GET',
                 data: {
                     periode: periode,
@@ -102,7 +110,7 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'LAP. PEMAKAIAN BARANG ' + new Date().getTime() + '.xlsx';
+                            link.download = 'LAP. KETERANGAN PINJAMAN' + new Date().getTime() + '.xlsx';
                             link.click();
                         }
                     }
@@ -114,46 +122,45 @@
                     showDialog('TIDAK ADA DATA')
                 }
             })
+
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
+   
+
     function initLookup() {
-        $('.jenis-lookup').lookupMaster({
-            title: 'Jenis Pemakaian Lookup',
-            fileName: 'parameterMaster',
+        $('.jenisorder-lookup').lookupMaster({
+            title: 'jenisorder Lookup',
+            fileName: 'jenisorderMaster',
             typeSearch: 'ALL',
             searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
-                    url: `${apiUrl}parameter/combo`,
-                    grp: 'JENIS PEMAKAIAN BARANG',
-                    subgrp: 'JENIS PEMAKAIAN BARANG',
                     Aktif: 'AKTIF',
                     searching: 1,
-                    valueName: 'jenis_id',
-                    searchText: 'text-lookup',
-                    title: 'Jenis Pemakaian Lookup',
+                    valueName: 'jenisorder_id',
+                    searchText: 'jenisorder-lookup',
+                    title: 'jenisorder Lookup',
                     typeSearch: 'ALL',
-                    singleColumn: true,
-                    hideLabel: true,
                 }
             },
-            onSelectRow: (jenis, element) => {
-                $('#crudForm [name=jenis]').first().val(jenis.id)
-                element.val(jenis.text)
+            onSelectRow: (jenisorder, element) => {
+                $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+                element.val(jenisorder.keterangan)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=jenis]').first().val('')
+                $('#crudForm [name=jenisorder_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
         })
+
     }
 </script>
 @endpush()
