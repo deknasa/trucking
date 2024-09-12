@@ -110,7 +110,7 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'LAP. KETERANGAN PINJAMAN' + new Date().getTime() + '.xlsx';
+                            link.download = 'LAPORAN KALKULASI EMKL ' + new Date().getTime() + '.xlsx';
                             link.click();
                         }
                     }
