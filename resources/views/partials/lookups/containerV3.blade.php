@@ -50,6 +50,11 @@ $idLookup = isset($id) ? $id : null;
             name: "kodecontainer",
             width: width,
         },
+        {
+            label: "keterangan",
+            name: "keterangan",
+            hidden: true,
+        },
     ]
 
 

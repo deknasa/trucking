@@ -61,20 +61,21 @@ use App\Http\Controllers\InputTripController;
 use App\Http\Controllers\JenisEmklController;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\KerusakanController;
+use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\SpkHarianController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\TutupBukuController;
-use App\Http\Controllers\UpahSupirController;
 
+use App\Http\Controllers\UpahSupirController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\LogAbsensiController;
-use App\Http\Controllers\MandorTripController;
 
+use App\Http\Controllers\MandorTripController;
 use App\Http\Controllers\PindahBukuController;
 use App\Http\Controllers\SupirSerapController;
 use App\Http\Controllers\TripTangkiController;
@@ -94,19 +95,19 @@ use App\Http\Controllers\ReminderStokController;
 use App\Http\Controllers\ReportNeracaController;
 use App\Http\Controllers\UbahPasswordController;
 use App\Http\Controllers\BankPelangganController;
-use App\Http\Controllers\InvoiceDetailController;
 
+use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
 use App\Http\Controllers\KartuStokLamaController;
-use App\Http\Controllers\LaporanNeracaController;
 
+use App\Http\Controllers\LaporanNeracaController;
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\PiutangDetailController;
+
 use App\Http\Controllers\PiutangHeaderController;
-
 use App\Http\Controllers\ReminderEmailController;
-use App\Http\Controllers\ResetPasswordController;
 
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\ApprovalOpnameController;
 use App\Http\Controllers\BlackListSupirController;
@@ -123,24 +124,24 @@ use App\Http\Controllers\GajiSupirHeaderController;
 use App\Http\Controllers\LaporanLabaRugiController;
 use App\Http\Controllers\NotaDebetDetailController;
 use App\Http\Controllers\NotaDebetHeaderController;
-use App\Http\Controllers\OrderanTruckingController;
 
+use App\Http\Controllers\OrderanTruckingController;
 use App\Http\Controllers\PengeluaranStokController;
 use App\Http\Controllers\ReminderServiceController;
 use App\Http\Controllers\ServiceInDetailController;
+
 use App\Http\Controllers\ServiceInHeaderController;
-
 use App\Http\Controllers\StatusContainerController;
-use App\Http\Controllers\UpahSupirTangkiController;
 
+use App\Http\Controllers\UpahSupirTangkiController;
 use App\Http\Controllers\ImportDataCabangController;
 use App\Http\Controllers\JurnalUmumDetailController;
-use App\Http\Controllers\JurnalUmumHeaderController;
 
+use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
-use App\Http\Controllers\LaporanBukuBesarController;
 
+use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanHutangBBMController;
 use App\Http\Controllers\LaporanKartuStokController;
 use App\Http\Controllers\LaporanKasHarianController;
@@ -159,8 +160,8 @@ use App\Http\Controllers\ApprovalBukaCetakController;
 use App\Http\Controllers\ApprovalStokReuseController;
 use App\Http\Controllers\ExportLaporanStokController;
 use App\Http\Controllers\HutangBayarDetailController;
-use App\Http\Controllers\HutangBayarHeaderController;
 
+use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\HutangExtraDetailController;
 use App\Http\Controllers\HutangExtraHeaderController;
 use App\Http\Controllers\LaporanBiayaSupirController;
@@ -205,13 +206,14 @@ use App\Http\Controllers\LaporanMutasiKasBankController;
 use App\Http\Controllers\LaporanPemakaianStokController;
 use App\Http\Controllers\LaporanPembelianStokController;
 use App\Http\Controllers\LaporanPinjamanSupirController;
+
+
 use App\Http\Controllers\PemutihanSupirDetailController;
-
-
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\PenerimaanStokDetailController;
 use App\Http\Controllers\PenerimaanStokHeaderController;
+use App\Http\Controllers\StatusGandenganTradoController;
 use App\Http\Controllers\StatusGandenganTruckController;
 use App\Http\Controllers\TradoTambahanAbsensiController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
@@ -305,7 +307,6 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
-use App\Http\Controllers\StatusGandenganTradoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -899,6 +900,14 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('jobemkl/export', [JobEmklController::class, 'export'])->name('jobemkl.export');
     Route::get('jobemkl/report', [JobEmklController::class, 'report'])->name('jobemkl.report');
     Route::resource('jobemkl', JobEmklController::class);
+    
+    Route::get('marketing/field_length', [MarketingController::class, 'fieldLength'])->name('marketing.field_length');
+    Route::get('marketing/{id}/delete', [MarketingController::class, 'delete'])->name('marketing.delete');
+    Route::get('marketing/get', [MarketingController::class, 'get'])->name('marketing.get');
+    Route::get('marketing/index', [MarketingController::class, 'index']);
+    Route::get('marketing/export', [MarketingController::class, 'export'])->name('marketing.export');
+    Route::get('marketing/report', [MarketingController::class, 'report'])->name('marketing.report');
+    Route::resource('marketing', MarketingController::class);
 
     Route::get('orderantrucking/field_length', [OrderanTruckingController::class, 'fieldLength'])->name('orderantrucking.field_length');
     Route::get('orderantrucking/{id}/delete', [OrderanTruckingController::class, 'delete'])->name('orderantrucking.delete');

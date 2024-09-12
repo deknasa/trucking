@@ -11,6 +11,7 @@
 </div>
 
 @include('jobemkl._modal')
+@include('jobemkl._modalNominalPrediksi')
 
 @push('scripts')
 <script>
@@ -175,21 +176,25 @@
                     {
                         label: 'statusapprovaledit',
                         label:'statusapprovaledit',
+                        searchable: false,                        
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'tglapprovaledit',
                         label:'tglapprovaledit',
+                        searchable: false,                        
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'userapprovaledit',
                         label:'userapprovaledit',
+                        searchable: false,                        
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'tglbataseditjobemkl',
                         label:'tglbataseditjobemkl',
+                        searchable: false,                        
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     
@@ -384,38 +389,36 @@
                         }
                     },
                 ],
-                modalBtnList: [{
-                    id: 'approve',
-                    title: 'Approve',
-                    caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-                    class: 'btn btn-purple btn-sm mr-1 ',
-                    item: [{
-                            id: 'approvalaktif',
-                            text: "APPROVAL AKTIF",
-                            color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
-                            hidden: (!`{{ $myAuth->hasPermission('jobemkl', 'approvalaktif') }}`),
+                modalBtnList: [
+                    {
+                        id: 'lainnya',
+                        title: 'Lainnya',
+                        caption: 'Lainnya',
+                        innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                        class: 'btn btn-secondary btn-sm mr-1',
+                        // targetModal:'#listMenuModal',
+                        item: [{
+                            id: 'nominalprediksi',
+                            text: "nominal prediksi",
+                            hidden: (!`{{ $myAuth->hasPermission('jobemkl', 'nominalprediksi') }}`),
+                            color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
                             onClick: () => {
-                                if (`{{ $myAuth->hasPermission('jobemkl', 'approvalaktif') }}`) {
-                                    approvalAktif('jobemkl')
+                                if (`{{ $myAuth->hasPermission('jobemkl', 'nominalprediksi') }}`) {
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        jobEmklNominalPrediksi(selectedOne[1])
+                                        // cekValidasihistory(selectedOne[1], 'nominalprediksi')
+                                        console.log('asasd');
 
+                                    } else {
+                                        showDialog(selectedOne[1])
+                                    }
                                 }
-                            }
-                        },
-                        {
-                            id: 'approvalnonaktif',
-                            text: "APPROVAL NON AKTIF",
-                            color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-                            hidden: (!`{{ $myAuth->hasPermission('jobemkl', 'approvalnonaktif') }}`),
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('jobemkl', 'approvalnonaktif') }}`) {
-                                    approvalNonAktif('jobemkl')
-                                }
-                            }
-                        },
+                            },
+                        }, ]
 
-                    ],
-                }]
+                    }
+                ]
             })
 
         /* Append clear filter button */
