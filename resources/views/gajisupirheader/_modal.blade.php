@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-12 col-md-10">
                                     <input type="hidden" name="supir_id">
-                                    <input type="text" name="supir" autocomplete="off" class="form-control supir-lookup">
+                                    <input type="text" name="supir" id="supir" autocomplete="off" class="form-control supir-lookup">
                                 </div>
                             </div>
 
@@ -3540,9 +3540,11 @@
     }
 
     function initLookup() {
-        $('.supir-lookup').lookup({
+        $('.supir-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirV3',
+            searching: ['namasupir'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

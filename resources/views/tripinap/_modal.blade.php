@@ -676,7 +676,7 @@
 
         $('.suratpengantar-lookup').lookupV3({
             title: 'Surat Pengantar Lookup',
-            fileName: 'suratpengantartripinap',
+            fileName: 'suratpengantartripinapV3',
            // searching: ['tradosupir'],
            labelColumn: false,
             beforeProcess: function(test) {

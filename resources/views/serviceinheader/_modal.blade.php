@@ -595,7 +595,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="karyawan_id[]" class="form-control">
-                                <input type="text" name="karyawan[]"  id="karyawan"data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
+                                <input type="text" name="karyawan[]"  id="karyawan${index}" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
                             </td>
 
                             <td>
@@ -614,9 +614,9 @@
 
                         $('#detailList tbody').append(detailRow)
 
-                        $('.karyawan-lookup').last().lookup({
+                        $('.karyawan-lookup').last().lookupV3({
                             title: 'Karyawan Lookup',
-                            fileName: 'karyawan',
+                            fileName: 'karyawanV3',
                             beforeProcess: function(test) {
                                 // var levelcoa = $(`#levelcoa`).val();
                                 this.postData = {
@@ -685,6 +685,7 @@
         })
     }
 
+    var xxindex = 0
 
     function addRow() {
         let detailRow = (`
@@ -692,7 +693,7 @@
             <td></td>
             <td>
                 <input type="hidden" name="karyawan_id[]" class="form-control">
-                <input type="text" name="karyawan[]" id="karyawan" class="form-control karyawan-lookup">
+                <input type="text" name="karyawan[]" id="karyawan${xxindex}" class="form-control karyawan-lookup">
             </td>
 
             <td>
@@ -706,9 +707,9 @@
 
         $('#detailList tbody').append(detailRow)
 
-        $('.karyawan-lookup').last().lookup({
+        $('.karyawan-lookup').last().lookupV3({
             title: 'karyawan Lookup',
-            fileName: 'karyawan',
+            fileName: 'karyawanV3',
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
@@ -732,6 +733,7 @@
             }
         })
         setRowNumbers()
+        xxindex++
     }
 
     function cekValidasi(Id, Aksi) {
@@ -831,9 +833,13 @@
 
     function initLookup() {
 
-        $('.trado-lookup').lookup({
+        $('.trado-lookup').lookupV3({
             title: 'trado Lookup',
-            fileName: 'trado',
+            fileName: 'tradoV3',
+            searching: ['kodetrado','kmakhirgantioli','merek','norangka','nomesin','nostnk' ],
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
@@ -886,22 +892,16 @@
         //     }
         // })
 
-        $(`.status-lookup`).lookupMaster({
+        $(`.status-lookup`).lookupV3({
             title: 'STATUS SERVICE OUT Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function() {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'STATUS SERVICE OUT',
                     subgrp: 'STATUS SERVICE OUT',
-                    searching: 1,
-                    valueName: `statusserviceout`,
-                    searchText: `status-lookup`,
-                    singleColumn: true,
-                    hideLabel: true,
-                    title: 'STATUS SERVICE OUT'
                 };
             },
             onSelectRow: (status, element) => {

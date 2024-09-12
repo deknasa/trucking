@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-    <table id="supirLookup<?= $id ?>" class="lookup-grid"></table>
+    <table id="suratpengantartripinapLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-    <table id="supirLookup" class="lookup-grid"></table>
+    <table id="suratpengantartripinapLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
     <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -18,7 +18,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#supirLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#suratpengantartripinapLookup{{ isset($id) ? $id : null }} `)
   
   var singleColumn = `{{ $singleColumn ?? '' }}`
   label = `{{ $labelColumn ?? '' }}`
@@ -62,7 +62,7 @@ $idLookup = isset($id) ? $id : null;
   ];
   
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'user' }}`,
+    url: `{{ config('app.api_url') . 'suratpengantar/gettripinap' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
@@ -73,7 +73,6 @@ $idLookup = isset($id) ? $id : null;
       trado_id: `{!! $trado_id ?? '' !!}`,
       supir_id: `{!! $supir_id ?? '' !!}`,
       from: `{!! $from ?? '' !!}`,
-
     },
     idPrefix: '',
     colModel: column,
