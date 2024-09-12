@@ -51,6 +51,12 @@ $idLookup = isset($id) ? $id : null;
             width: '1500px',
         },
         {
+            label: 'trado',
+            name: 'trado',
+            hidden: true,
+            search: false,
+        },
+        {
             label: 'trado_id',
             name: 'trado_id',
             hidden: true,

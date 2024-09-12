@@ -129,6 +129,20 @@ $idLookup = isset($id) ? $id : null;
             search: false,
             hidden: true
         },
+        {
+            label: 'nominalkenek',
+            name: 'nominalkenek',
+            align: 'left',
+            search: false,
+            hidden: true
+        },
+        {
+            label: 'nominalkomisi',
+            name: 'nominalkomisi',
+            align: 'left',
+            search: false,
+            hidden: true
+        },
     ]
 
 
