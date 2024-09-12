@@ -43,7 +43,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="shipper_id">
-                <input type="text" name="shipper" class="form-control shipper-lookup">
+                <input type="text" name="shipper" id="shipper" class="form-control shipper-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -53,7 +53,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="tujuan_id">
-                <input type="text" name="tujuan" class="form-control tujuan-lookup">
+                <input type="text" name="tujuan" id="tujuan" class="form-control tujuan-lookup">
               </div>
             </div>
 
@@ -64,7 +64,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="container_id">
-                <input type="text" name="container" class="form-control container-lookup">
+                <input type="text" name="container" id="container" class="form-control container-lookup">
               </div>
             </div>
             
@@ -75,7 +75,18 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  MARKETING <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="marketing_id">
+                <input type="text" name="marketing" id="marketing" class="form-control marketing-lookup">
               </div>
             </div>
 
@@ -86,6 +97,16 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="kapal" class="form-control">
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  lokasi bongkar muat <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="lokasibongkarmuat" class="form-control">
               </div>
             </div>
             
@@ -563,7 +584,20 @@
               element.val(value)
             }
 
-            if (index == 'statusaktifnama') {
+            
+            if (index == 'shipper') {
+              element.data('current-value', value)
+            }
+            if (index == 'tujuan') {
+              element.data('current-value', value)
+            }
+            if (index == 'container') {
+              element.data('current-value', value)
+            }
+            if (index == 'jenisorder') {
+              element.data('current-value', value)
+            }
+            if (index == 'marketing') {
               element.data('current-value', value)
             }
           })
@@ -634,22 +668,16 @@
   }
 
   function initLookup() {
-    $(`.status-lookup`).lookupMaster({
+    $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      typeSearch: 'ALL',
-      searching: 1,
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
           grp: 'STATUS AKTIF',
           subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
         };
       },
       onSelectRow: (status, element) => {
@@ -668,9 +696,10 @@
     });
 
 
-    $('.shipper-lookup').lookup({
+    $('.shipper-lookup').lookupV3({
       title: 'shipper Lookup',
-      fileName: 'pelanggan',
+      fileName: 'pelangganV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -686,14 +715,14 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=pelanggan_id]').first().val('')
+        $('#crudForm [name=shipper_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
-    $('.tujuan-lookup').lookup({
+    $('.tujuan-lookup').lookupV3({
       title: 'Tujuan Lookup',
-      fileName: 'tujuan',
+      fileName: 'tujuanV3',
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -714,9 +743,10 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.container-lookup').lookup({
-      title: 'Jenis Order Lookup',
-      fileName: 'container',
+    $('.container-lookup').lookupV3({
+      title: 'Container Lookup',
+      fileName: 'containerV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -737,9 +767,10 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.jenisorder-lookup').lookup({
+    $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -756,6 +787,30 @@
       },
       onClear: (element) => {
         $('#crudForm [name=jenisorder_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.marketing-lookup').lookupV3({
+      title: 'Marketing Lookup',
+      fileName: 'marketingV3',
+      labelColumn: false,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (marketing, element) => {
+        $('#crudForm [name=marketing_id]').first().val(marketing.id)
+        marketingId = marketing.id
+        element.val(marketing.kodemarketing)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=marketing_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
