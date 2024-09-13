@@ -159,8 +159,6 @@
             let nospedit = [];
             let nocontedit = [];
             let nocont2edit = [];
-            let nosealedit = [];
-            let noseal2edit = [];
             $.each(selectedRows, function(index, value) {
                 dataEditSp = $("#tableEditSp").jqGrid("getLocalRow", value);
 
@@ -168,8 +166,6 @@
                 nospedit.push(dataEditSp.nospedit)
                 nocontedit.push(dataEditSp.nocontedit)
                 nocont2edit.push(dataEditSp.nocont2edit)
-                nosealedit.push(dataEditSp.nosealedit)
-                noseal2edit.push(dataEditSp.noseal2edit)
             });
 
             let requestDataTrip = {
@@ -177,8 +173,6 @@
                 'nosp': nospedit,
                 'nocont': nocontedit,
                 'nocont2': nocont2edit,
-                'noseal': nosealedit,
-                'noseal2': noseal2edit
             };
 
             data.push({
@@ -473,44 +467,6 @@
                         },
                     },
                     {
-                        label: "NO SEAL",
-                        name: "nosealedit",
-                        sortable: false,
-                        editable: true,
-                        editoptions: {
-                            dataEvents: [{
-                                type: "keyup",
-                                fn: function(event, rowObject) {
-
-                                    let localRow = $("#tableEditSp").jqGrid(
-                                        "getLocalRow",
-                                        rowObject.rowId
-                                    );
-                                    localRow.nosealedit = event.target.value;
-                                },
-                            }, ],
-                        },
-                    },
-                    {
-                        label: "NO SEAL 2",
-                        name: "noseal2edit",
-                        sortable: false,
-                        editable: true,
-                        editoptions: {
-                            dataEvents: [{
-                                type: "keyup",
-                                fn: function(event, rowObject) {
-
-                                    let localRow = $("#tableEditSp").jqGrid(
-                                        "getLocalRow",
-                                        rowObject.rowId
-                                    );
-                                    localRow.noseal2edit = event.target.value;
-                                },
-                            }, ],
-                        },
-                    },
-                    {
                         label: "NO SP",
                         name: "nospedit",
                         sortable: false,
@@ -528,6 +484,11 @@
                                 },
                             }, ],
                         },
+                    },
+                    {
+                        label: "SHIPPER",
+                        name: "pelangganedit",
+                        sortable: true,
                     },
                     {
                         label: "GANDENGAN",
