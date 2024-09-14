@@ -307,6 +307,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\InvoiceEmklHeaderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1824,6 +1825,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     
     Route::get('statusgandengantrado/index', [StatusGandenganTradoController::class, 'index']);
     Route::resource('statusgandengantrado', StatusGandenganTradoController::class);
+
+    // Route::get('invoiceemklheader/export', [InvoiceEmklHeaderController::class, 'export'])->name('invoiceemklheader.export');
+    Route::get('invoiceemklheader/report', [InvoiceEmklHeaderController::class, 'report'])->name('invoiceemklheader.report');
+    Route::get('invoiceemklheader/index', [InvoiceEmklHeaderController::class, 'index']);
+    Route::resource('invoiceemklheader', InvoiceEmklHeaderController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
