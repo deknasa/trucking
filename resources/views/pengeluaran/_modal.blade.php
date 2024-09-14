@@ -161,6 +161,7 @@
                       <th style="width: 180px; min-width: 180px;">Nominal</th>
                       <th style="width: 180px; min-width: 180px;">No warkat</th>
                       <th style="width: 150px; min-width: 150px;">Tgl jatuh tempo</th>
+                      <th class="tbl_ketranganJob" style="width: 210px; min-width: 210px;">Keterangan JOB</th>
                       <th class="tbl_noinvoice" style="width: 210px; min-width: 210px;">No Invoice</th>
                       <th class="tbl_bank" style="width: 210px; min-width: 210px;">Bank</th>
                       <th style="width: 10px; min-width: 10px;" class="aksiBmt tbl_aksi">Aksi</th>
@@ -606,10 +607,12 @@
           }
           if (accessCabang == 'BTG-EMKL') {
             $('.statusreimbursement').show()
+            $('.tbl_ketranganJob').show()
             $('.cabang').hide()
             $('.statusjenisbiaya').hide()
           } else {
             $('.statusreimbursement').hide()
+            $('.tbl_ketranganJob').hide()
             $('.cabang').hide()
             $('.statusjenisbiaya').hide()
           }
@@ -643,10 +646,12 @@
               }
               if (accessCabang == 'BTG-EMKL') {
                 $('.statusreimbursement').show()
+                $('.tbl_ketranganJob').show()
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
               } else {
                 $('.statusreimbursement').hide()
+                $('.tbl_ketranganJob').hide()
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
               }
@@ -735,12 +740,14 @@
 
             if (accessCabang == 'BTG-EMKL') {
               $('.statusreimbursement').show()
+              $('.tbl_ketranganJob').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
               }
             } else {
               $('.statusreimbursement').hide()
+              $('.tbl_ketranganJob').hide()
               $('.cabang').hide()
               $('.statusjenisbiaya').hide()
             }
@@ -877,12 +884,14 @@
             }
             if (accessCabang == 'BTG-EMKL') {
               $('.statusreimbursement').show()
+              $('.tbl_ketranganJob').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
               }
             } else {
               $('.statusreimbursement').hide()
+              $('.tbl_ketranganJob').hide()
               $('.cabang').hide()
               $('.statusjenisbiaya').hide()
             }
@@ -946,12 +955,14 @@
             }
 
             if (accessCabang == 'BTG-EMKL') {
+              $('.tbl_ketranganJob').show()
               $('.statusreimbursement').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
               }
             } else {
+              $('.tbl_ketranganJob').hide()
               $('.statusreimbursement').hide()
               $('.cabang').hide()
               $('.statusjenisbiaya').hide()
@@ -1193,6 +1204,9 @@
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                       </div>
                   </td>
+                  <td class="tbl_ketranganJob">
+                    <input type="text" id="ketranganJob_${index}" name="ketranganJob[]" class="form-control ketranganJob_modalinput_${index}">
+                  </td>
                   <td class="tbl_noinvoice">
                       <input type="text" name="noinvoice[]" class="form-control">
                   </td>
@@ -1290,6 +1304,9 @@
           <div class="input-group">
             <input type="text" name="tgljatuhtempo[]" class="form-control">   
           </div>
+        </td>
+        <td class="tbl_ketranganJob">
+          <input type="text" id="ketranganJob_${lastIndex}" name="ketranganJob[]" class="form-control ketranganJob_modalinput_${lastIndex}">
         </td>
         <td class="tbl_noinvoice">
           <div class="input-group">
@@ -1406,6 +1423,33 @@
     // })
 
 
+    $(`.ketranganJob_modalinput_${rowLookup}`).modalInput({
+      title: 'asfdfsdf',
+      fileName: 'jobtrip_nominal',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (data, element) => {
+        element.val(JSON.stringify(data));
+        element.data('currentValue', JSON.stringify(data))
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+
+        enableTglJatuhTempo($(`#crudForm`))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="coadebet[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
+      }
+    })
     $(`.akunpusat-lookup_${rowLookup}`).lookupV3({
       title: 'Kode Perk. Lookup',
       fileName: 'akunpusatV3',
