@@ -152,11 +152,25 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       selectedbukti = []
-      loadDataHeader('suratpengantar', {
-        nobukti: '',
-        proses: 'reload',
-        reload: true,
-      })
+
+      $('#jqGrid').jqGrid('setGridParam', {
+        page: 1,
+        postData: {
+
+          limit: 0,
+          page: 1,
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          nobukti: selectednobuktiheader,
+          proses: 'reload',
+          reload: true,
+          clearfilter:true,
+          nobukti:'',
+          filters: ''
+        }
+
+      }).trigger('reloadGrid')
+
       selectedRows = []
       $('#gs_').prop('checked', false)
     })
