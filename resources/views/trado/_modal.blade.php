@@ -587,6 +587,10 @@
     initDropzone(form.data('action'))
     initLookup()
     initDatepicker()
+
+    initAutoNumeric(form.find(`[name="nominalplusborongan"]`), {
+      minimumValue: 0
+    })
     // initSelect2(form.find(`
     //   [name="statusaktif"],
     //   [name="statusjenisplat"],
@@ -834,7 +838,10 @@
               element.val(value).trigger('change')
             } else if (element.hasClass('datepicker')) {
               element.val(dateFormat(value))
-            } else if (element.hasClass('autonumeric')) {
+            } else if (index =='nominalplusborongan') {
+              initAutoNumeric(form.find(`[name="nominalplusborongan"]`), {
+                minimumValue: 0
+              })
               let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
               autoNumericInput.set(value)
             } else {
