@@ -35,7 +35,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group agen">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   CUSTOMER <span class="text-danger">*</span>
@@ -44,6 +44,17 @@
               <div class="col-8 col-md-10">
                 <input type="hidden" name="agen_id" class="form-control">
                 <input type="text" name="agen" class="form-control agen-lookup">
+              </div>
+            </div>
+            <div class="row form-group pelanggan">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  PELANGGAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="pelanggan_id" class="form-control">
+                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
 
@@ -242,6 +253,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
   let agenId
+  let pelangganId
   let selectAll = false
   let isEditTgl
   let statusDebet = {}
@@ -404,6 +416,14 @@
       data.push({
         name: 'agen_id',
         value: form.find(`[name="agen_id"]`).val()
+      })
+      data.push({
+        name: 'pelanggan',
+        value: form.find(`[name="pelanggan"]`).val()
+      })
+      data.push({
+        name: 'pelanggan_id',
+        value: form.find(`[name="pelanggan_id"]`).val()
       })
       data.push({
         name: 'nowarkat',
@@ -636,7 +656,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'tgljatuhtempo' || indexes[0] == 'piutang_id' || indexes[0] == 'notadebet_nobukti') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'pelanggan' || indexes[0] == 'tgljatuhtempo' || indexes[0] == 'piutang_id' || indexes[0] == 'notadebet_nobukti') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -899,6 +919,14 @@
       .then(() => {
         if (selectedRows.length > 0) {
           clearSelectedRows()
+        }
+
+        if (accessCabang == 'BTG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
         }
         loadPelunasanGrid()
         enableTglJatuhTempo(form)
@@ -1661,21 +1689,21 @@
     })
   })
 
-  function getDataPelunasan(agenId, id) {
+  function getDataPelunasan(agenId, id, pilihan) {
     aksi = $('#crudForm').data('action')
     if (aksi == 'edit') {
       console.log(id)
       if (id != undefined) {
-        url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getPelunasanPiutang`
+        url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/${pilihan}/getPelunasanPiutang`
       } else {
-        url = `${apiUrl}pelunasanpiutangheader/${agenId}/getpiutang`
+        url = `${apiUrl}pelunasanpiutangheader/${agenId}/${pilihan}/getpiutang`
       }
     } else if (aksi == 'delete' || aksi == 'view') {
-      url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getDeletePelunasanPiutang`
+      url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/${pilihan}/getDeletePelunasanPiutang`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
-      url = `${apiUrl}pelunasanpiutangheader/${agenId}/getpiutang`
+      url = `${apiUrl}pelunasanpiutangheader/${agenId}/${pilihan}/getpiutang`
     }
 
     return new Promise((resolve, reject) => {
@@ -1925,6 +1953,13 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            if (accessCabang == 'BTG-EMKL') {
+              $('.agen').hide()
+              $('.pelanggan').show()
+            } else {
+              $('.agen').show()
+              $('.pelanggan').hide()
+            }
             enableTglJatuhTempo(form)
             enableNoWarkat(form)
             $('#crudModal').modal('show')
@@ -1934,6 +1969,8 @@
             }
             form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="pelanggan"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="pelanggan"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
@@ -1974,11 +2011,21 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+
+            if (accessCabang == 'BTG-EMKL') {
+              $('.agen').hide()
+              $('.pelanggan').show()
+            } else {
+              $('.agen').show()
+              $('.pelanggan').hide()
+            }
             enableTglJatuhTempo(form)
             enableNoWarkat(form)
             $('#crudModal').modal('show')
             form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="pelanggan"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="pelanggan"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
@@ -2043,6 +2090,13 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            if (accessCabang == 'BTG-EMKL') {
+              $('.agen').hide()
+              $('.pelanggan').show()
+            } else {
+              $('.agen').show()
+              $('.pelanggan').hide()
+            }
             enableTglJatuhTempo(form)
             enableNoWarkat(form)
             $('#crudModal').modal('show')
@@ -2104,6 +2158,9 @@
             if (index == 'agen') {
               element.data('current-value', value).prop('readonly', true)
             }
+            if (index == 'pelanggan') {
+              element.data('current-value', value).prop('readonly', true)
+            }
             // form.find(`[name="${index}"]:not([name="tglbukti"])`).addClass('disabled')
             if (form.data('action') === 'delete') {
               form.find('[name]').addClass('disabled')
@@ -2111,11 +2168,18 @@
             }
 
           })
-          let agenId_ = response.data.agen_id
-
+          let agenId_ = '';
+          let pilihan = '';
+          if (response.data.agen_id != 0) {
+            agenId_ = response.data.agen_id
+            pilihan = 'agen'
+          } else {
+            agenId_ = response.data.pelanggan_id
+            pilihan = 'pelanggan'
+          }
           loadPelunasanGrid();
 
-          getDataPelunasan(agenId_, Id).then((response) => {
+          getDataPelunasan(agenId_, Id, pilihan).then((response) => {
 
             let selectedId = []
             let totalBayar = 0
@@ -2711,14 +2775,14 @@
             selectedRowIds: []
           })
           .trigger("reloadGrid");
-          
+
         setTotalBayar()
         setTotalPotongan()
         setTotalLebihBayar()
         setTotalNominal()
         setTotalSisa()
 
-        getDataPelunasan(agen.id).then((response) => {
+        getDataPelunasan(agen.id, '', 'agen').then((response) => {
 
           $("#tablePelunasan")[0].p.selectedRowIds = [];
           setTimeout(() => {
@@ -2751,6 +2815,83 @@
         //   .trigger("reloadGrid");
 
         topAgen = 0
+        console.log('onclear', $("#tablePelunasan").jqGrid('getGridParam', 'selectedRowIds'))
+        // setTimeout(() => {
+        $("#tablePelunasan")[0].p.selectedRowIds = [];
+        $('#tablePelunasan').jqGrid("clearGridData");
+        // }, 100);
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_sisa"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_nominal"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text('')
+
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.pelanggan-lookup').lookup({
+      title: 'Pelanggan Lookup',
+      fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+        pelangganId = pelanggan.id
+        element.val(pelanggan.namapelanggan)
+        // getPiutang(pelanggan.id)
+        $('#btnSubmit').prop('disabled', true)
+        $('#btnSaveAdd').prop('disabled', true)
+        $('#tablePelunasan').jqGrid("clearGridData");
+        $("#tablePelunasan")
+          .jqGrid("setGridParam", {
+            selectedRowIds: []
+          })
+          .trigger("reloadGrid");
+
+        setTotalBayar()
+        setTotalPotongan()
+        setTotalLebihBayar()
+        setTotalNominal()
+        setTotalSisa()
+
+        getDataPelunasan(pelanggan.id, '', 'pelanggan').then((response) => {
+
+          $("#tablePelunasan")[0].p.selectedRowIds = [];
+          setTimeout(() => {
+
+            $("#tablePelunasan")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
+          }, 100);
+
+        });
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pelanggan_id]').first().val('')
+        // $("#tablePelunasan")
+        //   .jqGrid("setGridParam", {
+        //     selectedRowIds: []
+        //   })
+        //   .trigger("reloadGrid");
+
         console.log('onclear', $("#tablePelunasan").jqGrid('getGridParam', 'selectedRowIds'))
         // setTimeout(() => {
         $("#tablePelunasan")[0].p.selectedRowIds = [];
