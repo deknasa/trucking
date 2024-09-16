@@ -72,6 +72,7 @@ use App\Http\Controllers\UpahSupirController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\JenisOrderController;
+use App\Http\Controllers\BiayaEmklController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\LogAbsensiController;
 
@@ -679,6 +680,14 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('jenisorder/export', [JenisOrderController::class, 'export'])->name('jenisorder.export');
     Route::get('jenisorder/report', [JenisOrderController::class, 'report'])->name('jenisorder.report');
     Route::resource('jenisorder', JenisOrderController::class);
+
+    Route::get('biayaemkl/field_length', [BiayaEmklController::class, 'fieldLength'])->name('biayaemkl.field_length');
+    Route::get('biayaemkl/{id}/delete', [BiayaEmklController::class, 'delete'])->name('biayaemkl.delete');
+    Route::get('biayaemkl/get', [BiayaEmklController::class, 'get'])->name('biayaemkl.get');
+    Route::get('biayaemkl/index', [BiayaEmklController::class, 'index']);
+    Route::get('biayaemkl/export', [BiayaEmklController::class, 'export'])->name('biayaemkl.export');
+    Route::get('biayaemkl/report', [BiayaEmklController::class, 'report'])->name('biayaemkl.report');
+    Route::resource('biayaemkl', BiayaEmklController::class);
 
     Route::get('jenistrado/field_length', [JenisTradoController::class, 'fieldLength'])->name('jenistrado.field_length');
     Route::get('jenistrado/{id}/delete', [JenisTradoController::class, 'delete'])->name('jenistrado.delete');
