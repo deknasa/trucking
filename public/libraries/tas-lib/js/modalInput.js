@@ -147,7 +147,7 @@ $.fn.modalInput = function (options) {
 			.find(lookupModal)
 			.on("click", ".savemodal-input",function () {
 				let data = $('#input-modal-form').serializeArray()
-				
+				console.log(data);
 				handleSelectedRow(serializeToJson(data), lookupModal, element)
 			});
 
@@ -161,7 +161,7 @@ $.fn.modalInput = function (options) {
 		data.forEach(item => {
 			if (item.name === "job_emkl[]") {
 				jobEmklArray.push(item.value);
-			} else if (item.name === "nominal[]") {
+			} else if (item.name === "nominal_job[]") {
 				nominalArray.push(item.value);
 			}
 		});
