@@ -44,7 +44,7 @@
         let detailRow = (`
         <tr>
             <td>
-                <input type="text" name="job_emkl[]" class="form-control ">
+                <input type="text" name="job_emkl[]" id="jobemkl-${indexModalRow}" class="form-control jobemkl-lookup_${indexModalRow}">
             </td>
             
             <td>
@@ -57,11 +57,11 @@
         </tr>`)
                         
         $('#bodytTableModal tbody').append(detailRow)
-
+        initModalLookup(indexModalRow)
     }
 
 
-    function initLookupDetail(index) {
+    function initModalLookup(index) {
         let rowLookup = index
 
     $(`.jobemkl-lookup_${rowLookup}`).lookupV3({
@@ -122,11 +122,11 @@
 
             detailRow.find(`[name="job_emkl[]"]`).val(detail.job_emkl)
             detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+            detailRow.find(`[name="job_emkl[]"]`)..data('currentValue',detail.job_emkl)
             
             $('#bodytTableModal tbody').append(detailRow)
 
-            initLookupDetail(index);
-            lastIndex = index;
+            initModalLookup(index);
             
           })
 

@@ -217,6 +217,7 @@
   let bankId
   let isEditTgl
   let cabangPusat
+  let indexModalRow = 0
 
   $(document).ready(function() {
 
@@ -1228,6 +1229,7 @@
             detailRow.find(`[name="noinvoice[]"]`).val(detail.noinvoice)
             detailRow.find(`[name="bank_detail[]"]`).val(detail.bank)
             detailRow.find(`[name="ketranganJob[]"]`).val(detail.ketranganJob)
+            detailRow.find(`[name="ketranganJob[]"]`).data('currentValue',detail.ketranganJob)
 
             initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 
@@ -1444,11 +1446,8 @@
         enableTglJatuhTempo($(`#crudForm`))
       },
       onClear: (element) => {
-        element.parents('td').find(`[name="coadebet[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
-
-        enableTglJatuhTempo($(`#crudForm`))
       }
     })
     $(`.akunpusat-lookup_${rowLookup}`).lookupV3({
