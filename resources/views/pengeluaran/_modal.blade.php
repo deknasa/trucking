@@ -1227,6 +1227,7 @@
             detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
             detailRow.find(`[name="noinvoice[]"]`).val(detail.noinvoice)
             detailRow.find(`[name="bank_detail[]"]`).val(detail.bank)
+            detailRow.find(`[name="ketranganJob[]"]`).val(detail.ketranganJob)
 
             initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 

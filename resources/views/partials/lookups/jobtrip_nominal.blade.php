@@ -3,8 +3,8 @@
     <table class="table table-bordered table-bindkeys" id="bodytTableModal" style="width: 1300px;">
         <thead>
             <tr>
-                <th width="3%">KEY <span class="text-danger">*</span></th>
-                <th width="8%">VALUE <span class="text-danger">*</span></th>
+                <th width="3%">Job <span class="text-danger">*</span></th>
+                <th width="8%">Nominal <span class="text-danger">*</span></th>
                 <th width="2%" class="tbl_aksi">Aksi</th>
             </tr>
         </thead>
@@ -61,6 +61,41 @@
     }
 
 
+    function initLookupDetail(index) {
+        let rowLookup = index
+
+    $(`.jobemkl-lookup_${rowLookup}`).lookupV3({
+      title: 'Job Emkl Lookup',
+      fileName: 'jobemklV3',
+      searching: ['nobukti', 'shipper'],
+      labelColumn: true,
+      extendSize: md_extendSize_3,
+      multiColumnSize: true,
+      filterToolbar: true,
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (jobemkl, element) => {
+        element.parents('td').find(`[name="nobukti[]"]`).val(jobemkl.coa)
+        element.val(jobemkl.nobukti)
+        element.data('currentValue', element.val())
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="nobukti[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+
+      }
+    })        
+    }
 
     function showDataModal(data) {
         // Ganti entitas &quot; dengan tanda kutip "
@@ -73,7 +108,7 @@
             let detailRow = $(`
         <tr>
             <td>
-                <input type="text" name="job_emkl[]" class="form-control ">
+                <input type="text" name="job_emkl[]" class="form-control jobemkl-lookup_${index}">
             </td>
             
             <td>
@@ -89,6 +124,9 @@
             detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
             
             $('#bodytTableModal tbody').append(detailRow)
+
+            initLookupDetail(index);
+            lastIndex = index;
             
           })
 
