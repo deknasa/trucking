@@ -422,6 +422,7 @@
   <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookup.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookupMaster.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupMaster.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookupV3.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupV3.js')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/modalInput.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\modalInput.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\mains.js')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/MonthPicker.min.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\MonthPicker.min.js')) }}"></script>
   {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script> --}}
