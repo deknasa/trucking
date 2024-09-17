@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trucking | Log in</title>
+    <title>{{ ($parametercabang->text != 'BITUNG-EMKL') ? 'Trucking' : 'EMKL';  }} | Log in</title>
     <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -42,7 +42,7 @@
         <div class="login-logo">
             <img class="mx-auto d-block" src="{{ asset('libraries/tas-lib/img/logo-min.png') }}" width="150" height="150">
             <h5 style="font-family: 'Open Sans Condensed';">PT. TRANSPORINDO AGUNG SEJAHTERA</h5>
-            <p style="font-family: 'Open Sans Condensed'; font-size:1rem" class="text-success">TRUCKING {{ $parametercabang->text }}</p>
+            <p style="font-family: 'Open Sans Condensed'; font-size:1rem" class="text-success">{{ ($parametercabang->text != 'BITUNG-EMKL') ? 'TRUCKING '.$parametercabang->text : $parametercabang->text;  }}</p>
         </div>
         <div class="card">
             <div class="card-body login-card-body">
