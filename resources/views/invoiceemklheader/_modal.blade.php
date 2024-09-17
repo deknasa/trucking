@@ -184,6 +184,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let isEditTgl
+  let indexModalRow =0
 
   $(document).ready(function() {
 
@@ -305,6 +306,7 @@
       job_id = []
       nojobemkl = []
       keterangan_detail = []
+      keterangan_biaya = []
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedNominal = (dataInvoice.nominal == undefined) ? 0 : dataInvoice.nominal;
@@ -314,12 +316,14 @@
         job_id.push(dataInvoice.id)
         nojobemkl.push(dataInvoice.nojobemkl)
         keterangan_detail.push(dataInvoice.keterangan_detail)
+        keterangan_biaya.push(dataInvoice.keterangan_biaya)
       });
       let requestData = {
         'nominal': nominal,
         'job_id': job_id,
         'nojobemkl': nojobemkl,
-        'keterangan_detail': keterangan_detail
+        'keterangan_detail': keterangan_detail,
+        'keterangan_biaya': keterangan_biaya
       };
       data.push({
         name: 'detail',
@@ -961,6 +965,44 @@
                 },
               }, ],
             },
+          },
+          {
+            label: "keterangan Biaya",
+            name: "keterangan_biaya",
+            sortable: false,
+            editable: true,
+            editoptions: {
+              autocomplete: 'off',
+              class: 'keteranganBiaya_modalinput',
+              dataInit: function(element) {
+                $('.keteranganBiaya_modalinput').last().modalInput({
+                  title: 'Keterangan Biaya Job',
+                  fileName: 'jobbiaya_nominal',
+                  beforeProcess: function(test) {
+                    // var levelcoa = $(`#levelcoa`).val();
+                    this.postData = {
+                      Aktif: 'AKTIF',
+                    }
+                  },
+                  onSelectRow: (data, element) => {
+                    let rowId = $("#tableInvoice").jqGrid('getGridParam', 'selrow');
+
+                    $("#jqGrid").jqGrid('setCell', rowId, 'keterangan_biaya', JSON.stringify(data));
+                    element.val(JSON.stringify(data));
+                    element.data('currentValue', JSON.stringify(data))
+                  },
+                  onCancel: (element) => {
+                    element.val(element.data('currentValue'))
+
+                  },
+                  onClear: (element) => {
+                    element.val('')
+                    element.data('currentValue', element.val())
+                  }
+                })
+              }
+            },
+            width:"500px"
           },
           {
             label: "SHIPPER",
