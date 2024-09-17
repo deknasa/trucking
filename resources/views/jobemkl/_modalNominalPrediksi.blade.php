@@ -36,6 +36,19 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Keterangan Biaya <span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="keteranganBiaya" id="keteranganBiaya" style="text-align:right" class="form-control  keteranganBiaya_modalinput">
+                </div>
+              </div>
+            </div>
+
             
           </div>
           <div class="modal-footer justify-content-start">
@@ -59,11 +72,11 @@
   let modalBodyApprovalTanpa = $('#crudModalNominalPrediksi').find('.modal-body').html()
   let showGambar;
   let showKeterangan;
+  let indexModalRow=0;
   
   $(document).ready(function() {
     $('#btnSubmitApprovalTanpa').click(function(event) {
       event.preventDefault()
-
       let method
       let url
       let form = $('#crudFormNominalPrediksi')
@@ -234,8 +247,9 @@
             if (index == 'nobukti') {
               element.prop('readonly', true)
             }
+          
           })
-
+          initLookupDetail();
           resolve(response.data)
         },
         error: error => {
@@ -244,6 +258,32 @@
       })
     })
   }
+  function initLookupDetail() {
+    $(`.keteranganBiaya_modalinput`).modalInput({
+      title: 'Keterangan Biaya Job',
+      fileName: 'jobbiaya_nominal',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (data, element) => {
+        element.val(JSON.stringify(data));
+        element.data('currentValue', JSON.stringify(data))
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
+  }
+    
 
 
   function cekValidasiTanpa(Id) {
