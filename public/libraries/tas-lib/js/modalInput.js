@@ -156,6 +156,9 @@ $.fn.modalInput = function (options) {
 	function serializeToJson(data) {
 		let jobEmklArray = [];
 		let nominalArray = [];
+		let biayaArray = [];
+		let nominalBiayaArray = [];
+		let keteranganArray = [];
 		
 		// Pisahkan berdasarkan nama "job_emkl[]" dan "nominal[]"
 		data.forEach(item => {
@@ -163,16 +166,35 @@ $.fn.modalInput = function (options) {
 				jobEmklArray.push(item.value);
 			} else if (item.name === "nominal_job[]") {
 				nominalArray.push(item.value);
+			} else if (item.name === "biaya_emkl[]") {
+				biayaArray.push(item.value);
+			} else if (item.name === "nominal_biaya[]") {
+				nominalBiayaArray.push(item.value);
+			} else if (item.name === "keterangan_biaya[]") {
+				keteranganArray.push(item.value);
 			}
 		});
 		
 		// Gabungkan kembali berdasarkan indeks yang sama
-		let result = jobEmklArray.map((job, index) => {
-			return {
-				"job_emkl": job,
-				"nominal": nominalArray[index]
-			};
-		});
+		let result;
+		if (jobEmklArray.length) {
+			result = jobEmklArray.map((job, index) => {
+				return {
+					"job_emkl": job,
+					"nominal": nominalArray[index]
+				};
+			});
+	
+		} else {
+			result = biayaArray.map((biaya, index) => {
+				return {
+					"biaya_emkl": biaya,
+					"nominal_biaya": nominalBiayaArray[index],
+					"keterangan_biaya": keteranganArray[index]
+				};
+			});
+	
+		}
 
 		return result;
 	}
