@@ -414,7 +414,10 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             // showSuccessDialog(response.message, response.data.nobukti)
-            createInvoiceHeader()
+            let currTglbukti = $('#crudForm [name=tglbukti]').val();
+            createInvoiceHeader(true)
+
+            $('#crudForm').find('[name=tglbukti]').val(currTglbukti).trigger('change');
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             $("#tableInvoice")[0].p.selectedRowIds = [];
             $('#tableInvoice').jqGrid("clearGridData");
@@ -573,7 +576,7 @@
       })
   }
 
-  function createInvoiceHeader() {
+  function createInvoiceHeader(isSaveAdd = false) {
     let form = $('#crudForm')
 
     $('#crudModal').find('#crudForm').trigger('reset')
@@ -600,7 +603,9 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        if (!isSaveAdd) {
+          $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        }
         $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglterima]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

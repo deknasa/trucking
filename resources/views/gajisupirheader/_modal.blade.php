@@ -3051,14 +3051,36 @@
                 iconSet: 'fontAwesome',
                 datatype: "local",
                 colModel: [{
-                        label: '',
-                        name: '',
+                        label: "",
+                        name: "",
                         width: 40,
                         align: 'center',
                         sortable: false,
-                        formatter: 'checkbox',
-                        search: false,
-                        editable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+                                $(element).addClass('checkbox-selectall')
+                                if (disabled == '') {
+                                    $(element).on('click', function() {
+                                        if ($(this).is(':checked')) {
+                                            selectAllRows()
+                                        } else {
+                                            clearSelectedRows()
+                                        }
+                                    })
+                                } else {
+                                    $(element).attr('disabled', true)
+                                }
+
+                            }
+                        },
                         formatter: (value, rowOptions, rowData) => {
                             return `<input type="checkbox" class="checkbox-jqgrid" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this, ${rowData.id})">`
                         },
@@ -3672,7 +3694,9 @@
         selectedKetBiaya = [];
         selectedTolSupir = [];
         selectedRitasi = [];
+        $("#rekapRincian")[0].p.selectedRowIds = [];
         $('#rekapRincian').trigger('reloadGrid')
+        hitung()
     }
 
     function getAllTrip(aksi, element = null) {
@@ -3748,58 +3772,19 @@
 
     }
 
-    function selectAllRows(supirId, dari, sampai, aksi, element = null) {
-        if (aksi == 'edit') {
-            ricId = $(`#crudForm`).find(`[name="id"]`).val()
-            url = `${ricId}/getEditTrip`
-        } else {
-            url = 'getTrip'
-        }
+    function selectAllRows() {
+        let originalData = $("#rekapRincian").getGridParam("data");
+        let getSelectedRows = originalData.map((data) => data.id);
+        $("#rekapRincian")[0].p.selectedRowIds = [];
 
-        $.ajax({
-            url: `${apiUrl}gajisupirheader/${url}`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: {
-                limit: 0,
-                supir_id: supirId,
-                supir: $('#crudForm').find(`[name="supir"]`).val(),
-                tgldari: dari,
-                tglsampai: sampai,
-                sortIndex: sortnameRincian,
-                aksi: aksi
-            },
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: (response) => {
+        setTimeout(() => {
+            $("#rekapRincian")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: getSelectedRows
+                })
+                .trigger("reloadGrid");
 
-                selectedRows = response.data.map((data) => data.id)
-                selectedNobukti = response.data.map((data) => data.nobuktitrip)
-                selectedGajiSupir = response.data.map((data) => data.gajisupir)
-                selectedGajiKenek = response.data.map((data) => data.gajikenek)
-                selectedKomisiSupir = response.data.map((data) => data.komisisupir)
-                selectedUpahRitasi = response.data.map((data) => data.upahritasi)
-                selectedStatusRitasi = response.data.map((data) => data.statusritasi)
-                selectedBiayaExtra = response.data.map((data) => data.biayaextra)
-                selectedKetBiaya = response.data.map((data) => data.keteranganbiaya)
-                selectedTolSupir = response.data.map((data) => data.tolsupir)
-                selectedRitasi = response.data.map((data) => data.ritasi_nobukti)
-
-                $('#rekapRincian').jqGrid('setGridParam', {
-                    url: `${apiUrl}gajisupirheader/${url}`,
-                    postData: {
-                        supir_id: $('#crudForm').find('[name=supir_id]').val(),
-                        supir: $('#crudForm').find(`[name="supir"]`).val(),
-                        tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                        aksi: aksi
-                    },
-                    datatype: "json"
-                }).trigger('reloadGrid');
-                // hitungNominal()
-                hitung()
-            }
+            hitung(getSelectedRows)
         })
 
     }
