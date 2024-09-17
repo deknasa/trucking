@@ -142,7 +142,14 @@ $.fn.modalInput = function (options) {
 			.find(lookupModal)
 			.on("click", ".savemodal-input",function () {
 				let data = $('#input-modal-form').serializeArray()
-				console.log(data);
+				$('#input-modal-form').find(`[name="nominal_job[]"`).each((index, element) => {
+					data.filter((row) => row.name === 'nominal_job[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_job[]"]`)[index])
+				})
+				$('#input-modal-form').find(`[name="nominal_biaya[]"`).each((index, element) => {
+					data.filter((row) => row.name === 'nominal_biaya[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_biaya[]"]`)[index])
+				})
+				
+			
 				handleSelectedRow(serializeToJson(data), lookupModal, element)
 			});
 
