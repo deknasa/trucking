@@ -6,7 +6,7 @@
   </ul>
 
   <img src="{{ asset('libraries/tas-lib/img/taslogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="width: 25px; margin-right: 5px;">
-  <strong>TAS Trucking System {{ session('cabang') }}</strong>
+  <strong>TAS {{ (session('cabang') != 'BITUNG-EMKL') ? 'Trucking' : ''; }} System {{ session('cabang') }}</strong>
 
   <ul class="navbar-nav ml-auto">
     <li class="nav-item mr-3">
