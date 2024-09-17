@@ -921,7 +921,7 @@
           clearSelectedRows()
         }
 
-        if (accessCabang == 'BTG-EMKL') {
+        if (accessCabang == 'BITUNG-EMKL') {
           $('.agen').hide()
           $('.pelanggan').show()
         } else {
@@ -1953,7 +1953,7 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
-            if (accessCabang == 'BTG-EMKL') {
+            if (accessCabang == 'BITUNG-EMKL') {
               $('.agen').hide()
               $('.pelanggan').show()
             } else {
@@ -2012,7 +2012,7 @@
               clearSelectedRows()
             }
 
-            if (accessCabang == 'BTG-EMKL') {
+            if (accessCabang == 'BITUNG-EMKL') {
               $('.agen').hide()
               $('.pelanggan').show()
             } else {
@@ -2090,7 +2090,7 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
-            if (accessCabang == 'BTG-EMKL') {
+            if (accessCabang == 'BITUNG-EMKL') {
               $('.agen').hide()
               $('.pelanggan').show()
             } else {

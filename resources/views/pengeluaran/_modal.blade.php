@@ -606,7 +606,7 @@
           } else {
             $('.bmt').hide()
           }
-          if (accessCabang == 'BTG-EMKL') {
+          if (accessCabang == 'BITUNG-EMKL') {
             $('.statusreimbursement').show()
             $('.tbl_ketranganJob').show()
             $('.cabang').hide()
@@ -645,7 +645,7 @@
               } else {
                 $('.bmt').hide()
               }
-              if (accessCabang == 'BTG-EMKL') {
+              if (accessCabang == 'BITUNG-EMKL') {
                 $('.statusreimbursement').show()
                 $('.tbl_ketranganJob').show()
                 $('.cabang').hide()
@@ -739,7 +739,7 @@
               clearSelectedRows()
             }
 
-            if (accessCabang == 'BTG-EMKL') {
+            if (accessCabang == 'BITUNG-EMKL') {
               $('.statusreimbursement').show()
               $('.tbl_ketranganJob').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
@@ -883,7 +883,7 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
-            if (accessCabang == 'BTG-EMKL') {
+            if (accessCabang == 'BITUNG-EMKL') {
               $('.statusreimbursement').show()
               $('.tbl_ketranganJob').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
@@ -955,7 +955,7 @@
               clearSelectedRows()
             }
 
-            if (accessCabang == 'BTG-EMKL') {
+            if (accessCabang == 'BITUNG-EMKL') {
               $('.tbl_ketranganJob').show()
               $('.statusreimbursement').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
