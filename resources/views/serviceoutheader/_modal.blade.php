@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
                                 <input type="hidden" name="trado_id">
-                                <input type="text" name="trado" class="form-control trado-lookup">
+                                <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                             </div>
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
@@ -738,9 +738,13 @@
 
     function initLookup() {
 
-        $('.trado-lookup').lookup({
+        $('.trado-lookup').lookupV3({
             title: 'trado Lookup',
-            fileName: 'trado',
+            fileName: 'tradoV3',
+            searching: ['kodetrado','kmakhirgantioli','merek','norangka','nomesin','nostnk' ],
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
