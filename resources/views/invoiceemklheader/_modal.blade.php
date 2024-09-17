@@ -987,7 +987,7 @@
                   onSelectRow: (data, element) => {
                     let rowId = $("#tableInvoice").jqGrid('getGridParam', 'selrow');
 
-                    $("#jqGrid").jqGrid('setCell', rowId, 'keterangan_biaya', JSON.stringify(data));
+                    $("#tableInvoice").jqGrid('setCell', rowId, 'keterangan_biaya', JSON.stringify(data));
                     element.val(JSON.stringify(data));
                     element.data('currentValue', JSON.stringify(data))
                   },
