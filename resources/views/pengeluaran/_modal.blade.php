@@ -1427,7 +1427,7 @@
 
 
     $(`.ketranganJob_modalinput_${rowLookup}`).modalInput({
-      title: 'asfdfsdf',
+      title: 'Job EMkl',
       fileName: 'jobtrip_nominal',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
