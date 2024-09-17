@@ -37,23 +37,18 @@ $.fn.modalInput = function (options) {
 		let element = $(this);
 
 		element.data("hasLookup", true);
-
+		element.hide()
 		element.wrap('<div class="input-group"></div>').after(`
-			${
-				settings.onClear
-					? `<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times-circle" style="font-size: 15px; margin-top:2px; color:red"></i></button>`
-					: ``
-			}
 			
-			<div class="input-group-append">
-				<button class="btn btn-easyui lookup-toggler" type="button">
-					<i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px"></i>
+			<div class="input-app-data">
+				<button class="btn btn-success lookup-toggler" type="button">
+					<i class="far fa-window-maximize text-white text-easyui-dark" style="font-size: 12.25px"> ${settings.title}</i>
 				</button>
 			</div>
 		`);
 
 		element
-			.siblings(".input-group-append")
+			.siblings(".input-app-data")
 			.find(".lookup-toggler")
 			.click(async function () {
 				activateLookup(element, element.val());
@@ -96,7 +91,7 @@ $.fn.modalInput = function (options) {
               <div class="modal-footer">
                 <div class="mr-auto">
                   <button type="button" class="btn btn-success savemodal-input"  aria-label="save">
-                  save
+                  Save
                   </button>
                   <button type="button" class="btn btn-secondary close-button" data-dismiss="modal" aria-label="Close">
                   Close
