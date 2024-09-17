@@ -48,7 +48,7 @@
             </td>
             
             <td>
-                <input type="text" name="nominal_job[]" id="nominal_job_${indexModalRow}" class="form-control ">
+                <input type="text" name="nominal_job[]" style="text-align:right" id="nominal_job_${indexModalRow}" class="form-control nominal">
             </td>
             
             <td class="tbl_aksi">
@@ -115,7 +115,7 @@
             </td>
             
             <td>
-                <input type="text" name="nominal_job[]" id="nominal_job_${index}" class="form-control ">
+                <input type="text" name="nominal_job[]" style="text-align:right" id="nominal_job_${index}" class="form-control nominal">
             </td>
             
             <td class="tbl_aksi">

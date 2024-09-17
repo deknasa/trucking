@@ -49,7 +49,7 @@
             </td>
             
             <td>
-                <input type="text" name="nominal_biaya[]" id="nominal_biaya_${indexModalRow}" class="form-control ">
+                <input type="text" name="nominal_biaya[]" style="text-align:right" id="nominal_biaya_${indexModalRow}" class="form-control ">
             </td>
             <td>
                 <input type="text" name="keterangan_biaya[]" id="keterangan_biaya_${indexModalRow}" class="form-control ">
@@ -119,7 +119,7 @@
             </td>
             
             <td>
-                <input type="text" name="nominal_biaya[]" id="nominal_biaya_${index}" class="form-control ">
+                <input type="text" name="nominal_biaya[]" style="text-align:right" id="nominal_biaya_${index}" class="form-control ">
             </td>
             <td>
                 <input type="text" name="keterangan_biaya[]" id="keterangan_biaya_${index}" class="form-control ">
@@ -134,7 +134,8 @@
             detailRow.find(`[name="biaya_emkl[]"]`).data('currentValue',detail.biaya_emkl)
             
             $('#bodytTableModal tbody').append(detailRow)
-            detailRow.find(`[name="nominal_biaya[]"]`).val(detail.nominal)
+            detailRow.find(`[name="nominal_biaya[]"]`).val(detail.nominal_biaya)
+            detailRow.find(`[name="keterangan_biaya[]"]`).val(detail.keterangan_biaya)
             initAutoNumericMinus($(`#nominal_biaya_${index}`))
             initModalLookup(index);
             
