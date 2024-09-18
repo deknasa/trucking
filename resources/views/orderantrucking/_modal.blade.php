@@ -1229,6 +1229,7 @@
         this.postData = {
           Aktif: 'AKTIF',
           Invoice: 'UTAMA',
+          from: 'inputtrip'
         }
 
       },

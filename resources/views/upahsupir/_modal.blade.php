@@ -209,7 +209,7 @@
             </div>
 
 
-            <div class="row form-group"  style="display: none">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   TGL MULAI BERLAKU <span class="text-danger">*</span>
@@ -1488,9 +1488,10 @@
           //   minimumValue: 0
           // })
           $('#detailList tbody').html('')
-          $.each(response.detail, (index, detail) => {
-            // $.each(response.data.upahsupir_rincian, (index, detail) => {
-            let detailRow = $(`
+          if (response.detail.length > 0) {
+            $.each(response.detail, (index, detail) => {
+              // $.each(response.data.upahsupir_rincian, (index, detail) => {
+              let detailRow = $(`
               <tr>
                 <td></td>
                 <td>
@@ -1520,27 +1521,31 @@
               </tr>
             `)
 
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
-            detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
-            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-            detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-            detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-            detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-            detailRow.find(`[name="liter[]"]`).val(detail.liter);
+              detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+              detailRow.find(`[name="container[]"]`).val(detail.container)
+              detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
+              detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
+              detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+              detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
+              detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
+              detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
+              detailRow.find(`[name="liter[]"]`).val(detail.liter);
 
-            $('#detailList tbody').append(detailRow)
+              $('#detailList tbody').append(detailRow)
 
-            initAutoNumeric(detailRow.find('.autonumeric'), {
-              minimumValue: 0
+              initAutoNumeric(detailRow.find('.autonumeric'), {
+                minimumValue: 0
+              })
+
+              setNominalSupir()
+              setNominalKenek()
+              setNominalKomisi()
+              setNominalTol()
             })
 
-            setNominalSupir()
-            setNominalKenek()
-            setNominalKomisi()
-            setNominalTol()
-          })
+          } else {
+            setUpRow()
+          }
           // setuprowshow(userId);
 
           setRowNumbers()
@@ -1960,7 +1965,7 @@
     $('.upahsupir-lookup').lookupV3({
       title: 'Upah Supir Lookup',
       fileName: 'upahsupirV3',
-      searching: ['kotasampai_id','kotadari_id','penyesuaian','jarak','zona_id'],
+      searching: ['kotasampai_id', 'kotadari_id', 'penyesuaian', 'jarak', 'zona_id'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
@@ -2070,7 +2075,7 @@
     $('.tarif-lookup').lookupV3({
       title: 'Tarif Lookup',
       fileName: 'tarifV3',
-      searching: ['upahsupir','tujuan','penyesuaian'],
+      searching: ['upahsupir', 'tujuan', 'penyesuaian'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
@@ -2123,7 +2128,7 @@
     $('.zonadari-lookup').lookupV3({
       title: 'Zona Dari Lookup',
       fileName: 'zonaV3',
-      searching: ['zona','keterangan'],
+      searching: ['zona', 'keterangan'],
       labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -2150,7 +2155,7 @@
     $('.zonasampai-lookup').lookupV3({
       title: 'Zona Sampai Lookup',
       fileName: 'zonaV3',
-      searching: ['zona','keterangan'],
+      searching: ['zona', 'keterangan'],
       labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -2177,7 +2182,7 @@
     $('.tarifmuatan-lookup').lookupV3({
       title: 'Tarif Muatan Lookup',
       fileName: 'tarifV3',
-      searching: ['upahsupir','tujuan','penyesuaian'],
+      searching: ['upahsupir', 'tujuan', 'penyesuaian'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
@@ -2203,7 +2208,7 @@
     $('.tarifbongkaran-lookup').lookupV3({
       title: 'Tarif Bongkaran Lookup',
       fileName: 'tarifV3',
-      searching: ['upahsupir','tujuan','penyesuaian'],
+      searching: ['upahsupir', 'tujuan', 'penyesuaian'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
@@ -2229,7 +2234,7 @@
     $('.tarifexport-lookup').lookupV3({
       title: 'Tarif Export Lookup',
       fileName: 'tarifV3',
-      searching: ['upahsupir','tujuan','penyesuaian'],
+      searching: ['upahsupir', 'tujuan', 'penyesuaian'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
@@ -2255,7 +2260,7 @@
     $('.tarifimport-lookup').lookupV3({
       title: 'Tarif Import Lookup',
       fileName: 'tarifV3',
-      searching: ['upahsupir','tujuan','penyesuaian'],
+      searching: ['upahsupir', 'tujuan', 'penyesuaian'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
@@ -2343,7 +2348,7 @@
     $('.zona-lookup').lookupV3({
       title: 'Zona Lookup',
       fileName: 'zonaV3',
-      searching: ['zona','keterangan'],
+      searching: ['zona', 'keterangan'],
       labelColumn: true,
       beforeProcess: function(test) {
         this.postData = {
