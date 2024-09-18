@@ -553,6 +553,14 @@
                     innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
                     class: 'btn btn-purple btn-sm mr-1 ',
                     item: [{
+                            id: 'approveun',
+                            text: "APPROVAL/UN Data",
+                            color: `<?php echo $combo['listbtn']->btn->approvaldata; ?>`,
+                            hidden: (!`{{ $myAuth->hasPermission('customer', 'approval') }}`),
+                            onClick: () => {
+                                approve()
+                            }
+                        }, {
                             id: 'approvalaktif',
                             text: "APPROVAL AKTIF",
                             color: `<?php echo $combo['listbtn']->btn->approvalaktif; ?>`,
@@ -654,6 +662,12 @@
             if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalaktif') }}`) {
                 hakApporveCount--
                 $('#approvalaktif').hide()
+            } 
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
+                hakApporveCount--
+                $('#approveun').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
