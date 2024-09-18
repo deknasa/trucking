@@ -2630,6 +2630,7 @@
 
           Aktif: 'AKTIF',
           Invoice: 'UTAMA',
+          from: 'inputtrip'
         }
       },
       onSelectRow: (agen, element) => {

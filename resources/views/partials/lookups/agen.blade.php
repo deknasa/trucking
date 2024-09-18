@@ -11,6 +11,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         invoice: `{!! $Invoice ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
       },       
       idPrefix: 'agenLookup',
       colModel: [{
@@ -18,7 +19,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
