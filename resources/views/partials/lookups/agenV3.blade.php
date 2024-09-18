@@ -64,6 +64,7 @@ $idLookup = isset($id) ? $id : null;
         postData: {
             aktif: `{!! $Aktif ?? '' !!}`,
             invoice: `{!! $Invoice ?? '' !!}`,
+            from: `{!! $from ?? '' !!}`,
             forLookup: true,
         },
         idPrefix: '',
