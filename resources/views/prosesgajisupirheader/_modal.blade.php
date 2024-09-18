@@ -54,7 +54,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" autocomplete="off" class="form-control bank-lookup">
+                                <input type="text" name="bank" autocomplete="off" id="bank" class="form-control bank-lookup">
                             </div>
                         </div>
 
@@ -1842,9 +1842,11 @@
 
     function initLookup() {
 
-        $('.bank-lookup').lookup({
+        $('.bank-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
