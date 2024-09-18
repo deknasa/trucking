@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="agen_id">
-                  <input type="text" name="agen" class="form-control agen-lookup">
+                  <input type="text" name="agen" id="agen" class="form-control agen-lookup">
                 </div>
                 <div class="col-12 col-md-2 ">
                   <label class="col-form-label">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="col-12 col-md-4 jenisorder">
                   <input type="hidden" name="jenisorder_id">
-                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                  <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
                 </div>
               </div>
 
@@ -1802,9 +1802,11 @@
   }
 
   function initLookup() {
-    $('.agen-lookup').lookup({
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -1830,9 +1832,11 @@
       }
     })
 
-    $('.jenisorder-lookup').lookup({
+    $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorder',
+       fileName: 'jenisorderV3',
+      searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',

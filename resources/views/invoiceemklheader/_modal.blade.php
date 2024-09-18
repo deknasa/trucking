@@ -975,34 +975,28 @@
               autocomplete: 'off',
               class: 'keteranganBiaya_modalinput',
               dataInit: function(element) {
-                $('.keteranganBiaya_modalinput').last().modalInput({
+                $('.keteranganBiaya_modalinput').last().linkInput({
                   title: 'Keterangan Biaya Job',
                   fileName: 'jobbiaya_nominal',
-                  beforeProcess: function(test) {
-                    // var levelcoa = $(`#levelcoa`).val();
-                    this.postData = {
-                      Aktif: 'AKTIF',
-                    }
-                  },
+                 
                   onSelectRow: (data, element) => {
                     let rowId = $("#tableInvoice").jqGrid('getGridParam', 'selrow');
-
-                    $("#tableInvoice").jqGrid('setCell', rowId, 'keterangan_biaya', JSON.stringify(data));
-                    element.val(JSON.stringify(data));
-                    element.data('currentValue', JSON.stringify(data))
+                    let localRow = $("#tableInvoice").jqGrid("getLocalRow",rowId);
+                    localRow.keterangan_biaya = JSON.stringify(data);
+                    element.val(JSON.stringify(data))
+                    element.data('currentValue', element.val())
+                    $("#tableInvoice").jqGrid('setCell', rowId, 'keterangan_biaya', JSON.stringify(data));                    
                   },
                   onCancel: (element) => {
                     element.val(element.data('currentValue'))
-
                   },
                   onClear: (element) => {
                     element.val('')
                     element.data('currentValue', element.val())
                   }
                 })
-              }
+              }, 
             },
-            width:"500px"
           },
           {
             label: "SHIPPER",

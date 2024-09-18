@@ -37,7 +37,7 @@
                 <label class="col-form-label">CUSTOMER <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="agen" class="form-control agen-lookup">
+                <input type="text" name="agen" id="agen" class="form-control agen-lookup">
                 <input type="text" id="agenId" name="agen_id" readonly hidden>
               </div>
 
@@ -823,9 +823,11 @@
 
   function initLookup() {
     // 
-    $('.agen-lookup').lookup({
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
