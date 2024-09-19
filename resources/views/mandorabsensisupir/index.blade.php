@@ -143,6 +143,7 @@
         success: response => {
           getAll(1, 0, filterObject)
           //deleted_id
+          showSuccessDialog(response.message, response.data.nobukti)
 
           dataAbsensi = {}
         },
