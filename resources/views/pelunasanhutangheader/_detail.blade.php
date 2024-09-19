@@ -32,7 +32,7 @@
               let tglsampai = rowData.tglsampaiheaderhutangheader
               let url = "{{route('hutangheader.index')}}"
               let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
              `)
              return formattedValue[0].outerHTML
            }
