@@ -135,6 +135,9 @@
 
   setSpaceBarCheckedHandler('suratpengantar')
   $(document).ready(function() {
+    if(accessCabang != 'MEDAN'){
+      $('#btnReloadTrip').hide()
+    }
     $("#tabs").tabs()
     setIsKomisi()
     loadDetailGrid()
