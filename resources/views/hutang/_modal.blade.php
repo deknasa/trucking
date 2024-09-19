@@ -852,9 +852,10 @@
     })
 
 
-    $('.supplier-lookup').lookup({
+    $('.supplier-lookup').lookupV3({
       title: 'supplier Lookup',
-      fileName: 'supplier',
+      fileName: 'supplierV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',

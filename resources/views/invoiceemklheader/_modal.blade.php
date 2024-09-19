@@ -316,7 +316,7 @@
         job_id.push(dataInvoice.id)
         nojobemkl.push(dataInvoice.nojobemkl)
         keterangan_detail.push(dataInvoice.keterangan_detail)
-        keterangan_biaya.push(dataInvoice.keterangan_biaya)
+        keterangan_biaya.push(dataInvoice.keteranganInput)
       });
       let requestData = {
         'nominal': nominal,
@@ -975,17 +975,19 @@
               autocomplete: 'off',
               class: 'keteranganBiaya_modalinput',
               dataInit: function(element) {
+                let rowId = $("#tableInvoice").jqGrid('getGridParam', 'selrow');
+                let localRow = $("#tableInvoice").jqGrid("getLocalRow",rowId);
+                let dddd = localRow.keteranganInput
+                $('.keteranganBiaya_modalinput').last().data('currentValue', dddd)
                 $('.keteranganBiaya_modalinput').last().linkInput({
                   title: 'Keterangan Biaya Job',
                   fileName: 'jobbiaya_nominal',
                  
                   onSelectRow: (data, element) => {
-                    let rowId = $("#tableInvoice").jqGrid('getGridParam', 'selrow');
-                    let localRow = $("#tableInvoice").jqGrid("getLocalRow",rowId);
-                    localRow.keterangan_biaya = JSON.stringify(data);
+                    console.log(dddd);
                     element.val(JSON.stringify(data))
                     element.data('currentValue', element.val())
-                    $("#tableInvoice").jqGrid('setCell', rowId, 'keterangan_biaya', JSON.stringify(data));                    
+                    $("#tableInvoice").jqGrid('setCell', rowId, 'keteranganInput', JSON.stringify(data));                    
                   },
                   onCancel: (element) => {
                     element.val(element.data('currentValue'))
@@ -997,6 +999,20 @@
                 })
               }, 
             },
+            // formatter: function(value, rowOptions, rowData) {
+            //   let disabled = '';
+            //   if ($('#crudForm').data('action') == 'delete') {
+            //     disabled = 'disabled'
+            //   }
+            //   return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandlerInvoice(this, ${rowData.id})">`;
+            // },
+          },
+          {
+            label: "keteranganInput",
+            name: "keteranganInput",
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+            sortable: false,
+            hidden:true
           },
           {
             label: "SHIPPER",

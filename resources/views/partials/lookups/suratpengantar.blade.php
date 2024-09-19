@@ -262,16 +262,16 @@
             thousandsSeparator: '.'
           }
         },
-        {
-          label: 'GAJI KENEK',
-          name: 'gajikenek',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          formatter: 'currency',
-          formatoptions: {
-            decimalSeparator: ',',
-            thousandsSeparator: '.'
-          }
-        },
+        // {
+        //   label: 'GAJI KENEK',
+        //   name: 'gajikenek',
+        //   width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        //   formatter: 'currency',
+        //   formatoptions: {
+        //     decimalSeparator: ',',
+        //     thousandsSeparator: '.'
+        //   }
+        // },
         {
           label: 'STATUS PERALIHAN',
           name: 'statusperalihan',
