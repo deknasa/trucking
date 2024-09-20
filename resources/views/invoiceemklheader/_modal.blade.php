@@ -656,6 +656,8 @@
             form.find(`[name="jenisorder"]`).prop('readonly', true)
             form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+
+            tampilanMuatanBongkaran()
           }).catch((error) => {
             showDialog(error.responseJSON)
           })
@@ -700,6 +702,7 @@
             form.find(`[name="tglbukti"]`).prop('readonly', true)
             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             $('#crudModal').modal('show')
+            tampilanMuatanBongkaran()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -743,6 +746,7 @@
             form.find(`[name="tglbukti"]`).prop('readonly', true)
             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             $('#crudModal').modal('show')
+            tampilanMuatanBongkaran()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -984,10 +988,15 @@
                   fileName: 'jobbiaya_nominal',
                  
                   onSelectRow: (data, element) => {
-                    console.log(dddd);
                     element.val(JSON.stringify(data))
                     element.data('currentValue', element.val())
-                    $("#tableInvoice").jqGrid('setCell', rowId, 'keteranganInput', JSON.stringify(data));                    
+                    $("#tableInvoice").jqGrid('setCell', rowId, 'keteranganInput', JSON.stringify(data));
+                    const totalNominal = data.reduce((accumulator, item) => {
+                      return accumulator + item.nominal_biaya;
+                    }, 0);
+                    $("#tableInvoice").jqGrid('setCell', rowId, 'nominal', totalNominal);
+                    $("#tableInvoice").jqGrid('setCell', rowId, 'keterangan_biaya', '');
+
                   },
                   onCancel: (element) => {
                     element.val(element.data('currentValue'))
@@ -1639,6 +1648,7 @@
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
+        tampilanMuatanBongkaran();
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1650,6 +1660,31 @@
       }
     })
 
+  }
+
+  function tampilanMuatanBongkaran() {
+    let jenisorder = $('#crudForm [name=jenisorder]').val()
+    if (jenisorder == 'MUATAN' ) {
+      $('[name=statuspajak]').parents('.form-group').show();
+      $('[name=kapal]').parents('.form-group').show();
+      $('[name=destination]').parents('.form-group').show();
+      $('[name=nobuktiinvoicepajak]').parents('.form-group').show();
+
+      $("#tableInvoice").jqGrid("hideCol", `keterangan_biaya`);
+      $("#tableInvoice").jqGrid('setColProp', 'nominal', {
+        editable: true
+      });
+    }else if (jenisorder == 'BONGKARAN') {
+      $('[name=statuspajak]').parents('.form-group').hide();
+      $('[name=kapal]').parents('.form-group').hide();
+      $('[name=destination]').parents('.form-group').hide();
+
+      $('[name=nobuktiinvoicepajak]').parents('.form-group').hide();
+      $("#tableInvoice").jqGrid("showCol", `keterangan_biaya`);
+      $("#tableInvoice").jqGrid('setColProp', 'nominal', {
+        editable: false
+      });
+    }
   }
 
   const setTglBukti = function(form) {
