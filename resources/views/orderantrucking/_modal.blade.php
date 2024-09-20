@@ -160,6 +160,38 @@
                 <input type="text" name="noseal2" class="form-control" readonly>
               </div>
             </div>
+            
+            <div class="row form-group nospempty">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  NO SP EMPTY
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="nospempty" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group nospfull">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  NO SP FULL
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="nospfull" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group kapal">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  KAPAL
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="kapal" class="form-control">
+              </div>
+            </div>
+
             <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -206,6 +238,7 @@
   let jenisorderId
   let containerId
   var statustas
+  let isreplication
   var kodecontainer
   var isAllowEdited;
   let orderemklshipper
@@ -947,6 +980,11 @@
             let nocont2 = $('#crudForm').find(`[name="nocont2"]`).parents('.form-group').hide()
             let noseal2 = $('#crudForm').find(`[name="noseal2"]`).parents('.form-group').hide()
           }
+          if(accessCabang != 'MEDAN'){
+            $('.nospempty').hide()
+            $('.nospfull').hide()
+            $('.kapal').hide()
+          }
 
           orderemklshipper = response.orderemklshipper
           if (form.data('action') === 'delete') {
@@ -1088,6 +1126,15 @@
         nojobemkl2.parents('.input-group').find('.button-clear').hide()
       }
     }
+    
+    if(isreplication == 'YA') {
+      form.find('[name=nocont]').attr('readonly', false)
+      form.find('[name=noseal]').attr('readonly', false)
+      if (container_id == 3) {
+        form.find('[name=nocont2]').attr('readonly', false)
+        form.find('[name=noseal2]').attr('readonly', false)
+      }
+    }
   }
 
 
@@ -1101,7 +1148,8 @@
       },
       success: response => {
         statustas = response.data.statustas
-        if (statusapproval == 3) {
+         isreplication = response.data.isreplication
+        if (statusapproval == 3 && isreplication == 'TIDAK') {
           statustas = 0
         }
         setJobReadOnly(form)
@@ -1170,7 +1218,8 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
-          orderemklshipper: orderemklshipper
+          orderemklshipper: orderemklshipper,
+          cabang: accessCabang
         }
       },
       onSelectRow: (orderanemkl, element) => {
@@ -1179,6 +1228,9 @@
 
         $('#crudForm [name=nocont]').first().val(orderanemkl.nocont)
         $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
+        $('#crudForm [name=nospempty]').first().val(orderanemkl.nospempty)
+        $('#crudForm [name=nospfull]').first().val(orderanemkl.nospfull)
+        $('#crudForm [name=kapal]').first().val(orderanemkl.kapal)
         $('#crudForm [name=jenisorderemkl]').first().val(orderanemkl.jenisorderan)
 
       },
@@ -1189,6 +1241,9 @@
         element.val('')
         $('#crudForm [name=nocont]').val('')
         $('#crudForm [name=noseal]').val('')
+        $('#crudForm [name=nospempty]').val('')
+        $('#crudForm [name=nospfull]').val('')
+        $('#crudForm [name=kapal]').val('')
         element.data('currentValue', element.val())
       }
     })
