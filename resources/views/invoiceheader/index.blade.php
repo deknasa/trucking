@@ -355,11 +355,12 @@
               if ((value == null) || (value == '')) {
                 return '';
               }
-              let tgldaripelunasan = rowData.tgldariheaderpelunasanpiutangheader
-              let tglsampaipelunasan = rowData.tglsampaiheaderpelunasanpiutangheader
-              let url = "{{route('pelunasanpiutangheader.index')}}"
-              let formattedValue = $(`<a href="${url}?tgldari=${tgldaripelunasan}&tglsampai=${tglsampaipelunasan}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
-              return formattedValue[0].outerHTML
+              // let tgldaripelunasan = rowData.tgldariheaderpelunasanpiutangheader
+              // let tglsampaipelunasan = rowData.tglsampaiheaderpelunasanpiutangheader
+              // let url = "{{route('pelunasanpiutangheader.index')}}"
+              // let formattedValue = $(`<a href="${url}?tgldari=${tgldaripelunasan}&tglsampai=${tglsampaipelunasan}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+              // return formattedValue[0].outerHTML
+              return value
             },
           },          
           {
