@@ -726,11 +726,11 @@
               </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
-                <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+                <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${index}" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
               </td>
               <td>
                 <input type="hidden" name="coakredit_detail[]">
-                <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+                <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${index}" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
               </td>
               <td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
@@ -752,9 +752,14 @@
             $('#detailList tbody').append(detailRow)
             setTotal();
 
-            $('.coadebet-lookup').last().lookup({
+            $('.coadebet-lookup').last().lookupV3({
               title: 'Coa Debet Lookup',
-              fileName: 'akunpusat',
+              fileName: 'akunpusatV3',
+              searching: ['coa','keterangancoa'],
+              labelColumn: true,
+              extendSize: md_extendSize_1,
+              multiColumnSize:true,
+              filterToolbar: true,
               beforeProcess: function(test) {
                 this.postData = {
                   Aktif: 'AKTIF',
@@ -776,9 +781,14 @@
               }
             })
 
-            $('.coakredit-lookup').last().lookup({
+            $('.coakredit-lookup').last().lookupV3({
               title: 'Coa Kredit Lookup',
-              fileName: 'akunpusat',
+              fileName: 'akunpusatV3',
+              searching: ['coa','keterangancoa'],
+              labelColumn: true,
+              extendSize: md_extendSize_1,
+              multiColumnSize:true,
+              filterToolbar: true,
               beforeProcess: function(test) {
                 this.postData = {
                   levelCoa: '3',
@@ -815,6 +825,7 @@
     })
   }
 
+  let lastRow = 0
   function addRow() {
     let detailRow = $(`
       <tr>
@@ -824,11 +835,11 @@
         </td>
         <td>
           <input type="hidden" name="coadebet_detail[]">
-          <input type="text" name="ketcoadebet_detail[]"  class="form-control coadebet-lookup">
+          <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${lastRow}" class="form-control coadebet-lookup">
         </td>
         <td>
           <input type="hidden" name="coakredit_detail[]">
-          <input type="text" name="ketcoakredit_detail[]"  class="form-control coakredit-lookup">
+          <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${lastRow}" class="form-control coakredit-lookup">
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
@@ -842,9 +853,14 @@
     $('#detailList tbody').append(detailRow)
 
     // $('#lookup').hide()
-    $('.coadebet-lookup').last().lookup({
+    $('.coadebet-lookup').last().lookupV3({
       title: 'Coa Debet Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function() {
         this.postData = {
           levelCoa: '3',
@@ -867,9 +883,14 @@
       }
     })
 
-    $('.coakredit-lookup').last().lookup({
+    $('.coakredit-lookup').last().lookupV3({
       title: 'Coa Kredit Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         this.postData = {
           levelCoa: '3',
@@ -895,6 +916,7 @@
 
     initDatepicker()
     setRowNumbers()
+    lastRow++
   }
 
   function deleteRow(row) {
@@ -987,11 +1009,11 @@
               </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
-                <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+                <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${index}"  data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
               </td>
               <td>
                 <input type="hidden" name="coakredit_detail[]">
-                <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+                <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${index}"  data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
               </td><td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
               </td>
@@ -1012,9 +1034,14 @@
           $('#detailList tbody').append(detailRow)
           setTotal();
 
-          $('.coadebet-lookup').last().lookup({
+          $('.coadebet-lookup').last().lookupV3({
             title: 'Coa Debet Lookup',
-            fileName: 'akunpusat',
+            fileName: 'akunpusatV3',
+            searching: ['coa','keterangancoa'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
               this.postData = {
                 Aktif: 'AKTIF',
@@ -1036,9 +1063,14 @@
             }
           })
 
-          $('.coakredit-lookup').last().lookup({
+          $('.coakredit-lookup').last().lookupV3({
             title: 'Coa Kredit Lookup',
-            fileName: 'akunpusat',
+            fileName: 'akunpusatV3',
+            searching: ['coa','keterangancoa'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             onSelectRow: (akunpusat, element) => {
               element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
               element.val(akunpusat.keterangancoa)
