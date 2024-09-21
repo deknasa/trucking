@@ -142,7 +142,9 @@
                         tglsampai: tglsampai,
                         periode: periode,
                     };
-                    laporantitipanemkl(data, detailParams, dataCabang);
+                    let cabang = accessCabang
+
+                    laporantitipanemkl(data, detailParams, dataCabang,cabang);
                 },
                 error: function(error) {
                     if (error.status === 422) {
@@ -232,12 +234,13 @@
     //     });
     // }
 
-    function laporantitipanemkl(data, detailParams, dataCabang) {
+    function laporantitipanemkl(data, detailParams, dataCabang,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
+        
 
         report.loadFile(`{{ asset('public/reports/ReportTitipanEmkl.mrt') }}`);
 

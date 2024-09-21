@@ -806,7 +806,7 @@
     })
 
     $('#btnImport').click(function(event) {
-      event.preventDefault()
+      event.preventDefault()  
 
       let url = `${apiUrl}tarif/import`
       let form_data = new FormData(document.getElementById('formImport'))

@@ -183,7 +183,15 @@
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksi.mrt') }}`);
+        if (accessCabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksiA4.mrt') }}`)
+        } else if (accessCabang == 'MAKASSAR') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksiLetter.mrt') }}`)
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksi.mrt') }}`);
+        }
+
+        // report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksi.mrt') }}`);
 
         dataSet.readJson({
             'data': data,

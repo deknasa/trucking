@@ -155,7 +155,10 @@
                         posisiakhir: parameter,
                         jenislaporan: jenislaporan,
                     };
-                    laporanpemakaianban(data, detailParams, dataCabang);
+
+                    let cabang = accessCabang
+
+                    laporanpemakaianban(data, detailParams, dataCabang,cabang);
                 },
                 error: function(error) {
                     if (error.status === 422) {
@@ -235,14 +238,20 @@
         }
     })
 
-    function laporanpemakaianban(data, detailParams, dataCabang) {
+    function laporanpemakaianban(data, detailParams, dataCabang,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanPemakaianBan.mrt') }}`);
+        if (cabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanPemakaianBanA4.mrt') }}`);
+        }else if(cabang == 'MAKASSAR'){
+            report.loadFile(`{{ asset('public/reports/ReportLaporanPemakaianBanLetter.mrt') }}`);
+        }else{
+            report.loadFile(`{{ asset('public/reports/ReportLaporanPemakaianBan.mrt') }}`);
+        }
 
         dataSet.readJson({
             'data': data,

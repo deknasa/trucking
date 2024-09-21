@@ -224,7 +224,9 @@
                     let data = response.data
                     let dataCabang = response.namacabang
                     let dataheader = response.dataheader
-                    laporanbukubesar(data, dataheader, dataCabang, printer);
+                    let cabang = accessCabang
+
+                    laporanbukubesar(data, dataheader, dataCabang, printer,cabang);
                 },
                 error: function(error) {
                     if (error.status === 422) {
@@ -242,7 +244,7 @@
             });
     }
 
-    function laporanbukubesar(data, dataheader, dataCabang, printer) {
+    function laporanbukubesar(data, dataheader, dataCabang, printer,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
@@ -250,9 +252,18 @@
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
         if (printer == 'reportPrinterBesar') {
-            report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesarBesar.mrt') }}`);
+            console.log(cabang)
+
+            if(cabang=='MEDAN'){
+                report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesarA4.mrt') }}`);
+            }else if(cabang == 'MAKASSAR'){
+                report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesarLetter.mrt') }}`);
+            }else{
+                report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesar.mrt') }}`);
+            }
+            
         } else {
-            report.loadFile(`{{ asset('public/reports/ReportLaporanBukuBesar.mrt') }}`);
+            report.loadFile(`{{ asset('public/reports/ReportLaporanBuku.mrt') }}`);
         }
 
         dataSet.readJson({

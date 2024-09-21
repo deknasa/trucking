@@ -112,9 +112,10 @@
                         let detailParams = {
                             sampai: sampai,
                         };
-                        let user = response.data[0].username;
+                        // let user = response.data[0].username;
+                        let cabang = accessCabang
 
-                        laporandepositosupir(data, dataCabang, detailParams, user);
+                        laporandepositosupir(data, dataCabang, detailParams,cabang);
                     },
                     error: function(error) {
                         if (error.status === 422) {
@@ -183,19 +184,27 @@
         }
     })
 
-    function laporandepositosupir(data, dataCabang, detailParams, user) {
+    function laporandepositosupir(data, dataCabang, detailParams,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanDepositoSupir.mrt') }}`);
+        if (cabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanDepositoSupirA4.mrt') }}`);
+        }else if(cabang == 'MAKASSAR'){
+            report.loadFile(`{{ asset('public/reports/ReportLaporanDepositoSupirLetter.mrt') }}`);
+        }else{
+            report.loadFile(`{{ asset('public/reports/ReportLaporanDepositoSupir.mrt') }}`);
+        }
+
+        // report.loadFile(`{{ asset('public/reports/ReportLaporanDepositoSupir.mrt') }}`);
 
         dataSet.readJson({
             'data': data,
             'dataCabang': dataCabang,
-            'user': user,
+            // 'user': user,
             'parameter': detailParams
         });
 

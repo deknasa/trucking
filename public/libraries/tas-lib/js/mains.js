@@ -1188,145 +1188,145 @@ function initDatepicker(classDatepicker = "datepicker") {
     });
 }
 
-// function initMonthpicker(classDatepicker = "monthpicker") {
-//     let element = $(document).find("." + classDatepicker);
+function initMonthpicker(classDatepicker = "monthpicker") {
+    let element = $(document).find("." + classDatepicker);
 
-//     if (!element.parent().hasClass("input-group")) {
-//         element.wrap(`
-// 				<div class="input-group">
-// 				</div>
-// 			`);
-//     }
+    if (!element.parent().hasClass("input-group")) {
+        element.wrap(`
+				<div class="input-group">
+				</div>
+			`);
+    }
 
-//     element
-//         .datepicker({
-//             dateFormat: "mm-yy",
-//             changeYear: true,
-//             changeMonth: true,
-//             assumeNearbyYear: true,
-//             // showButtonPanel: true,
-//             showOn: "button",
-//             beforeShow: function (element, instance) {
-//                 let calendar = instance.dpDiv;
+    element
+        .datepicker({
+            dateFormat: "mm-yy",
+            changeYear: true,
+            changeMonth: true,
+            assumeNearbyYear: true,
+            // showButtonPanel: true,
+            showOn: "button",
+            beforeShow: function (element, instance) {
+                let calendar = instance.dpDiv;
 
-//                  $(element).css({
-//                     position: "relative",
-//                 });
-//                 calendar.addClass("no-date");
+                 $(element).css({
+                    position: "relative",
+                });
+                calendar.addClass("no-date");
 
-//                 // Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
-//                 setTimeout(function () {
-//                     calendar.position({
-//                         my: "left top",
-//                         at: "left bottom",
-//                         collision: "none",
-//                         of: element,
-//                     });
-//                 }, 1);
+                // Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+                setTimeout(function () {
+                    calendar.position({
+                        my: "left top",
+                        at: "left bottom",
+                        collision: "none",
+                        of: element,
+                    });
+                }, 1);
 
-//                 // Ambil tanggal saat ini dari input
-//                 var currentInputValue = $(element).val(); // Formatnya 'mm-yy'
-//                 var currentMonthYear = currentInputValue.split("-");
+                // Ambil tanggal saat ini dari input
+                var currentInputValue = $(element).val(); // Formatnya 'mm-yy'
+                var currentMonthYear = currentInputValue.split("-");
 
-//                 if (currentMonthYear.length == 2) {
-//                     var currentMonth = parseInt(currentMonthYear[0]) - 1; 
-//                     var currentYear = parseInt(currentMonthYear[1]);
+                if (currentMonthYear.length == 2) {
+                    var currentMonth = parseInt(currentMonthYear[0]) - 1; 
+                    var currentYear = parseInt(currentMonthYear[1]);
 
-//                     $(element)
-//                         .datepicker(
-//                             "option",
-//                             "defaultDate",
-//                             new Date(currentYear, currentMonth, 1)
-//                         )
-//                         .siblings(".ui-datepicker-trigger")
-//                         .wrap('<div class="input-group-append"></div>')
-//                         .addClass("btn btn-easyui text-easyui-dark")
-//                         .html('<i class="fa fa-calendar-alt"></i>');
+                    $(element)
+                        .datepicker(
+                            "option",
+                            "defaultDate",
+                            new Date(currentYear, currentMonth, 1)
+                        )
+                        .siblings(".ui-datepicker-trigger")
+                        .wrap('<div class="input-group-append"></div>')
+                        .addClass("btn btn-easyui text-easyui-dark")
+                        .html('<i class="fa fa-calendar-alt"></i>');
 
-//                     $(element).datepicker(
-//                         "setDate",
-//                         new Date(currentYear, currentMonth, 1)
-//                     );
-//                 }
+                    $(element).datepicker(
+                        "setDate",
+                        new Date(currentYear, currentMonth, 1)
+                    );
+                }
 
-//                 setTimeout(function () {
-//                     // Function to attach the change event
-//                     function attachMonthYearChangeEvents() {
-//                         $(".ui-datepicker-month, .ui-datepicker-year")
-//                             .off("change")
-//                             .on("change", function () {
-//                                 var selectedMonth = $(".ui-datepicker-month").val();
-//                                 var selectedYear = $(".ui-datepicker-year").val();
+                setTimeout(function () {
+                    // Function to attach the change event
+                    function attachMonthYearChangeEvents() {
+                        $(".ui-datepicker-month, .ui-datepicker-year")
+                            .off("change")
+                            .on("change", function () {
+                                var selectedMonth = $(".ui-datepicker-month").val();
+                                var selectedYear = $(".ui-datepicker-year").val();
         
-//                                 var newDate = new Date(selectedYear, selectedMonth, 1);
+                                var newDate = new Date(selectedYear, selectedMonth, 1);
         
-//                                 // Set tanggal yang baru ke dalam datepicker
-//                                 $(element).datepicker("setDate", newDate);
+                                // Set tanggal yang baru ke dalam datepicker
+                                $(element).datepicker("setDate", newDate);
         
-//                                 // Re-attach the events after the change
-//                                 attachMonthYearChangeEvents();
-//                             });
-//                     }
+                                // Re-attach the events after the change
+                                attachMonthYearChangeEvents();
+                            });
+                    }
         
-//                     // Initial attachment of events
-//                     attachMonthYearChangeEvents();
-//                 }, 1);
-//             },
-//             onClose: function (dateText, inst) {
-//                 // $(this).datepicker(
-//                 //     "setDate",
-//                 //     new Date(inst.selectedYear, inst.selectedMonth, 1)
-//                 // );
-//                 var selectedMonth = inst.selectedMonth; // bulan yang dipilih (0-11)
-//                 var selectedYear = inst.selectedYear; // tahun yang dipilih
+                    // Initial attachment of events
+                    attachMonthYearChangeEvents();
+                }, 1);
+            },
+            onClose: function (dateText, inst) {
+                // $(this).datepicker(
+                //     "setDate",
+                //     new Date(inst.selectedYear, inst.selectedMonth, 1)
+                // );
+                var selectedMonth = inst.selectedMonth; // bulan yang dipilih (0-11)
+                var selectedYear = inst.selectedYear; // tahun yang dipilih
 
-//                 // Set tanggal yang baru berdasarkan bulan dan tahun yang dipilih
-//                 var newDate = new Date(selectedYear, selectedMonth, 1);
+                // Set tanggal yang baru berdasarkan bulan dan tahun yang dipilih
+                var newDate = new Date(selectedYear, selectedMonth, 1);
 
-//                 // Set tanggal yang baru ke dalam input
-//                 $(this).datepicker("setDate", newDate);
-//             },
-//         })
+                // Set tanggal yang baru ke dalam input
+                $(this).datepicker("setDate", newDate);
+            },
+        })
       
-//         .inputmask({
-//             inputFormat: "mm-yyyy",
-//             alias: "datetime",
-//         })
-//         .focusout(function (e) {
-//             let val = $(this).val();
-//             if (val.match("[a-zA-Z]") == null) {
-//                 if (val.length == 8) {
-//                     $(this)
-//                         .inputmask({
-//                             inputFormat: "mm-yyyy",
-//                         })
-//                         .val([val.slice(0, 6), "20", val.slice(6)].join(""));
-//                 }
-//             } else {
-//                 $(this).focus();
-//             }
-//         });
+        .inputmask({
+            inputFormat: "mm-yyyy",
+            alias: "datetime",
+        })
+        .focusout(function (e) {
+            let val = $(this).val();
+            if (val.match("[a-zA-Z]") == null) {
+                if (val.length == 8) {
+                    $(this)
+                        .inputmask({
+                            inputFormat: "mm-yyyy",
+                        })
+                        .val([val.slice(0, 6), "20", val.slice(6)].join(""));
+                }
+            } else {
+                $(this).focus();
+            }
+        });
 
-//     element
-//         .siblings(".ui-datepicker-trigger")
-//         .wrap(
-//             `
-// 			<div class="input-group-append">
-// 			</div>
-// 		`
-//         )
-//         .addClass("btn btn-easyui text-easyui-dark").html(`
-// 			<i class="fa fa-calendar-alt"></i>
-// 		`);
+    element
+        .siblings(".ui-datepicker-trigger")
+        .wrap(
+            `
+			<div class="input-group-append">
+			</div>
+		`
+        )
+        .addClass("btn btn-easyui text-easyui-dark").html(`
+			<i class="fa fa-calendar-alt"></i>
+		`);
 
-//     element.on("keydown", function (event) {
-//         if (event.keyCode === 115) {
-//             if (element.datepicker("widget").not(":visible")) {
-//                 element.datepicker("show");
-//             }
-//         }
-//     });
-// }
+    element.on("keydown", function (event) {
+        if (event.keyCode === 115) {
+            if (element.datepicker("widget").not(":visible")) {
+                element.datepicker("show");
+            }
+        }
+    });
+}
 
 
 function initMonthpicker(classDatepicker ="monthpicker"){

@@ -260,12 +260,20 @@
 
     function laporanuangjalan(data, detailParams, dataCabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
-        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalan.mrt') }}`);
+        if (accessCabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalanA4.mrt') }}`)
+        } else if (accessCabang == 'MAKASSAR') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalanLetter.mrt') }}`)
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalan.mrt') }}`);
+        }
+
+        // report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalan.mrt') }}`);
 
         dataSet.readJson({
             'data': data,
