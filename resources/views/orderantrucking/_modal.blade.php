@@ -181,16 +181,6 @@
                 <input type="text" name="nospfull" class="form-control">
               </div>
             </div>
-            <div class="row form-group kapal">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  KAPAL
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kapal" class="form-control">
-              </div>
-            </div>
 
             <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
@@ -983,7 +973,6 @@
           if(accessCabang != 'MEDAN'){
             $('.nospempty').hide()
             $('.nospfull').hide()
-            $('.kapal').hide()
           }
 
           orderemklshipper = response.orderemklshipper
@@ -1230,7 +1219,6 @@
         $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
         $('#crudForm [name=nospempty]').first().val(orderanemkl.nospempty)
         $('#crudForm [name=nospfull]').first().val(orderanemkl.nospfull)
-        $('#crudForm [name=kapal]').first().val(orderanemkl.kapal)
         $('#crudForm [name=jenisorderemkl]').first().val(orderanemkl.jenisorderan)
 
       },
@@ -1243,7 +1231,6 @@
         $('#crudForm [name=noseal]').val('')
         $('#crudForm [name=nospempty]').val('')
         $('#crudForm [name=nospfull]').val('')
-        $('#crudForm [name=kapal]').val('')
         element.data('currentValue', element.val())
       }
     })

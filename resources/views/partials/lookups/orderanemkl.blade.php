@@ -120,14 +120,6 @@
           align: 'left'
         },
         {
-          label: 'KAPAL',
-          name: 'kapal',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-          align: 'left',
-          search: (accessCabang == 'MEDAN') ? true : false,
-          hidden: (accessCabang == 'MEDAN') ? false : true
-        },
-        {
           label: 'SHIPPER',
           name: 'pelanggan',
           width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
