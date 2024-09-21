@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <div class="card card-primary">
+      <div class="card card-easyui bordered">
         <div class="card-header">
         </div>
         <form id="crudForm">
@@ -10,7 +10,7 @@
               <label class="col-12 col-sm-2 col-form-label mt-2">Bulan Job<span class="text-danger">*</span></label>
               <div class="col-sm-4 mt-2">
                 <div class="input-group">
-                  <input type="text" name="bulanjob" class="form-control datepicker">
+                  <input type="text" name="bulanjob" class="form-control monthpicker">
                 </div>
 
               </div>
@@ -38,32 +38,11 @@
 
 @push('scripts')
 <script>
-  todayEmkl = new Date();
+  initMonthpicker()
 
-  // mendapatkan tanggal pertama di bulan ini
-  firstDayEmkl = new Date(todayEmkl.getFullYear(), todayEmkl.getMonth(), 1);
-  formattedFirstDayEmkl = $.datepicker.formatDate('mm-yy', firstDayEmkl);
-  $('[name=bulanjob]').val(formattedFirstDayEmkl).trigger('change');
+  $('[name=bulanjob]').val($.datepicker.formatDate('mm-yy', new Date())).trigger(
+    'change');
 
-  $('.datepicker')
-    .datepicker({
-      changeMonth: true,
-      changeYear: true,
-      showButtonPanel: true,
-      showOn: "button",
-      dateFormat: 'mm-yy',
-      onClose: function(dateText, inst) {
-        $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-      }
-    })
-    .siblings(".ui-datepicker-trigger")
-    .wrap(`
-    <div class="input-group-append"></div>
-  `)
-    .addClass("btn btn-primary")
-    .html(`
-    <i class="fa fa-calendar-alt"></i>
-  `);
   jobEmkl = $('#crudForm [name=nojobemkl]').val()
   // Promise.all([
   //   getTglJob(jobEmkl),
@@ -122,8 +101,8 @@
           label: 'NO SP FULL',
           name: 'nospfull',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          align: 'left',   
-          search: (accessCabang == 'MEDAN') ? true : false,       
+          align: 'left',
+          search: (accessCabang == 'MEDAN') ? true : false,
           hidden: (accessCabang == 'MEDAN') ? false : true
         },
         {
