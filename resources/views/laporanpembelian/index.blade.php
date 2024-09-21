@@ -152,7 +152,9 @@
                     suppliersampai: suppliersampai,
                     status: status,
                 };
-                laporanpembelian(data, detailParams, dataCabang);
+                let cabang = accessCabang
+
+                laporanpembelian(data, detailParams, dataCabang,cabang);
             },
             error: function(xhr, status, error) {
                 $('#processingLoader').addClass('d-none')
@@ -213,14 +215,20 @@
 
     })
 
-    function laporanpembelian(data, detailParams, dataCabang) {
+    function laporanpembelian(data, detailParams, dataCabang,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportPembelian3.mrt') }}`);
+        if (cabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportPembelian3A4.mrt') }}`);
+        }else if(cabang == 'MAKASSAR'){
+            report.loadFile(`{{ asset('public/reports/ReportPembelian3Letter.mrt') }}`);
+        }else{
+            report.loadFile(`{{ asset('public/reports/ReportPembelian3.mrt') }}`);
+        }
 
         dataSet.readJson({
             'data': data,
@@ -237,16 +245,16 @@
         // designer.report = report;
         // designer.renderHtml('content');
 
-        report.renderAsync(function() {
-            report.exportDocumentAsync(function(pdfData) {
-                let blob = new Blob([new Uint8Array(pdfData)], {
-                    type: 'application/pdf'
-                });
-                let fileURL = URL.createObjectURL(blob);
-                window.open(fileURL, '_blank');
-                manipulatePdfWithJsPdf(pdfData);
-            }, Stimulsoft.Report.StiExportFormat.Pdf);
-        });
+        // report.renderAsync(function() {
+        //     report.exportDocumentAsync(function(pdfData) {
+        //         let blob = new Blob([new Uint8Array(pdfData)], {
+        //             type: 'application/pdf'
+        //         });
+        //         let fileURL = URL.createObjectURL(blob);
+        //         window.open(fileURL, '_blank');
+        //         manipulatePdfWithJsPdf(pdfData);
+        //     }, Stimulsoft.Report.StiExportFormat.Pdf);
+        // });
     }
 
     // function getCekReport() {
