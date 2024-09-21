@@ -23,7 +23,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group nominalprediksi">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   nominal <span class="text-danger">*</span>
@@ -31,7 +31,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
-                  <input type="text" name="nominal" id="nominal" style="text-align:right" class="form-control ">
+                  <input type="text" name="nominal" id="nominal" style="text-align:right" class="form-control nominal">
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@
               </div>
             </div>
 
-            
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmitApprovalTanpa" class="btn btn-primary">
@@ -72,9 +72,10 @@
   let modalBodyApprovalTanpa = $('#crudModalNominalPrediksi').find('.modal-body').html()
   let showGambar;
   let showKeterangan;
-  let indexModalRow=0;
-  
+  let indexModalRow = 0;
+
   $(document).ready(function() {
+
     $('#btnSubmitApprovalTanpa').click(function(event) {
       event.preventDefault()
       let method
@@ -175,7 +176,8 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    // initDatepicker()
+    initAutoNumericMinus($(`#nominal`))
+
     // initSelect2(form.find('.select2bs4'), true)
   })
 
@@ -196,27 +198,27 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    Promise.all([] )
-    .then(() => {
-      showJobEmklNominalPrediksi(form, id)
-      .then((response) => {
-        
-        let approvalTanpa = response;
-        $('#crudModalNominalPrediksi').modal('show')
-        form.data('action', 'add')
-      
-        initAutoNumeric(form.find(`[name="nominal"]`))
+    Promise.all([])
+      .then(() => {
+        showJobEmklNominalPrediksi(form, id)
+          .then((response) => {
+
+            let approvalTanpa = response;
+            $('#crudModalNominalPrediksi').modal('show')
+            form.data('action', 'add')
+
+            initAutoNumeric(form.find(`[name="nominal"]`))
 
 
+          })
+          .catch((error) => {
+            console.log(error);
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .catch((error) => {
-        console.log(error);
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
-    }) 
   }
 
   function showJobEmklNominalPrediksi(form, Id) {
@@ -247,8 +249,16 @@
             if (index == 'nobukti') {
               element.prop('readonly', true)
             }
-          
+
+
           })
+          let jenisorder = response.data.jenisorder
+          if (jenisorder == 'MUATAN') {
+            $('[name=nominal]').prop('readonly', false)
+          } else if (jenisorder == 'BONGKARAN') {
+            $('[name=nominal]').prop('readonly', true)
+          }
+
           initLookupDetail();
           resolve(response.data)
         },
@@ -258,6 +268,7 @@
       })
     })
   }
+
   function initLookupDetail() {
     $(`.keteranganBiaya_modalinput`).modalInput({
       title: 'Keterangan Biaya Job',
@@ -271,6 +282,10 @@
       onSelectRow: (data, element) => {
         element.val(JSON.stringify(data));
         element.data('currentValue', JSON.stringify(data))
+        const totalNominal = data.reduce((accumulator, item) => {
+          return accumulator + item.nominal_biaya;
+        }, 0);
+        $('[name=nominal]').val(totalNominal);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -281,9 +296,9 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
   }
-    
+
 
 
   function cekValidasiTanpa(Id) {
