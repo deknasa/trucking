@@ -154,6 +154,11 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
+                        label:'voy',
+                        name: 'voy',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
+                    {
                         label:'kapal',
                         name: 'kapal',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
