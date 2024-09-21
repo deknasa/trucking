@@ -85,6 +85,7 @@
         container_id: `{!! $container_Id ?? '' !!}`,
         jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
         bulanjob: $('[name=bulanjob]').val(),
       },
       idPrefix: 'orderanemklLookup',
@@ -118,10 +119,34 @@
           align: 'left'
         },
         {
+          label: 'NO SP FULL',
+          name: 'nospfull',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',   
+          search: (accessCabang == 'MEDAN') ? true : false,       
+          hidden: (accessCabang == 'MEDAN') ? false : true
+        },
+        {
+          label: 'NO SP EMPTY',
+          name: 'nospempty',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
+        },
+        {
           label: 'JENIS ORDERAN',
           name: 'jenisorderan',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
+        },
+        {
+          label: 'KAPAL',
+          name: 'kapal',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          align: 'left',
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
         },
         {
           label: 'SHIPPER',
