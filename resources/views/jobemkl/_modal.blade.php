@@ -601,6 +601,8 @@
               element.data('current-value', value)
             }
           })
+
+          tampilanMuatanBongkaran()
           resolve()
         },
         error: error => {
@@ -665,6 +667,19 @@
 
       }
     })
+  }
+
+  function tampilanMuatanBongkaran() {
+    let jenisorder = $('#crudForm [name=jenisorder]').val()
+    if (jenisorder == 'MUATAN' ) {
+      $('[name=marketing]').parents('.form-group').show();
+      $('[name=kapal]').parents('.form-group').show();
+      $('[name=destination]').parents('.form-group').show();
+    }else if (jenisorder == 'BONGKARAN') {
+      $('[name=marketing]').parents('.form-group').hide();
+      $('[name=kapal]').parents('.form-group').hide();
+      $('[name=destination]').parents('.form-group').hide();
+    }
   }
 
   function initLookup() {
@@ -781,6 +796,7 @@
         jenisorderId = jenisorder.id
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
+        tampilanMuatanBongkaran()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
