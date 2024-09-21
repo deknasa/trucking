@@ -1274,6 +1274,11 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
+          if (accessCabang == 'BITUNG-EMKL') {
+            $('.tbl_ketranganJob').show()
+          } else {
+            $('.tbl_ketranganJob').hide()
+          }
           resolve()
         },
         error: error => {
@@ -1374,6 +1379,11 @@
     setRowNumbers()
     rowCabangPusat()
     initLookupDetail(lastIndex);
+    if (accessCabang == 'BITUNG-EMKL') {
+      $('.tbl_ketranganJob').show()
+    } else {
+      $('.tbl_ketranganJob').hide()
+    }
 
   }
 
