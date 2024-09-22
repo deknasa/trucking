@@ -176,7 +176,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    initAutoNumericMinus($(`#nominal`))
+    // initAutoNumericMinus($(`#nominal`))
 
     // initSelect2(form.find('.select2bs4'), true)
   })
@@ -255,8 +255,11 @@
           let jenisorder = response.data.jenisorder
           if (jenisorder == 'MUATAN') {
             $('[name=nominal]').prop('readonly', false)
+            $('[name=keteranganBiaya]').parents('.form-group').hide();
           } else if (jenisorder == 'BONGKARAN') {
             $('[name=nominal]').prop('readonly', true)
+            $('[name=keteranganBiaya]').parents('.form-group').show();
+
           }
 
           initLookupDetail();
@@ -286,6 +289,7 @@
           return accumulator + item.nominal_biaya;
         }, 0);
         $('[name=nominal]').val(totalNominal);
+        // $('[id=nominal]').val(totalNominal);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
