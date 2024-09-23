@@ -696,11 +696,14 @@
       $('[name=tujuan]').parents('.form-group').find('label').text('TUJUAN')
       $('[name=destination]').parents('.form-group').show();
       $('[name=penerima]').parents('.form-group').hide();
+      $('[name=lokasibongkarmuat]').parents('.form-group').find('label').text('LOKASI MUAT')
+
     }else if (jenisorder == 'BONGKARAN') {
       $('[name=marketing]').parents('.form-group').hide();
       $('[name=tujuan]').parents('.form-group').find('label').text('ASAL')
       $('[name=destination]').parents('.form-group').hide();
       $('[name=penerima]').parents('.form-group').show();
+      $('[name=lokasibongkarmuat]').parents('.form-group').find('label').text('LOKASI BONGKAR')
     }
   }
 

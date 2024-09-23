@@ -280,6 +280,7 @@
       sp_id = []
       jobtrucking = []
       keteranganManual = []
+      kapal = []
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
@@ -293,6 +294,7 @@
         sp_id.push(dataInvoice.sp_id)
         jobtrucking.push(dataInvoice.jobtrucking)
         keteranganManual.push(dataInvoice.keterangan)
+        kapal.push(dataInvoice.kapal)
       });
       let requestData = {
         'nominalextra': nominalextra,
@@ -300,6 +302,7 @@
         'omset': omset,
         'sp_id': sp_id,
         'jobtrucking': jobtrucking,
+        'kapal': kapal,
         'keterangan': keteranganManual
       };
       data.push({
@@ -1030,6 +1033,28 @@
             formatter: currencyFormat,
           },
           {
+            label: "KAPAL",
+            name: "kapal",
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            sortable: false,
+            editable: true,
+            hidden: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+
+                  let localRow = $("#tableInvoice").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  console.log(localRow)
+                  localRow.kapal = event.target.value;
+                },
+              }, ],
+            },
+          },
+          {
             label: "BAGIAN",
             name: "jenisorder_idgrid",
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -1458,7 +1483,11 @@
             }
 
           })
-
+          if (accessCabang == 'MEDAN' && response.data.coa == '01.03.02.01') {
+            $("#tableInvoice").jqGrid("showCol", `kapal`);
+          } else {
+            $("#tableInvoice").jqGrid("hideCol", `kapal`);
+          }
           if (aksi == 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -1817,7 +1846,11 @@
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         setTglJatuhTempo(agen.top);
-
+        if (accessCabang == 'MEDAN' && agen.coa == '01.03.02.01') {
+          $("#tableInvoice").jqGrid("showCol", `kapal`);
+        } else {
+          $("#tableInvoice").jqGrid("hideCol", `kapal`);
+        }
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
       },
@@ -1834,7 +1867,7 @@
 
     $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-       fileName: 'jenisorderV3',
+      fileName: 'jenisorderV3',
       searching: ['keterangan'],
       labelColumn: false,
       beforeProcess: function(test) {
