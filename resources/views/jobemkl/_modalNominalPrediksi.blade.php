@@ -177,6 +177,7 @@
 
     activeGrid = null
 
+
     // initSelect2(form.find('.select2bs4'), true)
   })
 
@@ -254,8 +255,11 @@
           let jenisorder = response.data.jenisorder
           if (jenisorder == 'MUATAN') {
             $('[name=nominal]').prop('readonly', false)
+            $('[name=keteranganBiaya]').parents('.form-group').hide();
           } else if (jenisorder == 'BONGKARAN') {
             $('[name=nominal]').prop('readonly', true)
+            $('[name=keteranganBiaya]').parents('.form-group').show();
+
           }
 
           initLookupDetail();
@@ -286,6 +290,7 @@
         }, 0);
         elQty = AutoNumeric.getAutoNumericElement($(`#nominal`)[0]);
         elQty.set(totalNominal);
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

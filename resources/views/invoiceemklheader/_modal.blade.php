@@ -48,16 +48,16 @@
                   </select>
                 </div>
 
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-2 jenisorder">
                   <label class="col-form-label">
-                    STATUS PAJAK <span class="text-danger">*</span>
+                    JENIS ORDER <span class="text-danger">*</span>
                   </label>
                 </div>
-                <div class="col-12 col-md-4">
-                  <select name="statuspajak" class="form-control select2bs4" id="statuspajak">
-                    <option value="">-- PILIH STATUS PAJAK --</option>
-                  </select>
+                <div class="col-12 col-md-4 jenisorder">
+                  <input type="hidden" name="jenisorder_id">
+                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
+
               </div>
 
               <div class="row form-group">
@@ -103,6 +103,21 @@
               </div>
 
               <div class="row form-group">
+
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  ASAL MUAT
+                </label>
+              </div>
+              <div class="col-12 col-md-4">
+                  <input type="hidden" name="tujuan_id">
+                  <input type="text" name="tujuan" class="form-control tujuan-lookup">
+                </div>
+
+              </div>
+
+
+              <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
                     SHIPPER <span class="text-danger">*</span>
@@ -112,15 +127,18 @@
                   <input type="hidden" name="pelanggan_id">
                   <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
                 </div>
-                <div class="col-12 col-md-2 jenisorder">
+
+
+                <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    JENIS ORDER <span class="text-danger">*</span>
+                    STATUS PAJAK <span class="text-danger">*</span>
                   </label>
                 </div>
-                <div class="col-12 col-md-4 jenisorder">
-                  <input type="hidden" name="jenisorder_id">
-                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
-                </div>
+                <div class="col-12 col-md-4">
+                  <select name="statuspajak" class="form-control select2bs4" id="statuspajak">
+                    <option value="">-- PILIH STATUS PAJAK --</option>
+                  </select>
+                </div>                
               </div>
 
               <div class="row form-group">
@@ -289,6 +307,15 @@
         name: 'pelanggan_id',
         value: form.find(`[name="pelanggan_id"]`).val()
       })
+      data.push({
+        name: 'tujuan',
+        value: form.find(`[name="tujuan"]`).val()
+      })
+      data.push({
+        name: 'tujuan_id',
+        value: form.find(`[name="tujuan_id"]`).val()
+      })
+
       data.push({
         name: 'tgldari',
         value: form.find(`[name="tgldari"]`).val()
@@ -769,7 +796,9 @@
 
     $('#btnSubmit').prop('disabled', true)
     $('#btnSaveAdd').prop('disabled', true)
-    if ($('#crudForm').find(`[name="pelanggan_id"]`).val() != '') {
+    let jenisorder = $('#crudForm [name=jenisorder]').val()
+    if (jenisorder == 'MUATAN' ) {
+      if ($('#crudForm').find(`[name="pelanggan_id"]`).val() != '') {
       $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
           $("#tableInvoice")[0].p.selectedRowIds = [];
@@ -810,6 +839,54 @@
         });
     } else {
       showDialog('Harap memilih shipper, jenis order, tgl dari serta tgl sampai')
+    }
+
+    } else {
+      if ($('#crudForm').find(`[name="tujuan_id"]`).val() != '') {
+
+      $('#loaderGrid').removeClass('d-none')
+      getDataInvoice(url).then((response) => {
+          $("#tableInvoice")[0].p.selectedRowIds = [];
+          $('#tableInvoice').jqGrid("clearGridData");
+          if ($('#crudForm').data('action') == 'add') {
+            selectedRowId = [];
+          } else {
+            selectedRowId = response.selectedId;
+          }
+          setTimeout(() => {
+
+            $("#tableInvoice")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: selectedRowId
+              })
+              .trigger("reloadGrid");
+            $('#btnSubmit').prop('disabled', false)
+            $('#btnSaveAdd').prop('disabled', false)
+          }, 100);
+
+        })
+        .catch((error) => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages($('#crudForm'), error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        })
+        .finally(() => {
+          $('.loaderGrid').addClass('d-none')
+        });
+    
+      } else {
+      showDialog('Harap memilih asal muat, jenis order, tgl dari serta tgl sampai')
+    }
+
     }
   })
 
@@ -1153,6 +1230,14 @@
     data.push({
       name: 'pelanggan_id',
       value: form.find(`[name="pelanggan_id"]`).val()
+    })
+    data.push({
+      name: 'tujuan_id',
+      value: form.find(`[name="tujuan_id"]`).val()
+    })
+    data.push({
+      name: 'nobukti',
+      value: form.find(`[name="nobukti"]`).val()
     })
     data.push({
       name: 'jenisorder_id',
@@ -1525,7 +1610,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS INVOICE"
+              "data": "STATUS INVOICE EMKL"
             }]
           })
         },
@@ -1636,6 +1721,31 @@
       }
     })
 
+    $('.tujuan-lookup').lookup({
+      title: 'Asal Muat Lookup',
+      fileName: 'tujuan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (tujuan, element) => {
+        $('#crudForm [name=tujuan_id]').first().val(tujuan.id)
+
+        element.val(tujuan.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        console.log(element.val())
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=tujuan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
       fileName: 'jenisorder',
@@ -1669,6 +1779,7 @@
       $('[name=kapal]').parents('.form-group').show();
       $('[name=destination]').parents('.form-group').show();
       $('[name=nobuktiinvoicepajak]').parents('.form-group').show();
+      $('[name=tujuan]').parents('.form-group').hide();
 
       $("#tableInvoice").jqGrid("hideCol", `keterangan_biaya`);
       $("#tableInvoice").jqGrid('setColProp', 'nominal', {
@@ -1678,6 +1789,7 @@
       $('[name=statuspajak]').parents('.form-group').hide();
       $('[name=kapal]').parents('.form-group').hide();
       $('[name=destination]').parents('.form-group').hide();
+      $('[name=tujuan]').parents('.form-group').show();
 
       $('[name=nobuktiinvoicepajak]').parents('.form-group').hide();
       $("#tableInvoice").jqGrid("showCol", `keterangan_biaya`);
