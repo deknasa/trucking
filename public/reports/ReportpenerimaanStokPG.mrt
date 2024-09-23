@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "015711d3797a346f43a88a2bc470fb14",
+  "ReportGuid": "db198b2e6f3a666ed27510996aa83d74",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportpenerimaanStokPG.mrt",
+  "ReportFile": "http://localhost/truck/public/reports/ReportpenerimaanStokPG.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1722058573000+0700)/",
+  "ReportChanged": "/Date(1727085995000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -304,12 +304,18 @@
             "Type": "System.DateTime"
           },
           "13": {
+            "Name": "menu",
+            "NameInSource": "menu",
+            "Alias": "menu",
+            "Type": "System.String"
+          },
+          "14": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -1130,14 +1136,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Dari Gudang "
+                "Value": "{penerimaanstokheader.columnDari}"
               },
               "VertAlignment": "Bottom",
               "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "14": {
               "Ident": "StiText",
@@ -1151,7 +1157,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaanstokheader.gudangdari}"
+                "Value": "{penerimaanstokheader.valueDari}"
               },
               "VertAlignment": "Bottom",
               "Font": "Tahoma;;;",
@@ -1163,7 +1169,7 @@
               },
               "ShrinkFontToFit": true,
               "ShrinkFontToFitMinimumSize": 5,
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "15": {
               "Ident": "StiText",
@@ -1175,14 +1181,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Ke Gudang"
+                "Value": "{penerimaanstokheader.columnKe}"
               },
               "VertAlignment": "Bottom",
               "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "16": {
               "Ident": "StiText",
@@ -1196,7 +1202,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaanstokheader.gudangke}"
+                "Value": "{penerimaanstokheader.valueKe}"
               },
               "VertAlignment": "Bottom",
               "Font": "Tahoma;;;",
@@ -1212,7 +1218,7 @@
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
               },
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "17": {
               "Ident": "StiHorizontalLinePrimitive",
@@ -1698,7 +1704,7 @@
               "Guid": "a2736195779d74203ce731205ac4a93e",
               "CanGrow": true,
               "ClientRectangle": "148.59,11.26,55,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1719,7 +1725,7 @@
               "Guid": "ea00c7dd26ede67e19402ad3c7962c0f",
               "CanGrow": true,
               "ClientRectangle": "148.59,15,55,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1740,7 +1746,7 @@
               "Guid": "2eb7ac7db8d621079676ba6e0d56ee54",
               "CanGrow": true,
               "ClientRectangle": "148.59,19,55,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
