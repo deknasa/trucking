@@ -89,7 +89,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="nobuktiinvoicepajak" class="form-control">
+                  <input type="text" name="nobuktiinvoicepajak" class="form-control" readonly>
                 </div>
 
                 <div class="col-12 col-md-2">
