@@ -245,16 +245,16 @@
         // designer.report = report;
         // designer.renderHtml('content');
 
-        // report.renderAsync(function() {
-        //     report.exportDocumentAsync(function(pdfData) {
-        //         let blob = new Blob([new Uint8Array(pdfData)], {
-        //             type: 'application/pdf'
-        //         });
-        //         let fileURL = URL.createObjectURL(blob);
-        //         window.open(fileURL, '_blank');
-        //         manipulatePdfWithJsPdf(pdfData);
-        //     }, Stimulsoft.Report.StiExportFormat.Pdf);
-        // });
+        report.renderAsync(function() {
+            report.exportDocumentAsync(function(pdfData) {
+                let blob = new Blob([new Uint8Array(pdfData)], {
+                    type: 'application/pdf'
+                });
+                let fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+                manipulatePdfWithJsPdf(pdfData);
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        });
     }
 
     // function getCekReport() {
