@@ -35,7 +35,7 @@
         addModalinput()
     }
 
-    $(document). on('click', "#addModalinput", function() {
+    $("#input-modal-form").off('click').on('click', "#addModalinput", function() {
         addModalinput()
     })
 
