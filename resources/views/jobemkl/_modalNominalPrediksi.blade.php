@@ -176,7 +176,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    // initAutoNumericMinus($(`#nominal`))
+
 
     // initSelect2(form.find('.select2bs4'), true)
   })
@@ -288,8 +288,9 @@
         const totalNominal = data.reduce((accumulator, item) => {
           return accumulator + item.nominal_biaya;
         }, 0);
-        $('[name=nominal]').val(totalNominal);
-        // $('[id=nominal]').val(totalNominal);
+        elQty = AutoNumeric.getAutoNumericElement($(`#nominal`)[0]);
+        elQty.set(totalNominal);
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
