@@ -130,6 +130,16 @@
                 <input type="text" name="destination" class="form-control">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  penerima
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="penerima" class="form-control">
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -685,10 +695,12 @@
       $('[name=marketing]').parents('.form-group').show();
       $('[name=tujuan]').parents('.form-group').find('label').text('TUJUAN')
       $('[name=destination]').parents('.form-group').show();
+      $('[name=penerima]').parents('.form-group').hide();
     }else if (jenisorder == 'BONGKARAN') {
       $('[name=marketing]').parents('.form-group').hide();
       $('[name=tujuan]').parents('.form-group').find('label').text('ASAL')
       $('[name=destination]').parents('.form-group').hide();
+      $('[name=penerima]').parents('.form-group').show();
     }
   }
 

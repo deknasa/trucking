@@ -79,6 +79,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          jenisorder_id:`{{ $jenisorder_id ?? '' }}`,
         }
       },
       onSelectRow: (jobemkl, element) => {
