@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use App\Models\User;
 use App\Models\Parameter;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Laravel\Passport\Token;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends MyController
 {
@@ -93,12 +94,26 @@ class AuthController extends MyController
             $credentials['browser'] = $this->get_client_browser();
             $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
 
-            $token = Http::withHeaders([
-                'Accept' => 'application/json'
-            ])->withOptions(['verify' => false])
-                ->post(config('app.api_url') . 'token', $credentials);
-
-            // dd($token->getBody()->getContents());
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->withOptions(['verify' => false])->post(env('TRUCKINGAPI_OUTH_URL').'oauth/token',[
+                    'grant_type'=>'password',
+                    'client_id'=>env('TRUCKINGAPI_CLIENT_ID'),
+                    'client_secret'=>env('TRUCKINGAPI_CLIENT_SECRET'),
+                    'username'=>$credentials['user'],
+                    'password'=>$credentials['password'],
+                    'scope'=>''
+            ]);
+            if ($response->getStatusCode() > 200) {
+                return redirect()->back()->withErrors([
+                    'user_not_found' => 'Autentikasi token Gagal'
+                ]);
+            }
+            $token = json_decode((string) $response->getBody(),true);
+            
+    
+            
             $tokenUrlTas = '';
             if ($parametercabang->text == "PUSAT") {
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
@@ -172,11 +187,13 @@ class AuthController extends MyController
 
 
             session(['access_token' => $token['access_token']]);
+            session(['refresh_token' => $token['refresh_token']]);
+            session(['expires_at' => now()->addSeconds($token['expires_in'])]);            
             // session(['access_token_tnl' => $tokenTNL]);
             session(['cabang' =>  $parametercabang->text]);
             session(['tnl' =>  $parametertnl->text]);
 
-            session(['info' => $token['info']]);
+            session(['info' =>" "]);
             session(['link_url' => strtolower($linkUrl->text)]);
 
             if ($parametercabang->text != 'PUSAT') {
@@ -208,6 +225,53 @@ class AuthController extends MyController
         }
     }
 
+    public function refreshToken()
+    {
+
+    
+        $refreshToken = Session::get('refresh_token');
+
+        if (!$refreshToken) {
+            return null;
+        }
+
+        try {
+            $response =  $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->withOptions(['verify' => false])->post(env('TRUCKINGAPI_OUTH_URL').'oauth/token',[
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $refreshToken,
+                    'client_id'=>env('TRUCKINGAPI_CLIENT_ID'),
+                    'client_secret'=>env('TRUCKINGAPI_CLIENT_SECRET'),
+                    'scope' => '',
+            ]);
+
+            if ($response->getStatusCode() == 200) {
+                $data = json_decode($response->getBody(), true);
+                
+                // Simpan token baru dalam session
+                Session::put('access_token', $data['access_token']);
+                Session::put('refresh_token', $data['refresh_token']); // Simpan refresh token jika diperlukan
+                
+                return response([
+                        'access_token' => session('access_token'),
+                        'refresh_token' => session('refresh_token'),
+                    ], 200);
+            }
+
+            return response([
+                 'access_token' => null,
+                 'refresh_token' => null,
+             ], 404);
+        } catch (\Exception $e) {
+            return response([
+                 'access_token' => null,
+                 'refresh_token' => null,
+             ], 404);
+        }
+    }
+    
     // Mendapatkan jenis web browser pengunjung
     private function get_client_browser()
     {

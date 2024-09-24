@@ -436,6 +436,7 @@
 
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
+    let refreshToken = `{{ session('refresh_token') }}`
     let accessTokenEmkl = `{{ session('access_token_emkl') }}`
     let accessTokenTnl = `{{ session('access_token_tnl') }}`
     let accessTokenMdn = `{{ session('access_token_mdn') }}`
@@ -714,6 +715,58 @@
       })
     }
 
+ // Interceptor: Setup global handler untuk semua request AJAX
+ $.ajaxSetup({
+        beforeSend: function(xhr) {
+            // Sertakan access token di setiap request
+            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        },
+        statusCode: {
+            401: function() {
+                // Jika status 401 Unauthorized, token sudah kadaluarsa
+                console.log("Token expired, attempting to refresh...");
+              console.log();
+                // Panggil fungsi refresh token yang terpisah
+                handleTokenExpired(this);
+            }
+        }
+    });
+
+    // Fungsi khusus untuk memperbarui access token dengan refresh token
+    function refreshAccessToken() {
+        return $.ajax({
+            url: `${appUrl}/refresh`, // Endpoint untuk refresh token
+            type: "get",
+           
+            success: function(response) {
+                // Berhasil mendapatkan token baru
+                accessToken = response.access_token;
+                console.log("Access token diperbarui:", accessToken);
+            },
+            error: function(xhr, status, error) {
+                console.log("Gagal memperbarui token:", error);
+            }
+        });
+    }
+
+    // Fungsi untuk menangani token yang kadaluarsa
+    function handleTokenExpired(req) {
+        // Panggil refresh token
+        refreshAccessToken().done(function(newToken) {
+          accessToken = newToken.access_token;  // Simpan access token yang baru
+            retryLastRequest(req);  // Coba ulangi request terakhir
+        }).fail(function() {
+            console.log("Gagal memperbarui token, arahkan pengguna ke login.");
+            // Opsi: arahkan pengguna ke halaman login jika refresh token juga gagal
+        });
+    }
+
+    // Fungsi untuk menyimpan dan mengulang request terakhir yang gagal
+    function retryLastRequest(req) {
+
+        // Ulangi request
+        $.ajax(req);
+    }
 
 
 
