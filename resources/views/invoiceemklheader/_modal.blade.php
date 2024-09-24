@@ -1139,6 +1139,7 @@
 
           let getNominal = $("#tableInvoice").jqGrid("getCell", rowId, "nominal")
           let retribusi = (getNominal != '') ? parseFloat(getNominal.replaceAll(',', '')) : 0
+          setTotalNominal()
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
@@ -1167,6 +1168,7 @@
                   initAutoNumeric($(this).find(`tr#${selectedRowId} td[aria-describedby="tableInvoice_nominal"]`))
                 }
               });
+            initAutoNumeric($(this).find(`td[aria-describedby="tableInvoice_nominal"]`))
           }, 100);
 
           $('#loaderGrid').addClass('d-none')
@@ -1310,9 +1312,9 @@
             selectedRowIds.splice(i, 1);
           }
         }
-
-        $("#tableInvoice").jqGrid("setCell", rowId, "nominal", 0);
-        $(`#tableInvoice tr#${rowId}`).find(`td[aria-describedby="tableInvoice_nominal"]`).attr("value", 0)
+        $("#tableInvoice").jqGrid("setCell", rowId, "nominal", originalGridData.nominal);
+        $(`#tableInvoice tr#${rowId}`).find(`td[aria-describedby="tableInvoice_nominal"]`).attr("value", originalGridData.nominal)
+        initAutoNumeric( $(`#tableInvoice tr#${rowId}`).find(`td[aria-describedby="tableInvoice_nominal"]`))
       } else {
         selectedRowIds.push(rowId);
       }
@@ -1727,6 +1729,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          emkl: 'emkl',
         }
       },
       onSelectRow: (tujuan, element) => {

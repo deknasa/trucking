@@ -1744,6 +1744,7 @@
         // const bank_ID=0        
         this.postData = {
           Aktif: 'AKTIF',
+          emkl: 'emkl',
         }
       },
       onSelectRow: (cabang, element) => {
