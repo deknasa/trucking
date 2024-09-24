@@ -10,6 +10,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        emkl: `{!! $emkl ?? '' !!}`,
       },         
       idPrefix: 'TujuanLookup',
       colModel: [{

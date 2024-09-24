@@ -63,6 +63,7 @@ $idLookup = isset($id) ? $id : null;
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        emkl: `{!! $emkl ?? '' !!}`,
       },
       idPrefix: '',
       colModel: column,
