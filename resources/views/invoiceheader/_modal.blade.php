@@ -280,6 +280,7 @@
       sp_id = []
       jobtrucking = []
       keteranganManual = []
+      kapal = []
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
@@ -293,6 +294,7 @@
         sp_id.push(dataInvoice.sp_id)
         jobtrucking.push(dataInvoice.jobtrucking)
         keteranganManual.push(dataInvoice.keterangan)
+        kapal.push(dataInvoice.kapal)
       });
       let requestData = {
         'nominalextra': nominalextra,
@@ -300,6 +302,7 @@
         'omset': omset,
         'sp_id': sp_id,
         'jobtrucking': jobtrucking,
+        'kapal': kapal,
         'keterangan': keteranganManual
       };
       data.push({
@@ -414,7 +417,10 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             // showSuccessDialog(response.message, response.data.nobukti)
-            createInvoiceHeader()
+            let currTglbukti = $('#crudForm [name=tglbukti]').val();
+            createInvoiceHeader(true)
+
+            $('#crudForm').find('[name=tglbukti]').val(currTglbukti).trigger('change');
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             $("#tableInvoice")[0].p.selectedRowIds = [];
             $('#tableInvoice').jqGrid("clearGridData");
@@ -573,7 +579,7 @@
       })
   }
 
-  function createInvoiceHeader() {
+  function createInvoiceHeader(isSaveAdd = false) {
     let form = $('#crudForm')
 
     $('#crudModal').find('#crudForm').trigger('reset')
@@ -600,7 +606,9 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        if (!isSaveAdd) {
+          $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        }
         $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglterima]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -1023,6 +1031,28 @@
             sortable: true,
             align: "right",
             formatter: currencyFormat,
+          },
+          {
+            label: "KAPAL",
+            name: "kapal",
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            sortable: false,
+            editable: true,
+            hidden: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+
+                  let localRow = $("#tableInvoice").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  console.log(localRow)
+                  localRow.kapal = event.target.value;
+                },
+              }, ],
+            },
           },
           {
             label: "BAGIAN",
@@ -1453,7 +1483,11 @@
             }
 
           })
-
+          if (accessCabang == 'MEDAN' && response.data.coa == '01.03.02.01') {
+            $("#tableInvoice").jqGrid("showCol", `kapal`);
+          } else {
+            $("#tableInvoice").jqGrid("hideCol", `kapal`);
+          }
           if (aksi == 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -1806,12 +1840,17 @@
         this.postData = {
           Aktif: 'AKTIF',
           Invoice: 'UTAMA',
+          from: 'inputtrip'
         }
       },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         setTglJatuhTempo(agen.top);
-
+        if (accessCabang == 'MEDAN' && agen.coa == '01.03.02.01') {
+          $("#tableInvoice").jqGrid("showCol", `kapal`);
+        } else {
+          $("#tableInvoice").jqGrid("hideCol", `kapal`);
+        }
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
       },
@@ -1828,7 +1867,7 @@
 
     $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-       fileName: 'jenisorderV3',
+      fileName: 'jenisorderV3',
       searching: ['keterangan'],
       labelColumn: false,
       beforeProcess: function(test) {

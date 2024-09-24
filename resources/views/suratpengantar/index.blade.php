@@ -135,6 +135,9 @@
 
   setSpaceBarCheckedHandler('suratpengantar')
   $(document).ready(function() {
+    if(accessCabang != 'MEDAN'){
+      $('#btnReloadTrip').hide()
+    }
     $("#tabs").tabs()
     setIsKomisi()
     loadDetailGrid()
@@ -166,7 +169,7 @@
           reload: true,
           clearfilter:true,
           nobukti:'',
-          filters: ''
+          filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
         }
 
       }).trigger('reloadGrid')
@@ -713,10 +716,10 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statusTolakan = JSON.parse(value)
-              if (!statusTolakan) {
+              if (!value) {
                 return ''
               }
+              let statusTolakan = JSON.parse(value)
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusTolakan.WARNA}; color: #fff;">
                   <span>${statusTolakan.SINGKATAN}</span>
@@ -726,10 +729,10 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusTolakan = JSON.parse(rowObject.statustolakan)
-              if (!statusTolakan) {
+              if (!rowObject.statustolakan) {
                 return ` title=""`
               }
+              let statusTolakan = JSON.parse(rowObject.statustolakan)
               return ` title="${statusTolakan.MEMO}"`
             }
           },

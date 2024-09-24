@@ -83,6 +83,18 @@
                 <input type="text" name="pelanggan" class="form-control " readonly>
               </div>
             </div>
+
+            <div class="row form-group gandengan">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NO GANDENGAN / CHASIS <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="gandengan_id">
+                <input type="text" id="gandengan" name="gandengan" class="form-control gandengan-lookup">
+              </div>
+            </div>
+
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -354,6 +366,10 @@
     initLookups()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
+
+    if (accessCabang != 'MEDAN') {
+      $('.gandengan').hide()
+    }
   })
 
   $('#updateModal').on('hidden.bs.modal', () => {

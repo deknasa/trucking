@@ -46,13 +46,13 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'job emkl',
         name: 'nobukti',
-        width: width,
+        width: '500px',
         align: 'left'
       },
       {
         label: 'shipper',
         name: 'shipper',
-        width: width,
+        width: '500px',
         align: 'left'
       },
   ]
@@ -65,6 +65,7 @@ $idLookup = isset($id) ? $id : null;
     datatype: "json",
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
+      jenisorder_id: `{!! $jenisorder_id ?? '' !!}`,
     },
     idPrefix: '',
     colModel: column,

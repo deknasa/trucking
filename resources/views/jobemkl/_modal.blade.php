@@ -36,6 +36,18 @@
                 </div>
               </div>
             </div>
+             
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  JENIS ORDER <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="jenisorder_id">
+                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
+              </div>
+            </div>
+            
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -67,18 +79,7 @@
                 <input type="text" name="container" id="container" class="form-control container-lookup">
               </div>
             </div>
-            
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  JENIS ORDER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
-              </div>
-            </div>
-            
+           
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -97,6 +98,15 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="kapal" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  voy <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="voy" class="form-control">
               </div>
             </div>
             
@@ -118,6 +128,16 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="destination" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  penerima
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="penerima" class="form-control">
               </div>
             </div>
 
@@ -673,12 +693,17 @@
     let jenisorder = $('#crudForm [name=jenisorder]').val()
     if (jenisorder == 'MUATAN' ) {
       $('[name=marketing]').parents('.form-group').show();
-      $('[name=kapal]').parents('.form-group').show();
+      $('[name=tujuan]').parents('.form-group').find('label').text('TUJUAN')
       $('[name=destination]').parents('.form-group').show();
+      $('[name=penerima]').parents('.form-group').hide();
+      $('[name=lokasibongkarmuat]').parents('.form-group').find('label').text('LOKASI MUAT')
+
     }else if (jenisorder == 'BONGKARAN') {
       $('[name=marketing]').parents('.form-group').hide();
-      $('[name=kapal]').parents('.form-group').hide();
+      $('[name=tujuan]').parents('.form-group').find('label').text('ASAL')
       $('[name=destination]').parents('.form-group').hide();
+      $('[name=penerima]').parents('.form-group').show();
+      $('[name=lokasibongkarmuat]').parents('.form-group').find('label').text('LOKASI BONGKAR')
     }
   }
 

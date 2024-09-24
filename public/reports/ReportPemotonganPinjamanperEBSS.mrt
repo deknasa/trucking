@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3fdb71d5295691288da49bb700ca07c2",
+  "ReportGuid": "dd57dda25a2abd125c85fe222fa2441f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPemotonganPinjamanperEBSS.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724224078000+0700)/",
+  "ReportChanged": "/Date(1726807094000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -289,7 +289,7 @@
         "0": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,0.4,27.69,4.4",
+          "ClientRectangle": "0,0.4,27.7,4.4",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -311,7 +311,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -337,7 +337,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -363,7 +363,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -389,7 +389,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -415,7 +415,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -441,7 +441,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -467,7 +467,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -493,7 +493,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -519,7 +519,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -545,7 +545,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -571,7 +571,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -597,7 +597,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -623,7 +623,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -649,7 +649,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -675,7 +675,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -701,7 +701,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -727,7 +727,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -753,7 +753,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -779,7 +779,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -805,7 +805,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -831,7 +831,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -856,7 +856,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -875,7 +875,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -895,7 +895,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Italic;",
+              "Font": "SourceSansPro;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -915,7 +915,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -935,7 +935,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;;Italic;",
+              "Font": "SourceSansPro;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -955,7 +955,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -966,7 +966,7 @@
         "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
-          "ClientRectangle": "0,5.6,27.69,2.2",
+          "ClientRectangle": "0,5.6,27.7,2.2",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -986,7 +986,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.nobukti}&nbsp;"
+                "Value": "<font face=\"SourceSansPro\">{root_data.nobukti}&nbsp;</font>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1007,7 +1007,7 @@
               "TextFormat": {
                 "Ident": "StiDateFormatService"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "1": {
               "Ident": "StiText",
@@ -1023,7 +1023,7 @@
                 "Value": "{Line}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1053,7 +1053,7 @@
                 "Value": "{root_data.tglbukti}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1084,7 +1084,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.gajisupir_nobukti}&nbsp;"
+                "Value": "<font face=\"SourceSansPro\">{root_data.gajisupir_nobukti}&nbsp;</font>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1105,7 +1105,7 @@
               "TextFormat": {
                 "Ident": "StiDateFormatService"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "4": {
               "Ident": "StiText",
@@ -1122,7 +1122,7 @@
                 "Value": "{root_data.namasupir}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1156,7 +1156,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1192,7 +1192,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1229,7 +1229,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1266,7 +1266,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1303,7 +1303,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1336,7 +1336,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.potonganpinjamansemua}"
+                "Value": "<font face=\"SourceSansPro\">{root_data.potonganpinjamansemua}</font>"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
@@ -1347,6 +1347,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1359,7 +1361,7 @@
                 "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "11": {
               "Ident": "StiText",
@@ -1373,7 +1375,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.nopolisi}&nbsp;"
+                "Value": "<font face=\"SourceSansPro\">{root_data.nopolisi}&nbsp;</font>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1394,7 +1396,7 @@
               "TextFormat": {
                 "Ident": "StiDateFormatService"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "12": {
               "Ident": "StiText",
@@ -1411,7 +1413,7 @@
                 "Value": "{root_data.tgldari}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1445,7 +1447,7 @@
                 "Value": "{root_data.tglsampai}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1480,7 +1482,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1517,7 +1519,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1554,7 +1556,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1590,7 +1592,7 @@
                 "Value": "{root_data.tanggaldari}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1621,7 +1623,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.tanggalsampai}"
+                "Value": "<font face=\"SourceSansPro\">{root_data.tanggalsampai}</font>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1631,6 +1633,8 @@
               "TextOptions": {
                 "WordWrap": true
               },
+              "TextQuality": "Wysiwyg",
+              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1641,7 +1645,7 @@
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "19": {
               "Ident": "StiText",
@@ -1655,7 +1659,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.keteranganpinjamansupir}&nbsp;"
+                "Value": "<font face=\"SourceSansPro\">{root_data.keteranganpinjamansupir}&nbsp;</font>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1676,7 +1680,7 @@
               "TextFormat": {
                 "Ident": "StiDateFormatService"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "20": {
               "Ident": "StiText",
@@ -1690,7 +1694,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.keteranganpinjamansupirsemua}&nbsp;"
+                "Value": "<font face=\"SourceSansPro\">{root_data.keteranganpinjamansupirsemua}</font><span style=\"font-family: &quot;Comic Sans MS3&quot;;\">&nbsp;</span>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1711,15 +1715,16 @@
               "TextFormat": {
                 "Ident": "StiDateFormatService"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             }
           },
           "DataSourceName": "root_data"
         }
       },
+      "PaperSize": "A4",
       "Orientation": "Landscape",
-      "PageWidth": 29.69,
-      "PageHeight": 21.01,
+      "PageWidth": 29.7,
+      "PageHeight": 21,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },

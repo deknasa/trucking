@@ -34,7 +34,7 @@
         addModalinput()
     }
 
-    $(document). on('click', "#addModalinput", function() {
+    $("#input-modal-form"). off('click').on('click', "#addModalinput", function() {
         addModalinput()
     })
 
@@ -79,6 +79,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          jenisorder_id:`{{ $jenisorder_id ?? '' }}`,
         }
       },
       onSelectRow: (jobemkl, element) => {

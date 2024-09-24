@@ -50,13 +50,21 @@
         if ($.trim(format['cetak']) == 'FORMAT 1') {
           report.loadFile(`{{ asset('public/reports/ReportInvoiceBesar.mrt') }}`)
         } else {
-          report.loadFile(`{{ asset('public/reports/ReportInvoiceBesarFormat2.mrt') }}`)
+          if (invoiceheaders.cabang == 'MEDAN' && invoiceheaders.coa == '01.03.02.01') {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceBesarOLFormat2.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceBesarFormat2.mrt') }}`)
+          }
         }
       } else {
         if ($.trim(format['cetak']) == 'FORMAT 1') {
           report.loadFile(`{{ asset('public/reports/ReportInvoice.mrt') }}`)
         } else {
-          report.loadFile(`{{ asset('public/reports/ReportInvoiceFormat2.mrt') }}`)
+          if (invoiceheaders.cabang == 'MEDAN' && invoiceheaders.coa == '01.03.02.01') {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceOLFormat2.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceFormat2.mrt') }}`)
+          }
         }
       }
 

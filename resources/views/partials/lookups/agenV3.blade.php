@@ -51,6 +51,14 @@ $idLookup = isset($id) ? $id : null;
             name: "namaagen",
             width: width,
         },
+        {
+          label: 'COA',
+          name: 'coa',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          align: 'left',
+          search: false,
+          hidden: true
+        },
     ]
 
 
@@ -64,6 +72,7 @@ $idLookup = isset($id) ? $id : null;
         postData: {
             aktif: `{!! $Aktif ?? '' !!}`,
             invoice: `{!! $Invoice ?? '' !!}`,
+            from: `{!! $from ?? '' !!}`,
             forLookup: true,
         },
         idPrefix: '',

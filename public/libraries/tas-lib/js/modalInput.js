@@ -7,10 +7,10 @@
 // 	return str.join("&");
 // };
 
-const getModalInput = function (fileName, postData) {
+const getModalInput = function (fileName, postData,currentVal) {
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: `${appUrl}/lookup/${fileName}?data=${postData}`,
+			url: `${appUrl}/lookup/${fileName}?data=${currentVal}&${serialize(postData)}`,
 			method: "GET",
 			dataType: "html",
 			success: function (response) {
@@ -108,7 +108,7 @@ $.fn.modalInput = function (options) {
 
 		lookupModal.modal("show");
 		console.log(searchValue);
-		getModalInput(settings.fileName, searchValue ?? null).then((response) => {
+		getModalInput(settings.fileName, settings.postData, searchValue ?? null).then((response) => {
 			lookupModal.find(".modal-body").html('')
 			lookupModal.find(".modal-body").html(response);
 		
@@ -304,7 +304,7 @@ $.fn.linkInput = function (options) {
 
 		lookupModal.modal("show");
 		console.log(searchValue);
-		getModalInput(settings.fileName, searchValue ?? null).then((response) => {
+		getModalInput(settings.fileName, settings.postData ,searchValue ?? null).then((response) => {
 			lookupModal.find(".modal-body").html('')
 			lookupModal.find(".modal-body").html(response);
 		

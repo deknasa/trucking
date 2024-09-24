@@ -1569,14 +1569,18 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
+        data: {
+          aktif: 'AKTIF',
+          tipe: 'KAS'
+        },
         success: response => {
           $.each(response.data, (index, bank) => {
             // console.log(index);
-            if (bank.id == 1) {
+            // if (bank.id == 1) {
               $('#crudForm [name=bank_id]').first().val(bank.id)
               $('#crudForm [name=bank]').first().val(bank.namabank)
               $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
-            }
+            // }
           })
           resolve()
         },

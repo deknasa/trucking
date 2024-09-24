@@ -186,12 +186,20 @@
 
     function laporanpinjamansupirkaryawan(data, detailParams, dataCabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
-        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/ComicSansMS3.ttf') }}", "Comic Sans MS3");
+        Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirKaryawan.mrt') }}`);
+        if (accessCabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirKaryawanA4.mrt') }}`)
+        } else if (accessCabang == 'MAKASSAR') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirKaryawanLetter.mrt') }}`)
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirKaryawan.mrt') }}`);
+        }
+
+        // report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirKaryawan.mrt') }}`);
 
         dataSet.readJson({
             'data': data,

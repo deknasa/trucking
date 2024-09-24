@@ -609,6 +609,7 @@
           if (accessCabang == 'BITUNG-EMKL') {
             $('.statusreimbursement').show()
             $('.tbl_ketranganJob').show()
+            enableNominalReimburse()
             $('.cabang').hide()
             $('.statusjenisbiaya').hide()
           } else {
@@ -648,6 +649,7 @@
               if (accessCabang == 'BITUNG-EMKL') {
                 $('.statusreimbursement').show()
                 $('.tbl_ketranganJob').show()
+                enableNominalReimburse()
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
               } else {
@@ -742,6 +744,7 @@
             if (accessCabang == 'BITUNG-EMKL') {
               $('.statusreimbursement').show()
               $('.tbl_ketranganJob').show()
+              enableNominalReimburse()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
@@ -886,6 +889,7 @@
             if (accessCabang == 'BITUNG-EMKL') {
               $('.statusreimbursement').show()
               $('.tbl_ketranganJob').show()
+              enableNominalReimburse()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
                 $('.cabang').hide()
                 $('.statusjenisbiaya').hide()
@@ -957,6 +961,7 @@
 
             if (accessCabang == 'BITUNG-EMKL') {
               $('.tbl_ketranganJob').show()
+              enableNominalReimburse()
               $('.statusreimbursement').show()
               if ($('#crudForm').find(`[name="statusreimbursementnama"]`).val() != 'YA') {
                 $('.cabang').hide()
@@ -1194,7 +1199,7 @@
                     <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
                   </td>
                   <td>
-                      <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                      <input type="text" id="nominal_${index}"  name="nominal_detail[]" class="form-control autonumeric nominal"> 
                   </td>
 
                   <td>
@@ -1274,6 +1279,12 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
+          if (accessCabang == 'BITUNG-EMKL') {
+            $('.tbl_ketranganJob').show()
+            enableNominalReimburse()
+          } else {
+            $('.tbl_ketranganJob').hide()
+          }
           resolve()
         },
         error: error => {
@@ -1298,7 +1309,7 @@
           <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
         </td>
         <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+          <input type="text" id="nominal_${lastIndex}" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
           <input type="text" name="nowarkat[]"  class="form-control">
@@ -1374,6 +1385,12 @@
     setRowNumbers()
     rowCabangPusat()
     initLookupDetail(lastIndex);
+    if (accessCabang == 'BITUNG-EMKL') {
+      $('.tbl_ketranganJob').show()
+      enableNominalReimburse()
+    } else {
+      $('.tbl_ketranganJob').hide()
+    }
 
   }
 
@@ -1434,11 +1451,21 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          jenisorder_id: 2
         }
       },
       onSelectRow: (data, element) => {
         element.val(JSON.stringify(data));
         element.data('currentValue', JSON.stringify(data))
+        const totalNominal = data.reduce((accumulator, item) => {
+          return accumulator + item.nominal;
+        }, 0);
+
+        console.log($(`#nominal_${rowLookup}`),totalNominal);
+
+        elQty = AutoNumeric.getAutoNumericElement($(`#nominal_${rowLookup}`)[0]);
+        elQty.set(totalNominal);
+        
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1616,6 +1643,18 @@
     }
   }
 
+  function enableNominalReimburse(){
+    let reimbursement = $('#crudForm').find(`[name="statusreimbursementnama"]`).val()
+
+    if (reimbursement == 'YA') {
+      $('.tbl_ketranganJob').show()
+      $(`#table_body [name="nominal_detail[]"]`).prop('readonly',true)
+    } else {
+      $('.tbl_ketranganJob').hide()
+      $(`#table_body [name="nominal_detail[]"]`).prop('readonly',false)
+    }
+  }
+
   function initLookup() {
 
     $('.pelanggan-lookup').lookup({
@@ -1753,6 +1792,7 @@
           $(`#crudForm [name="statusjenisbiaya"]`).val('')
           $(`#crudForm [name="statusjenisbiayanama"]`).data('currentValue', '')
         }
+        enableNominalReimburse()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1769,6 +1809,7 @@
         $(`#crudForm [name="statusjenisbiayanama"]`).val('')
         $(`#crudForm [name="statusjenisbiaya"]`).val('')
         $(`#crudForm [name="statusjenisbiayanama"]`).data('currentValue', '')
+        enableNominalReimburse()
 
       }
     })

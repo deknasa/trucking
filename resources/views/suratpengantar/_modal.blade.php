@@ -1286,11 +1286,11 @@
             $('#crudForm [name=jobtrucking]').parents('.input-group').find('.button-clear').hide()
             // }
 
-            if (accessCabang == 'MEDAN') {
-              $('#crudForm [name=gandengan]').attr('readonly', true)
-              $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
-              $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
-            }
+            // if (accessCabang == 'MEDAN') {
+            //   $('#crudForm [name=gandengan]').attr('readonly', true)
+            //   $('#crudForm [name=gandengan]').parents('.input-group').find('.input-group-append').hide()
+            //   $('#crudForm [name=gandengan]').parents('.input-group').find('.button-clear').hide()
+            // }
 
             moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
             if(jobmanual == 'YA'){
@@ -2630,6 +2630,7 @@
 
           Aktif: 'AKTIF',
           Invoice: 'UTAMA',
+          from: 'inputtrip'
         }
       },
       onSelectRow: (agen, element) => {
@@ -2905,6 +2906,12 @@
     let dari = $('#crudForm').find(`[name="dari"]`).parents('.input-group')
     let sampai = $('#crudForm').find(`[name="sampai"]`).parents('.input-group')
     let statuscontainer = $('#crudForm').find(`[name="statuscontainer"]`).parents('.input-group')
+    
+    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
+    let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
+    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
+    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group')
 
     if (!edit) {
 
@@ -2928,6 +2935,21 @@
       statuscontainer.find('.button-clear').attr('disabled', true)
       statuscontainer.find('input').attr('readonly', true)
       statuscontainer.children().find('.lookup-toggler').attr('disabled', true)
+      pelanggan.find('.button-clear').attr('disabled', true)
+      pelanggan.find('input').attr('readonly', true)
+      pelanggan.children().find('.lookup-toggler').attr('disabled', true)
+      container.find('.button-clear').attr('disabled', true)
+      container.find('input').attr('readonly', true)
+      container.children().find('.lookup-toggler').attr('disabled', true)
+      agen.find('.button-clear').attr('disabled', true)
+      agen.find('input').attr('readonly', true)
+      agen.children().find('.lookup-toggler').attr('disabled', true)
+      jenisorder.find('.button-clear').attr('disabled', true)
+      jenisorder.find('input').attr('readonly', true)
+      jenisorder.children().find('.lookup-toggler').attr('disabled', true)
+      gandengan.find('.button-clear').attr('disabled', true)
+      gandengan.find('input').attr('readonly', true)
+      gandengan.children().find('.lookup-toggler').attr('disabled', true)
 
     } else {
       console.log("true");
@@ -2949,6 +2971,22 @@
       statuscontainer.find('.button-clear').attr('disabled', false)
       statuscontainer.find('input').attr('readonly', false)
       statuscontainer.children().find('.lookup-toggler').attr('disabled', false)
+      pelanggan.find('.button-clear').attr('disabled', false)
+      pelanggan.find('input').attr('readonly', false)
+      pelanggan.children().find('.lookup-toggler').attr('disabled', false)
+      container.find('.button-clear').attr('disabled', false)
+      container.find('input').attr('readonly', false)
+      container.children().find('.lookup-toggler').attr('disabled', false)
+      agen.find('.button-clear').attr('disabled', false)
+      agen.find('input').attr('readonly', false)
+      agen.children().find('.lookup-toggler').attr('disabled', false)
+      jenisorder.find('.button-clear').attr('disabled', false)
+      jenisorder.find('input').attr('readonly', false)
+      jenisorder.children().find('.lookup-toggler').attr('disabled', false)
+      gandengan.find('.button-clear').attr('disabled', false)
+      gandengan.find('input').attr('readonly', false)
+      gandengan.children().find('.lookup-toggler').attr('disabled', false)
+
 
     }
 
@@ -2956,24 +2994,24 @@
   }
 
   function inputReadOnly() {
-    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
-    let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
-    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
-    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    // let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
+    // let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
+    // let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
+    // let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
     let dari = $('#crudForm').find(`[name="dari"]`)
     let sampai = $('#crudForm').find(`[name="sampai"]`)
-    pelanggan.find('.button-clear').attr('disabled', true)
-    pelanggan.find('input').attr('readonly', true)
-    pelanggan.children().find('.lookup-toggler').attr('disabled', true)
-    container.find('.button-clear').attr('disabled', true)
-    container.find('input').attr('readonly', true)
-    container.children().find('.lookup-toggler').attr('disabled', true)
-    agen.find('.button-clear').attr('disabled', true)
-    agen.find('input').attr('readonly', true)
-    agen.children().find('.lookup-toggler').attr('disabled', true)
-    jenisorder.find('.button-clear').attr('disabled', true)
-    jenisorder.find('input').attr('readonly', true)
-    jenisorder.children().find('.lookup-toggler').attr('disabled', true)
+    // pelanggan.find('.button-clear').attr('disabled', true)
+    // pelanggan.find('input').attr('readonly', true)
+    // pelanggan.children().find('.lookup-toggler').attr('disabled', true)
+    // container.find('.button-clear').attr('disabled', true)
+    // container.find('input').attr('readonly', true)
+    // container.children().find('.lookup-toggler').attr('disabled', true)
+    // agen.find('.button-clear').attr('disabled', true)
+    // agen.find('input').attr('readonly', true)
+    // agen.children().find('.lookup-toggler').attr('disabled', true)
+    // jenisorder.find('.button-clear').attr('disabled', true)
+    // jenisorder.find('input').attr('readonly', true)
+    // jenisorder.children().find('.lookup-toggler').attr('disabled', true)
     dari.parents('.input-group').find('.input-group-append').hide()
     dari.parents('.input-group').find('.button-clear').hide()
     sampai.parents('.input-group').find('.input-group-append').hide()

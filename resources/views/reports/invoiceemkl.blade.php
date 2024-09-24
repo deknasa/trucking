@@ -50,7 +50,14 @@
         if (invoiceheaders.jenisorder == 'MUATAN') {
           report.loadFile(`{{ asset('public/reports/ReportInvoiceEmklMuatan.mrt') }}`)
         } else {
-          report.loadFile(`{{ asset('public/reports/ReportInvoiceEmkl.mrt') }}`)
+          if (invoiceheaders.statusinvoice == 'UTAMA') {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceEmkl.mrt') }}`)
+
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceEmklTambahan.mrt') }}`)
+
+          }
+
         }
       }
 

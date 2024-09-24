@@ -62,6 +62,7 @@ class InvoiceEmklHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'invoiceemkldetail', $detailParams)['data'];
+            
           
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 

@@ -177,7 +177,15 @@
         var report = new Stimulsoft.Report.StiReport();
         var dataSet = new Stimulsoft.System.Data.DataSet("Data");
 
-        report.loadFile(`{{ asset('public/reports/ReportLaporanHutangBBM.mrt') }}`);
+        if (accessCabang == 'MEDAN') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanHutangBBMA4.mrt') }}`)
+        } else if (accessCabang == 'MAKASSAR') {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanHutangBBMLetter.mrt') }}`)
+        } else {
+            report.loadFile(`{{ asset('public/reports/ReportLaporanHutangBBM.mrt') }}`);
+        }
+
+        // report.loadFile(`{{ asset('public/reports/ReportLaporanHutangBBM.mrt') }}`);
 
         dataSet.readJson({
             'data': data,
