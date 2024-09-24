@@ -353,6 +353,10 @@ Route::get('stokpusat/tokenmdn', [StokPusatController::class, 'tokenMdn']);
 Route::get('stokpusat/tokenmks', [StokPusatController::class, 'tokenMks']);
 Route::get('stokpusat/tokenjkt', [StokPusatController::class, 'tokenJkt']);
 Route::get('stokpusat/tokenjkttnl', [StokPusatController::class, 'tokenJktTnl']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/refresh',[AuthController::class,'refreshToken'])->name('refreshs');
+
+});
 Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('importdatacabang/index', [ImportDataCabangController::class, 'index']);
     Route::get('importdatacabang', [ImportDataCabangController::class, 'index']);

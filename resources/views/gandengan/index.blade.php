@@ -356,7 +356,11 @@
                         innerHTML: '<i class="fa fa-plus"></i> ADD',
                         class: 'btn btn-primary btn-sm mr-1',
                         onClick: () => {
-                            createGandengan()
+                            NewcekValidasi(0, 'ADD').then((response) => {
+                                createGandengan()
+                            }).catch((error) => {
+                                showDialog(error)
+                            })
                         }
                     },
                     {
@@ -368,7 +372,11 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId, 'EDIT')
+                                 NewcekValidasi(selectedId, 'EDIT').then((response) => {
+                                    editGandengan(selectedId)
+                                }).catch((error) => {
+                                    showDialog(error)
+                                })
                             }
                         }
                     },
@@ -381,7 +389,12 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId, 'DELETE')
+                                NewcekValidasi(selectedId, 'DELETE').then((response) => {
+                                    viewGandengan(selectedId)
+                                }).catch((error) => {
+                                    console.log('asdasd');
+                                    showDialog(error)
+                                })
                             }
                         }
                     },
@@ -394,7 +407,11 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                viewGandengan(selectedId)
+                                 NewcekValidasi(selectedId, 'VIEW').then((response) => {
+                                    viewGandengan(selectedId)
+                                }).catch((error) => {
+                                    showDialog(error)
+                                })
                             }
                         }
                     },

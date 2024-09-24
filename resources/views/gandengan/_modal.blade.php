@@ -755,30 +755,25 @@
 
   }
 
-  function cekValidasi(Id,Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}gandengan/${Id}/cekValidasi`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      data: {
-        aksi: Aksi,
-      },
-      success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
-        } else {
-          if (Aksi=="EDIT") {
-            editGandengan(Id)
-          }else if (Aksi=="DELETE"){
-            deleteGandengan(Id)
+  function NewcekValidasi(Id,Aksi) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `{{ config('app.api_url') }}gandengan/${Id}/cekValidasi`,
+        method: 'POST',
+        dataType: 'JSON',
+        data: {
+          aksi: Aksi,
+        },
+        success: response => {
+          var kondisi = response.kondisi
+          
+          if (kondisi == true) {
+            reject(response.message['keterangan'])
+          } else {
+            resolve()
           }
         }
-
-      }
+      })
     })
   }
 </script>

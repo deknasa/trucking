@@ -355,7 +355,7 @@ $(document).on("sidebar:toggle", () => {
 
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
     if (jqXHR.status === 401) {
-        showDialog(thrownError, jqXHR.responseJSON.message);
+        // showDialog(thrownError, jqXHR.responseJSON.message);
     }
 });
 
