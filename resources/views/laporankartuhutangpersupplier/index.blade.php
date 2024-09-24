@@ -27,8 +27,8 @@
                         </div> --}}
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-1 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
-                            <div class="col-sm-11 mt-2">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                            <div class="col-sm-10 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="dari" class="form-control datepicker">
                                 </div>
@@ -37,15 +37,23 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-1 col-form-label mt-2">SUPPLIER</label>
-                            <div class="col-sm-5 mt-2">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">SUPPLIER</label>
+                            <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="supplierdari_id">
                                 <input type="text" id="supplierdari" name="supplierdari" class="form-control supplierdari-lookup">
                             </div>
                             <h5 class="col-sm-1 mt-3 text-center">s/d</h5>
-                            <div class="col-sm-5 mt-2">
+                            <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="suppliersampai_id">
                                 <input type="text" id="suppliersampai" name="suppliersampai" class="form-control suppliersampai-lookup">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS LAPORAN</label>
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="jenislaporan" id="jenislaporan">
+                                <input type="text" id="jenislaporan" name="jenislaporannama" class="form-control jenislaporan-lookup">
                             </div>
                         </div>
 
@@ -100,7 +108,8 @@
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=status]'), false)
         setLaporanKartuHutangPerSupplier($('#crudForm'))
-
+        $('[name=jenislaporan]').val(0)
+        $('[name=jenislaporannama]').val('SEMUA')
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
             'change');
@@ -138,7 +147,8 @@
                     supplierdari_id: supplierdari_id,
                     suppliersampai_id: suppliersampai_id,
                     supplierdari: supplierdari,
-                    suppliersampai: suppliersampai
+                    suppliersampai: suppliersampai,
+                    jenislaporan: $('#crudForm').find('[name=jenislaporan]').val()
                 },
                 success: function(response) {
                     // console.log(response)
@@ -149,10 +159,11 @@
                         supplierdari_id: supplierdari_id,
                         suppliersampai_id: suppliersampai_id,
                         supplierdari: supplierdari,
-                        suppliersampai: suppliersampai
+                        suppliersampai: suppliersampai,
+                        jenislaporan: $('#crudForm').find('[name=jenislaporan]').val()
                     };
                     let cabang = accessCabang
-                    laporankartuhutangpersupplier(data, detailParams, dataCabang,cabang);
+                    laporankartuhutangpersupplier(data, detailParams, dataCabang, cabang);
                 },
                 error: function(error) {
                     if (error.status === 422) {
@@ -189,7 +200,8 @@
                 supplierdari_id: supplierdari_id,
                 suppliersampai_id: suppliersampai_id,
                 supplierdari: supplierdari,
-                suppliersampai: suppliersampai
+                suppliersampai: suppliersampai,
+                jenislaporan: $('#crudForm').find('[name=jenislaporan]').val()
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -219,7 +231,7 @@
         })
     })
 
-    function laporankartuhutangpersupplier(data, detailParams, dataCabang,cabang) {
+    function laporankartuhutangpersupplier(data, detailParams, dataCabang, cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
@@ -228,13 +240,13 @@
 
         if (cabang == 'MEDAN') {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPerSupplierA4.mrt') }}`);
-        }else if(cabang == 'MAKASSAR'){
+        } else if (cabang == 'MAKASSAR') {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPerSupplierLetter.mrt') }}`);
-        }else{
+        } else {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPerSupplier.mrt') }}`);
         }
 
-        
+
 
         dataSet.readJson({
             'data': data,
@@ -278,6 +290,7 @@
                     supplierdari_id: $('#crudForm').find('[name=supplierdari_id]').val(),
                     suppliersampai: $('#crudForm').find('[name=suppliersampai]').val(),
                     suppliersampai_id: $('#crudForm').find('[name=suppliersampai_id]').val(),
+                    jenislaporan: $('#crudForm').find('[name=jenislaporan]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
@@ -348,6 +361,41 @@
             },
             onClear: (element) => {
                 $('#crudForm [name=suppliersampai_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.jenislaporan-lookup').lookupMaster({
+            title: 'Jenis Laporan Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'JENIS KARTU HUTANG',
+                    subgrp: 'JENIS KARTU HUTANG',
+                    semua: 'SEMUA',
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'jenislaporan_id',
+                    searchText: 'jenislaporan-lookup',
+                    title: 'Jenis Laporan Lookup',
+                    typeSearch: 'ALL',
+                    singleColumn: true,
+                    hideLabel: true,
+                }
+            },
+            onSelectRow: (jenislaporan, element) => {
+                $('#crudForm [name=jenislaporan]').first().val(jenislaporan.id)
+                element.val(jenislaporan.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=jenislaporan]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
