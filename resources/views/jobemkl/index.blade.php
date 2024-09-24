@@ -5,6 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
+            @include('layouts._rangeheader')
             <table id="jqGrid"></table>
         </div>
     </div>
@@ -72,12 +73,34 @@
         })
     }
 
+    
+    
+    
     $(document).ready(function() {
+        @isset($request['tgldari'])
+        tgldariheader = `{{ $request['tgldari'] }}`;
+        @endisset
+        @isset($request['tglsampai'])
+        tglsampaiheader = `{{ $request['tglsampai'] }}`;
+        @endisset
+        setRange(true)
+        initDatepicker('datepickerIndex')
+        
+        $(document).on('click', '#btnReload', function(event) {
+            loadDataHeader('jobemkl', {
+                proses: 'reload'
+            })
+        })
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}jobemkl`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    tgldari: $('#tgldariheader').val(),
+                    tglsampai: $('#tglsampaiheader').val(),
+                    proses: 'reload'
+                },
                 datatype: "json",
                 colModel: [{
                         label: '',
@@ -159,6 +182,12 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
+                        label: 'nominal',
+                        name: 'nominal',
+                        align: 'right',
+                        formatter: currencyFormat,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
                         label:'voy',
                         name: 'voy',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
