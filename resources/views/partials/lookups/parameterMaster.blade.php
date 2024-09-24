@@ -128,6 +128,7 @@ $idLookup = isset($id) ? $id : null;
         postData: {
             grp: `{!! $grp ?? '' !!}`,
             subgrp: `{!! $subgrp ?? '' !!}`,
+            semua: `{!! $semua ?? '' !!}`,
             filters: `{!! $filters ?? '' !!}`,
 
         },
