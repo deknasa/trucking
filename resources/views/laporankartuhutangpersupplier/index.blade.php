@@ -108,8 +108,8 @@
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=status]'), false)
         setLaporanKartuHutangPerSupplier($('#crudForm'))
-        $('[name=jenislaporan]').val(0)
-        $('[name=jenislaporannama]').val('SEMUA')
+        // $('[name=jenislaporan]').val(0)
+        // $('[name=jenislaporannama]').val('SEMUA')
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
             'change');
@@ -375,7 +375,7 @@
                     url: `${apiUrl}parameter/combo`,
                     grp: 'JENIS KARTU HUTANG',
                     subgrp: 'JENIS KARTU HUTANG',
-                    semua: 'SEMUA',
+                    // semua: 'SEMUA',
                     Aktif: 'AKTIF',
                     searching: 1,
                     valueName: 'jenislaporan_id',
