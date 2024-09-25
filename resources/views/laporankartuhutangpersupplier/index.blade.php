@@ -83,8 +83,8 @@
 {{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
 <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script>
 @endpush()
 @push('scripts')
 <script>
@@ -160,7 +160,7 @@
                         suppliersampai_id: suppliersampai_id,
                         supplierdari: supplierdari,
                         suppliersampai: suppliersampai,
-                        jenislaporan: $('#crudForm').find('[name=jenislaporan]').val()
+                        jenislaporan: ($('#crudForm').find('[name=jenislaporan]').val() == '') ? 0 : $('#crudForm').find('[name=jenislaporan]').val()
                     };
                     let cabang = accessCabang
                     laporankartuhutangpersupplier(data, detailParams, dataCabang, cabang);
