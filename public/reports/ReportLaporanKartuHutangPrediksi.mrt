@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "46acfc9462b113c92a814b1225341c2a",
+  "ReportGuid": "6fdc8943eef9cd569b5eb5ac501f1b61",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanKartuHutangPrediksi.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPrediksiA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1725002533000+0700)/",
+  "ReportChanged": "/Date(1727253070000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -109,6 +109,12 @@
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
+            "Type": "System.String"
+          },
+          "14": {
+            "Name": "noebsdata",
+            "NameInSource": "noebsdata",
+            "Alias": "noebsdata",
             "Type": "System.String"
           }
         },
@@ -589,33 +595,6 @@
           "Components": {
             "0": {
               "Ident": "StiText",
-              "Name": "Text20",
-              "Guid": "7a7e2607963e58ddd075917536210794",
-              "ClientRectangle": "38.06,1,21.81,7.59",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "<font face=\"SourceSansPro\">{root_data.tanggal}</font>"
-              },
-              "Font": "Comic Sans MS3;9;;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "TextQuality": "Wysiwyg",
-              "AllowHtmlTags": true,
-              "TextFormat": {
-                "Ident": "StiDateFormatService",
-                "StringFormat": "dd/MM/yyyy"
-              },
-              "Type": "Expression"
-            },
-            "1": {
-              "Ident": "StiText",
               "Name": "Text22",
               "Guid": "2b643fa7e677a9a771103263ed36bfae",
               "ClientRectangle": "5.6,1,29.1,7.59",
@@ -637,7 +616,7 @@
               "AllowHtmlTags": true,
               "Type": "Expression"
             },
-            "2": {
+            "1": {
               "Ident": "StiText",
               "Name": "Text23",
               "Guid": "a91f497eb014c8dfc40781c6188f9f19",
@@ -646,7 +625,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },
@@ -666,7 +644,7 @@
               },
               "Type": "DataColumn"
             },
-            "3": {
+            "2": {
               "Ident": "StiText",
               "Name": "Text10",
               "Guid": "45fcd726894d2ccac2301ae4fddd7ff7",
@@ -675,7 +653,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.bayar}"
               },
@@ -695,7 +672,7 @@
               },
               "Type": "DataColumn"
             },
-            "4": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "d58d2714a378f7fa0793a745b2ba9db2",
@@ -704,7 +681,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -724,7 +700,7 @@
               },
               "Type": "DataColumn"
             },
-            "5": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text6",
               "Guid": "19ba4e5799f6a2498dec6f0fb08078ad",
@@ -747,6 +723,28 @@
               "TextQuality": "Wysiwyg",
               "AllowHtmlTags": true,
               "Type": "Expression"
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text13",
+              "ClientRectangle": "38,1,22,6",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{root_data.tanggal}"
+              },
+              "Font": "SourceSansPro;9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
+              }
             },
             "6": {
               "Ident": "StiStartPointPrimitive",
@@ -943,7 +941,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -973,7 +970,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.nominal)}"
               },
@@ -1003,7 +999,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.bayar)}"
               },
