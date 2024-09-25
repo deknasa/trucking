@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'authorized' => \App\Http\Middleware\Authorized::class,
         'no-cache' => \App\Http\Middleware\NoCache::class,
         'jwt' => \App\Http\Middleware\VerifyJwtToken::class,
+        'check.token' => \App\Http\Middleware\CekTokenMiddleware::class,
     ];
 }
