@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d15e49336e89890948f3408e001aeadb",
+  "ReportGuid": "aacb7ec94e9531f913a1188404efb5ec",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPerSupplierA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1727246155000+0700)/",
+  "ReportChanged": "/Date(1727255834000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1735,6 +1735,17 @@
               "Guid": "c72a0b5625cd78f6986fd0200ae10f4c",
               "ClientRectangle": "1.04,0.02,4.7,0.74",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": " 0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1762,6 +1773,17 @@
               "GrowToHeight": true,
               "ClientRectangle": "8.43,0.12,3.12,0.53",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1803,6 +1825,17 @@
               "GrowToHeight": true,
               "ClientRectangle": "14.73,0.09,2.82,0.53",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1844,6 +1877,17 @@
               "GrowToHeight": true,
               "ClientRectangle": "16.99,0.08,3.42,0.51",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1884,6 +1928,17 @@
               "GrowToHeight": true,
               "ClientRectangle": "0.24,0.6,20.23,0.29",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
