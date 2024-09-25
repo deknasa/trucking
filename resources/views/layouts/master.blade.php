@@ -741,7 +741,6 @@
             success: function(response) {
                 // Berhasil mendapatkan token baru
                 accessToken = response.access_token;
-                console.log("Access token diperbarui:", accessToken);
             },
             error: function(xhr, status, error) {
                 console.log("Gagal memperbarui token:", error);
@@ -754,7 +753,7 @@
         // Panggil refresh token
         refreshAccessToken().done(function(newToken) {
           accessToken = newToken.access_token;  // Simpan access token yang baru
-            retryLastRequest(req);  // Coba ulangi request terakhir
+          retryLastRequest(req);  // Coba ulangi request terakhir
         }).fail(function() {
             console.log("Gagal memperbarui token, arahkan pengguna ke login.");
             // Opsi: arahkan pengguna ke halaman login jika refresh token juga gagal
