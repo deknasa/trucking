@@ -331,7 +331,7 @@
                 });
                 let fileURL = URL.createObjectURL(blob);
                 window.open(fileURL, '_blank');
-                manipulatePdfWithJsPdf(pdfData);
+                // manipulatePdfWithJsPdf(pdfData);
             }, Stimulsoft.Report.StiExportFormat.Pdf);
         });
     }

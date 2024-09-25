@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7edd994e6b4fdf67dcd01ab6b150d4c1",
+  "ReportGuid": "4f104c95470540f1d1d8cc413764c140",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgenA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724749989000+0700)/",
+  "ReportChanged": "/Date(1727236201000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -51,7 +51,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "4": {
             "Name": "nominalpiutang",
@@ -1069,42 +1069,6 @@
             },
             "2": {
               "Ident": "StiText",
-              "Name": "Text9",
-              "Guid": "cd3b239e91d6ae4352bba29155253e20",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "5.38,0.09,3.12,0.51",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{root_data.tglbukti}"
-              },
-              "CanBreak": true,
-              "Font": "SourceSansPro;9;;",
-              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
-              "TextFormat": {
-                "Ident": "StiDateFormatService",
-                "StringFormat": "dd/MM/yyyy"
-              },
-              "Type": "DataColumn"
-            },
-            "3": {
-              "Ident": "StiText",
               "Name": "Text23",
               "Guid": "7f35d8982f0830d258383fcee9abbcea",
               "CanGrow": true,
@@ -1144,7 +1108,7 @@
               },
               "Type": "DataColumn"
             },
-            "4": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text8",
               "Guid": "b1707fdbaa1dc4183468750708f1804c",
@@ -1180,7 +1144,7 @@
               },
               "Type": "DataColumn"
             },
-            "5": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text11",
               "Guid": "dfadbbe4fbb411594c388ff5d1871dd3",
@@ -1221,7 +1185,7 @@
               },
               "Type": "DataColumn"
             },
-            "6": {
+            "5": {
               "Ident": "StiText",
               "Name": "Text17",
               "Guid": "d587e67aa85edf9a22e2a6a6d6e55206",
@@ -1261,6 +1225,24 @@
                 "State": "DecimalSeparator, GroupSeparator"
               },
               "Type": "DataColumn"
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text9",
+              "ClientRectangle": "5.4,0.03,3,0.6",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{root_data.tglbukti}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
+              }
             }
           },
           "DataSourceName": "root_data"
