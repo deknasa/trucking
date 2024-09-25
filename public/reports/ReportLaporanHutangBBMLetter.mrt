@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d4d056cd686cf6fb6b0fc3bab12d7d5d",
+  "ReportGuid": "57140389d272823b8a4d14c81b927abc",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanHutangBBMA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1726822835000+0700)/",
+  "ReportChanged": "/Date(1727253578000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -31,7 +31,7 @@
             "Name": "tanggal",
             "NameInSource": "tanggal",
             "Alias": "tanggal",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "1": {
             "Name": "keterangan",
@@ -528,8 +528,8 @@
                 "WordWrap": true
               },
               "TextFormat": {
-                "Ident": "StiDateFormatService",
-                "StringFormat": "dd/MM/yyyy"
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             },
@@ -542,7 +542,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },
@@ -570,7 +569,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.Saldo}"
               },
@@ -706,7 +704,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.nominal)}"
               },
