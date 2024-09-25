@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d7655903ae44f7ea3b1de97d5c3acd5d",
+  "ReportGuid": "fdfe41e9cd0001e73b3943d5526abc32",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanHistoryPinjaman.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanHistoryPinjamanA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1724896635000+0700)/",
+  "ReportChanged": "/Date(1727245806000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -820,8 +820,8 @@
                 "WordWrap": true
               },
               "TextFormat": {
-                "Ident": "StiDateFormatService",
-                "StringFormat": "dd/MM/yyyy"
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             },

@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "dcc372cdb104eb9133f8667b8bc723d6",
+  "ReportGuid": "333add127863c71fbd2057abf1ad6a54",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanBanGudangSementaraA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1726885511000+0700)/",
+  "ReportChanged": "/Date(1727250679000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -55,7 +55,7 @@
             "Name": "tanggal",
             "NameInSource": "tanggal",
             "Alias": "tanggal",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "5": {
             "Name": "jlhhari",
@@ -469,8 +469,8 @@
                 "WordWrap": true
               },
               "TextFormat": {
-                "Ident": "StiDateFormatService",
-                "StringFormat": "dd/MM/yyyy"
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             },

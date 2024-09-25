@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b4d9602852b572684511bca6886610c5",
+  "ReportGuid": "35877fc1af97486c8ae000fc4e853524",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanKasGantung.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasGantung.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1725001355000+0700)/",
+  "ReportChanged": "/Date(1727246614000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -31,7 +31,7 @@
             "Name": "tanggal",
             "NameInSource": "tanggal",
             "Alias": "tanggal",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "1": {
             "Name": "nobukti",
@@ -639,7 +639,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font face=\"SourceSansPro\">{root_data.tanggal}</font>"
+                "Value": "{root_data.tanggal}"
               },
               "Font": "Comic Sans MS3;9;;",
               "Border": ";;;;;;;solid:Black",
@@ -651,9 +651,10 @@
               "TextQuality": "Wysiwyg",
               "AllowHtmlTags": true,
               "TextFormat": {
-                "Ident": "StiDateFormatService"
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
               },
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "1": {
               "Ident": "StiText",
