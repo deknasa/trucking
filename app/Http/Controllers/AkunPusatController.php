@@ -30,6 +30,7 @@ class AkunPusatController extends MyController
             'comboparent' => $this->comboList('list', 'STATUS PARENT', 'STATUS PARENT'),
             'comboneraca' => $this->comboList('list', 'STATUS NERACA', 'STATUS NERACA'),
             'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
+            'combomanual' => $this->comboList('list', 'STATUS DEFAULT PARAMETER', 'STATUS DEFAULT PARAMETER'),
             'listbtn' => $this->getListBtn()
         ];
 
