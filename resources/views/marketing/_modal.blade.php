@@ -44,6 +44,16 @@
                 <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  user
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="users[]" id="multiple" class="select2bs4 form-control" multiple="multiple"></select>
+              </div>
+            </div>            
             
           </div>
           <div class="modal-footer justify-content-start">
@@ -189,6 +199,12 @@
     }
 
     initLookup()
+    $('#multiple')
+      .select2({
+        theme: 'bootstrap4',
+        width: '100%',
+      })
+      
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -239,13 +255,14 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Add Jenis Trado')
+    $('#crudModalTitle').text('Add Marketing')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
         // setStatusAktifOptions(form),
+        setUserOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -262,6 +279,45 @@
       })
   }
 
+  function setUserOptions(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name="users[]"]').empty()
+
+      $.ajax({
+        url: `${apiUrl}user`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "statusaktif",
+              "op": "cn",
+              "data": "AKTIF"
+            }]
+          }),
+          role: 'MARKETING'
+        },
+        success: response => {
+          response.data.forEach(user => {
+            let option = new Option(user.user, user.id)
+
+            relatedForm.find(`[name="users[]"]`).append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   function editMarketing(marketingId) {
     let form = $('#crudForm')
 
@@ -273,13 +329,14 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Jenis Trado')
+    $('#crudModalTitle').text('Edit Marketing')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
         // setStatusAktifOptions(form),
+        setUserOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -311,13 +368,14 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Jenis Trado')
+    $('#crudModalTitle').text('Delete Marketing')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
         // setStatusAktifOptions(form),
+        setUserOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -349,13 +407,14 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Jenis Trado')
+    $('#crudModalTitle').text('View Marketing')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
         // setStatusAktifOptions(form),
+        setUserOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -475,6 +534,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          let userIds = []
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
 
@@ -491,6 +551,18 @@
               element.data('current-value', value)
             }
           })
+          response.detail.forEach((user) => {
+            userIds.push(user.user_id)
+          });
+
+          form.find(`[name="users[]"]`).val(userIds).change()
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+
+
           resolve()
         },
         error: error => {
@@ -558,6 +630,30 @@
   }
 
   function initLookup() {
+
+    $('.user-lookup').lookup({
+      title: 'user Lookup',
+      fileName: 'user',
+      beforeProcess: function(test) {
+        this.postData = {
+          role: 'MARKETING',
+        }
+      },
+      onSelectRow: (user, element) => {
+        $(`#crudForm [name="user_id"]`).first().val(user.id)
+        element.val(user.name)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="user_id"]`).first().val('')
+        element.data('currentValue', element.val())
+      }
+    })
+        
     $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
       fileName: 'parameterV3',
