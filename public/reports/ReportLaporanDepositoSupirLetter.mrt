@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "5e6820e13651962c74a405c483043892",
+  "ReportGuid": "9a9137cfbca5836b3725712681a05a12",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanDepositoSupir.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanDepositoSupirA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1726817636000+0700)/",
+  "ReportChanged": "/Date(1727331820000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -133,6 +133,12 @@
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "keterangan1",
+            "NameInSource": "keterangan1",
+            "Alias": "keterangan1",
             "Type": "System.String"
           }
         },
@@ -704,7 +710,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -734,7 +739,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.deposito}"
               },
@@ -764,7 +768,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.total}"
               },
@@ -794,7 +797,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.penarikan}"
               },
@@ -859,7 +861,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.penarikan)}"
               },
@@ -889,7 +890,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.deposito)}"
               },
@@ -919,7 +919,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.saldo)}"
               },
@@ -949,7 +948,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.total)}"
               },
@@ -1034,12 +1032,11 @@
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "cb0f6f9f84d170271ec790e71e997944",
-              "ClientRectangle": "130,6,26,6",
+              "ClientRectangle": "128,6,26,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1, root_data.deposito)}"
               },
@@ -1069,7 +1066,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.penarikan)}"
               },
@@ -1099,7 +1095,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.total)}"
               },
@@ -1209,7 +1204,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.saldo)}"
               },

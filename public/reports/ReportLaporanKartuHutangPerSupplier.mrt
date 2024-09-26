@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "f18763a9203de4471ae60ca10694792a",
+  "ReportGuid": "86d20d02d33c8ebbd206a3090206a703",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanKartuHutangPerSupplier.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPerSupplierA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724748258000+0700)/",
+  "ReportChanged": "/Date(1727324604000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -166,6 +166,12 @@
             "NameInSource": "relationId",
             "Alias": "relationId",
             "Type": "System.String"
+          },
+          "23": {
+            "Name": "coa",
+            "NameInSource": "coa",
+            "Alias": "coa",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.root_data"
@@ -210,6 +216,12 @@
             "NameInSource": "relationId",
             "Alias": "relationId",
             "Type": "System.String"
+          },
+          "6": {
+            "Name": "jenislaporan",
+            "NameInSource": "jenislaporan",
+            "Alias": "jenislaporan",
+            "Type": "System.Decimal"
           }
         },
         "NameInSource": "Data.root_parameter"
@@ -577,7 +589,7 @@
           "Brush": "solid:",
           "SortDirection": "Descending",
           "Condition": {
-            "Value": "{root_data.jenishutang}"
+            "Value": "{root_data.coa}"
           }
         },
         "2": {
@@ -1116,7 +1128,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1195,7 +1206,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominalbayar}"
               },
@@ -1237,7 +1247,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominalhutang}"
               },
@@ -1357,7 +1366,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1, root_data.nominalhutang)}"
               },
@@ -1398,7 +1406,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1, root_data.nominalbayar)}"
               },
@@ -1439,7 +1446,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalhutang)-Sum(DataBand1,root_data.nominalbayar)}"
               },
@@ -1499,15 +1505,25 @@
           "Components": {
             "0": {
               "Ident": "StiText",
-              "Name": "Text19",
-              "Guid": "43253f3a7733045f5ebca3715f95df19",
+              "Name": "Text41",
+              "Guid": "d18dac77a3960ef230b1a41a8853e7ab",
               "ClientRectangle": "1.04,-0.07,4.81,0.74",
               "ComponentPlacement": "gf.GroupFooterBand4",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "root_data.coa",
+                  "Value1": "03.02.02.01",
+                  "Value2": "03.02.02.01",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TOTAL {root_data.jenishutang}"
+                "Value": "TOTAL HUTANG PREDIKSI"
               },
               "VertAlignment": "Center",
               "Font": "SourceSansPro;9;Bold;",
@@ -1524,6 +1540,40 @@
             },
             "1": {
               "Ident": "StiText",
+              "Name": "Text19",
+              "Guid": "43253f3a7733045f5ebca3715f95df19",
+              "ClientRectangle": "1.04,-0.07,4.81,0.74",
+              "ComponentPlacement": "gf.GroupFooterBand4",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "root_data.coa",
+                  "Value1": "03.02.02.04",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "TOTAL HUTANG USAHA"
+              },
+              "VertAlignment": "Center",
+              "Font": "SourceSansPro;9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "empty",
+              "TextBrush": "solid:0,0,0",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "2": {
+              "Ident": "StiText",
               "Name": "Text21",
               "Guid": "0d5a8b95dd6fa948d3f0f9812e7d716f",
               "CanGrow": true,
@@ -1533,7 +1583,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalhutang)}"
               },
@@ -1563,7 +1612,7 @@
               },
               "Type": "Totals"
             },
-            "2": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text22",
               "Guid": "f4879865bb811a0bf638927a3b6f0e90",
@@ -1574,7 +1623,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalbayar)}"
               },
@@ -1604,7 +1652,7 @@
               },
               "Type": "Totals"
             },
-            "3": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "31bbfd96dbc93a133a2051b2ac9cd9a1",
@@ -1615,7 +1663,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalhutang)-Sum(DataBand1,root_data.nominalbayar)}"
               },
@@ -1645,7 +1692,7 @@
               },
               "Type": "Expression"
             },
-            "4": {
+            "5": {
               "Ident": "StiShape",
               "Name": "Shape9",
               "Guid": "ddde1bcbca3f148d2da98ca99eea6600",
@@ -1679,6 +1726,17 @@
               "Guid": "c72a0b5625cd78f6986fd0200ae10f4c",
               "ClientRectangle": "1.04,0.02,4.7,0.74",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": " 0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1706,10 +1764,20 @@
               "GrowToHeight": true,
               "ClientRectangle": "8.43,0.12,3.12,0.53",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalhutang)}"
               },
@@ -1747,10 +1815,20 @@
               "GrowToHeight": true,
               "ClientRectangle": "14.73,0.09,2.82,0.53",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalbayar)}"
               },
@@ -1788,10 +1866,20 @@
               "GrowToHeight": true,
               "ClientRectangle": "16.99,0.08,3.42,0.51",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalhutang)-Sum(DataBand1,root_data.nominalbayar)}"
               },
@@ -1828,6 +1916,17 @@
               "GrowToHeight": true,
               "ClientRectangle": "0.24,0.6,20.23,0.29",
               "ComponentPlacement": "rs.ReportSummaryBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_parameter.jenislaporan",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },

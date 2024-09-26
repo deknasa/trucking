@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "dd57dda25a2abd125c85fe222fa2441f",
+  "ReportGuid": "fbd528acbcd2b7955ac57ccfffa702e4",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPemotonganPinjamanperEBSS.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPemotonganPinjamanperEBSSA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1726807094000+0700)/",
+  "ReportChanged": "/Date(1727333970000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -289,7 +289,7 @@
         "0": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,0.4,27.7,4.4",
+          "ClientRectangle": "0,0.4,27.69,4.4",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -966,7 +966,7 @@
         "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
-          "ClientRectangle": "0,5.6,27.7,2.2",
+          "ClientRectangle": "0,5.6,27.69,2.2",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1023,7 +1023,7 @@
                 "Value": "{Line}"
               },
               "CanBreak": true,
-              "Font": "SourceSansPro;9;;",
+              "Font": "SourceSansPro;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1192,7 +1192,7 @@
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "SourceSansPro;9;;",
+              "Font": "SourceSansPro;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1336,19 +1336,17 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font face=\"SourceSansPro\">{root_data.potonganpinjamansemua}</font>"
+                "Value": "{root_data.potonganpinjamansemua}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
-              "TextQuality": "Wysiwyg",
-              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1361,7 +1359,7 @@
                 "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator"
               },
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "11": {
               "Ident": "StiText",
@@ -1447,7 +1445,7 @@
                 "Value": "{root_data.tglsampai}"
               },
               "CanBreak": true,
-              "Font": "SourceSansPro;9;;",
+              "Font": "SourceSansPro;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1623,18 +1621,16 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font face=\"SourceSansPro\">{root_data.tanggalsampai}</font>"
+                "Value": "{root_data.tanggalsampai}"
               },
               "CanBreak": true,
-              "Font": "Comic Sans MS3;;;",
+              "Font": "SourceSansPro;;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
                 "WordWrap": true
               },
-              "TextQuality": "Wysiwyg",
-              "AllowHtmlTags": true,
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -1645,7 +1641,7 @@
                 "Ident": "StiCustomFormatService",
                 "StringFormat": "dd-MM-yyyy"
               },
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "19": {
               "Ident": "StiText",
@@ -1694,7 +1690,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font face=\"SourceSansPro\">{root_data.keteranganpinjamansupirsemua}</font><span style=\"font-family: &quot;Comic Sans MS3&quot;;\">&nbsp;</span>"
+                "Value": "<font face=\"SourceSansPro\">{root_data.keteranganpinjamansupirsemua}&nbsp;</font>"
               },
               "CanBreak": true,
               "Font": "Comic Sans MS3;;;",
@@ -1721,10 +1717,9 @@
           "DataSourceName": "root_data"
         }
       },
-      "PaperSize": "A4",
       "Orientation": "Landscape",
-      "PageWidth": 29.7,
-      "PageHeight": 21,
+      "PageWidth": 29.69,
+      "PageHeight": 21.01,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },

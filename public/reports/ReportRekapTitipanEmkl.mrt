@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3afb941bee1c162c4a2bb4df406ce295",
+  "ReportGuid": "f4e8e1c3ec2658e79a6c85f1fec59123",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportRekapTitipanEmkl.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportRekapTitipanEmklA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724751244000+0700)/",
+  "ReportChanged": "/Date(1727330680000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -849,7 +849,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },
@@ -934,7 +933,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominal)}"
               },
@@ -1054,7 +1052,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominal)}"
               },

@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "ad08d3cf5e55b8a5e2d046081c7fe025",
+  "ReportGuid": "faee6604e591d9cf190a421696221eb8",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportTitipanEmkl.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportTitipanEmklA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1727236971000+0700)/",
+  "ReportChanged": "/Date(1727331164000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -272,7 +272,7 @@
         "0": {
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
-          "ClientRectangle": "0,26.94,21.3,0.56",
+          "ClientRectangle": "0,28.74,20.7,0.56",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -283,7 +283,7 @@
         "1": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,0.4,21.3,4.8",
+          "ClientRectangle": "0,0.4,20.7,4.8",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -876,7 +876,7 @@
         "2": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,6,21.3,0.7",
+          "ClientRectangle": "0,6,20.7,0.7",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -927,7 +927,7 @@
         "3": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,7.5,21.3,0.71",
+          "ClientRectangle": "0,7.5,20.7,0.71",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1085,7 +1085,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },
@@ -1228,7 +1227,7 @@
         "4": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
-          "ClientRectangle": "0,9.01,21.3,0.76",
+          "ClientRectangle": "0,9.01,20.7,0.76",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -1280,7 +1279,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.nominal)}"
               },
@@ -1306,7 +1304,7 @@
         "5": {
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
-          "ClientRectangle": "0,10.57,21.3,0.86",
+          "ClientRectangle": "0,10.57,20.7,0.86",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -1358,7 +1356,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.nominal)}"
               },
@@ -1399,9 +1396,9 @@
           }
         }
       },
-      "PaperSize": "Letter",
-      "PageWidth": 21.6,
-      "PageHeight": 27.9,
+      "PaperSize": "A4",
+      "PageWidth": 21,
+      "PageHeight": 29.7,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },

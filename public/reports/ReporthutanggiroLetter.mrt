@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "920e8067af33839b0f3517db1c600ded",
+  "ReportGuid": "510cdaa318ec6530970f6b6685fb05f3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportHutangGiroLetter.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportHutangGiroA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1725525283000+0700)/",
+  "ReportChanged": "/Date(1727323713000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -900,7 +900,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },

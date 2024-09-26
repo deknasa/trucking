@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "29efb5a6bc1e6522836dc8c7fe6d2653",
+  "ReportGuid": "4fe1aaa04fe04ddc474fe9b1c05079a2",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPanjar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPanjarA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1726803664000+0700)/",
+  "ReportChanged": "/Date(1727331334000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1105,7 +1105,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1182,7 +1181,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominallunas}"
               },
@@ -1223,7 +1221,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominalpiutang}"
               },
@@ -1342,7 +1339,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalpiutang)}"
               },
@@ -1383,7 +1379,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominallunas)}"
               },
@@ -1424,7 +1419,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalpiutang)-Sum(DataBand1,root_data.nominallunas)}"
               },
@@ -1529,7 +1523,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalpiutang)}"
               },
@@ -1570,7 +1563,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominallunas)}"
               },
@@ -1611,7 +1603,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(DataBand1,root_data.nominalpiutang)-Sum(DataBand1,root_data.nominallunas)}"
               },

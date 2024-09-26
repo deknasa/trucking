@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "55a5bee25c2a1aff3312a44586a678ed",
+  "ReportGuid": "8738fda3d97a855fc58b4c1735e283f4",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanLabaRugi.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugiA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724747365000+0700)/",
+  "ReportChanged": "/Date(1727323471000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -141,6 +141,12 @@
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "19": {
+            "Name": "OrderMain",
+            "NameInSource": "OrderMain",
+            "Alias": "OrderMain",
             "Type": "System.String"
           }
         },
@@ -604,7 +610,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(data.Nominal)}"
               },
@@ -666,7 +671,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{data.Nominal}"
               },
@@ -743,7 +747,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(data.Nominal)}"
               },
@@ -834,7 +837,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(data.Nominal)}"
               },
