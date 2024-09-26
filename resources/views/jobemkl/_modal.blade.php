@@ -13,7 +13,7 @@
 
 
             <input type="text" name="id" class="form-control" hidden>
-                        
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -36,7 +36,7 @@
                 </div>
               </div>
             </div>
-             
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -47,7 +47,7 @@
                 <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -79,7 +79,7 @@
                 <input type="text" name="container" id="container" class="form-control container-lookup">
               </div>
             </div>
-           
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -109,7 +109,7 @@
                 <input type="text" name="voy" class="form-control">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -119,7 +119,7 @@
                 <input type="text" name="lokasibongkarmuat" class="form-control">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -161,7 +161,7 @@
                 <input type="text" name="noseal" class="form-control">
               </div>
             </div>
-            
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -397,7 +397,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        getMaxLength(form)
+        getMaxLength(form),
       ])
       .then(() => {
         showJobEmkl(form, jenisTradoId)
@@ -405,6 +405,7 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            tampilanMuatanBongkaranEdit()
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -604,7 +605,7 @@
               element.val(value)
             }
 
-            
+
             if (index == 'shipper') {
               element.data('current-value', value)
             }
@@ -691,20 +692,43 @@
 
   function tampilanMuatanBongkaran() {
     let jenisorder = $('#crudForm [name=jenisorder]').val()
-    if (jenisorder == 'MUATAN' ) {
+    if (jenisorder == 'MUATAN') {
       $('[name=marketing]').parents('.form-group').show();
       $('[name=tujuan]').parents('.form-group').find('label').text('TUJUAN')
       $('[name=destination]').parents('.form-group').show();
       $('[name=penerima]').parents('.form-group').hide();
       $('[name=lokasibongkarmuat]').parents('.form-group').find('label').text('LOKASI MUAT')
 
-    }else if (jenisorder == 'BONGKARAN') {
+    } else if (jenisorder == 'BONGKARAN') {
       $('[name=marketing]').parents('.form-group').hide();
       $('[name=tujuan]').parents('.form-group').find('label').text('ASAL')
       $('[name=destination]').parents('.form-group').hide();
       $('[name=penerima]').parents('.form-group').show();
       $('[name=lokasibongkarmuat]').parents('.form-group').find('label').text('LOKASI BONGKAR')
     }
+  }
+
+  function tampilanMuatanBongkaranEdit() {
+    let jenisorder = $('#crudForm [name=jenisorder]').val()
+    let form = $('#crudForm')
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+    tglbukti.find('button').attr('disabled', false)
+    if (jenisorder == 'MUATAN') {
+      form.find(`[name="marketing"]`).prop('readonly', true)
+      form.find(`[name="tujuan"]`).prop('readonly', true)
+      $('#crudForm').find(`[name="tujuan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+      $('#crudForm').find(`[name="tujuan"]`).parents('.input-group').children().attr('disabled', true)
+      $('#crudForm').find(`[name="marketing"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+      $('#crudForm').find(`[name="marketing"]`).parents('.input-group').children().attr('disabled', true)
+
+    } else if (jenisorder == 'BONGKARAN') {
+      form.find(`[name="tujuan"]`).prop('readonly', true)
+      $('#crudForm').find(`[name="tujuan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+      $('#crudForm').find(`[name="tujuan"]`).parents('.input-group').children().attr('disabled', true)
+
+    }
+
   }
 
   function initLookup() {

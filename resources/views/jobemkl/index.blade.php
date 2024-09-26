@@ -73,9 +73,9 @@
         })
     }
 
-    
-    
-    
+
+
+
     $(document).ready(function() {
         @isset($request['tgldari'])
         tgldariheader = `{{ $request['tgldari'] }}`;
@@ -85,7 +85,7 @@
         @endisset
         setRange(true)
         initDatepicker('datepickerIndex')
-        
+
         $(document).on('click', '#btnReload', function(event) {
             loadDataHeader('jobemkl', {
                 proses: 'reload'
@@ -140,9 +140,9 @@
                         search: false,
                         hidden: true
                     },
-                    
+
                     {
-                        label:'nobukti',
+                        label: 'nobukti',
                         name: 'nobukti',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
@@ -152,32 +152,32 @@
                         formatter: "date",
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
-                          srcformat: "ISO8601Long",
-                          newformat: "d-m-Y"
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
                         }
-                      },
+                    },
                     {
-                        label:'shipper',
+                        label: 'shipper',
                         name: 'shipper',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'tujuan',
+                        label: 'tujuan',
                         name: 'tujuan',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'container',
+                        label: 'container',
                         name: 'container',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'jenisorder',
+                        label: 'jenisorder',
                         name: 'jenisorder',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'kapal',
+                        label: 'kapal',
                         name: 'kapal',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
@@ -188,67 +188,69 @@
                         formatter: currencyFormat,
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
-                        label:'voy',
+
+                    {
+                        label: 'voy',
                         name: 'voy',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
 
                     {
-                        label:'destination',
+                        label: 'destination',
                         name: 'destination',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'nocont',
+                        label: 'nocont',
                         name: 'nocont',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'noseal',
+                        label: 'noseal',
                         name: 'noseal',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'statusapprovaledit',
-                        label:'statusapprovaledit',
-                        searchable: false,                        
+                        label: 'statusapprovaledit',
+                        searchable: false,
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'tglapprovaledit',
-                        label:'tglapprovaledit',
-                        searchable: false,                        
+                        label: 'tglapprovaledit',
+                        searchable: false,
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'userapprovaledit',
-                        label:'userapprovaledit',
-                        searchable: false,                        
+                        label: 'userapprovaledit',
+                        searchable: false,
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'tglbataseditjobemkl',
-                        label:'tglbataseditjobemkl',
-                        searchable: false,                        
+                        label: 'tglbataseditjobemkl',
+                        searchable: false,
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
-                    
+
                     {
-                        label:'modifiedby',
+                        label: 'modifiedby',
                         name: 'modifiedby',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'created_at',
+                        label: 'created_at',
                         name: 'created_at',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
-                        label:'updated_at',
+                        label: 'updated_at',
                         name: 'updated_at',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
-                    
+
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -424,36 +426,34 @@
                         }
                     },
                 ],
-                modalBtnList: [
-                    {
-                        id: 'lainnya',
-                        title: 'Lainnya',
-                        caption: 'Lainnya',
-                        innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-                        class: 'btn btn-secondary btn-sm mr-1',
-                        // targetModal:'#listMenuModal',
-                        item: [{
-                            id: 'nominalprediksi',
-                            text: "nominal prediksi",
-                            hidden: (!`{{ $myAuth->hasPermission('jobemkl', 'nominalprediksi') }}`),
-                            color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('jobemkl', 'nominalprediksi') }}`) {
-                                    var selectedOne = selectedOnlyOne();
-                                    if (selectedOne[0]) {
-                                        jobEmklNominalPrediksi(selectedOne[1])
-                                        // cekValidasihistory(selectedOne[1], 'nominalprediksi')
-                                        console.log('asasd');
+                modalBtnList: [{
+                    id: 'lainnya',
+                    title: 'Lainnya',
+                    caption: 'Lainnya',
+                    innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                    class: 'btn btn-secondary btn-sm mr-1',
+                    // targetModal:'#listMenuModal',
+                    item: [{
+                        id: 'nominalprediksi',
+                        text: "nominal prediksi",
+                        hidden: (!`{{ $myAuth->hasPermission('jobemkl', 'nominalprediksi') }}`),
+                        color: `<?php echo $data['listbtn']->btn->historysupirmandor; ?>`,
+                        onClick: () => {
+                            if (`{{ $myAuth->hasPermission('jobemkl', 'nominalprediksi') }}`) {
+                                var selectedOne = selectedOnlyOne();
+                                if (selectedOne[0]) {
+                                    jobEmklNominalPrediksi(selectedOne[1])
+                                    // cekValidasihistory(selectedOne[1], 'nominalprediksi')
+                                    console.log('asasd');
 
-                                    } else {
-                                        showDialog(selectedOne[1])
-                                    }
+                                } else {
+                                    showDialog(selectedOne[1])
                                 }
-                            },
-                        }, ]
+                            }
+                        },
+                    }, ]
 
-                    }
-                ]
+                }]
             })
 
         /* Append clear filter button */

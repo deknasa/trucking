@@ -73,308 +73,309 @@
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
-            url: `${apiUrl}marketing`,
-            mtype: "GET",
-            styleUI: 'Bootstrap4',
-            iconSet: 'fontAwesome',
-            datatype: "json",
-            colModel: [
-                {
-                    label: '',
-                    name: '',
-                    width: 30,
-                    align: 'center',
-                    sortable: false,
-                    clear: false,
-                    stype: 'input',
-                    searchable: false,
-                    searchoptions: {
-                        type: 'checkbox',
-                        clearSearch: false,
-                        dataInit: function(element) {
-                            $(element).removeClass('form-control')
-                            $(element).parent().addClass('text-center')
-                            
-                            $(element).on('click', function() {
-                                
-                                $(element).attr('disabled', true)
-                                if ($(this).is(':checked')) {
-                                    selectAllRows()
-                                } else {
-                                    clearSelectedRows()
-                                }
-                            })
-                        }
+                url: `${apiUrl}marketing`,
+                mtype: "GET",
+                styleUI: 'Bootstrap4',
+                iconSet: 'fontAwesome',
+                datatype: "json",
+                colModel: [{
+                        label: '',
+                        name: '',
+                        width: 30,
+                        align: 'center',
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+
+                                $(element).on('click', function() {
+
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                        },
+
                     },
-                    formatter: (value, rowOptions, rowData) => {
-                        return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                    {
+                        label: 'ID',
+                        name: 'id',
+                        width: '50px',
+                        search: false,
+                        hidden: true
                     },
-                    
-                }, 
-                {
-                    label: 'ID',
-                    name: 'id',
-                    width: '50px',    
-                    search: false,
-                    hidden: true
-                },
-                {
-                    label:'Kode Marketing',
-                    name: 'kodemarketing',
-                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-                },
-                {
-                    label: 'keterangan',
-                    name: 'keterangan',
-                    align: 'left',
-                    width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-                },
-                {
-                    label: 'Status',
-                    name: 'statusaktif_memo',
-                    stype: 'select',
-                    width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                    searchoptions: {
-                        value: `<?php
-                        $i = 1;
-                        
-                        foreach ($data['combo'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
-                            echo ';';
-                        }
-                        $i++;
-                        endforeach;
-                        
-                        ?>
+                    {
+                        label: 'Kode Marketing',
+                        name: 'kodemarketing',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
+                    {
+                        label: 'keterangan',
+                        name: 'keterangan',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+                    },
+                    {
+                        label: 'user',
+                        name: 'user',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+                    },
+                    {
+                        label: 'Status',
+                        name: 'statusaktif',
+                        stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['combo'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combo'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
                         `,
-                        dataInit: function(element) {
-                            $(element).select2({
-                                width: 'resolve',
-                                theme: "bootstrap4"
-                            });
-                        }
-                    },
-                    formatter: (value, options, rowData) => {
-                        let statusAktif = JSON.parse(value)
-                        let formattedValue = $(`
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusAktif = JSON.parse(value)
+                            let formattedValue = $(`
                         <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                             <span>${statusAktif.SINGKATAN}</span>
                             </div>
                         `)
-                        return formattedValue[0].outerHTML
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusAktif = JSON.parse(rowObject.statusaktif)
+                            return ` title="${statusAktif.MEMO}"`
+                        }
                     },
-                    cellattr: (rowId, value, rowObject) => {
-                        let statusAktif = JSON.parse(rowObject.statusaktif)
-                        return ` title="${statusAktif.MEMO}"`
-                    }
+                    {
+                        label: 'modifiedby',
+                        name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
+                    {
+                        label: 'created at',
+                        name: 'created_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
+                    {
+                        label: 'updated at',
+                        name: 'updated_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                    },
+
+                ],
+                autowidth: true,
+                shrinkToFit: false,
+                height: 350,
+                rowNum: rowNum,
+                rownumbers: true,
+                rownumWidth: 45,
+                rowList: [10, 20, 50, 0],
+                toolbar: [true, "top"],
+                sortable: true,
+                sortname: sortname,
+                sortorder: sortorder,
+                page: page,
+                viewrecords: true,
+                prmNames: {
+                    sort: 'sortIndex',
+                    order: 'sortOrder',
+                    rows: 'limit'
                 },
-                {
-                    label:'modifiedby',
-                    name: 'modifiedby',
-                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                jsonReader: {
+                    root: 'data',
+                    total: 'attributes.totalPages',
+                    records: 'attributes.totalRows',
                 },
-                {
-                    label:'created at',
-                    name: 'created_at',
-                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                loadBeforeSend: function(jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                    setGridLastRequest($(this), jqXHR)
                 },
-                {
-                    label:'updated at',
-                    name: 'updated_at',
-                    width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                onSelectRow: function(id) {
+                    activeGrid = $(this)
+                    indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+                    page = $(this).jqGrid('getGridParam', 'page')
+                    let limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
                 },
-                
-            ],
-            autowidth: true,
-            shrinkToFit: false,
-            height: 350,
-            rowNum: rowNum,
-            rownumbers: true,
-            rownumWidth: 45,
-            rowList: [10, 20, 50, 0],
-            toolbar: [true, "top"],
-            sortable: true,
-            sortname: sortname,
-            sortorder: sortorder,
-            page: page,
-            viewrecords: true,
-            prmNames: {
-                sort: 'sortIndex',
-                order: 'sortOrder',
-                rows: 'limit'
-            },
-            jsonReader: {
-                root: 'data',
-                total: 'attributes.totalPages',
-                records: 'attributes.totalRows',
-            },
-            loadBeforeSend: function(jqXHR) {
-                jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-                setGridLastRequest($(this), jqXHR)
-            },
-            onSelectRow: function(id) {
-                activeGrid = $(this)
-                indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-                page = $(this).jqGrid('getGridParam', 'page')
-                let limit = $(this).jqGrid('getGridParam', 'postData').limit
-                if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-                
-            },
-            loadComplete: function(data) {
-                changeJqGridRowListText()
-                $(document).unbind('keydown')
-                setCustomBindKeys($(this))
-                initResize($(this))
-                
-                
-                $.each(selectedRows, function(key, value) {
-                    
-                    $('#jqGrid tbody tr').each(function(row, tr) {
-                        if ($(this).find(`td input:checkbox`).val() == value) {
-                            $(this).find(`td input:checkbox`).prop('checked', true)
-                            $(this).addClass('bg-light-blue')
-                        }
+                loadComplete: function(data) {
+                    changeJqGridRowListText()
+                    $(document).unbind('keydown')
+                    setCustomBindKeys($(this))
+                    initResize($(this))
+
+
+                    $.each(selectedRows, function(key, value) {
+
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+
+                    });
+                    /* Set global variables */
+                    sortname = $(this).jqGrid("getGridParam", "sortname")
+                    sortorder = $(this).jqGrid("getGridParam", "sortorder")
+                    totalRecord = $(this).getGridParam("records")
+                    limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    postData = $(this).jqGrid('getGridParam', 'postData')
+                    triggerClick = true
+
+                    $('.clearsearchclass').click(function() {
+                        clearColumnSearch($(this))
                     })
-                    
-                });
-                /* Set global variables */
-                sortname = $(this).jqGrid("getGridParam", "sortname")
-                sortorder = $(this).jqGrid("getGridParam", "sortorder")
-                totalRecord = $(this).getGridParam("records")
-                limit = $(this).jqGrid('getGridParam', 'postData').limit
-                postData = $(this).jqGrid('getGridParam', 'postData')
-                triggerClick = true
-                
-                $('.clearsearchclass').click(function() {
-                    clearColumnSearch($(this))
-                })
-                
-                if (indexRow > $(this).getDataIDs().length - 1) {
-                    indexRow = $(this).getDataIDs().length - 1;
-                }
-                
-                if (triggerClick) {
-                    if (id != '') {
-                        indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                        $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                        id = ''
-                    } else if (indexRow != undefined) {
-                        $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+
+                    if (indexRow > $(this).getDataIDs().length - 1) {
+                        indexRow = $(this).getDataIDs().length - 1;
                     }
-                    
-                    if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                        $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-                    }
-                    
-                    triggerClick = false
-                } else {
-                    $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-                }
-                
-                $('#left-nav').find('button').attr('disabled', false)
-                permission()
-                $('#gs_').attr('disabled', false)
-                setHighlight($(this))
-            },
-        })
-        
-        .jqGrid("setLabel", "rn", "No.")
-        .jqGrid('filterToolbar', {
-            stringResult: true,
-            searchOnEnter: false,
-            defaultSearch: 'cn',
-            groupOp: 'AND',
-            disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-            beforeSearch: function() {
-                abortGridLastRequest($(this))
-                $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
-                clearGlobalSearch($('#jqGrid'))
-            },
-        })
-        
-        .customPager({
-            buttons: [
-                {
-                    id: 'add',
-                    innerHTML: '<i class="fa fa-plus"></i> ADD',
-                    class: 'btn btn-primary btn-sm mr-1',
-                    onClick: () => {
-                        createMarketing()
-                    }
-                },
-                {
-                    id: 'edit',
-                    innerHTML: '<i class="fa fa-pen"></i> EDIT',
-                    class: 'btn btn-success btn-sm mr-1',
-                    onClick: () => {
-                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            showDialog('Harap pilih salah satu record')
-                        } else {
-                            cekValidasi(selectedId, 'EDIT')
+
+                    if (triggerClick) {
+                        if (id != '') {
+                            indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                            $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                            id = ''
+                        } else if (indexRow != undefined) {
+                            $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
                         }
-                    }
-                },
-                {
-                    id: 'delete',
-                    innerHTML: '<i class="fa fa-trash"></i> DELETE',
-                    class: 'btn btn-danger btn-sm mr-1',
-                    onClick: () => {
-                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            showDialog('Harap pilih salah satu record')
-                        } else {
-                            cekValidasi(selectedId, 'DELETE')
+
+                        if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                            $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
                         }
+
+                        triggerClick = false
+                    } else {
+                        $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                     }
+
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission()
+                    $('#gs_').attr('disabled', false)
+                    setHighlight($(this))
                 },
-                
-                {
-                    id: 'view',
-                    innerHTML: '<i class="fa fa-eye"></i> VIEW',
-                    class: 'btn btn-orange btn-sm mr-1',
-                    onClick: () => {
-                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                            showDialog('Harap pilih salah satu record')
-                        } else {
-                            viewMarketing(selectedId)
+            })
+
+            .jqGrid("setLabel", "rn", "No.")
+            .jqGrid('filterToolbar', {
+                stringResult: true,
+                searchOnEnter: false,
+                defaultSearch: 'cn',
+                groupOp: 'AND',
+                disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                    clearGlobalSearch($('#jqGrid'))
+                },
+            })
+
+            .customPager({
+                buttons: [{
+                        id: 'add',
+                        innerHTML: '<i class="fa fa-plus"></i> ADD',
+                        class: 'btn btn-primary btn-sm mr-1',
+                        onClick: () => {
+                            createMarketing()
                         }
-                    }
-                },
-                
-                {
-                    id: 'report',
-                    innerHTML: '<i class="fa fa-print"></i> REPORT',
-                    class: 'btn btn-info btn-sm mr-1',
-                    onClick: () => {
-                        $('#rangeModal').data('action', 'report')
-                        $('#rangeModal').find('button:submit').html(`Report`)
-                        $('#rangeModal').modal('show')
-                    }
-                },
-                {
-                    id: 'export',
-                    innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-                    class: 'btn btn-warning btn-sm mr-1',
-                    onClick: () => {
-                        $('#rangeModal').data('action', 'export')
-                        $('#rangeModal').find('button:submit').html(`Export`)
-                        $('#rangeModal').modal('show')
-                    }
-                },
-            ],
-            modalBtnList: [
-                {
+                    },
+                    {
+                        id: 'edit',
+                        innerHTML: '<i class="fa fa-pen"></i> EDIT',
+                        class: 'btn btn-success btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasi(selectedId, 'EDIT')
+                            }
+                        }
+                    },
+                    {
+                        id: 'delete',
+                        innerHTML: '<i class="fa fa-trash"></i> DELETE',
+                        class: 'btn btn-danger btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasi(selectedId, 'DELETE')
+                            }
+                        }
+                    },
+
+                    {
+                        id: 'view',
+                        innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                        class: 'btn btn-orange btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                viewMarketing(selectedId)
+                            }
+                        }
+                    },
+
+                    {
+                        id: 'report',
+                        innerHTML: '<i class="fa fa-print"></i> REPORT',
+                        class: 'btn btn-info btn-sm mr-1',
+                        onClick: () => {
+                            $('#rangeModal').data('action', 'report')
+                            $('#rangeModal').find('button:submit').html(`Report`)
+                            $('#rangeModal').modal('show')
+                        }
+                    },
+                    {
+                        id: 'export',
+                        innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+                        class: 'btn btn-warning btn-sm mr-1',
+                        onClick: () => {
+                            $('#rangeModal').data('action', 'export')
+                            $('#rangeModal').find('button:submit').html(`Export`)
+                            $('#rangeModal').modal('show')
+                        }
+                    },
+                ],
+                modalBtnList: [{
                     id: 'approve',
                     title: 'Approve',
                     caption: 'Approve',
                     innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-                    
+
                     class: 'btn btn-purple btn-sm mr-1 ',
-                    item: [
-                        {
+                    item: [{
                             id: 'approvalaktif',
                             text: "APPROVAL AKTIF",
                             color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
@@ -385,7 +386,7 @@
                                 }
                             }
                         },
-                        
+
                         {
                             id: 'approvalnonaktif',
                             text: "APPROVAL NON AKTIF",
@@ -397,34 +398,33 @@
                                 }
                             }
                         },
-                        
+
                     ],
-                    
-                }
-            ]
-        })
+
+                }]
+            })
 
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
-        
+
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
-        
+
         $('#add .ui-pg-div')
-        .addClass(`btn-sm btn-primary`)
-        .parent().addClass('px-1')
+            .addClass(`btn-sm btn-primary`)
+            .parent().addClass('px-1')
 
         $('#edit .ui-pg-div')
             .addClass('btn-sm btn-success')
             .parent().addClass('px-1')
-            
-            $('#delete .ui-pg-div')
+
+        $('#delete .ui-pg-div')
             .addClass('btn-sm btn-danger')
             .parent().addClass('px-1')
-            
-            $('#report .ui-pg-div')
-            
-            
+
+        $('#report .ui-pg-div')
+
+
             .addClass('btn-sm btn-info')
             .parent().addClass('px-1')
 
