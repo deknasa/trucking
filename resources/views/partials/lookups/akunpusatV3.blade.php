@@ -78,6 +78,8 @@ $idLookup = isset($id) ? $id : null;
             keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
             supplier: `{!! $Supplier ?? '' !!}`,
             isParent: `{!! $isParent ?? '' !!}`,
+            manual: `{!! $manual ?? '' !!}`,
+            bank: `{!! $bank ?? '' !!}`,
             // filters: `{!! $filters ?? '' !!}`
         },
         idPrefix: '',

@@ -329,6 +329,51 @@
                         }
                     },
                     {
+                        label: 'STATUS MANUAL',
+                        name: 'statusmanual',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
+
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['combomanual'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combomanual'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
+              `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusManual = JSON.parse(value)
+
+                            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusManual.WARNA}; color: #fff;">
+                  <span>${statusManual.SINGKATAN}</span>
+                </div>
+              `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusManual = JSON.parse(rowObject.statusmanual)
+
+                            return ` title="${statusManual.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'kode perkiraan main',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                         name: 'coamain',

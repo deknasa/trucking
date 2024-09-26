@@ -1490,6 +1490,8 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          manual: 'YA',
+          bank: $('#crudForm [name=bank]').val(),
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -1898,14 +1900,14 @@
         $('#crudForm [name=bank_id]').first().val(bank.id)
 
         bankId = bank.id
+        element.val(bank.namabank)
+        element.data('currentValue', element.val())
 
         if ($('#crudForm [name=bank]').val().includes('PENGEMBALIAN')) {
           $('.bmt').show()
         } else {
           $('.bmt').hide()
         }
-        element.val(bank.namabank)
-        element.data('currentValue', element.val())
         $('#crudForm [name=alatbayar_id]').first().val('')
         $('#crudForm [name=alatbayar]').first().val('')
         $('#crudForm [name=alatbayar]').data('currentValue', '')
@@ -1971,7 +1973,7 @@
                   <td></td>
                   <td>
                     <input type="hidden" name="coadebet[]">
-                    <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
+                    <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoakredit}" class="form-control" readonly>
                   </td>                
                   <td>
                       <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>

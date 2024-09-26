@@ -1258,6 +1258,7 @@
                 this.postData = {
                     levelCoa: '3',
                     Aktif: 'AKTIF',
+                    manual: 'YA',
                 }
             },
             onSelectRow: (akunpusat, element) => {

@@ -105,6 +105,17 @@
                 <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  STATUS MANUAL <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="statusmanual">
+                <input type="text" name="statusmanualnama" data-target-name="statusmanual" id="statusmanualnama" class="form-control lg-form statusmanual-lookup">
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -392,6 +403,12 @@
               element.data('current-value', value)
             }
             if (index == 'parentnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusmanualnama') {
               element.data('current-value', value)
             }
             if (index == 'statusparentnama') {
@@ -984,7 +1001,7 @@
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coamain]').val(akunpusat.coa)
-        element.val(akunpusat.kodeket)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1013,6 +1030,40 @@
           singleColumn: true,
           hideLabel: true,
           title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $(`.statusmanual-lookup`).lookupV3({
+      title: 'Status Manual Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS DEFAULT PARAMETER',
+          subgrp: 'STATUS DEFAULT PARAMETER',
+          searching: 1,
+          valueName: `statusmanual`,
+          searchText: `statusmanual-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Manual'
         };
       },
       onSelectRow: (status, element) => {
