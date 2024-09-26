@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2014f4321f95d1b8b42010652f41088b",
+  "ReportGuid": "aca690ccdcdf46159dbc769e9a82f7fd",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://192.168.3.211/trucking/public/reports/ReportLaporanHistoryPenjualan.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanHistoryPenjualanA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1724895460000+0700)/",
+  "ReportChanged": "/Date(1727332005000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -212,7 +212,7 @@
         "0": {
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
-          "ClientRectangle": "0,26.94,21.3,0.56",
+          "ClientRectangle": "0,28.74,20.7,0.56",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -223,7 +223,7 @@
         "1": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,0.4,21.3,4.7",
+          "ClientRectangle": "0,0.4,20.7,4.7",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -738,7 +738,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,5.9,21.3,1.71",
+          "ClientRectangle": "0,5.9,20.7,1.71",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -859,7 +859,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },
@@ -933,7 +932,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.Saldo}"
               },
@@ -1051,9 +1049,9 @@
           "EndCap": ";;;"
         }
       },
-      "PaperSize": "Letter",
-      "PageWidth": 21.6,
-      "PageHeight": 27.9,
+      "PaperSize": "A4",
+      "PageWidth": 21,
+      "PageHeight": 29.7,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },

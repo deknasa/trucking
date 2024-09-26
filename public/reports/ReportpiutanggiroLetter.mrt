@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6950842eedb85fcb830389e3f536ef69",
+  "ReportGuid": "e4f650c702fb2e4391b055b73b0fc6c2",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportpiutanggiroA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1726815736000+0700)/",
+  "ReportChanged": "/Date(1727323909000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -770,7 +770,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },

@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a70fdaea7853bdb329194f33b30d16f5",
+  "ReportGuid": "8aab3bb0967f1f1ceffb80efc54252da",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKlaimPJTSupirA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1726886525000+0700)/",
+  "ReportChanged": "/Date(1727338200000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -479,7 +479,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -499,7 +499,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -519,7 +519,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -539,7 +539,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -559,7 +559,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -579,7 +579,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Comic Sans MS3;9;Bold;",
+              "Font": "SourceSansPro;9;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -762,7 +762,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.nominal}"
               },
@@ -828,7 +827,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.nominal)}"
               },
