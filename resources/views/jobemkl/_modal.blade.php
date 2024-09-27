@@ -356,7 +356,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Add Jenis Trado')
+    $('#crudModalTitle').text('Add Job Emkl')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -390,7 +390,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Jenis Trado')
+    $('#crudModalTitle').text('Edit Job Emkl')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -429,7 +429,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Jenis Trado')
+    $('#crudModalTitle').text('Delete Job Emkl')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -467,7 +467,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Jenis Trado')
+    $('#crudModalTitle').text('View Job Emkl')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
