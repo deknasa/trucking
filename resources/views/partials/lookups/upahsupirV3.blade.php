@@ -53,6 +53,12 @@ $idLookup = isset($id) ? $id : null;
         align: 'left'          
       },     
       {
+        label: 'TUJUANid',
+        name: 'kotasampaiid',
+        hidden:true,
+        align: 'left'          
+      },     
+      {
         label: 'DARI',
         name: 'kotadari_id',
         align: 'left'          

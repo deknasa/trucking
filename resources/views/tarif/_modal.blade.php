@@ -107,14 +107,14 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  KOTA <span class="text-danger">*</span></label>
+                  TUJUAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="kota_id">
                 <input type="text" name="kota" id="kota" class="form-control kota-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" hidden>
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   TUJUAN <span class="text-danger">*</span>
@@ -801,6 +801,8 @@
               $(`.${field}`).hide()
             });
           }
+
+
           resolve()
         },
         error: error => {
@@ -1226,7 +1228,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
-          StatusPelabuhan : 'PELABUHAN',
+          StatusPelabuhan: 'PELABUHAN',
         }
       },
       onSelectRow: (pelabuhan, element) => {
@@ -1246,12 +1248,12 @@
       }
     })
 
-    
+
 
     $('.zona-lookup').lookupV3({
       title: 'Zona Lookup',
       fileName: 'zonaV3',
-      searching: ['zona','keterangan'],
+      searching: ['zona', 'keterangan'],
       labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -1303,7 +1305,7 @@
     $('.parent-lookup').lookupV3({
       title: 'Tarif Lookup',
       fileName: 'tarifV3',
-      searching: ['upahsupir','tujuan','penyesuaian'],
+      searching: ['upahsupir', 'tujuan', 'penyesuaian'],
       labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -1333,7 +1335,7 @@
     $('.upahsupir-lookup').lookupV3({
       title: 'Upah Supir Lookup',
       fileName: 'upahsupirV3',
-      searching: ['kotasampai_id','kotadari_id','penyesuaian','jarak','zona_id'],
+      searching: ['kotasampai_id', 'kotadari_id', 'penyesuaian', 'jarak', 'zona_id'],
       labelColumn: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -1349,6 +1351,19 @@
         $('#crudForm [name=sampai]').val(upahsupir.kotasampai_id)
         element.val(`${upahsupir.kotadari_id} - ${upahsupir.kotasampai_id}`)
 
+        $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
+        $('#crudForm [name=tujuan]').val(upahsupir.kotasampai_id)
+        $('#crudForm [name=kota]').val(upahsupir.kotasampai_id)
+        $('#crudForm [name=kota_id]').val(upahsupir.kotasampaiid)
+
+        let kota = $('#crudForm').find(`[name="kota"]`).parents('.input-group')
+        kota.children().attr('readonly', true)
+        kota.children().find('.lookup-toggler').attr('disabled', true)
+        kota.find('button.button-clear').hide()
+
+        let form = $('#crudForm')
+         form.find(`[name="penyesuaian"]`).prop('readonly', true)
+
         element.data('currentValue', element.val())
         // clearTrado()
       },
@@ -1361,6 +1376,21 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
+
+        $('#crudForm [name=penyesuaian]').val('')
+        $('#crudForm [name=tujuan]').val('')
+        $('#crudForm [name=kota]').val('')
+        $('#crudForm [name=kota_id]').val('')
+        $('#crudForm [name=penyesuaianupah]').val('')
+
+
+        let kota = $('#crudForm').find(`[name="kota"]`).parents('.input-group')
+        kota.children().attr('readonly', false)
+        kota.children().find('.lookup-toggler').attr('disabled', false)
+        kota.find('button.button-clear').show()
+
+        let form = $('#crudForm')
+         form.find(`[name="penyesuaian"]`).prop('readonly', false)
       }
     })
 
