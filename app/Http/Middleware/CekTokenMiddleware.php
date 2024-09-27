@@ -18,8 +18,10 @@ class CekTokenMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $this->checkToken();
-        return $next($request);
+        if($this->checkToken()){
+            return $next($request);
+        }
+        return redirect('logout');
 
     }
 
@@ -43,8 +45,16 @@ class CekTokenMiddleware
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'checkuser');
 
-            return $newResponse;
+            if ($newResponse->status() > 200) {
+                return false;
+            }
         }
+        
+        if ($response->status() > 200) {
+            return false;
+        }
+        return true;
+
     }
 
 

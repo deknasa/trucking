@@ -357,7 +357,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/refresh',[AuthController::class,'refreshToken'])->name('refreshs');
 
 });
-Route::middleware(['auth', 'authorized','check.token'])->group(function () {
+Route::middleware(['auth', 'check.token','authorized'])->group(function () {
     Route::get('importdatacabang/index', [ImportDataCabangController::class, 'index']);
     Route::get('importdatacabang', [ImportDataCabangController::class, 'index']);
 
