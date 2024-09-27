@@ -375,7 +375,7 @@
                     if (printer == 'reportPrinterBesar') {
                         // console.log(cabang)
                         if (cabang == 'MEDAN') {
-                            report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
+                            report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarA4.mrt') }}`)
                         } else if (cabang == 'MAKASSAR') {
                             report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarLetter.mrt') }}`)
                         } else {
@@ -403,7 +403,7 @@
                 // designer.report = report;
                 // designer.renderHtml('content');
 
-                // PDF
+               // PDF
                 report.renderAsync(function() {
                     report.exportDocumentAsync(function(pdfData) {
                         let blob = new Blob([new Uint8Array(pdfData)], {
