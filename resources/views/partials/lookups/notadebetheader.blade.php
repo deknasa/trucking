@@ -24,6 +24,7 @@
         // tglsampai: $('#tglsampaiheaderlookup').val(),
         panjar: `{!! $Panjar ?? '' !!}`,
         agen_id: `{!! $agen_Id ?? '' !!}`,
+        pelanggan_id: `{!! $pelanggan_Id ?? '' !!}`,
       },
       idPrefix: 'notaDebetHeaderLookup',
       colModel: [
@@ -62,6 +63,11 @@
           {
             label: 'CUSTOMER',
             name: 'agen',
+            align: 'left',
+          },
+          {
+            label: 'SHIPPER',
+            name: 'pelanggan',
             align: 'left',
           },
           {

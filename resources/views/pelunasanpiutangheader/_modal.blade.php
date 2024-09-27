@@ -49,7 +49,7 @@
             <div class="row form-group pelanggan">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  PELANGGAN <span class="text-danger">*</span>
+                  SHIPPER <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -1967,6 +1967,8 @@
               form.find(`[name="tglbukti"]`).prop('readonly', true)
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             }
+            form.find(`[name="notadebet_nobukti"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="notadebet_nobukti"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="pelanggan"]`).parent('.input-group').find('.button-clear').remove()
@@ -2734,7 +2736,8 @@
           bank_Id: bankId,
           Aktif: 'AKTIF',
           Panjar: 'PANJAR',
-          agen_Id: agenId,
+          agen_Id:  $('#crudForm [name=agen_id]').val(),
+          pelanggan_Id:  $('#crudForm [name=pelanggan_id]').val(),
 
         }
       },
