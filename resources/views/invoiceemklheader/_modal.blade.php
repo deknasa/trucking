@@ -343,7 +343,7 @@
         job_id.push(dataInvoice.id)
         nojobemkl.push(dataInvoice.nojobemkl)
         keterangan_detail.push(dataInvoice.keterangan_detail)
-        keterangan_biaya.push(dataInvoice.keteranganInput)
+        keterangan_biaya.push((dataInvoice.keteranganInput)?dataInvoice.keteranganInput:dataInvoice.keterangan_biaya)
       });
       let requestData = {
         'nominal': nominal,
@@ -1098,7 +1098,10 @@
             name: "keteranganInput",
             width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
             sortable: false,
-            hidden:true
+            hidden:true,
+            formatter: function(cellValue, options, rowObject) {
+              return rowObject.keterangan_biaya;
+            }
           },
           {
             label: "SHIPPER",
