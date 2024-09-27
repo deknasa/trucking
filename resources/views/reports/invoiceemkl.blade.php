@@ -44,7 +44,7 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      if (invoiceheaders.statusformatreimbursement == 'YA') {
+      if (invoiceheaders.nobuktiinvoicereimbursement != '') {
         report.loadFile(`{{ asset('public/reports/ReportInvoiceReimbursement.mrt') }}`)
       } else {
         if (invoiceheaders.jenisorder == 'MUATAN') {
