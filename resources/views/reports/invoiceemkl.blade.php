@@ -44,21 +44,21 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      if (invoiceheaders.nobuktiinvoicereimbursement != '') {
-        report.loadFile(`{{ asset('public/reports/ReportInvoiceReimbursement.mrt') }}`)
-      } else {
-        if (invoiceheaders.jenisorder == 'MUATAN') {
-          report.loadFile(`{{ asset('public/reports/ReportInvoiceEmklMuatan.mrt') }}`)
-        } else {
-          if (invoiceheaders.statusinvoice == 'UTAMA') {
-            report.loadFile(`{{ asset('public/reports/ReportInvoiceEmkl.mrt') }}`)
 
+      if (invoiceheaders.jenisorder == 'MUATAN') {
+        report.loadFile(`{{ asset('public/reports/ReportInvoiceEmklMuatan.mrt') }}`)
+      } else {
+        if (invoiceheaders.statusinvoice == 'UTAMA') {
+          report.loadFile(`{{ asset('public/reports/ReportInvoiceEmkl.mrt') }}`)
+
+        } else {
+          if (invoiceheaders.nobuktiinvoicereimbursement != '') {
+            report.loadFile(`{{ asset('public/reports/ReportInvoiceReimbursement.mrt') }}`)
           } else {
             report.loadFile(`{{ asset('public/reports/ReportInvoiceEmklTambahan.mrt') }}`)
-
           }
-
         }
+
       }
 
       report.dictionary.dataSources.clear()
