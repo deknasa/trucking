@@ -2103,8 +2103,18 @@
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
         // element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
+
+        let kota = $('#crudForm').find(`[name="kotasampai"]`).parents('.input-group')
+        kota.children().attr('readonly', true)
+        kota.children().find('.lookup-toggler').attr('disabled', true)
+        kota.find('button.button-clear').hide()
+
+        let form = $('#crudForm')
+         form.find(`[name="penyesuaian"]`).prop('readonly', true)
+
         element.val(tarif.tujuanpenyesuaian)
         element.data('currentValue', element.val())
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2119,6 +2129,19 @@
         // $('#kotaupahsupir').parent('.input-group').show()
         $('#kotatarif').prop('type', 'hidden')
         $('#kotatarif').prop('disabled', true).hide()
+
+        let kota = $('#crudForm').find(`[name="kotasampai"]`).parents('.input-group')
+        kota.children().attr('readonly', false)
+        kota.children().find('.lookup-toggler').attr('disabled', false)
+        kota.find('button.button-clear').show()
+
+        let form = $('#crudForm')
+         form.find(`[name="penyesuaian"]`).prop('readonly', false)
+
+         $('#crudForm [name=kotasampai]').val('')
+        $('#crudForm [name=kotasampai_id]').val('')
+        $('#crudForm [name=penyesuaian]').val('')
+
         element.val('')
         element.data('currentValue', element.val())
         $('#crudForm [name=tarif_id]').val('')

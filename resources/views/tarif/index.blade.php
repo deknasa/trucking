@@ -638,7 +638,7 @@
           class: 'btn btn-purple btn-sm mr-1 ',
           item: [{
               id: 'approvalaktif',
-              text: "APPROVAL AKTIF",
+              text: "APPROVAL AKTIF/NON AKTIF",
               color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
               hidden: (!`{{ $myAuth->hasPermission('tarif', 'approvalaktif') }}`),
               onClick: () => {
@@ -648,17 +648,17 @@
                 }
               }
             },
-            {
-              id: 'approvalnonaktif',
-              text: "APPROVAL NON AKTIF",
-              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
-                  approvalNonAktif('tarif')
-                }
-              }
-            },
+            // {
+            //   id: 'approvalnonaktif',
+            //   text: "APPROVAL NON AKTIF",
+            //   color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+            //   hidden: (!`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`),
+            //   onClick: () => {
+            //     if (`{{ $myAuth->hasPermission('tarif', 'approvalnonaktif') }}`) {
+            //       approvalNonAktif('tarif')
+            //     }
+            //   }
+            // },
           ],
         }]
 
