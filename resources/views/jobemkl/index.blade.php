@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            @include('layouts._rangeheader')
+            @include('layouts._rangeheaderjobemkl')
             <table id="jqGrid"></table>
         </div>
     </div>
@@ -77,18 +77,25 @@
 
 
     $(document).ready(function() {
+        initLookup()
         @isset($request['tgldari'])
         tgldariheader = `{{ $request['tgldari'] }}`;
         @endisset
         @isset($request['tglsampai'])
         tglsampaiheader = `{{ $request['tglsampai'] }}`;
         @endisset
+        @isset($request['jenisorder_id'])
+        jenisorder_id = `{{ $request['jenisorder_id'] }}`;
+        @endisset
+
         setRange(true)
         initDatepicker('datepickerIndex')
 
         $(document).on('click', '#btnReload', function(event) {
-            loadDataHeader('jobemkl', {
-                proses: 'reload'
+            loadDataHeaderJobEmkl('jobemkl', {
+                proses: 'reload',
+                jenisorder_id: $('#crudForm').find('[name=jenisorder_id]').val(),
+
             })
         })
         $("#jqGrid").jqGrid({
@@ -99,6 +106,7 @@
                 postData: {
                     tgldari: $('#tgldariheader').val(),
                     tglsampai: $('#tglsampaiheader').val(),
+                    jenisorder_id: $('#jenisorder_id').val(),
                     proses: 'reload'
                 },
                 datatype: "json",
