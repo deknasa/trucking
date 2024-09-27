@@ -277,6 +277,22 @@
               newformat: "d-m-Y"
             }
           },
+          
+          {
+            label: 'CUSTOMER',
+            name: 'agen_id',
+            align: 'left',
+            search: (accessCabang != 'BITUNG-EMKL') ? true : false,
+            hidden: (accessCabang != 'BITUNG-EMKL') ? false : true
+          },
+          {
+            label: 'SHIPPER',
+            name: 'pelanggan_id',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            search: (accessCabang == 'BITUNG-EMKL') ? true : false,
+            hidden: (accessCabang == 'BITUNG-EMKL') ? false : true
+          },
           {
             label: 'POSTING DARI',
             name: 'postingdari',
@@ -356,11 +372,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'CUSTOMER',
-            name: 'agen_id',
-            align: 'left'
           },
           {
             label: 'NAMA PERKIRAAN (DEBET)',
