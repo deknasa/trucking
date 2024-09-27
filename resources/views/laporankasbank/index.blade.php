@@ -397,23 +397,23 @@
                 report.regData(dataSet.dataSetName, '', dataSet);
                 report.dictionary.synchronize();
 
-                var options = new Stimulsoft.Designer.StiDesignerOptions()
-                options.appearance.fullScreenMode = true
-                var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
-                designer.report = report;
-                designer.renderHtml('content');
+                // var options = new Stimulsoft.Designer.StiDesignerOptions()
+                // options.appearance.fullScreenMode = true
+                // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+                // designer.report = report;
+                // designer.renderHtml('content');
 
                 // PDF
-                // report.renderAsync(function() {
-                //     report.exportDocumentAsync(function(pdfData) {
-                //         let blob = new Blob([new Uint8Array(pdfData)], {
-                //             type: 'application/pdf'
-                //         });
-                //         let fileURL = URL.createObjectURL(blob);
-                //         window.open(fileURL, '_blank');
-                //         manipulatePdfWithJsPdf(pdfData);
-                //     }, Stimulsoft.Report.StiExportFormat.Pdf);
-                // });
+                report.renderAsync(function() {
+                    report.exportDocumentAsync(function(pdfData) {
+                        let blob = new Blob([new Uint8Array(pdfData)], {
+                            type: 'application/pdf'
+                        });
+                        let fileURL = URL.createObjectURL(blob);
+                        window.open(fileURL, '_blank');
+                        manipulatePdfWithJsPdf(pdfData);
+                    }, Stimulsoft.Report.StiExportFormat.Pdf);
+                });
 
               
                 //WORD
