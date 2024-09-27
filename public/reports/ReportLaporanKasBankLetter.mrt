@@ -6,7 +6,7 @@
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1727401819000+0700)/",
+  "ReportChanged": "/Date(1727401739000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -402,7 +402,7 @@
         "0": {
           "Ident": "StiPageHeaderBand",
           "Name": "PageHeaderBand1",
-          "ClientRectangle": "0,4,209.1,32",
+          "ClientRectangle": "0,4,214.9,32",
           "ComponentPlacement": "ph.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1001,7 +1001,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,277.9,209.1,6",
+          "ClientRectangle": "0,260.4,214.9,6",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1012,7 +1012,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,44,209.1,6",
+          "ClientRectangle": "0,44,214.9,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1226,7 +1226,7 @@
         "3": {
           "Ident": "StiReportSummaryBand",
           "Name": "ReportSummaryBand1",
-          "ClientRectangle": "0,58,209.1,38",
+          "ClientRectangle": "0,58,214.9,38",
           "ComponentPlacement": "rs.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1741,9 +1741,9 @@
           "EndCap": ";;;"
         }
       },
-      "PaperSize": "A4",
-      "PageWidth": 210.1,
-      "PageHeight": 296.9,
+      "PaperSize": "Letter",
+      "PageWidth": 215.9,
+      "PageHeight": 279.4,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },

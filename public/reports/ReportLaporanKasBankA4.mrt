@@ -6,7 +6,7 @@
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1727401819000+0700)/",
+  "ReportChanged": "/Date(1727401713000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",

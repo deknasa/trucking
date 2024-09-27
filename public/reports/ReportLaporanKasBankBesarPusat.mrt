@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "0fbcf915ddaf9809da5920a6d34672b8",
+  "ReportGuid": "25b6170924694cd7959a4d26feaca36c",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1725616800000+0700)/",
+  "ReportChanged": "/Date(1727402287000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -61,7 +61,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "6": {
             "Name": "nobukti",
@@ -1244,7 +1244,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1273,9 +1272,8 @@
               "Conditions": {
                 "0": {
                   "Ident": "StiCondition",
-                  "DataType": "Numeric",
-                  "Column": "root_data.kredit",
-                  "Value1": "0",
+                  "Column": "root_data.keterangan",
+                  "Value1": "SALDO AWAL",
                   "Enabled": false,
                   "BorderSides": "None"
                 }
@@ -1283,7 +1281,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.kredit}"
               },
@@ -1312,17 +1309,8 @@
               "Conditions": {
                 "0": {
                   "Ident": "StiCondition",
-                  "Condition": "NotEqualTo",
-                  "Column": "root_data.urutdetail",
-                  "Value1": "1.0",
-                  "Enabled": false,
-                  "BorderSides": "None"
-                },
-                "1": {
-                  "Ident": "StiCondition",
-                  "DataType": "Numeric",
-                  "Column": "root_data.totaldebet",
-                  "Value1": "0",
+                  "Column": "root_data.keterangan",
+                  "Value1": "SALDO AWAL",
                   "Enabled": false,
                   "BorderSides": "None"
                 }
@@ -1330,7 +1318,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totaldebet}"
               },
@@ -1359,17 +1346,8 @@
               "Conditions": {
                 "0": {
                   "Ident": "StiCondition",
-                  "Condition": "NotEqualTo",
-                  "Column": "root_data.urutdetail",
-                  "Value1": "1.0",
-                  "Enabled": false,
-                  "BorderSides": "None"
-                },
-                "1": {
-                  "Ident": "StiCondition",
-                  "DataType": "Numeric",
-                  "Column": "root_data.totalkredit",
-                  "Value1": "0",
+                  "Column": "root_data.keterangan",
+                  "Value1": "SALDO AWAL",
                   "Enabled": false,
                   "BorderSides": "None"
                 }
@@ -1377,7 +1355,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totalkredit}"
               },
@@ -1406,9 +1383,8 @@
               "Conditions": {
                 "0": {
                   "Ident": "StiCondition",
-                  "DataType": "Numeric",
-                  "Column": "root_data.debet",
-                  "Value1": "0",
+                  "Column": "root_data.keterangan",
+                  "Value1": "SALDO AWAL",
                   "Enabled": false,
                   "BorderSides": "None"
                 }
@@ -1416,7 +1392,6 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.debet}"
               },
