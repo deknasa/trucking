@@ -312,6 +312,16 @@
             label: 'CUSTOMER',
             name: 'agen',
             align: 'left',
+            search: (accessCabang != 'BITUNG-EMKL') ? true : false,
+            hidden: (accessCabang != 'BITUNG-EMKL') ? false : true
+          },
+          {
+            label: 'SHIPPER',
+            name: 'pelanggan',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            search: (accessCabang == 'BITUNG-EMKL') ? true : false,
+            hidden: (accessCabang == 'BITUNG-EMKL') ? false : true
           },
           {
             label: 'NO BUKTI PELUNASAN PIUTANG',

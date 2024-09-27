@@ -44,13 +44,22 @@
                 </div>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group agen">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">CUSTOMER <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="agen_id">
                 <input type="text" name="agen" class="form-control agen-lookup">
+              </div>
+            </div>
+            <div class="row form-group pelanggan">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">SHIPPER <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="pelanggan_id">
+                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
 
@@ -163,7 +172,7 @@
       event.preventDefault()
       submit($(this).attr('id'))
     })
-    
+
     function submit(button) {
       event.preventDefault()
       let method
@@ -259,23 +268,23 @@
           $('#crudForm').trigger('reset')
           if (button == 'btnSubmit') {
             $('#crudModal').modal('hide')
-            
+
             id = response.data.id
             $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
             $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
-            
+
             $('#jqGrid').jqGrid('setGridParam', {
               page: response.data.page,
               postData: {
                 tgldari: dateFormat(response.data.tgldariheader),
                 tglsampai: dateFormat(response.data.tglsampaiheader)
-              }                
+              }
             }).trigger('reloadGrid');
-            
+
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
-            }  
-          }else {
+            }
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
@@ -405,6 +414,13 @@
         if (selectedRows.length > 0) {
           clearSelectedRows()
         }
+        if (accessCabang == 'BITUNG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
+        }
         $('#crudModal').modal('show')
         addRow()
         setTotal()
@@ -442,6 +458,13 @@
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
+            }
+            if (accessCabang == 'BITUNG-EMKL') {
+              $('.agen').hide()
+              $('.pelanggan').show()
+            } else {
+              $('.agen').show()
+              $('.pelanggan').hide()
             }
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
@@ -490,6 +513,13 @@
         if (selectedRows.length > 0) {
           clearSelectedRows()
         }
+        if (accessCabang == 'BITUNG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -522,6 +552,13 @@
       .then(() => {
         if (selectedRows.length > 0) {
           clearSelectedRows()
+        }
+        if (accessCabang == 'BITUNG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
         }
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
@@ -963,6 +1000,30 @@
       },
       onClear: (element) => {
         $('#crudForm').find('[name=agen_id]').val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.pelanggan-lookup').lookup({
+      title: 'Shipper Lookup',
+      fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm').find('[name=pelanggan_id]').val(pelanggan.id)
+        element.val(pelanggan.namapelanggan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm').find('[name=pelanggan_id]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }

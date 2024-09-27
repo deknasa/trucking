@@ -45,7 +45,7 @@
                 </div>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group agen">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">CUSTOMER <span class="text-danger"></span> </label>
               </div>
@@ -54,6 +54,16 @@
                 <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
+            <div class="row form-group pelanggan">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">SHIPPER <span class="text-danger"></span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="pelanggan_id">
+                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+              </div>
+            </div>
+
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -445,6 +455,14 @@
         if (selectedRows.length > 0) {
           clearSelectedRows()
         }
+
+        if (accessCabang == 'BITUNG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
+        }
         $('#crudModal').modal('show')
         addRow()
         setTotal()
@@ -486,6 +504,13 @@
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
+            if (accessCabang == 'BITUNG-EMKL') {
+              $('.agen').hide()
+              $('.pelanggan').show()
+            } else {
+              $('.agen').show()
+              $('.pelanggan').hide()
             }
             $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().attr('disabled', true)
             $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
@@ -529,6 +554,13 @@
         if (selectedRows.length > 0) {
           clearSelectedRows()
         }
+        if (accessCabang == 'BITUNG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -561,6 +593,13 @@
       .then(() => {
         if (selectedRows.length > 0) {
           clearSelectedRows()
+        }
+        if (accessCabang == 'BITUNG-EMKL') {
+          $('.agen').hide()
+          $('.pelanggan').show()
+        } else {
+          $('.agen').show()
+          $('.pelanggan').hide()
         }
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
@@ -1000,6 +1039,30 @@
       },
       onClear: (element) => {
         $('#crudForm').find('[name=agen_id]').val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.pelanggan-lookup').lookup({
+      title: 'Shipper Lookup',
+      fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm').find('[name=pelanggan_id]').val(pelanggan.id)
+        element.val(pelanggan.namapelanggan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm').find('[name=pelanggan_id]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }
