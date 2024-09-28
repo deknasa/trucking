@@ -35,7 +35,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row agen">
                             <label class="col-12 col-sm-2 col-form-label mt-2">CUSTOMER (DARI)</label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="agendari_id">
@@ -45,6 +45,19 @@
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="agensampai_id">
                                 <input type="text" id="agensampai" name="agensampai" class="form-control agensampai-lookup">
+                            </div>
+                        </div>
+
+                        <div class="form-group row shipper">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">SHIPPER (DARI)</label>
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="pelanggandari_id">
+                                <input type="text" id="pelanggandari" name="pelanggandari" class="form-control pelanggandari-lookup">
+                            </div>
+                            <h5 class="col-sm-1 mt-3 text-center">s/d</h5>
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="pelanggansampai_id">
+                                <input type="text" id="pelanggansampai" name="pelanggansampai" class="form-control pelanggansampai-lookup">
                             </div>
                         </div>
 
@@ -99,7 +112,13 @@
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=status]'), false)
         setLaporanPiutangPerAgen($('#crudForm'))
-
+        if (accessCabang == 'BITUNG-EMKL') {
+            $('.agen').hide()
+            $('.pelanggan').show()
+        } else {
+            $('.agen').show()
+            $('.pelanggan').hide()
+        }
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -136,7 +155,11 @@
                     agendari_id: agendari_id,
                     agensampai_id: agensampai_id,
                     agendari: agendari,
-                    agensampai: agensampai
+                    agensampai: agensampai,
+                    pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+                    pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+                    pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+                    pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
                 },
                 success: function(response) {
                     // console.log(response)
@@ -148,11 +171,15 @@
                         agendari_id: agendari_id,
                         agensampai_id: agensampai_id,
                         agendari: agendari,
-                        agensampai: agensampai
+                        agensampai: agensampai,
+                        pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+                        pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+                        pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+                        pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
                     };
                     let cabang = accessCabang
 
-                    laporankartupiutangperagen(data, detailParams, dataCabang,cabang);
+                    laporankartupiutangperagen(data, detailParams, dataCabang, cabang);
                 },
                 error: function(error) {
                     if (error.status === 422) {
@@ -185,13 +212,17 @@
             url: `${apiUrl}laporankartupiutangperagen/export`,
             // url: `{{ route('laporankartupiutangperagen.export') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}`,
             type: 'GET',
-            data : {
-                dari : dari,
-                sampai : sampai,
-                agendari_id : agendari_id,
-                agensampai_id : agensampai_id,
-                agendari : agendari,
-                agensampai : agensampai
+            data: {
+                dari: dari,
+                sampai: sampai,
+                agendari_id: agendari_id,
+                agensampai_id: agensampai_id,
+                agendari: agendari,
+                agensampai: agensampai,
+                pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+                pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+                pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+                pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -221,7 +252,7 @@
         })
     })
 
-    function laporankartupiutangperagen(data, detailParams, dataCabang,cabang) {
+    function laporankartupiutangperagen(data, detailParams, dataCabang, cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");
         Stimulsoft.Base.StiFontCollection.addOpentypeFontFile("{{ asset('libraries/stimulsoft-report/2023.1.1/font/SourceSansPro.ttf') }}", "SourceSansPro");
 
@@ -230,9 +261,9 @@
 
         if (cabang == 'MEDAN') {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKartuPiutangPerAgenA4.mrt') }}`);
-        }else if(cabang == 'MAKASSAR'){
+        } else if (cabang == 'MAKASSAR') {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKartuPiutangPerAgenLetter.mrt') }}`);
-        }else{
+        } else {
             report.loadFile(`{{ asset('public/reports/ReportLaporanKartuPiutangPerAgen.mrt') }}`);
         }
 
@@ -279,6 +310,10 @@
                     agensampai_id: $('#crudForm').find('[name=agensampai_id]').val(),
                     agendari: $('#crudForm').find('[name=agendari]').val(),
                     agensampai: $('#crudForm').find('[name=agensampai]').val(),
+                    pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+                    pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+                    pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+                    pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
@@ -349,6 +384,66 @@
             },
             onClear: (element) => {
                 $('#crudForm [name=agensampai_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
+        $('.pelanggandari-lookup').lookupMaster({
+            title: 'Shipper Lookup',
+            fileName: 'pelangganMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'pelanggandari_id',
+                    searchText: 'pelanggandari-lookup',
+                    title: 'Shipper Lookup',
+                    typeSearch: 'ALL',
+                }
+            },
+            onSelectRow: (pelanggan, element) => {
+                $('#crudForm [name=pelanggandari_id]').first().val(pelanggan.id)
+                element.val(pelanggan.namapelanggan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=pelanggandari_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
+        $('.pelanggansampai-lookup').lookupMaster({
+            title: 'Shipper Lookup',
+            fileName: 'pelangganMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'pelanggansampai_id',
+                    searchText: 'pelanggansampai-lookup',
+                    title: 'Shipper Lookup',
+                    typeSearch: 'ALL',
+                }
+            },
+            onSelectRow: (pelanggan, element) => {
+                $('#crudForm [name=pelanggansampai_id]').first().val(pelanggan.id)
+                element.val(pelanggan.namapelanggan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=pelanggansampai_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
