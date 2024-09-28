@@ -229,20 +229,52 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
 
           },
-          {
-            label: 'asuransitas',
-            name: 'asuransitas',
-            hidden: (!cabangTrucking),
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
 
-          },
           {
-            label: 'asuransisendiri',
-            name: 'asuransisendiri',
+            label: 'Status',
+            name: 'statusasuransi',
             hidden: (!cabangTrucking),
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ';';
+                        }
+                        $i++;
+                      endforeach
+                      ?>`,
+
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+
+            formatter: (value, options, rowData) => {
+              let statusAsuransi = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAsuransi.WARNA}; color: ${statusAsuransi.WARNATULISAN};">
+                  <span>${statusAsuransi.SINGKATAN}</span>
+                </div>
+              `)
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAsuransi = JSON.parse(rowObject.statusasuransi)
+
+              return ` title="${statusAsuransi.MEMO}"`
+            }
           },
+          
+          
+     
           {
             label: 'top',
             name: 'top',
@@ -584,7 +616,7 @@
           class: 'btn btn-purple btn-sm mr-1 ',
           item: [{
               id: 'approvalaktif',
-              text: "APPROVAL AKTIF",
+              text: "APPROVAL AKTIF/NON AKTIF",
               color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
               hidden: (!`{{ $myAuth->hasPermission('shipper', 'approvalaktif') }}`),
               onClick: () => {
@@ -594,17 +626,17 @@
                 }
               }
             },
-            {
-              id: 'approvalnonaktif',
-              text: "APPROVAL NON AKTIF",
-              color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
-              hidden: (!`{{ $myAuth->hasPermission('shipper', 'approvalnonaktif') }}`),
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('shipper', 'approvalnonaktif') }}`) {
-                  approvalNonAktif('shipper')
-                }
-              }
-            },
+            // {
+            //   id: 'approvalnonaktif',
+            //   text: "APPROVAL NON AKTIF",
+            //   color: `<?php echo $data['listbtn']->btn->approvalnonaktif; ?>`,
+            //   hidden: (!`{{ $myAuth->hasPermission('shipper', 'approvalnonaktif') }}`),
+            //   onClick: () => {
+            //     if (`{{ $myAuth->hasPermission('shipper', 'approvalnonaktif') }}`) {
+            //       approvalNonAktif('shipper')
+            //     }
+            //   }
+            // },
           ],
         }]
       })
