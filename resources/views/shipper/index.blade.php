@@ -57,6 +57,11 @@
 
 
   $(document).ready(function() {
+    cabangTrucking = false;
+    if (accessCabang == 'BITUNG-EMKL') {
+      cabangTrucking = true;
+    }
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}shipper`,
         mtype: "GET",
@@ -153,35 +158,224 @@
               return ` title="${statusAktif.MEMO}"`
             }
           },
+          
+          {
+            label: 'npwp',
+            name: 'npwp',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'noktp',
+            name: 'noktp',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'alamatfakturpajak',
+            name: 'alamatfakturpajak',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'alamatkantorpenagihan',
+            name: 'alamatkantorpenagihan',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'namapemilik',
+            name: 'namapemilik',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'telpkantor',
+            name: 'telpkantor',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'faxkantor',
+            name: 'faxkantor',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'website',
+            name: 'website',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'contactperson',
+            name: 'contactperson',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'telpcp',
+            name: 'telpcp',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'asuransitas',
+            name: 'asuransitas',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'asuransisendiri',
+            name: 'asuransisendiri',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'top',
+            name: 'top',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'prosedurpenagihan',
+            name: 'prosedurpenagihan',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'syaratpenagihan',
+            name: 'syaratpenagihan',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'pickeuangan',
+            name: 'pickeuangan',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'telppickeuangan',
+            name: 'telppickeuangan',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'jenisusaha',
+            name: 'jenisusaha',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'volumeperbulan',
+            name: 'volumeperbulan',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'kompetitor',
+            name: 'kompetitor',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'referensi',
+            name: 'referensi',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'nominalplafon',
+            name: 'nominalplafon',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'danaditransferdari',
+            name: 'danaditransferdari',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'atasnama',
+            name: 'atasnama',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'norekening',
+            name: 'norekening',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
+          {
+            label: 'bank',
+            name: 'bank',
+            hidden: (!cabangTrucking),
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
+          },
           {
             label: 'NO TELEPON/HANDPHONE',
             name: 'telp',
+            hidden: cabangTrucking,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
 
           },
           {
             label: 'alamat (1)',
             name: 'alamat',
+            hidden: cabangTrucking,
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
           },
           {
             label: 'alamat (2)',
             name: 'alamat2',
+            hidden: cabangTrucking,
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
             label: 'kota',
             name: 'kota',
+            hidden: cabangTrucking,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'kode pos',
             name: 'kodepos',
+            hidden: cabangTrucking,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'keterangan',
             name: 'keterangan',
+            hidden: cabangTrucking,
             width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3
 
           },

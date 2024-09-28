@@ -40,78 +40,348 @@
                 <input type="text" name="kodepelanggan" class="form-control">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  nama kontak <span class="text-danger"></span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="namakontak" class="form-control">
-              </div>
-            </div>
+            
+            <!--- trucking default ---->
 
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  NO TELEPON/HANDPHONE <span class="text-danger"></span>
-                </label>
+            <div class="" id="field-trucking">
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    nama kontak <span class="text-danger"></span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="namakontak" class="form-control">
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="telp" class="form-control numbernoseparate">
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    NO TELEPON/HANDPHONE <span class="text-danger"></span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="telp" class="form-control numbernoseparate">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    alamat (1) <span class="text-danger"></span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="alamat" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    alamat (2) <span class="text-danger"></span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="alamat2" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    kota <span class="text-danger"></span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="kota" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    kode pos <span class="text-danger"></span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="kodepos" class="form-control numbernoseparate">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    keterangan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="keterangan" class="form-control">
+                </div>
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  alamat (1) <span class="text-danger"></span>
-                </label>
+            <!--- end trucking default ---->
+            
+            <!--- emkl bitung ---->
+            <div class="" id="field-emkl">
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    npwp
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input id='input_masknpwp' type="text" name="npwp" class="form-control">
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="alamat" class="form-control">
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    noktp
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input id='input_maskktp' type="text" name="noktp" class="form-control numbernoseparate">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    alamat faktur pajak
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="alamatfakturpajak" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    alamat kantor penagihan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="alamatkantorpenagihan" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    nama pemilik
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="namapemilik" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    telp kantor
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="telpkantor" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    faxk antor
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="faxkantor" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    website
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="website" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    contact person (CP)
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="contactperson" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    telp cp
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="telpcp" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    asuransi tas
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="asuransitas" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    asuransi sendiri
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="asuransisendiri" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    top
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="top" style="text-align:right" class="form-control autonumeric">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    prosedur penagihan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="prosedurpenagihan" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    syarat penagihan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="syaratpenagihan" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    pic keuangan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="pickeuangan" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    telp pic keuangan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="telppickeuangan" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    jenis usaha
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="jenisusaha" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    volume perbulan
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="volumeperbulan" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    kompetitor
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="kompetitor" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    referensi
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="referensi" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    nominal plafon
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="nominalplafon" style="text-align:right" class="form-control autonumeric">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    dana ditransfer dari
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="danaditransferdari" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    atas nama
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="atasnama" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    no rekening
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="norekening" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-3">
+                  <label class="col-form-label">
+                    bank
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9">
+                  <input type="text" name="bank" class="form-control">
+                </div>
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  alamat (2) <span class="text-danger"></span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="alamat2" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  kota <span class="text-danger"></span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="kota" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  kode pos <span class="text-danger"></span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="kodepos" class="form-control numbernoseparate">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3">
-                <label class="col-form-label">
-                  keterangan
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
+            
+            <!--- end emkl bitung ---->
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
@@ -146,11 +416,34 @@
   let dataMaxLength = []
   var data_id
 
+  $('#input_masknpwp').inputmask({
+    mask: '99.999.999.9-999.999',
+    definitions: {
+      A: {
+        validator: "[A-Za-z0-9]"
+      },
+    },
+  });
+
+  $('#input_maskktp').inputmask({
+    mask: '9999999999999999',
+    definitions: {
+      A: {
+        validator: "[A-Za-z0-9]"
+      },
+    },
+  });
 
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  $('#field-emkl').hide()
+  $('#field-trucking').show()
 
   $(document).ready(function() {
+    if (accessCabang == 'BITUNG-EMKL') {
+      $('#field-trucking').hide()
+      $('#field-emkl').show()
+    }
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -160,6 +453,14 @@
       let pelangganId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+
+      $('#crudForm').find(`[name="nominalplafon"`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalplafon')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalplafon"]`)[index])
+      })
+      $('#crudForm').find(`[name="top"`).each((index, element) => {
+        data.filter((row) => row.name === 'top')[index].value = AutoNumeric.getNumber($(`#crudForm [name="top"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -266,6 +567,8 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
+    initAutoNumeric(form.find(`[name="nominalplafon"]`))
+    initAutoNumeric(form.find(`[name="top"]`))
 
     initLookup()
   })
@@ -312,6 +615,24 @@
 
     $('.modal-loader').removeClass('d-none')
 
+    $('#input_masknpwp').inputmask({
+      mask: '99.999.999.9-999.999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
+    
+    $('#input_maskktp').inputmask({
+      mask: '9999999999999999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
+    
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -447,6 +768,24 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
+
+    $('#input_masknpwp').inputmask({
+      mask: '99.999.999.9-999.999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
+    
+    $('#input_maskktp').inputmask({
+      mask: '9999999999999999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -636,6 +975,8 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
+            // } else if (element.hasClass('autonumeric')) {
+            //   initAutoNumeric(element)
             } else {
               element.val(value)
             }
