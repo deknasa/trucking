@@ -220,25 +220,17 @@
                 </div>
               </div>
               <div class="row form-group">
-                <div class="col-12 col-sm-3 col-md-3">
-                  <label class="col-form-label">
-                    asuransi tas
-                  </label>
-                </div>
-                <div class="col-12 col-sm-9 col-md-9">
-                  <input type="text" name="asuransitas" class="form-control">
-                </div>
+              <div class="col-12 col-sm-3 col-md-3">
+                <label class="col-form-label">
+                  Asuransi <span class="text-danger">*</span>
+                </label>
               </div>
-              <div class="row form-group">
-                <div class="col-12 col-sm-3 col-md-3">
-                  <label class="col-form-label">
-                    asuransi sendiri
-                  </label>
-                </div>
-                <div class="col-12 col-sm-9 col-md-9">
-                  <input type="text" name="asuransisendiri" class="form-control">
-                </div>
+              <div class="col-12 col-sm-9 col-md-9">
+                <input type="hidden" name="statusasuransi">
+                <input type="text" name="statusasuransinama" id="statusasuransinama" class="form-control lg-form statusasuransi-lookup">
               </div>
+            </div>
+            
               <div class="row form-group">
                 <div class="col-12 col-sm-3 col-md-3">
                   <label class="col-form-label">
@@ -567,8 +559,8 @@
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
     }
-    initAutoNumeric(form.find(`[name="nominalplafon"]`))
-    initAutoNumeric(form.find(`[name="top"]`))
+    // initAutoNumeric(form.find(`[name="nominalplafon"]`))
+    // initAutoNumeric(form.find(`[name="top"]`))
 
     initLookup()
   })
@@ -647,6 +639,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusAsuransiOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -704,6 +697,46 @@
     })
   }
 
+  const setStatusAsuransiOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusasuransi]').empty()
+      relatedForm.find('[name=statusasuransi]').append(
+        new Option('-- PILIH STATUS ASURANSI --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS ASURANSI"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAsuransi => {
+            let option = new Option(statusAsuransi.text, statusAsuransi.id)
+
+            relatedForm.find('[name=statusasuransi]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   function initLookup() {
     $(`.status-lookup`).lookupV3({
       title: 'Status Aktif Lookup',
@@ -732,6 +765,36 @@
         element.data('currentValue', element.val());
       },
     });
+
+    $(`.statusasuransi-lookup`).lookupV3({
+      title: 'Status Asuransi Lookup',
+      fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS ASURANSI',
+          subgrp: 'STATUS ASURANSI',
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusasuransi]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusasuransi"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+
   }
 
   function showDefault(form) {
@@ -801,6 +864,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusAsuransiOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -837,6 +901,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusAsuransiOptions(form),
+
         getMaxLength(form)
       ])
       .then(() => {
@@ -872,6 +938,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusAsuransiOptions(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -982,6 +1049,9 @@
             }
 
             if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusasuransinama') {
               element.data('current-value', value)
             }
           })
