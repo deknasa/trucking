@@ -1571,7 +1571,8 @@
         },
         data: {
           aktif: 'AKTIF',
-          tipe: 'KAS'
+          tipe: 'KAS',
+          default: 'YA',
         },
         success: response => {
           $.each(response.data, (index, bank) => {
