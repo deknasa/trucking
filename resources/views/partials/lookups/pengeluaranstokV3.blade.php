@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-    <table id="gandenganLookup<?= $id ?>" class="lookup-grid"></table>
+    <table id="pengeluaranstokLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-    <table id="gandenganLookup" class="lookup-grid"></table>
+    <table id="pengeluaranstokLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
     <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
     var idLookup = '{{ $idLookup }}';
     var idTop
 
-    selector = $(`#gandenganLookup{{ isset($id) ? $id : null }} `)
+    selector = $(`#pengeluaranstokLookup{{ isset($id) ? $id : null }} `)
     var isToolbarSearch = false;
 
     var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -36,44 +36,40 @@ $idLookup = isset($id) ? $id : null;
     }
 
 
-    column = [{
-            label: "ID",
-            name: "id",
-            width: "50px",
-            hidden: true,
-            sortable: false,
-            search: false,
-        },
-
-        {
-            label: "KODE GANDENGAN",
-            name: "kodegandengan",
-            width: '100px',
-        },
-        {
-            label: "keterangan",
-            name: "keterangan",
-            width: '450px',
-        },
+    column = [
+      {
+        label: 'ID',
+        name: 'id',
+        align: 'right',
+        width: '70px',
+        search: false,
+        hidden: true
+      },
+      {
+        label: 'pengeluaran',
+        name: 'kodepengeluaran',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left',
+      },
+      {
+        label: 'KETERANGAN',
+        name: 'keterangan',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+        align: 'left'
+      },
     ]
+    
 
 
 
     selector.jqGrid({
-        url: `{!! $url ?? config('app.api_url')  !!}` + 'gandengan',
+        url: `{{ config('app.api_url') . 'pengeluaranstok' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         postData: {
             aktif: `{!! $Aktif ?? '' !!}`,
-            asal: `{!! $Asal ?? '' !!}`,
-            cabang: `{!! $cabang ?? '' !!}`,
-            penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
-            gandengandarike: `{!! $gandengandarike ?? '' !!}`,
-            gandengandari_id: `{!! $gandengandari_id ?? '' !!}`,
-            gandenganke_id: `{!! $gandenganke_id ?? '' !!}`,
-            statusjeniskendaraan: `{!! $statusjeniskendaraan ?? '' !!}`,
             forLookup: true,
         },
         idPrefix: '',
@@ -368,6 +364,7 @@ $idLookup = isset($id) ? $id : null;
             setHighlight($(this))
             // $(this).jqGrid('setSelection', 1);
         },
+
     })
     
     if (filterToolbar == 'true') {

@@ -87,7 +87,7 @@
                     <label class="col-form-label">supplier </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="supplier" class="form-control supplier-lookup">
+                    <input type="text" name="supplier" id="supplier" class="form-control supplier-lookup">
                     <input type="text" id="supplierId" name="supplier_id" readonly hidden>
                   </div>
                 </div>
@@ -99,7 +99,7 @@
                     <label class="col-form-label">kerusakan </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="kerusakan" class="form-control kerusakan-lookup">
+                    <input type="text" name="kerusakan" id="kerusakan" class="form-control kerusakan-lookup">
                     <input type="text" id="kerusakanId" name="kerusakan_id" readonly hidden>
                   </div>
                 </div>
@@ -111,7 +111,7 @@
                     <label class="col-form-label">supir </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="supir" class="form-control supir-lookup">
+                    <input type="text" name="supir" id="supir" class="form-control supir-lookup">
                     <input type="text" id="supirId" name="supir_id" readonly hidden>
                   </div>
                 </div>
@@ -162,7 +162,7 @@
                         <label class="col-form-label">trado </label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
-                        <input type="text" name="trado" class="form-control trado-lookup">
+                        <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                         <input type="text" id="tradoId" name="trado_id" readonly hidden>
                       </div>
                     </div>
@@ -174,7 +174,7 @@
                         <label class="col-form-label">gudang </label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
-                        <input type="text" name="gudang" class="form-control gudang-lookup">
+                        <input type="text" name="gudang" id="gudang" class="form-control gudang-lookup">
                         <input type="text" id="gudangId" name="gudang_id" readonly hidden>
                       </div>
                     </div>
@@ -186,7 +186,7 @@
                         <label class="col-form-label">gandengan </label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
-                        <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                        <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                         <input type="text" id="gandenganId" name="gandengan_id" readonly hidden>
                       </div>
                     </div>
@@ -219,7 +219,7 @@
                       <label class="col-form-label">KAS/bank </label>
                     </div>
                     <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="bank" class="form-control bank-lookup">
+                      <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                       <input type="text" id="bankId" name="bank_id" readonly hidden>
                     </div>
                   </div>
@@ -256,7 +256,7 @@
             </div>
             <div class="row mt-5">
               <div class="col-md-12">
-                <div id="detail-table" class="card" style="max-height:500px; overflow-y: scroll;">
+                <div id="detail-table" class="card" style="max-height:500px; min-height:200px overflow-y: scroll;">
                   <div class="card-body">
                     <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                       <thead>
@@ -300,7 +300,7 @@
                           <label class="col-form-label">Stok <span class="text-danger">*</span> </label>
                         </div>
                         <div class="col-12 col-sm-9 col-md-8">
-                          <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup-afkir">
+                          <input type="text" name="detail_stok[]" id="afkir_detail_stok_1" class="form-control detail_stok_1 stok-lookup-afkir">
                           <input type="text" class="detailstokId" id="detail_stok_id" name="detail_stok_id[]" readonly hidden>
                         </div>
                       </div>
@@ -1570,7 +1570,7 @@
                   
                   <td>
                     <input name="id_detail[]" hidden value="${detail.id}">
-                    <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
+                    <input type="text"  name="detail_stok[]" id="stokdetailaddrow${index}" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${index}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
 
@@ -1648,9 +1648,13 @@
       idpengeluaranstok = pengeluaranstokId;
       nobuktipenerimaan = penerimaanstok_nobukti;
     }
-    $(`.detail_stok_${row}`).lookup({
+    $(`.detail_stok_${row}`).lookupV3({
       title: 'stok Lookup',
-      fileName: 'stok',
+      fileName: 'stokV3',
+      searching: ['namstok'],
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         if (kodePengeluaranStok == listKodePengeluaran[0]) { //spk
@@ -2311,9 +2315,13 @@
               initAutoNumeric($(`#detail_persentasediscount${id}`))
               initAutoNumeric($(`#totalItem${id}`))
               setRowNumbers()
-              $(`#detail_stok_${id}`).lookup({
+              $(`#detail_stok_${id}`).lookupV3({
                 title: 'stok Lookup',
-                fileName: 'stok',
+                fileName: 'stokV3',
+                searching: ['namstok'],
+                extendSize: md_extendSize_1,
+                multiColumnSize:true,
+                labelColumn: false,
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   var nobukti = $('#crudModal').find(`[name=nobukti]`).val();                  
@@ -2669,9 +2677,12 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.pengeluaranstok-lookup').lookup({
+    $('.pengeluaranstok-lookup').lookupV3({
       title: 'pengeluaran stok Lookup',
-      fileName: 'pengeluaranstok',
+      fileName: 'pengeluaranstokV3',
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2730,9 +2741,11 @@
     // })
 
 
-    $('.supir-lookup').lookup({
+    $('.supir-lookup').lookupV3({
       title: 'supir Lookup',
-      fileName: 'supir',
+      fileName:"supirV3",
+      labelColumn: false,
+      searching: ['namasupir','namaalias'],
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2754,10 +2767,11 @@
       }
     })
 
-    $('.kerusakan-lookup').lookup({
+    $('.kerusakan-lookup').lookupV3({
       title: 'kerusakan Lookup',
-      fileName: 'kerusakan',
-
+      fileName: 'kerusakanV3',
+      labelColumn: false,
+      searching: ['keterangan'],
       onSelectRow: (kerusakan, element) => {
         element.val(kerusakan.keterangan)
         $(`#${element[0]['name']}Id`).val(kerusakan.id)
@@ -2771,9 +2785,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.supplier-lookup').lookup({
+    $('.supplier-lookup').lookupV3({
       title: 'supplier Lookup',
-      fileName: 'supplier',
+      fileName: 'supplierV3',
+      labelColumn: false,
+      searching: ['namasupplier'],
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2796,9 +2812,11 @@
       }
     })
 
-    $('.bank-lookup').lookup({
+    $('.bank-lookup').lookupV3({
       title: 'bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -2821,9 +2839,11 @@
       }
     })
 
-    $('.trado-lookup').lookup({
+    $('.trado-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'trado',
+      fileName: 'tradoV3',
+      labelColumn: false,
+      searching: ['kodetrado'],
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -2846,9 +2866,13 @@
       }
     })
 
-    $('.gandengan-lookup').lookup({
+    $('.gandengan-lookup').lookupV3({
       title: 'gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      searching: ['name','keterangan'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         this.postData = {
           // var levelcoa = $(`#levelcoa`).val();
@@ -2905,9 +2929,13 @@
       }
     })
 
-    $(`.stok-lookup-afkir`).lookup({
+    $(`.stok-lookup-afkir`).lookupV3({
       title: 'stok Lookup',
-      fileName: 'stok',
+      fileName: 'stokV3',
+      searching: ['namstok'],
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           from: 'pengeluaranstok',
@@ -2974,9 +3002,11 @@
       }
     })
 
-    $('.gudang-lookup').lookup({
+    $('.gudang-lookup').lookupV3({
       title: 'Gudang Lookup',
-      fileName: 'gudang',
+      fileName: 'gudangV3',
+      labelColumn: false,
+      searching: ['gudang'],
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',

@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-    <table id="gandenganLookup<?= $id ?>" class="lookup-grid"></table>
+    <table id="gudangLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-    <table id="gandenganLookup" class="lookup-grid"></table>
+    <table id="gudangLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
     <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
     var idLookup = '{{ $idLookup }}';
     var idTop
 
-    selector = $(`#gandenganLookup{{ isset($id) ? $id : null }} `)
+    selector = $(`#gudangLookup{{ isset($id) ? $id : null }} `)
     var isToolbarSearch = false;
 
     var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -46,35 +46,28 @@ $idLookup = isset($id) ? $id : null;
         },
 
         {
-            label: "KODE GANDENGAN",
-            name: "kodegandengan",
-            width: '100px',
-        },
-        {
-            label: "keterangan",
-            name: "keterangan",
-            width: '450px',
+            label: "gudang",
+            name: "gudang",
+            width: width,
         },
     ]
 
 
 
     selector.jqGrid({
-        url: `{!! $url ?? config('app.api_url')  !!}` + 'gandengan',
+        url: `{!! $url ?? config('app.api_url')  !!}` + 'gudang',
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         postData: {
+            filters: `{!! $filters ?? '' !!}`,
             aktif: `{!! $Aktif ?? '' !!}`,
-            asal: `{!! $Asal ?? '' !!}`,
-            cabang: `{!! $cabang ?? '' !!}`,
             penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
-            gandengandarike: `{!! $gandengandarike ?? '' !!}`,
-            gandengandari_id: `{!! $gandengandari_id ?? '' !!}`,
-            gandenganke_id: `{!! $gandenganke_id ?? '' !!}`,
-            statusjeniskendaraan: `{!! $statusjeniskendaraan ?? '' !!}`,
-            forLookup: true,
+            pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
+            gudangdarike: `{!! $gudangdarike ?? '' !!}`,
+            gudangdari_id: `{!! $gudangdari_id ?? '' !!}`,
+            gudangke_id: `{!! $gudangke_id ?? '' !!}`,
         },
         idPrefix: '',
         colModel: column,
