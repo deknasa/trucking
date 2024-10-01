@@ -1193,7 +1193,7 @@
           $(`#detail_stok_${detail.id}`).lookupV3({
             title: 'stok Lookup',
             fileName: 'stokV3',
-            searching: ['namstok'],
+            searching: ['namastok'],
             extendSize: md_extendSize_1,
             multiColumnSize:true,
             labelColumn: false,
@@ -1379,7 +1379,7 @@
           $(`#detail_stok_${id}`).lookupV3({
             title: 'stok Lookup',
             fileName: 'stokV3',
-            searching: ['namstok'],
+            searching: ['namastok'],
             extendSize: md_extendSize_1,
             multiColumnSize:true,
             labelColumn: false,
@@ -1573,7 +1573,7 @@
       $(`#detail_stok_${id}`).lookupV3({
         title: 'stok Lookup',
         fileName: 'stokV3',
-        searching: ['namstok'],
+        searching: ['namastok'],
         extendSize: md_extendSize_1,
         multiColumnSize:true,
         labelColumn: false,
@@ -2749,7 +2749,7 @@
     $(`.detail_stok_${row}`).lookupV3({
       title: 'stok Lookup',
       fileName: 'stokV3',
-      searching: ['namstok'],
+      searching: ['namastok'],
       extendSize: md_extendSize_1,
       multiColumnSize:true,
       labelColumn: false,
@@ -3231,7 +3231,7 @@
             $(`#detail_stok_${id}`).lookupV3({
               title: 'stok Lookup',
               fileName: 'stokV3',
-              searching: ['namstok'],
+              searching: ['namastok'],
               extendSize: md_extendSize_1,
               multiColumnSize:true,
               labelColumn: false,
