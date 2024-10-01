@@ -140,6 +140,12 @@ $idLookup = isset($id) ? $id : null;
       search: false,
       hidden: true
     },
+    {
+      label: 'service',
+      name: 'servicerutin_text',
+      hidden: true,
+      search: false
+    },
     
   ]
 
