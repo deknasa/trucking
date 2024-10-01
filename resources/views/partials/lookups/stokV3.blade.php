@@ -119,7 +119,11 @@ $idLookup = isset($id) ? $id : null;
       search: false,
       hidden: true
     },
-   
+    {
+      name: 'kelompok_id',
+      search: false,
+      hidden: true
+    },
     {
       name: 'statusban_id',
       search: false,
@@ -136,17 +140,35 @@ $idLookup = isset($id) ? $id : null;
       hidden: true
     },
     {
+      name: 'penerimaanstokdetail_keterangan',
+      search: false,
+      hidden: true
+    },
+    {
+      name: 'penerimaanstokdetail_qty',
+      search: false,
+      hidden: true
+    },
+    {
+      name: 'penerimaanstokdetail_harga',
+      search: false,
+      hidden: true
+    },
+    {
+      name: 'penerimaanstokdetail_total',
+      search: false,
+      hidden: true
+    },
+    {
       name: 'statusservicerutin',
       search: false,
       hidden: true
     },
     {
-      label: 'service',
       name: 'servicerutin_text',
-      hidden: true,
-      search: false
+      search: false,
+      hidden: true
     },
-    
   ]
 
 
