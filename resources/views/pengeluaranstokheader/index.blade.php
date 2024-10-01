@@ -547,6 +547,13 @@
             }
           },
           {
+            label: 'keterangan',
+            name: 'keterangan',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3,
+
+          },          
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left'
@@ -571,6 +578,8 @@
               newformat: "d-m-Y H:i:s"
             }
           },
+
+
         ],
 
         autowidth: true,

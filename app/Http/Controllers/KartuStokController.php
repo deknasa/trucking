@@ -38,6 +38,7 @@ class KartuStokController extends MyController
             'filter' => $request->filter,
             'datafilter' => $request->datafilter,
             'statustampil' => $request->statustampil,
+            'statuspemakaian' => $request->statuspemakaian,
             'kelompok_id' => $request->kelompok_id,
             'limit' => 0
         ];

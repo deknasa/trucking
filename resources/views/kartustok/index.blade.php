@@ -17,9 +17,7 @@
                                     <input type="text" name="dari" class="form-control datepicker">
                                 </div>
                             </div>
-                            <div class="col-sm-1 mt-2">
-                                <h5 class="text-center mt-2">s/d</h5>
-                            </div>
+                            <label class="col-sm-1 mt-2 col-form-label mt-2">s/d<span class="text-danger"></span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="sampai" class="form-control datepicker">
@@ -33,9 +31,7 @@
                                 <input type="hidden" name="stokdari_id">
                                 <input type="text" name="stokdari" class="form-control stokdari-lookup">
                             </div>
-                            <div class="col-sm-1 mt-2">
-                                <h5 class="text-center mt-2">s/d</h5>
-                            </div>
+                            <label class="col-sm-1 mt-2 col-form-label mt-2">s/d<span class="text-danger"></span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="stoksampai_id">
                                 <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
@@ -48,6 +44,14 @@
                                 <input type="hidden" name="kelompok_id">
                                 <input type="text" name="kelompok" class="form-control kelompok-lookup">
                             </div>
+
+                            <label class="col-sm-1 mt-2 col-form-label mt-2">pemakaian<span class="text-danger"></span></label>
+                            <div class="col-sm-4 mt-2">
+                                <select name="statuspemakaian" id="statuspemakaian" class="form-select select2bs4" style="width: 100%;">
+                                </select>
+                            </div>
+
+
                         </div>
                         <div class="row">
                             <div class="col-12 col-sm-2 col-form-label mt-2">
@@ -58,7 +62,6 @@
                                 </select>
                             </div>
                         </div>
-
 
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">FILTER<span class="text-danger">*</span></label>
@@ -136,9 +139,11 @@
 
         initSelect2($('#crudForm').find('[name=filter]'), false)
         initSelect2($('#crudForm').find('[name=statustampil]'), false)
+        initSelect2($('#crudForm').find('[name=statuspemakaian]'), false)
         initLookup()
         setFilterOptions($('#crudForm'))
         setStatusTampilOptions($('#crudForm'))
+        setStatusPemakaianOptions($('#crudForm'))
         initDatepicker()
 
 
@@ -236,6 +241,7 @@
             let dari = $('#crudForm').find('[name=dari]').val()
             let sampai = $('#crudForm').find('[name=sampai]').val()
             let statustampil = $('#crudForm').find('[name=statustampil]').val()
+            let statuspemakaian = $('#crudForm').find('[name=statuspemakaian]').val()
             let filter = $('#crudForm').find('[name=filter]').val()
             let dataFilter = ''
             if (filter == '186') {
@@ -257,6 +263,7 @@
                         stoksampai_id: stoksampai_id,
                         kelompok_id: kelompok_id,
                         statustampil: statustampil,
+                        statuspemakaian: statuspemakaian,
                         dari: dari,
                         sampai: sampai,
                         filter: filter,
@@ -539,6 +546,7 @@
                         let dari = $('#crudForm').find('[name=dari]').val()
                         let sampai = $('#crudForm').find('[name=sampai]').val()
                         let statustampil = $('#crudForm').find('[name=statustampil]').val()
+                        let statuspemakaian = $('#crudForm').find('[name=statuspemakaian]').val()
                         let filter = $('#crudForm').find('[name=filter]').val()
                         let dataFilter = ''
                         let proses = 'reload'
@@ -555,7 +563,7 @@
                         if (dari != '' && sampai != '' && filter != '') {
 
                             window.open(
-                                `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                                `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&statuspemakaian=${statuspemakaian}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                             )
                         } else {
                             showDialog('ISI SELURUH KOLOM')
@@ -572,6 +580,7 @@
                         let dari = $('#crudForm').find('[name=dari]').val()
                         let sampai = $('#crudForm').find('[name=sampai]').val()
                         let statustampil = $('#crudForm').find('[name=statustampil]').val()
+                        let statuspemakaian = $('#crudForm').find('[name=statuspemakaian]').val()
                         let filter = $('#crudForm').find('[name=filter]').val()
                         let proses = 'reload'
                         let dataFilter = ''
@@ -601,6 +610,7 @@
                                     filter : filter,
                                     datafilter : dataFilter,
                                     statustampil : statustampil,
+                                    statuspemakaian : statuspemakaian,
                                     kelompok_id : kelompok_id,
                                     limit : 0
                                 },
@@ -926,6 +936,43 @@
             })
         })
     }
+
+    const setStatusPemakaianOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statuspemakaian]').empty()
+            relatedForm.find('[name=statuspemakaian]').append(
+                new Option('-- TIDAK --', '0', false, true)
+            ).trigger('change')
+
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'STATUS DEFAULT PARAMETER'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'STATUS DEFAULT PARAMETER'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/combo`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+
+                    response.data.forEach(statusPemakaian => {
+                        let option = new Option(statusPemakaian.text, statusPemakaian.id)
+                        relatedForm.find('[name=statuspemakaian]').append(option).trigger(
+                            'change')
+                    });
+
+                }
+            })
+        })
+    }    
 </script>
 @endpush()
 @endsection
