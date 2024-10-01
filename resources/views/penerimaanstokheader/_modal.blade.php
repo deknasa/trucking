@@ -117,7 +117,7 @@
                     <label class="col-form-label">trado </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="trado" class="form-control trado-lookup">
+                    <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                     <input type="text" id="tradoId" name="trado_id" hidden readonly>
                   </div>
                 </div>
@@ -129,7 +129,7 @@
                     <label class="col-form-label">supplier </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="supplier" class="form-control supplier-lookup">
+                    <input type="text" name="supplier" id="supplier" class="form-control supplier-lookup">
                     <input type="text" id="supplierId" name="supplier_id" hidden readonly>
                   </div>
                 </div>
@@ -141,7 +141,7 @@
                     <label class="col-form-label">gudang </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudang" class="form-control gudang-lookup">
+                    <input type="text" name="gudang" id="gudang" class="form-control gudang-lookup">
                     <input type="text" id="gudangId" name="gudang_id" hidden readonly>
                   </div>
                 </div>
@@ -153,7 +153,7 @@
                     <label class="col-form-label">gandengan </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                    <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                     <input type="text" id="gandenganId" name="gandengan_id" hidden readonly>
                   </div>
                 </div>
@@ -169,7 +169,7 @@
                     <label class="col-form-label"> gudang dari </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
+                    <input type="text" name="gudangdari" id="gudangdari" class="form-control gudangdari-lookup">
                     <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
                   </div>
                 </div>
@@ -180,7 +180,7 @@
                     <label class="col-form-label">gudang ke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudangke" class="form-control gudangke-lookup">
+                    <input type="text" name="gudangke" id="gudangke" class="form-control gudangke-lookup">
                     <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
                   </div>
                 </div>
@@ -192,7 +192,7 @@
                     <label class="col-form-label">trado dari</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="tradodari" class="form-control tradodari-lookup">
+                    <input type="text" name="tradodari" id="tradodari" class="form-control tradodari-lookup">
                     <input type="text" id="tradodariId" name="tradodari_id" hidden readonly>
                   </div>
                 </div>
@@ -204,7 +204,7 @@
                     <label class="col-form-label">trado ke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="tradoke" class="form-control tradoke-lookup">
+                    <input type="text" name="tradoke" id="tradoke" class="form-control tradoke-lookup">
                     <input type="text" id="tradokeId" name="tradoke_id" hidden readonly>
                   </div>
                 </div>
@@ -217,7 +217,7 @@
                     <label class="col-form-label">gandengan dari</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
+                    <input type="text" name="gandengandari" id="gandengandari" class="form-control gandengandari-lookup">
                     <input type="text" id="gandengandariId" name="gandengandari_id" hidden readonly>
                   </div>
                 </div>
@@ -229,7 +229,7 @@
                     <label class="col-form-label">gandengan ke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
+                    <input type="text" name="gandenganke" id="gandenganke" class="form-control gandenganke-lookup">
                     <input type="text" id="gandengankeId" name="gandenganke_id" hidden readonly>
                   </div>
                 </div>
@@ -249,7 +249,7 @@
             </div> --}}
 
 
-            <div class="table-scroll table-responsive">
+            <div class="table-scroll table-responsive" style="min-height: 500px;">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 100%; min-width: 500px;">
                 <thead>
                   <tr>
@@ -1190,9 +1190,13 @@
           $('table #table_body').append(detailRow)
           initAutoNumeric($(`.number${detail.id}`))
           setRowNumbers()
-          $(`#detail_stok_${detail.id}`).lookup({
+          $(`#detail_stok_${detail.id}`).lookupV3({
             title: 'stok Lookup',
-            fileName: 'stok',
+            fileName: 'stokV3',
+            searching: ['namstok'],
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            labelColumn: false,
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
@@ -1372,9 +1376,13 @@
           $('table #table_body').append(detailRow)
           initAutoNumeric($(`.number${id}`))
           setRowNumbers()
-          $(`#detail_stok_${id}`).lookup({
+          $(`#detail_stok_${id}`).lookupV3({
             title: 'stok Lookup',
-            fileName: 'stok',
+            fileName: 'stokV3',
+            searching: ['namstok'],
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            labelColumn: false,
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
@@ -1562,9 +1570,13 @@
       $('table #table_body').append(detailRow)
       initAutoNumeric($(`.number${id}`))
       setRowNumbers()
-      $(`#detail_stok_${id}`).lookup({
+      $(`#detail_stok_${id}`).lookupV3({
         title: 'stok Lookup',
-        fileName: 'stok',
+        fileName: 'stokV3',
+        searching: ['namstok'],
+        extendSize: md_extendSize_1,
+        multiColumnSize:true,
+        labelColumn: false,
         beforeProcess: function(test) {
           var penerimaanstokId = $(`#penerimaanstokId`).val();
           var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
@@ -2662,7 +2674,7 @@
                   
                   <td>
                     <input name="id_detail[]" hidden value="0">
-                    <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
+                    <input type="text"  name="detail_stok[]" id="detailstokaddrow${index}" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     <input type="text" id="detailstokKelompok_${index}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>                 
@@ -2734,9 +2746,14 @@
       detailRow.find(`#statusban${index}`).append(option).trigger('change')
     });
     var row = index;
-    $(`.detail_stok_${row}`).lookup({
+    $(`.detail_stok_${row}`).lookupV3({
       title: 'stok Lookup',
-      fileName: 'stok',
+      fileName: 'stokV3',
+      searching: ['namstok'],
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      labelColumn: false,
+
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
@@ -3211,9 +3228,13 @@
 
             setRowNumbers()
             let row = id;
-            $(`#detail_stok_${id}`).lookup({
+            $(`#detail_stok_${id}`).lookupV3({
               title: 'stok Lookup',
-              fileName: 'stok',
+              fileName: 'stokV3',
+              searching: ['namstok'],
+              extendSize: md_extendSize_1,
+              multiColumnSize:true,
+              labelColumn: false,
               beforeProcess: function(test) {
                 var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
                 var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
@@ -3336,9 +3357,11 @@
   }
 
   function initLookup(params) {
-    $('.akunpusat-lookup').lookup({
+    $('.akunpusat-lookup').lookupV3({
       title: 'akun pusat Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: false,
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         $(`#${element[0]['name']}Id`).val(akunpusat.coa)
@@ -3353,9 +3376,12 @@
       }
     })
 
-    $('.penerimaanstok-lookup').lookup({
+    $('.penerimaanstok-lookup').lookupV3({
       title: 'penerimaan stok Lookup',
-      fileName: 'penerimaanstok',
+      fileName: 'penerimaanstokV3',
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3416,9 +3442,12 @@
 
     // })
 
-    $('.supplier-lookup').lookup({
+    $('.supplier-lookup').lookupV3({
       title: 'supplier Lookup',
-      fileName: 'supplier',
+      fileName: 'supplierV3',
+      labelColumn: false,
+      searching: ['namasupplier'],
+
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3438,9 +3467,11 @@
       }
     })
 
-    $('.trado-lookup').lookup({
+    $('.trado-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'trado',
+      fileName: 'tradoV3',
+      labelColumn: false,
+      searching: ['kodetrado'],
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3462,9 +3493,13 @@
       }
     })
 
-    $('.gandengan-lookup').lookup({
+    $('.gandengan-lookup').lookupV3({
       title: 'gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      searching: ['name','keterangan'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3486,9 +3521,11 @@
       }
     })
 
-    $('.gudang-lookup').lookup({
+    $('.gudang-lookup').lookupV3({
       title: 'Gudang Lookup',
-      fileName: 'gudang',
+      fileName: 'gudangV3',
+      labelColumn: false,
+      searching: ['gudang'],
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3576,9 +3613,11 @@
     })
 
 
-    $('.tradoke-lookup').lookup({
+    $('.tradoke-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'trado',
+       fileName: 'tradoV3',
+      labelColumn: false,
+      searching: ['kodetrado'],
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
@@ -3604,9 +3643,13 @@
       }
     })
 
-    $('.gandenganke-lookup').lookup({
+    $('.gandenganke-lookup').lookupV3({
       title: 'gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      searching: ['name','keterangan'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,      
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
@@ -3632,9 +3675,11 @@
       }
     })
 
-    $('.gudangke-lookup').lookup({
+    $('.gudangke-lookup').lookupV3({
       title: 'Gudang Lookup',
-      fileName: 'gudang',
+      fileName: 'gudangV3',
+      labelColumn: false,
+      searching: ['gudang'],
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
@@ -3659,9 +3704,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.tradodari-lookup').lookup({
+    $('.tradodari-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'trado',
+       fileName: 'tradoV3',
+      labelColumn: false,
+      searching: ['kodetrado'],
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
@@ -3688,9 +3735,13 @@
       }
     })
 
-    $('.gandengandari-lookup').lookup({
+    $('.gandengandari-lookup').lookupV3({
       title: 'gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      searching: ['name','keterangan'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
@@ -3717,9 +3768,11 @@
       }
     })
 
-    $('.gudangdari-lookup').lookup({
+    $('.gudangdari-lookup').lookupV3({
       title: 'Gudang Lookup',
-      fileName: 'gudang',
+      fileName: 'gudangV3',
+      labelColumn: false,
+      searching: ['gudang'],
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
