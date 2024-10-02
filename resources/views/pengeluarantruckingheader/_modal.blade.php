@@ -91,7 +91,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="agen_id">
-                <input type="text" name="agen" class="form-control agen-lookup">
+                <input type="text" name="agen" id="agen" class="form-control agen-lookup">
               </div>
             </div>
 
@@ -102,7 +102,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="containerheader_id">
-                <input type="text" name="containerheader" class="form-control containerheader-lookup">
+                <input type="text" name="containerheader" id="containerheader" class="form-control containerheader-lookup">
               </div>
             </div>
 
@@ -113,7 +113,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="karyawanheaderId" name="karyawanheader_id">
-                <input type="text" name="karyawanheader" class="form-control karyawanheader-lookup">
+                <input type="text" name="karyawanheader" id="karyawanheader" class="form-control karyawanheader-lookup">
               </div>
             </div>
 
@@ -124,7 +124,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="supirheaderId" name="supirheader_id">
-                <input type="text" name="supirheader" class="form-control supirheader-lookup">
+                <input type="text" name="supirheader" id="supirheader" class="form-control supirheader-lookup">
               </div>
             </div>
 
@@ -135,7 +135,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="tradoHaeaderId" name="tradoheader_id">
-                <input type="text" name="trado" class="form-control tradoheader-lookup">
+                <input type="text" name="trado" id="trado" class="form-control tradoheader-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -145,7 +145,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="gandenganHaeaderId" name="gandenganheader_id">
-                <input type="text" name="gandengan" class="form-control gandenganheader-lookup">
+                <input type="text" name="gandengan" id="gandengan" class="form-control gandenganheader-lookup">
               </div>
             </div>
 
@@ -170,7 +170,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="coa">
-                <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
+                <input type="text" name="keterangancoa" id="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
 
@@ -181,7 +181,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="jenisorderan" name="jenisorderan_id">
-                <input type="text" name="jenisorderan" class="form-control jenisorderan-lookup">
+                <input type="text" name="jenisorderan" id="jenisorderan" class="form-control jenisorderan-lookup">
               </div>
             </div>
 
@@ -292,7 +292,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control bank-lookup">
+                  <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -357,9 +357,9 @@
 
             <div class="row mt-5">
               <div class="col-md-12">
-                <div class="card" style="max-height:500px; overflow-y: scroll;">
+                <div class="card">
                   <div class="card-body">
-                    <div id="detail-default-section" class="table-scroll table-responsive">
+                    <div id="detail-default-section" class="table-scroll table-responsive" style="height: 500px;">
                       <table class="table table-bordered table-bindkeys mt-3" id="detailList">
                         <thead>
                           <tr>
@@ -5942,9 +5942,11 @@
                 setTotalKlaim()
                 setTotalTambahan()
               }
-              $('.supir-lookup').last().lookup({
+              $('.supir-lookup').last().lookupV3({
                 title: 'Supir Lookup',
-                fileName: 'supir',
+                fileName:"supirV3",
+                labelColumn: false,
+                searching: ['namasupir','namaalias'],
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
@@ -5968,9 +5970,10 @@
                   element.data('currentValue', element.val())
                 }
               })
-              $('.karyawan-lookup').last().lookup({
+              $('.karyawan-lookup').last().lookupV3({
                 title: 'karyawan Lookup',
-                fileName: 'karyawan',
+                fileName: 'karyawanV3',
+                labelColumn:false,
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
@@ -6430,9 +6433,11 @@
       $(`#pelanggan_id_${indexRow}`).prop('readonly', true);
       $(`#jenisorder_${indexRow}`).prop('readonly', true);
     }
-    $('.supir-lookup').last().lookup({
+    $('.supir-lookup').last().lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName:"supirV3",
+      labelColumn: false,
+      searching: ['namasupir','namaalias'],
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -6488,9 +6493,10 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.karyawan-lookup').last().lookup({
+    $('.karyawan-lookup').last().lookupV3({
       title: 'karyawan Lookup',
-      fileName: 'karyawan',
+      fileName: 'karyawanV3',
+      labelColumn:false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -6734,10 +6740,14 @@
         element.data('currentValue', element.val())
       }
     })
-    $(`#stok_${indexRow}_master`).lookup({
-    // $('.stok-lookup-master').last().lookup({
+    $(`#stok_${indexRow}_master`).lookupV3({
       title: 'stok Lookup',
-      fileName: 'stok',
+    // $('.stok-lookup-master').last().lookup({
+      fileName: 'stokV3',
+      searching: ['namastok'],
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           cabang: statuscabang,
@@ -9291,9 +9301,12 @@
 
   function initLookup() {
 
-    $('.pengeluarantrucking-lookup').lookup({
+    $('.pengeluarantrucking-lookup').lookupV3({
       title: 'Pengeluaran Trucking Lookup',
-      fileName: 'pengeluarantrucking',
+      fileName: 'pengeluarantruckingV3',
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9353,9 +9366,11 @@
     //     element.data('currentValue', element.val())
     //   }
     // })
-    $('.bank-lookup').lookup({
+    $('.bank-lookup').lookupV3({
       title: 'Bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9377,9 +9392,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.agen-lookup').lookup({
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9401,9 +9418,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.containerheader-lookup').lookup({
+    $('.containerheader-lookup').lookupV3({
       title: 'Container Lookup',
-      fileName: 'container',
+      fileName: 'containerV3',
+      // searching: ['kodecontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9424,9 +9443,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.supirheader-lookup').last().lookup({
+    $('.supirheader-lookup').last().lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      // searching: ['kodecontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9486,9 +9507,10 @@
       }
     })
 
-    $('.karyawanheader-lookup').last().lookup({
+    $('.karyawanheader-lookup').last().lookupV3({
       title: 'Karyawan Lookup',
-      fileName: 'karyawan',
+      fileName: 'karyawanV3',
+      labelColumn:false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9550,9 +9572,13 @@
       }
     })
 
-    $('.tradoheader-lookup').last().lookup({
+    $('.tradoheader-lookup').last().lookupV3({
       title: 'TRADO Lookup',
-      fileName: 'trado',
+      fileName: 'tradoV3',
+      searching: ['kodetrado','kmakhirgantioli','merek','norangka','nomesin','nostnk' ],
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      filterToolbar: true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9579,9 +9605,13 @@
         enabledKorDisable()
       }
     })
-    $('.gandenganheader-lookup').last().lookup({
+    $('.gandenganheader-lookup').last().lookupV3({
       title: 'gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      searching: ['name','keterangan'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9631,9 +9661,11 @@
       }
     })
 
-    $('.akunpusat-lookup').lookup({
+    $('.akunpusat-lookup').lookupV3({
       title: 'Kode Perk. Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -9657,9 +9689,11 @@
     })
 
 
-    $('.jenisorderan-lookup').last().lookup({
+    $('.jenisorderan-lookup').last().lookupV3({
       title: 'jenis orderan Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderV3',
+      // searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
