@@ -4,6 +4,12 @@
 
 
 <script>
+  var fromMenu =  `{!! $from ?? '' !!}`
+
+  if (fromMenu == "klaim") {
+    $('#rangeHeaderLookup').parents('.card').hide()
+  }
+
   setRangeLookup()
   initDatepicker()
   $('#btnReloadLookup').click(function(event) {
