@@ -53,7 +53,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="supirHaeaderId" name="supirheader_id">
-                <input type="text" name="supir" class="form-control supirheader-lookup">
+                <input type="text" name="supir" id="supirHeder" class="form-control supirheader-lookup">
               </div>
             </div>
 
@@ -64,7 +64,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="karyawanHeaderId" name="karyawanheader_id">
-                <input type="text" name="karyawan" class="form-control karyawanheader-lookup">
+                <input type="text" name="karyawan" id="karyawanHeader" class="form-control karyawanheader-lookup">
               </div>
             </div>
 
@@ -75,7 +75,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="jenisorder" name="jenisorderan_id">
-                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
 
@@ -112,7 +112,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="coa">
-                <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
+                <input type="text" name="keterangancoa" id="akunpusat" class="form-control akunpusat-lookup">
               </div>
             </div>
 
@@ -155,7 +155,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control bank-lookup">
+                  <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -175,7 +175,7 @@
             <table id="tablePinjamanKaryawan"></table>
             <table id="tablePengembalianTitipan"></table>
 
-            <div class="table-scroll table-responsive">
+            <div class="table-scroll table-responsive" style="height: 500px;">
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
@@ -3091,11 +3091,11 @@
                     <td></td>
                     <td class="tbl_supir_id">
                         <input type="hidden" name="supir_id[]">
-                        <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                        <input type="text" name="supir[]" id="supirdet_${index}" data-current-value="${detail.supir}" class="form-control supir-lookup">
                     </td>
                     <td class="tbl_karyawan_id">
                       <input type="hidden" name="karyawan_id[]">
-                      <input type="text" name="karyawandetail[]" data-current-value="${detail.karyawandetail}" class="form-control karyawan-lookup">
+                      <input type="text" name="karyawandetail[]" id="karyawanDet_${index}" data-current-value="${detail.karyawandetail}" class="form-control karyawan-lookup">
                     </td>
                     <td class="tbl_pengeluarantruckingheader_nobukti">
                         <input type="text" name="pengeluarantruckingheader_nobukti[]" data-current-value="${detail.pengeluarantruckingheader_nobukti}" class="form-control pengeluarantruckingheader-lookup">
@@ -3125,9 +3125,11 @@
 
               setTotal();
 
-              $('.supir-lookup').last().lookup({
+              $('.supir-lookup').last().lookupV3({
                 title: 'Supir Lookup',
-                fileName: 'supir',
+                fileName: 'supirV3',
+                // searching: ['kodecontainer'],
+                labelColumn: false,
                 beforeProcess: function(test) {
                   this.postData = {
                     Aktif: 'AKTIF',
@@ -3152,9 +3154,10 @@
                 }
               })
 
-              $('.karyawan-lookup').last().lookup({
+              $('.karyawan-lookup').last().lookupV3({
                 title: 'Karyawan Lookup',
-                fileName: 'karyawan',
+                fileName: 'karyawanV3',
+                labelColumn:false,
                 beforeProcess: function(test) {
                   this.postData = {
                     Aktif: 'AKTIF',
@@ -3432,6 +3435,7 @@
 
     new AutoNumeric('#sisaFoot').set(bayar)
   }
+  indexRows = 0;
 
   function addRow() {
     let detailRow = $(`
@@ -3439,11 +3443,11 @@
         <td></td>
         <td class="tbl_supir_id">
           <input type="hidden" name="supir_id[]">
-          <input type="text" name="supir[]"  class="form-control supir-lookup">
+          <input type="text" name="supir[]" id="supirdetailAdd_${indexRows}" class="form-control supir-lookup">
         </td>
         <td class="tbl_karyawan_id">
           <input type="hidden" name="karyawan_id[]">
-          <input type="text" name="karyawandetail[]"  class="form-control karyawan-lookup">
+          <input type="text" name="karyawandetail[]" id="karyawandetailAdd_${indexRows}" class="form-control karyawan-lookup">
         </td>
         <td class="tbl_pengeluarantruckingheader_nobukti">
           <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
@@ -3468,9 +3472,11 @@
     // }
     $('#detailList tbody').append(detailRow)
 
-    $('.supir-lookup').last().lookup({
+    $('.supir-lookup').last().lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      // searching: ['kodecontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3496,9 +3502,10 @@
       }
     })
 
-    $('.karyawan-lookup').last().lookup({
+    $('.karyawan-lookup').last().lookupV3({
       title: 'Karyawan Lookup',
-      fileName: 'karyawan',
+      fileName: 'karyawanV3',
+      labelColumn:false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3547,6 +3554,7 @@
     initAutoNumeric(detailRow.find('.autonumeric'))
     setTampilanForm()
     setRowNumbers()
+    indexRows++
   }
 
   function getPengembalianPinjaman(id) {
@@ -3666,9 +3674,11 @@
   }
 
   function initLookup() {
-    $('.supirheader-lookup').last().lookup({
+    $('.supirheader-lookup').last().lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      // searching: ['kodecontainer'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3717,9 +3727,10 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.karyawanheader-lookup').last().lookup({
+    $('.karyawanheader-lookup').last().lookupV3({
       title: 'karyawan Lookup',
-      fileName: 'karyawan',
+      fileName: 'karyawanV3',
+      labelColumn:false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3769,9 +3780,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.jenisorder-lookup').last().lookup({
+    $('.jenisorder-lookup').last().lookupV3({
       title: 'jenis orderan Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderV3',
+      // searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3816,9 +3829,15 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.penerimaantrucking-lookup').lookup({
+    $('.penerimaantrucking-lookup').lookupV3({
       title: 'Penerimaan Trucking Lookup',
-      fileName: 'penerimaantrucking',
+      
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
+      fileName: 'penerimaantruckingV3',
+
+
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3875,9 +3894,11 @@
     //   }
     // })
 
-    $('.bank-lookup').lookup({
+    $('.bank-lookup').lookupV3({
       title: 'Bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3900,9 +3921,11 @@
       }
     })
 
-    $('.akunpusat-lookup').lookup({
+    $('.akunpusat-lookup').lookupV3({
       title: 'Kode Perk. Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatV3',
+      searching: ['coa','keterangancoa'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
