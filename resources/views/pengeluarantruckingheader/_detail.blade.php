@@ -32,6 +32,17 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
+            label: 'stok',
+            name: 'stok',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          },
+          {
+            label: 'qty',
+            name: 'qty',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          },
+          
+          {
             label: 'NOMINAL',
             name: 'nominal',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -127,23 +138,7 @@
               return formattedValue[0].outerHTML
             }             
           },
-          {
-            label: 'stok',
-            name: 'stok',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          },
-          {
-            label: 'qty',
-            name: 'qty',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          },
-          {
-            label: 'total harga',
-            name: 'total',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatter: currencyFormat,
-            align: "right",
-          },
+          
           {
             label: 'nominal tambahan',
             name: 'nominaltambahan',

@@ -3166,6 +3166,7 @@
 
       $('.stok-lookup').parents('.input-group').show()
       $('.stok-lookup-master').parents('.input-group').hide()
+      $('.stok-lookup-master').hide()
 
       $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).attr('readonly', false)
       $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled', false)
@@ -3178,6 +3179,7 @@
 
       $('.stok-lookup-master').parents('.input-group').show()
       $('.stok-lookup').parents('.input-group').hide()
+      $('.stok-lookup').hide()
 
       $('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).attr('readonly', true)
       $($('#crudForm').find(`[name="pengeluaranstok_nobukti[]"]`).parents('.input-group').children()[1]).prop('disabled', true)
@@ -3548,10 +3550,7 @@
 
             }
 
-            klaimTanpaNobukti()
             if (KodePengeluaranId === "KLAIM") {
-              console.log('asd klaim');
-              klaimTanpaNobukti()
               if (form.find(`[name="karyawanheader"]`).val() != '') {
                 selectedSupirKaryawan('karyawan')
               } else {
@@ -3575,6 +3574,9 @@
               form.find(`[name="karyawanheader"]`).parent('.input-group').find('.button-clear').remove()
               form.find(`[name="karyawanheader"]`).parent('.input-group').find('.input-group-append').remove()
             }
+          })
+          .then(penerimaanStokHeaderId => {
+            klaimTanpaNobukti()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -3658,6 +3660,9 @@
               form.find(`[name="supirheader"]`).parent('.input-group').find('.button-clear').remove()
               form.find(`[name="supirheader"]`).parent('.input-group').find('.input-group-append').remove()
             }
+          })
+          .then(penerimaanStokHeaderId => {
+            klaimTanpaNobukti()
           })
       })
       .catch((error) => {
