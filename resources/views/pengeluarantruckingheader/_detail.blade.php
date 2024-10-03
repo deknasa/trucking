@@ -152,6 +152,11 @@
             align: "right",
           },
           {
+            label: 'Container',
+            name: 'container',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
+          {
             label: 'KET. TAMBAHAN',
             name: 'keterangantambahan',
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
