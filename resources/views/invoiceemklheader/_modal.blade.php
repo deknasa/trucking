@@ -492,7 +492,7 @@
               let element;
               if (indexes[0] == 'sp') {
                 return showDialog(error);
-              } else if (indexes[0] == 'nominalretribusi') {
+              } else if (indexes[0] == 'nominal') {
                 selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
                 row = parseInt(selectedRowsInvoice[angka]) - 1;
 

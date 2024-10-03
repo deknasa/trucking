@@ -59,7 +59,7 @@
             <div class="row form-group ">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  UPAH SUPIR
+                  UPAH SUPIR <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
