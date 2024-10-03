@@ -95,7 +95,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <!-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   container <span class="text-danger">*</span></label>
@@ -104,7 +104,7 @@
                 <input type="hidden" name="containerheader_id">
                 <input type="text" name="containerheader" id="containerheader" class="form-control containerheader-lookup">
               </div>
-            </div>
+            </div> -->
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -490,6 +490,7 @@
   let selectedRowsOtokJobtrucking = [];
   let selectedRowsOtokKeterangan = [];
   let selectedRowsOtokNominal = [];
+  let selectedRowsOtokContainer = [];
 
   let sortnameOtol = 'noinvoice_detail';
   let sortorderOtol = 'asc';
@@ -504,6 +505,7 @@
   let selectedRowsOtolJobtrucking = [];
   let selectedRowsOtolKeterangan = [];
   let selectedRowsOtolNominal = [];
+  let selectedRowsOtolContainer = [];
 
   $(document).ready(function() {
 
@@ -1253,6 +1255,7 @@
             'id_detail': selectedRowsOtok,
             'nominal': oto_nominal,
             'noinvoice_detail': selectedRowsOtokNobukti,
+            'container_detail': selectedRowsOtokContainer,
             'nojobtrucking_detail': selectedRowsOtokJobtrucking,
             'keterangan': oto_keterangan,
           };
@@ -1272,6 +1275,7 @@
             'nominal': oto_nominal,
             'noinvoice_detail': selectedRowsOtolNobukti,
             'nojobtrucking_detail': selectedRowsOtolJobtrucking,
+            'container_detail': selectedRowsOtolContainer,
             'keterangan': oto_keterangan,
           };
           data.push({
@@ -5465,6 +5469,7 @@
                 selectedRowsOtokJobtrucking.push(detail.nojobtrucking_detail)
                 selectedRowsOtokNobukti.push(detail.noinvoice_detail)
                 selectedRowsOtokNominal.push(detail.nominal_detail)
+                selectedRowsOtokContainer.push(detail.container_id_detail)
               }
             })
             // $('#tableSumbangan').jqGrid("clearGridData");
@@ -5490,6 +5495,7 @@
                 selectedRowsOtolJobtrucking.push(detail.nojobtrucking_detail)
                 selectedRowsOtolNobukti.push(detail.noinvoice_detail)
                 selectedRowsOtolNominal.push(detail.nominal_detail)
+                selectedRowsOtolContainer.push(detail.container_id_detail)
               }
             })
             // $('#tableSumbangan').jqGrid("clearGridData");
@@ -8571,6 +8577,17 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
+            label: 'container',
+            name: 'container_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
+          {
+            label: 'containerid',
+            name: 'container_id_detail',
+            hidden: true,
+            search: false
+          },
+          {
             label: 'nominal',
             name: 'nominal_detail',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -8685,6 +8702,7 @@
       selectedRowsOtokNobukti.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_noinvoice_detail"]`).text())
       selectedRowsOtokJobtrucking.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_nojobtrucking_detail"]`).text())
       selectedRowsOtokNominal.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_nominal_detail"]`).text())
+      selectedRowsOtokContainer.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_container_id_detail"]`).text())
 
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
@@ -8695,6 +8713,7 @@
           selectedRowsOtokNobukti.splice(i, 1);
           selectedRowsOtokJobtrucking.splice(i, 1);
           selectedRowsOtokNominal.splice(i, 1);
+          selectedRowsOtokContainer.splice(i, 1);
         }
       }
     }
@@ -8718,6 +8737,7 @@
     selectedRowsOtokNobukti = [];
     selectedRowsOtokJobtrucking = [];
     selectedRowsOtokNominal = [];
+    selectedRowsOtokContainer = [];
     $('#tableOTOK').trigger('reloadGrid')
   }
 
@@ -8751,6 +8771,7 @@
                 selectedRowsOtokNobukti.push(data.noinvoice_detail)
                 selectedRowsOtokJobtrucking.push(data.nojobtrucking_detail)
                 selectedRowsOtokNominal.push(data.nominal_detail)
+                selectedRowsOtokContainer.push(data.container_id_detail)
               }
             })
           }
@@ -8805,6 +8826,7 @@
           selectedRowsOtokNobukti = response.data.map((data) => data.noinvoice_detail)
           selectedRowsOtokJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
           selectedRowsOtokNominal = response.data.map((data) => data.nominal_detail)
+          selectedRowsOtokContainer = response.data.map((data) => data.container_id_detail)
 
           // $('#tableOTOK').jqGrid("clearGridData");
           $('#tableOTOK').jqGrid('setGridParam', {
@@ -8898,6 +8920,17 @@
             label: 'no job',
             name: 'nojobtrucking_detail',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'container',
+            name: 'container_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
+          {
+            label: 'containerid',
+            name: 'container_id_detail',
+            hidden: true,
+            search: false
           },
           {
             label: 'nominal',
@@ -9014,6 +9047,7 @@
       selectedRowsOtolNobukti.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_noinvoice_detail"]`).text())
       selectedRowsOtolJobtrucking.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_nojobtrucking_detail"]`).text())
       selectedRowsOtolNominal.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_nominal_detail"]`).text())
+      selectedRowsOtolContainer.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_container_id_detail"]`).text())
 
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
@@ -9024,6 +9058,7 @@
           selectedRowsOtolNobukti.splice(i, 1);
           selectedRowsOtolJobtrucking.splice(i, 1);
           selectedRowsOtolNominal.splice(i, 1);
+          selectedRowsOtolContainer.splice(i, 1);
         }
       }
     }
@@ -9047,6 +9082,7 @@
     selectedRowsOtolNobukti = [];
     selectedRowsOtolJobtrucking = [];
     selectedRowsOtolNominal = [];
+    selectedRowsOtolContainer = [];
     $('#tableOTOL').trigger('reloadGrid')
   }
 
@@ -9082,6 +9118,7 @@
                 selectedRowsOtolNobukti.push(data.noinvoice_detail)
                 selectedRowsOtolJobtrucking.push(data.nojobtrucking_detail)
                 selectedRowsOtolNominal.push(data.nominal_detail)
+                selectedRowsOtolContainer.push(data.container_id_detail)
               }
             })
           }
@@ -9136,6 +9173,7 @@
           selectedRowsOtolNobukti = response.data.map((data) => data.noinvoice_detail)
           selectedRowsOtolJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
           selectedRowsOtolNominal = response.data.map((data) => data.nominal_detail)
+          selectedRowsOtolContainer = response.data.map((data) => data.container_id_detail)
 
           // $('#tableOTOK').jqGrid("clearGridData");
           $('#tableOTOL').jqGrid('setGridParam', {
