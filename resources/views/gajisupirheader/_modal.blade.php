@@ -3814,7 +3814,8 @@
                 supir_id: supirId,
                 tgldari: dari,
                 tglsampai: sampai,
-                sortIndex: sortnameAbsensi,
+                sortIndex: sortnameAbsensi, 
+                statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                 aksi: aksi
             },
             headers: {
@@ -3832,6 +3833,7 @@
                         supir_id: $('#crudForm').find('[name=supir_id]').val(),
                         tgldari: $('#crudForm').find('[name=tgldari]').val(),
                         tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                        statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                         aksi: aksi
                     },
                     datatype: "json"
