@@ -48,6 +48,7 @@ class CekTokenMiddleware
             if ($newResponse->status() > 200) {
                 return false;
             }
+            return true;
         }
         
         if ($response->status() > 200) {
