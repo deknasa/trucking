@@ -144,7 +144,7 @@
   $(document).ready(function() {
     // $("#pengeluaranheader_id").val($("#pengeluaranheader_id option:eq(1)").val()).trigger('change');
     $("#tabs").tabs()
-    pengeluaranTrucking($('#crudForm'))
+    // pengeluaranTrucking($('#crudForm'))
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)

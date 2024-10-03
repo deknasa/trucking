@@ -642,7 +642,6 @@
     })
     $(document).on('change', `[name="statustanpabukti"]`, function(event) {
       klaimTanpaNobukti()
-      console.log($(`#crudForm [name="statustanpabukti"]`).val());
     })
 
     function rangeInvoice() {
@@ -3158,6 +3157,7 @@
 
   function klaimTanpaNobukti() {
     let statustanpabukti = $(`#crudForm [name="statustanpabukti"]`).val();
+    console.log(statustanpabukti);
     if (statustanpabukti == 4) { // statustanpabukti NON APPROVAL (HARUS ADA SPK/PG)
 
       $('.stok-lookup').parents('.input-group').show()
@@ -3544,7 +3544,9 @@
 
             }
 
+            klaimTanpaNobukti()
             if (KodePengeluaranId === "KLAIM") {
+              console.log('asd klaim');
               klaimTanpaNobukti()
               if (form.find(`[name="karyawanheader"]`).val() != '') {
                 selectedSupirKaryawan('karyawan')
@@ -3708,7 +3710,8 @@
                 element.select2('destroy')
               }
             })
-
+            klaimTanpaNobukti()
+            
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
@@ -6705,6 +6708,7 @@
           cabang: statuscabang,
           penerimaanstokheader_id: penerimaanstokheader,
           penerimaanstokheader_nobukti: penerimaanstokheader_nobukti,
+          pengeluaranstok_nobukti_: $(`#pengeluaranstok_nobukti_${row}`).val(),
           pengeluaranstokheader_id: pengeluaranstokheader,
           url: urlTNL,
           token: tokenTNL,
