@@ -309,6 +309,7 @@ use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\InvoiceEmklHeaderController;
+use App\Http\Controllers\LaporanKomisiSupirController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1843,6 +1844,9 @@ Route::middleware(['auth', 'check.token','authorized'])->group(function () {
     Route::get('invoiceemklheader/report', [InvoiceEmklHeaderController::class, 'report'])->name('invoiceemklheader.report');
     Route::get('invoiceemklheader/index', [InvoiceEmklHeaderController::class, 'index']);
     Route::resource('invoiceemklheader', InvoiceEmklHeaderController::class);
+
+    Route::get('laporankomisisupir/index', [LaporanKomisiSupirController::class, 'index']);
+    Route::resource('laporankomisisupir', LaporanKomisiSupirController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
