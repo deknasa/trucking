@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "25b6170924694cd7959a4d26feaca36c",
+  "ReportGuid": "7274ded068a5d149387f2ed5eca8520b",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1727402287000+0700)/",
+  "ReportChanged": "/Date(1728033757000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -61,7 +61,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.DateTime"
+            "Type": "System.String"
           },
           "6": {
             "Name": "nobukti",
@@ -1147,6 +1147,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_datasaldo.saldo}"
               },
@@ -1244,6 +1245,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1281,6 +1283,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.kredit}"
               },
@@ -1318,6 +1321,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totaldebet}"
               },
@@ -1355,6 +1359,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totalkredit}"
               },
@@ -1392,6 +1397,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.debet}"
               },
@@ -1525,6 +1531,10 @@
               },
               "TextQuality": "Wysiwyg",
               "AllowHtmlTags": true,
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "d-M-yyy"
+              },
               "Type": "Expression"
             }
           },
