@@ -211,6 +211,9 @@
             }
           },
           formatter: (value, options, rowData) => {
+             if (!value) {
+              return '';
+            }
             let statusPosting = JSON.parse(value)
 
             let formattedValue = $(`
@@ -222,6 +225,9 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
+            if (!rowObject.statusposting) {
+              return '';
+            }
             let statusPosting = JSON.parse(rowObject.statusposting)
 
             return ` title="${statusPosting.MEMO}"`
