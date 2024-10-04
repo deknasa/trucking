@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="supir_id">
-                                <input type="text" name="supir" class="form-control supir-lookup">
+                                <input type="text" name="supir" id="supir" class="form-control supir-lookup">
                             </div>
                         </div>
 
@@ -96,7 +96,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" class="form-control bank-lookup">
+                                <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                             </div>
                         </div>
 
@@ -2254,13 +2254,37 @@
     }
 
     function initLookup() {
-        $('.supir-lookup').lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
-            beforeProcess: function(test) {
-                // var levelcoa = $(`#levelcoa`).val();
-                this.postData = {
+        // $('.supir-lookup').lookup({
+        //     title: 'Supir Lookup',
+        //     fileName: 'supir',
+        //     beforeProcess: function(test) {
+        //         // var levelcoa = $(`#levelcoa`).val();
+        //         this.postData = {
 
+        //             Aktif: 'AKTIF',
+        //         }
+        //     },
+        //     onSelectRow: (supir, element) => {
+        //         $('#crudForm [name=supir_id]').first().val(supir.id)
+        //         element.val(supir.namasupir)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=supir_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+        $('.supir-lookup').lookupV3({
+            title: 'Supir Lookup',
+            fileName: 'supirV3',
+            searching: ['namasupir'],
+            labelColumn: false,
+            beforeProcess: function(test) {
+                this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
@@ -2273,18 +2297,44 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=supir_id]').first().val('')
+                $(`#crudForm [name="supir_id"]`).first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
         })
 
-        $('.bank-lookup').lookup({
+
+        // $('.bank-lookup').lookup({
+        //     title: 'Bank Lookup',
+        //     fileName: 'bank',
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+
+        //             Aktif: 'AKTIF',
+        //             withPusat: 0
+        //         }
+        //     },
+        //     onSelectRow: (bank, element) => {
+        //         $('#crudForm [name=bank_id]').first().val(bank.id)
+        //         element.val(bank.namabank)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $('#crudForm [name=bank_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
+        $('.bank-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
-
                     Aktif: 'AKTIF',
                     withPusat: 0
                 }
@@ -2298,11 +2348,12 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=bank_id]').first().val('')
+                $(`#crudForm [name="bank_id"]`).first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
         })
+
 
         $('.kota-lookup').lookup({
             title: 'Kota Lookup',

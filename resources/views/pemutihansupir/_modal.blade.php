@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-12 col-md-10">
                   <input type="hidden" name="supir_id">
-                  <input type="text" name="supir" class="form-control supir-lookup">
+                  <input type="text" name="supir" id="supir" class="form-control supir-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-12 col-md-10">
                   <input type="hidden" name="karyawan_id">
-                  <input type="text" name="karyawan" class="form-control karyawan-lookup">
+                  <input type="text" name="karyawan" id="karyawan" class="form-control karyawan-lookup">
                 </div>
               </div>
 
@@ -69,7 +69,7 @@
                   </div>
                   <div class="col-12 col-md-4">
                     <input type="hidden" name="bank_id">
-                    <input type="text" name="bank" class="form-control bank-lookup">
+                    <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                   </div>
                 </div>
                 <div class="row form-group">
@@ -1140,14 +1140,14 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
             tablePost(`${pemutihanId}/getDeletePost`)
-            selectAllRowsPosting(response.data.supir_id,response.data.karyawan_id)
+            selectAllRowsPosting(response.data.supir_id, response.data.karyawan_id)
             tableNonPost(`${pemutihanId}/getDeleteNonPost`)
-            selectAllRowsNonPosting(response.data.supir_id,response.data.karyawan_id)
+            selectAllRowsNonPosting(response.data.supir_id, response.data.karyawan_id)
           } else {
             tablePost(`${pemutihanId}/getEditPost`)
-            selectAllRowsPosting(response.data.supir_id,response.data.karyawan_id)
+            selectAllRowsPosting(response.data.supir_id, response.data.karyawan_id)
             tableNonPost(`${pemutihanId}/getEditNonPost`)
-            selectAllRowsNonPosting(response.data.supir_id,response.data.karyawan_id)
+            selectAllRowsNonPosting(response.data.supir_id, response.data.karyawan_id)
           }
           resolve()
         },
@@ -1238,9 +1238,11 @@
   }
 
   function initLookup() {
-    $('.supir-lookup').lookup({
+    $('.supir-lookup').lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      searching: ['namasupir'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1271,9 +1273,11 @@
         $('#crudForm').find(`[name="karyawan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
       }
     })
-    $('.karyawan-lookup').lookup({
+    $('.karyawan-lookup').lookupV3({
       title: 'Karyawan Lookup',
-      fileName: 'karyawan',
+      fileName: 'karyawanV3',
+      searching: ['namakaryawan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1304,9 +1308,11 @@
       }
     })
 
-    $('.bank-lookup').lookup({
+    $('.bank-lookup').lookupV3({
       title: 'Bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
 
