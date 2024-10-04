@@ -9,8 +9,13 @@
   if (fromMenu == "klaim") {
     $('#rangeHeaderLookup').parents('.card').hide()
   }
+  var tglbukti = `{!! $tglbukti ?? '' !!}`
+  if (tglbukti) {
+    setRangeLookupByTglBukti(tglbukti)
+  }else{
+    setRangeLookup()
+  }
 
-  setRangeLookup()
   initDatepicker()
   $('#btnReloadLookup').click(function(event) {
     event.preventDefault()

@@ -1021,6 +1021,27 @@
 
     }
 
+    function setRangeLookupByTglBukti(tglbukti) {
+      var date = tglbukti.split('-');
+
+      let year = date[2];
+      let mounth = date[1]-1;
+      // mendapatkan tanggal hari ini
+      let today = new Date();
+
+      // mendapatkan tanggal pertama di bulan ini
+      let firstDay = new Date(year, mounth, 1);
+      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+      // mendapatkan tanggal terakhir di bulan ini
+      let lastDay = new Date(year, mounth + 1, 0);
+      let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+
+      $('#rangeHeaderLookup').find('[name=tgldariheaderlookup]').val(formattedFirstDay).trigger('change');
+      $('#rangeHeaderLookup').find('[name=tglsampaiheaderlookup]').val(formattedLastDay).trigger('change');
+
+    }
+
 
     function loadDataHeaderLookup(url, grid, addtional = null, urlTas = null) {
       clearGlobalSearch($('#jqGrid'))
