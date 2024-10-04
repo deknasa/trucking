@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a8ec8860af89a78de3e47c8897fbb84c",
+  "ReportGuid": "999d680411fa597c51a0bdcb6078baf2",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1725616937000+0700)/",
+  "ReportChanged": "/Date(1728033553000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1161,6 +1161,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_datasaldo.saldo}"
               },
@@ -1253,6 +1254,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
@@ -1290,6 +1292,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.kredit}"
               },
@@ -1327,6 +1330,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totaldebet}"
               },
@@ -1364,6 +1368,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.totalkredit}"
               },
@@ -1401,6 +1406,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.debet}"
               },
@@ -1579,6 +1585,7 @@
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "cb0f6f9f84d170271ec790e71e997944",
+              "GrowToHeight": true,
               "ClientRectangle": "202,0,25,6.06",
               "ComponentPlacement": "f.FooterBand1",
               "Conditions": {
@@ -1596,6 +1603,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.debet)}"
               },
@@ -1635,6 +1643,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{Sum(root_data.kredit)}"
               },
@@ -1664,6 +1673,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "{root_data.saldo}"
               },
