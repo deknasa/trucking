@@ -199,9 +199,10 @@
 
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        // showSuccessDialog(response.message)
+                        showSuccessDialog(response.message)
                         createSupirSerap()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        $('#crudForm').find('[name=tglabsensi]').val(dateFormat(response.data.tglabsensi)).trigger('change');
 
                     }
                 },

@@ -1466,13 +1466,13 @@
             let tgldariVal = $('#crudForm').find('[name="tgldari"]').val();
             let tglsampaiVal = $('#crudForm').find('[name="tglsampai"]').val();
             let pengeluaranTruckingIdVal = $('#crudForm').find('[name="pengeluarantrucking_id"]').val();
-            // showSuccessDialog(response.message, response.data.nobukti)
             createPengeluaranTruckingHeader(true)
             $('#crudForm').find('input[type="text"]').not('[name="pengeluarantrucking"]').data('current-value', '')
             $('#crudForm').find('[name="pengeluarantrucking"]').val(pengeluaranTruckingVal)
             $('#crudForm').find('[name="pengeluarantrucking_id"]').val(pengeluaranTruckingIdVal)
             $('#crudForm').find('[name="tgldari"]').val(tgldariVal)
             $('#crudForm').find('[name="tglsampai"]').val(tglsampaiVal)
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
             $('#crudForm').find('[name=tglbukti]').focus()
             setTampilanForm()
 

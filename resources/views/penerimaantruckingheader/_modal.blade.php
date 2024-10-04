@@ -867,8 +867,9 @@
             $('.invalid-feedback').remove()
             let penerimaanTruckingVal = $('#crudForm').find('[name="penerimaantrucking"]').val();
             let penerimaanTruckingIdVal = $('#crudForm').find('[name="penerimaantrucking_id"]').val();
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             createPenerimaanTruckingHeader()
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
             $('#crudForm').find('input[type="text"]').not('[name="penerimaantrucking"]').data('current-value', '')
             $('#crudForm').find('[name="penerimaantrucking"]').val(penerimaanTruckingVal)
             $('#crudForm').find('[name="penerimaantrucking_id"]').val(penerimaanTruckingIdVal)

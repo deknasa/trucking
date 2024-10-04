@@ -424,7 +424,7 @@
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             let bankVal = $('#crudForm').find('[name="bank"]').val();
             let bankIdVal = $('#crudForm').find('[name="bank_id"]').val();
             let alatbayarVal = $('#crudForm').find('[name="alatbayar"]').val();
@@ -432,6 +432,7 @@
 
             createPengeluaran(true)
             $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
             $('#crudForm').find('[name=tglbukti]').focus()
             $('#crudForm').find('[name="bank"]').val(bankVal)
             $('#crudForm').find('[name="bank"]').data('current-value', bankVal)

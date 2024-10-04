@@ -623,7 +623,6 @@
                         uangjalan = AutoNumeric.getAutoNumericElement($('#crudForm').find(`input[name="uangjalan"]`)[0]);
                         uangjalan.set(0);
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
-                        // showSuccessDialog(response.message, response.data.nobukti)
 
                         $("#tablePengembalian")[0].p.selectedRowIds = [];
                         $('#tablePengembalian').jqGrid("clearGridData");
@@ -634,6 +633,8 @@
                             .trigger("reloadGrid");
 
                         createProsesUangJalanSupir()
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
                     }
 
                 },

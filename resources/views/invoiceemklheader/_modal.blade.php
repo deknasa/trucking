@@ -463,7 +463,7 @@
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             createInvoiceHeader()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             $("#tableInvoice")[0].p.selectedRowIds = [];
@@ -474,6 +474,7 @@
               })
               .trigger("reloadGrid");
             initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominal"]`).text(0))
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
 
 
           }

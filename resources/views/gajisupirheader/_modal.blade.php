@@ -1065,9 +1065,10 @@
 
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        // showSuccessDialog(response.message, response.data.nobukti)
+                        showSuccessDialog(response.message, response.data.nobukti)
                         createGajiSupirHeader(true)
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
                         $("#rekapRincian")[0].p.selectedRowIds = [];
                         $('#rekapRincian').jqGrid("clearGridData");
                         $("#rekapRincian")

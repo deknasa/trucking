@@ -328,8 +328,9 @@
             $('.invalid-feedback').remove()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             $('#table_body').html('')
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             createNotaDebet();
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
           }
         },
         error: error => {

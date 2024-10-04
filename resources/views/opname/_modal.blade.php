@@ -242,8 +242,9 @@
             .jqGrid("setGridParam", {
               selectedRowIds: []
             })
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             createOpname();
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
           }
         },
         error: error => {

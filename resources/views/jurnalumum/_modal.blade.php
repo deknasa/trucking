@@ -288,9 +288,10 @@
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             createJurnalUmumHeader()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
           }
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)

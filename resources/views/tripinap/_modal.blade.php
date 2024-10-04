@@ -218,6 +218,8 @@
                         // showSuccessDialog(response.message)
                         createTripInap()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        showSuccessDialog(response.message, response.data.tglabsensi)
+                        $('#crudForm').find('[name=tglabsensi]').val(dateFormat(response.data.tglabsensi)).trigger('change');
 
                     }
                 },
