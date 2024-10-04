@@ -112,8 +112,13 @@ class AuthController extends MyController
             }
             $token = json_decode((string) $response->getBody(),true);
             
-    
-            
+            $location = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->withOptions(['verify' => false])->get(config('app.api_url').'location',$credentials);
+            $info = json_decode((string) $location->getBody(),true);
+            // dd($info);
+
             $tokenUrlTas = '';
             if ($parametercabang->text == "PUSAT") {
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
@@ -193,7 +198,7 @@ class AuthController extends MyController
             session(['cabang' =>  $parametercabang->text]);
             session(['tnl' =>  $parametertnl->text]);
 
-            session(['info' =>" "]);
+            session(['info' =>$info['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
 
             if ($parametercabang->text != 'PUSAT') {
