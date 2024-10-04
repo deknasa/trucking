@@ -260,6 +260,8 @@
                         $('#gbox_tableEditSp').remove()
                         $('#tes').append(`<table id="tableEditSp"></table>`)
                         createEditSp(true);
+                        showSuccessDialog(response.message, response.data.nobuktiedit)
+                        $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbuktiedit)).trigger('change');
                     }
                 },
                 error: error => {

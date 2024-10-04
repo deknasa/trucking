@@ -416,7 +416,7 @@
 
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            // showSuccessDialog(response.message, response.data.nobukti)
+            showSuccessDialog(response.message, response.data.nobukti)
             let currTglbukti = $('#crudForm [name=tglbukti]').val();
             createInvoiceHeader(true)
 

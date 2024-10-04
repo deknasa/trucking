@@ -183,9 +183,11 @@
 
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        // showSuccessDialog(response.message)
+                        showSuccessDialog(response.message)
                         createPengajuanTripInap()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
+
                     }
                 },
                 error: error => {

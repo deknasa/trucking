@@ -312,7 +312,8 @@
             // showSuccessDialog(response.message, response.data.nobukti)
             createRekapPengeluaranHeader()
             $('#crudForm').find('input[type="text"]').data('current-value', '')
-
+            showSuccessDialog(response.message, response.data.nobukti)
+            $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
             selectedRowsId = []
             selectedNobukti = []
             selectedTglBukti = []

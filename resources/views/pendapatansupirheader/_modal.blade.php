@@ -553,7 +553,7 @@
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
-                        // showSuccessDialog(response.message, response.data.nobukti)
+                        showSuccessDialog(response.message, response.data.nobukti)
 
                         $("#tableDeposito")[0].p.selectedRowIds = [];
                         $('#tableDeposito').jqGrid("clearGridData");
@@ -571,6 +571,7 @@
                             })
                             .trigger("reloadGrid");
                         createPendapatanSupir()
+                        $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
                     }
 
                 },

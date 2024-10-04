@@ -683,6 +683,8 @@
             $('#crudForm').find('input[type="text"]').data('current-value', '')
             if ($('#kodepengeluaranheader').val() != '') {
               createPengeluaranstokHeader()
+              showSuccessDialog(response.message, response.data.nobukti)
+              $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
               let IdPengeluaran = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
               setKodePengeluaran(listKodePengeluaran[IdPengeluaran]);
               setIsDateAvailable($('#kodepengeluaranheader').val())

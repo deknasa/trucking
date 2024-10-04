@@ -273,9 +273,10 @@
 
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        // showSuccessDialog(response.message, response.data.nobukti)
                         createPindahBuku()
                         $('#crudForm').find('input[type="text"]').data('current-value', '')
+                        showSuccessDialog(response.message, response.data.nobukti)
+                        $('#crudForm').find('[name=tglbukti]').val(dateFormat(response.data.tglbukti)).trigger('change');
                         let nominalEl = `<input type="text" name="nominal" class="form-control text-right">`
                         $('#crudForm').find(`[name="nominal"]`).remove()
                         $('#contNominal').append(nominalEl)
