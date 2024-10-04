@@ -6595,6 +6595,7 @@
           url: urlTNL,
           token: tokenTNL,
           from: 'klaim',
+          tglbukti:$('#crudForm').find(`[name="tglbukti"]`).val(),
           aksi: $('#crudForm').data('action')
         }
       },
