@@ -28,17 +28,16 @@
                             <label class="col-12 col-sm-4 col-md-2  col-form-label mt-2">Cabang<span class="text-danger">*</span></label>
 
                             <div class="col-12 col-sm-4 col-md-4">
-                                <select name="cabang" id="cabang" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
+                                <input type="hidden" name="cabang">
+                                <input type="text" name="cabangnama" id="cabangnama" class="form-control cabang-lookup">
                             </div>
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-4 col-md-2  col-form-label mt-2">tipe import<span class="text-danger">*</span></label>
 
                             <div class="col-12 col-sm-4 col-md-4">
-                                <select name="import" id="import" class="form-select select2bs4" style="width: 100%;">
-                                </select>
+                                <input type="hidden" name="import">
+                                <input type="text" name="importnama" id="importnama" class="form-control import-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -62,15 +61,14 @@
 </div>
 @push('scripts')
 <script>
-    
-
     $(document).ready(function() {
 
-        initSelect2($('#crudForm').find('[name=cabang]'), false)
-        initSelect2($('#crudForm').find('[name=import]'), false)
-        setCabangOptions($('#crudForm'))
-        setStatusImportOptions($('#crudForm'))
+        // initSelect2($('#crudForm').find('[name=cabang]'), false)
+        // initSelect2($('#crudForm').find('[name=import]'), false)
+        // setCabangOptions($('#crudForm'))
+        // setStatusImportOptions($('#crudForm'))
 
+        initLookup()
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -97,7 +95,7 @@
 
         $('#btnProcess').click(function(event) {
             event.preventDefault()
-            
+
             let method
             let url
             let form = $('#crudForm')
@@ -109,10 +107,10 @@
             url = `${apiUrl}importdatacabang`
 
             data.push({
-              name: 'info',
-              value: info
+                name: 'info',
+                value: info
             })
-          
+
 
             $(this).attr('disabled', '')
             $('#processingLoader').removeClass('d-none')
@@ -144,39 +142,94 @@
                 $(this).removeAttr('disabled')
             })
         })
-            
+
     })
-     
-    const setCabangOptions = function(relatedForm) {
-        return new Promise((resolve, reject) => {
-        relatedForm.find('[name=cabang]').empty()
-        relatedForm.find('[name=cabang]').append(
-            new Option('-- PILIH CABANG --', '', false, true)
-        ).trigger('change')
 
-        $.ajax({
-            url: `${apiUrl}cabang`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-            Authorization: `Bearer ${accessToken}`
+    function initLookup() {
+        $('.cabang-lookup').lookupV3({
+            title: 'Cabang Lookup',
+            fileName: 'cabangV3',
+            searching: ['namacabang'],
+            labelColumn: false,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    transferCoa: 'YA'
+                }
             },
-            data:{
-                transferCoa: 'YA'  
+            onSelectRow: (cabang, element) => {
+                $('#crudForm [name=cabang]').first().val(cabang.id)
+                element.val(cabang.namacabang)
+                element.data('currentValue', element.val())
             },
-            success: response => {
-            response.data.forEach(cabang => {
-                let option = new Option(cabang.namacabang, cabang.id)
-
-                relatedForm.find('[name=cabang]').append(option).trigger('change')
-            });
-
-            resolve()
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
             },
-            error: error => {
-            reject(error)
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="cabang"]`).first().val('')
+                element.data('currentValue', element.val())
             }
         })
+
+        $('.import-lookup').lookupV3({
+            title: 'Status Import Lookup',
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
+            beforeProcess: function() {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'STATUSIMPORT',
+                    subgrp: 'STATUSIMPORT',
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=import]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="import"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
+
+    const setCabangOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=cabang]').empty()
+            relatedForm.find('[name=cabang]').append(
+                new Option('-- PILIH CABANG --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}cabang`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    transferCoa: 'YA'
+                },
+                success: response => {
+                    response.data.forEach(cabang => {
+                        let option = new Option(cabang.namacabang, cabang.id)
+
+                        relatedForm.find('[name=cabang]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -186,7 +239,7 @@
             relatedForm.find('[name=import]').append(
                 new Option('-- PILIH STATUS IMPORT --', '', false, true)
             ).trigger('change')
-            
+
             let data = [];
             data.push({
                 name: 'grp',
@@ -209,7 +262,7 @@
                         let option = new Option(statusApproval.text, statusApproval.id)
                         relatedForm.find('[name=import]').append(option).trigger('change')
                     });
-                
+
 
                     resolve();
                 },
@@ -219,8 +272,6 @@
             })
         })
     }
-                
-    
 </script>
 @endpush()
 @endsection

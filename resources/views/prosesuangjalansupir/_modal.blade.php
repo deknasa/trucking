@@ -56,7 +56,7 @@
                                 </div>
                                 <div class="col-12 col-md-10">
                                     <input type="hidden" name="supir_id">
-                                    <input type="text" name="supir" class="form-control supir-lookup">
+                                    <input type="text" name="supir" id="supir" class="form-control supir-lookup">
                                 </div>
                             </div>
 
@@ -94,11 +94,11 @@
                                     </ul>
 
                                     <div id="tabs-1">
-                                        <div class="table-scroll table-responsive">
+                                        <div class="table-scroll">
                                             <table class="table table-bordered table-bindkeys" id="detailTransfer" style="width:1450px;">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%">No</th>
+                                                        <th width="1%">No</th>
                                                         <th width="10%">Tanggal</th>
                                                         <th width="20%">Keterangan Transfer</th>
                                                         <th width="15%">Nilai Transfer</th>
@@ -177,7 +177,7 @@
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <input type="hidden" name="bank_idadjust">
-                                                    <input type="text" name="bankadjust" class="form-control bankadjust-lookup">
+                                                    <input type="text" name="bankadjust" id="bankadjust" class="form-control bankadjust-lookup">
                                                 </div>
                                             </div>
                                             <div class="row form-group">
@@ -255,7 +255,7 @@
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <input type="hidden" name="bank_iddeposit">
-                                                    <input type="text" name="bankdeposit" class="form-control bankdeposit-lookup">
+                                                    <input type="text" name="bankdeposit" id="bankdeposit" class="form-control bankdeposit-lookup">
                                                 </div>
                                             </div>
                                             <div class="row form-group">
@@ -278,7 +278,7 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <input type="hidden" name="bank_idpengembalian">
-                                                <input type="text" name="bankpengembalian" class="form-control bankpengembalian-lookup">
+                                                <input type="text" name="bankpengembalian" id="bankpengembalian" class="form-control bankpengembalian-lookup">
                                             </div>
                                         </div>
                                         <table id="tablePengembalian"></table>
@@ -354,6 +354,7 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let isEditTgl
+    let lastIndex = 0;
     $(document).ready(function() {
 
         $('#addRowTransfer').hide()
@@ -614,9 +615,6 @@
                             $('#detail').jqGrid().trigger('reloadGrid')
                         }
 
-                        if (response.data.grp == 'FORMAT') {
-                            updateFormat(response.data)
-                        }
                     } else {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
@@ -1755,6 +1753,8 @@
     }
 
     function addRowTransfer() {
+        lastIndex += 1;
+        let isTheFirstRow = $('#table_body tr').length;
         let detailRow = $(`
         <tr>
             <td></td>
@@ -1785,7 +1785,7 @@
                 <div class="row form-group">
                     <div class="col-12 col-md-12">
                         <input type="hidden" name="bank_idtransfer[]">
-                        <input type="text" name="banktransfer[]" class="form-control bank-lookup">
+                        <input type="text" name="banktransfer[]" id="banktransfer_${lastIndex}" class="form-control bank-lookup_${lastIndex}">
                     </div>
                 </div>
             </td>
@@ -1815,29 +1815,29 @@
 
             }
         });
-        $('.bank-lookup').last().lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-                    withPusat: 0
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $(`#crudForm [name="bank_idtransfer[]"]`).last().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $(`#crudForm [name="bank_idtransfer[]"]`).last().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
+        // $('.bank-lookup').last().lookup({
+        //     title: 'Bank Lookup',
+        //     fileName: 'bank',
+        //     beforeProcess: function(test) {
+        //         this.postData = {
+        //             Aktif: 'AKTIF',
+        //             withPusat: 0
+        //         }
+        //     },
+        //     onSelectRow: (bank, element) => {
+        //         $(`#crudForm [name="bank_idtransfer[]"]`).last().val(bank.id)
+        //         element.val(bank.namabank)
+        //         element.data('currentValue', element.val())
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         $(`#crudForm [name="bank_idtransfer[]"]`).last().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
         let bankid_transfer = $('#detailTransfer tbody').children('tr:first').find(`td [name="bank_idtransfer[]"]`).val()
         let bank_transfer = $('#detailTransfer tbody').children('tr:first').find(`td [name="banktransfer[]"]`).val()
         detailRow.find(`[name="bank_idtransfer[]"]`).val(bankid_transfer)
@@ -1846,9 +1846,37 @@
         initDatepicker();
         initAutoNumeric(detailRow.find('.autonumeric'))
         setTotalTransfer()
+        initLookupDetail(lastIndex);
         setRowNumbers('#detailTransfer #tbodyTransfer')
     }
 
+    function initLookupDetail(index) {
+        let rowLookup = index
+        $(`.bank-lookup_${rowLookup}`).lookupV3({
+            title: 'Bank Lookup',
+            fileName: 'bankV3',
+            labelColumn: true,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                    withPusat: 0
+                }
+            },
+            onSelectRow: (bank, element) => {                
+                element.parents('td').find(`[name="bank_idtransfer[]"]`).val(bank.id)
+                element.val(bank.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.parents('td').find(`[name="bank_idtransfer[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
 
     function deleteRow(row) {
         let countRow = $('.delete-row').parents('tr').length
@@ -1951,9 +1979,11 @@
             }
         })
 
-        $('.supir-lookup').lookup({
+        $('.supir-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'absensisupirdetail',
+            fileName: 'absensisupirdetailV3',
+            searching: ['tradosupir'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -2014,9 +2044,11 @@
             }
         })
 
-        $('.bankadjust-lookup').lookup({
+        $('.bankadjust-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -2038,9 +2070,11 @@
             }
         })
 
-        $('.bankdeposit-lookup').lookup({
+        $('.bankdeposit-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -2061,9 +2095,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.bankpengembalian-lookup').lookup({
+        $('.bankpengembalian-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bank',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

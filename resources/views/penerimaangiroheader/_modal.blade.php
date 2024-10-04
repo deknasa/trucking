@@ -1177,7 +1177,7 @@
         initDatepicker()
         setRowNumbers()
 
-        selectIndex++;
+        // selectIndex++;
     }
 
     function initLookupDetail(index) {
