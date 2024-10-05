@@ -5861,14 +5861,14 @@
                       <input id="nominaltagih_${index}" type="text" name="nominaltagih[]" readonly class="form-control autonumeric nominaltagih"> 
                     </td>
                     <td class="data_tbl tbl_keterangan">
-                        <input type="text" id="keterangan_${index}" name="keterangan[]" class="form-control"> 
+                      <textarea class="form-control" id="keterangan_${index}" name="keterangan[]" rows="1" placeholder=""></textarea>
                     </td>
         
                     <td class="data_tbl tbl_tagihklaim">
                       <input id="nominaltambahan_${index}" type="text" name="nominaltambahan[]" class="form-control autonumeric text-right nominaltambahan"> 
                     </td>
                     <td class="data_tbl tbl_tagihklaim">
-                      <input id="keterangantambahan_${index}" type="text" name="keterangantambahan[]" class="form-control"> 
+                      <textarea class="form-control" id="keterangantambahan_${index}" name="keterangantambahan[]" rows="1" placeholder=""></textarea>
                     </td>
                     <td class="data_tbl tbl_jenisorder kolom_bbt">
                       <input id="jenisorder_${index}" type="text" name="jenisorder_id[]" class="form-control"> 
@@ -6413,14 +6413,14 @@
           <input id="nominaltagih_${indexRow}" type="text" name="nominaltagih[]" readonly class="form-control text-right nominaltagih"> 
         </td>
         <td class="data_tbl tbl_keterangan">
-          <input id="keterangan_${indexRow}" type="text" name="keterangan[]" class="form-control"> 
+          <textarea class="form-control" id="keterangan_${indexRow}" name="keterangan[]" rows="1" placeholder=""></textarea>
         </td>
         
         <td class="data_tbl tbl_tagihklaim">
           <input id="nominaltambahan_${indexRow}" type="text" name="nominaltambahan[]" class="form-control autonumeric text-right nominaltambahan"> 
         </td>
         <td class="data_tbl tbl_tagihklaim">
-          <input id="keterangantambahan_${indexRow}" type="text" name="keterangantambahan[]" class="form-control"> 
+          <textarea class="form-control" id="keterangantambahan_${indexRow}" name="keterangantambahan[]" rows="1" placeholder=""></textarea>
         </td>
         <td class="data_tbl tbl_jenisorder kolom_bbt">
           <input id="jenisorder_${indexRow}" type="text" name="jenisorder_id[]" class="form-control"> 
