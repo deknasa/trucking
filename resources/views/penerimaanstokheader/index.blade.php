@@ -342,8 +342,8 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            hidden: true,
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3,
           },
           {
             label: 'Penerimaan no bukti',
