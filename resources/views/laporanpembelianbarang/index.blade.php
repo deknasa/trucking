@@ -25,6 +25,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <label class="col-form-label">JENIS LAPORAN <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <select name="jenislaporan" id="jenislaporan" class="form-select select2bs4" style="width: 100%;">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+           
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -67,8 +80,9 @@
 
     $(document).ready(function() {
         initMonthpicker()
+        initSelect2($('#crudForm').find('[name=jenislaporan]'), false)
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
-
+        setJenisLaporanOptions($('#crudForm'))
 
         if (!`{{ $myAuth->hasPermission('laporanpembelianbarang', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
@@ -79,18 +93,62 @@
 
     })
 
+    const setJenisLaporanOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=jenislaporan]').empty()
+            relatedForm.find('[name=jenislaporan]').append(
+                new Option('-- PILIH JENIS LAPORAN --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "JENIS LAPORAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusReuse => {
+                        let option = new Option(statusReuse.text, statusReuse.id)
+
+                        relatedForm.find('[name=jenislaporan]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+
     $(document).on('click', `#btnPreview`, function(event) {
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
+
         $.ajax({
             url: `{{ route('laporanpembelianbarang.report') }}`,
             method: 'GET',
             data: {
-                sampai: sampai
+                sampai: sampai,
+                jenislaporan: jenislaporan
             },
             success: function(response) {
                 // Handle the success response
-                var newWindow = window.open('','_blank');
+                var newWindow = window.open('', '_blank');
                 newWindow.document.open();
                 newWindow.document.write(response);
                 newWindow.document.close();
@@ -110,6 +168,7 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
 
@@ -118,8 +177,9 @@
                 url: `${apiUrl}laporanpembelianbarang/export`,
                 // url: `{{ route('laporanpembelianbarang.export') }}?sampai=${sampai}`,
                 type: 'GET',
-                data : {
-                    sampai : sampai
+                data: {
+                    sampai: sampai,
+                    jenislaporan: jenislaporan
                 },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -139,7 +199,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -163,6 +223,7 @@
                 },
                 data: {
                     sampai: $('#crudForm').find('[name=sampai]').val(),
+                    jenislaporan: $('#crudForm').find('[name=jenislaporan]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
