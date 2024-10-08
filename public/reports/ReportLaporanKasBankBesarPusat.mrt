@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7274ded068a5d149387f2ed5eca8520b",
+  "ReportGuid": "b618f92483e56641eab53911fd934ed0",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728033757000+0700)/",
+  "ReportChanged": "/Date(1728380912000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -139,6 +139,18 @@
             "Name": "tglbukti2",
             "NameInSource": "tglbukti2",
             "Alias": "tglbukti2",
+            "Type": "System.String"
+          },
+          "19": {
+            "Name": "nilaikosongdebet",
+            "NameInSource": "nilaikosongdebet",
+            "Alias": "nilaikosongdebet",
+            "Type": "System.String"
+          },
+          "20": {
+            "Name": "nilaikosongkredit",
+            "NameInSource": "nilaikosongkredit",
+            "Alias": "nilaikosongkredit",
             "Type": "System.String"
           }
         },
@@ -1316,6 +1328,15 @@
                   "Value1": "SALDO AWAL",
                   "Enabled": false,
                   "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_data.urutdetail",
+                  "Value1": "1",
+                  "Enabled": false,
+                  "BorderSides": "None"
                 }
               },
               "Interaction": {
@@ -1352,6 +1373,15 @@
                   "Ident": "StiCondition",
                   "Column": "root_data.keterangan",
                   "Value1": "SALDO AWAL",
+                  "Enabled": false,
+                  "BorderSides": "None"
+                },
+                "1": {
+                  "Ident": "StiCondition",
+                  "Condition": "NotEqualTo",
+                  "DataType": "Numeric",
+                  "Column": "root_data.urutdetail",
+                  "Value1": "1",
                   "Enabled": false,
                   "BorderSides": "None"
                 }
