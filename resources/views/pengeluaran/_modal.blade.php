@@ -152,11 +152,12 @@
 
             <div class="overflow scroll-container mb-2">
               <div class="table-container">
-                <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+                <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1700px;">
                   <thead>
                     <tr>
+                      <th style="width: 10px; min-width: 10px;" class="aksiBmt tbl_aksi">Aksi</th>
                       <th style="width: 10px; min-width: 10px;">No</th>
-                      <th style="width: 180px; min-width: 180px;">Nama Perkiraan</th>
+                      <th style="width: 200px; min-width: 200px;">Nama Perkiraan</th>
                       <th style="width: 350px; min-width: 350px;">Keterangan</th>
                       <th style="width: 180px; min-width: 180px;">Nominal</th>
                       <th style="width: 180px; min-width: 180px;">No warkat</th>
@@ -164,7 +165,6 @@
                       <th class="tbl_ketranganJob" style="width: 210px; min-width: 210px;">Keterangan JOB</th>
                       <th class="tbl_noinvoice" style="width: 210px; min-width: 210px;">No Invoice</th>
                       <th class="tbl_bank" style="width: 210px; min-width: 210px;">Bank</th>
-                      <th style="width: 10px; min-width: 10px;" class="aksiBmt tbl_aksi">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="table_body" class="form-group">
@@ -173,6 +173,9 @@
                   </tbody>
                   <tfoot>
                     <tr>
+                      <td class="aksiBmt tbl_aksi">
+                        <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                      </td>
                       <td colspan="3" id="colspan-1">
                         <p class="text-right font-weight-bold">TOTAL :</p>
                       </td>
@@ -180,9 +183,6 @@
                         <p class="text-right font-weight-bold autonumeric" id="total"></p>
                       </td>
                       <td colspan="4" id="colspan-2"></td>
-                      <td class="aksiBmt tbl_aksi">
-                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                      </td>
                     </tr>
                   </tfoot>
                 </table>
@@ -1191,6 +1191,9 @@
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>
+                  <td class="tbl_aksi">
+                      <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td></td>
                   <td>
                     <input type="hidden" name="coadebet[]">
@@ -1220,9 +1223,6 @@
                   <td class="tbl_bank">
                       <input type="text" name="bank_detail[]" class="form-control">
                   </td>
-                  <td class="tbl_aksi">
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                  </td>
               </tr>
             `)
 
@@ -1235,7 +1235,7 @@
             detailRow.find(`[name="noinvoice[]"]`).val(detail.noinvoice)
             detailRow.find(`[name="bank_detail[]"]`).val(detail.bank)
             detailRow.find(`[name="ketranganJob[]"]`).val(detail.ketranganJob)
-            detailRow.find(`[name="ketranganJob[]"]`).data('currentValue',detail.ketranganJob)
+            detailRow.find(`[name="ketranganJob[]"]`).data('currentValue', detail.ketranganJob)
 
             initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 
@@ -1300,6 +1300,9 @@
     let isTheFirstRow = $('#table_body tr').length;
     let detailRow = $(`
       <tr>
+        <td>
+            <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td>
             <input type="hidden" name="coadebet[]">
@@ -1332,9 +1335,6 @@
           <div class="input-group">
             <input type="text" name="bank_detail[]" class="form-control">   
           </div>
-        </td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -1462,11 +1462,11 @@
           return accumulator + item.nominal;
         }, 0);
 
-        console.log($(`#nominal_${rowLookup}`),totalNominal);
+        console.log($(`#nominal_${rowLookup}`), totalNominal);
 
         elQty = AutoNumeric.getAutoNumericElement($(`#nominal_${rowLookup}`)[0]);
         elQty.set(totalNominal);
-        
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1537,12 +1537,19 @@
     initDatepicker()
   }
 
-  function setRowNumbers() {
-    let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
-
-    elements.each((index, element) => {
-      $(element).text(index + 1)
-    })
+  function setRowNumbers(isBMT = false) {
+    console.log(isBMT)
+    if (!isBMT) {
+      let elements = $('#detailList>#table_body>tr>td:nth-child(2)')
+      elements.each((index, element) => {
+        $(element).text(index + 1)
+      })
+    } else {
+      let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
+      elements.each((index, element) => {
+        $(element).text(index + 1)
+      })
+    }
   }
 
   function approve() {
@@ -1646,15 +1653,15 @@
     }
   }
 
-  function enableNominalReimburse(){
+  function enableNominalReimburse() {
     let reimbursement = $('#crudForm').find(`[name="statusreimbursementnama"]`).val()
 
     if (reimbursement == 'YA') {
       $('.tbl_ketranganJob').show()
-      $(`#table_body [name="nominal_detail[]"]`).prop('readonly',true)
+      $(`#table_body [name="nominal_detail[]"]`).prop('readonly', true)
     } else {
       $('.tbl_ketranganJob').hide()
-      $(`#table_body [name="nominal_detail[]"]`).prop('readonly',false)
+      $(`#table_body [name="nominal_detail[]"]`).prop('readonly', false)
     }
   }
 
@@ -2042,7 +2049,7 @@
 
 
         })
-        setRowNumbers()
+        setRowNumbers(true)
       },
       error: error => {
         showDialog(error.responseJSON)

@@ -67,10 +67,10 @@
                                             <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                                                 <thead>
                                                     <tr>
+                                                        <th width="2%" class="tbl_aksi">Aksi</th>
                                                         <th width="2%">No</th>
                                                         <th width="48%">No bukti Service in</th>
                                                         <th width="48%">Keterangan</th>
-                                                        <th width="2%" class="tbl_aksi">Aksi</th>
 
                                                     </tr>
                                                 </thead>
@@ -79,10 +79,10 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="3"></td>
                                                         <td class="tbl_aksi">
-                                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                                        <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
                                                         </td>
+                                                        <td colspan="3"></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -184,6 +184,14 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
+            data.push({
+                name: 'tgldariheader',
+                value: $('#tgldariheader').val()
+            })
+            data.push({
+                name: 'tglsampaiheader',
+                value: $('#tglsampaiheader').val()
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -562,6 +570,9 @@
                     $.each(response.detail, (index, detail) => {
                         let detailRow = $(`
                         <tr>
+                            <td class="tbl_aksi">
+                                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                            </td>
                             <td></td>
                             <td>
                                 <input type="text" name="servicein_nobukti[]" data-current-value="${detail.servicein_nobukti}" class="form-control serviceinheader-lookup">
@@ -569,9 +580,6 @@
                             <td>
                                 <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                             </td>
-                            <td class="tbl_aksi">
-                            <div class='btn btn-danger btn-sm delete-row '>Delete</div>
-                        </td>
                         </tr>`)
 
                         detailRow.find(`[name="servicein_nobukti[]"]`).val(detail.servicein_nobukti)
@@ -623,15 +631,15 @@
     function addRow() {
         let detailRow = (`
         <tr>
+        <td>
+            <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td>
             <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
         </td>
         <td>
             <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
-        </td>
-        <td>
-        <div class='btn btn-danger btn-sm delete-row '>Delete</div>
         </td>
     </tr>`)
 
@@ -674,7 +682,7 @@
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList tbody tr td:nth-child(1)')
+        let elements = $('#detailList tbody tr td:nth-child(2)')
 
         elements.each((index, element) => {
             $(element).text(index + 1)

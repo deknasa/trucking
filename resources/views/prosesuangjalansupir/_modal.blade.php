@@ -98,19 +98,22 @@
                                             <table class="table table-bordered table-bindkeys" id="detailTransfer" style="width:1450px;">
                                                 <thead>
                                                     <tr>
+                                                        <th width="5%">Aksi</th>
                                                         <th width="1%">No</th>
                                                         <th width="10%">Tanggal</th>
                                                         <th width="20%">Keterangan Transfer</th>
                                                         <th width="15%">Nilai Transfer</th>
                                                         <th width="20%">Posting ke Kas/Bank</th>
                                                         <th width="15%">No Bukti Kas/Bank</th>
-                                                        <th width="5%">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbodyTransfer" class="form-group">
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
+                                                        <td>
+                                                            <div type="button" class="my-1" id="addRowTransfer"><span><i class="far fa-plus-square"></i></span></div>
+                                                        </td>
                                                         <td colspan="3">
                                                             <p class="text-right font-weight-bold">TOTAL :</p>
                                                         </td>
@@ -118,9 +121,6 @@
                                                             <p class="text-right font-weight-bold autonumeric" id="totalTransfer"></p>
                                                         </td>
                                                         <td colspan="2"></td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRowTransfer">TAMBAH</button>
-                                                        </td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -951,8 +951,8 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        $('#detailTransfer').find("th").last().hide()
-        $('#detailTransfer tfoot').find("td").last().hide()
+        $('#detailTransfer').find("th").first().hide()
+        $('#detailTransfer tfoot').find("td").first().hide()
 
         Promise
             .all([
@@ -1644,7 +1644,7 @@
 
                     })
 
-                    setRowNumbers('#detailTransfer #tbodyTransfer')
+                    setRowNumbers('#detailTransfer #tbodyTransfer', true)
 
                     $.each(response.detail.adjust, (index, value) => {
                         let element = form.find(`[name="${index}"]`)
@@ -1758,6 +1758,9 @@
         let isTheFirstRow = $('#table_body tr').length;
         let detailRow = $(`
         <tr>
+            <td>
+                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+            </td>
             <td></td>
             <td>
                 <div class="row form-group">
@@ -1797,9 +1800,6 @@
                         <input type="text" name="nobukti_kasbank[]" readonly class="form-control">
                     </div>
                 </div>
-            </td>
-            <td>
-                <div class="btn btn-danger btn-sm delete-row">Delete</div>
             </td>
         </tr>
         `)
@@ -1891,12 +1891,20 @@
         setTotalTransfer()
     }
 
-    function setRowNumbers(attr) {
-        let elements = $(`${attr} tr td:nth-child(1)`)
+    function setRowNumbers(attr, isShow = false) {
+        if(!isShow){
+            let elements = $(`${attr} tr td:nth-child(2)`)
 
-        elements.each((index, element) => {
-            $(element).text(index + 1)
-        })
+            elements.each((index, element) => {
+                $(element).text(index + 1)
+            })
+        } else {
+            let elements = $(`${attr} tr td:nth-child(1)`)
+
+            elements.each((index, element) => {
+                $(element).text(index + 1)
+            })
+        }
     }
 
     function getMaxLength(form) {

@@ -89,16 +89,16 @@
                                 <table class="table table-bordered table-bindkeys " id="detailList">
                                     <thead>
                                         <tr>
+                                            <th style="width: 10px; min-width: 10px;" class="tbl_aksi">Aksi</th>
                                             <th style="width: 10px; min-width: 10px;">No</th>
                                             <th style="width: 150px; min-width: 150px;">Tgl jatuh tempo</th>
                                             <th style="width: 180px; min-width: 180px;">No warkat</th>
                                             <th style="width: 210px; min-width: 210px;">Bank</th>
-                                            <th style="width: 200px; min-width: 200px;">Bank Pelanggan</th>
                                             <th style="width: 350px; min-width: 350px;">Keterangan</th>
                                             <th style="width: 250px; min-width: 250px;">Nominal</th>
+                                            <th style="width: 200px; min-width: 200px;">Bank Pelanggan</th>
                                             <th style="width: 200px; min-width: 200px;">Jenis Biaya</th>
                                             <th style="width: 150px; min-width: 150px;">Bulan Beban</th>
-                                            <th style="width: 10px; min-width: 10px;" class="tbl_aksi">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table_body">
@@ -106,16 +106,16 @@
                                     <tfoot>
 
                                         <tr>
-                                            <td colspan="6">
+                                            <td class="tbl_aksi">
+                                                <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                                            </td>
+                                            <td colspan="5">
                                                 <p class="text-right font-weight-bold">TOTAL :</p>
                                             </td>
                                             <td>
                                                 <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                             </td>
                                             <td colspan="2"></td>
-                                            <td class="tbl_aksi">
-                                                <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                            </td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -960,6 +960,7 @@
     }
 
     let lastIndex = 0;
+
     function showPenerimaanGiro(form, id) {
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
@@ -995,6 +996,9 @@
                         let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                         let detailRow = $(`
                         <tr class="${detail.pelunasanpiutang_nobukti}">
+                            <td class="tbl_aksi">
+                                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                            </td>
                             <td></td>
                             <td>
                                 <div class="input-group">
@@ -1009,14 +1013,14 @@
                                 <input type="text" name="bank[]" id="bank_${index}" data-current-value="${detail.bank}" class="form-control bank-lookup${index}">
                             </td>
                             <td>
-                                <input type="hidden" name="bankpelanggan_id[]">
-                                <input type="text" name="bankpelanggan[]" id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control lg-forms bankpelanggan-lookup${index}">
-                            </td>
-                            <td>
                                 <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="" ${readOnly}></textarea>
                             </td>
                             <td>
                                 <input type="text" name="nominal[]" class="form-control autonumeric" ${readOnly}> 
+                            </td>
+                            <td>
+                                <input type="hidden" name="bankpelanggan_id[]">
+                                <input type="text" name="bankpelanggan[]" id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control lg-forms bankpelanggan-lookup${index}">
                             </td>
                             <td>
                                 <input type="text" name="jenisbiaya[]" class="form-control">   
@@ -1025,9 +1029,6 @@
                                 <div class="input-group">
                                     <input type="text" name="bulanbeban[]" class="form-control datepicker">   
                                 </div>
-                            </td>
-                            <td class="tbl_aksi">
-                                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                             </td>
                         </tr>
                         `)
@@ -1124,10 +1125,13 @@
 
     function addRow() {
 
-        lastIndex += 1; 
+        lastIndex += 1;
 
         let detailRow = $(`
       <tr>
+        <td class="tbl_aksi">
+            <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td>
             <div class="input-group">
@@ -1142,14 +1146,14 @@
             <input type="text" name="bank[]" id="bank_${lastIndex}" class="form-control bank-lookup${lastIndex}">
         </td>
         <td>
-            <input type="hidden" name="bankpelanggan_id[]">
-            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${lastIndex}" class="form-control bankpelanggan-lookup${lastIndex}">
-        </td>
-        <td>
             <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder="" ></textarea>
         </td>
         <td>
         <input type="text" name="nominal[]" class="form-control autonumeric "> 
+        </td>
+        <td>
+            <input type="hidden" name="bankpelanggan_id[]">
+            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${lastIndex}" class="form-control bankpelanggan-lookup${lastIndex}">
         </td>
         <td>
             <input type="text" name="jenisbiaya[]" class="form-control">   
@@ -1158,9 +1162,6 @@
             <div class="input-group">
                 <input type="text" name="bulanbeban[]" class="form-control datepicker">   
             </div>
-        </td>
-        <td class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -1223,7 +1224,7 @@
             searching: ['namabank'],
             labelColumn: false,
             extendSize: md_extendSize_1,
-            multiColumnSize:true,
+            multiColumnSize: true,
             beforeProcess: function() {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -1279,11 +1280,11 @@
 
         $(`.bankpelanggan-lookup${rowLookup}`).lookupV3({
             title: 'Bank Pelanggan Lookup',
-            fileName: 'bankpelangganV3', 
-            searching: ['coa','keterangancoa'],
+            fileName: 'bankpelangganV3',
+            searching: ['coa', 'keterangancoa'],
             labelColumn: false,
             extendSize: md_extendSize_3,
-            multiColumnSize:true,
+            multiColumnSize: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -1321,7 +1322,7 @@
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
+        let elements = $('#detailList>#table_body>tr>td:nth-child(2)')
 
         elements.each((index, element) => {
             $(element).text(index + 1)
@@ -1437,7 +1438,7 @@
             title: 'Customer Lookup',
             fileName: 'agenV3',
             labelColumn: false,
-            beforeProcess: function(test) {    
+            beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }

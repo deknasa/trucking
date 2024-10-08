@@ -62,23 +62,23 @@
               <table class="table table-bordered table-bindkeys" style="width: 1000px;">
                 <thead>
                   <tr>
+                    <th width="2%" class="tbl_aksi">Aksi</th>
                     <th width="2%">No</th>
                     <th width="70%">keterangan</th>
                     <th width="26%">nominal</th>
-                    <th width="2%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
                 </tbody>
                 <tfoot>
                   <tr>
+                    <td class="tbl_aksi">
+                      <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                    </td>
                     <td colspan=""></td>
 
                     <td class="font-weight-bold"> Total : </td>
                     <td id="sumary" class="text-right font-weight-bold"> </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -637,7 +637,10 @@
   function addRow() {
 
     let detailRow = $(`
-    <tr>
+    <tr>            
+                  <td class="tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                     <div class="baris"></div>
                   </td> 
@@ -646,10 +649,7 @@
                   </td>                  
                   <td>
                     <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
-                  </td>                  
-                  <td class="tbl_aksi">
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                  </td>
+                  </td>      
               </tr>
     `)
 
@@ -669,7 +669,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('table #table_body tr td:nth-child(1)')
+    let elements = $('table #table_body tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -717,6 +717,9 @@
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
               <tr>
+                    <td class="tbl_aksi">
+                     <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    </td>
                     <td>
                       <div class="baris"></div>
                     </td>
@@ -727,9 +730,6 @@
                     <td>
                       <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    
                     </td>  
-                    <td class="tbl_aksi">
-                      <div class='btn btn-danger btn-sm rmv delete-row'>Delete</div>
-                    </td>
                 </tr>
             `)
             detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
