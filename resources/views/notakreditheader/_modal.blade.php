@@ -98,10 +98,10 @@
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
+                    <th width="2%" class="tbl_aksi">Aksi</th>
                     <th width="2%">No</th>
                     <th width="70%">Keterangan</th>
                     <th width="26%">Nominal</th>
-                    <th width="2%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -109,14 +109,14 @@
                 </tbody>
                 <tfoot>
                   <tr>
+                    <td class="tbl_aksi">
+                      <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                    </td>
                     <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                    </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                     </td>
                   </tr>
                 </tfoot>
@@ -673,15 +673,15 @@
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>
+              <td class="tbl_aksi">
+                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+              </td>
               <td></td>
               <td>
                 <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
               </td>
               <td>
                 <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
-              </td>
-              <td class="tbl_aksi">
-                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
               </td>
             </tr>
             `)
@@ -710,13 +710,7 @@
     })
   }
 
-  function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
-
-    elements.each((index, element) => {
-      $(element).text(index + 1)
-    })
-  }
+ 
 
   // function getPelunasan(id) {
 
@@ -1199,15 +1193,15 @@
   function addRow() {
     let detailRow = $(`
       <tr>
+        <td class="tbl_aksi">
+          <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td>
           <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
-        </td>
-        <td class="tbl_aksi">
-          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -1231,7 +1225,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList tbody tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)

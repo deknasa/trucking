@@ -255,11 +255,11 @@
                   <table class="table table-bordered table-bindkeys" id="ritasiList" style="width: 1000px;">
                     <thead>
                       <tr>
+                        <th width="2%">Aksi</th>
                         <th width="2%">No</th>
                         <th width="25%">JENIS RITASI</th>
                         <th width="35%">RITASI DARI</th>
                         <th width="35%">RITASI KE</th>
-                        <th width="2%">Aksi</th>
                       </tr>
                     </thead>
                     <tbody id="table_body" class="form-group">
@@ -267,10 +267,10 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="4"></td>
                         <td>
-                          <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
+                          <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
                         </td>
+                        <td colspan="4"></td>
                       </tr>
                     </tfoot>
                   </table>
@@ -3077,6 +3077,9 @@
   function addRow() {
     let detailRow = $(`
       <tr id="${index}">
+        <td>
+          <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td>
           <input type="hidden" name="jenisritasi_id[]" id="jenisritasi_id_${index}">
@@ -3089,9 +3092,6 @@
         <td>
           <input type="hidden" name="ritasike_id[]">
           <input type="text" name="ritasike[]" id="ritasike-${index}" class="form-control ritasike-lookup-${index}" readonly>
-        </td>
-        <td>
-          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -3229,7 +3229,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('#ritasiList tbody tr td:nth-child(1)')
+    let elements = $('#ritasiList tbody tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)

@@ -253,7 +253,8 @@
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 100%; min-width: 500px;">
                 <thead>
                   <tr>
-                    <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
+                    <th class="data_tbl tbl_aksi" style="width:5%; max-width:70px;">Aksi</th>
+                    <th style="width:5%; max-width:70px;">No</th>
                     <th style="width: 20%; min-width: 200px;">stok </th>
                     <th style="width: 10%; min-width: 100px;">Satuan </th>
                     <th style="width: 20%; min-width: 200px;">keterangan </th>
@@ -268,7 +269,6 @@
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                     <th class="data_tbl tbl_nominaldiscount" style="width:20%; min-width: 200px">nominal discount</th>
                     <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
-                    <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -276,13 +276,13 @@
                 </tbody>
                 <tfoot>
                   <tr>
+                    <td class="data_tbl tbl_aksi">
+                      <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                    </td>
                     <td colspan="6" class="colspan"></td>
 
                     <td class="font-weight-bold data_tbl sumrow"> Total : </td>
                     <td id="sumary" class="text-right font-weight-bold data_tbl sumrow"> </td>
-                    <td class="data_tbl tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -979,7 +979,7 @@
 
     $('.sumrow').show();
 
-    $('.tbl_aksi').hide()
+    $('.tbl_aksi').show()
   }
 
   function tampilanPSPK() {
@@ -1115,6 +1115,9 @@
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
             <tr class="trow" data-id="${detail.id}">
+                  <td class="tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1174,9 +1177,7 @@
                     <input type="text"  name="totalItem[]" id="totalItem${detail.id}" style="text-align:right" onkeyup="calculate(${detail.id})" class="form-control totalItem autonumeric number${detail.id}">                    
                   </td>
 
-                  <td class="tbl_aksi">
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
+                 
               </tr>
           `)
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
@@ -1298,6 +1299,9 @@
 
           let detailRow = $(`
             <tr class="trow" data-id="${id}">
+                  <td class="tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1351,9 +1355,7 @@
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
                   </td>
 
-                  <td class="tbl_aksi">
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
+                 
               </tr>
           `)
           // detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
@@ -1488,6 +1490,9 @@
 
       let detailRow = $(`
         <tr class="trow" data-id="${id}">
+              <td class="tbl_aksi">
+                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+              </td>
               <td>
                 <div class="baris">1</div>
               </td>
@@ -1542,9 +1547,7 @@
                 <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
               </td>
 
-              <td class="tbl_aksi">
-                <div class='btn btn-danger btn-sm rmv'>Delete</div>
-              </td>
+              
           </tr>
       `)
       // detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
@@ -1686,6 +1689,9 @@
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
             <tr class="trow" data-id="${index}">
+                  <td class="tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1739,9 +1745,6 @@
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>
 
-                  <td class="tbl_aksi">
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
               </tr>
           `)
           if (KodePenerimaanId === listKodePenerimaan[7]) {
@@ -1811,7 +1814,7 @@
         setTampilanForm()
         if ((KodePenerimaanId === listKodePenerimaan[7]) || (KodePenerimaanId === listKodePenerimaan[8])) {
           $('#addRow').hide()
-          $('.tbl_aksi').hide()
+          // $('.tbl_aksi').hide()
           if (KodePenerimaanId === listKodePenerimaan[8]) {
             $('.tbl_persentase').hide()
             $('.tbl_nominaldiscount').hide()
@@ -1843,6 +1846,9 @@
           console.log(detail.maximum);
           let detailRow = $(`
             <tr class="trow" data-id="${id}">
+                  <td class="tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1897,9 +1903,6 @@
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>
     
-                  <td class="tbl_aksi">
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
               </tr>
           `)
           if (KodePenerimaanId === listKodePenerimaan[7]) {
@@ -2670,6 +2673,9 @@
   function addRow() {
     let detailRow = $(`
     <tr class="trow" data-id="${index}">
+                  <td class="tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -2734,9 +2740,7 @@
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right"  onkeyup="calculate(${index})" class="form-control totalItem autonumeric number${index}" >                    
                   </td>
 
-                  <td class="tbl_aksi">
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
+                 
               </tr>
     `)
 
@@ -2837,6 +2841,13 @@
 
   function deleteRow(row) {
     let countRow = $('.rmv').parents('tr').length
+    KodePenerimaanId
+    if (countRow == 1) {
+      if ((KodePenerimaanId == listKodePenerimaan[7]) || (KodePenerimaanId == listKodePenerimaan[8])){
+        return;
+      }
+    }
+    
     row.remove()
     if (countRow <= 1) {
       addRow()
@@ -2872,7 +2883,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('table #table_body tr td:nth-child(1)')
+    let elements = $('table #table_body tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -3114,6 +3125,9 @@
 
             let detailRow = $(`
               <tr class="trow" data-id="${id}">
+                  <td class="data_tbl tbl_aksi">
+                      <div data-id="${detail.id}" type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    </td>
                     <td>
                       <div class="baris">1</div>
                     </td>
@@ -3179,9 +3193,7 @@
                       <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">
                     </td>
 
-                    <td class="data_tbl tbl_aksi">
-                      <div data-id="${detail.id}" class='btn btn-danger btn-sm rmv'>Delete</div>
-                    </td>
+                  
                 </tr>
             `)
             // console.log(KodePenerimaanId , listKodePenerimaan[7]);
