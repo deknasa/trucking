@@ -54,6 +54,9 @@
               let tglsampai = rowData.tglsampaiheaderpengeluaranheader
               let bankpengeluaran = rowData.pengeluaranbank_id
               let url = "{{route('pengeluaranheader.index')}}"
+              if(value.substr(0, 3).toUpperCase() == 'PBT'){
+                url = "{{route('pindahbuku.index')}}"
+              }
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}&bank_id=${bankpengeluaran}" class="link-color" target="_blank">${value}</a>
              `)
