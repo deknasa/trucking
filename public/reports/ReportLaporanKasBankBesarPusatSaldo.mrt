@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "999d680411fa597c51a0bdcb6078baf2",
+  "ReportGuid": "7ef03d20f4465ad6cbe2e63a66265466",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728033553000+0700)/",
+  "ReportChanged": "/Date(1728382270000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -139,6 +139,18 @@
             "Name": "tglbukti2",
             "NameInSource": "tglbukti2",
             "Alias": "tglbukti2",
+            "Type": "System.String"
+          },
+          "19": {
+            "Name": "nilaikosongdebet",
+            "NameInSource": "nilaikosongdebet",
+            "Alias": "nilaikosongdebet",
+            "Type": "System.String"
+          },
+          "20": {
+            "Name": "nilaikosongkredit",
+            "NameInSource": "nilaikosongkredit",
+            "Alias": "nilaikosongkredit",
             "Type": "System.String"
           }
         },
@@ -1229,6 +1241,7 @@
           "Name": "DataBand1",
           "ClientRectangle": "0,76.8,289.9,1",
           "ComponentPlacement": "d.Page1",
+          "Enabled": false,
           "Interaction": {
             "Ident": "StiBandInteraction"
           },
