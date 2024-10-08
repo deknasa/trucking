@@ -363,7 +363,8 @@
                       <table class="table table-bordered table-bindkeys mt-3" id="detailList">
                         <thead>
                           <tr>
-                            <th style="width:5%; min-width: 25px">No</th>
+                            <th style="width:5%; max-width: 95px" class="tbl_aksi">Aksi</th>
+                            <th style="width:1%; min-width: 25px">No</th>
                             <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_karyawan_id">Karyawan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_supir_id">SUPIR</th>
@@ -386,7 +387,6 @@
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_tagihklaim">Keterangan Tambahan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_jenisorder kolom_bbt">jenis orderan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_tagihklaim">total nominal</th>
-                            <th style="width:5%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
                           </tr>
                         </thead>
                         <tbody id="table_body" class="form-group">
@@ -394,6 +394,9 @@
                         </tbody>
                         <tfoot>
                           <tr>
+                            <td id="tbl_addRow" class="tbl_aksi">
+                              <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                            </td>
                             <td colspan="3" class="colspan">
                               <p class="text-right font-weight-bold">TOTAL :</p>
                             </td>
@@ -413,9 +416,6 @@
                             </td>
                             <td class="colmn-offset4" style="display: none" colspan="2">
                               <p class="text-right font-weight-bold autonumeric" id="totalKlaim"></p>
-                            </td>
-                            <td id="tbl_addRow" class="tbl_aksi">
-                              <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                             </td>
                           </tr>
                         </tfoot>
@@ -5803,6 +5803,9 @@
               let pengeluaranstokheader;
               let detailRow = $(`
                 <tr>
+                    <td class="tbl_aksi">
+                        <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    </td>
                     <td></td>
                     <td class="data_tbl tbl_supir_id">
                         <input type="hidden" id="supir_id_${index}" name="supir_id[]">
@@ -5876,9 +5879,6 @@
                     <td class="data_tbl tbl_tagihklaim">
                       <input id="totalklaim_${index}" type="text" name="totalklaim[]" readonly class="form-control text-right totalklaim"> 
                     </td>
-                    <td class="tbl_aksi">
-                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                    </td>
                 </tr>
               `)
               // let qtyNumeric = new AutoNumeric(detailRow.find(`[name="qty[]"]`))
@@ -5935,8 +5935,9 @@
                 detailRow.find(`[name="jenisorder_id[]"]`).prop('readonly', true)
 
               }
-
-              initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+              if (kodepengeluaran != "KLAIM") {
+                initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+              }
               initAutoNumeric(detailRow.find(`[name="nominaltambahan[]"]`))
               initAutoNumeric(detailRow.find(`[name="totalklaim[]"]`))
               $('#detailList tbody').append(detailRow)
@@ -5950,6 +5951,17 @@
                 });
                 detailRow.find(`[name="detail_statustitipanemkl[]"]`).val(detail.statustitipanemkl).trigger('change')
 
+              }
+              
+
+              if (kodepengeluaran === "KLAIM") {
+                detailRow.find(`[name="nominal[]"]`).val(detail.nominaltagih)
+                initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+                if (detail.pengeluaranstok_nobukti) {
+                  lookupSelectedSpkPG(index, 'SPK')
+                } else if (detail.penerimaanstok_nobukti) {
+                  lookupSelectedSpkPG(index, 'PG')
+                }
               }
 
               setTotal();
@@ -6203,15 +6215,6 @@
                   element.data('currentValue', element.val())
                 }
               })
-
-              if (kodepengeluaran === "KLAIM") {
-                detailRow.find(`[name="nominal[]"]`).val(detail.nominaltagih)
-                if (detail.pengeluaranstok_nobukti) {
-                  lookupSelectedSpkPG(index, 'SPK')
-                } else if (detail.penerimaanstok_nobukti) {
-                  lookupSelectedSpkPG(index, 'PG')
-                }
-              }
               indexRow = index
             })
 
@@ -6358,6 +6361,9 @@
 
     let detailRow = $(`
       <tr>
+        <td class="tbl_aksi">
+            <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td class="data_tbl tbl_supir_id">
           <input id="supir_id_${indexRow}" type="hidden" name="supir_id[]">
@@ -6427,9 +6433,6 @@
         </td>
         <td class="data_tbl tbl_tagihklaim">
           <input id="totalklaim_${indexRow}" type="text" name="totalklaim[]" readonly class="form-control text-right totalklaim"> 
-        </td>
-        <td class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -9235,7 +9238,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList tbody tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)

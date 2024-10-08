@@ -179,7 +179,8 @@
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
-                    <th style="width:5%; max-width: 25px;max-width: 15px" class="">No</th>
+                    <th style="width:1%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
+                    <th style="width:1%; max-width: 25px;max-width: 15px" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_supir_id">SUPIR </th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_karyawan_id">KARYAWAN </th>
@@ -187,7 +188,6 @@
                     <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa </th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_keterangan">Keterangan</th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_nominal">Nominal</th>
-                    <th style="width:5%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -195,6 +195,9 @@
                 </tbody>
                 <tfoot>
                   <tr>
+                    <td id="tbl_addRow" class="tbl_aksi">
+                      <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                    </td>
                     <td colspan="4" class="colspan">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
@@ -205,9 +208,6 @@
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
                     <td class="colmn-offset"></td>
-                    <td id="tbl_addRow" class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -1149,7 +1149,7 @@
     $('#gbox_tablePinjamanKaryawan').hide()
     $('#gbox_tablePengembalianTitipan').hide()
 
-    $('#detailList').hide()
+    $('#detailList').parents('.table-scroll').hide()
     loadPinjamanGrid()
   }
 
@@ -1167,7 +1167,7 @@
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').show()
     $('#gbox_tablePengembalianTitipan').hide()
-    $('#detailList').hide()
+    $('#detailList').parents('.table-scroll').hide()
     loadPinjamanKaryawanGrid()
   }
 
@@ -1186,7 +1186,7 @@
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
     $('#gbox_tablePengembalianTitipan').show()
-    $('#detailList').hide()
+    $('#detailList').parents('.table-scroll').hide()
     if ($('#crudForm').data('action') == 'delete') {
 
       $('#btnReloadBbtGrid').parents('.row').hide()
@@ -1579,9 +1579,9 @@
           $.each(response.data, (index, bank) => {
             // console.log(index);
             // if (bank.id == 1) {
-              $('#crudForm [name=bank_id]').first().val(bank.id)
-              $('#crudForm [name=bank]').first().val(bank.namabank)
-              $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
+            $('#crudForm [name=bank_id]').first().val(bank.id)
+            $('#crudForm [name=bank]').first().val(bank.namabank)
+            $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
             // }
           })
           resolve()
@@ -3089,6 +3089,9 @@
             $.each(response.detail, (index, detail) => {
               let detailRow = $(`
                 <tr>
+                    <td  class="tbl_aksi">
+                        <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    </td>
                     <td></td>
                     <td class="tbl_supir_id">
                         <input type="hidden" name="supir_id[]">
@@ -3106,9 +3109,6 @@
                     </td>
                     <td class="tbl_nominal">
                         <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-                    </td>
-                    <td  class="tbl_aksi">
-                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                     </td>
                 </tr>
               `)
@@ -3158,7 +3158,7 @@
               $('.karyawan-lookup').last().lookupV3({
                 title: 'Karyawan Lookup',
                 fileName: 'karyawanV3',
-                labelColumn:false,
+                labelColumn: false,
                 beforeProcess: function(test) {
                   this.postData = {
                     Aktif: 'AKTIF',
@@ -3441,6 +3441,9 @@
   function addRow() {
     let detailRow = $(`
       <tr>
+        <td  class="tbl_aksi">
+            <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td class="tbl_supir_id">
           <input type="hidden" name="supir_id[]">
@@ -3458,9 +3461,6 @@
         </td>
         <td class="tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-        </td>
-        <td  class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -3506,7 +3506,7 @@
     $('.karyawan-lookup').last().lookupV3({
       title: 'Karyawan Lookup',
       fileName: 'karyawanV3',
-      labelColumn:false,
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3642,7 +3642,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList tbody tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -3731,7 +3731,7 @@
     $('.karyawanheader-lookup').last().lookupV3({
       title: 'karyawan Lookup',
       fileName: 'karyawanV3',
-      labelColumn:false,
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -3832,10 +3832,10 @@
     })
     $('.penerimaantrucking-lookup').lookupV3({
       title: 'Penerimaan Trucking Lookup',
-      
+
       labelColumn: true,
       extendSize: md_extendSize_1,
-      multiColumnSize:true,
+      multiColumnSize: true,
       fileName: 'penerimaantruckingV3',
 
 
@@ -3925,7 +3925,7 @@
     $('.akunpusat-lookup').lookupV3({
       title: 'Kode Perk. Lookup',
       fileName: 'akunpusatV3',
-      searching: ['coa','keterangancoa'],
+      searching: ['coa', 'keterangancoa'],
       labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {

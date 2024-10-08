@@ -50,11 +50,11 @@
                             <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                                 <thead>
                                     <tr>
+                                        <th width="2%" class="tbl_aksi">Aksi</th>
                                         <th width="2%">No</th>
                                         <th width="48%">Keterangan Biaya</th>
                                         <th width="25%">Nominal</th>
                                         <th width="25%">Nominal Tagih</th>
-                                        <th width="2%" class="tbl_aksi">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body">
@@ -62,6 +62,9 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <td class="tbl_aksi">
+                                            <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                                        </td>
                                         <td colspan="2">
                                             <p class="text-right font-weight-bold">TOTAL :</p>
                                         </td>
@@ -70,9 +73,6 @@
                                         </td>
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="totaltagih"></p>
-                                        </td>
-                                        <td class="tbl_aksi">
-                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -539,6 +539,9 @@
                     $.each(response.detail, (index, detail) => {
                         let detailRow = $(`
                         <tr>
+                            <td class="tbl_aksi">
+                                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                            </td>
                             <td></td>
                             <td>
                                 <input type="text" name="keteranganbiaya[]" class="form-control">
@@ -550,9 +553,6 @@
                                 <input type="text" name="nominaltagih[]" class="form-control autonumeric">
                             </td>
 
-                            <td class="tbl_aksi">
-                                <div class='btn btn-danger btn-sm delete-row'>Delete</div>
-                            </td>
                         </tr>`)
 
                         detailRow.find(`[name="keteranganbiaya[]"]`).val(detail.keteranganbiaya)
@@ -583,6 +583,9 @@
     function addRow() {
         let detailRow = $(`
         <tr>
+            <td class="tbl_aksi">
+                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+            </td>
             <td></td>
             <td>
                 <input type="text" name="keteranganbiaya[]" class="form-control">
@@ -594,9 +597,6 @@
                 <input type="text" name="nominaltagih[]" class="form-control autonumeric">
             </td>
 
-            <td class="tbl_aksi">
-                <div class='btn btn-danger btn-sm delete-row'>Delete</div>
-            </td>
         </tr>`)
 
         $('#detailList tbody').append(detailRow)
@@ -664,7 +664,7 @@
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList tbody tr td:nth-child(1)')
+        let elements = $('#detailList tbody tr td:nth-child(2)')
 
         elements.each((index, element) => {
             $(element).text(index + 1)
