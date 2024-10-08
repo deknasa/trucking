@@ -61,12 +61,12 @@
       </div>
 
       <div class="table-responsive">
-        <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
+        <table class="table table-bordered table-bindkeys" id="detailList" style="width: 100%;">
           <thead>
             <tr>
-              <th width="3%">Judul</th>
-              <th width="8%">Keterangan</th>
               <th width="2%" class="aksi">Aksi</th>
+              <th width="46%">Judul</th>
+              <th width="46%">Keterangan</th>
             </tr>
           </thead>
           <tbody id="table_body" class="form-group">
@@ -74,10 +74,10 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="2"></td>
               <td class="aksi">
-                <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
               </td>
+              <td colspan="2"></td>
             </tr>
           </tfoot>
         </table>
@@ -651,6 +651,9 @@
 
               let detailRow = $(`
                 <tr>
+                  <td class="aksi">
+                      <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
                   <td>
                       <input type="text" name="key[]" class="form-control">
                   </td>
@@ -658,9 +661,6 @@
                     <div class="input-group" id="${index}">
                       <input type="text" name="value[]" class="form-control">
                     </div>
-                  </td>
-                  <td class="aksi">
-                      <div class='btn btn-danger btn-sm delete-row'>Delete</div>
                   </td>
               </tr>`)
               let inputColor = $(`<div class="input-group-prepend" style="width:50px; background: #fff">
@@ -765,6 +765,9 @@
   function addRow() {
     let detailRow = (`
         <tr>
+            <td class="aksi">
+                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+            </td>
             <td>
                 <input type="text" name="key[]" class="form-control">
             </td>
@@ -773,9 +776,6 @@
                 <input type="text" name="value[]" class="form-control">
             </td>
 
-            <td class="aksi">
-                <div class='btn btn-danger btn-sm delete-row'>Delete</div>
-            </td>
         </tr>`)
 
     $('#detailList tbody').append(detailRow)

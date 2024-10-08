@@ -261,7 +261,8 @@
                     <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                       <thead>
                         <tr>
-                          <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
+                          <th class="data_tbl tbl_aksi" style="width:5%; max-width:70px;">Aksi</th>
+                          <th style="width:5%; max-width:70px;">No</th>
                           <th style="width: 20%; min-width: 200px;">stok</th>
                           <th style="width: 10%; min-width: 100px;">satuan</th>
                           <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
@@ -273,20 +274,19 @@
                           <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                           <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                           <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
-                          <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                         </tr>
                       </thead>
                       <tbody id="table_body" class="form-group">
                       </tbody>
                       <tfoot>
                         <tr>
+                          <td class="data_tbl tbl_aksi">
+                            <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                          </td>
                           <td colspan="6" class="colspan"></td>
 
                           <td class="font-weight-bold  data_tbl tbl_total"> Total : </td>
                           <td id="sumary" class="text-right font-weight-bold data_tbl tbl_total"> </td>
-                          <td class="data_tbl tbl_aksi">
-                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                          </td>
                         </tr>
                       </tfoot>
                     </table>
@@ -1566,6 +1566,9 @@
   function addRow() {
     let detailRow = $(`
     <tr class="trow">
+                  <td class="data_tbl tbl_aksi" >
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
+                  </td>
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1617,9 +1620,7 @@
                     <input type="text"  name="totalItem[]"  id="totalItem${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
                   </td>  
                   
-                  <td class="data_tbl tbl_aksi" >
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
+                 
               </tr>
     `)
     // // if (kodePengeluaranStok == 'SPK') {
@@ -1841,7 +1842,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('table #table_body tr td:nth-child(1)')
+    let elements = $('table #table_body tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -2201,6 +2202,9 @@
               let idDetail = id
               let detailRow = $(`
                 <tr class="trow">
+                   <td class="data_tbl tbl_aksi" >
+                        <div class='btn btn-danger btn-sm rmv'>Delete</div>
+                      </td>
                       <td>
                         <div class="baris">1</div>
                       </td>
@@ -2250,9 +2254,7 @@
                       <td class="data_tbl tbl_total">
                         <input type="text" readonly name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                       </td>  
-                      <td class="data_tbl tbl_aksi" >
-                        <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                      </td>
+                     
                   </tr>
               `)
 
