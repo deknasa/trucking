@@ -474,6 +474,7 @@
           permission()
           setHighlight($(this))
           $('#gs_').attr('disabled', false)
+          getQueryParameter()
         },
       })
 
