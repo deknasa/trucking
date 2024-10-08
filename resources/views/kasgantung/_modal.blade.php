@@ -82,14 +82,17 @@
               <table class="table table-bordered" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
+                    <th width="1%" class="tbl_aksi">AKSI</th>
                     <th width="1%">NO</th>
                     <th width="70%">KETERANGAN</th>
                     <th width="28%">NOMINAL</th>
-                    <th width="1%" class="tbl_aksi">AKSI</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
                   <tr>
+                    <td class="tbl_aksi">
+                      <div class="btn btn-danger btn-sm delete-row">Delete</div>
+                    </td>
                     <td>1</td>
                     <td>
                       <div class="row form-group">
@@ -105,21 +108,18 @@
                         </div>
                       </div>
                     </td>
-                    <td class="tbl_aksi">
-                      <div class="btn btn-danger btn-sm delete-row">Delete</div>
-                    </td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr>
+                    <td class="tbl_aksi">
+                      <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                    </td>
                     <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                    </td>
-                    <td class="tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
                 </tfoot>
@@ -762,15 +762,15 @@
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>
+                <td class="tbl_aksi">
+                  <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                </td>
                 <td></td>
                 <td>
                   <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
                 </td>
                 <td>
                   <input type="text" name="nominal[]" class="form-control autonumeric nominal">
-                </td>
-                <td class="tbl_aksi">
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                 </td>
               </tr>
             `)
@@ -801,15 +801,15 @@
   function addRow() {
     let detailRow = $(`
       <tr>
+        <td class="tbl_aksi">
+          <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+        </td>
         <td></td>
         <td>
           <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
         </td>
         <td>
           <input type="text" name="nominal[]" class="form-control autonumeric nominal">
-        </td>
-        <td class="tbl_aksi">
-          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
@@ -833,7 +833,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList tbody tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -951,34 +951,34 @@
     // })
 
     $('.bank-lookup').lookupV3({
-        title: 'Bank Lookup',
-        fileName: 'bankV3',
-        searching: ['namabank'],
-        labelColumn: false,
-        // filterToolbar:true,
-        beforeProcess: function(test) {
-            this.postData = {
-              Aktif: 'AKTIF',
-              tipe: 'KAS',
-            }
-        },
-        onSelectRow: (bank, element) => {
-          $('#crudForm [name=bank_id]').first().val(bank.id)
-          element.val(bank.namabank)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          $('#crudForm [name=bank_id]').first().val('')
-          element.val('')
-          element.data('currentValue', element.val())
+      title: 'Bank Lookup',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
+      // filterToolbar:true,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          tipe: 'KAS',
         }
-      })
+      },
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+        element.val(bank.namabank)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
   }
 
-   
+
 
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {

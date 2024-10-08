@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="hidden" name="alatbayar_id">
-                                <input type="text" name="alatbayar" id="alatbayar"  class="form-control alatbayar-lookup">
+                                <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
                             </div>
                         </div>
 
@@ -123,17 +123,17 @@
                         </div>--}}
 
                         <div class="table-container">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:1500px;">
                                 <thead>
                                     <tr>
-                                        <th width="1%">No</th>
-                                        <th width="5%">Nama Perkiraan</th>
-                                        <th width="10%">Keterangan</th>
-                                        <th width="6%">Nominal</th>
-                                        <th width="4%">Tgl jatuh tempo</th>
-                                        <th width="4%">No warkat</th>
-                                        <th width="5%" class="bankpelanggan">Bank Pelanggan</th>
-                                        <th width="1%" class="aksiGiro tbl_aksi">Aksi</th>
+                                        <th style="width: 10px; min-width: 10px;" class="aksiGiro tbl_aksi">Aksi</th>
+                                        <th style="width: 10px; min-width: 10px;">No</th>
+                                        <th style="width: 200px; min-width: 200px;">Nama Perkiraan</th>
+                                        <th style="width: 350px; min-width: 350px;">Keterangan</th>
+                                        <th style="width: 180px; min-width: 180px;">Nominal</th>
+                                        <th style="width: 180px; min-width: 180px;">Tgl jatuh tempo</th>
+                                        <th style="width: 180px; min-width: 180px;">No warkat</th>
+                                        <th style="width: 180px; min-width: 180px;" class="bankpelanggan">Bank Pelanggan</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
@@ -141,15 +141,16 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <td class="aksiGiro tbl_aksi">
+                                            <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                                        </td>
                                         <td class='colspan'>
                                             <p class="text-right font-weight-bold">TOTAL :</p>
                                         </td>
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td class="aksiGiro tbl_aksi">
-                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                        </td>
+                                        <td class="colspan2"></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -541,13 +542,15 @@
                         $('#crudModal').modal('show')
                         if (accessCabang == 'PUSAT') {
                             $('.bankpelanggan').hide();
-                            $('.colspan').attr('colspan', 5)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 2)
                             $('#detailList').css({
                                 width: '1200px'
                             });
                         } else {
                             $('.bankpelanggan').show();
-                            $('.colspan').attr('colspan', 6)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 3)
                         }
                     })
                     .catch((error) => {
@@ -645,13 +648,15 @@
     function rowCabangPusat() {
         if (accessCabang == 'PUSAT') {
             $('.bankpelanggan').hide();
-            $('.colspan').attr('colspan', 5)
+            $('.colspan').attr('colspan', 3)
+            $('.colspan2').attr('colspan', 2)
             $('#detailList').css({
                 width: '1200px'
             });
         } else {
             $('.bankpelanggan').show();
-            $('.colspan').attr('colspan', 6)
+            $('.colspan').attr('colspan', 3)
+            $('.colspan2').attr('colspan', 3)
         }
     }
 
@@ -702,13 +707,15 @@
 
                         if (accessCabang == 'PUSAT') {
                             $('.bankpelanggan').hide();
-                            $('.colspan').attr('colspan', 5)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 2)
                             $('#detailList').css({
                                 width: '1200px'
                             });
                         } else {
                             $('.bankpelanggan').show();
-                            $('.colspan').attr('colspan', 6)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 3)
                         }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -767,13 +774,15 @@
                         }
                         if (accessCabang == 'PUSAT') {
                             $('.bankpelanggan').hide();
-                            $('.colspan').attr('colspan', 5)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 2)
                             $('#detailList').css({
                                 width: '1200px'
                             });
                         } else {
                             $('.bankpelanggan').show();
-                            $('.colspan').attr('colspan', 6)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 3)
                         }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
@@ -852,13 +861,15 @@
                         clearSelectedRows()
                         if (accessCabang == 'PUSAT') {
                             $('.bankpelanggan').hide();
-                            $('.colspan').attr('colspan', 5)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 2)
                             $('#detailList').css({
                                 width: '1200px'
                             });
                         } else {
                             $('.bankpelanggan').show();
-                            $('.colspan').attr('colspan', 6)
+                            $('.colspan').attr('colspan', 3)
+                            $('.colspan2').attr('colspan', 3)
                         }
                         $('#gs_').prop('checked', false)
                         $('#crudModal').modal('show')
@@ -990,6 +1001,7 @@
         })
     }
     let lastIndex = 0;
+
     function showPenerimaan(form, id) {
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
@@ -1036,6 +1048,9 @@
                             let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                             let detailRow = $(`
                         <tr class="${detail.pelunasanpiutang_nobukti}">
+                            <td class="tbl_aksi">
+                                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                            </td>
                             <td></td>
                             <td>
                                 <input type="hidden" name="coakredit[]">
@@ -1058,9 +1073,6 @@
                             <td class="bankpelanggan">
                                 <input type="hidden" name="bankpelanggan_id[]">
                                 <input type="text" name="bankpelanggan[]"  id="bankpelanggan_${index}" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup_${index}">
-                            </td>
-                            <td class="tbl_aksi">
-                                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                             </td>
                         </tr>
                         `)
@@ -1133,7 +1145,7 @@
                             // })
                         })
                     } else {
-                        
+
                         penerimaanGiro = response.data.penerimaangiro_nobukti;
                         $('.aksiGiro').hide()
                         $('#detailList tbody').html('')
@@ -1197,41 +1209,42 @@
             })
         })
     }
+
     function addRow() {
-        lastIndex += 1; 
+        lastIndex += 1;
         let detailRow = $(`
-      <tr>
-        <td></td>
-        <td>
-            <input type="hidden" name="coakredit[]">
-          <input type="text" name="ketcoakredit[]" id="ketcoa_${lastIndex}" class="form-control akunpusat-lookup_${lastIndex}">
-        </td>
-        <td>
-          <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
-        </td>
-        <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
-        </td>
-        <td>
-          <div class="input-group">
-            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
-          </div>
-        </td>
-        <td>
-          <input type="text" name="nowarkat[]"  class="form-control">
-        </td>
-        <td class="bankpelanggan">
-            <input type="hidden" name="bankpelanggan_id[]">
-            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${lastIndex}" class="form-control bankpelanggan-lookup_${lastIndex}">
-        </td>
-        <td class="aksiGiro tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-        </td>
-      </tr>
-    `)
+            <tr>
+                <td class="aksiGiro tbl_aksi">
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                </td>
+                <td></td>
+                <td>
+                    <input type="hidden" name="coakredit[]">
+                <input type="text" name="ketcoakredit[]" id="ketcoa_${lastIndex}" class="form-control akunpusat-lookup_${lastIndex}">
+                </td>
+                <td>
+                <textarea rows="1" placeholder="" name="keterangan_detail[]" class="form-control"></textarea>
+                </td>
+                <td>
+                <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
+                </td>
+                <td>
+                <div class="input-group">
+                    <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                </div>
+                </td>
+                <td>
+                <input type="text" name="nowarkat[]"  class="form-control">
+                </td>
+                <td class="bankpelanggan">
+                    <input type="hidden" name="bankpelanggan_id[]">
+                    <input type="text" name="bankpelanggan[]" id="bankpelanggan_${lastIndex}" class="form-control bankpelanggan-lookup_${lastIndex}">
+                </td>
+            </tr>
+        `)
         $('#detailList>#table_body').append(detailRow)
 
-        
+
 
         initAutoNumericMinus(detailRow.find('.autonumeric'))
         tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
@@ -1242,20 +1255,20 @@
         initLookupDetail(lastIndex);
         // initLookupDetail(indexAdd)
         // indexAdd++
- 
+
     }
 
-    function initLookupDetail(index){
+    function initLookupDetail(index) {
         let rowLookup = index
         $(`.akunpusat-lookup_${rowLookup}`).lookupV3({
             title: 'Kode Perk. Lookup',
             fileName: 'akunpusatV3',
-            searching: ['coa','keterangancoa'],
+            searching: ['coa', 'keterangancoa'],
             labelColumn: true,
             extendSize: md_extendSize_1,
-            multiColumnSize:true,
+            multiColumnSize: true,
             filterToolbar: true,
-            beforeProcess: function(test) {    
+            beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
                     levelCoa: '3',
@@ -1280,8 +1293,8 @@
 
         $(`.bankpelanggan-lookup_${rowLookup}`).lookupV3({
             title: 'Bank Pelanggan Lookup',
-            fileName: 'bankpelangganV3', 
-            searching: ['coa','keterangancoa'],
+            fileName: 'bankpelangganV3',
+            searching: ['coa', 'keterangancoa'],
             labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
@@ -1316,7 +1329,7 @@
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
+        let elements = $('#detailList>#table_body>tr>td:nth-child(2)')
         elements.each((index, element) => {
             $(element).text(index + 1)
         })

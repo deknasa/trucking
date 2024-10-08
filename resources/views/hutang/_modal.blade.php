@@ -53,11 +53,11 @@
                 <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
                   <thead>
                     <tr>
+                      <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
                       <th scope="col" width="1%">No</th>
                       <th scope="col" width="55%">Keterangan</th>
                       <th scope="col" width="18%">Tgl Jatuh Tempo</th>
                       <th scope="col" width="25%">Total</th>
-                      <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="table_body">
@@ -66,14 +66,14 @@
                   <tfoot>
                     <tr>
 
+                      <td class="tbl_aksi">
+                        <div type="button" class="my-1" id="addRow"><span><i class="far fa-plus-square"></i></span></div>
+                      </td>
                       <td colspan="3">
                         <h5 class="font-weight-bold">TOTAL :</h5>
                       </td>
                       <td>
                         <h5 id="total" class="text-right font-weight-bold"></h5>
-                      </td>
-                      <td class="tbl_aksi">
-                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                       </td>
                     </tr>
                   </tfoot>
@@ -731,6 +731,9 @@
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>
+                <td class="tbl_aksi">
+                  <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                </td>
                 <td> </td>
                 <td>
                   <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
@@ -742,9 +745,6 @@
                 </td>
                 <td>
                     <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
-                </td>
-                <td class="tbl_aksi">
-                  <div class='btn btn-danger btn-sm delete-row '>Delete</div>
                 </td>
               </tr>
             `)
@@ -778,6 +778,9 @@
   function addRow() {
     let detailRow = $(`
       <tr>
+          <td class="tbl_aksi">
+            <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+          </td>
           <td> </td>
           <td>
             <textarea class="form-control" name="keterangan_detail[]" rows="1" placeholder=""></textarea>
@@ -789,9 +792,6 @@
           </td>
           <td>
               <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
-          </td>
-          <td class="tbl_aksi">
-            <div class='btn btn-danger btn-sm delete-row'>Delete</div>
           </td>
       </tr>`)
 
@@ -823,7 +823,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
+    let elements = $('#detailList>#table_body>tr>td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
