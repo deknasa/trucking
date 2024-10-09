@@ -473,6 +473,7 @@
   var listKeteranganPengeluaran = []
   let isEditTgl
   let statuscabang = ''
+  let statusCabangTasId
   let urlTNL = ''
   let tokenTNL = ''
   let classHidden = [];
@@ -3161,7 +3162,9 @@
 
   function klaimTanpaNobukti() {
     let statustanpabukti = $(`#crudForm [name="statustanpabukti"]`).val();
-    console.log(statustanpabukti);
+    $('.stok-lookup-master').show()
+    $('.stok-lookup').show()
+    console.log(statustanpabukti,' klaimTanpaNobukti');
     if (statustanpabukti == 4) { // statustanpabukti NON APPROVAL (HARUS ADA SPK/PG)
 
       $('.stok-lookup').parents('.input-group').show()
@@ -3495,6 +3498,11 @@
         }
         $('#crudModal').modal('show')
         $('#crudModal').find("[name=statustanpabukti]").val(4).trigger('change')
+        klaimTanpaNobukti()
+        if (accessCabang != 'JAKARTA') {
+          $('#crudModal').find("[name=statuscabang]").val(statusCabangTasId).trigger('change')
+          $('#crudModal').find("[name=statuscabang]").parents('.form-group').hide()
+        }
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -9889,7 +9897,9 @@
           response.data.forEach(postingPinjaman => {
             let option = new Option(postingPinjaman.text, postingPinjaman.id)
             relatedForm.find('[name=statuscabang]').append(option).trigger('change')
-
+            if (postingPinjaman.text =="TAS") {
+              statusCabangTasId = postingPinjaman.id
+            }
           });
           resolve()
         },
