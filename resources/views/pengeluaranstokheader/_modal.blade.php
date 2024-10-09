@@ -1567,7 +1567,7 @@
     let detailRow = $(`
     <tr class="trow">
                   <td class="data_tbl tbl_aksi" >
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -2103,6 +2103,9 @@
               let detailRow = $(`
                 <tr class="trow">
                       <td>
+                        <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                      </td>
+                      <td>
                         <div class="baris">1</div>
                       </td>
                       
@@ -2138,9 +2141,6 @@
                       <td class="data_tbl tbl_total">
                         <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                       </td>  
-                      <td>
-                        <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                      </td>
                   </tr>
               `)
 
@@ -2203,7 +2203,7 @@
               let detailRow = $(`
                 <tr class="trow">
                    <td class="data_tbl tbl_aksi" >
-                        <div class='btn btn-danger btn-sm rmv'>Delete</div>
+                        <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
                       </td>
                       <td>
                         <div class="baris">1</div>
@@ -2495,6 +2495,9 @@
           let detailRow = $(`
             <tr class="trow">
                   <td>
+                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                  </td>
+                  <td>
                     <div class="baris">1</div>
                   </td>
                   
@@ -2530,9 +2533,6 @@
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
-                  </td>
               </tr>
           `)
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
