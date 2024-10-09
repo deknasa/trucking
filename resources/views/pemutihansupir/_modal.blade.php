@@ -1248,7 +1248,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-          // Aktif: 'AKTIF',
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (supir, element) => {
