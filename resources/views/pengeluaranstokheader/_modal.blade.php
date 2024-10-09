@@ -256,7 +256,7 @@
             </div>
             <div class="row mt-5">
               <div class="col-md-12">
-                <div id="detail-table" class="card" style="max-height:500px; min-height:200px overflow-y: scroll;">
+                <div id="detail-table" class="card" style=" height:500px overflow-y: scroll;">
                   <div class="card-body">
                     <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                       <thead>
@@ -1567,7 +1567,7 @@
     let detailRow = $(`
     <tr class="trow">
                   <td class="data_tbl tbl_aksi" >
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -2103,7 +2103,7 @@
               let detailRow = $(`
                 <tr class="trow">
                       <td>
-                        <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                        <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                       </td>
                       <td>
                         <div class="baris">1</div>
@@ -2203,7 +2203,7 @@
               let detailRow = $(`
                 <tr class="trow">
                    <td class="data_tbl tbl_aksi" >
-                        <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                        <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                       </td>
                       <td>
                         <div class="baris">1</div>
@@ -2495,7 +2495,7 @@
           let detailRow = $(`
             <tr class="trow">
                   <td>
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>

@@ -1116,7 +1116,7 @@
           let detailRow = $(`
             <tr class="trow" data-id="${detail.id}">
                   <td class="tbl_aksi">
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -1300,7 +1300,7 @@
           let detailRow = $(`
             <tr class="trow" data-id="${id}">
                   <td class="tbl_aksi">
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -1491,7 +1491,7 @@
       let detailRow = $(`
         <tr class="trow" data-id="${id}">
               <td class="tbl_aksi">
-                <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
               </td>
               <td>
                 <div class="baris">1</div>
@@ -1690,7 +1690,7 @@
           let detailRow = $(`
             <tr class="trow" data-id="${index}">
                   <td class="tbl_aksi">
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -1847,7 +1847,7 @@
           let detailRow = $(`
             <tr class="trow" data-id="${id}">
                   <td class="tbl_aksi">
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -2674,7 +2674,7 @@
     let detailRow = $(`
     <tr class="trow" data-id="${index}">
                   <td class="tbl_aksi">
-                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                    <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                   </td>
                   <td>
                     <div class="baris">1</div>
@@ -3126,7 +3126,7 @@
             let detailRow = $(`
               <tr class="trow" data-id="${id}">
                   <td class="data_tbl tbl_aksi">
-                      <div data-id="${detail.id}" type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                      <div data-id="${detail.id}" type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                     </td>
                     <td>
                       <div class="baris">1</div>
