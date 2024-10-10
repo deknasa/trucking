@@ -2102,7 +2102,7 @@
             $.each(response.detail, (id, detail) => {
               let detailRow = $(`
                 <tr class="trow">
-                      <td>
+                      <td class="tbl_aksi">
                         <div type="button" class="delete-row rmv"><span><i class="fas fa-trash-alt"></i></span></div>
                       </td>
                       <td>

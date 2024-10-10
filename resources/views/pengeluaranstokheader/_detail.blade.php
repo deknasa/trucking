@@ -116,6 +116,12 @@
             align: 'right',
             formatter: currencyFormat,
           },
+          {
+            label: 'selisih harga fifo',
+            name: 'selisihhargafifo',
+            align: 'right',
+            formatter: currencyFormat,
+          },
 
           {
             label: 'persentase discount',
