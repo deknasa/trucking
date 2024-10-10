@@ -142,7 +142,17 @@
                 let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
                 let periodedata = $('#crudForm').find('[name=periodedata]').val()
 
-                getCekReport(dari, sampai, bank_id, bank, periodedata_id, periodedata, 'reportPrinterKecil')
+                getCekReport().then((response) => {
+                    window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&periodedata=${periodedata}&periodedata_id=${periodedata_id}&printer=reportPrinterKecil`)
+                }).catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                })
             })
 
             $(document).on('click', `#reportPrinterBesar`, function(event) {
