@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "b97cfc79cd09bef83cb644d0b536b257",
+  "ReportGuid": "6b654a82de6f7eebd13654f37c28e2f5",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728466211000+0700)/",
+  "ReportChanged": "/Date(1728531124000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1120,7 +1120,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nobukti}"
+                "Value": "{data.tglbukti}"
               },
               "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
