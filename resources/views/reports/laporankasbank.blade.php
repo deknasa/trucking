@@ -25,11 +25,6 @@
         function Start() {
             Stimulsoft.Base.StiLicense.Key = "<?= $lisenceKeySti2024 ?>";
 
-            // Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
-            // var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
-            // viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
-
-            // var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
             var report = new Stimulsoft.Report.StiReport()
 
             // var options = new Stimulsoft.Designer.StiDesignerOptions()
@@ -39,7 +34,6 @@
 
             var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
-            // viewer.renderHtml('content')
             if (cabang['cabang'] == 'PUSAT') {
                 if (jumlah['jumlah'] == 2) {
                     report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesarPusat.mrt') }}`)
