@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "57140389d272823b8a4d14c81b927abc",
+  "ReportGuid": "14dea6fc1647a60eef0d5c58591154bf",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanHutangBBMA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1727253529000+0700)/",
+  "ReportChanged": "/Date(1728638860000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -699,7 +699,7 @@
               "Ident": "StiText",
               "Name": "Text13",
               "Guid": "37347928ef8763e512d80442e7e29412",
-              "ClientRectangle": "134,2,32,6",
+              "ClientRectangle": "170,2,32,6",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
