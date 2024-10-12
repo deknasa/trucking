@@ -114,10 +114,10 @@
         setLaporanPiutangPerAgen($('#crudForm'))
         if (accessCabang == 'BITUNG-EMKL') {
             $('.agen').hide()
-            $('.pelanggan').show()
+            $('.shipper').show()
         } else {
             $('.agen').show()
-            $('.pelanggan').hide()
+            $('.shipper').hide()
         }
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

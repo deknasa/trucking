@@ -2228,7 +2228,7 @@
           Aktif: 'AKTIF',
           withPusat: 0,
           // bankId: bankId
-          alatbayar: bankId
+          alatbayar: $('#crudForm [name=alatbayar_id]').val()
         }
       },
       onSelectRow: (bank, element) => {

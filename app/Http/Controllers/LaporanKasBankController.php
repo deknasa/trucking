@@ -46,40 +46,40 @@ class LaporanKasBankController extends MyController
         return $response['data'];
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'dari' => $request->dari,
-    //         'sampai' => $request->sampai,
-    //         'bank_id' => $request->bank_id,
-    //         'bank' => $request->bank,
-    //         'periodedata_id' => $request->periodedata_id,
-    //         'periodedata' => $request->periodedata,
-    //     ];
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank,
+            'periodedata_id' => $request->periodedata_id,
+            'periodedata' => $request->periodedata,
+        ];
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
-    //     $jumlah['jumlah'] = 1;
-    //     if (session('cabang') == 'PUSAT') {
-    //         $data = $header['data'];
-    //         if (count($data) > 1) {
-    //             array_shift($data);
-    //             $jumlah['jumlah'] = 2;
-    //         }
-    //     } else {
-    //         $data = $header['data'];
-    //     }
-    //     $infopemeriksa = $header['infopemeriksa'];
-    //     $datasaldo = $header['datasaldo'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $printer['tipe'] = $request->printer;
-    //     $cabang['cabang'] = session('cabang');
+        $jumlah['jumlah'] = 1;
+        if (session('cabang') == 'PUSAT') {
+            $data = $header['data'];
+            if (count($data) > 1) {
+                array_shift($data);
+                $jumlah['jumlah'] = 2;
+            }
+        } else {
+            $data = $header['data'];
+        }
+        $infopemeriksa = $header['infopemeriksa'];
+        $datasaldo = $header['datasaldo'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $printer['tipe'] = $request->printer;
+        $cabang['cabang'] = session('cabang');
 
-    //     $user = Auth::user();
-    //     return view('reports.laporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa', 'jumlah'));
-    // }
+        $user = Auth::user();
+        return view('reports.laporankasbank', compact('data', 'dataCabang', 'user', 'detailParams', 'printer', 'cabang', 'datasaldo', 'infopemeriksa', 'jumlah'));
+    }
 
     // public function export(Request $request): void
     // {
