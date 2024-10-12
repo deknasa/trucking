@@ -258,19 +258,17 @@
 
     function initLookup() {
 
-        $('.supirdari-lookup').lookupMaster({
+        $('.supirdari-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supirMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supirV3',
+            searching: ['namasupir',"namaalias"],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
-                    searching: 1,
-                    valueName: 'supirdari_id',
-                    searchText: 'supirdari-lookup',
-                    title: 'supir dari',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -287,19 +285,17 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.supirsampai-lookup').lookupMaster({
+        $('.supirsampai-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supirMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supirV3',
+            searching: ['namasupir',"namaalias"],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
-                    searching: 1,
-                    valueName: 'supirsampai_id',
-                    searchText: 'supirsampai-lookup',
-                    title: 'supir sampai',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {

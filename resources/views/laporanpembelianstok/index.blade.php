@@ -322,19 +322,16 @@
 
     function initLookup() {
 
-        $('.stokdari-lookup').lookupMaster({
+        $('.stokdari-lookup').lookupV3({
             title: 'Stok Lookup',
-            fileName: 'stokMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'stokV3',
+            searching: ['namastok'],
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'stokdari_id',
-                    searchText: 'stokdari-lookup',
-                    title: 'Stok Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (stok, element) => {
@@ -352,19 +349,16 @@
             }
         })
 
-        $('.stoksampai-lookup').lookupMaster({
+        $('.stoksampai-lookup').lookupV3({
             title: 'Stok Lookup',
-            fileName: 'stokMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'stokV3',
+            searching: ['namastok'],
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'stoksampai_id',
-                    searchText: 'stoksampai-lookup',
-                    title: 'Stok Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (stok, element) => {

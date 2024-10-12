@@ -407,19 +407,17 @@
     }
 
     function initLookup() {
-        $('.trado-lookup').lookupMaster({
+        $('.trado-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'tradoMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'tradoV3',
+            searching: ['kodetrado'],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'trado_id',
-                    searchText: 'trado-lookup',
-                    title: 'trado lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {
@@ -437,22 +435,16 @@
             }
         })
 
-        $(`.status-lookup`).lookupMaster({
+        $(`.status-lookup`).lookupV3({
             title: 'status Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function() {
                 this.postData = {
                 url: `${apiUrl}parameter/combo`,
                 grp: 'STATUS OLI',
                 subgrp: 'STATUS OLI',
-                searching: 1,
-                valueName: `status`,
-                searchText: `status-lookup`,
-                singleColumn: true,
-                hideLabel: true,
-                title: 'status Lookup'
                 };
             },
             onSelectRow: (status, element) => {

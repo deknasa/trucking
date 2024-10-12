@@ -872,18 +872,14 @@
   }
 
   function initLookup() {
-    $('.gudang-lookup').lookupMaster({
+    $('.gudang-lookup').lookupV3({
       title: 'gudang Lookup',
-      fileName: 'gudangMaster',
-      typeSearch: 'ALL',
+      fileName: 'gudangV3',
+      labelColumn: false,
+      searching: ['gudang'],
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'gudang_id',
-          searchText: 'gudang-lookup',
-          title: 'Gudang',
-          typeSearch: 'ALL',
         }
       },
       onSelectRow: (gudang, element) => {
@@ -900,19 +896,15 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.kelompok-lookup').lookupMaster({
+    $('.kelompok-lookup').lookupV3({
       title: 'kelompok Lookup',
-      fileName: 'kelompokMaster',
-      typeSearch: 'ALL',
+      fileName: 'kelompokV3',
+      labelColumn: false,
+      searching: ['kodekelompok'],
       beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-          searching: 1,
-          valueName: 'kelompok_id',
-          searchText: 'kelompok-lookup',
-          title: 'kelompok',
-          typeSearch: 'ALL',
-        }
+          this.postData = {
+              Aktif: 'AKTIF',
+          }
       },
       onSelectRow: (kelompok, element) => {
         $('#crudForm [name=kelompok_id]').first().val(kelompok.id)

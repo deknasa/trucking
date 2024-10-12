@@ -88,14 +88,14 @@
                   <label class="col-sm-12 col-form-label"><em><u>CUSTOMER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="agen_id">
-                    <input type="text" name="agen" class="form-control agen-lookup">
+                    <input type="text" name="agen" id="agen" class="form-control agen-lookup">
                   </div>
                 </div>
                 <div class="form-group jenisorder">
                   <label class="col-sm-12 col-form-label"><em><u>JENIS ORDERAN </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="jenisorder_id">
-                    <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                    <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
                   </div>
                 </div>
                 <div class="form-group statuscontainer">
@@ -109,7 +109,7 @@
                   <label class="col-sm-12 col-form-label"><em><u>CONTAINER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
-                    <input type="text" name="container" class="form-control container-lookup">
+                    <input type="text" name="container" id="container" class="form-control container-lookup">
                   </div>
                 </div>
 
@@ -211,7 +211,7 @@
                   <label class="col-sm-12 col-form-label"><em><u>SHIPPER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
-                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                    <input type="text" name="pelanggan" id="pelanggan" class="form-control pelanggan-lookup">
                   </div>
                 </div>
 
@@ -228,7 +228,7 @@
                   <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
-                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                    <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                   </div>
                 </div>
 
@@ -2301,9 +2301,11 @@
       }
     })
 
-    $('.pelanggan-lookup').lookup({
+    $('.pelanggan-lookup').lookupV3({
       title: 'Pelanggan Lookup',
-      fileName: 'pelanggan',
+      fileName: 'pelangganV3',
+      searching: ['kodepelanggan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2328,9 +2330,10 @@
       }
     })
 
-    $('.container-lookup').lookup({
+    $('.container-lookup').lookupV3({
       title: 'Container Lookup',
-      fileName: 'container',
+      fileName: 'containerV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2596,9 +2599,13 @@
       }
     })
 
-    $('.gandengan-lookup').lookup({
+    $('.gandengan-lookup').lookupV3({
       title: 'Gandengan Lookup',
-      fileName: 'gandengan',
+      fileName: 'gandenganV3',
+      searching: ['name','keterangan'],
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2621,9 +2628,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.agen-lookup').lookup({
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -2650,9 +2659,11 @@
       }
     })
 
-    $('.jenisorder-lookup').lookup({
+    $('.jenisorder-lookup').lookupV3({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderV3',
+      // searching: ['keterangan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {

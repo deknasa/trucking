@@ -24,7 +24,7 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="gudang_id">
-                                    <input type="text" name="gudang" class="form-control gudang-lookup">
+                                    <input type="text" name="gudang" id="gudang" class="form-control gudang-lookup">
                                 </div>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="trado_id">
-                                    <input type="text" name="trado" class="form-control trado-lookup">
+                                    <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                                 </div>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="gandengan_id">
-                                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                                    <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                                 </div>
                             </div>
                         </div>
@@ -436,9 +436,11 @@
 
     function initLookup() {
 
-        $('.gudang-lookup').lookup({
+        $('.gudang-lookup').lookupV3({
             title: 'Gudang Lookup',
-            fileName: 'gudang',
+            fileName: 'gudangV3',
+            labelColumn: false,
+            searching: ['gudang'],
             onSelectRow: (gudang, element) => {
                 $('#crudForm [name=gudang_id]').first().val(gudang.id)
                 element.val(gudang.gudang)
@@ -453,9 +455,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.trado-lookup').lookup({
+        $('.trado-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'trado',
+            fileName: 'tradoV3',
+            labelColumn: false,
+            searching: ['kodetrado'],
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
                 element.val(trado.keterangan)
@@ -470,9 +474,13 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.gandengan-lookup').lookup({
+        $('.gandengan-lookup').lookupV3({
             title: 'Gandengan Lookup',
-            fileName: 'gandengan',
+            fileName: 'gandenganV3',
+            searching: ['name','keterangan'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
             onSelectRow: (gandengan, element) => {
                 $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
                 element.val(gandengan.keterangan)

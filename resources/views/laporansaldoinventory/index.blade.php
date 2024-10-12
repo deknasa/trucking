@@ -18,7 +18,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="kelompok_id">
-                                            <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                                            <input type="text" name="kelompok" id="kelompok" class="form-control kelompok-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="gudang_id">
-                                            <input type="text" name="gudang" class="form-control gudang-lookup">
+                                            <input type="text" name="gudang" id="gudang" class="form-control gudang-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="trado_id">
-                                            <input type="text" name="trado" class="form-control trado-lookup">
+                                            <input type="text" name="trado" id="trado" class="form-control trado-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -106,7 +106,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="gandengan_id">
-                                            <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                                            <input type="text" name="gandengan" id="gandengan" class="form-control gandengan-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -300,9 +300,13 @@
 
     function initLookup() {
 
-        $('.stokdari-lookup').lookup({
+        $('.stokdari-lookup').lookupV3({
             title: 'stok dari lookup',
-            fileName: 'stok',
+            fileName: 'stokV3',
+            searching: ['namastok'],
+            // extendSize: md_extendSize_1,
+            multiColumnSize:false,
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -353,9 +357,13 @@
         //     }
         // })
 
-        $('.stoksampai-lookup').lookup({
+        $('.stoksampai-lookup').lookupV3({
             title: 'stok sampai dari lookup',
-            fileName: 'stok',
+            fileName: 'stokV3',
+            searching: ['namastok'],
+            // extendSize: md_extendSize_1,
+            multiColumnSize:false,
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -408,9 +416,11 @@
         //     }
         // })
 
-        $('.kelompok-lookup').lookup({
+        $('.kelompok-lookup').lookupV3({
             title: 'kelompok dari lookup',
-            fileName: 'kelompok',
+            fileName: 'kelompokV3',
+            labelColumn: false,
+            searching: ['kodekelompok'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -430,9 +440,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.gudang-lookup').lookup({
+        $('.gudang-lookup').lookupV3({
             title: 'gudang dari lookup',
-            fileName: 'gudang',
+            fileName: 'gudangV3',
+            labelColumn: false,
+            searching: ['gudang'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -452,9 +464,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.trado-lookup').lookup({
+        $('.trado-lookup').lookupV3({
             title: 'Trado lookup',
-            fileName: 'trado',
+            fileName: 'tradoV3',
+            labelColumn: false,
+            searching: ['kodetrado'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -474,9 +488,13 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.gandengan-lookup').lookup({
+        $('.gandengan-lookup').lookupV3({
             title: 'Gandengan lookup',
-            fileName: 'gandengan',
+            fileName: 'gandenganV3',
+            searching: ['name','keterangan'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

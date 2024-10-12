@@ -31,14 +31,14 @@
 
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="stokdari_id">
-                                <input type="text" name="stokdari" class="form-control stokdari-lookup">
+                                <input type="text" name="stokdari" id="stokdari" class="form-control stokdari-lookup">
                             </div>
                             <div class="col-sm-1 mt-2">
                                 <h5 class="text-center mt-2">s/d</h5>
                             </div>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="stoksampai_id">
-                                <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
+                                <input type="text" name="stoksampai" id="stoksampai" class="form-control stoksampai-lookup">
                             </div>
                         </div>
 
@@ -491,9 +491,13 @@
 
     function initLookup() {
 
-        $('.stokdari-lookup').lookup({
+        $('.stokdari-lookup').lookupV3({
             title: 'Stok Lookup',
-            fileName: 'stok',
+            fileName: 'stokV3',
+            searching: ['namastok'],
+            // extendSize: md_extendSize_1,
+            multiColumnSize:false,
+            labelColumn: false,
             onSelectRow: (stok, element) => {
                 $('#crudForm [name=stokdari_id]').first().val(stok.id)
                 element.val(stok.namastok)
@@ -508,9 +512,13 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.stoksampai-lookup').lookup({
+        $('.stoksampai-lookup').lookupV3({
             title: 'Stok Lookup',
-            fileName: 'stok',
+            fileName: 'stokV3',
+            searching: ['namastok'],
+            // extendSize: md_extendSize_1,
+            multiColumnSize:false,
+            labelColumn: false,
             onSelectRow: (stok, element) => {
                 $('#crudForm [name=stoksampai_id]').first().val(stok.id)
                 element.val(stok.namastok)

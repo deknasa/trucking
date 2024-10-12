@@ -188,21 +188,17 @@
     })
 
     function initLookup() {
-        $('.supirdari-lookup').lookupMaster({
+        $('.supirdari-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supirMaster',
-            typeSearch: 'ALL',
-            searching: 1,
-            multiColumnSize: true,
+            fileName: 'supirV3',
+            searching: ['namasupir',"namaalias"],
+            labelColumn: true,
             extendSize: md_extendSize_1,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'ALL',
-                    searching: 1,
-                    valueName: 'supirdari_id',
-                    searchText: 'supirdari-lookup',
-                    title: 'supir lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {

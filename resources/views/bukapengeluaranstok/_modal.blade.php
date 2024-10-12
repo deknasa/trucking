@@ -32,7 +32,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
-                  <input type="text" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
+                  <input type="text" name="pengeluaranstok" id="pengeluaranstok" class="form-control pengeluaranstok-lookup">
                   <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" hidden readonly>
                 </div>
               </div>
@@ -328,9 +328,12 @@
   }
 
   function initLookup() {
-    $('.pengeluaranstok-lookup').lookup({
+    $('.pengeluaranstok-lookup').lookupV3({
       title: 'pengeluaran stok Lookup',
-      fileName: 'pengeluaranstok',
+      fileName: 'pengeluaranstokV3',
+      labelColumn: true,
+      extendSize: md_extendSize_1,
+      multiColumnSize:true,
       onSelectRow: (pengeluaranstok, element) => {
         element.val(pengeluaranstok.kodepengeluaran)
         $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)

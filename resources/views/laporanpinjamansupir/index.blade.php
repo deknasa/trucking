@@ -220,22 +220,16 @@
     }
 
     function initLookup() {
-        $(`.jenis-lookup`).lookupMaster({
+        $(`.jenis-lookup`).lookupV3({
             title: 'Jenis Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function() {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'STATUS POSTING',
                     subgrp: 'STATUS POSTING',
-                    searching: 1,
-                    valueName: `jenis`,
-                    searchText: `jenis-lookup`,
-                    singleColumn: true,
-                    hideLabel: true,
-                    title: 'jenis lookup'
                 };
             },
             onSelectRow: (status, element) => {

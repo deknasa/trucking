@@ -327,19 +327,14 @@
 
     function initLookup() {
 
-        $('.agendari-lookup').lookupMaster({
+        $('.agendari-lookup').lookupV3({
             title: 'Customer Lookup',
-            fileName: 'agenMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'agenV3',
+            // searching: ['namaagen'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'agendari_id',
-                    searchText: 'agendari-lookup',
-                    title: 'Customer Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (agen, element) => {
@@ -357,11 +352,11 @@
             }
         })
 
-        $('.agensampai-lookup').lookupMaster({
+        $('.agensampai-lookup').lookupV3({
             title: 'Customer Lookup',
-            fileName: 'agenMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'agenV3',
+            // searching: ['namaagen'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

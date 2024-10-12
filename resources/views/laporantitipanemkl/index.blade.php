@@ -305,21 +305,14 @@
 
     function initLookup() {
 
-        $('.jenisorder-lookup').lookupMaster({
+        $('.jenisorder-lookup').lookupV3({
             title: 'Jenis Order Lookup',
-            fileName: 'jenisorderMaster',
-            // typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'jenisorderV3',
+            searching: ['keterangan'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'jenisorder_id',
-                    searchText: 'jenisorder-lookup',
-                    title: 'Jenis Order Lookup',
-                    // typeSearch: 'ALL',
-                    singleColumn: true,
-                    hideLabel: true,
                 }
             },
             onSelectRow: (jenisorder, element) => {

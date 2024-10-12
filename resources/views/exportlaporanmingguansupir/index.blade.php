@@ -264,19 +264,17 @@
     }
 
     function initLookup() {
-        $('.tradodari-lookup').lookupMaster({
+        $('.tradodari-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'tradoMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'tradoV3',
+            searching: ['kodetrado'],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'tradodari_id',
-                    searchText: 'tradodari-lookup',
-                    title: 'trado dari',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {
@@ -294,19 +292,17 @@
             }
         })
 
-        $('.tradosampai-lookup').lookupMaster({
+        $('.tradosampai-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'tradoMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'tradoV3',
+            searching: ['kodetrado'],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'tradosampai_id',
-                    searchText: 'tradosampai-lookup',
-                    title: 'trado sampai',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {
@@ -324,20 +320,18 @@
             }
         })
 
-        $('.minggu-lookup').lookupMaster({
+        $('.minggu-lookup').lookupV3({
             title: 'Mingguan Lookup',
-            fileName: 'mingguanMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'mingguanV3',
+            searching: ['fMingguKe','fTglDr','fTglSd','fKode','fTahun','fBulanKe'],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                     bulan: $('#crudForm').find('[name=bulan]').val(),
-                    searching: 1,
-                    valueName: 'minggu',
-                    searchText: 'minggu',
-                    title: 'minggu',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (minggu, element) => {

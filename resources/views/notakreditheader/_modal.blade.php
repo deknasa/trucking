@@ -50,7 +50,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="agen_id">
-                <input type="text" name="agen" class="form-control agen-lookup">
+                <input type="text" name="agen" id="agen" class="form-control agen-lookup">
               </div>
             </div>
             <div class="row form-group pelanggan">
@@ -59,7 +59,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="pelanggan_id">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                <input type="text" name="pelanggan" id="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
 
@@ -70,7 +70,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="bank_id">
-                <input type="text" name="bank" class="form-control bank-lookup">
+                <input type="text" name="bank" id="bank" class="form-control bank-lookup">
               </div>
             </div>
 
@@ -81,7 +81,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="alatbayar_id">
-                <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
+                <input type="text" name="alatbayar" id="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
               </div>
             </div>
 
@@ -975,9 +975,11 @@
   }
 
   function initLookup() {
-    $('.agen-lookup').lookup({
+    $('.agen-lookup').lookupV3({
       title: 'Customer Lookup',
-      fileName: 'agen',
+      fileName: 'agenV3',
+      // searching: ['namaagen'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -999,9 +1001,11 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.pelanggan-lookup').lookup({
+    $('.pelanggan-lookup').lookupV3({
       title: 'Shipper Lookup',
-      fileName: 'pelanggan',
+      fileName: 'pelangganV3',
+      searching: ['kodepelanggan'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1024,9 +1028,11 @@
       }
     })
 
-    $('.alatbayar-lookup').lookup({
+    $('.alatbayar-lookup').lookupV3({
       title: 'Alat Bayar Lookup',
-      fileName: 'alatbayar',
+      fileName: 'alatbayarV3',
+      searching: ['namaalatbayar'],
+      labelColumn: false,
       beforeProcess: function(test) {
         // const bank_ID=0        
         this.postData = {
@@ -1081,9 +1087,11 @@
     //   }
     // })
 
-    $('.bank-lookup').lookup({
+    $('.bank-lookup').lookupV3({
       title: 'Bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
