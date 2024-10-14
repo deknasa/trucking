@@ -329,19 +329,14 @@
 
     function initLookup() {
 
-        $('.agendari-lookup').lookupMaster({
+        $('.agendari-lookup').lookupV3({
             title: 'Customer Lookup',
-            fileName: 'agenMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'agenV3',
+            // searching: ['namaagen'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'agendari_id',
-                    searchText: 'agendari-lookup',
-                    title: 'Customer Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (agen, element) => {
@@ -359,19 +354,14 @@
             }
         })
 
-        $('.agensampai-lookup').lookupMaster({
+        $('.agensampai-lookup').lookupV3({
             title: 'Customer Lookup',
-            fileName: 'agenMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'agenV3',
+            // searching: ['namaagen'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'agensampai_id',
-                    searchText: 'agensampai-lookup',
-                    title: 'Customer Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (agen, element) => {
@@ -389,19 +379,14 @@
             }
         })
 
-        $('.pelanggandari-lookup').lookupMaster({
+        $('.pelanggandari-lookup').lookupV3({
             title: 'Shipper Lookup',
-            fileName: 'pelangganMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'pelangganV3',
+            searching: ['kodepelanggan'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'pelanggandari_id',
-                    searchText: 'pelanggandari-lookup',
-                    title: 'Shipper Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (pelanggan, element) => {
@@ -419,19 +404,14 @@
             }
         })
 
-        $('.pelanggansampai-lookup').lookupMaster({
+        $('.pelanggansampai-lookup').lookupV3({
             title: 'Shipper Lookup',
-            fileName: 'pelangganMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'pelangganV3',
+            searching: ['kodepelanggan'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'pelanggansampai_id',
-                    searchText: 'pelanggansampai-lookup',
-                    title: 'Shipper Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (pelanggan, element) => {

@@ -291,6 +291,69 @@
             //         });
             // }
 
+
+    function initLookup() {
+        $('.bank-lookup').lookupV3({
+            title: 'Bank Lookup',
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (bank, element) => {
+                $('#crudForm [name=bank_id]').first().val(bank.id)
+                element.val(bank.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bank_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
+        $(`.periodedata-lookup`).lookupMaster({
+            title: 'PERIODE DATA Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'PERIODE DATA',
+                    subgrp: 'PERIODE DATA',
+                    searching: 1,
+                    valueName: `periodedata_id`,
+                    searchText: `periodedata-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'PERIODE DATA'
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=periodedata_id]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                let status_id_input = $('#crudForm [name=periodedata_id]').first();
+                status_id_input.val('');
+                element.val('');
+                element.data('currentValue', element.val());
+            },
+        });
+    }
+
+
             function getCekReport() {
                 return new Promise((resolve, reject) => {
                     $.ajax({
@@ -347,71 +410,7 @@
                 });
             }
 
-            function initLookup() {
-                $('.bank-lookup').lookupMaster({
-                    title: 'Bank Lookup',
-                    fileName: 'bankMaster',
-                    typeSearch: 'ALL',
-                    searching: 1,
-                    beforeProcess: function(test) {
-                        this.postData = {
-                            Aktif: 'AKTIF',
-                            searching: 1,
-                            valueName: 'bank_id',
-                            searchText: 'bank-lookup',
-                            title: 'bank Lookup',
-                            typeSearch: 'ALL',
-                        }
-                    },
-                    onSelectRow: (bank, element) => {
-                        $('#crudForm [name=bank_id]').first().val(bank.id)
-                        element.val(bank.namabank)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'))
-                    },
-                    onClear: (element) => {
-                        $('#crudForm [name=bank_id]').first().val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
-                    }
-                })
-
-                $(`.periodedata-lookup`).lookupMaster({
-                    title: 'PERIODE DATA Lookup',
-                    fileName: 'parameterMaster',
-                    typeSearch: 'ALL',
-                    searching: 1,
-                    beforeProcess: function() {
-                        this.postData = {
-                            url: `${apiUrl}parameter/combo`,
-                            grp: 'PERIODE DATA',
-                            subgrp: 'PERIODE DATA',
-                            searching: 1,
-                            valueName: `periodedata_id`,
-                            searchText: `periodedata-lookup`,
-                            singleColumn: true,
-                            hideLabel: true,
-                            title: 'PERIODE DATA'
-                        };
-                    },
-                    onSelectRow: (status, element) => {
-                        $('#crudForm [name=periodedata_id]').first().val(status.id)
-                        element.val(status.text)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'));
-                    },
-                    onClear: (element) => {
-                        let status_id_input = $('#crudForm [name=periodedata_id]').first();
-                        status_id_input.val('');
-                        element.val('');
-                        element.data('currentValue', element.val());
-                    },
-                });
-            }
+           
 
             function laporankasbank(data, datasaldo, infopemeriksa, dataCabang, cabang, detailParams, jumlah, printer) {
                 Stimulsoft.Base.StiLicense.Key = "6vJhGtLLLz2GNviWmUTrhSqnOItdDwjBylQzQcAOiHksEid1Z5nN/hHQewjPL/4/AvyNDbkXgG4Am2U6dyA8Ksinqp" +

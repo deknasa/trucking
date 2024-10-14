@@ -120,24 +120,17 @@
     })
 
     function initLookup() {
-        $('.jenis-lookup').lookupMaster({
+        $('.jenis-lookup').lookupV3({
             title: 'Jenis Pemakaian Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'JENIS PEMAKAIAN BARANG',
                     subgrp: 'JENIS PEMAKAIAN BARANG',
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'jenis_id',
-                    searchText: 'text-lookup',
-                    title: 'Jenis Pemakaian Lookup',
-                    typeSearch: 'ALL',
-                    singleColumn: true,
-                    hideLabel: true,
                 }
             },
             onSelectRow: (jenis, element) => {

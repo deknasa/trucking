@@ -318,19 +318,14 @@
 
     function initLookup() {
 
-        $('.supplierdari-lookup').lookupMaster({
+        $('.supplierdari-lookup').lookupV3({
             title: 'Supplier Lookup',
-            fileName: 'supplierMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supplierV3',
+            labelColumn: false,
+            searching: ['namasupplier'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'supplierdari_id',
-                    searchText: 'supplierdari-lookup',
-                    title: 'Supplier Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -348,19 +343,14 @@
             }
         })
 
-        $('.suppliersampai-lookup').lookupMaster({
+        $('.suppliersampai-lookup').lookupV3({
             title: 'Supplier Lookup',
-            fileName: 'supplierMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supplierV3',
+            labelColumn: false,
+            searching: ['namasupplier'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'suppliersampai_id',
-                    searchText: 'suppliersampai-lookup',
-                    title: 'Supplier Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -378,24 +368,17 @@
             }
         })
 
-        $('.status-lookup').lookupMaster({
+        $('.status-lookup').lookupV3({
             title: 'Status Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'LAPORAN PEMBELIAN',
                     subgrp: 'LAPORAN PEMBELIAN',
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'status_id',
-                    searchText: 'status-lookup',
-                    title: 'Status Lookup',
-                    typeSearch: 'ALL',
-                    singleColumn: true,
-                    hideLabel: true,
                 }
             },
             onSelectRow: (status, element) => {

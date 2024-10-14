@@ -218,11 +218,13 @@
 
 
     function initLookup() {
-        $('.gandengandari-lookup').lookupMaster({
+        $('.gandengandari-lookup').lookupV3({
             title: 'Gandengan Lookup',
-            fileName: 'gandenganMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'gandenganV3',
+            searching: ['name','keterangan'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -247,19 +249,16 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.gandengansampai-lookup').lookupMaster({
+        $('.gandengansampai-lookup').lookupV3({
             title: 'Gandengan Lookup',
-            fileName: 'gandenganMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'gandenganV3',
+            searching: ['name','keterangan'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'gandengan_id',
-                    searchText: 'gandengan-lookup',
-                    title: 'gandengan dari',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (gandengan, element) => {

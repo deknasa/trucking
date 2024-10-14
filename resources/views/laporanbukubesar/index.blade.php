@@ -295,20 +295,17 @@
 
     function initLookup() {
 
-        $('.coadari-lookup').lookupMaster({
+        $('.coadari-lookup').lookupV3({
             title: 'Kd. Perkiraan Lookup',
-            fileName: 'akunpusatMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'akunpusatV3',
+            searching: ['coa', 'keterangancoa'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize: true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'coadari_id',
-                    searchText: 'coadari-lookup',
-                    singleColumn: true,
-                    title: 'Kd. Perkiraan Lookup',
-                    typeSearch: 'ALL',
                     levelCoa: '3',
                 }
             },
@@ -327,20 +324,17 @@
             }
         })
 
-        $('.coasampai-lookup').lookupMaster({
+        $('.coasampai-lookup').lookupV3({
             title: 'Kd. Perkiraan Lookup',
-            fileName: 'akunpusatMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'akunpusatV3',
+            searching: ['coa', 'keterangancoa'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize: true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'coasampai_id',
-                    searchText: 'coasampai-lookup',
-                    singleColumn: true,
-                    title: 'Kd. Perkiraan Lookup',
-                    typeSearch: 'ALL',
                     levelCoa: '3',
                 }
             },

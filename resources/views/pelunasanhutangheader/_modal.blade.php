@@ -42,7 +42,7 @@
               <div class="col-12 col-sm-9 col-md-10">
 
                 <input type="hidden" name="alatbayar_id" class="form-control">
-                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+                <input type="text" name="alatbayar" id="alatbayar" class="form-control alatbayar-lookup">
               </div>
             </div>
 
@@ -77,7 +77,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="supplier_id">
-                <input type="text" name="supplier" class="form-control supplier-lookup">
+                <input type="text" name="supplier" id="supplier" class="form-control supplier-lookup">
               </div>
 
             </div>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control bank-lookup">
+                  <input type="text" name="bank" id="bank" class="form-control bank-lookup">
                 </div>
               </div>
               <div class="row form-group">
@@ -2218,9 +2218,11 @@
       }
     })
 
-    $('.bank-lookup').lookup({
+    $('.bank-lookup').lookupV3({
       title: 'Bank Lookup',
-      fileName: 'bank',
+      fileName: 'bankV3',
+      searching: ['namabank'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -2244,9 +2246,11 @@
       }
     })
 
-    $('.supplier-lookup').lookup({
+    $('.supplier-lookup').lookupV3({
       title: 'Supplier Lookup',
-      fileName: 'supplier',
+      fileName: 'supplierV3',
+      labelColumn: false,
+      searching: ['namasupplier'],
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -2316,9 +2320,11 @@
       }
     })
 
-    $('.alatbayar-lookup').lookup({
+    $('.alatbayar-lookup').lookupV3({
       title: 'Alat Bayar Lookup',
-      fileName: 'alatbayar',
+      fileName: 'alatbayarV3',
+      searching: ['namaalatbayar'],
+      labelColumn: false,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',

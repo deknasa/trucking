@@ -258,20 +258,15 @@
 
     function initLookup() {
 
-        $('.bank-lookup').lookupMaster({
+        $('.bank-lookup').lookupV3({
             title: 'Bank Lookup',
-            fileName: 'bankMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'bankV3',
+            searching: ['namabank'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                     tipe: 'KAS',
-                    searching: 1,
-                    valueName: 'bank_id',
-                    searchText: 'bank-lookup',
-                    title: 'bank',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (bank, element) => {

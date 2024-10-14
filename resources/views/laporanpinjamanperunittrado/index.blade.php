@@ -262,18 +262,17 @@
 
     function initLookup() {
 
-        $('.trado-lookup').lookupMaster({
+        $('.trado-lookup').lookupV3({
             title: 'Trado Lookup',
-            fileName: 'tradoMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'tradoV3',
+            searching: ['kodetrado'],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: false,
             beforeProcess: function(test) {
                 this.postData = {
                     searching: 1,
-                    valueName: 'trado_id',
-                    searchText: 'trado-lookup',
-                    title: 'trado',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {

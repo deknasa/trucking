@@ -236,19 +236,14 @@
     }
 
     function initLookup() {
-        $('.kelompok-lookup').lookupMaster({
+        $('.kelompok-lookup').lookupV3({
             title: 'kelompok Lookup',
-            fileName: 'kelompokMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'kelompokV3',
+            searching: ['kodekelompok'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'kelompok_id',
-                    searchText: 'kelompok-lookup',
-                    title: 'Kelompok lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (kategori, element) => {

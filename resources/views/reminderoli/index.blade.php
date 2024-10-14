@@ -388,22 +388,16 @@
     }
 
     function initLookup(){
-        $(`.status-lookup`).lookupMaster({
+        $(`.status-lookup`).lookupV3({
         title: 'status Lookup',
-        fileName: 'parameterMaster',
-        typeSearch: 'ALL',
-        searching: 1,
+        fileName: 'parameterV3',
+        searching: ['text'],
+        labelColumn: false,
         beforeProcess: function() {
             this.postData = {
             url: `${apiUrl}parameter/combo`,
             grp: 'STATUS SERVICE RUTIN',
             subgrp: 'STATUS SERVICE RUTIN',
-            searching: 1,
-            valueName: `status`,
-            searchText: `status-lookup`,
-            singleColumn: true,
-            hideLabel: true,
-            title: 'status Lookup'
             };
         },
         onSelectRow: (status, element) => {

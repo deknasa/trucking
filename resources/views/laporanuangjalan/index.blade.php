@@ -303,19 +303,17 @@
     }
 
     function initLookup() {
-        $('.supirdari-lookup').lookupMaster({
+        $('.supirdari-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supirMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+             fileName: 'supirV3',
+            searching: ['namasupir',"namaalias"],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'supirdari_id',
-                    searchText: 'supirdari-lookup',
-                    title: 'supir lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -333,19 +331,17 @@
             }
         });
 
-        $('.supirsampai-lookup').lookupMaster({
+        $('.supirsampai-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supirMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supirV3',
+            searching: ['namasupir',"namaalias"],
+            labelColumn: true,
+            extendSize: sm_extendSize_4,
+            multiColumnSize:true,
+            filterToolbar: true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'supirsampai_id',
-                    searchText: 'supirsampai-lookup',
-                    title: 'supir lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -363,22 +359,16 @@
             }
         })
 
-        $(`.status-lookup`).lookupMaster({
+        $(`.status-lookup`).lookupV3({
             title: 'status Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function() {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'STATUS KEMBALI',
                     subgrp: 'STATUS KEMBALI',
-                    searching: 1,
-                    valueName: `jenis`,
-                    searchText: `jenis-lookup`,
-                    singleColumn: true,
-                    hideLabel: true,
-                    title: 'status Lookup'
                 };
             },
             onSelectRow: (status, element) => {

@@ -359,19 +359,14 @@
 
     function initLookup() {
 
-        $('.posisiakhirtrado-lookup').lookupMaster({
+        $('.posisiakhirtrado-lookup').lookupV3({
             title: 'Posisi Akhir Ban Trado Lookup',
-            fileName: 'tradoMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'tradoV3',
+            labelColumn: false,
+            searching: ['kodetrado'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'posisiakhirtrado_id',
-                    searchText: 'posisiakhirtrado-lookup',
-                    title: 'Posisi Akhir Ban Trado Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (trado, element) => {
@@ -389,11 +384,13 @@
             }
         })
 
-        $('.posisiakhirgandengan-lookup').lookupMaster({
+        $('.posisiakhirgandengan-lookup').lookupV3({
             title: 'Posisi Akhir Ban Gandengan Lookup',
-            fileName: 'gandenganMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'gandenganV3',
+            searching: ['name','keterangan'],
+            labelColumn: true,
+            extendSize: md_extendSize_1,
+            multiColumnSize:true,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -419,24 +416,17 @@
             }
         })
 
-        $('.text-lookup').lookupMaster({
+        $('.text-lookup').lookupV3({
             title: 'Parameter Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'LAPORAN PEMAKAIAN BAN',
                     subgrp: 'LAPORAN PEMAKAIAN BAN',
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'text_id',
-                    searchText: 'text-lookup',
-                    title: 'Parameter Lookup',
-                    typeSearch: 'ALL',
-                    singleColumn: true,
-                    hideLabel: true,
                 }
             },
             onSelectRow: (text, element) => {

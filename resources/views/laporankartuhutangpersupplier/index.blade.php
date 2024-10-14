@@ -306,19 +306,14 @@
 
     function initLookup() {
 
-        $('.supplierdari-lookup').lookupMaster({
+        $('.supplierdari-lookup').lookupV3({
             title: 'Supplier Lookup',
-            fileName: 'supplierMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supplierV3',
+            labelColumn: false,
+            searching: ['namasupplier'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'supplierdari_id',
-                    searchText: 'supplierdari-lookup',
-                    title: 'Supplier Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -336,19 +331,14 @@
             }
         })
 
-        $('.suppliersampai-lookup').lookupMaster({
+        $('.suppliersampai-lookup').lookupV3({
             title: 'Supplier Lookup',
-            fileName: 'supplierMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'supplierV3',
+            labelColumn: false,
+            searching: ['namasupplier'],
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'suppliersampai_id',
-                    searchText: 'suppliersampai-lookup',
-                    title: 'Supplier Lookup',
-                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (supplier, element) => {
@@ -365,25 +355,16 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.jenislaporan-lookup').lookupMaster({
+        $('.jenislaporan-lookup').lookupV3({
             title: 'Jenis Laporan Lookup',
-            fileName: 'parameterMaster',
-            typeSearch: 'ALL',
-            searching: 1,
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     url: `${apiUrl}parameter/combo`,
                     grp: 'JENIS KARTU HUTANG',
                     subgrp: 'JENIS KARTU HUTANG',
-                    // semua: 'SEMUA',
-                    Aktif: 'AKTIF',
-                    searching: 1,
-                    valueName: 'jenislaporan_id',
-                    searchText: 'jenislaporan-lookup',
-                    title: 'Jenis Laporan Lookup',
-                    typeSearch: 'ALL',
-                    singleColumn: true,
-                    hideLabel: true,
                 }
             },
             onSelectRow: (jenislaporan, element) => {
