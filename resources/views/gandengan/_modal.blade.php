@@ -95,6 +95,17 @@
                 <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Jenis Kendaraan <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="statusjeniskendaraan">
+                <input type="text" name="statusjeniskendaraannama" id="statusjeniskendaraannama" class="form-control lg-form statusjenis-lookup">
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -223,6 +234,10 @@
         $(this).removeAttr('disabled')
       })
     })
+    if (accessCabang != "MAKASSAR") {
+      $('[name=statusjeniskendaraannama]').parents('.form-group').hide()
+    }
+
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -566,6 +581,32 @@
         element.data('currentValue', element.val());
       },
     });
+    $(`.statusjenis-lookup`).lookupV3({
+      title: 'Status Aktif Lookup',
+     fileName: 'parameterV3',
+      searching: ['text'],
+      labelColumn: false,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS JENIS KENDARAAN',
+          subgrp: 'STATUS JENIS KENDARAAN',
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusjeniskendaraan]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusjeniskendaraan]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
 
     // if (!$('.supir-lookup').data('hasLookup')) {
     //   $('.supir-lookup').lookup({
@@ -665,6 +706,9 @@
             if (index == 'statusaktifnama') {
               element.data('current-value', value)
             }
+            if (index == 'statusjeniskendaraannama') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -691,7 +735,6 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
