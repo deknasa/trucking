@@ -267,7 +267,8 @@ class UpahSupirController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'upahsupir/export', [
                 'limit' => $request->limit,
-                'filters' => $request->filters
+                'filters' => $request->filters,
+                'forReport' => true
             ]);
 
         if ($upahsupir_detail->successful()) {
