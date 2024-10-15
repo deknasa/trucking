@@ -27,29 +27,30 @@ class LaporanKartuPanjarController extends MyController
         return view('laporankartupanjar.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'dari' => $request->dari,
-    //         'sampai' => $request->sampai,
-    //         'agendari' => $request->agendari,
-    //         'agensampai' => $request->agensampai,
-    //         'agendari_id' => $request->agendari_id,
-    //         'agensampai_id' => $request->agensampai_id,
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'agendari' => $request->agendari,
+            'agensampai' => $request->agensampai,
+            'agendari_id' => $request->agendari_id,
+            'agensampai_id' => $request->agensampai_id,
 
-    //     ];
-    //     // dd($detailParams);
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporankartupanjar/report', $detailParams);
+        ];
+        // dd($detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporankartupanjar/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
 
-    //     return view('reports.laporankartupanjar', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        return view('reports.laporankartupanjar', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

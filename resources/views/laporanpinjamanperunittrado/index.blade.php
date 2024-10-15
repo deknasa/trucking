@@ -39,11 +39,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -78,44 +73,20 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let trado_id = $('#crudForm').find('[name=trado_id]').val()
         let trado = $('#crudForm').find('[name=trado]').val()
-
-        $.ajax({
-                url: `${apiUrl}laporanpinjamanperunittrado/report`,
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    trado_id: trado_id,
-                    trado: trado
-                },
-                success: function(response) {
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        trado_id: trado_id,
-                        trado: trado
-                    };
-                    let cabang = accessCabang
-
-                    laporanpinjamanperunittrado(data, detailParams, dataCabang,cabang);
-                },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
-            });
-
+        getCekReport().then((response) => {
+            
+            window.open(`{{ route('laporanpinjamanperunittrado.report') }}?trado=${trado}&trado_id=${trado_id}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+            }
+        })
     })
+
 
     function laporanpinjamanperunittrado(data, detailParams, dataCabang,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");

@@ -23,23 +23,25 @@ class LaporanPinjamanPerUnitTradoController extends MyController
         return view('laporanpinjamanperunittrado.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'trado_id' => $request->trado_id,
-    //         'trado' => $request->trado,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'trado_id' => $request->trado_id,
+            'trado' => $request->trado,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanpinjamanperunittrado/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpinjamanperunittrado/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     return view('reports.laporanpinjamanperunittrado', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+
+        return view('reports.laporanpinjamanperunittrado', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

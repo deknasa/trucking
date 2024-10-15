@@ -39,11 +39,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -88,51 +83,7 @@
         let supirdari = $('#crudForm').find('[name=supirdari]').val()
         let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
         if (supirdari_id != '') {
-
-            // window.open(`{{ route('laporanhistorydeposito.report') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`)
-            $.ajax({
-                    url: `${apiUrl}laporanhistorydeposito/report`,
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                        judul: 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-                        judullaporan: 'Laporan History Deposito',
-                        tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
-                        supirdari_id: supirdari_id,
-                        supirdari: supirdari,
-                    },
-                    success: function(response) {
-                        // console.log(response)
-                        let data = response.data
-                        let dataCabang = response.namacabang
-                        let detailParams = {
-                            judul: 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-                            judullaporan: 'Laporan History Deposito',
-                            tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
-                            supirdari_id: supirdari_id,
-                            supirdari: supirdari,
-                        };
-                        let user = `{{ auth()->user()->name }}`;
-                        let cabang = accessCabang
-                        // console.log(JSON.stringify(data))
-                        laporanhistorydeposito(data, detailParams, dataCabang, user,cabang);
-                    },
-                    error: function(error) {
-                        if (error.status === 422) {
-                            $('.is-invalid').removeClass('is-invalid');
-                            $('.invalid-feedback').remove();
-                            $('#rangeTglModal').modal('hide')
-                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                        } else {
-                            showDialog(error.responseJSON.message);
-                        }
-                    }
-                })
-                .always(() => {
-                    $('#processingLoader').addClass('d-none')
-                });
+            window.open(`{{ route('laporanhistorydeposito.report') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

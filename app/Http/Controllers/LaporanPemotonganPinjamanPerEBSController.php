@@ -48,7 +48,9 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
         // dd($data);
-        return view('reports.laporanpemotonganpinjamanperebs', compact('data', 'dataCabang', 'user', 'detailParams'));
+        $cabang['cabang'] = session('cabang');
+
+        return view('reports.laporanpemotonganpinjamanperebs', compact('data', 'dataCabang', 'user', 'detailParams','cabang'));
     }
 
     // public function export(Request $request): void

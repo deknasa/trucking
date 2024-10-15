@@ -53,11 +53,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -85,8 +80,6 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-
-
         if (!`{{ $myAuth->hasPermission('laporanklaimpjtsupir', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -98,47 +91,45 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompokid = $('#crudForm').find('[name=kelompok_id]').val()
         let kelompok = $('#crudForm').find('[name=kelompok]').val()
 
-        $.ajax({
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanklaimpjtsupir.report') }}?sampai=${sampai}&dari=${dari}&kelompok=${kelompok}&kelompok_id=${kelompokid}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+            }
+        })
+    })
+
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
                 url: `${apiUrl}laporanklaimpjtsupir/report`,
-                method: 'GET',
+                dataType: "JSON",
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
-                    sampai: sampai,
-                    dari: dari,
-                    kelompok_id: kelompok_id,
-                    kelompok: kelompok,
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    kelompok: $('#crudForm').find('[name=kelompok_id]').val(),
+                    isCheck: true,
                 },
-                success: function(response) {
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        sampai: sampai,
-                        dari: dari,
-                        kelompok_id: kelompok_id,
-                        kelompok: kelompok,
-                    };
-                    laporanklaimpjtsupir(data, detailParams, dataCabang);
+                success: (response) => {
+                    resolve(response);
                 },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
+                error: error => {
+                    reject(error)
+                },
             });
-    })
+        });
+    }
 
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()

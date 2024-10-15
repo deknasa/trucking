@@ -81,12 +81,6 @@
 
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2024.3.6/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2024.3.6/css/stimulsoft.designer.office2013.whiteblue.css') }}">
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2024.3.6/scripts/stimulsoft.reports.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2024.3.6/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2024.3.6/scripts/stimulsoft.designer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2024.3.6/scripts/stimulsoft.blockly.editor.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>

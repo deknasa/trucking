@@ -28,25 +28,27 @@ class LaporanHutangBBMController extends MyController
         return view('laporanhutangbbm.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'jenis' => $request->jenis,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'jenis' => $request->jenis,
+        ];
 
-    //     // dd($detailParams);
+        // dd($detailParams);
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanhutangbbm/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanhutangbbm/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     return view('reports.laporanhutangbbm', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        return view('reports.laporanhutangbbm', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
     
     // public function export(Request $request): void
     // {

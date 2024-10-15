@@ -29,29 +29,25 @@ class LaporanPinjamanSupirKaryawanController extends MyController
         return view('laporanpinjamansupirkaryawan.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'jenis' => $request->jenis,
-    //     ];
-
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanpinjamansupirkaryawan/report', $detailParams);
-
-    //     // dd($header->successful());
-
-    //     if ($header->successful()) {
-    //         $data = $header['data'];
-    //         $user = Auth::user();
-    //         $dataCabang['namacabang'] = $header['namacabang'];
-    //         return view('reports.laporanpinjamansupirkaryawan', compact('data','dataCabang', 'user', 'detailParams'));
-    //     } else {
-    //         return response()->json($header->json(), $header->status());
-    //     }
-    // }
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+        ];
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpinjamansupirkaryawan/report', $detailParams);
+        if ($header->successful()) {
+            $data = $header['data'];
+            $user = Auth::user();
+            $dataCabang['namacabang'] = $header['namacabang'];
+            $cabang['cabang'] = session('cabang');
+            return view('reports.laporanpinjamansupirkaryawan', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+        } else {
+            return response()->json($header->json(), $header->status());
+        }
+    }
     
     // public function export(Request $request): void
     // {

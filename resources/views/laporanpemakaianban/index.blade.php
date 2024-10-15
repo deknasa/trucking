@@ -71,11 +71,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -110,6 +105,32 @@
             $('#btnExport').attr('disabled', 'disabled')
         }
 
+    })
+
+    
+    $(document).on('click', `#btnPreview`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let posisiakhirtrado = $('#crudForm').find('[name=posisiakhirtrado]').val()
+        let posisiakhirtradoId = $('#crudForm').find('[name=posisiakhirtrado_id]').val()
+        let posisiakhirgandengan = $('#crudForm').find('[name=posisiakhirgandengan]').val()
+        let posisiakhirgandenganId = $('#crudForm').find('[name=posisiakhirgandengan_id]').val()
+        let posisiakhirgandengantext = $('#crudForm').find('[name=posisiakhirgandengan]').val()
+        let jenislaporan_id = $('#crudForm').find('[name=text]').val()
+        let jenislaporan = $('#text').find('option:selected').text();
+
+        
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanpemakaianban.report') }}?sampai=${sampai}&dari=${dari}&posisiakhirtrado_id=${posisiakhirtradoId}&posisiakhirtrado=${posisiakhirtrado}&posisiakhirgandengan_id=${posisiakhirgandenganId}&posisiakhirgandengan=${posisiakhirgandengan}&jenislaporan_id=${jenislaporan_id}&jenislaporan=${jenislaporan}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+            }
+        })
     })
 
     $(document).on('click', `#btnPreview`, function(event) {

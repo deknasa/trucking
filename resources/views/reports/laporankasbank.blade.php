@@ -53,8 +53,7 @@
                 } else {
                     report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
                 }
-                // report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
-
+             
             }
 
 
@@ -73,9 +72,7 @@
             report.dictionary.synchronize()
             // designer.report = report;
             // designer.renderHtml('content');
-            // viewer.report = report
-
-            // Export report to PDF format and save to file
+           
             report.renderAsync(function() {
                 report.exportDocumentAsync(function(pdfData) {
                     let blob = new Blob([new Uint8Array(pdfData)], {

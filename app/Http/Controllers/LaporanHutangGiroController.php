@@ -52,32 +52,33 @@ class LaporanHutangGiroController extends MyController
     }
 
 
-    // public function report(Request $request)
-    // {
-    //     date_default_timezone_set('Asia/Jakarta');
-    //     $detailParams = [
-    //         'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-    //         'judullaporan' => 'Laporan  Hutang Giro',
-    //         'tanggal_cetak' => date('d-m-Y H:i:s'),
-    //         'periode' => $request->periode,
-    //     ];
+    public function report(Request $request)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $detailParams = [
+            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+            'judullaporan' => 'Laporan  Hutang Giro',
+            'tanggal_cetak' => date('d-m-Y H:i:s'),
+            'periode' => $request->periode,
+        ];
 
 
-    //     // dd($detailParams);
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanhutanggiro/report', $detailParams);
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
+        // dd($detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanhutanggiro/report', $detailParams);
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
 
 
 
-    //     // $dataHeader = $header['dataheader'];
-    //     $user = Auth::user();
-    //     // dd($data);
-    //     return view('reports.laporanhutanggiro', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        // $dataHeader = $header['dataheader'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        // dd($data);
+        return view('reports.laporanhutanggiro', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

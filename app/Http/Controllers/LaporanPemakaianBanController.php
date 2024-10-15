@@ -28,37 +28,38 @@ class LaporanPemakaianBanController extends MyController
         return view('laporanpemakaianban.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     if ($request->posisiakhirtrado != null) {
+    public function report(Request $request)
+    {
+        if ($request->posisiakhirtrado != null) {
 
-    //         $parameter = $request->posisiakhirtrado;
-    //     } else {
-    //         $parameter = $request->posisiakhirgandengan;
-    //     }
+            $parameter = $request->posisiakhirtrado;
+        } else {
+            $parameter = $request->posisiakhirgandengan;
+        }
 
-    //     $detailParams = [
-    //         'dari' => $request->dari,
-    //         'sampai' => $request->sampai,
-    //         'posisiakhir' => $parameter,
-    //         'jenislaporan' => $request->jenislaporan
-    //     ];
+        $detailParams = [
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'posisiakhir' => $parameter,
+            'jenislaporan' => $request->jenislaporan
+        ];
 
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanpemakaianban/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpemakaianban/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     if(count($data) == 0){
-    //         throw new \Exception('TIDAK ADA DATA');
-    //     }
-    //     $user = Auth::user();
-    //     $dataCabang['namacabang'] = $header['namacabang'];
+        $data = $header['data'];
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        $user = Auth::user();
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $cabang['cabang'] = session('cabang');
 
-    //     return view('reports.laporanpemakaianban', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        return view('reports.laporanpemakaianban', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

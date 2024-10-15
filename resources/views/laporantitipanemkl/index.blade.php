@@ -67,11 +67,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -119,48 +114,66 @@
         let tgldari = $('#crudForm').find('[name=tgldari]').val()
         let tglsampai = $('#crudForm').find('[name=tglsampai]').val()
         let periode = $('#crudForm').find('[name=periode]').val()
-
-        $.ajax({
-                url: `${apiUrl}laporantitipanemkl/report`,
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    jenisorder: jenisorder,
-                    tgldari: tgldari,
-                    tglsampai: tglsampai,
-                    periode: periode,
-                },
-                success: function(response) {
-                    // console.log(response)
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        jenisorder: jenisorder,
-                        tgldari: tgldari,
-                        tglsampai: tglsampai,
-                        periode: periode,
-                    };
-                    let cabang = accessCabang
-
-                    laporantitipanemkl(data, detailParams, dataCabang,cabang);
-                },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
-            });
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporantitipanemkl.report') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+            }
+        })
     })
+
+    // $(document).on('click', `#btnPreview`, function(event) {
+    //     let jenisorder = $('#crudForm').find('[name=jenisorder]').val()
+    //     let tgldari = $('#crudForm').find('[name=tgldari]').val()
+    //     let tglsampai = $('#crudForm').find('[name=tglsampai]').val()
+    //     let periode = $('#crudForm').find('[name=periode]').val()
+
+    //     $.ajax({
+    //             url: `${apiUrl}laporantitipanemkl/report`,
+    //             method: 'GET',
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 jenisorder: jenisorder,
+    //                 tgldari: tgldari,
+    //                 tglsampai: tglsampai,
+    //                 periode: periode,
+    //             },
+    //             success: function(response) {
+    //                 // console.log(response)
+    //                 let data = response.data
+    //                 let dataCabang = response.namacabang
+    //                 let detailParams = {
+    //                     jenisorder: jenisorder,
+    //                     tgldari: tgldari,
+    //                     tglsampai: tglsampai,
+    //                     periode: periode,
+    //                 };
+    //                 let cabang = accessCabang
+
+    //                 laporantitipanemkl(data, detailParams, dataCabang,cabang);
+    //             },
+    //             error: function(error) {
+    //                 if (error.status === 422) {
+    //                     $('.is-invalid').removeClass('is-invalid');
+    //                     $('.invalid-feedback').remove();
+    //                     $('#rangeTglModal').modal('hide')
+    //                     setErrorMessages($('#crudForm'), error.responseJSON.errors);
+    //                 } else {
+    //                     showDialog(error.responseJSON.message);
+    //                 }
+    //             }
+    //         })
+    //         .always(() => {
+    //             $('#processingLoader').addClass('d-none')
+    //         });
+    // })
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
@@ -209,30 +222,30 @@
 
     })
 
-    // function getCekReport() {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url: `${apiUrl}laporantitipanemkl/report`,
-    //             dataType: "JSON",
-    //             headers: {
-    //                 Authorization: `Bearer ${accessToken}`
-    //             },
-    //             data: {
-    //                 jenisorder: $('#crudForm').find('[name=jenisorder]').val(),
-    //                 tgldari: $('#crudForm').find('[name=periode]').val(),
-    //                 tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-    //                 periode: $('#crudForm').find('[name=periode]').val(),
-    //             },
-    //             success: (response) => {
-    //                 resolve(response);
-    //             },
-    //             error: error => {
-    //                 reject(error)
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporantitipanemkl/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    jenisorder: $('#crudForm').find('[name=jenisorder]').val(),
+                    tgldari: $('#crudForm').find('[name=periode]').val(),
+                    tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
 
-    //             },
-    //         });
-    //     });
-    // }
+                },
+            });
+        });
+    }
 
     function laporantitipanemkl(data, detailParams, dataCabang,cabang) {
         Stimulsoft.Base.StiLicense.loadFromFile("{{ asset('libraries/stimulsoft-report/2023.1.1/license.php') }}");

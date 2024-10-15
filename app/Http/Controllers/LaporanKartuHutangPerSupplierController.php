@@ -27,28 +27,30 @@ class LaporanKartuHutangPerSupplierController extends MyController
         return view('laporankartuhutangpersupplier.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'dari' => $request->dari,
-    //         'sampai' => $request->sampai,
-    //         'supplierdari' => $request->supplierdari,
-    //         'suppliersampai' => $request->suppliersampai,
-    //         'supplierdari_id' => $request->supplierdari_id,
-    //         'suppliersampai_id' => $request->suppliersampai_id,
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'supplierdari' => $request->supplierdari,
+            'suppliersampai' => $request->suppliersampai,
+            'supplierdari_id' => $request->supplierdari_id,
+            'suppliersampai_id' => $request->suppliersampai_id,
+            'jenislaporan' => $request->jenislaporan
 
-    //     ];
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporankartuhutangpersupplier/report', $detailParams);
+        ];
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporankartuhutangpersupplier/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     // dd($data);
-    //     return view('reports.laporankartuhutangpersupplier', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        // dd($data);
+        return view('reports.laporankartuhutangpersupplier', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

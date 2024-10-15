@@ -52,34 +52,35 @@ class LaporanPembelianStokController extends MyController
     }
 
 
-    // public function report(Request $request)
-    // {
-    //     date_default_timezone_set('Asia/Jakarta');
-    //     $detailParams = [
-    //         'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-    //         'judullaporan' => 'Laporan  Pembelian',
-    //         'tanggal_cetak' => date('d-m-Y H:i:s'),
-    //         'dari' => $request->dari,
-    //         'sampai' => $request->sampai,
-    //         'stokdari' => $request->stokdari,
-    //         'stoksampai' => $request->stoksampai,
-    //         'stokdari_id' => $request->stokdari_id,
-    //         'stoksampai_id' => $request->stoksampai_id,
+    public function report(Request $request)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $detailParams = [
+            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+            'judullaporan' => 'Laporan  Pembelian',
+            'tanggal_cetak' => date('d-m-Y H:i:s'),
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'stokdari' => $request->stokdari,
+            'stoksampai' => $request->stoksampai,
+            'stokdari_id' => $request->stokdari_id,
+            'stoksampai_id' => $request->stoksampai_id,
 
-    //     ];
-    //     // dd($detailParams);
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanpembelianstok/report', $detailParams);
-    //     $data = $header['data'];
+        ];
+        // dd($detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpembelianstok/report', $detailParams);
+        $data = $header['data'];
 
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     // $dataHeader = $header['dataheader'];
-    //     $user = Auth::user();
-    //     // dd($data);
-    //     return view('reports.laporanpembelianstok', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $dataCabang['namacabang'] = $header['namacabang'];
+        // $dataHeader = $header['dataheader'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        // dd($data);
+        return view('reports.laporanpembelianstok', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

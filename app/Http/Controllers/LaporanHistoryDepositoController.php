@@ -27,28 +27,29 @@ class LaporanHistoryDepositoController extends MyController
         return view('laporanhistorydeposito.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     date_default_timezone_set('Asia/Jakarta');
-    //     $detailParams = [
-    //         'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-    //         'judullaporan' => 'Laporan History Deposito',
-    //         'tanggal_cetak' => date('d-m-Y H:i:s'),
-    //         'supirdari_id' => $request->supirdari_id,
-    //         'supirdari' => $request->supirdari,
-    //     ];
+    public function report(Request $request)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $detailParams = [
+            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+            'judullaporan' => 'Laporan History Deposito',
+            'tanggal_cetak' => date('d-m-Y H:i:s'),
+            'supirdari_id' => $request->supirdari_id,
+            'supirdari' => $request->supirdari,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanhistorydeposito/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanhistorydeposito/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     // dd(json_encode($data), $user);
-    //     return view('reports.laporanhistorydeposito', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        // dd(json_encode($data), $user);
+        return view('reports.laporanhistorydeposito', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

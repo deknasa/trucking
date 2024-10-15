@@ -54,11 +54,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -104,49 +99,67 @@
 
     })
 
-    $(document).on('click', `#btnPreview`, function(event) {
+    // $(document).on('click', `#btnPreview`, function(event) {
 
+    //     let sampai = $('#crudForm').find('[name=sampai]').val()
+    //     let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
+
+    //     $.ajax({
+    //             url: `${apiUrl}laporanlabarugi/report`,
+    //             method: 'GET',
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 sampai: sampai,
+    //                 cabang_id: cabang_id
+    //             },
+    //             success: function(response) {
+    //                 // console.log(response)
+    //                 let data = response.data
+    //                 let dataheader = response.dataheader
+    //                 let detailParams = {
+    //                     sampai: sampai,
+    //                     cabang_id: cabang_id,
+    //                     tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+    //                     judullaporan: 'Laporan Laba Rugi',
+    //                 };
+    //                 let cabang = accessCabang
+
+    //                 laporanlabarugi(data, detailParams, dataheader,cabang);
+    //             },
+    //             error: function(error) {
+    //                 if (error.status === 422) {
+    //                     $('.is-invalid').removeClass('is-invalid');
+    //                     $('.invalid-feedback').remove();
+    //                     $('#rangeTglModal').modal('hide')
+    //                     setErrorMessages($('#crudForm'), error.responseJSON.errors);
+    //                 } else {
+    //                     showDialog(error.responseJSON.message);
+    //                 }
+    //             }
+    //         })
+    //         .always(() => {
+    //             $('#processingLoader').addClass('d-none')
+    //         });
+    // })
+
+    
+    $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
-
-        $.ajax({
-                url: `${apiUrl}laporanlabarugi/report`,
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    sampai: sampai,
-                    cabang_id: cabang_id
-                },
-                success: function(response) {
-                    // console.log(response)
-                    let data = response.data
-                    let dataheader = response.dataheader
-                    let detailParams = {
-                        sampai: sampai,
-                        cabang_id: cabang_id,
-                        tanggal_cetak: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
-                        judullaporan: 'Laporan Laba Rugi',
-                    };
-                    let cabang = accessCabang
-
-                    laporanlabarugi(data, detailParams, dataheader,cabang);
-                },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
-            });
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}&cabang_id=${cabang_id}`)
+        }).catch((error) => {
+            
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON.message)
+            }
+        })
     })
 
     $(document).on('click', `#btnExport`, function(event) {

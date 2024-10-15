@@ -117,54 +117,20 @@
         let stokdari = $('#crudForm').find('[name=stokdari]').val()
         let stoksampai = $('#crudForm').find('[name=stoksampai]').val()
         let status = $('#crudForm').find('[name=status]').val()
-
-        $.ajax({
-                url: `${apiUrl}laporanpembelianstok/report`,
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    dari: dari,
-                    sampai: sampai,
-                    stokdari_id: stokdari_id,
-                    stoksampai_id: stoksampai_id,
-                    stokdari: stokdari,
-                    stoksampai: stoksampai,
-                    status: status,
-                },
-                success: function(response) {
-                    // console.log(response)
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        dari: dari,
-                        sampai: sampai,
-                        stokdari_id: stokdari_id,
-                        stoksampai_id: stoksampai_id,
-                        stokdari: stokdari,
-                        stoksampai: stoksampai,
-                        status: status,
-                    };
-                    let cabang = accessCabang
-
-                    laporanpembelianstok(data, detailParams, dataCabang,cabang);
-                },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
-            });
-
+        getCekReport().then((response) => {
+            window.open(
+                `{{ route('laporanpembelianstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`
+            )
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                // return showDialog(error.responseJSON.errors.export);
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+            }
+        })
     })
 
     $(document).on('click', `#btnExport`, function(event) {

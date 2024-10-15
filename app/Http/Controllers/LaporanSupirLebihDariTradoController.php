@@ -28,28 +28,29 @@ class LaporanSupirLebihDariTradoController extends MyController
         return view('laporansupirlebihdaritrado.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     date_default_timezone_set('Asia/Jakarta'); 
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'dari' => $request->dari,
-    //         'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-    //         'judullaporan' => 'Laporan 1 Supir Lebih Dari 1 Trado',
-    //         'tanggal_cetak' => date('d-m-Y H:i:s'),
-    //     ];
+    public function report(Request $request)
+    {
+        date_default_timezone_set('Asia/Jakarta'); 
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'dari' => $request->dari,
+            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+            'judullaporan' => 'Laporan 1 Supir Lebih Dari 1 Trado',
+            'tanggal_cetak' => date('d-m-Y H:i:s'),
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporansupirlebihdaritrado/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporansupirlebihdaritrado/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     // dd($data);
-    //     return view('reports.laporansupirlebihdaritrado', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+       
+        return view('reports.laporansupirlebihdaritrado', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     public function export(Request $request): void
     {

@@ -3,5 +3,5 @@
 File ini dibuatkan utk konfigurasi report
 */
 
-$stireport_path='/libraries/stimulsoft-report/2023.1.1/';
+$stireport_path='/libraries/stimulsoft-report/2024.3.6/';
 ?>

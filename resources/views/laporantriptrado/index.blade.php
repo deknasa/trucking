@@ -90,44 +90,8 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-
         if (dari != '' && sampai != '') {
-
-            // window.open(`{{ route('laporantriptrado.report') }}?sampai=${sampai}&dari=${dari}`)
-
-            $.ajax({
-                    url: `${apiUrl}laporantriptrado/report`,
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                        sampai: sampai,
-                        dari: dari
-                    },
-                    success: function(response) {
-                        let data = response.data
-                        let dataCabang = response.namacabang
-                        let detailParams = {
-                            sampai: sampai,
-                            dari: dari
-                        };
-                        laporantriptrado(data, detailParams, dataCabang);
-                    },
-                    error: function(error) {
-                        if (error.status === 422) {
-                            $('.is-invalid').removeClass('is-invalid');
-                            $('.invalid-feedback').remove();
-                            $('#rangeTglModal').modal('hide')
-                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                        } else {
-                            showDialog(error.responseJSON.message);
-                        }
-                    }
-                })
-                .always(() => {
-                    $('#processingLoader').addClass('d-none')
-                });
+            window.open(`{{ route('laporantriptrado.report') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
