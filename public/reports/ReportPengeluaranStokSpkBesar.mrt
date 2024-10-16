@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2fc268f3d8525629398e6eca888643ad",
+  "ReportGuid": "a3e4856584ffd9fd43bb5b895f2e87f7",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranStokSPKBesar.mrt",
+  "ReportFile": "http://localhost/truck/public/reports/ReportPengeluaranStokSPKBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1721898079000+0700)/",
+  "ReportChanged": "/Date(1729042966000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -46,102 +46,114 @@
             "Type": "System.String"
           },
           "3": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "4": {
             "Name": "satuan",
             "NameInSource": "satuan",
             "Alias": "satuan",
             "Type": "System.String"
           },
-          "4": {
+          "5": {
             "Name": "stok",
             "NameInSource": "stok",
             "Alias": "stok",
             "Type": "System.String"
           },
-          "5": {
+          "6": {
             "Name": "statusreuse",
             "NameInSource": "statusreuse",
             "Alias": "statusreuse",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "qty",
             "NameInSource": "qty",
             "Alias": "qty",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "harga",
             "NameInSource": "harga",
             "Alias": "harga",
             "Type": "System.String"
           },
-          "8": {
+          "9": {
             "Name": "persentasediscount",
             "NameInSource": "persentasediscount",
             "Alias": "persentasediscount",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
             "Name": "nominaldiscount",
             "NameInSource": "nominaldiscount",
             "Alias": "nominaldiscount",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "total",
             "NameInSource": "total",
             "Alias": "total",
             "Type": "System.String"
           },
-          "11": {
+          "12": {
             "Name": "keterangan",
             "NameInSource": "keterangan",
             "Alias": "keterangan",
             "Type": "System.String"
           },
-          "12": {
+          "13": {
             "Name": "vulkanisirke",
             "NameInSource": "vulkanisirke",
             "Alias": "vulkanisirke",
             "Type": "System.String"
           },
-          "13": {
+          "14": {
             "Name": "statusban",
             "NameInSource": "statusban",
             "Alias": "statusban",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
+            "Name": "selisihhargafifo",
+            "NameInSource": "selisihhargafifo",
+            "Alias": "selisihhargafifo",
+            "Type": "System.String"
+          },
+          "16": {
             "Name": "statusoli",
             "NameInSource": "statusoli",
             "Alias": "statusoli",
             "Type": "System.String"
           },
-          "15": {
+          "17": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "16": {
+          "18": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "17": {
+          "19": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "18": {
+          "20": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "19": {
+          "21": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -316,12 +328,18 @@
             "Type": "System.DateTime"
           },
           "13": {
+            "Name": "menu",
+            "NameInSource": "menu",
+            "Alias": "menu",
+            "Type": "System.String"
+          },
+          "14": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -704,30 +722,36 @@
             "Type": "System.String"
           },
           "56": {
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "57": {
             "Name": "details",
             "NameInSource": "details",
             "Alias": "details",
             "Type": "System.String"
           },
-          "57": {
+          "58": {
             "Name": "user",
             "NameInSource": "user",
             "Alias": "user",
             "Type": "System.String"
           },
-          "58": {
+          "59": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
             "Type": "System.String"
           },
-          "59": {
+          "60": {
             "Name": "column",
             "NameInSource": "column",
             "Alias": "column",
             "Type": "System.String"
           },
-          "60": {
+          "61": {
             "Name": "value",
             "NameInSource": "value",
             "Alias": "value",
@@ -1132,7 +1156,7 @@
               "Ident": "StiText",
               "Name": "Text22",
               "Guid": "9da4bf798ab0b66f9fc4c3d842ac3b83",
-              "ClientRectangle": "52,24.77,18,5",
+              "ClientRectangle": "52,24.77,26,5",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1178,7 +1202,7 @@
               "Ident": "StiText",
               "Name": "Text4",
               "Guid": "ea70d97704410817134f1b80243005d5",
-              "ClientRectangle": "70,24.77,32,5",
+              "ClientRectangle": "78,24.77,24,5",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1323,7 +1347,7 @@
             "23": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive21",
-              "ClientRectangle": "70,24.77,0,0",
+              "ClientRectangle": "78,24.77,0,0",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1333,7 +1357,7 @@
             "24": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive21",
-              "ClientRectangle": "70,30.77,0,0",
+              "ClientRectangle": "78,30.77,0,0",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1521,14 +1545,14 @@
               "Name": "Text53",
               "Guid": "e0b5d57c9c76383e047ae6447e90caba",
               "CanGrow": true,
-              "ClientRectangle": "52,0.19,16,3.4",
+              "ClientRectangle": "52,0.19,24,3.4",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pengeluaranstokheader_details.qty}"
+                "Value": "{pengeluaranstokheader_details.qty} {pengeluaranstokheader_details.satuan} "
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -1546,7 +1570,7 @@
                 "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator"
               },
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "2": {
               "Ident": "StiText",
@@ -1585,7 +1609,7 @@
               "Name": "Text6",
               "Guid": "9ef09e76255bf5591d4097f0da3bff0b",
               "CanGrow": true,
-              "ClientRectangle": "70,0.19,30,3.4",
+              "ClientRectangle": "78,0.19,22,3.4",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1669,7 +1693,7 @@
             "8": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive14",
-              "ClientRectangle": "70,-2.85,0,0",
+              "ClientRectangle": "78,-2.85,0,0",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1913,7 +1937,7 @@
               "Guid": "9086d8061fea24e715cd77e69321e1e0",
               "CanGrow": true,
               "ClientRectangle": "148.59,11.26,54.45,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1934,7 +1958,7 @@
               "Guid": "fef05dde22ef97a78abadb185515da7e",
               "CanGrow": true,
               "ClientRectangle": "148.59,14.7,54.45,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1955,7 +1979,7 @@
               "Guid": "87c1e11a54771d5bc49f45eceaf51e5d",
               "CanGrow": true,
               "ClientRectangle": "148.59,18.2,54.45,4",
-              "ComponentPlacement": "ph.PageHeaderBand1",
+              "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1983,7 +2007,7 @@
             "13": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive14",
-              "ClientRectangle": "70,0.68,0,0",
+              "ClientRectangle": "78,0.68,0,0",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -2353,7 +2377,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive21",
           "Guid": "4ce5bc45e4628accf2cc893450e0f166",
-          "ClientRectangle": "70,28.77,0.254,6",
+          "ClientRectangle": "78,28.77,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2389,7 +2413,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive14",
           "Guid": "c72c05ead164a83da45c8f0544a62f5e",
-          "ClientRectangle": "70,40.74,0.254,15.53",
+          "ClientRectangle": "78,40.74,0.254,15.53",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
