@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
         <form action="" method="post">
           <div class="modal-body">
@@ -271,7 +276,7 @@
   })
 
 
-  function createInvoicelunaskepusat(invoiceheader_id) {
+  function createInvoicelunaskepusat(invoiceheader_id, nobukti) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -283,7 +288,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Input Pelunasan Invoice Ke Pusat')
+    $('#crudModalTitle').text('Add Pelunasan Invoice Ke Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     // $('#crudForm').find('[name=tglbukti]').val($('#tglshow').val()).trigger('change');
@@ -292,7 +297,7 @@
     Promise
       .all([
         // showDefault(form),
-        showInvoicelunaskepusat(form, invoiceheader_id)
+        showInvoicelunaskepusat(form, invoiceheader_id, nobukti)
       ])
       .then(() => {
         $('#crudModal').modal('show')
@@ -331,7 +336,7 @@
     }
   }
 
-  function editInvoicelunaskepusat(invoiceheader_id) {
+  function editInvoicelunaskepusat(invoiceheader_id, nobukti) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -343,14 +348,14 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Absen')
+    $('#crudModalTitle').text('Edit Pelunasan Invoice Ke Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     Promise
       .all([
-        showInvoicelunaskepusat(form, invoiceheader_id)
+        showInvoicelunaskepusat(form, invoiceheader_id, nobukti)
       ])
       .then(() => {
         $('#crudModal').modal('show')
@@ -364,7 +369,7 @@
       })
   }
 
-  function deleteInvoicelunaskepusat(invoiceheader_id) {
+  function deleteInvoicelunaskepusat(invoiceheader_id, nobukti) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -376,14 +381,14 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Absen')
+    $('#crudModalTitle').text('Delete Pelunasan Invoice Ke Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     Promise
       .all([
-        showInvoicelunaskepusat(form, invoiceheader_id)
+        showInvoicelunaskepusat(form, invoiceheader_id, nobukti)
       ])
       .then(() => {
         $('#crudModal').modal('show')
@@ -400,7 +405,7 @@
   }
 
 
-  function showInvoicelunaskepusat(form, invoiceheader_id) {
+  function showInvoicelunaskepusat(form, invoiceheader_id, nobukti) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}invoicelunaskepusat/${invoiceheader_id}`,
@@ -410,7 +415,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          tanggal: $('#tglbukti').val()
+          tanggal: $('#tglbukti').val(),
+          nobukti: nobukti
         },
         success: response => {
           $.each(response.data, (index, value) => {
@@ -440,7 +446,7 @@
     })
   }
 
-  function cekValidasi(invoiceheader_id, aksi) {
+  function cekValidasi(invoiceheader_id, aksi, nobukti) {
     $.ajax({
       url: `${apiUrl}invoicelunaskepusat/${invoiceheader_id}/cekvalidasi`,
       method: 'GET',
@@ -449,23 +455,24 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tanggal: $('#tglshow').val()
+        tanggal: $('#tglshow').val(),
+        nobukti: nobukti
       },
       success: response => {
         if (response.errors) {
           showDialog(response.message)
         } else {
           if (aksi == 'edit') {
-            editInvoicelunaskepusat(invoiceheader_id)
+            editInvoicelunaskepusat(invoiceheader_id, nobukti)
           } else {
-            deleteInvoicelunaskepusat(invoiceheader_id)
+            deleteInvoicelunaskepusat(invoiceheader_id, nobukti)
           }
         }
       }
     })
   }
 
-  function cekValidasiAdd(invoiceheader_id) {
+  function cekValidasiAdd(invoiceheader_id, nobukti) {
     $.ajax({
       url: `${apiUrl}invoicelunaskepusat/${invoiceheader_id}/cekvalidasiadd`,
       method: 'GET',
@@ -474,13 +481,14 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        periode: $('#periode').val()
+        periode: $('#periode').val(),
+        nobukti: nobukti
       },
       success: response => {
         if (response.errors) {
           showDialog(response.message)
         } else {
-          createInvoicelunaskepusat(invoiceheader_id)
+          createInvoicelunaskepusat(invoiceheader_id, nobukti)
         }
       }
     })
