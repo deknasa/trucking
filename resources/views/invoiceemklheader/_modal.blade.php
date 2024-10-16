@@ -60,26 +60,6 @@
 
               </div>
 
-              <div class="row form-group">
-
-                <div class="col-12 col-md-2">
-                  <label class="col-form-label">
-                    KAPAL <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-12 col-md-4">
-                  <input type="text" name="kapal" class="form-control">
-                </div>
-
-                <div class="col-12 col-md-2">
-                  <label class="col-form-label">
-                    DESTINATION <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-12 col-md-4">
-                  <input type="text" name="destination" class="form-control">
-                </div>
-              </div>
 
               <div class="row form-group">
 
