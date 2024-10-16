@@ -28,29 +28,30 @@ class LaporanKlaimPJTSupirController extends MyController
         return view('laporanklaimpjtsupir.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'dari' => $request->dari,
-    //         'kelompok' => $request->kelompok,
-    //         'kelompok_id' => $request->kelompok_id,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'dari' => $request->dari,
+            'kelompok' => $request->kelompok,
+            'kelompok_id' => $request->kelompok_id,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanklaimpjtsupir/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanklaimpjtsupir/report', $detailParams);
 
-    //     if ($header->successful()) {
-    //         $data = $header['data'];
-    //         $dataCabang['namacabang'] = $header['namacabang'];
-    //         $user = Auth::user();
-    //         return view('reports.laporanklaimpjtsupir', compact('data','dataCabang', 'user', 'detailParams'));
-    //     } else {
-    //         return response()->json($header->json(), $header->status());
-    //     }
-    // }
+        if ($header->successful()) {
+            $data = $header['data'];
+            $dataCabang['namacabang'] = $header['namacabang'];
+            $user = Auth::user();
+            $cabang['cabang'] = session('cabang');
+            return view('reports.laporanklaimpjtsupir', compact('data', 'dataCabang', 'user', 'detailParams','cabang'));
+        } else {
+            return response()->json($header->json(), $header->status());
+        }
+    }
 
     // public function export(Request $request): void
     // {
@@ -160,7 +161,7 @@ class LaporanKlaimPJTSupirController extends MyController
     //             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
     //         }
     //         $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
-           
+
     //         $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
     //         $sheet->setCellValue("B$detail_start_row", $dateValue);
     //         $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
@@ -172,7 +173,7 @@ class LaporanKlaimPJTSupirController extends MyController
     //         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
     //         $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
-           
+
     //         $detail_start_row++;
     //     }
 

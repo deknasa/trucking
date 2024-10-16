@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "f73aa1cf5034413295d9e2acddee3973",
+  "ReportGuid": "f826c63bd59ee4dfcffff9ced1c80d50",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728974598000+0700)/",
+  "ReportChanged": "/Date(1728611855000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -457,7 +457,7 @@
               "Text": {
                 "Value": "Periode"
               },
-              "Font": "Tahoma;;;",
+              "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -493,7 +493,7 @@
               "Text": {
                 "Value": "{parameter.dari}"
               },
-              "Font": "Tahoma;;;",
+              "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -503,7 +503,7 @@
               "Ident": "StiText",
               "Name": "Text7",
               "Guid": "0ecc49e3a25b03f41d7b91e7b337b00e",
-              "ClientRectangle": "37.97,11,32,4",
+              "ClientRectangle": "41.97,11,32,4",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -511,7 +511,7 @@
               "Text": {
                 "Value": "{parameter.sampai}"
               },
-              "Font": "Tahoma;;;",
+              "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -521,7 +521,7 @@
               "Ident": "StiText",
               "Name": "Text8",
               "Guid": "1edb1c4cfdfddba60d8f67169d983d60",
-              "ClientRectangle": "31.92,11,6,4",
+              "ClientRectangle": "35.96,11,8,4",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -545,7 +545,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "NO BUKTI"
+                "Value": "No Bukti"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -565,7 +565,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "NAMA PERKIRAAN"
+                "Value": "Nama Perkiraan"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -585,7 +585,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KETERANGAN"
+                "Value": "Keterangan"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -605,7 +605,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "DEBET"
+                "Value": "Debet"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -625,7 +625,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KREDIT"
+                "Value": "Kredit"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -645,7 +645,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "SALDO"
+                "Value": "Saldo"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -665,7 +665,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TANGGAL"
+                "Value": "Tanggal"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -703,7 +703,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "DEBET"
+                "Value": "Debet"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -723,7 +723,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KREDIT"
+                "Value": "Kredit"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -1031,7 +1031,7 @@
                 "Value": "Buku Kas / Bank"
               },
               "VertAlignment": "Center",
-              "Font": "Tahoma;;;",
+              "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1051,7 +1051,7 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": "Tahoma;;;",
+              "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1071,7 +1071,7 @@
                 "Value": "{data.namabank}"
               },
               "VertAlignment": "Center",
-              "Font": "Tahoma;;;",
+              "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1079,11 +1079,30 @@
             },
             "3": {
               "Ident": "StiText",
+              "Name": "Text28",
+              "Guid": "7af0a9a65694769698dc63b6eaccd961",
+              "PrintOn": "OnlyFirstPage",
+              "ClientRectangle": "88,4,30,4",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "SALDO AWAL"
+              },
+              "Font": "Tahoma;9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "4": {
+              "Ident": "StiText",
               "Name": "Text39",
               "Guid": "b27ae7cbf781781ad0945c96b74ce22a",
               "PrintOn": "OnlyFirstPage",
               "CanGrow": true,
-              "ClientRectangle": "257,0.7,27,4",
+              "ClientRectangle": "257,4,27,4",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1093,7 +1112,7 @@
                 "Value": "{datasaldo.saldo}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;;;",
+              "Font": "Tahoma;9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1107,7 +1126,7 @@
               },
               "Type": "Expression"
             },
-            "4": {
+            "5": {
               "Ident": "StiShape",
               "Name": "Shape1",
               "ClientRectangle": "2,-3.8,0,8",
@@ -1120,26 +1139,6 @@
                 "Ident": "StiVerticalLineShapeType"
               },
               "Font": ";9;Bold;"
-            },
-            "5": {
-              "Ident": "StiText",
-              "Name": "Text43",
-              "Guid": "c969d2a03faddbbe988ed6708f477276",
-              "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "88,-0.12,30,6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "SALDO AWAL"
-              },
-              "VertAlignment": "Center",
-              "Font": "Tahoma;;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
             }
           }
         },
@@ -1421,7 +1420,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font style=\"\" face=\"Tahoma\" size=\"8\">{data.keterangan}&nbsp;</font>"
+                "Value": "<font style=\"\" face=\"Tahoma\">{data.keterangan}&nbsp;</font>"
               },
               "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1445,7 +1444,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font style=\"\" face=\"Tahoma\" size=\"8\">{data.keterangancoa}&nbsp;</font>"
+                "Value": "<font style=\"\" face=\"Tahoma\">{data.keterangancoa}&nbsp;</font>"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1479,7 +1478,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font style=\"\" face=\"Tahoma\" size=\"8\">{data.nobukti}&nbsp;</font>"
+                "Value": "<font style=\"\" face=\"Tahoma\">{data.nobukti}&nbsp;</font>"
               },
               "Font": "Comic Sans MS3;;;",
               "Border": ";;;;;;;solid:Black",
@@ -1513,7 +1512,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "<font style=\"\" face=\"Tahoma\" size=\"8\">{data.tglbukti}</font>"
+                "Value": "<font style=\"\" face=\"Tahoma\">{data.tglbukti}</font>"
               },
               "Font": "SourceSansPro;;;",
               "Border": ";;;;;;;solid:Black",

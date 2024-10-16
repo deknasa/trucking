@@ -86,7 +86,7 @@
 @push('report-scripts')
 {{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script> --}}
 {{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
 <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
@@ -135,6 +135,69 @@
         initLookup()
     })
 
+    // $(document).on('click', `#btnPreview`, function(event) {
+    //     let dari = $('#crudForm').find('[name=dari]').val()
+    //     let sampai = $('#crudForm').find('[name=sampai]').val()
+    //     let agendari_id = $('#crudForm').find('[name=agendari_id]').val()
+    //     let agensampai_id = $('#crudForm').find('[name=agensampai_id]').val()
+    //     let agendari = $('#crudForm').find('[name=agendari]').val()
+    //     let agensampai = $('#crudForm').find('[name=agensampai]').val()
+
+    //     $.ajax({
+    //             url: `${apiUrl}laporankartupiutangperagen/report`,
+    //             method: 'GET',
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 dari: dari,
+    //                 sampai: sampai,
+    //                 agendari_id: agendari_id,
+    //                 agensampai_id: agensampai_id,
+    //                 agendari: agendari,
+    //                 agensampai: agensampai,
+    //                 pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+    //                 pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+    //                 pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+    //                 pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
+    //             },
+    //             success: function(response) {
+    //                 // console.log(response)
+    //                 let data = response.data
+    //                 let dataCabang = response.namacabang
+    //                 let detailParams = {
+    //                     dari: dari,
+    //                     sampai: sampai,
+    //                     agendari_id: agendari_id,
+    //                     agensampai_id: agensampai_id,
+    //                     agendari: agendari,
+    //                     agensampai: agensampai,
+    //                     pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+    //                     pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+    //                     pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+    //                     pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
+    //                 };
+    //                 let cabang = accessCabang
+
+    //                 laporankartupiutangperagen(data, detailParams, dataCabang, cabang);
+    //             },
+    //             error: function(error) {
+    //                 if (error.status === 422) {
+    //                     $('.is-invalid').removeClass('is-invalid');
+    //                     $('.invalid-feedback').remove();
+    //                     $('#rangeTglModal').modal('hide')
+    //                     setErrorMessages($('#crudForm'), error.responseJSON.errors);
+    //                 } else {
+    //                     showDialog(error.responseJSON.message);
+    //                 }
+    //             }
+    //         })
+    //         .always(() => {
+    //             $('#processingLoader').addClass('d-none')
+    //         });
+
+    // })
+
     $(document).on('click', `#btnPreview`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
@@ -142,61 +205,50 @@
         let agensampai_id = $('#crudForm').find('[name=agensampai_id]').val()
         let agendari = $('#crudForm').find('[name=agendari]').val()
         let agensampai = $('#crudForm').find('[name=agensampai]').val()
+        let pelanggandari_id= $('#crudForm').find('[name=pelanggandari_id]').val()
+        let pelanggansampai_id= $('#crudForm').find('[name=pelanggansampai_id]').val()
+        let pelanggandari= $('#crudForm').find('[name=pelanggandari]').val()
+        let pelanggansampai= $('#crudForm').find('[name=pelanggansampai]').val()
 
-        $.ajax({
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporankartupiutangperagen.report') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}&pelanggandari_id=${pelanggandari_id}&pelanggansampai_id=${pelanggansampai_id}&pelanggandari=${pelanggandari}&pelanggansampai=${pelanggansampai}`);
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+            }
+        })
+    })
+
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
                 url: `${apiUrl}laporankartupiutangperagen/report`,
-                method: 'GET',
+                dataType: "JSON",
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
-                    dari: dari,
-                    sampai: sampai,
-                    agendari_id: agendari_id,
-                    agensampai_id: agensampai_id,
-                    agendari: agendari,
-                    agensampai: agensampai,
-                    pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
-                    pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
-                    pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
-                    pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    agendari_id: $('#crudForm').find('[name=agendari_id]').val(),
+                    agensampai_id: $('#crudForm').find('[name=agensampai_id]').val(),
+                    agendari: $('#crudForm').find('[name=agendari]').val(),
+                    agensampai: $('#crudForm').find('[name=agensampai]').val(),
+                    isCheck: true,
                 },
-                success: function(response) {
-                    // console.log(response)
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        dari: dari,
-                        sampai: sampai,
-                        agendari_id: agendari_id,
-                        agensampai_id: agensampai_id,
-                        agendari: agendari,
-                        agensampai: agensampai,
-                        pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
-                        pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
-                        pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
-                        pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
-                    };
-                    let cabang = accessCabang
-
-                    laporankartupiutangperagen(data, detailParams, dataCabang, cabang);
+                success: (response) => {
+                    resolve(response);
                 },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
+                error: error => {
+                    reject(error)
+                },
             });
-
-    })
+        });
+    }
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')

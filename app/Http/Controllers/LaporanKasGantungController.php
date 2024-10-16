@@ -34,29 +34,30 @@ class LaporanKasGantungController extends MyController
         return view('laporankasgantung.index', compact('title','data'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'periode' => $request->periode,
-    //         'bank_id' => $request->bank_id,
-    //         'bank' => $request->bank,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'periode' => $request->periode,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporankasgantung/report', $detailParams);
-
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-
-    //     $printer['tipe'] = $request->printer;
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporankasgantung/report', $detailParams);
 
 
-    //     //   dd($data);
-    //     return view('reports.laporankasgantung', compact('data', 'dataCabang', 'user', 'detailParams', 'printer'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+
+        $printer['tipe'] = $request->printer;
+
+        $cabang['cabang'] = session('cabang');
+
+        return view('reports.laporankasgantung', compact('data', 'dataCabang', 'user', 'detailParams', 'printer','cabang'));
+    }
 
 
     // public function export(Request $request): void

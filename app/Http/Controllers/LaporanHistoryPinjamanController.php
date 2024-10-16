@@ -28,24 +28,25 @@ class LaporanHistoryPinjamanController extends MyController
         return view('laporanhistorypinjaman.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'supirdari_id' => $request->supirdari_id,
-    //         'supirsampai_id' => $request->supirsampai_id,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'supirdari_id' => $request->supirdari_id,
+            'supirsampai_id' => $request->supirsampai_id,
+        ];
 
-    //     $responses = Http::withHeaders($request->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanhistorypinjaman/report', $detailParams);
-    //     // dd($responses['data']);
-    //     $data = $responses['data'];
-    //     $dataCabang['namacabang'] = $responses['namacabang'];
-    //     $user = Auth::user();
+        $responses = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanhistorypinjaman/report', $detailParams);
+        // dd($responses['data']);
+        $data = $responses['data'];
+        $dataCabang['namacabang'] = $responses['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
 
-    //     return view('reports.laporanhistorypinjaman', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        return view('reports.laporanhistorypinjaman', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request)
     // {

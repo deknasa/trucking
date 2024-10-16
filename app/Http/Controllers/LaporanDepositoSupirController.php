@@ -44,23 +44,25 @@ class LaporanDepositoSupirController extends MyController
         return $response['data'];
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'periodedata_id' => $request->periodedata_id,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'periodedata_id' => $request->periodedata_id,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporandepositosupir/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporandepositosupir/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     return view('reports.laporandepositosupir', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+
+        return view('reports.laporandepositosupir', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

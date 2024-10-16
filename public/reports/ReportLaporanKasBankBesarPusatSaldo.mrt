@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "54bb3f0c662ea2b471d30b47180a24e6",
+  "ReportGuid": "0473d468e4c4562f768e05919844a485",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728617258000+0700)/",
+  "ReportChanged": "/Date(1728974717000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1093,30 +1093,11 @@
             },
             "3": {
               "Ident": "StiText",
-              "Name": "Text28",
-              "Guid": "7af0a9a65694769698dc63b6eaccd961",
-              "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "88,4,30,4",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "SALDO AWAL"
-              },
-              "Font": "Tahoma;;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "4": {
-              "Ident": "StiText",
               "Name": "Text39",
               "Guid": "b27ae7cbf781781ad0945c96b74ce22a",
               "PrintOn": "OnlyFirstPage",
               "CanGrow": true,
-              "ClientRectangle": "257,4,27,4",
+              "ClientRectangle": "257,0.7,27,4",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1138,6 +1119,26 @@
                 "DecimalDigits": 2,
                 "GroupSeparator": ","
               },
+              "Type": "Expression"
+            },
+            "4": {
+              "Ident": "StiText",
+              "Name": "Text43",
+              "Guid": "62afa781bb4f7476de750bef6428d2a7",
+              "PrintOn": "OnlyFirstPage",
+              "ClientRectangle": "88,-0.12,30,6",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "SALDO AWAL"
+              },
+              "VertAlignment": "Center",
+              "Font": "Tahoma;;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
               "Type": "Expression"
             }
           }

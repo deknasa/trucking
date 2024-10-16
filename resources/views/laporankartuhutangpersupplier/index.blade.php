@@ -129,58 +129,108 @@
         initLookup()
     })
 
+    // $(document).on('click', `#btnPreview`, function(event) {
+    //     let dari = $('#crudForm').find('[name=dari]').val()
+    //     let supplierdari_id = $('#crudForm').find('[name=supplierdari_id]').val()
+    //     let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
+    //     let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
+    //     let suppliersampai = $('#crudForm').find('[name=suppliersampai]').val()
+
+    //     $.ajax({
+    //             url: `${apiUrl}laporankartuhutangpersupplier/report`,
+    //             method: 'GET',
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 dari: dari,
+    //                 supplierdari_id: supplierdari_id,
+    //                 suppliersampai_id: suppliersampai_id,
+    //                 supplierdari: supplierdari,
+    //                 suppliersampai: suppliersampai,
+    //                 jenislaporan: $('#crudForm').find('[name=jenislaporan]').val()
+    //             },
+    //             success: function(response) {
+    //                 // console.log(response)
+    //                 let data = response.data
+    //                 let dataCabang = response.namacabang
+    //                 let detailParams = {
+    //                     dari: dari,
+    //                     supplierdari_id: supplierdari_id,
+    //                     suppliersampai_id: suppliersampai_id,
+    //                     supplierdari: supplierdari,
+    //                     suppliersampai: suppliersampai,
+    //                     jenislaporan: ($('#crudForm').find('[name=jenislaporan]').val() == '') ? 0 : $('#crudForm').find('[name=jenislaporan]').val()
+    //                 };
+    //                 let cabang = accessCabang
+    //                 laporankartuhutangpersupplier(data, detailParams, dataCabang, cabang);
+    //             },
+    //             error: function(error) {
+    //                 if (error.status === 422) {
+    //                     $('.is-invalid').removeClass('is-invalid');
+    //                     $('.invalid-feedback').remove();
+    //                     $('#rangeTglModal').modal('hide')
+    //                     setErrorMessages($('#crudForm'), error.responseJSON.errors);
+    //                 } else {
+    //                     showDialog(error.responseJSON.message);
+    //                 }
+    //             }
+    //         })
+    //         .always(() => {
+    //             $('#processingLoader').addClass('d-none')
+    //         });
+
+    // })
+
     $(document).on('click', `#btnPreview`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let supplierdari_id = $('#crudForm').find('[name=supplierdari_id]').val()
         let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
         let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
         let suppliersampai = $('#crudForm').find('[name=suppliersampai]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
+        getCekReport().then((response) => {
+            window.open(
+                `{{ route('laporankartuhutangpersupplier.report') }}?dari=${dari}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}&jenislaporan=${jenislaporan}`
+            )
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                // return showDialog(error.responseJSON.errors.export);
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+            }
+        })
+    })
 
-        $.ajax({
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
                 url: `${apiUrl}laporankartuhutangpersupplier/report`,
-                method: 'GET',
+                dataType: "JSON",
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
-                    dari: dari,
-                    supplierdari_id: supplierdari_id,
-                    suppliersampai_id: suppliersampai_id,
-                    supplierdari: supplierdari,
-                    suppliersampai: suppliersampai,
-                    jenislaporan: $('#crudForm').find('[name=jenislaporan]').val()
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    supplierdari: $('#crudForm').find('[name=supplierdari]').val(),
+                    supplierdari_id: $('#crudForm').find('[name=supplierdari_id]').val(),
+                    suppliersampai: $('#crudForm').find('[name=suppliersampai]').val(),
+                    suppliersampai_id: $('#crudForm').find('[name=suppliersampai_id]').val(),
+                    isCheck: true,
+                   
                 },
-                success: function(response) {
-                    // console.log(response)
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        dari: dari,
-                        supplierdari_id: supplierdari_id,
-                        suppliersampai_id: suppliersampai_id,
-                        supplierdari: supplierdari,
-                        suppliersampai: suppliersampai,
-                        jenislaporan: ($('#crudForm').find('[name=jenislaporan]').val() == '') ? 0 : $('#crudForm').find('[name=jenislaporan]').val()
-                    };
-                    let cabang = accessCabang
-                    laporankartuhutangpersupplier(data, detailParams, dataCabang, cabang);
+                success: (response) => {
+                    resolve(response);
                 },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
+                error: error => {
+                    reject(error)
+                },
             });
-
-    })
+        });
+    }
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')

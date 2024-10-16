@@ -52,32 +52,33 @@ class LaporanBukuBesarController extends MyController
         return $response;
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'dari' => $request->dari,
-    //         'sampai' => $request->sampai,
-    //         'coadari_id' => $request->coadari_id,
-    //         'coasampai_id' => $request->coasampai_id,
-    //         'coadari' => $request->coadari,
-    //         'coasampai' => $request->coasampai,
-    //         'cabang_id' => $request->cabang_id,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'coadari_id' => $request->coadari_id,
+            'coasampai_id' => $request->coasampai_id,
+            'coadari' => $request->coadari,
+            'coasampai' => $request->coasampai,
+            'cabang_id' => $request->cabang_id,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanbukubesar/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanbukubesar/report', $detailParams);
 
-    //     // dd($header);
+        // dd($header);
 
-    //     $data = $header['data'];
-    //     $dataheader = $header['dataheader'];
-    //     $printer['tipe'] = $request->printer;
-    //     $user = Auth::user();
-    //     // dd($data, $dataheader);
-    //     return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader', 'printer'));
-    // }
+        $data = $header['data'];
+        $dataheader = $header['dataheader'];
+        $printer['tipe'] = $request->printer;
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        // dd($data, $dataheader);
+        return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader', 'printer','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

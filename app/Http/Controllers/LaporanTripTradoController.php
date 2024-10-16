@@ -27,23 +27,25 @@ class LaporanTripTradoController extends MyController
         return view('laporantriptrado.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'dari' => $request->dari,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'dari' => $request->dari,
+        ];
         
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporantriptrado/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporantriptrado/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
-    //     $user = Auth::user();
-    //     return view('reports.laporantriptrado', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+
+        return view('reports.laporantriptrado', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
     
     // public function export(Request $request): void
     // {

@@ -53,11 +53,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -96,31 +91,30 @@
 
     })
 
-    // $(document).on('click', `#btnPreview`, function(event) {
-    //     let periode = $('#crudForm').find('[name=periode]').val()
-
-    //     if (periode != '') {
-
-    //         window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}`)
-    //     } else {
-    //         showDialog('ISI SELURUH KOLOM')
-    //     }
-    // })
-
     $(document).on('click', `#reportPrinterBesar`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
-        let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
 
-        getCekReport(periode, bank_id, bank, 'reportPrinterBesar')
+        if (periode != '') {
+
+            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&bank=${bank}&bank_id=${bank_id}&printer=reportPrinterBesar`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
     })
 
     $(document).on('click', `#reportPrinterKecil`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
-        let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
 
-        getCekReport(periode, bank_id, bank, 'reportPrinterKecil')
+        if (periode != '') {
+
+            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&bank=${bank}&bank_id=${bank_id}&printer=reportPrinterKecil`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
     })
 
     function getCekReport(periode, bank_id, bank, printer) {

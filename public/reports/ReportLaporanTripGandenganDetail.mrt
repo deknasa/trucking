@@ -1,12 +1,12 @@
 {
-  "ReportVersion": "2023.1.1",
-  "ReportGuid": "37f25ca017653ed6663772ef5cb82854",
+  "ReportVersion": "2024.3.6",
+  "ReportGuid": "4ff3077033a0a63aa22b33c61013903e",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanTripGandenganDetailA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1727249857000+0700)/",
+  "ReportChanged": "/Date(1728965911000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -17,7 +17,8 @@
       "Ident": "StiTableStyle",
       "Name": "Style1",
       "BackColor": "255,255,255",
-      "GridColor": "220,220,220"
+      "GridColor": "220,220,220",
+      "WinLossPositive": "99,142,198"
     }
   },
   "Dictionary": {
@@ -182,12 +183,18 @@
             "Type": "System.DateTime"
           },
           "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -274,6 +281,18 @@
             "Type": "System.DateTime"
           },
           "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "menu",
+            "NameInSource": "menu",
+            "Alias": "menu",
+            "Type": "System.String"
+          },
+          "14": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -370,6 +389,7 @@
         "0": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
+          "CanGrow": true,
           "ClientRectangle": "0,4,209.1,28",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -391,7 +411,7 @@
                 "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;10;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -411,7 +431,7 @@
                 "Value": "{data.judulLaporan}"
               },
               "HorAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;10;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -433,7 +453,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;;Italic;",
+              "Font": "Tahoma;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -459,7 +479,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -485,7 +505,7 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;;Italic;",
+              "Font": "Tahoma;;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -508,7 +528,7 @@
                 "Value": "Periode"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -526,7 +546,7 @@
               "Text": {
                 "Value": "Gandengan"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -545,7 +565,7 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -563,7 +583,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": ";9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -584,7 +604,7 @@
                 "Value": "{parameter.dari}"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -611,7 +631,7 @@
                 "Value": "s/d"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -632,7 +652,7 @@
                 "Value": "{parameter.sampai}"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -658,7 +678,7 @@
               "Text": {
                 "Value": "{parameter.gandengandari} s/d {parameter.gandengansampai}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -669,6 +689,7 @@
         "1": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
+          "CanGrow": true,
           "ClientRectangle": "0,40,209.1,24",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
@@ -691,7 +712,7 @@
                 "Value": "GANDENGAN"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -718,7 +739,7 @@
                 "Value": "{data.gandengan}"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -745,7 +766,7 @@
                 "Value": "Tanggal"
               },
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -773,7 +794,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -801,7 +822,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -829,7 +850,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -857,7 +878,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -885,7 +906,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -913,7 +934,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -941,7 +962,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;10;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1179,6 +1200,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
+          "CanGrow": true,
           "ClientRectangle": "0,72,209.1,8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
@@ -1200,7 +1222,7 @@
               "Text": {
                 "Value": "{data.tanggal}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1226,7 +1248,7 @@
               "Text": {
                 "Value": "{data.nosp}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1248,7 +1270,7 @@
               "Text": {
                 "Value": "{data.supir}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1270,7 +1292,7 @@
               "Text": {
                 "Value": "{data.nocont}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1292,7 +1314,7 @@
               "Text": {
                 "Value": "{data.noplat}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1314,7 +1336,7 @@
               "Text": {
                 "Value": "{data.rute}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1336,7 +1358,7 @@
               "Text": {
                 "Value": "{data.cont}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1358,7 +1380,7 @@
               "Text": {
                 "Value": "{data.keterangan}"
               },
-              "Font": "SourceSansPro;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1373,6 +1395,7 @@
         "3": {
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
+          "CanGrow": true,
           "ClientRectangle": "0,88,209.1,36",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1394,7 +1417,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1414,6 +1437,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1433,7 +1457,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1453,7 +1477,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "SourceSansPro;;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",

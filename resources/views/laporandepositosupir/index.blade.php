@@ -93,44 +93,8 @@
         // let periodedata_id = $('#crudForm').find('[name=periodedata_id]').val()
         // let periodedata = $('#crudForm').find('[name=periodedata]').val()
         if (sampai != '') {
-
             // window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&periodedata=${periodedata}&periodedata_id=${periodedata_id}`)
-            // window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
-            $.ajax({
-                    url: `${apiUrl}laporandepositosupir/report`,
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                        sampai: sampai,
-                    },
-                    success: function(response) {
-                        // console.log(response)
-                        let data = response.data
-                        let dataCabang = response.namacabang
-                        let detailParams = {
-                            sampai: sampai,
-                        };
-                        // let user = response.data[0].username;
-                        let cabang = accessCabang
-
-                        laporandepositosupir(data, dataCabang, detailParams,cabang);
-                    },
-                    error: function(error) {
-                        if (error.status === 422) {
-                            $('.is-invalid').removeClass('is-invalid');
-                            $('.invalid-feedback').remove();
-                            $('#rangeTglModal').modal('hide')
-                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                        } else {
-                            showDialog(error.responseJSON.message);
-                        }
-                    }
-                })
-                .always(() => {
-                    $('#processingLoader').addClass('d-none')
-                });
+            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

@@ -44,7 +44,8 @@ class LaporanBanGudangSementaraController extends MyController
         $data = $header['data'];
         $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanbangudangsementara', compact('data','dataCabang', 'user', 'detailParams'));
+        $cabang['cabang'] = session('cabang');
+        return view('reports.laporanbangudangsementara', compact('data','dataCabang', 'user', 'detailParams','cabang'));
     }
 
     public function export(Request $request): void

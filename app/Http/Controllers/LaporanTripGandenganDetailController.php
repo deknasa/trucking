@@ -47,7 +47,8 @@ class LaporanTripGandenganDetailController extends MyController
         $data = $header['data'];
         // dd($data);
         $user = Auth::user();
-        return view('reports.laporantripgandengandetail', compact('data', 'user', 'detailParams'));
+        $cabang['cabang'] = session('cabang');
+        return view('reports.laporantripgandengandetail', compact('data', 'user', 'detailParams','cabang'));
     }
 
     // public function export(Request $request): void

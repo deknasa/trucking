@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "6d658c5c9d43a4003dc14947c4d0dc78",
+  "ReportGuid": "6d59c89e9d1fb6731b14f5b515ce0623",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugiA4.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1728438325000+0700)/",
+  "ReportChanged": "/Date(1728619876000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -36,9 +36,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "OrderMain",
-            "NameInSource": "OrderMain",
-            "Alias": "OrderMain",
+            "Name": "ordermain",
+            "NameInSource": "ordermain",
+            "Alias": "ordermain",
             "Type": "System.String"
           },
           "2": {
@@ -204,28 +204,28 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "6": {
             "Name": "pivot",
@@ -302,28 +302,28 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "12": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "13": {
             "Name": "menu",
@@ -545,7 +545,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -596,7 +596,7 @@
               "Text": {
                 "Value": "PERIODE"
               },
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -620,7 +620,7 @@
               "Text": {
                 "Value": "{parameter.sampai}"
               },
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -639,7 +639,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -666,7 +666,7 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -827,7 +827,7 @@
                 "Value": "{Sum(data.Nominal)}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -863,13 +863,18 @@
               "GrowToHeight": true,
               "ClientRectangle": "1.4,0.1,9.4,0.6",
               "ComponentPlacement": "d.DataBand1",
+              "Expressions": {
+                "0": {
+                  "Name": "Font"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
                 "Value": "<font style=\"\" face=\"Tahoma\">{data.keterangancoa}&nbsp;</font>"
               },
-              "Font": "Comic Sans MS3;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -883,6 +888,11 @@
               "GrowToHeight": true,
               "ClientRectangle": "11,0.1,4,0.6",
               "ComponentPlacement": "d.DataBand1",
+              "Expressions": {
+                "0": {
+                  "Name": "Font"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -890,7 +900,7 @@
                 "Value": "{data.Nominal}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;9;;",
+              "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -948,13 +958,19 @@
               "GrowToHeight": true,
               "ClientRectangle": "0.4,0.1,20.02,1",
               "ComponentPlacement": "gf.GroupFooterBand3",
+              "Expressions": {
+                "0": {
+                  "Name": "Font"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Brush": "solid:",
               "ShapeType": {
                 "Ident": "StiRectangleShapeType"
-              }
+              },
+              "Font": "Tahoma;;;"
             },
             "1": {
               "Ident": "StiText",
@@ -970,7 +986,7 @@
                 "Value": "{Sum(data.Nominal)}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -989,6 +1005,11 @@
               "Guid": "1df8135b08d27a6a9bfb47ec52f22018",
               "ClientRectangle": "0.61,0.38,10.2,0.6",
               "ComponentPlacement": "gf.GroupFooterBand3",
+              "Expressions": {
+                "0": {
+                  "Name": "Font"
+                }
+              },
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1062,7 +1083,7 @@
                 "Value": "{Sum(data.Nominal)}"
               },
               "HorAlignment": "Right",
-              "Font": "Tahoma;9;Bold;",
+              "Font": "Tahoma;;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",

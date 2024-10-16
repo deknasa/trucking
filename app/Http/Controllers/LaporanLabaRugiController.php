@@ -65,13 +65,14 @@ class LaporanLabaRugiController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanlabarugi/report', $detailParams);
 
+        $cabang['cabang'] = session('cabang');
 
         if ($header->successful()) {
             $data = $header['data'];
             $dataheader = $header['dataheader'];
             $user = Auth::user();
             // return response()->json(['url' => route('reports.laporanlabarugi', compact('data', 'user', 'detailParams'))]);
-            return view('reports.laporanlabarugi', compact('data', 'dataheader', 'user', 'detailParams'));
+            return view('reports.laporanlabarugi', compact('data', 'dataheader', 'user', 'detailParams','cabang'));
         } else {
             return response()->json($header->json(), $header->status());
         }

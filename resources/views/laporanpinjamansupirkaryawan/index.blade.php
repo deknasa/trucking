@@ -49,11 +49,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -95,46 +90,42 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (sampai != '') {
-            $('#processingLoader').removeClass('d-none')
-            $.ajax({
-                    url: `${apiUrl}laporanpinjamansupirkaryawan/report`,
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                        sampai: sampai,
-                        jenis: jenis
-                    },
-                    success: function(response) {
-                        // console.log(response)
-                        let data = response.data
-                        let dataCabang = response.namacabang
-                        let detailParams = {
-                            sampai: sampai,
-                            jenis: jenis
-                        };
-                        laporanpinjamansupirkaryawan(data, detailParams, dataCabang);
-                    },
-                    error: function(error) {
-                        if (error.status === 422) {
-                            $('.is-invalid').removeClass('is-invalid');
-                            $('.invalid-feedback').remove();
-                            $('#rangeTglModal').modal('hide')
-                            setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                        } else {
-                            showDialog(error.responseJSON.message);
-                        }
-                    }
-                })
-                .always(() => {
-                    $('#processingLoader').addClass('d-none')
-                });
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanpinjamansupirkaryawan.report') }}?sampai=${sampai}&jenis=${jenis}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+            }
+        })
     })
+
+
+    function getCekReport() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporanpinjamansupirkaryawan/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+                },
+            });
+        });
+    }
+
 
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()

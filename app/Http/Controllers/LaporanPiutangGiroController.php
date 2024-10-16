@@ -27,24 +27,26 @@ class LaporanPiutangGiroController extends MyController
         return view('laporanpiutanggiro.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'periode' => $request->periode,
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'periode' => $request->periode,
 
-    //     ];
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanpiutanggiro/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpiutanggiro/report', $detailParams);
 
-    //     $data = $header['data'];
-    //     $dataCabang['namacabang'] = $header['namacabang'];
+        $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
 
-    //     $user = Auth::user();
-    //     return view('reports.laporanpiutanggiro', compact('data','dataCabang', 'user', 'detailParams'));
-    // }
+        $user = Auth::user();
+        $cabang['cabang'] = session('cabang');
+        
+        return view('reports.laporanpiutanggiro', compact('data','dataCabang', 'user', 'detailParams','cabang'));
+    }
 
     // public function export(Request $request): void
     // {

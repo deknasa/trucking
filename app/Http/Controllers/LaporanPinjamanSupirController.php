@@ -29,26 +29,26 @@ class LaporanPinjamanSupirController extends MyController
         return view('laporanpinjamansupir.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'jenis' => $request->jenis,
-    //     ];
-
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporanpinjamansupir/report', $detailParams);
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'jenis' => $request->jenis,
+        ];
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpinjamansupir/report', $detailParams);
             
-    //     if ($header->successful()) {
-    //         $data = $header['data'];
-    //         $user = Auth::user();
-    //         return view('reports.laporanpinjamansupir', compact('data', 'user', 'detailParams'));
-    //     } else {
-    //         return response()->json($header->json(), $header->status());
-    //     }
-    // }
+        if ($header->successful()) {
+            $data = $header['data'];
+            $user = Auth::user();
+            $cabang = session('cabang');
+            return view('reports.laporanpinjamansupir', compact('data', 'user', 'detailParams','cabang'));
+        } else {
+            return response()->json($header->json(), $header->status());
+        }
+    }
 
     // public function export(Request $request): void
     // {
