@@ -46,7 +46,13 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'job emkl',
         name: 'nobukti',
-        width: '500px',
+        width: '200px',
+        align: 'left'
+      },
+      {
+        label: 'no cont',
+        name: 'nocont',
+        width: '200px',
         align: 'left'
       },
       {
