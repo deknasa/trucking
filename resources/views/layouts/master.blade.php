@@ -1234,33 +1234,6 @@
 
 
     window.addEventListener('beforeunload', function(e) {
-      window.onerror = function (message, source, lineno, colno, error) {
-            const errorData = {
-                message: message,
-                source: source,
-                lineno: lineno,
-                colno: colno,
-                stack: error ? error.stack : null
-            };
-
-            // Mengirim error ke server Laravel
-            fetch('/trucking/errorlog/log-error', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(errorData)
-            }).then(response => {
-                if (response.ok) {
-                    console.log('Error logged successfully');
-                } else {
-                    console.error('Failed to log error');
-                }
-            });
-
-            // Supaya error tetap muncul di console browser
-            return false;
-        };
      
       removeEditingBy($('#crudForm').find('[name=id]').val())
     });
