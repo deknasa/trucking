@@ -47,7 +47,7 @@ $idLookup = isset($id) ? $id : null;
     {
       label: 'KETERANGAN',
       name: 'keterangan',
-      hidden: true,
+      width: "250px"
     },
     
     

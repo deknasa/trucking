@@ -77,15 +77,15 @@
 
 
     $(document).ready(function() {
-        initLookup()
+        initLookupIndex()
         @isset($request['tgldari'])
         tgldariheader = `{{ $request['tgldari'] }}`;
         @endisset
         @isset($request['tglsampai'])
         tglsampaiheader = `{{ $request['tglsampai'] }}`;
         @endisset
-        @isset($request['jenisorder_id'])
-        jenisorder_id = `{{ $request['jenisorder_id'] }}`;
+        @isset($request['jenisorder_id_index'])
+        jenisorder_id = `{{ $request['jenisorder_id_index'] }}`;
         @endisset
 
         setRange(true)
@@ -94,7 +94,7 @@
         $(document).on('click', '#btnReload', function(event) {
             loadDataHeaderJobEmkl('jobemkl', {
                 proses: 'reload',
-                jenisorder_id: $('#crudForm').find('[name=jenisorder_id]').val(),
+                jenisorder_id: $('#crudForm').find('[name=jenisorder_id_index]').val(),
 
             })
         })
@@ -106,7 +106,7 @@
                 postData: {
                     tgldari: $('#tgldariheader').val(),
                     tglsampai: $('#tglsampaiheader').val(),
-                    jenisorder_id: $('#jenisorder_id').val(),
+                    jenisorder_id: $('#jenisorder_id_index').val(),
                     proses: 'reload'
                 },
                 datatype: "json",
@@ -689,6 +689,34 @@
                     submitButton.removeAttr('disabled')
                 })
         })
+
+        function initLookupIndex() {
+            $('.jenisorder-lookup-index').lookupV3({
+                title: 'Jenis Order Lookup',
+                fileName: 'jenisorderV3',
+                labelColumn: false,
+                beforeProcess: function(test) {
+                    this.postData = {
+                    Aktif: 'AKTIF',
+                    }
+                },
+                onSelectRow: (jenisorder, element) => {
+                    $('#crudForm [name=jenisorder_id_index]').first().val(jenisorder.id)
+                    jenisorderId = jenisorder.id
+                    element.val(jenisorder.keterangan)
+                    element.data('currentValue', element.val())
+                    tampilanMuatanBongkaran()
+                },
+                onCancel: (element) => {
+                    element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                    $('#crudForm [name=jenisorder_id_index]').first().val('')
+                    element.val('')
+                    element.data('currentValue', element.val())
+                }
+                })
+        }
 
         function getCekExport(params) {
 

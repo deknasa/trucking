@@ -23,9 +23,9 @@
                     class="text-danger">*</span></label>
             <div class="col-sm-4 mt-2">
                 <div class="input-group">
-                    <input type="hidden" name="jenisorder_id">
-                    <input type="text" id="jenisorder" name="jenisorder"
-                        class="form-control jenisorder-lookup">
+                    <input type="hidden" id="jenisorder_id_index" name="jenisorder_id_index">
+                    <input type="text" id="jenisorder_index" name="jenisorder_index"
+                        class="form-control jenisorder-lookup-index">
                 </div>
             </div>
         </div>            
