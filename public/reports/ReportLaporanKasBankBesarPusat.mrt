@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "f73aa1cf5034413295d9e2acddee3973",
+  "ReportGuid": "e9a7ee401b3b8af0ccf516b4170d4592",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportLaporanKasBankBesarPusat.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusat.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728974598000+0700)/",
+  "ReportChanged": "/Date(1729137382000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1126,7 +1126,7 @@
               "Name": "Text43",
               "Guid": "c969d2a03faddbbe988ed6708f477276",
               "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "88,-0.12,30,6",
+              "ClientRectangle": "91,-0.12,30,6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
