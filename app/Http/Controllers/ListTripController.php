@@ -20,6 +20,8 @@ class ListTripController extends MyController
         $jobmanual = DB::table("parameter")->from(DB::raw("parameter with (readuncommitted)"))
         ->where('grp','JOB TRUCKING MANUAL')->first()->text ?? 'TIDAK';
         $data = [
+            'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'combogajisupir' => $this->comboList('list', 'STATUS SUDAH BUKA', 'STATUS SUDAH BUKA'),
             'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
             'combogudangsama' => $this->comboList('list', 'STATUS GUDANG SAMA', 'STATUS GUDANG SAMA')
         ];

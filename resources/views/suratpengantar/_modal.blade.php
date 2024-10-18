@@ -862,6 +862,10 @@
         value: $('#crudForm').find(`[name="statuslongtrip"]`).val()
       })
       data.push({
+        name: 'statuslangsir',
+        value: $('#crudForm').find(`[name="statuslangsir"]`).val()
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
