@@ -430,11 +430,18 @@
                 success: response => {
                     $('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
+                    console.log( $('#tgldariheader').val(), $('#tglsampaiheader').val())
 
-                    id = response.data.id
+                    id = $('#jqGrid').jqGrid('getGridParam','selrow')
 
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: $('#tgldariheader').val(),
+                            tglsampai: $('#tglsampaiheader').val(), 
+                            supirheader: $('#supirheader_id').val(),
+                            proses: 'reload'
+                        }
                     }).trigger('reloadGrid');
 
                     if (response.data.grp == 'FORMAT') {
@@ -568,6 +575,7 @@
         indexRitasi = 0
         removeEditingBy($('#crudForm').find('[name=id]').val())
         $('#crudModal').find('.modal-body').html(modalBody)
+        $('#crudModalRitasi').find('.modal-body').html(modalBodyRitasi)
     })
 
     function removeEditingBy(id) {
@@ -664,7 +672,7 @@
             isPulangLongtrip = false;
         }
         moveKotaUpah(statuslongtrip)
-        enableTripAsalLongTrip()
+        // enableTripAsalLongTrip()
         clearUpahSupir()
         setJobReadOnly()
     })
@@ -1161,10 +1169,11 @@
                             let detailRow = $(`   
                             <tr>
                                 <td>
-                                    <div type="button" class="delete-row"><span><i class="fas fa-trash-alt"></i></span></div>
+                                    <div type="button"  class="delete-row">${detail.statusapprovalmandor == 4 ? '<span><i class="fas fa-trash-alt"></i></span>' : ''}</div>
                                 </td>
                                 <td></td>
                                 <td>
+                                    <input type="hidden" name="ritasi_id[]">
                                     <input type="hidden" name="jenisritasi_id[]" id="jenisritasi_id_${index}">
                                     <input type="text" name="jenisritasi[]" class="form-control dataritasi-lookup-${index}" data-current-value="${detail.jenisritasi}" id="jenisritasi_${index}">
                                 </td>
@@ -1178,6 +1187,7 @@
                                 </td>
                             </tr>
                             `)
+                            detailRow.find(`[name="ritasi_id[]"]`).val(detail.id)
                             detailRow.find(`[name="jenisritasi_id[]"]`).val(detail.jenisritasi_id)
                             detailRow.find(`[name="jenisritasi[]"]`).val(detail.jenisritasi)
                             detailRow.find(`[name="ritasidari_id[]"]`).val(detail.ritasidari_id)
@@ -1188,19 +1198,10 @@
                             $('#ritasiList tbody').append(detailRow)
                             
                             initLookupDetail(index)
-                            if (detail.jenisritasi_id == 3) {
-                                detailRow.find(`[name="ritasidari[]"]`).prop('readonly', false)
-                                detailRow.find(`[name="ritasike[]"]`).prop('readonly', false)
-                                let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
-                                ritDari.find('.button-clear').attr('disabled', false)
-                                ritDari.children().find('.lookup-toggler').attr('disabled', false)
-
-                                let ritKe = detailRow.find(`[name="ritasike[]"]`).parents('.input-group')
-                                ritKe.find('.button-clear').attr('disabled', false)
-                                ritKe.children().find('.lookup-toggler').attr('disabled', false)
-
-                            } else {
-
+                            if(detail.statusapprovalmandor == 3){
+                                detailRow.find(`[name="ritasidari[]"]`).prop('readonly', true)
+                                detailRow.find(`[name="ritasike[]"]`).prop('readonly', true)
+                                detailRow.find(`[name="jenisritasi[]"]`).prop('readonly', true)
                                 let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
                                 ritDari.find('.button-clear').attr('disabled', true)
                                 ritDari.children().find('.lookup-toggler').attr('disabled', true)
@@ -1209,6 +1210,34 @@
                                 ritKe.find('.button-clear').attr('disabled', true)
                                 ritKe.children().find('.lookup-toggler').attr('disabled', true)
 
+                                let jenisRit = detailRow.find(`[name="jenisritasi[]"]`).parents('.input-group')
+                                jenisRit.find('.button-clear').attr('disabled', true)
+                                jenisRit.children().find('.lookup-toggler').attr('disabled', true)
+                            } else {
+                                
+                                if (detail.jenisritasi_id == 3) {
+                                    detailRow.find(`[name="ritasidari[]"]`).prop('readonly', false)
+                                    detailRow.find(`[name="ritasike[]"]`).prop('readonly', false)
+                                    let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
+                                    ritDari.find('.button-clear').attr('disabled', false)
+                                    ritDari.children().find('.lookup-toggler').attr('disabled', false)
+
+                                    let ritKe = detailRow.find(`[name="ritasike[]"]`).parents('.input-group')
+                                    ritKe.find('.button-clear').attr('disabled', false)
+                                    ritKe.children().find('.lookup-toggler').attr('disabled', false)
+
+                                } else {
+
+                                    let ritDari = detailRow.find(`[name="ritasidari[]"]`).parents('.input-group')
+                                    ritDari.find('.button-clear').attr('disabled', true)
+                                    ritDari.children().find('.lookup-toggler').attr('disabled', true)
+
+                                    let ritKe = detailRow.find(`[name="ritasike[]"]`).parents('.input-group')
+                                    ritKe.find('.button-clear').attr('disabled', true)
+                                    ritKe.children().find('.lookup-toggler').attr('disabled', true)
+
+                                }
+                                
                             }
                             indexRitasi = index
 
@@ -3230,6 +3259,7 @@
         </td>
         <td></td>
         <td>
+          <input type="hidden" name="ritasi_id[]">
           <input type="hidden" name="jenisritasi_id[]" id="jenisritasi_id_${indexRitasi}">
           <input type="text" name="jenisritasi[]" id="jenisritasi-${indexRitasi}" class="form-control dataritasi-lookup-${indexRitasi}" id="jenisritasi_${indexRitasi}">
         </td>

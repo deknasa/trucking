@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "0473d468e4c4562f768e05919844a485",
+  "ReportGuid": "d3a5c93a56f05cf6a9d8243b991efe3a",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarPusatSaldo.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728974717000+0700)/",
+  "ReportChanged": "/Date(1729137423000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1126,7 +1126,7 @@
               "Name": "Text43",
               "Guid": "62afa781bb4f7476de750bef6428d2a7",
               "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "88,-0.12,30,6",
+              "ClientRectangle": "91,-0.12,30,6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

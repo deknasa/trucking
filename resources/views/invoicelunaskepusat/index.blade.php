@@ -390,10 +390,11 @@
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+              let valuebukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasiAdd(rowData.invoiceheader_id)
+                cekValidasiAdd(rowData.invoiceheader_id, valuebukti)
               }
             }
           },
@@ -404,11 +405,12 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
-
+              let valuebukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+              
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(rowData.invoiceheader_id, 'edit')
+                cekValidasi(rowData.invoiceheader_id, 'edit', valuebukti)
               }
             }
           },
@@ -418,11 +420,13 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId); 
+              let valuebukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                            
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(rowData.invoiceheader_id, 'delete')
+                cekValidasi(rowData.invoiceheader_id, 'delete', valuebukti)
               }
             }
           },
