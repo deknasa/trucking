@@ -2353,6 +2353,7 @@
         element.data('currentValue', element.val())
         enabledUpahSupir()
         clearTripAsal()
+        getDataUpahSupir(true)
         // getGaji()
       },
       onCancel: (element) => {
