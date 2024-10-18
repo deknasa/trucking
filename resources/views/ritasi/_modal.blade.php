@@ -296,7 +296,11 @@
     initDatepicker('datepickerIndex')
   })
 
-  function removeEditingByRitasi(id) {
+  function removeEditingBy(id) {
+    if (id == "") {
+      return ;
+    }
+
     let formData = new FormData();
 
 
