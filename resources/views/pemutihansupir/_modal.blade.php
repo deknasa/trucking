@@ -564,7 +564,9 @@
   })
 
   function removeEditingBy(id) {
-
+    if (id == "") {
+      return ;
+    }
     let formData = new FormData();
 
 

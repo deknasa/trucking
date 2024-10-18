@@ -242,6 +242,9 @@
 
   })
   function removeEditingBy(id) {
+    if (id == "") {
+      return ;
+    }
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
       method: 'POST',

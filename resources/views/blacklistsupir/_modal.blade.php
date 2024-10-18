@@ -193,6 +193,9 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
   function removeEditingBy(Id) {
+    if (Id == "") {
+      return ;
+    }
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
       method: 'POST',

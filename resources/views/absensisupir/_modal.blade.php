@@ -303,7 +303,9 @@
   })
 
   function removeEditingBy(id) {
-
+    if (id == "") {
+      return ;
+    }
          
 
     
