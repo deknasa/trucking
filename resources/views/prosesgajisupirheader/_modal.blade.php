@@ -323,6 +323,7 @@
     let selectedGajiSupir = [];
     let selectedGajiKenek = [];
     let selectedExtra = [];
+    let selectedBatas = [];
     let sortnameRincian = 'nobuktiric'
     let sortorderRincian = 'asc';
     let pageRincian = 0;
@@ -693,7 +694,7 @@
                             }
                         }).trigger('reloadGrid');
 
-                        clearSelectedRows()
+                        clearSelectedRowsReal()
                         if (id == 0) {
                             $('#detail').jqGrid().trigger('reloadGrid')
                         }
@@ -779,7 +780,7 @@
 
     function removeEditingBy(id) {
         if (id == "") {
-            return ;
+            return;
         }
         let formData = new FormData();
 
@@ -1083,7 +1084,7 @@
                                 $(this).find(`td input:checkbox`).prop('checked', true)
 
                                 if ($('#crudForm').data('action') == 'edit') {
-                                    if (isReload) {
+                                    if (isReload && accessCabang != 'MEDAN') {
                                         $(this).find(`td input:checkbox`).prop("disabled", false);
                                     } else {
                                         $(this).find(`td input:checkbox`).prop("disabled", true);
@@ -1599,7 +1600,7 @@
                             tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
                             statusjeniskendaraan: $('#crudForm').find('[name=statusjeniskendaraan]').val(),
                             sortIndex: sortnameRincian,
-                            aksi: ''
+                            aksi: 'show'
                         },
                         datatype: "json"
                     }).trigger('reloadGrid');
@@ -1738,6 +1739,28 @@
                     clearRows()
                     isReload = true;
                     $(`[name="rincianId[]"]`).prop('disabled', false)
+                    if (accessCabang == 'MEDAN') {
+                        $.each(response.data, (index, value) => {
+                            if (value.statusbatas == '0') {
+                                selectedRows.push(value.idric)
+                                selectedBorongan.push(value.borongan)
+                                selectedGajiSupir.push(value.gajisupir)
+                                selectedGajiKenek.push(value.gajikenek)
+                                selectedExtra.push(value.extra)
+                                selectedJalan.push(value.uangjalan)
+                                selectedKomisi.push(value.komisisupir)
+                                selectedMakan.push(value.uangmakanharian)
+                                selectedMakanBerjenjang.push(value.uangmakanberjenjang)
+                                selectedExtraHeader.push(value.biayaextraheader)
+                                selectedPP.push(value.potonganpinjaman)
+                                selectedPS.push(value.potonganpinjamansemua)
+                                selectedDeposito.push(value.deposito)
+                                selectedBBM.push(value.bbm)
+                                selectedRIC.push(value.nobuktiric)
+                                selectedSupir.push(value.supir_id)
+                            }
+                        })
+                    }
 
                 }
                 $('#rekapRincian').jqGrid('setGridParam', {
@@ -1893,7 +1916,7 @@
         selectedSupir = [];
     }
 
-    function clearSelectedRows() {
+    function clearSelectedRowsReal() {
         selectedRows = [];
         selectedBorongan = [];
         selectedGajiSupir = [];
@@ -1910,6 +1933,54 @@
         selectedBBM = [];
         selectedRIC = [];
         selectedSupir = [];
+        selectedBatas = [];
+        $('#rekapRincian').trigger('reloadGrid')
+    }
+
+    function clearSelectedRows() {
+        if ($('#crudForm').data('action') == 'edit' && accessCabang == 'MEDAN') {
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedBatas[i] == 1) {
+                    selectedRows.splice(i, 1);
+                    selectedRIC.splice(i, 1);
+                    selectedSupir.splice(i, 1);
+                    selectedPP.splice(i, 1);
+                    selectedPS.splice(i, 1);
+                    selectedDeposito.splice(i, 1);
+                    selectedBBM.splice(i, 1);
+                    selectedBorongan.splice(i, 1);
+                    selectedJalan.splice(i, 1);
+                    selectedKomisi.splice(i, 1);
+                    selectedMakan.splice(i, 1);
+                    selectedMakanBerjenjang.splice(i, 1);
+                    selectedExtraHeader.splice(i, 1);
+                    selectedGajiSupir.splice(i, 1);
+                    selectedGajiKenek.splice(i, 1);
+                    selectedExtra.splice(i, 1);
+                    selectedBatas.splice(i, 1);
+                }
+            }
+            countNominal()
+        } else {
+            selectedRows = [];
+            selectedBorongan = [];
+            selectedGajiSupir = [];
+            selectedExtra = [];
+            selectedGajiKenek = [];
+            selectedJalan = [];
+            selectedKomisi = [];
+            selectedMakan = [];
+            selectedMakanBerjenjang = [];
+            selectedExtraHeader = [];
+            selectedPP = [];
+            selectedPS = [];
+            selectedDeposito = [];
+            selectedBBM = [];
+            selectedRIC = [];
+            selectedSupir = [];
+            selectedBatas = [];
+
+        }
         $('#rekapRincian').trigger('reloadGrid')
     }
 
@@ -1987,7 +2058,9 @@
                 selectedBBM = response.data.map((data) => data.bbm)
                 selectedRIC = response.data.map((data) => data.nobuktiric)
                 selectedSupir = response.data.map((data) => data.supir_id)
-
+                if (aksi == 'edit' && accessCabang == 'MEDAN') {
+                    selectedBatas = response.data.map((data) => data.statusbatas)
+                }
                 $('#rekapRincian').jqGrid('setGridParam', {
                     url: `${apiUrl}prosesgajisupirheader/${url}`,
                     postData: {
