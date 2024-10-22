@@ -1242,7 +1242,7 @@
                             indexRitasi = index
 
                         })
-
+                        indexRitasi+=1
                     }
                     setRowNumbers()
                     resolve()

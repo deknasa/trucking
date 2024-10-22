@@ -19,7 +19,7 @@
         colModel: [
           
           {
-            label: 'STATUS APP.',
+            label: 'STS. APP. TRP',
             name: 'statusapprovaltrip',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             stype: 'select',
@@ -67,7 +67,7 @@
             }
           },
           {
-            label: 'STATUS APP.',
+            label: 'STS. APP. RTT',
             name: 'statusapprovalritasi',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             stype: 'select',
