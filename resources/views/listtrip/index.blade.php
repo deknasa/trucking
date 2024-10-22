@@ -276,6 +276,44 @@
             hidden: (accessCabang == 'MEDAN') ? false : true
           },
           {
+            label: 'GAJI SUPIR NO BUKTI',
+            name: 'gajisupir_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            search: (accessCabang == 'MEDAN') ? true : false,
+            hidden: (accessCabang == 'MEDAN') ? false : true,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarigajisupirheader
+              let tglsampai = rowData.tglsampaigajisupirheader
+              let url = "{{route('gajisupirheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+          },
+          {
+            label: 'NO BUKTI EBS',
+            name: 'prosesgajisupir_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            search: (accessCabang == 'MEDAN') ? true : false,
+            hidden: (accessCabang == 'MEDAN') ? false : true,
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariebs
+              let tglsampai = rowData.tglsampaiebs
+              let url = "{{route('prosesgajisupirheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+             `)
+              return formattedValue[0].outerHTML
+            }
+          },
+          {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
@@ -323,25 +361,6 @@
             search: (accessCabang == 'MEDAN') ? true : false,
             hidden: (accessCabang == 'MEDAN') ? false : true
 
-          },
-          {
-            label: 'GAJI SUPIR NO BUKTI',
-            name: 'gajisupir_nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            formatter: (value, options, rowData) => {
-              if ((value == null) || (value == '')) {
-                return '';
-              }
-              let tgldari = rowData.tgldarigajisupirheader
-              let tglsampai = rowData.tglsampaigajisupirheader
-              let url = "{{route('gajisupirheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
-            }
           },
 
           {

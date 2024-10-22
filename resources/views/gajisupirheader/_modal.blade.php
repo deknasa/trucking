@@ -522,7 +522,7 @@
                         if(accessCabang == 'MEDAN') {
                             $.each(response.data, (index, value) => {
                                 let statusapprovaltrip = JSON.parse(value.statusapprovaltrip);
-                                let statusapprovalritasi = JSON.parse(value.statusapprovalritasi);
+                                let statusapprovalritasi = (value.ritasi_nobukti != '-') ? JSON.parse(value.statusapprovalritasi) : '';
                                 if(statusapprovaltrip.SINGKATAN == 'APP'){
                                     if(value.ritasi_nobukti != '-'){
                                         if(statusapprovalritasi.SINGKATAN == 'APP'){
@@ -3145,11 +3145,14 @@
                         }
                     },
                     {
-                        label: 'STS. APP. RITASI',
+                        label: 'STS. APP. RTT',
                         name: 'statusapprovalritasi',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,                        
                         hidden: (accessCabang == 'MEDAN') ? false : true,                        
                         formatter: (value, options, rowData) => {
+                            if(value == ''){
+                                return '';
+                            }
                             let statusApproval = JSON.parse(value)
                             if (!statusApproval) {
                                 return ''
@@ -3163,6 +3166,9 @@
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
+                            if(rowObject.statusapprovalritasi == ''){
+                                return '';
+                            }
                             let statusApproval = JSON.parse(rowObject.statusapprovalritasi)
                             if (!statusApproval) {
                                 return ` title=""`
@@ -3431,6 +3437,7 @@
                                 initAutoNumeric($(this).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`))
                             });
                     }, 100);
+                    $('#gs_').attr('disabled', false)
                     $('#loaderGrid').addClass('d-none')
                     setHighlight($(this))
                 }
@@ -3851,7 +3858,26 @@
 
     function selectAllRows() {
         let originalData = $("#rekapRincian").getGridParam("data");
-        let getSelectedRows = originalData.map((data) => data.id);
+        
+        let getSelectedRows = [];
+        if(accessCabang == 'MEDAN') {
+            $.each(originalData, (index, value) => {
+                let statusapprovaltrip = JSON.parse(value.statusapprovaltrip);
+                let statusapprovalritasi = (value.ritasi_nobukti != '-') ? JSON.parse(value.statusapprovalritasi) : '';
+                if(statusapprovaltrip.SINGKATAN == 'APP'){
+                    if(value.ritasi_nobukti != '-'){
+                        if(statusapprovalritasi.SINGKATAN == 'APP'){
+                            getSelectedRows.push(value.id)
+                        }
+                    } else {
+                        getSelectedRows.push(value.id)
+                    }
+
+                }
+            })
+        }else{
+            getSelectedRows = originalData.map((data) => data.id);
+        }
         $("#rekapRincian")[0].p.selectedRowIds = [];
 
         setTimeout(() => {

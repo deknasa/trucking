@@ -296,7 +296,7 @@
     initDatepicker('datepickerIndex')
   })
 
-  function removeEditingBy(id) {
+  function removeEditingByRitasi(id) {
     if (id == "") {
       return ;
     }
