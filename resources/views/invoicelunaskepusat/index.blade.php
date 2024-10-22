@@ -61,18 +61,27 @@
   let autoNumericElements = []
   let rowNum = 0
   let selectedRows = [];
+  let selectedbukti = [];
 
 
   function checkboxHandler(element) {
     let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
     if (element.checked) {
       selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
       for (var i = 0; i < selectedRows.length; i++) {
         if (selectedRows[i] == value) {
           selectedRows.splice(i, 1);
+        }
+      }
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
         }
       }
     }
@@ -184,7 +193,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="invId[]" class="checkbox-jqgrid" value="${rowData.invoiceheader_id}" onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="invId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           },
           {
@@ -307,6 +316,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           // sortname = $(this).jqGrid("getGridParam", "sortname")
           // sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -344,6 +363,7 @@
           if (rowNum == 0) {
             $('#jqGrid_rowList option[value=0]').attr('selected', 'selected');
           }
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         },
         loadError: function(jqXHR, textStatus, errorThrown) {
@@ -406,7 +426,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               let valuebukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-              
+
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
@@ -420,9 +440,9 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId); 
+              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               let valuebukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-                            
+
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
@@ -444,13 +464,19 @@
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
               // window.open(`{{ route('invoicelunaskepusat.export') }}?periode=` + $('#periode').val())
+              let requestData = {
+                'id': selectedRows,
+                'nobukti': selectedbukti,
+              };
+
               $.ajax({
                 url: `${apiUrl}invoicelunaskepusat/export`,
                 type: 'GET',
                 data: {
                   sortIndex: 'invoiceheader_id',
                   limit: 0,
-                  periode : $('#periode').val(),
+                  data: JSON.stringify(requestData),
+                  periode: $('#periode').val(),
                 },
                 beforeSend: function(xhr) {
                   xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -470,6 +496,7 @@
                       link.click();
                     }
                   }
+                  clearSelectedRows()
                   $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -579,6 +606,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
+    selectedbukti = []
 
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -597,7 +625,8 @@
         filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
-        selectedRows = response.data.map((invoice) => invoice.invoiceheader_id)
+        selectedRows = response.data.map((invoice) => invoice.id)
+        selectedbukti = response.data.map((invoice) => invoice.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
