@@ -45,7 +45,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="supirsp_id">
-                                <input type="text" name="supirsp" class="form-control supirsp-lookup">
+                                <input type="text" name="supirsp" id="supirsp" class="form-control supirsp-lookup">
                             </div>
                         </div>
 
@@ -669,9 +669,11 @@
 
     function initLookupEditSp() {
 
-        $('.supirsp-lookup').lookup({
+        $('.supirsp-lookup').lookupV3({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'supirV3',
+            searching: ['namasupir'],
+            labelColumn: false,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

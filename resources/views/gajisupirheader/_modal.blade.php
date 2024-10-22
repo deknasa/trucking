@@ -3860,24 +3860,24 @@
         let originalData = $("#rekapRincian").getGridParam("data");
         
         let getSelectedRows = [];
-        if(accessCabang == 'MEDAN') {
-            $.each(originalData, (index, value) => {
-                let statusapprovaltrip = JSON.parse(value.statusapprovaltrip);
-                let statusapprovalritasi = (value.ritasi_nobukti != '-') ? JSON.parse(value.statusapprovalritasi) : '';
-                if(statusapprovaltrip.SINGKATAN == 'APP'){
-                    if(value.ritasi_nobukti != '-'){
-                        if(statusapprovalritasi.SINGKATAN == 'APP'){
-                            getSelectedRows.push(value.id)
-                        }
-                    } else {
-                        getSelectedRows.push(value.id)
-                    }
+        // if(accessCabang == 'MEDAN') {
+        //     $.each(originalData, (index, value) => {
+        //         let statusapprovaltrip = JSON.parse(value.statusapprovaltrip);
+        //         let statusapprovalritasi = (value.ritasi_nobukti != '-') ? JSON.parse(value.statusapprovalritasi) : '';
+        //         if(statusapprovaltrip.SINGKATAN == 'APP'){
+        //             if(value.ritasi_nobukti != '-'){
+        //                 if(statusapprovalritasi.SINGKATAN == 'APP'){
+        //                     getSelectedRows.push(value.id)
+        //                 }
+        //             } else {
+        //                 getSelectedRows.push(value.id)
+        //             }
 
-                }
-            })
-        }else{
+        //         }
+        //     })
+        // }else{
             getSelectedRows = originalData.map((data) => data.id);
-        }
+        // }
         $("#rekapRincian")[0].p.selectedRowIds = [];
 
         setTimeout(() => {
