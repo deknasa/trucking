@@ -804,6 +804,37 @@
       $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
 
     }
+    function setRangeForm(isToday = false, firstDayParam = null, lastDayParam = null) {
+      // mendapatkan tanggal hari ini
+      let today = new Date();
+      let formattedLastDay;
+      let firstDay
+      let lastDay
+
+      if (firstDayParam) {
+        firstDay = new Date(firstDayParam);
+      } else {
+        // mendapatkan tanggal pertama di bulan ini
+        firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      }
+
+      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+      if (lastDayParam) {
+        lastDay = new Date(lastDayParam);
+      } else if (isToday) {
+        lastDay = new Date()
+        // formattedLastDay=$.datepicker.formatDate('dd-mm-yy', )
+      } else {
+        // mendapatkan tanggal terakhir di bulan ini
+        lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      }
+      formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+      
+      $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
+      $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
+
+    }
 
 
     function loadDataHeader(url, addtional = null) {
