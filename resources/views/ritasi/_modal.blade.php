@@ -1,9 +1,9 @@
-<div class="modal modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+<div class="modal modal-fullscreen" id="crudModalRitasi" tabindex="-1" aria-labelledby="crudModalRitasiLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm">
+    <form action="#" id="crudFormRitasi">
       <div class="modal-content">
         <div class="modal-header">
-          <p class="modal-title" id="crudModalTitle"></p>
+          <p class="modal-title" id="crudModalRitasiTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           </button>
         </div>
@@ -59,7 +59,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="dari_id">
-                <input type="text" name="dari" class="form-control dari-lookup">
+                <input type="text" name="dari" id="dari" class="form-control dari-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -69,7 +69,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="sampai_id">
-                <input type="text" name="sampai" class="form-control sampai-lookup">
+                <input type="text" name="sampai" id="sampai" class="form-control sampai-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -79,7 +79,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="trado_id">
-                <input type="text" name="trado" class="form-control trado-lookup">
+                <input type="text" name="trado" id="trado" class="form-control trado-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -89,12 +89,12 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="supir_id">
-                <input type="text" name="supir" class="form-control supir-lookup">
+                <input type="text" name="supir" id="supir" class="form-control supir-lookup">
               </div>
             </div>
           </div>
           <div class="modal-footer justify-content-start">
-            <button id="btnSubmit" class="btn btn-primary">
+            <button id="btnSubmitRitasi" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Save
             </button>
@@ -115,30 +115,34 @@
 
 @push('scripts')
 <script>
-  let hasFormBindKeys = false
-  let modalBody = $('#crudModal').find('.modal-body').html()
+  let hasFormBindKeysRitasi = false
+  let modalBodyRitasi = $('#crudModalRitasi').find('.modal-body').html()
   let tradoLookup = ''
   let supirLookup = ''
   $(document).ready(function() {
-    $('#btnSubmit').click(function(event) {
+    $('#btnSubmitRitasi').click(function(event) {
       event.preventDefault()
-      submit($(this).attr('id'))
+      submitRitasi($(this).attr('id'))
     })
     $('#btnSaveAdd').click(function(event) {
       event.preventDefault()
-      submit($(this).attr('id'))
+      submitRitasi($(this).attr('id'))
     })
 
-    function submit(button) {
+    function submitRitasi(button) {
       event.preventDefault()
 
       let method
       let url
-      let form = $('#crudForm')
+      let form = $('#crudFormRitasi')
       let ritasiId = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
+      let data = $('#crudFormRitasi').serializeArray()
 
+      data.push({
+        name: 'supirheader',
+        value: $('#supirheader_id').val()
+      })
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -214,31 +218,33 @@
         },
         data: data,
         success: response => {
-          $('#crudForm').trigger('reset')
-          if (button == 'btnSubmit') {
-            $('#crudModal').modal('hide')
-            id = response.data.id
-            $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
-            $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+          $('#crudFormRitasi').trigger('reset')
+          if (button == 'btnSubmitRitasi') {
+            $('#crudModalRitasi').modal('hide')
+            id = response.data.position
+            // $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+            // $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
             $('#jqGrid').jqGrid('setGridParam', {
               page: response.data.page,
               postData: {
-                tgldari: dateFormat(response.data.tgldariheader),
-                tglsampai: dateFormat(response.data.tglsampaiheader)
+                tgldari: $('#tgldariheader').val(),
+                tglsampai: $('#tglsampaiheader').val(),
+                supirheader: $('#supirheader_id').val(),
+                proses: 'reload'
               }
             }).trigger('reloadGrid');
             if (response.data.grp == 'FORMAT') {
               updateFormat(response.data)
             }
-          }else{
+          } else {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            $('#crudForm').find('input[type="text"]').data('current-value', '')
+            $('#crudFormRitasi').find('input[type="text"]').data('current-value', '')
             // showSuccessDialog(response.message, response.data.nobukti)
             createRitasi()
           }
-          
-          
+
+
         },
         error: error => {
           if (error.status === 422) {
@@ -257,20 +263,20 @@
     }
   })
 
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
+  $('#crudModalRitasi').on('shown.bs.modal', () => {
+    let form = $('#crudFormRitasi')
 
     setFormBindKeys(form)
 
     activeGrid = null
 
-    getMaxLength(form)
-    initLookup()
-    form.find('#btnSubmit').prop('disabled', false)
+    getMaxLengthRitasi(form)
+    initLookupRitasi()
+    form.find('#btnSubmitRitasi').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled', true)
+      form.find('#btnSubmitRitasi').prop('disabled', true)
     }
-    
+
     if (form.data('action') == 'add') {
       form.find('#btnSaveAdd').show()
     } else {
@@ -280,19 +286,21 @@
     initSelect2(form.find('.select2bs4'), true)
   })
 
-  $('#crudModal').on('hidden.bs.modal', () => {
+  $('#crudModalRitasi').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    removeEditingBy($('#crudForm').find('[name=id]').val())
+    removeEditingByRitasi($('#crudFormRitasi').find('[name=id]').val())
+    $('#crudModalRitasi').find('.modal-body').html(modalBodyRitasi)
     $('#crudModal').find('.modal-body').html(modalBody)
     tradoLookup = ''
     supirLookup = ''
     initDatepicker('datepickerIndex')
   })
 
-  function removeEditingBy(id) {
+  function removeEditingByRitasi(id) {
     if (id == "") {
       return ;
     }
+
     let formData = new FormData();
 
 
@@ -316,7 +324,7 @@
         return response.json();
       })
       .then(data => {
-        $("#crudModal").modal("hide");
+        $("#crudModalRitasi").modal("hide");
       })
       .catch(error => {
         // Handle error
@@ -329,41 +337,42 @@
         }
       })
   }
+
   function createRitasi() {
-    let form = $('#crudForm')
+    let form = $('#crudFormRitasi')
 
     $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
-    form.find('#btnSubmit').html(`
+    form.find('#btnSubmitRitasi').html(`
     <i class="fa fa-save"></i>
     Save
   `)
     form.data('action', 'add')
-    $('#crudModal').modal('show')
+    $('#crudModalRitasi').modal('show')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Add Ritasi')
+    $('#crudModalRitasiTitle').text('Add Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudFormRitasi').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     $('.modal-loader').addClass('d-none')
 
   }
 
   function editRitasi(ritasiId) {
-    let form = $('#crudForm')
+    let form = $('#crudFormRitasi')
 
     $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
-    form.find('#btnSubmit').html(`
+    form.find('#btnSubmitRitasi').html(`
     <i class="fa fa-save"></i>
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Ritasi')
+    $('#crudModalRitasiTitle').text('Edit Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -374,9 +383,9 @@
       .then(() => {
         showRitasi(form, ritasiId)
           .then(() => {
-            $('#crudModal').modal('show')
-            $('#crudForm [name=tglbukti]').attr('readonly', true)
-            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+            $('#crudModalRitasi').modal('show')
+            $('#crudFormRitasi [name=tglbukti]').attr('readonly', true)
+            $('#crudFormRitasi [name=tglbukti]').siblings('.input-group-append').remove()
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -388,18 +397,18 @@
   }
 
   function deleteRitasi(ritasiId) {
-    let form = $('#crudForm')
+    let form = $('#crudFormRitasi')
 
     $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
-    form.find('#btnSubmit').html(`
+    form.find('#btnSubmitRitasi').html(`
     <i class="fa fa-trash"></i>
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Ritasi')
+    $('#crudModalRitasiTitle').text('Delete Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -410,7 +419,7 @@
       .then(() => {
         showRitasi(form, ritasiId)
           .then(() => {
-            $('#crudModal').modal('show')
+            $('#crudModalRitasi').modal('show')
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -422,18 +431,18 @@
   }
 
   function viewRitasi(ritasiId) {
-    let form = $('#crudForm')
+    let form = $('#crudFormRitasi')
 
     $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'view')
     form.trigger('reset')
-    form.find('#btnSubmit').html(`
+    form.find('#btnSubmitRitasi').html(`
       <i class="fa fa-save"></i>
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Ritasi')
+    $('#crudModalRitasiTitle').text('View Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -444,10 +453,10 @@
       .then(() => {
         showRitasi(form, ritasiId)
           .then(() => {
-            $('#crudModal').modal('show')
+            $('#crudModalRitasi').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            let name = $('#crudFormRitasi').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
           })
@@ -460,7 +469,7 @@
       })
   }
 
-  function showDefault(form) {
+  function showDefaultRitasi(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}ritasi/default`,
@@ -490,7 +499,7 @@
     })
   }
 
-  function getMaxLength(form) {
+  function getMaxLengthRitasi(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
         url: `${apiUrl}ritasi/field_length`,
@@ -615,7 +624,7 @@
     })
   }
 
-  function initLookup() {
+  function initLookupRitasi() {
     $('.suratpengantar-lookup').lookup({
       title: 'Surat Pengantar Lookup',
       fileName: 'suratpengantar',
@@ -625,15 +634,15 @@
 
           Aktif: 'AKTIF',
           from: 'ritasi',
-          tglbukti: $('#crudForm [name=tglbukti]').val()
+          tglbukti: $('#crudFormRitasi [name=tglbukti]').val()
         }
       },
       onSelectRow: (suratpengantar, element) => {
         element.val(suratpengantar.nobukti)
-        $('#crudForm [name=trado_id]').val('')
-        $('#crudForm [name=trado]').val('').data('currentValue', '')
-        $('#crudForm [name=supir_id]').val('')
-        $('#crudForm [name=supir]').val('').data('currentValue', '')
+        $('#crudFormRitasi [name=trado_id]').val('')
+        $('#crudFormRitasi [name=trado]').val('').data('currentValue', '')
+        $('#crudFormRitasi [name=supir_id]').val('')
+        $('#crudFormRitasi [name=supir]').val('').data('currentValue', '')
         tradoLookup = suratpengantar.tradolookup
         supirLookup = suratpengantar.supirlookup
         element.data('currentValue', element.val())
@@ -644,17 +653,18 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
-        $('#crudForm [name=trado_id]').val('')
-        $('#crudForm [name=trado]').val('').data('currentValue', '')
-        $('#crudForm [name=supir_id]').val('')
-        $('#crudForm [name=supir]').val('').data('currentValue', '')
+        $('#crudFormRitasi [name=trado_id]').val('')
+        $('#crudFormRitasi [name=trado]').val('').data('currentValue', '')
+        $('#crudFormRitasi [name=supir_id]').val('')
+        $('#crudFormRitasi [name=supir]').val('').data('currentValue', '')
         tradoLookup = ''
         supirLookup = ''
       }
     })
-    $('.dari-lookup').lookup({
+    $('.dari-lookup').lookupV3({
       title: 'Dari Lookup',
-      fileName: 'kota',
+      fileName: 'kotaV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -663,7 +673,7 @@
         }
       },
       onSelectRow: (kota, element) => {
-        $('#crudForm [name=dari_id]').first().val(kota.id)
+        $('#crudFormRitasi [name=dari_id]').first().val(kota.id)
         element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
@@ -671,14 +681,15 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=dari_id]').first().val('')
+        $('#crudFormRitasi [name=dari_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
-    $('.sampai-lookup').lookup({
+    $('.sampai-lookup').lookupV3({
       title: 'Sampai Lookup',
-      fileName: 'kota',
+      fileName: 'kotaV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -687,7 +698,7 @@
         }
       },
       onSelectRow: (kota, element) => {
-        $('#crudForm [name=sampai_id]').first().val(kota.id)
+        $('#crudFormRitasi [name=sampai_id]').first().val(kota.id)
         element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
@@ -695,14 +706,15 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=sampai_id]').first().val('')
+        $('#crudFormRitasi [name=sampai_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
-    $('.trado-lookup').lookup({
+    $('.trado-lookup').lookupV3({
       title: 'Trado Lookup',
-      fileName: 'trado',
+      fileName: 'tradoV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -712,7 +724,7 @@
         }
       },
       onSelectRow: (trado, element) => {
-        $('#crudForm [name=trado_id]').first().val(trado.id)
+        $('#crudFormRitasi [name=trado_id]').first().val(trado.id)
         element.val(trado.kodetrado)
         element.data('currentValue', element.val())
       },
@@ -720,14 +732,15 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=trado_id]').first().val('')
+        $('#crudFormRitasi [name=trado_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
-    $('.supir-lookup').lookup({
+    $('.supir-lookup').lookupV3({
       title: 'Supir Lookup',
-      fileName: 'supir',
+      fileName: 'supirV3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -737,7 +750,7 @@
         }
       },
       onSelectRow: (supir, element) => {
-        $('#crudForm [name=supir_id]').first().val(supir.id)
+        $('#crudFormRitasi [name=supir_id]').first().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
@@ -745,15 +758,16 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=supir_id]').first().val('')
+        $('#crudFormRitasi [name=supir_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
 
-    $('.dataritasi-lookup').lookup({
+    $('.dataritasi-lookup').lookupV3({
       title: 'Data Ritasi Lookup',
-      fileName: 'dataritasi',
+      fileName: 'dataritasiv3',
+      labelColumn: false,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -762,15 +776,20 @@
         }
       },
       onSelectRow: (dataRitasi, element) => {
-        $('#crudForm [name=statusritasi_id]').first().val(dataRitasi.id)
+        $('#crudFormRitasi [name=statusritasi_id]').first().val(dataRitasi.id)
         element.val(dataRitasi.statusritasi)
         element.data('currentValue', element.val())
+        getKota(dataRitasi.statusritasi_id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=statusritasi_id]').first().val('')
+        $('#crudFormRitasi [name=statusritasi_id]').first().val('')
+        $('#crudFormRitasi [name=dari_id]').first().val('')
+        $('#crudFormRitasi [name=dari]').first().val('').data('currentValue', '').attr("readonly", true)
+        $('#crudFormRitasi [name=sampai_id]').first().val('')
+        $('#crudFormRitasi [name=sampai]').first().val('').data('currentValue', '').attr("readonly", true)
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -793,7 +812,7 @@
     //     }
     //   },
     //   onSelectRow: (dataRitasi, element) => {
-    //     $('#crudForm [name=statusritasi_id]').first().val(dataRitasi.id)
+    //     $('#crudFormRitasi [name=statusritasi_id]').first().val(dataRitasi.id)
     //     element.val(dataRitasi.statusritasi)
     //     element.data('currentValue', element.val())
     //   },
@@ -801,7 +820,7 @@
     //     element.val(element.data('currentValue'))
     //   },
     //   onClear: (element) => {
-    //     $('#crudForm [name=statusritasi_id]').first().val('')
+    //     $('#crudFormRitasi [name=statusritasi_id]').first().val('')
     //     element.val('')
     //     element.data('currentValue', element.val())
     //   }
@@ -809,7 +828,7 @@
 
   }
 
-  function cekValidasi(Id, Aksi) {
+  function cekValidasiRitasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}ritasi/${Id}/cekvalidasi`,
       method: 'POST',
@@ -832,6 +851,55 @@
 
       }
     })
+  }
+
+  function getKota(ritasiId) {
+    $.ajax({
+      url: `${apiUrl}inputtrip/getKotaRitasi`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        dataritasi_id: ritasiId
+      },
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        if (response.data.length != 0) {
+          $('#crudFormRitasi').find(`[name="dari_id"]`).val(response.data.dari_id)
+          $('#crudFormRitasi').find(`[name="dari"]`).val(response.data.dari).data('currentValue', response.data.dari)
+          $('#crudFormRitasi').find(`[name="sampai_id"]`).val(response.data.sampai_id)
+          $('#crudFormRitasi').find(`[name="sampai"]`).val(response.data.sampai).data('currentValue', response.data.sampai)
+          $('#crudFormRitasi').find(`[name="dari"]`).prop('readonly', true)
+          $('#crudFormRitasi').find(`[name="sampai"]`).prop('readonly', true)
+
+          let ritDari =   $('#crudFormRitasi').find(`[name="dari"]`).parents('.input-group')
+          ritDari.find('.button-clear').attr('disabled', true)
+          ritDari.children().find('.lookup-toggler').attr('disabled', true)
+
+          let ritKe =   $('#crudFormRitasi').find(`[name="sampai"]`).parents('.input-group')
+          ritKe.find('.button-clear').attr('disabled', true)
+          ritKe.children().find('.lookup-toggler').attr('disabled', true)
+        } else {
+
+
+          let ritDari = $('#crudFormRitasi').find(`[name="dari"]`).parents('.input-group')
+          ritDari.find('.button-clear').attr('disabled', false)
+          ritDari.find('input').attr('readonly', false)
+          ritDari.children().find('.lookup-toggler').attr('disabled', false)
+
+          let ritKe = $('#crudFormRitasi').find(`[name="sampai"]`).parents('.input-group')
+          ritKe.find('.button-clear').attr('disabled', false)
+          ritKe.find('input').attr('readonly', false)
+          ritKe.children().find('.lookup-toggler').attr('disabled', false)
+        }
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+
   }
 </script>
 @endpush()
