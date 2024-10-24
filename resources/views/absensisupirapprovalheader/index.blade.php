@@ -57,6 +57,7 @@
   let absensiTangki;
   let limit
   let postData
+  let activeGrid
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
