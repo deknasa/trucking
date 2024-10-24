@@ -214,6 +214,10 @@
                             <i class="fa fa-save"></i>
                             Save
                         </button>
+                        <button id="btnApprovalMandor" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Approve/Un
+                        </button>
                         <button id="btnSaveAdd" class="btn btn-success">
                             <i class="fas fa-file-upload"></i>
                             Save & Add
@@ -304,6 +308,38 @@
 
                 // hitungNominal()
                 hitung(selectedRowIds)
+                $(element).parents('tr').addClass('bg-light-blue')
+            }
+        });
+
+        $("#rekapRincian").jqGrid("setGridParam", {
+            selectedRowIds: selectedRowIds,
+        });
+
+
+
+    }
+
+    function checkboxHandlerApprovalMandor(element, rowId) {
+
+        let isChecked = $(element).is(":checked");
+        let editableColumns = $("#rekapRincian").getGridParam("editableColumns");
+        let selectedRowIds = $("#rekapRincian").getGridParam("selectedRowIds");
+        let originalGridData = $("#rekapRincian")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+        editableColumns.forEach((editableColumn) => {
+
+            if (!isChecked) {
+                for (var i = 0; i < selectedRowIds.length; i++) {
+                    if (selectedRowIds[i] == rowId) {
+                        selectedRowIds.splice(i, 1);
+                    }
+                }
+                $(element).parents('tr').removeClass('bg-light-blue')
+            } else {
+                selectedRowIds.push(rowId);
                 $(element).parents('tr').addClass('bg-light-blue')
             }
         });
@@ -519,20 +555,20 @@
                     if ($('#crudForm').data('action') == 'edit') {
                         isReload = true;
                         $(`[name="rincianId[]"]`).prop('disabled', false)
-                        if(accessCabang == 'MEDAN') {
+                        if (accessCabang == 'MEDAN') {
                             $.each(response.data, (index, value) => {
-                                let statusapprovaltrip = JSON.parse(value.statusapprovaltrip);
-                                let statusapprovalritasi = (value.ritasi_nobukti != '-') ? JSON.parse(value.statusapprovalritasi) : '';
-                                if(statusapprovaltrip.SINGKATAN == 'APP'){
-                                    if(value.ritasi_nobukti != '-'){
-                                        if(statusapprovalritasi.SINGKATAN == 'APP'){
-                                            selectedTrip.push(value.id)
-                                            $(`#rekapRincian tbody tr#${value.id}`).find(`[name="rincianId[]"]`).prop('disabled', true)
-                                        }
-                                    } else {
-                                        selectedTrip.push(value.id)
-                                        $(`#rekapRincian tbody tr#${value.id}`).find(`[name="rincianId[]"]`).prop('disabled', true)
-                                    }
+                                let statusapproval = JSON.parse(value.statusapproval);
+                                // let statusapprovalritasi = (value.ritasi_nobukti != '-') ? JSON.parse(value.statusapprovalritasi) : '';
+                                if (statusapproval.SINGKATAN == 'APP') {
+                                    // if(value.ritasi_nobukti != '-'){
+                                    //     if(statusapprovalritasi.SINGKATAN == 'APP'){
+                                    //         selectedTrip.push(value.id)
+                                    //         $(`#rekapRincian tbody tr#${value.id}`).find(`[name="rincianId[]"]`).prop('disabled', true)
+                                    //     }
+                                    // } else {
+                                    selectedTrip.push(value.id)
+                                    $(`#rekapRincian tbody tr#${value.id}`).find(`[name="rincianId[]"]`).prop('disabled', true)
+                                    // }
 
                                 }
                             })
@@ -678,6 +714,10 @@
         $('#btnSaveAdd').click(function(event) {
             event.preventDefault()
             submit($(this).attr('id'))
+        })
+        $('#btnApprovalMandor').click(function(event) {
+            event.preventDefault()
+            approvalMandor()
         })
 
         function submit(button) {
@@ -1181,6 +1221,93 @@
                 $(this).removeAttr('disabled')
             })
         }
+
+        function approvalMandor() {
+
+            let form = $('#crudForm')
+            let selectedRowsTrip = $("#rekapRincian").getGridParam("selectedRowIds");
+
+            let rincian_nobukti = [];
+            let rincian_ritasi = [];
+            let rincian_approval = [];
+            $.each(selectedRowsTrip, function(index, value) {
+                dataTrip = $("#rekapRincian").jqGrid("getLocalRow", value);
+                if (dataTrip.gajisupir > 0) {
+                    rincian_nobukti.push(dataTrip.nobuktitrip)
+                }
+                rincian_ritasi.push(dataTrip.ritasi_nobukti)
+                rincian_approval.push(dataTrip.statusapproval)
+            })
+            let requestDataTrip = {
+                'rincian_nobukti': rincian_nobukti,
+                'rincian_ritasi': rincian_ritasi,
+                'rincian_approval': rincian_approval,
+            };
+
+            let data = [];
+            let action = $('#crudForm').data('action')
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
+            data.push({
+                name: 'detail',
+                value: JSON.stringify(requestDataTrip)
+            })
+            data.push({
+                name: 'info',
+                value: info
+            })
+            data.push({
+                name: 'indexRow',
+                value: indexRow
+            })
+            data.push({
+                name: 'page',
+                value: page
+            })
+            data.push({
+                name: 'limit',
+                value: limit
+            })
+
+            $.ajax({
+                url: `${apiUrl}listtrip/approval`,
+                method: 'POST',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+
+                    $('#crudModal').find('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+                    selectedRowsTrip = []
+                    selectedTrip = [];
+                    selectedRic = [];
+                    selectedNominal = [];
+                    selectedDari = [];
+                    selectedSampai = [];
+                    selectedGajiKenek = [];
+                    $('#jqGrid').jqGrid().trigger('reloadGrid');
+                    $('#detail').jqGrid().trigger('reloadGrid')
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
+        }
     })
 
 
@@ -1259,6 +1386,13 @@
         } else {
             form.find('#btnSaveAdd').hide()
         }
+        if (form.data('action') == 'approvalmandor') {
+            form.find('#btnApprovalMandor').show()
+            form.find('#btnSubmit').hide()
+        } else {
+            form.find('#btnApprovalMandor').hide()
+            form.find('#btnSubmit').show()
+        }
 
         activeGrid = null
         form.find('#btnSubmit').prop('disabled', false)
@@ -1296,7 +1430,7 @@
 
     function removeEditingBy(id) {
         if (id == "") {
-            return ;
+            return;
         }
         let formData = new FormData();
 
@@ -1383,6 +1517,7 @@
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
                         }
+                        $("#rekapRincian").jqGrid("hideCol", `approval`);
                         if (jenisTambahan == 'RITASI') {
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
@@ -1435,6 +1570,7 @@
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
                         }
+                        $("#rekapRincian").jqGrid("hideCol", `approval`);
                         if (jenisTambahan == 'RITASI') {
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
@@ -1488,6 +1624,7 @@
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
                         }
+                        $("#rekapRincian").jqGrid("hideCol", `approval`);
                         if (jenisTambahan == 'RITASI') {
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
@@ -1545,6 +1682,7 @@
                         if (selectedRowsIndex.length > 0) {
                             clearSelectedRowsIndex()
                         }
+                        $("#rekapRincian").jqGrid("hideCol", `approval`);
                         if (jenisTambahan == 'RITASI') {
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
                             $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
@@ -1574,6 +1712,66 @@
             })
 
     }
+
+
+    function approvalGajiSupirHeader(Id) {
+        let form = $('#crudForm')
+
+        form.data('action', 'approvalmandor')
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+            <i class="fa fa-save"></i>
+            Save
+        `)
+        $('#crudModalTitle').text('Approval RIC')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        form.find('#btnTampil').prop('disabled', true)
+
+        Promise
+            .all([
+                setStatusJenisKendaraanOptions(form),
+                isTangki()
+            ])
+            .then(() => {
+                showGajiSupir(form, Id, 'approvalmandor')
+                    .then(() => {
+
+                        if (selectedRowsIndex.length > 0) {
+                            clearSelectedRowsIndex()
+                        }
+                        $("#rekapRincian").jqGrid("hideCol", ``);
+                        $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nobukti`);
+                        $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_nominal`);
+                        $("#rekapRincian").jqGrid("hideCol", `biayaextrasupir_keterangan`);
+
+                        $('#crudModal').modal('show')
+                        $('.statusjeniskendaraan').hide()
+                        $('.biayaextraheader').hide()
+                        $('.keteranganextraheader').hide()
+                        form.find(`[name="tglbukti"]`).prop('readonly', true)
+                        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                        form.find(`[name="tgldari"]`).prop('readonly', true)
+                        form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
+                        form.find(`[name="tglsampai"]`).prop('readonly', true)
+                        form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                        form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+                        form.find(`[name="nomDeposito"]`).prop('readonly', true)
+                        form.find(`[name="ketDeposito"]`).prop('readonly', true)
+                        form.find(`[name="nomBBM"]`).prop('readonly', true)
+                        form.find(`[name="ketBBM"]`).prop('readonly', true)
+                        form.find(`[name="uangmakanharian"]`).prop('readonly', true)
+                    }).catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
+            })
+
+    }
+
 
     function cekValidasi(Id, Aksi) {
         $.ajax({
@@ -1790,6 +1988,9 @@
                     if (Aksi == 'DELETE') {
                         deleteGajiSupirHeader(Id)
                     }
+                    if (Aksi == 'APPROVAL MANDOR') {
+                        approvalGajiSupirHeader(Id)
+                    }
                 }
 
             }
@@ -1811,7 +2012,7 @@
                         editable: false,
                         formatter: function(value, rowOptions, rowData) {
                             let disabled = '';
-                            if ($('#crudForm').data('action') == 'delete') {
+                            if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'approvalmandor') {
                                 disabled = 'disabled'
                             }
                             return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxPotSemuaHandler(this, ${rowData.id})">`;
@@ -2058,7 +2259,7 @@
 
     function getDataPotSemua(id) {
         aksi = $('#crudForm').data('action')
-        if (aksi == 'edit') {
+        if (aksi == 'edit' || aksi == 'approvalmandor') {
             id = $(`#crudForm`).find(`[name="id"]`).val()
 
             urlPotSemua = `${apiUrl}gajisupirheader/${id}/edit/editpinjsemua`
@@ -2229,7 +2430,7 @@
                         editable: false,
                         formatter: function(value, rowOptions, rowData) {
                             let disabled = '';
-                            if ($('#crudForm').data('action') == 'delete') {
+                            if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'approvalmandor') {
                                 disabled = 'disabled'
                             }
                             return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
@@ -2457,7 +2658,7 @@
 
     function getDataPotPribadi(supirId, id) {
         aksi = $('#crudForm').data('action')
-        if (aksi == 'edit') {
+        if (aksi == 'edit' || aksi == 'approvalmandor') {
             id = $(`#crudForm`).find(`[name="id"]`).val()
             urlPotPribadi = `${apiUrl}gajisupirheader/${id}/${supirId}/edit/editpinjpribadi`
 
@@ -2600,7 +2801,7 @@
         selectedRowsPribadi = $("#tablePotPribadi").getGridParam("selectedRowIds");
         $.each(selectedRowsPribadi, function(index, value) {
             dataPinjaman = $("#tablePotPribadi").jqGrid("getLocalRow", value);
-            console.log('dataPinjaman ', dataPinjaman)
+            // console.log('dataPinjaman ', dataPinjaman)
             nominals = (dataPinjaman.nominalPP == undefined || dataPinjaman.nominalPP == '') ? 0 : dataPinjaman.nominalPP;
             getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
             nominalPP = nominalPP + getNominal
@@ -2612,7 +2813,7 @@
 
     function loadUangJalan() {
         let disabled = '';
-        if ($('#crudForm').data('action') == 'delete') {
+        if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'approvalmandor') {
             disabled = 'disabled'
         }
         $("#tableAbsensi").jqGrid({
@@ -3109,6 +3310,40 @@
                         formatter: (value, rowOptions, rowData) => {
                             return `<input type="checkbox" class="checkbox-jqgrid" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this, ${rowData.id})">`
                         },
+                    }, {
+                        label: "",
+                        name: "approval",
+                        width: 40,
+                        align: 'center',
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+                                $(element).addClass('checkbox-selectall')
+                                if (disabled == '') {
+                                    $(element).on('click', function() {
+                                        if ($(this).is(':checked')) {
+                                            selectAllRowsApprovalMandor()
+                                        } else {
+                                            clearSelectedRowsApprovalMandor()
+                                        }
+                                    })
+                                } else {
+                                    $(element).attr('disabled', true)
+                                }
+
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" class="checkbox-jqgrid" name="approvalId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandlerApprovalMandor(this, ${rowData.id})">`
+                        },
                     },
                     {
                         label: 'ID',
@@ -3119,10 +3354,10 @@
                         hidden: true
                     },
                     {
-                        label: 'STS. APP. TRIP',
-                        name: 'statusapprovaltrip',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,                        
-                        hidden: (accessCabang == 'MEDAN') ? false : true,                        
+                        label: 'STS. APP',
+                        name: 'statusapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        hidden: (accessCabang == 'MEDAN') ? false : true,
                         formatter: (value, options, rowData) => {
                             let statusApproval = JSON.parse(value)
                             if (!statusApproval) {
@@ -3137,39 +3372,7 @@
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
-                            let statusApproval = JSON.parse(rowObject.statusapprovaltrip)
-                            if (!statusApproval) {
-                                return ` title=""`
-                            }
-                            return ` title="${statusApproval.MEMO}"`
-                        }
-                    },
-                    {
-                        label: 'STS. APP. RTT',
-                        name: 'statusapprovalritasi',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,                        
-                        hidden: (accessCabang == 'MEDAN') ? false : true,                        
-                        formatter: (value, options, rowData) => {
-                            if(value == ''){
-                                return '';
-                            }
-                            let statusApproval = JSON.parse(value)
-                            if (!statusApproval) {
-                                return ''
-                            }
-                            let formattedValue = $(`
-                                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                                <span>${statusApproval.SINGKATAN}</span>
-                                </div>
-                            `)
-
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            if(rowObject.statusapprovalritasi == ''){
-                                return '';
-                            }
-                            let statusApproval = JSON.parse(rowObject.statusapprovalritasi)
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
                             if (!statusApproval) {
                                 return ` title=""`
                             }
@@ -3424,15 +3627,19 @@
                             .getGridParam("selectedRowIds")
                             .forEach((selectedRowId) => {
                                 $(this)
-                                    .find(`tr input[value=${selectedRowId}]`)
+                                    .find(`tr input[name="rincianId[]"][value=${selectedRowId}]`)
                                     .prop("checked", true);
 
                                 if ($('#crudForm').data('action') == 'edit') {
                                     if (isReload && accessCabang != 'MEDAN') {
-                                        $(this).find(`tr input[value=${selectedRowId}]`).prop("disabled", false);
+                                        $(this).find(`tr input[name="rincianId[]"][value=${selectedRowId}]`).prop("disabled", false);
                                     } else {
-                                        $(this).find(`tr input[value=${selectedRowId}]`).prop("disabled", true);
+                                        $(this).find(`tr input[name="rincianId[]"][value=${selectedRowId}]`).prop("disabled", true);
                                     }
+                                }
+                                if ($('#crudForm').data('action') == 'approvalmandor') {
+                                    $(this).find(`tr input[name="approvalId[]"][value=${selectedRowId}]`)
+                                        .prop("checked", true);
                                 }
                                 initAutoNumeric($(this).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`))
                             });
@@ -3783,6 +3990,22 @@
         hitung()
     }
 
+    function clearSelectedRowsApprovalMandor(element = null) {
+        selectedRows = []
+        selectedNobukti = [];
+        selectedGajiSupir = [];
+        selectedGajiKenek = [];
+        selectedKomisiSupir = [];
+        selectedUpahRitasi = [];
+        selectedStatusRitasi = [];
+        selectedBiayaExtra = [];
+        selectedKetBiaya = [];
+        selectedTolSupir = [];
+        selectedRitasi = [];
+        $("#rekapRincian")[0].p.selectedRowIds = [];
+        $('#rekapRincian').trigger('reloadGrid')
+    }
+
     function getAllTrip(aksi, element = null) {
         if (aksi == 'edit' || aksi == 'show') {
             ricId = $(`#crudForm`).find(`[name="id"]`).val()
@@ -3821,7 +4044,7 @@
     }
 
     function getAllAbsensi(supirId, dari, sampai, aksi, element = null) {
-        if (aksi == 'edit') {
+        if (aksi == 'edit' || aksi == 'approvalmandor') {
             ricId = $(`#crudForm`).find(`[name="id"]`).val()
             urlAbsensi = `${ricId}/getEditAbsensi`
         } else {
@@ -3858,7 +4081,7 @@
 
     function selectAllRows() {
         let originalData = $("#rekapRincian").getGridParam("data");
-        
+
         let getSelectedRows = [];
         // if(accessCabang == 'MEDAN') {
         //     $.each(originalData, (index, value) => {
@@ -3876,7 +4099,7 @@
         //         }
         //     })
         // }else{
-            getSelectedRows = originalData.map((data) => data.id);
+        getSelectedRows = originalData.map((data) => data.id);
         // }
         $("#rekapRincian")[0].p.selectedRowIds = [];
 
@@ -3888,6 +4111,24 @@
                 .trigger("reloadGrid");
 
             hitung(getSelectedRows)
+        })
+
+    }
+
+    function selectAllRowsApprovalMandor() {
+        let originalData = $("#rekapRincian").getGridParam("data");
+        console.log(originalData)
+
+        let getSelectedRows = [];
+        getSelectedRows = originalData.map((data) => data.id);
+        $("#rekapRincian")[0].p.selectedRowIds = [];
+
+        setTimeout(() => {
+            $("#rekapRincian")
+                .jqGrid("setGridParam", {
+                    selectedRowIds: getSelectedRows
+                })
+                .trigger("reloadGrid");
         })
 
     }
@@ -3917,7 +4158,7 @@
                 supir_id: supirId,
                 tgldari: dari,
                 tglsampai: sampai,
-                sortIndex: sortnameAbsensi, 
+                sortIndex: sortnameAbsensi,
                 statusjeniskendaraan: $('#crudForm').find(`[name="statusjeniskendaraan"]`).val(),
                 aksi: aksi
             },
