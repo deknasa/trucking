@@ -252,6 +252,11 @@
           $('#crudForm').trigger('reset')
 
           $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            },
+            
             page: response.data.page
           }).trigger('reloadGrid');
 
