@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "65643ca1085aec1a82560f5392aac441",
+  "ReportGuid": "125b45e81c089f76f343ccb2bb8422f2",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKasBankBesarA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1728616570000+0700)/",
+  "ReportChanged": "/Date(1729740209000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -726,14 +726,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.namabank}"
+                "Value": "{data.namabank}"
               },
               "VertAlignment": "Center",
               "Font": "Tahoma;;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "19": {
               "Ident": "StiText",
