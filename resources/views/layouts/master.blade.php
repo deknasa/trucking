@@ -416,6 +416,7 @@
   <!-- Report -->
   @stack('report-scripts')
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
+  @stack('colmodel')
 
   <!-- Custom global script -->
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\pager.js')) }}"></script>
@@ -462,6 +463,7 @@
     let isAllowedForceEdit = false
     let accessCabang = `{{ session('cabang') }}`
     let cabangTnl = `{{ session('tnl') }}`
+    let authUserId = `{{  auth()->user()->id }}`
 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
@@ -799,6 +801,37 @@
 
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
       $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
+
+      $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
+      $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
+
+    }
+    function setRangeForm(isToday = false, firstDayParam = null, lastDayParam = null) {
+      // mendapatkan tanggal hari ini
+      let today = new Date();
+      let formattedLastDay;
+      let firstDay
+      let lastDay
+
+      if (firstDayParam) {
+        firstDay = new Date(firstDayParam);
+      } else {
+        // mendapatkan tanggal pertama di bulan ini
+        firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      }
+
+      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+      if (lastDayParam) {
+        lastDay = new Date(lastDayParam);
+      } else if (isToday) {
+        lastDay = new Date()
+        // formattedLastDay=$.datepicker.formatDate('dd-mm-yy', )
+      } else {
+        // mendapatkan tanggal terakhir di bulan ini
+        lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      }
+      formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
 
       $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
       $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');

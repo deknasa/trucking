@@ -586,7 +586,7 @@
         }
         loadPengembalianGrid()
         $('#crudModal').modal('show')
-        setRange(true)
+        setRangeForm(true)
       })
       .catch((error) => {
         showDialog(error.responseJSON)

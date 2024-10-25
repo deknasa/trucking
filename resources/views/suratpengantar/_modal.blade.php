@@ -945,6 +945,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page,
             postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader),
               proses: 'reload'
             }
           }).trigger('reloadGrid');
