@@ -136,7 +136,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="zonadari_id">
-                <input type="text" name="zonadari" class="form-control zonadari-lookup">
+                <input type="text" name="zonadari" id="zonadari" class="form-control zonadari-lookup">
               </div>
             </div>
 
@@ -148,7 +148,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="zonasampai_id">
-                <input type="text" name="zonasampai" class="form-control zonasampai-lookup">
+                <input type="text" name="zonasampai" id="zonasampai" class="form-control zonasampai-lookup">
               </div>
             </div>
 
