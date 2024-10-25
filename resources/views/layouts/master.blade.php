@@ -416,6 +416,7 @@
   <!-- Report -->
   @stack('report-scripts')
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
+  @stack('colmodel')
 
   <!-- Custom global script -->
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\pager.js')) }}"></script>
@@ -462,6 +463,7 @@
     let isAllowedForceEdit = false
     let accessCabang = `{{ session('cabang') }}`
     let cabangTnl = `{{ session('tnl') }}`
+    let authUserId = `{{  auth()->user()->id }}`
 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
@@ -830,7 +832,7 @@
         lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
       }
       formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
-      
+
       $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
       $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
 

@@ -147,6 +147,481 @@
       })
     })
 
+    function createColModel() {
+      return [
+        {
+          label: '',
+          name: '',
+          width: 40,
+          align: 'center',
+          sortable: false,
+          clear: false,
+          stype: 'input',
+          searchable: false,
+          hidden: (accessCabang == 'MEDAN') ? false : true,
+          searchoptions: {
+            type: 'checkbox',
+            clearSearch: false,
+            dataInit: function(element) {
+              $(element).removeClass('form-control')
+              $(element).parent().addClass('text-center')
+              $(element).addClass('checkbox-selectall')
+              
+              $(element).on('click', function() {
+                $(element).attr('disabled', true)
+                if ($(this).is(':checked')) {
+                  selectAllRows()
+                } else {
+                  clearSelectedRows()
+                }
+              })
+              
+            }
+          },
+          formatter: (value, rowOptions, rowData) => {
+            return `<input type="checkbox" name="listtripId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
+          },
+        },
+        {
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        }, 
+        {
+          label: 'ID ORI',
+          name: 'idoriginal',
+          search: false,
+          hidden: true
+        }, 
+        {
+          label: 'FLAG',
+          name: 'flag',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'STATUS APP.',
+          name: 'statusapprovalmandor',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          stype: 'select',
+          hidden: (accessCabang == 'MEDAN') ? false : true,
+          searchoptions: {
+            value: `<?php
+            $i = 1;
+            
+            foreach ($data['comboapproval'] as $status) :
+            echo "$status[param]:$status[parameter]";
+            if ($i !== count($data['comboapproval'])) {
+              echo ";";
+              }
+              $i++;
+              endforeach
+              ?>
+            `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusApproval = JSON.parse(value)
+            if (!statusApproval) {
+              return ''
+            }
+            let formattedValue = $(`
+            <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+              <span>${statusApproval.SINGKATAN}</span>
+            </div>
+            `)
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusApproval = JSON.parse(rowObject.statusapprovalmandor)
+            if (!statusApproval) {
+              return ` title=""`
+            }
+            return ` title="${statusApproval.MEMO}"`
+          }
+        },
+        {
+          label: 'JOB TRUCKING',
+          name: 'jobtrucking',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        },
+        {
+          label: 'NO BUKTI RITASI',
+          name: 'ritasi_nobukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
+        },
+        {
+          label: 'SUPIR',
+          name: 'supir_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'DARI',
+          name: 'dari_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'SAMPAI',
+          name: 'sampai_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'KET. RITASI',
+          name: 'keteranganritasi',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
+        },
+        {
+          label: 'GAJI SUPIR',
+          name: 'gajisupir',
+          align: 'right',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          formatter: currencyFormat,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
+
+        },
+        {
+          label: 'CONTAINER',
+          name: 'container_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+        },
+        {
+          label: 'GAJI SUPIR NO BUKTI',
+          name: 'gajisupir_nobukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true,
+          formatter: (value, options, rowData) => {
+            if ((value == null) || (value == '')) {
+              return '';
+            }
+            let tgldari = rowData.tgldarigajisupirheader
+            let tglsampai = rowData.tglsampaigajisupirheader
+            let url = "{{route('gajisupirheader.index')}}"
+            let formattedValue = $(`
+            <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+           `)
+            return formattedValue[0].outerHTML
+          }
+        },
+        {
+          label: 'NO BUKTI EBS',
+          name: 'prosesgajisupir_nobukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true,
+          formatter: (value, options, rowData) => {
+            if ((value == null) || (value == '')) {
+              return '';
+            }
+            let tgldari = rowData.tgldariebs
+            let tglsampai = rowData.tglsampaiebs
+            let url = "{{route('prosesgajisupirheader.index')}}"
+            let formattedValue = $(`
+            <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
+           `)
+            return formattedValue[0].outerHTML
+          }
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tglbukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        
+        {
+          label: 'PENYESUAIAN',
+          name: 'penyesuaian',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'NO CONT',
+          name: 'nocont',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
+        },
+        {
+          label: 'STATUS GAJI SUPIR',
+          name: 'statusgajisupir',
+          stype: 'select',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          hidden: (accessCabang == 'MEDAN') ? false : true,
+          searchoptions: {
+            value: `<?php
+                    $i = 1;
+
+                    foreach ($data['combogajisupir'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combogajisupir'])) {
+                        echo ";";
+                      }
+                      $i++;
+                    endforeach
+
+                    ?>
+          `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusGajisupir = JSON.parse(value)
+            if (!statusGajisupir) {
+              return ''
+            }
+            let formattedValue = $(`
+              <div class="badge" style="background-color: ${statusGajisupir.WARNA}; color: #fff;">
+                <span>${statusGajisupir.SINGKATAN}</span>
+              </div>
+            `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusGajisupir = JSON.parse(rowObject.statusgajisupir)
+            if (!statusGajisupir) {
+              return ` title=""`
+            }
+            return ` title="${statusGajisupir.MEMO}"`
+          }
+        },
+        {
+          label: 'CUSTOMER',
+          name: 'agen_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'JENIS ORDER',
+          name: 'jenisorder_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+        },
+        {
+          label: 'SHIPPER',
+          name: 'pelanggan_id',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+        },
+        
+        {
+          label: 'STATUS CONTAINER',
+          name: 'statuscontainer_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+        {
+          label: 'TRADO',
+          name: 'trado_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
+        },
+        {
+          label: 'GANDENGAN',
+          name: 'gandengan_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+        },
+       
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
+        },
+        {
+          label: 'LONGTRIP',
+          name: 'statuslongtrip',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          stype: 'select',
+          searchoptions: {
+            value: `<?php
+                    $i = 1;
+
+                    foreach ($data['combolongtrip'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combolongtrip'])) {
+                        echo ";";
+                      }
+                      $i++;
+                    endforeach
+
+                    ?>
+          `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusLongTrip = JSON.parse(value)
+            if (!statusLongTrip) {
+              return ''
+            }
+            let formattedValue = $(`
+              <div class="badge" style="background-color: ${statusLongTrip.WARNA}; color: #fff;">
+                <span>${statusLongTrip.SINGKATAN}</span>
+              </div>
+            `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusLongTrip = JSON.parse(rowObject.statuslongtrip)
+            if (!statusLongTrip) {
+              return ` title=""`
+            }
+            return ` title="${statusLongTrip.MEMO}"`
+          }
+        },
+        {
+          label: 'GUDANG SAMA',
+          name: 'statusgudangsama',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          stype: 'select',
+          searchoptions: {
+            value: `<?php
+              $i = 1;
+              foreach ($data['combogudangsama'] as $status) :
+                echo "$status[param]:$status[parameter]";
+                if ($i !== count($data['combogudangsama'])) {
+                  echo ";";
+                }
+                $i++;
+              endforeach
+              ?>  
+            `,
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4"
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusGudangSama = JSON.parse(value)
+            if (!statusGudangSama) {
+              return ''
+            }
+            let formattedValue = $(`
+              <div class="badge" style="background-color: ${statusGudangSama.WARNA}; color: #fff;">
+                <span>${statusGudangSama.SINGKATAN}</span>
+              </div>
+            `)
+              return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusGudangSama = JSON.parse(rowObject.statusgudangsama)
+            if (!statusGudangSama) {
+              return ` title=""`
+            }
+            return ` title="${statusGudangSama.MEMO}"`
+          }
+        },
+        {
+          label: 'LOKASI BONGKAR MUAT',
+          name: 'tarif_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        },
+        {
+          label: 'USER APPROVAL',
+          name: 'userapprovalmandor',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true
+        },
+        {
+          label: 'TGL APPROVAL',
+          name: 'tglapprovalmandor',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          search: (accessCabang == 'MEDAN') ? true : false,
+          hidden: (accessCabang == 'MEDAN') ? false : true,
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+      ];
+    }
+
+    function getSavedColumnOrder() {
+      return JSON.parse(localStorage.getItem(`tas_${window.location.href}_${authUserId}`));
+    }
+    // Menyimpan urutan kolom ke local storage
+    function saveColumnOrder() {
+      var colOrder = $("#jqGrid").jqGrid("getGridParam", "colModel").map(function(col) {
+        return col.name;
+      });
+      localStorage.setItem(`tas_${window.location.href}_${authUserId}`, JSON.stringify(colOrder));
+    }
+    // Mengatur ulang urutan colModel berdasarkan urutan yang disimpan
+    function reorderColModel(colModel, colOrder) {
+      if (!colOrder) return colModel;
+      var orderedColModel = [];
+      colOrder.forEach(function(colName) {
+        var col = colModel.find(function(c) {
+          return c.name === colName;
+        });
+        if (col) orderedColModel.push(col);
+      });
+      return orderedColModel;
+    }
+    var colModel = createColModel();
+    var savedColOrder = getSavedColumnOrder();
+    var orderedColModel = reorderColModel(colModel, savedColOrder);
+
+
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}listtrip`,
         mtype: "GET",
@@ -158,451 +633,7 @@
           supirheader: $('#supirheader_id').val(),
         },
         datatype: "json",
-        colModel: [{
-            label: '',
-            name: '',
-            width: 40,
-            align: 'center',
-            sortable: false,
-            clear: false,
-            stype: 'input',
-            searchable: false,
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            searchoptions: {
-              type: 'checkbox',
-              clearSearch: false,
-              dataInit: function(element) {
-                $(element).removeClass('form-control')
-                $(element).parent().addClass('text-center')
-                $(element).addClass('checkbox-selectall')
-
-                $(element).on('click', function() {
-
-                  $(element).attr('disabled', true)
-                  if ($(this).is(':checked')) {
-                    selectAllRows()
-                  } else {
-                    clearSelectedRows()
-                  }
-                })
-
-              }
-            },
-            formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="listtripId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
-            },
-          },
-          {
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          }, {
-            label: 'ID ORI',
-            name: 'idoriginal',
-            search: false,
-            hidden: true
-          }, {
-            label: 'FLAG',
-            name: 'flag',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'STATUS APP.',
-            name: 'statusapprovalmandor',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            stype: 'select',
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboapproval'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboapproval'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusApproval = JSON.parse(value)
-              if (!statusApproval) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                  <span>${statusApproval.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusApproval = JSON.parse(rowObject.statusapprovalmandor)
-              if (!statusApproval) {
-                return ` title=""`
-              }
-              return ` title="${statusApproval.MEMO}"`
-            }
-          },
-          {
-            label: 'JOB TRUCKING',
-            name: 'jobtrucking',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'NO BUKTI RITASI',
-            name: 'ritasi_nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true
-          },
-          {
-            label: 'GAJI SUPIR NO BUKTI',
-            name: 'gajisupir_nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            formatter: (value, options, rowData) => {
-              if ((value == null) || (value == '')) {
-                return '';
-              }
-              let tgldari = rowData.tgldarigajisupirheader
-              let tglsampai = rowData.tglsampaigajisupirheader
-              let url = "{{route('gajisupirheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
-            }
-          },
-          {
-            label: 'NO BUKTI EBS',
-            name: 'prosesgajisupir_nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            formatter: (value, options, rowData) => {
-              if ((value == null) || (value == '')) {
-                return '';
-              }
-              let tgldari = rowData.tgldariebs
-              let tglsampai = rowData.tglsampaiebs
-              let url = "{{route('prosesgajisupirheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
-            }
-          },
-          {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'DARI',
-            name: 'dari_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'SAMPAI',
-            name: 'sampai_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'KET. RITASI',
-            name: 'keteranganritasi',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true
-          },
-          {
-            label: 'PENYESUAIAN',
-            name: 'penyesuaian',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'NO CONT',
-            name: 'nocont',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true
-          },
-          {
-            label: 'GAJI SUPIR',
-            name: 'gajisupir',
-            align: 'right',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatter: currencyFormat,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true
-
-          },
-
-          {
-            label: 'STATUS GAJI SUPIR',
-            name: 'statusgajisupir',
-            stype: 'select',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combogajisupir'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combogajisupir'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusGajisupir = JSON.parse(value)
-              if (!statusGajisupir) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusGajisupir.WARNA}; color: #fff;">
-                  <span>${statusGajisupir.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusGajisupir = JSON.parse(rowObject.statusgajisupir)
-              if (!statusGajisupir) {
-                return ` title=""`
-              }
-              return ` title="${statusGajisupir.MEMO}"`
-            }
-          },
-          {
-            label: 'CUSTOMER',
-            name: 'agen_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
-          },
-          {
-            label: 'SHIPPER',
-            name: 'pelanggan_id',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
-          },
-          {
-            label: 'CONTAINER',
-            name: 'container_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
-          },
-          {
-            label: 'STATUS CONTAINER',
-            name: 'statuscontainer_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'TRADO',
-            name: 'trado_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
-          },
-          {
-            label: 'GANDENGAN',
-            name: 'gandengan_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'SUPIR',
-            name: 'supir_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
-          },
-          {
-            label: 'LONGTRIP',
-            name: 'statuslongtrip',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combolongtrip'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combolongtrip'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusLongTrip = JSON.parse(value)
-              if (!statusLongTrip) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLongTrip.WARNA}; color: #fff;">
-                  <span>${statusLongTrip.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusLongTrip = JSON.parse(rowObject.statuslongtrip)
-              if (!statusLongTrip) {
-                return ` title=""`
-              }
-              return ` title="${statusLongTrip.MEMO}"`
-            }
-          },
-          {
-            label: 'GUDANG SAMA',
-            name: 'statusgudangsama',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combogudangsama'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combogudangsama'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusGudangSama = JSON.parse(value)
-              if (!statusGudangSama) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusGudangSama.WARNA}; color: #fff;">
-                  <span>${statusGudangSama.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusGudangSama = JSON.parse(rowObject.statusgudangsama)
-              if (!statusGudangSama) {
-                return ` title=""`
-              }
-              return ` title="${statusGudangSama.MEMO}"`
-            }
-          },
-          {
-            label: 'LOKASI BONGKAR MUAT',
-            name: 'tarif_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapprovalmandor',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true
-          },
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapprovalmandor',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            search: (accessCabang == 'MEDAN') ? true : false,
-            hidden: (accessCabang == 'MEDAN') ? false : true,
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-        ],
+        colModel: orderedColModel,
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -785,7 +816,12 @@
         ]
       })
 
-
+      $("thead tr.ui-jqgrid-labels").sortable({
+      stop: function(event, ui) {
+        saveColumnOrder();
+        console.log("Column order updated!");
+      }
+    });
 
 
     /* Append clear filter button */

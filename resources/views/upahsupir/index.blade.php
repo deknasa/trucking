@@ -419,14 +419,14 @@
     }
 
     function getSavedColumnOrder() {
-      return JSON.parse(localStorage.getItem(`tas${window.location.href}`));
+      return JSON.parse(localStorage.getItem(`tas_${window.location.href}_${authUserId}`));
     }
     // Menyimpan urutan kolom ke local storage
     function saveColumnOrder() {
       var colOrder = $("#jqGrid").jqGrid("getGridParam", "colModel").map(function(col) {
         return col.name;
       });
-      localStorage.setItem(`tas${window.location.href}`, JSON.stringify(colOrder));
+      localStorage.setItem(`tas_${window.location.href}_${authUserId}`, JSON.stringify(colOrder));
     }
     // Mengatur ulang urutan colModel berdasarkan urutan yang disimpan
     function reorderColModel(colModel, colOrder) {
