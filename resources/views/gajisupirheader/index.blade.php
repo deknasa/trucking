@@ -772,7 +772,7 @@
             {
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak GAJI SUPIR",
-              color: "btn-success",
+              hidden: (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`),
               color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`) {
@@ -802,7 +802,7 @@
             {
               id: 'approval-mandor',
               text: "Approval Mandor",
-              color: "btn-success",
+              hidden: (!`{{ $myAuth->hasPermission('listtrip', 'approval') }}`),
               color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('listtrip', 'approval') }}`) {
