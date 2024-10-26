@@ -3359,6 +3359,9 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         hidden: (accessCabang == 'MEDAN') ? false : true,
                         formatter: (value, options, rowData) => {
+                            if (!value) {
+                                return ''
+                            }
                             let statusApproval = JSON.parse(value)
                             if (!statusApproval) {
                                 return ''
@@ -3372,6 +3375,9 @@
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
+                            if (!rowObject.statusapproval) {
+                                return ` title=""`
+                            }
                             let statusApproval = JSON.parse(rowObject.statusapproval)
                             if (!statusApproval) {
                                 return ` title=""`
