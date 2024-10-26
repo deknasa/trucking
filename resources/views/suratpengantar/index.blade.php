@@ -525,6 +525,60 @@
               return ` title="${statusPeralihan.MEMO}"`
             }
           },
+          {
+            label: 'LANGSIR',
+            name: 'statuslangsir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combolangsir'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combolangsir'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusLangsir = JSON.parse(value)
+              if (!statusLangsir) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLangsir.WARNA}; color: #fff;">
+                  <span>${statusLangsir.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              
+              if (!rowObject.statuslangsir) {
+                return ` title=""`
+              }
+              let statusLangsir = JSON.parse(rowObject.statuslangsir)
+              if (!statusLangsir) {
+                return ` title=""`
+              }
+              return ` title="${statusLangsir.MEMO}"`
+            }
+          },
 
           {
             label: 'LOKASI BONGKAR MUAT',
