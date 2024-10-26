@@ -39,6 +39,7 @@ class SuratPengantarController extends MyController
             'combotolakan' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combotitipan' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'comboperalihan' => $this->comboList('list', 'STATUS PERALIHAN', 'STATUS PERALIHAN'),
+            'combolangsir' => $this->comboList('list', 'STATUS LANGSIR', 'STATUS LANGSIR'),
             'comboritasiomset' => $this->comboList('list', 'STATUS RITASI OMSET', 'STATUS RITASI OMSET'),
             'combogudangsama' => $this->comboList('list', 'STATUS GUDANG SAMA', 'STATUS GUDANG SAMA'),
             'combobatalmuat' => $this->comboList('list', 'STATUS BATAL MUAT', 'STATUS BATAL MUAT'),
