@@ -817,41 +817,45 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      if (!isAllowEdited) {
-        data.push({
-          name: 'statusupahzona',
-          value: editUpahZona
+      if(action != 'edittripasal'){
+          
+        if (!isAllowEdited) {
+          data.push({
+            name: 'statusupahzona',
+            value: editUpahZona
+          })
+          data.push({
+            name: 'statuspenyesuaian',
+            value: editStatusPenyesuaian
+          })
+        }
+        $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
+          data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
         })
-        data.push({
-          name: 'statuspenyesuaian',
-          value: editStatusPenyesuaian
+        $('#crudForm').find(`[name="nominalTagih[]"]`).each((index, element) => {
+          data.filter((row) => row.name === 'nominalTagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalTagih[]"]`)[index])
         })
+        // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
+        //   data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]:not([disabled])`)[index])
+        // })
+
+        // if ($("#statusperalihan option:selected").text() == 'PERALIHAN') {
+        // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
+        // })
+
+        data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
+        // }
+        // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
+        data.filter((row) => row.name === 'hargapertontarif')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
+        data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
+        data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
+        data.filter((row) => row.name === 'komisisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="komisisupir"]`)[0])
+        data.filter((row) => row.name === 'gajikenek')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajikenek"]`)[0])
+        data.filter((row) => row.name === 'gajisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajisupir"]`)[0])
+        // })
+
       }
-      $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-      })
-      $('#crudForm').find(`[name="nominalTagih[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalTagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalTagih[]"]`)[index])
-      })
-      // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]:not([disabled])`)[index])
-      // })
-
-      // if ($("#statusperalihan option:selected").text() == 'PERALIHAN') {
-      // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
-      data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
-      // })
-
-      data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
-      // }
-      // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
-      data.filter((row) => row.name === 'hargapertontarif')[0].value = AutoNumeric.getNumber($(`#crudForm [name="hargapertontarif"]`)[0])
-      data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
-      data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
-      data.filter((row) => row.name === 'komisisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="komisisupir"]`)[0])
-      data.filter((row) => row.name === 'gajikenek')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajikenek"]`)[0])
-      data.filter((row) => row.name === 'gajisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajisupir"]`)[0])
-      // })
 
       data.push({
         name: 'statusjeniskendaraan',
@@ -918,6 +922,10 @@
         case 'delete':
           method = 'DELETE'
           url = `${apiUrl}suratpengantar/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          break;
+        case 'edittripasal':
+          method = 'POST'
+          url = `${apiUrl}suratpengantar/edittripasal`
           break;
         default:
           method = 'POST'
@@ -3528,6 +3536,63 @@
       $(this).removeAttr('disabled')
     })
   })
+
+  function editTripAsal(id) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'edittripasal')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Save
+  `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Edit Trip Asal')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAll(form),
+        setTampilan(form)
+      ])
+      .then(() => {
+        showSuratPengantar(form, id)
+          .then(id => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+            form.find('[name]').not('[name="nobukti_tripasal"]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+          })
+          .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
+            $('#crudModal').modal('show')
+            moveKotaLangsir($('#crudForm [name=statuslangsir]').val())
+            form.find(`.hasDatepicker`).prop('readonly', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            let name = $('#crudForm').find(`[name]`).not('[name="nobukti_tripasal"]').parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
 
   
   const setStatusAll = function(relatedForm) {

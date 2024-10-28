@@ -135,7 +135,7 @@
 
   setSpaceBarCheckedHandler('suratpengantar')
   $(document).ready(function() {
-    if(accessCabang != 'MEDAN'){
+    if (accessCabang != 'MEDAN') {
       $('#btnReloadTrip').hide()
     }
     $("#tabs").tabs()
@@ -167,8 +167,8 @@
           nobukti: selectednobuktiheader,
           proses: 'reload',
           reload: true,
-          clearfilter:true,
-          nobukti:'',
+          clearfilter: true,
+          nobukti: '',
           filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
         }
 
@@ -568,7 +568,7 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              
+
               if (!rowObject.statuslangsir) {
                 return ` title=""`
               }
@@ -1342,7 +1342,7 @@
                   tgldari: $('#tgldariheader').val(),
                   tglsampai: $('#tglsampaiheader').val(),
                   filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters,
-                  export : true
+                  export: true
                 },
                 beforeSend: function(xhr) {
                   xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -1470,13 +1470,26 @@
             caption: 'Lainnya',
             innerHTML: '<i class="fa fa-check"></i> LAINNYA',
             class: 'btn btn-secondary btn-sm mr-1  ',
-            hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'editSP') }}`),
             item: [{
               id: 'editSP',
               text: "Edit SP",
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'editSP') }}`),
               color: `<?php echo $data['listbtn']->btn->updatenocontainer; ?>`,
               onClick: () => {
-                createEditSp()
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'editSP') }}`) {
+                  createEditSp()
+                }
+              }
+            }, {
+              id: 'edit-trip-asal',
+              text: "Edit Trip Asal",
+              hidden: (!`{{ $myAuth->hasPermission('suratpengantar', 'editTripAsal') }}`),
+              color: `<?php echo $data['listbtn']->btn->approvalbiayaextra; ?>`,
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'editTripAsal') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  editTripAsal(selectedId);
+                }
               }
             }]
           }
@@ -1655,6 +1668,11 @@
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'editSP') }}`) {
         hakLainnyaCount--
         $('#editSP').hide()
+      }
+      hakLainnyaCount++
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'editTripAsal') }}`) {
+        hakLainnyaCount--
+        $('#edit-trip-asal').hide()
       }
       if (hakLainnyaCount < 1) {
         // $('#approve').hide()
