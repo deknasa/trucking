@@ -1271,6 +1271,7 @@
       removeEditingBy($('#crudForm').find('[name=id]').val())
     });
   </script>
+   @include('layouts.lookupV4')
 </body>
 
 </html>
