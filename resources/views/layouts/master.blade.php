@@ -525,6 +525,11 @@
       .focus(function() {})
 
     $(document).ready(function() {
+      syncHeaderScroll('jqGrid'); // For the first grid
+      syncHeaderScroll('detail');
+      syncHeaderScroll('jurnalGrid');
+      syncHeaderScroll('pengeluaranGrid');
+      syncHeaderScroll('penerimaanGrid');
       // Echo.channel('export')
       //   .listen('UpdateExportProgress', event => {
       //     $('.modal-body').append(`<div id="progressbar"></div>`)
@@ -717,56 +722,56 @@
       })
     }
 
- // Interceptor: Setup global handler untuk semua request AJAX
- $.ajaxSetup({
-        beforeSend: function(xhr) {
-            // Sertakan access token di setiap request
-            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        },
-        statusCode: {
-            401: function() {
-                // Jika status 401 Unauthorized, token sudah kadaluarsa
-                console.log("Token expired, attempting to refresh...");
-              console.log();
-                // Panggil fungsi refresh token yang terpisah
-                handleTokenExpired(this);
-            }
+    // Interceptor: Setup global handler untuk semua request AJAX
+    $.ajaxSetup({
+      beforeSend: function(xhr) {
+        // Sertakan access token di setiap request
+        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+      },
+      statusCode: {
+        401: function() {
+          // Jika status 401 Unauthorized, token sudah kadaluarsa
+          console.log("Token expired, attempting to refresh...");
+          console.log();
+          // Panggil fungsi refresh token yang terpisah
+          handleTokenExpired(this);
         }
+      }
     });
 
     // Fungsi khusus untuk memperbarui access token dengan refresh token
     function refreshAccessToken() {
-        return $.ajax({
-            url: `${appUrl}/refresh`, // Endpoint untuk refresh token
-            type: "get",
-           
-            success: function(response) {
-                // Berhasil mendapatkan token baru
-                accessToken = response.access_token;
-            },
-            error: function(xhr, status, error) {
-                console.log("Gagal memperbarui token:", error);
-            }
-        });
+      return $.ajax({
+        url: `${appUrl}/refresh`, // Endpoint untuk refresh token
+        type: "get",
+
+        success: function(response) {
+          // Berhasil mendapatkan token baru
+          accessToken = response.access_token;
+        },
+        error: function(xhr, status, error) {
+          console.log("Gagal memperbarui token:", error);
+        }
+      });
     }
 
     // Fungsi untuk menangani token yang kadaluarsa
     function handleTokenExpired(req) {
-        // Panggil refresh token
-        refreshAccessToken().done(function(newToken) {
-          accessToken = newToken.access_token;  // Simpan access token yang baru
-          retryLastRequest(req);  // Coba ulangi request terakhir
-        }).fail(function() {
-            console.log("Gagal memperbarui token, arahkan pengguna ke login.");
-            // Opsi: arahkan pengguna ke halaman login jika refresh token juga gagal
-        });
+      // Panggil refresh token
+      refreshAccessToken().done(function(newToken) {
+        accessToken = newToken.access_token; // Simpan access token yang baru
+        retryLastRequest(req); // Coba ulangi request terakhir
+      }).fail(function() {
+        console.log("Gagal memperbarui token, arahkan pengguna ke login.");
+        // Opsi: arahkan pengguna ke halaman login jika refresh token juga gagal
+      });
     }
 
     // Fungsi untuk menyimpan dan mengulang request terakhir yang gagal
     function retryLastRequest(req) {
 
-        // Ulangi request
-        $.ajax(req);
+      // Ulangi request
+      $.ajax(req);
     }
 
 
@@ -806,6 +811,7 @@
       $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
 
     }
+
     function setRangeForm(isToday = false, firstDayParam = null, lastDayParam = null) {
       // mendapatkan tanggal hari ini
       let today = new Date();
@@ -898,61 +904,61 @@
 
     function loadDataHeaderJobEmkl(url, addtional = null) {
 
-        let data = {
-          tgldari: $('#tgldariheader').val(),
-          tglsampai: $('#tglsampaiheader').val(),
-          jenisorder_id: $('#jenisorder_id').val(),
-          proses: 'reload'
-        }
-        data = {
-          ...data,
-          ...addtional
-        }
-        getIndex(url, data).then((response) => {
+      let data = {
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        jenisorder_id: $('#jenisorder_id').val(),
+        proses: 'reload'
+      }
+      data = {
+        ...data,
+        ...addtional
+      }
+      getIndex(url, data).then((response) => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        clearGlobalSearch($('#jqGrid'))
+        $('#jqGrid').setGridParam({
+          url: `${apiUrl}${url}`,
+          datatype: "json",
+          postData: data,
+
+          page: 1
+        }).trigger('reloadGrid')
+      }).catch((error) => {
+        clearGlobalSearch($('#jqGrid'))
+
+        if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
-          clearGlobalSearch($('#jqGrid'))
-          $('#jqGrid').setGridParam({
-            url: `${apiUrl}${url}`,
-            datatype: "json",
-            postData: data,
+          errors = error.responseJSON.errors
 
-            page: 1
-          }).trigger('reloadGrid')
-        }).catch((error) => {
-          clearGlobalSearch($('#jqGrid'))
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let element;
+            if (indexes[0] == 'tgldari' || indexes[0] == 'tglsampai') {
+              element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+            } else {
+              element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
+            }
 
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-            errors = error.responseJSON.errors
-
-            $.each(errors, (index, error) => {
-              let indexes = index.split(".");
-              let element;
-              if (indexes[0] == 'tgldari' || indexes[0] == 'tglsampai')  {
-                element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
-              } else {
-                element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
-              }
-
-              $(element).addClass("is-invalid");
-              $(`
+            $(element).addClass("is-invalid");
+            $(`
                 <div class="invalid-feedback">
                 ${error[0].toLowerCase()}
                 </div>
             `).appendTo($(element).parent());
 
-            });
+          });
 
-            $(".is-invalid").first().focus();
-            $('#processingLoader').addClass('d-none')
-          } else {
-            showDialog(error.responseJSON)
-          }
-        })
+          $(".is-invalid").first().focus();
+          $('#processingLoader').addClass('d-none')
+        } else {
+          showDialog(error.responseJSON)
+        }
+      })
 
-}
+    }
 
     function loadDataHeaderTrip(url, addtional = null) {
 
@@ -1058,7 +1064,7 @@
       var date = tglbukti.split('-');
 
       let year = date[2];
-      let mounth = date[1]-1;
+      let mounth = date[1] - 1;
       // mendapatkan tanggal hari ini
       let today = new Date();
 
@@ -1267,7 +1273,7 @@
 
 
     window.addEventListener('beforeunload', function(e) {
-     
+
       removeEditingBy($('#crudForm').find('[name=id]').val())
     });
   </script>

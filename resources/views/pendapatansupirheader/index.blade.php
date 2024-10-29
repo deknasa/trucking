@@ -122,6 +122,9 @@
     setIsDeposito()
     setIsValidateBank()
     setRange()
+    syncHeaderScroll('jurnaldepositoGrid');
+    syncHeaderScroll('jurnalpinjamanGrid');
+    
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pendapatansupirheader')

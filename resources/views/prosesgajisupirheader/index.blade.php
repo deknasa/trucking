@@ -174,6 +174,11 @@
     loadBBMGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
     loadPengembalianGrid(nobukti)
+    syncHeaderScroll('potsemuaGrid');
+    syncHeaderScroll('potpribadiGrid');
+    syncHeaderScroll('depositoGrid');
+    syncHeaderScroll('bbmGrid');
+    syncHeaderScroll('pengembalianGrid');
 
     setRange()
     initDatepicker('datepickerIndex')

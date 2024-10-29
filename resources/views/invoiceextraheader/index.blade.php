@@ -112,6 +112,7 @@
     loadDetailGrid()
     loadPiutangGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
+    syncHeaderScroll('piutangGrid');
 
     setRange()
     @isset($request['tgldari'])

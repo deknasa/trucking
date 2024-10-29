@@ -144,6 +144,7 @@
     loadDetailGrid()
     loadHistoryGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
+    syncHeaderScroll('historyGrid');
 
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
