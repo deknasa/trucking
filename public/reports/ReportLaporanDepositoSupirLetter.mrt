@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "40d0390d34a24a73293c87a02bfba8ed",
+  "ReportGuid": "064677a76946b165310b8b9df88e426b",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanDepositoSupirA4.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1729129786000+0700)/",
+  "ReportChanged": "/Date(1729740545000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -414,7 +414,7 @@
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
           "CanGrow": true,
-          "ClientRectangle": "0,4,215.7,34",
+          "ClientRectangle": "0,4,214.9,34",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -771,7 +771,7 @@
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand2",
           "CanGrow": true,
-          "ClientRectangle": "0,46,215.7,8",
+          "ClientRectangle": "0,46,214.9,8",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -807,7 +807,7 @@
           "Ident": "StiDataBand",
           "Name": "DataBand1",
           "CanGrow": true,
-          "ClientRectangle": "0,62,215.7,8",
+          "ClientRectangle": "0,62,214.9,8",
           "ComponentPlacement": "d.Page1",
           "Expressions": {
             "0": {
@@ -995,7 +995,7 @@
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand2",
           "CanGrow": true,
-          "ClientRectangle": "0,78,215.7,8",
+          "ClientRectangle": "0,78,214.9,8",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1176,7 +1176,7 @@
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
           "CanGrow": true,
-          "ClientRectangle": "0,94,215.7,44",
+          "ClientRectangle": "0,94,214.9,44",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1574,7 +1574,7 @@
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
           "CanGrow": true,
-          "ClientRectangle": "0,146,215.7,2.2",
+          "ClientRectangle": "0,146,214.9,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {
@@ -1663,10 +1663,10 @@
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
-        "Left": 0.1,
-        "Right": 0.1,
-        "Top": 0.1,
-        "Bottom": 0.1
+        "Left": 1,
+        "Right": 0,
+        "Top": 10,
+        "Bottom": 3
       }
     }
   }

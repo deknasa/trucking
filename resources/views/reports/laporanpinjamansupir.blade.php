@@ -7,13 +7,13 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Laporan Pinjaman Supir</title>
-    {{-- <link rel="stylesheet" type="text/css"
-        href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}"> --}}
-    {{-- <link rel="stylesheet" type="text/css"
-        href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
+    <!-- <link rel="stylesheet" type="text/css"
+        href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}"> -->
+    <!-- <link rel="stylesheet" type="text/css"
+        href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}"> -->
     <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
-    {{-- <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script> --}}
-    {{-- <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> --}}
+    <!-- <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
+    <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
     <script type="text/javascript">
@@ -31,9 +31,9 @@
 
             var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
-            if (cabang['cabang'] == 'MEDAN') {
+            if (cabang == 'MEDAN') {
                 report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirA4.mrt') }}`)
-            } else if (cabang['cabang'] == 'MAKASSAR') {
+            } else if (cabang == 'MAKASSAR') {
                 report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupirLetter.mrt') }}`)
             } else {
                 report.loadFile(`{{ asset('public/reports/ReportLaporanPinjamanSupir.mrt') }}`)

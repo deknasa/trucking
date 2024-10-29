@@ -24,10 +24,10 @@
 
             var report = new Stimulsoft.Report.StiReport()
 
-            var options = new Stimulsoft.Designer.StiDesignerOptions()
-            options.appearance.fullScreenMode = true
+            // var options = new Stimulsoft.Designer.StiDesignerOptions()
+            // options.appearance.fullScreenMode = true
 
-            var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
+            // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
             var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 

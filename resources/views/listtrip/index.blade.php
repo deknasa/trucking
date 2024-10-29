@@ -149,39 +149,7 @@
 
     function createColModel() {
       return [
-        {
-          label: '',
-          name: '',
-          width: 40,
-          align: 'center',
-          sortable: false,
-          clear: false,
-          stype: 'input',
-          searchable: false,
-          hidden: (accessCabang == 'MEDAN') ? false : true,
-          searchoptions: {
-            type: 'checkbox',
-            clearSearch: false,
-            dataInit: function(element) {
-              $(element).removeClass('form-control')
-              $(element).parent().addClass('text-center')
-              $(element).addClass('checkbox-selectall')
-              
-              $(element).on('click', function() {
-                $(element).attr('disabled', true)
-                if ($(this).is(':checked')) {
-                  selectAllRows()
-                } else {
-                  clearSelectedRows()
-                }
-              })
-              
-            }
-          },
-          formatter: (value, rowOptions, rowData) => {
-            return `<input type="checkbox" name="listtripId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
-          },
-        },
+       
         {
           label: 'ID',
           name: 'id',
@@ -805,14 +773,6 @@
               }
             }
           },
-          {
-            id: 'approve',
-            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: function(event) {
-              approvalMandor()
-            }
-          },
         ]
       })
 
@@ -840,9 +800,6 @@
 
       if (!`{{ $myAuth->hasPermission('listtrip', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('listtrip', 'approval') }}`) {
-        $('#approve').hide()
       }
     }
 

@@ -317,7 +317,7 @@
             align: 'right',
             formatter: currencyFormat,
           },
-        
+
           {
             label: 'Biaya Extra (Trip)',
             name: 'biayaextra',
@@ -721,10 +721,10 @@
                   url: `${apiUrl}gajisupirheader/${selectedId}/export`,
                   type: 'GET',
                   data: {
-                    forReport : true,
-                    sortIndex : 'suratpengantar_nobukti',
+                    forReport: true,
+                    sortIndex: 'suratpengantar_nobukti',
                     gajisupir_id: selectedId,
-                    export : true
+                    export: true
                   },
                   beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
@@ -772,7 +772,7 @@
             {
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak GAJI SUPIR",
-              color: "btn-success",
+              hidden: (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`),
               color: `<?php echo $data['listbtn']->btn->approvalbukacetak; ?>`,
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`) {
@@ -795,6 +795,24 @@
                   tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
 
                   approvalKirimBerkas(tglkirimberkas, 'GAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-mandor',
+              text: "Approval Mandor",
+              hidden: (!`{{ $myAuth->hasPermission('listtrip', 'approval') }}`),
+              color: `<?php echo $data['listbtn']->btn->approvalaktif; ?>`,
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('listtrip', 'approval') }}`) {
+
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'APPROVAL MANDOR')
+                  }
 
                 }
               }
@@ -865,6 +883,11 @@
       if (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {
         hakApporveCount--
         $('#approval-kirim-berkas').hide()
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('listtrip', 'approval') }}`) {
+        hakApporveCount--
+        $('#approval-mandor').hide()
       }
       if (hakApporveCount < 1) {
         $('#approve').hide()
