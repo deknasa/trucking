@@ -29,7 +29,10 @@
 
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="table" id="table" class="form-select select2bs4" style="width: 100%;">
-
+                                    <option value=""> -- PILIH DATA TRANSAKSI -- </option>
+                                    @foreach ($data['comboTable'] as $kodepenerimaan)
+                                    <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['text']}} </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -75,17 +78,23 @@
     let rowNum = 10
     let hasDetail = false
     let selectedRows = [];
+    let selectedbukti = [];
 
     function checkboxHandler(element) {
         let value = $(element).val();
+        let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
         if (element.checked) {
             selectedRows.push($(element).val())
+            selectedbukti.push(valuebukti)
             $(element).parents('tr').addClass('bg-light-blue')
         } else {
             $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
+                }
+                if (selectedbukti[i] == valuebukti) {
+                    selectedbukti.splice(i, 1);
                 }
             }
         }
@@ -94,11 +103,11 @@
 
     $(document).ready(function() {
 
-        initSelect2($('#crudForm').find('[name=cetak]'), false)
+        // initSelect2($('#crudForm').find('[name=cetak]'), false)
         initSelect2($('#crudForm').find('[name=table]'), false)
 
-        setStatusApprovalOptions($('#crudForm'))
-        setStatusInvoiceOptions($('#crudForm'))
+        // setStatusApprovalOptions($('#crudForm'))
+        // setStatusInvoiceOptions($('#crudForm'))
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -146,6 +155,7 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 data: {
+                    bukti: selectedbukti,
                     tableId: selectedRows,
                     periode: $('#crudForm').find('[name=periode]').val(),
                     table: $('#crudForm').find('[name=table]').val(),
@@ -464,7 +474,7 @@
         loadGlobalSearch($('#jqGrid'))
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('approvalbukacetak', 'approvalbukacetak') }}`) {
+            if (!`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
                 $('#btnSubmit').attr('disabled', 'disabled')
             }
         }
@@ -482,7 +492,7 @@
                 },
                 data: {
                     periode: $('#crudForm').find('[name=periode]').val(),
-                    cetak: $('#crudForm').find('[name=cetak]').val(),
+                    // cetak: $('#crudForm').find('[name=cetak]').val(),
                     table: $('#crudForm').find('[name=table]').val(),
                 },
                 success: (response) => {
