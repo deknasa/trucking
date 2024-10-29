@@ -159,7 +159,7 @@ selector.jqGrid({
 
                     postData.searching = searching;
                     postData.searchText = searchText;
-                } else if (searching.length > 1) {
+                } else if (searching.length >= 1) {                    
                     for (i = 0; i < l; i++) {
                         cm = colModel[i];
                         // Check if the column name is in the 'searching' array

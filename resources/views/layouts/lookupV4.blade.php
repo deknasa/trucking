@@ -260,6 +260,17 @@
                 });
 
 
+                let postData = {
+                    filters: JSON.stringify({
+                            groupOp: "OR",
+                            rules: rulesFirst,
+                        })
+                }
+
+                filterPostData = {
+                    ...filterPostData,
+                    ...postData,
+                }
                 $.ajax({
                     url: `${apiUrl}${endpoint}`,
                     method: 'GET',
@@ -267,12 +278,7 @@
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     },
-                    data: {
-                        filters: JSON.stringify({
-                            groupOp: "OR",
-                            rules: rulesFirst,
-                        }),
-                    },
+                    data: filterPostData,
                     success: response => {
                         firstdata = response.data[0]
                         handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata)
