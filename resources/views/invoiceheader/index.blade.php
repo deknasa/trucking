@@ -113,6 +113,7 @@
     loadDetailGrid()
     loadPiutangGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
+    syncHeaderScroll('piutangGrid');
 
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;

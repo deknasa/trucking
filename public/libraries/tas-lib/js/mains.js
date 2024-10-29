@@ -2597,3 +2597,14 @@ function getQueryParameter() {
         }
     }, 1000);
 }
+
+function syncHeaderScroll(gridId) {
+    // Get the jqGrid header and body containers dynamically based on the grid ID
+    let gridHeader = $(`#${gridId}`).closest('.ui-jqgrid').find('.ui-jqgrid-hdiv');
+    let gridBody = $(`#${gridId}`).closest('.ui-jqgrid').find('.ui-jqgrid-bdiv');
+
+    // Sync header scroll with body scroll for the specified grid
+    gridBody.on('scroll', function() {
+        gridHeader.scrollLeft(gridBody.scrollLeft());
+    });
+}

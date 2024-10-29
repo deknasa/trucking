@@ -164,6 +164,11 @@
     loadBBMGrid()
     getJenisTambahan()
     loadAbsensiGrid()
+    syncHeaderScroll('potsemuaGrid');
+    syncHeaderScroll('potpribadiGrid');
+    syncHeaderScroll('depositoGrid');
+    syncHeaderScroll('bbmGrid');
+    syncHeaderScroll('absensiGrid');
 
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;

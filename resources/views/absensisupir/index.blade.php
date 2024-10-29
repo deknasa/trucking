@@ -159,6 +159,10 @@
     loadKasGantungGrid()
     setTradoMilikSupir()
     GetActiveKolomJenisKendaraan()
+    syncHeaderScroll('rekapAbsenTradoGrid');
+    syncHeaderScroll('kasgantungGrid');
+    syncHeaderScroll('dataTidakLengkapGrid');
+    
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset

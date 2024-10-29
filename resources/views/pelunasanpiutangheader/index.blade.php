@@ -150,7 +150,8 @@
     loadPenerimaanGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
     loadJurnalPengeluaranGrid(nobukti)
-
+    syncHeaderScroll('jurnalPengeluaranGrid');
+    
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
