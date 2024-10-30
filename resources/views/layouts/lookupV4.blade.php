@@ -278,7 +278,7 @@
                     ...postData,
                 }
                 $.ajax({
-                    url: `${apiUrl}${urlRequestGrid}`,
+                    url: `${urlRequestGrid}`,
                     method: 'GET',
                     dataType: 'JSON',
                     headers: {
