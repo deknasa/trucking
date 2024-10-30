@@ -23,33 +23,84 @@ if (detectDeviceType() == "desktop" && label == false) {
 console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
-        label: "ID",
-        name: "id",
-        width: "50px",
-        hidden: true,
-        sortable: false,
-        search: false,
-    },
-
+column = [
     {
-        label: "bank",
-        name: "namabank",
-        width: width,
+        label: 'JOB TRUCKING',
+        name: 'jobtrucking',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        // hidden: true,
+        // sortable: false,
+        // search: false,
     },
-
+    // {
+    //     label: 'JOB TRUCKING',
+    //     name: 'jobtrip',
+    //     width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+    // },
+    {
+        label: 'TGL BUKTI',
+        name: 'tglbukti',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        align: 'right',
+        formatter: "date",
+        formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+        }
+    },
+    {
+        label: 'SUPIR',
+        name: 'supir',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+    },
+    {
+        label: 'TRADO',
+        name: 'trado',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+    },
+    {
+        label: 'DARI',
+        name: 'kotadari',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+    },
+    {
+        label: 'SAMPAI',
+        name: 'kotasampai',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+    },
+    {
+        label: 'NOBUKTI',
+        name: 'nobukti',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+    },
+    // {
+    //     label: 'RITASI',
+    //     name: 'kotadarisampai',
+    //     width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+    // },
 ]
+
+
 filterPostData = {
-    aktif: parsePostData.Aktif || '',
+    edit: parsePostData.edit || 'false',
+    idtrip: parsePostData.idtrip || '',
+    statuscontainer_id: parsePostData.statuscontainer_id || '',
+    container_id: parsePostData.container_id || '',
+    jenisorder_id: parsePostData.jenisorder_id || '',
+    pelanggan_id: parsePostData.pelanggan_id || '',
+    gandengan_id: parsePostData.gandengan_id || '',
+    trado_id: parsePostData.trado_id || '',
+    tarif_id: parsePostData.tarif_id || '',
+    statuslongtrip: parsePostData.statuslongtrip || '',
+    tripasal: parsePostData.tripasal || '',
+    isPulangLongtrip: parsePostData.isPulangLongtrip || '',
+    tglbukti: parsePostData.tglbukti || '',
+    dari_id: parsePostData.dari_id || '',
     filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+
+urlRequestGrid =  `${apiUrl}jobtrucking`,
 
 selector.jqGrid({
     url: urlRequestGrid,
@@ -354,7 +405,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')

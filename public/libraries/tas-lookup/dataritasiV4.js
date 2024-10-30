@@ -23,7 +23,8 @@ if (detectDeviceType() == "desktop" && label == false) {
 console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
+column = [
+    {
         label: "ID",
         name: "id",
         width: "50px",
@@ -31,28 +32,28 @@ column = [{
         sortable: false,
         search: false,
     },
-
     {
-        label: "bank",
-        name: "namabank",
+        label: 'STATUS RITASI ID',
+        name: 'statusritasi_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'STATUS RITASI',
+        name: 'statusritasi',
         width: width,
     },
-
 ]
+
+
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+urlRequestGrid= `${apiUrl}dataritasi`,
 
 selector.jqGrid({
-    url: urlRequestGrid,
+    url: `${apiUrl}dataritasi`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
@@ -354,7 +355,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')

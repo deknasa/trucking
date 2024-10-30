@@ -4,6 +4,7 @@
         let elementReferenceLookup = null;
         let dataParsed 
         let filterPostData
+        let urlRequestGrid
 
         const serializeLookupV4 = function(obj) {
             var str = [];
@@ -53,6 +54,7 @@
 
         let isKeyDownV4 = false;
         let isLookupOpenV4 = true;
+        let isSelectedRow = false;
 
         let offsetWindowV4;
 
@@ -231,13 +233,14 @@
                 });
 
                 element.on("blur",function(event){
-
-                    const lookupContainer = element.siblings(
-                        `#lookup-${element.attr("id")}`
-                    );
-                    
-                    if (element.val() != '') {
-                        getFirst(settings.searching, settings.endpoint, lookupContainer, element);
+                    if  (detectDeviceType() != "desktop") {
+                        const lookupContainer = element.siblings(
+                            `#lookup-${element.attr("id")}`
+                        );
+                        
+                        if (element.val() != '') {
+                            getFirst(settings.searching, settings.endpoint, lookupContainer, element);
+                        }                        
                     }
                    
                 })
@@ -247,6 +250,9 @@
             });
 
             function getFirst(fields, endpoint, lookupContainer, element) {
+                if (isSelectedRow) {
+                    return ;
+                }
                 let rulesFirst = []
                 dataval = element.val();
 
@@ -303,6 +309,8 @@
                 let bottomSelected = 11;
                 let topSelected = 0;
                 // let indexRowSelectV4 = 1;
+                isSelectedRow = false;
+                
 
                 offsetWindowV4 = window.pageYOffset;
 
@@ -754,7 +762,8 @@
                             activate = false;
                             $(element).removeClass('active');
 
-                            if (element.val() != '') {
+                            if (element.data("currentValue") != '') {
+                                // console.log($(event.target).closest(lookupContainer),$(event.target).closest(".input-group").length );
                                 getFirst(settings.searching, settings.endpoint, lookupContainer, element);
                             }
                             
@@ -833,6 +842,7 @@
 
                     let detailElement = $(".overflow");
                     isLookupOpenV4 = false;
+                    isSelectedRow = true;
                     // keydownIndexV4 = false;
 
                     // indexRowSelectV4 = 1

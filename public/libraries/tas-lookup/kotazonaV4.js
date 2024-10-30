@@ -23,7 +23,8 @@ if (detectDeviceType() == "desktop" && label == false) {
 console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
+column = [
+    {
         label: "ID",
         name: "id",
         width: "50px",
@@ -33,23 +34,24 @@ column = [{
     },
 
     {
-        label: "bank",
-        name: "namabank",
+        label: 'KOTA',
+        name: 'kodekota',
+        align: 'left',
         width: width,
     },
-
 ]
+
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    kotaZona: parsePostData.$kotaZona || '',
+    isLookup: parsePostData.$isLookup || '',
+    statuslongtrip: parsePostData.$statuslongtrip || '',
+    dari_id: parsePostData.$dari_id || '',
+    from: parsePostData.$from || '',
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+
+urlRequestGrid = parsePostData.url || `${apiUrl}kota`,
 
 selector.jqGrid({
     url: urlRequestGrid,
@@ -354,7 +356,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')

@@ -23,7 +23,8 @@ if (detectDeviceType() == "desktop" && label == false) {
 console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
+column = [
+    {
         label: "ID",
         name: "id",
         width: "50px",
@@ -33,23 +34,72 @@ column = [{
     },
 
     {
-        label: "bank",
-        name: "namabank",
-        width: width,
+        label: 'TRADO - SUPIR',
+        name: 'tradosupir',
+        width: '1500px',
     },
-
+    {
+        label: 'trado',
+        name: 'trado',
+        hidden: true,
+        search: false,
+    },
+    {
+        label: 'trado_id',
+        name: 'trado_id',
+        hidden: true,
+        search: false,
+    },
+    {
+        label: 'supir_id',
+        name: 'supir_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'supir',
+        name: 'supir',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'statusgerobak',
+        name: 'statusgerobak',
+        hidden: true,
+        search: false
+    },
+    {
+        label: 'nominalplusborongan',
+        name: 'nominalplusborongan',
+        hidden: true,
+        search: false
+    },
+    {
+        label: 'UANG JALAN',
+        name: 'uangjalan',
+        hidden: true,
+        search: false
+    },
 ]
+
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    trado_id: parsePostData.trado_id || '',
+    cabang: parsePostData.cabang || '',
+    absensiId: parsePostData.absensiId || '',
+    tgltrip: parsePostData.tgltrip || '',
+    absensi_id: parsePostData.absensi_id || '',
+    from: parsePostData.from || '',
+    aksi: parsePostData.aksi || '',
+    tripinap_id: parsePostData.tripinap_id || '',
+    pengajuantrip_id: parsePostData.pengajuantrip_id || '',
+    isProsesUangjalan: parsePostData.isProsesUangjalan || '',
+    uangJalanId: parsePostData.uangJalanId || '',
+    statusjeniskendaraan: parsePostData.statusjeniskendaraan || '',
+    trip_id: parsePostData.trip_id || '',
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+urlRequestGrid = `${apiUrl}absensisupirdetail/get`
 
 selector.jqGrid({
     url: urlRequestGrid,
@@ -354,7 +404,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')

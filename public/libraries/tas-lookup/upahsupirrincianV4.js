@@ -3,6 +3,8 @@ parsePostData = dataParsed
 
 var idLookup = 1;
 var idTop 
+jenisKendaraan = parsePostData.statusjeniskendaraan || '';
+urlUpahsupir = (jenisKendaraan == 'TANGKI') ? 'upahsupirtangki/get' : 'upahsupirrincian/get';
 
 selector = $(`#${parsePostData.lookupName}`)
 var isToolbarSearch = false;
@@ -20,10 +22,10 @@ if (detectDeviceType() == "desktop" && label == false) {
 } else if (detectDeviceType() == "mobile") {
     width = '350px'
 }
-console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
+column = [
+    {
         label: "ID",
         name: "id",
         width: "50px",
@@ -33,23 +35,122 @@ column = [{
     },
 
     {
-        label: "bank",
-        name: "namabank",
-        width: width,
+        label: 'RITASI',
+        name: 'kotadarisampai',
+        width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
+        align: 'left'
     },
-
+    {
+        label: 'Omset',
+        name: 'omset',
+        align: 'right',
+        formatter: currencyFormat,
+    },
+    {
+        label: 'Nominal Supir',
+        name: 'nominalsupir',
+        align: 'right',
+        formatter: currencyFormat,
+    },
+    {
+        label: 'upah id',
+        name: 'upah_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'Kota dari Id',
+        name: 'kotadari_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'Kota Sampai Id',
+        name: 'kotasampai_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'Zona dari Id',
+        name: 'zonadari_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'Zona Sampai Id',
+        name: 'zonasampai_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'Tarif ID',
+        name: 'tarif_id',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'Tarif',
+        name: 'tarif',
+        align: 'left',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'DARI',
+        name: 'kotadari',
+        align: 'left',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'TUJUAN',
+        name: 'kotasampai',
+        align: 'left',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'PENYESUAIAN',
+        name: 'penyesuaian',
+        align: 'left',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'nominalkenek',
+        name: 'nominalkenek',
+        align: 'left',
+        search: false,
+        hidden: true
+    },
+    {
+        label: 'nominalkomisi',
+        name: 'nominalkomisi',
+        align: 'left',
+        search: false,
+        hidden: true
+    },
 ]
+
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    container_id: parsePostData.container_Id  || '',
+    statuscontainer_id: parsePostData.statuscontainer_Id  || '',
+    jenisorder_id: parsePostData.jenisorder_Id  || '',
+    statuskandang_id: parsePostData.statuskandang_Id  || '',
+    statusupahzona: parsePostData.statusUpahZona  || '',
+    tglbukti: parsePostData.tglbukti  || '',
+    longtrip: parsePostData.longtrip  || '',
+    dari_id: parsePostData.dari_id  || '',
+    sampai_id: parsePostData.sampai_id  || '',
+    statuspenyesuaian: parsePostData.statuspenyesuaian  || '',
+    statusperalihan: parsePostData.statusperalihan  || '',
+    statuslangsir: parsePostData.statuslangsir  || '',
+    nobukti_tripasal: parsePostData.nobukti_tripasal  || '',
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+
+urlRequestGrid= `${apiUrl}${urlUpahsupir}`,
 
 selector.jqGrid({
     url: urlRequestGrid,
@@ -264,6 +365,10 @@ selector.jqGrid({
 
 
         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        jenisKendaraan = parsePostData.statusjeniskendaraan || '';
+        if (jenisKendaraan == 'TANGKI') {
+            $("#upahsupirrincianLookup").jqGrid("hideCol", 'nominalsupir');
+        }
         setGridLastRequest($(this), jqXHR)
 
     },
@@ -354,7 +459,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')

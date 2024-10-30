@@ -23,7 +23,8 @@ if (detectDeviceType() == "desktop" && label == false) {
 console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
+column = [
+    {
         label: "ID",
         name: "id",
         width: "50px",
@@ -31,25 +32,39 @@ column = [{
         sortable: false,
         search: false,
     },
-
     {
-        label: "bank",
-        name: "namabank",
+        label: 'KOTA',
+        name: 'kodekota',
+        align: 'left',
         width: width,
     },
-
+    {
+      label: 'KETERANGAN',
+      name: 'keterangan',
+      align: 'left',
+      hidden: true,
+      sortable: false,
+      search: false,
+    },
 ]
+
+
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    statuspelabuhan: parsePostData.StatusPelabuhan || '',
+    kotadari_id: parsePostData.kotadari_id || '',
+    kotasampai_id: parsePostData.kotasampai_id || '',
+    pilihkota_id: parsePostData.pilihkota_id || '',
+    dataritasi_id: parsePostData.DataRitasi || '',
+    ritasidarike: parsePostData.RitasiDariKe || '',
+    zonadari_id: parsePostData.zonadari_id || '',
+    zonasampai_id: parsePostData.zonasampai_id || '',
+    upahSupirDariKe: parsePostData.upahSupirDariKe || '',
+    upahSupirKotaDari: parsePostData.upahSupirKotaDari || '',
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+
+urlRequestGrid= `${apiUrl}kota`,
 
 selector.jqGrid({
     url: urlRequestGrid,
@@ -354,7 +369,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')

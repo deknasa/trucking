@@ -23,7 +23,8 @@ if (detectDeviceType() == "desktop" && label == false) {
 console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
-column = [{
+column = [
+    {
         label: "ID",
         name: "id",
         width: "50px",
@@ -33,23 +34,31 @@ column = [{
     },
 
     {
-        label: "bank",
-        name: "namabank",
-        width: width,
+        label: "KODE GANDENGAN",
+        name: "kodegandengan",
+        width: '100px',
     },
-
+    {
+        label: "keterangan",
+        name: "keterangan",
+        width: '450px',
+    },
 ]
+
+
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    filters: parsePostData.filters || '',
-    tipe: parsePostData.tipe || '',
-    bankId: parsePostData.bankId || '',
-    bankExclude: parsePostData.bankExclude || '',
-    alatbayar: parsePostData.alatbayar || '',
-    withPusat: parsePostData.withPusat || '',
-    from: parsePostData.from || ''
+    asal: parsePostData.Asal|| '',
+    cabang: parsePostData.cabang|| '',
+    penerimaanstok_id: parsePostData.penerimaanstok_id|| '',
+    gandengandarike: parsePostData.gandengandarike|| '',
+    gandengandari_id: parsePostData.gandengandari_id|| '',
+    gandenganke_id: parsePostData.gandenganke_id|| '',
+    statusjeniskendaraan: parsePostData.statusjeniskendaraan|| '',
+    forLookup: true,
 };
-urlRequestGrid = `${apiUrl}bank`
+
+urlRequestGrid = parsePostData.url || `${apiUrl}gandengan`,
 
 selector.jqGrid({
     url: urlRequestGrid,
@@ -354,7 +363,7 @@ selector.jqGrid({
 
 })
 
-if (filterToolbar == 'true') {
+if (filterToolbar) {
     if (detectDeviceType() == 'mobile') {
         $('.loadingMessage').css('top', '125%')
         $('.loading-text').css('margin-top', '13px')
