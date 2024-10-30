@@ -791,7 +791,7 @@
     loadGlobalSearch($('#jqGrid'))
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('ritasi', 'store') }}`) {
+      if (accessCabang != 'MEDAN') {
         $('#add').hide()
       }
       if (!`{{ $myAuth->hasPermission('listtrip', 'update') }}`) {
