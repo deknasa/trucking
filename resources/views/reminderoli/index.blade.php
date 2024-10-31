@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <input type="hidden" name="status">
-                                <input type="text" name="statusnama" id="statusnama" class="form-control lg-form status-lookup">
+                                <input type="text" name="statusnama" id="statusnama" data-target-name="status" class="form-control lg-form status-lookup">
                             </div>
                         </div>
                         <div class="row">
