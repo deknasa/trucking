@@ -29,6 +29,17 @@
             label: 'NO BUKTI PEMBAYARAN',
             width: 230,
             name: 'nobukti_bayar',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpelunasan
+              let tglsampai = rowData.tglsampaiheaderpelunasan
+              let url = "{{route('pelunasanhutangheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'NOMINAL',

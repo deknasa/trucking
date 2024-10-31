@@ -1,4 +1,3 @@
-
 @push('scripts')
 <script>
   function loadHistoryGrid() {
@@ -33,6 +32,17 @@
             label: 'NO BUKTI PELUNASAN',
             width: 220,
             name: 'nobukti_pelunasan',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpelunasan
+              let tglsampai = rowData.tglsampaiheaderpelunasan
+              let url = "{{route('pelunasanpiutangheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'NOMINAL',
@@ -132,7 +142,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#historyGrid'))
         },
       })
@@ -154,9 +164,9 @@
   }
 
   function loadHistoryData(id) {
-        abortGridLastRequest($('#historyGrid'))
+    abortGridLastRequest($('#historyGrid'))
 
-        $('#historyGrid').setGridParam({
+    $('#historyGrid').setGridParam({
       url: `${apiUrl}piutangdetail/history`,
       datatype: "json",
       postData: {
