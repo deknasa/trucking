@@ -287,11 +287,13 @@
 
 
     function initLookup() {
-        $('.bank-lookup').lookupV3({
+        $('.bank-lookup').lookupV4({
             title: 'Bank Lookup',
-            fileName: 'bankV3',
+            fileName: 'bankV4',
             searching: ['namabank'],
             labelColumn: false,
+            endpoint : 'bank',
+            lookupName: 'bankLookup',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
