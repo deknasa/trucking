@@ -23,6 +23,17 @@
 
 @include('listtrip._modal')
 @include('ritasi._modal')
+@push('colmodel')
+<script>
+  let colModelUser ={}
+</script>
+  @if (file_exists(public_path('libraries/tas-grid-column/colModel-'.auth()->user()->id.'.js')))
+      <script src="{{ asset('libraries/tas-grid-column/colModel-'.auth()->user()->id.'.js?version=' . date('YmdHis')) }}"></script>
+  {{-- @else
+      <script>console.error('File colModel-'.auth()->user()->id.'.js tidak ditemukan');</script> --}}
+  @endif
+@endpush()
+
 @push('scripts')
 <script>
   let indexRow = 0;
@@ -563,14 +574,17 @@
     }
 
     function getSavedColumnOrder() {
-      return JSON.parse(localStorage.getItem(`tas_${window.location.href}_${authUserId}`));
+      // return JSON.parse(localStorage.getItem(`tas_${window.location.href}_${authUserId}`));
+      // console.log(authUserId);
+      
+      return colModelUser.listrip;
     }
     // Menyimpan urutan kolom ke local storage
     function saveColumnOrder() {
       var colOrder = $("#jqGrid").jqGrid("getGridParam", "colModel").map(function(col) {
         return col.name;
       });
-      localStorage.setItem(`tas_${window.location.href}_${authUserId}`, JSON.stringify(colOrder));
+      // localStorage.setItem(`tas_${window.location.href}_${authUserId}`, JSON.stringify(colOrder));
     }
     // Mengatur ulang urutan colModel berdasarkan urutan yang disimpan
     function reorderColModel(colModel, colOrder) {
@@ -777,10 +791,10 @@
       })
 
       $("thead tr.ui-jqgrid-labels").sortable({
-      stop: function(event, ui) {
-        saveColumnOrder();
-        console.log("Column order updated!");
-      }
+      // stop: function(event, ui) {
+      //   saveColumnOrder();
+      //   console.log("Column order updated!");
+      // }
     });
 
 

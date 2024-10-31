@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/libraries/tas-grid-column
 /storage/*.key
 /vendor
 .env
