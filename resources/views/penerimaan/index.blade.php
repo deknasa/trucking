@@ -343,6 +343,18 @@
             align: 'left'
           },
           {
+            label: 'NO BUKTI ASAL',
+            name: 'url_asal',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return value
+            }
+          },
+          {
             label: 'POSTING DARI',
             name: 'postingdari',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
