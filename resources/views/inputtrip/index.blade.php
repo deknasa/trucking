@@ -2689,7 +2689,7 @@
     $(`.dataritasi-lookup-${rowLookup}`).last().lookupV4({
       title: 'Data Ritasi Lookup',
       fileName: 'dataritasiV4',
-      searching: ['kodekota'],
+      searching: ['statusritasi'],
       endpoint : 'dataritasi',
       lookupName: `dataritasi-lookup-${rowLookup}`,
       labelColumn: false,
