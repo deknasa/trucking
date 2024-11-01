@@ -2242,6 +2242,8 @@
       onClear: (element) => {
         $('#crudForm [name=agen_id]').first().val('')
         element.val('')
+        console.log(element.val());
+        
         element.data('currentValue', element.val())
         clearTripAsal()
       }
@@ -2689,7 +2691,7 @@
     $(`.dataritasi-lookup-${rowLookup}`).last().lookupV4({
       title: 'Data Ritasi Lookup',
       fileName: 'dataritasiV4',
-      searching: ['kodekota'],
+      searching: ['statusritasi'],
       endpoint : 'dataritasi',
       lookupName: `dataritasi-lookup-${rowLookup}`,
       labelColumn: false,
