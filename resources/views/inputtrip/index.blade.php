@@ -2242,8 +2242,6 @@
       onClear: (element) => {
         $('#crudForm [name=agen_id]').first().val('')
         element.val('')
-        console.log(element.val());
-        
         element.data('currentValue', element.val())
         clearTripAsal()
       }
