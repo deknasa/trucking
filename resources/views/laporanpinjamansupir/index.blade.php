@@ -91,9 +91,10 @@
 
             $(document).on('click', `#btnPreview`, function(event) {
                 let sampai = $('#crudForm').find('[name=sampai]').val()
+                let jenis = $('#crudForm').find('[name=jenis]').val()
 
                 getCekReport().then((response) => {
-                    window.open(`{{ route('laporanpinjamansupir.report') }}?sampai=${sampai}`)
+                    window.open(`{{ route('laporanpinjamansupir.report') }}?sampai=${sampai}&jenis=${jenis}`)
                 }).catch((error) => {
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
@@ -116,6 +117,7 @@
                         },
                         data: {
                             sampai: $('#crudForm').find('[name=sampai]').val(),
+                            jenis: $('#crudForm').find('[name=jenis]').val(),
                             isCheck: true,
                         },
                         success: (response) => {
