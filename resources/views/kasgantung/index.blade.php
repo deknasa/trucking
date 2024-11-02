@@ -278,6 +278,18 @@
             }
           },
           {
+            label: 'NO BUKTI PENGEMBALIAN',
+            name: 'url_asal',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return value
+            }
+          },
+          {
             name: 'pengeluaran_nobukti_hidden',
             hidden: true,
             search: false,
@@ -445,6 +457,7 @@
           permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
+          getQueryParameter()
         }
       })
 

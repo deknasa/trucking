@@ -421,6 +421,22 @@
             formatter: currencyFormat,
           },
           {
+            label: 'NO BUKTI EBS',
+            width: 220,
+            name: 'nobukti_ebs',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderebs
+              let tglsampai = rowData.tglsampaiheaderebs
+              let url = "{{route('prosesgajisupirheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+
+              return formattedValue[0].outerHTML
+            },
+          },
+          {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
