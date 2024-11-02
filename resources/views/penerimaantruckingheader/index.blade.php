@@ -345,6 +345,18 @@
             align: 'left'
           },
           {
+            label: 'NO BUKTI PENARIKAN/PELUNASAN',
+            name: 'url_pelunasan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              return value
+            }
+          },
+          {
             label: 'KETERANGAN',
             name: 'keteranganheader',
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
@@ -505,8 +517,8 @@
           permission()
           $('#gs_').attr('disabled', false)
           setPermissionAcos()
-          getQueryParameter()
           setHighlight($(this))
+          getQueryParameter()
         }
       })
 
