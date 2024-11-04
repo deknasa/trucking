@@ -461,6 +461,8 @@
     // initLookup()
   })
   $('#crudModal').on('hidden.bs.modal', () => {
+    $('#crudModal').find('.modal-body').html(modalBody)
+
     activeGrid = '#jqGrid'
     removeEditingBy(data_id)
     $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
