@@ -23,16 +23,7 @@
 
 @include('listtrip._modal')
 @include('ritasi._modal')
-@push('colmodel')
-<script>
-  let colModelUser ={}
-</script>
-  @if (file_exists(public_path('libraries/tas-grid-column/colModel-'.auth()->user()->id.'.js')))
-      <script src="{{ asset('libraries/tas-grid-column/colModel-'.auth()->user()->id.'.js?version=' . date('YmdHis')) }}"></script>
-  {{-- @else
-      <script>console.error('File colModel-'.auth()->user()->id.'.js tidak ditemukan');</script> --}}
-  @endif
-@endpush()
+
 
 @push('scripts')
 <script>
