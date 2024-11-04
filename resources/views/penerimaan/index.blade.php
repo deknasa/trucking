@@ -524,7 +524,7 @@
 
         },
         datatype: "json",
-        colModel: orderedColModel
+        colModel: orderedColModel,
         autowidth: true,
         shrinkToFit: false,
         height: 350,
