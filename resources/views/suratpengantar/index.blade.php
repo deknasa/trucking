@@ -142,6 +142,8 @@
     setIsKomisi()
     loadDetailGrid()
     loadRekapCustGrid($('#tgldariheader').val(), $('#tglsampaiheader').val())
+    syncHeaderScroll('detailGrid');
+    syncHeaderScroll('rekapCustGrid');
 
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;

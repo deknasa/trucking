@@ -179,6 +179,7 @@
   let bankId
   let isEditTgl
   let statusApproval
+  let statusApprovalPengeluaran
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -558,6 +559,7 @@
     activeGrid = '#jqGrid'
     selectedRows = []
     statusApproval = ''
+    statusApprovalPengeluaran = ''
     removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
@@ -919,6 +921,7 @@
             }
           })
           statusApproval = response.data.statusapproval
+          statusApprovalPengeluaran = response.data.statusapprovalpengeluaran
           loadHutangGrid();
           getDataHutang(response.data.supplier_id, Id).then((response) => {
 
@@ -1399,6 +1402,10 @@
                 return $(this)
                   .find(`tr input[value=${rowData.id}]`)
                   .is(":checked");
+              } else {
+                if(statusApprovalPengeluaran != '3'){
+                  return cellname === 'keterangan';
+                }
               }
             }
           }

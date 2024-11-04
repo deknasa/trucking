@@ -1423,6 +1423,7 @@
         selectedRowsAbsensi = []
         selectedRowsAbsensiNobukti = [];
         selectedRowsAbsensiUangjalan = [];
+        selectedRowsAbsensiTrado = [];
         isReload = false
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')

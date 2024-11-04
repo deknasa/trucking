@@ -164,6 +164,11 @@
     loadBBMGrid()
     getJenisTambahan()
     loadAbsensiGrid()
+    syncHeaderScroll('potsemuaGrid');
+    syncHeaderScroll('potpribadiGrid');
+    syncHeaderScroll('depositoGrid');
+    syncHeaderScroll('bbmGrid');
+    syncHeaderScroll('absensiGrid');
 
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
@@ -414,6 +419,22 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
+          },
+          {
+            label: 'NO BUKTI EBS',
+            width: 220,
+            name: 'nobukti_ebs',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderebs
+              let tglsampai = rowData.tglsampaiheaderebs
+              let url = "{{route('prosesgajisupirheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'USER BUKA CETAK',

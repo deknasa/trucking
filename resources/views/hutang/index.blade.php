@@ -113,6 +113,8 @@
     loadDetailGrid()
     loadHistoryGrid()
     loadJurnalUmumGrid(nobukti)
+    
+    syncHeaderScroll('historyGrid');
 
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
@@ -294,18 +296,6 @@
             }
           },
           {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-          },
-          {
-            label: 'NAMA PERKIRAAN',
-            name: 'coa',
-            align: 'left',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-          },
-          {
             label: 'SUPPLIER',
             name: 'supplier_id',
             align: 'left',
@@ -331,6 +321,34 @@
             align: 'right',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
+          },
+          {
+            label: 'NO BUKTI SPB/S',
+            width: 220,
+            name: 'nobukti_spb',
+            formatter: (value, options, rowData) => {
+              if ((value == null) || (value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderspb
+              let tglsampai = rowData.tglsampaiheaderspb
+              let url = "{{route('penerimaanstokheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}&nobukti=${value}" class="link-color" target="_blank">${value}</a>`)
+
+              return formattedValue[0].outerHTML
+            },
+          },
+          {
+            label: 'POSTING DARI',
+            name: 'postingdari',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+          },
+          {
+            label: 'NAMA PERKIRAAN',
+            name: 'coa',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
           {
             label: 'USER APPROVAL',

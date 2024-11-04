@@ -105,7 +105,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let isEditTgl
-
+  let lastIndex = 0;
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -338,6 +338,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    lastIndex = 0
     removeEditingBy($('#crudForm').find('[name=id]').val())
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
@@ -730,11 +731,11 @@
               </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
-                <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${index}" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+                <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${index}" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup_${index}">
               </td>
               <td>
                 <input type="hidden" name="coakredit_detail[]">
-                <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${index}" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+                <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${index}" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup_${index}">
               </td>
               <td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
@@ -756,63 +757,66 @@
             $('#detailList tbody').append(detailRow)
             setTotal();
 
-            $('.coadebet-lookup').last().lookupV3({
-              title: 'Coa Debet Lookup',
-              fileName: 'akunpusatV3',
-              searching: ['coa','keterangancoa'],
-              labelColumn: true,
-              extendSize: md_extendSize_1,
-              multiColumnSize:true,
-              filterToolbar: true,
-              beforeProcess: function(test) {
-                this.postData = {
-                  Aktif: 'AKTIF',
-                  levelCoa: '3',
-                }
-              },
-              onSelectRow: (akunpusat, element) => {
-                element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
-                element.val(akunpusat.keterangancoa)
-                element.data('currentValue', element.val())
-              },
-              onCancel: (element) => {
-                element.val(element.data('currentValue'))
-              },
-              onClear: (element) => {
-                element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
-                element.val('')
-                element.data('currentValue', element.val())
-              }
-            })
+            // $('.coadebet-lookup').last().lookupV3({
+            //   title: 'Coa Debet Lookup',
+            //   fileName: 'akunpusatV3',
+            //   searching: ['coa','keterangancoa'],
+            //   labelColumn: true,
+            //   extendSize: md_extendSize_1,
+            //   multiColumnSize:true,
+            //   filterToolbar: true,
+            //   beforeProcess: function(test) {
+            //     this.postData = {
+            //       Aktif: 'AKTIF',
+            //       levelCoa: '3',
+            //     }
+            //   },
+            //   onSelectRow: (akunpusat, element) => {
+            //     element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+            //     element.val(akunpusat.keterangancoa)
+            //     element.data('currentValue', element.val())
+            //   },
+            //   onCancel: (element) => {
+            //     element.val(element.data('currentValue'))
+            //   },
+            //   onClear: (element) => {
+            //     element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
+            //     element.val('')
+            //     element.data('currentValue', element.val())
+            //   }
+            // })
 
-            $('.coakredit-lookup').last().lookupV3({
-              title: 'Coa Kredit Lookup',
-              fileName: 'akunpusatV3',
-              searching: ['coa','keterangancoa'],
-              labelColumn: true,
-              extendSize: md_extendSize_1,
-              multiColumnSize:true,
-              filterToolbar: true,
-              beforeProcess: function(test) {
-                this.postData = {
-                  levelCoa: '3',
-                  Aktif: 'AKTIF',
-                }
-              },
-              onSelectRow: (akunpusat, element) => {
-                element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
-                element.val(akunpusat.keterangancoa)
-                element.data('currentValue', element.val())
-              },
-              onCancel: (element) => {
-                element.val(element.data('currentValue'))
-              },
-              onClear: (element) => {
-                element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
-                element.val('')
-                element.data('currentValue', element.val())
-              }
-            })
+            // $('.coakredit-lookup').last().lookupV3({
+            //   title: 'Coa Kredit Lookup',
+            //   fileName: 'akunpusatV3',
+            //   searching: ['coa','keterangancoa'],
+            //   labelColumn: true,
+            //   extendSize: md_extendSize_1,
+            //   multiColumnSize:true,
+            //   filterToolbar: true,
+            //   beforeProcess: function(test) {
+            //     this.postData = {
+            //       levelCoa: '3',
+            //       Aktif: 'AKTIF',
+            //     }
+            //   },
+            //   onSelectRow: (akunpusat, element) => {
+            //     element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+            //     element.val(akunpusat.keterangancoa)
+            //     element.data('currentValue', element.val())
+            //   },
+            //   onCancel: (element) => {
+            //     element.val(element.data('currentValue'))
+            //   },
+            //   onClear: (element) => {
+            //     element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
+            //     element.val('')
+            //     element.data('currentValue', element.val())
+            //   }
+            // })
+            
+            initLookupDetail(index);
+            lastIndex = index;
           })
 
           setRowNumbers()
@@ -831,6 +835,8 @@
 
   let lastRow = 0
   function addRow() {
+    lastIndex += 1;
+    let isTheFirstRow = $('#table_body tr').length;
     let detailRow = $(`
       <tr>
         <td></td>
@@ -839,11 +845,11 @@
         </td>
         <td>
           <input type="hidden" name="coadebet_detail[]">
-          <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${lastRow}" class="form-control coadebet-lookup">
+          <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${lastIndex}" class="form-control coadebet-lookup_${lastIndex}">
         </td>
         <td>
           <input type="hidden" name="coakredit_detail[]">
-          <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${lastRow}" class="form-control coakredit-lookup">
+          <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${lastIndex}" class="form-control coakredit-lookup_${lastIndex}">
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
@@ -857,69 +863,70 @@
     $('#detailList tbody').append(detailRow)
 
     // $('#lookup').hide()
-    $('.coadebet-lookup').last().lookupV3({
-      title: 'Coa Debet Lookup',
-      fileName: 'akunpusatV3',
-      searching: ['coa','keterangancoa'],
-      labelColumn: true,
-      extendSize: md_extendSize_1,
-      multiColumnSize:true,
-      filterToolbar: true,
-      beforeProcess: function() {
-        this.postData = {
-          levelCoa: '3',
-          Aktif: 'AKTIF',
-          limits: 50,
-        }
-      },
-      onSelectRow: (akunpusat, element) => {
-        element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
-        element.val(akunpusat.keterangancoa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    // $('.coadebet-lookup').last().lookupV3({
+    //   title: 'Coa Debet Lookup',
+    //   fileName: 'akunpusatV3',
+    //   searching: ['coa','keterangancoa'],
+    //   labelColumn: true,
+    //   extendSize: md_extendSize_1,
+    //   multiColumnSize:true,
+    //   filterToolbar: true,
+    //   beforeProcess: function() {
+    //     this.postData = {
+    //       levelCoa: '3',
+    //       Aktif: 'AKTIF',
+    //       limits: 50,
+    //     }
+    //   },
+    //   onSelectRow: (akunpusat, element) => {
+    //     element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+    //     element.val(akunpusat.keterangancoa)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
-    $('.coakredit-lookup').last().lookupV3({
-      title: 'Coa Kredit Lookup',
-      fileName: 'akunpusatV3',
-      searching: ['coa','keterangancoa'],
-      labelColumn: true,
-      extendSize: md_extendSize_1,
-      multiColumnSize:true,
-      filterToolbar: true,
-      beforeProcess: function(test) {
-        this.postData = {
-          levelCoa: '3',
-          Aktif: 'AKTIF',
-          limits: 50,
-        }
-      },
-      onSelectRow: (akunpusat, element) => {
-        element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
-        element.val(akunpusat.keterangancoa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    // $('.coakredit-lookup').last().lookupV3({
+    //   title: 'Coa Kredit Lookup',
+    //   fileName: 'akunpusatV3',
+    //   searching: ['coa','keterangancoa'],
+    //   labelColumn: true,
+    //   extendSize: md_extendSize_1,
+    //   multiColumnSize:true,
+    //   filterToolbar: true,
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       levelCoa: '3',
+    //       Aktif: 'AKTIF',
+    //       limits: 50,
+    //     }
+    //   },
+    //   onSelectRow: (akunpusat, element) => {
+    //     element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+    //     element.val(akunpusat.keterangancoa)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
+    //     element.val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     initAutoNumeric(detailRow.find('.autonumeric'))
 
     initDatepicker()
     setRowNumbers()
+    initLookupDetail(lastIndex);
     lastRow++
   }
 
@@ -1013,11 +1020,11 @@
               </td>
               <td>
                 <input type="hidden" name="coadebet_detail[]">
-                <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${index}"  data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+                <input type="text" name="ketcoadebet_detail[]" id="ketcoadebet_detail${index}"  data-current-value="${detail.coadebet}" class="form-control coadebet-lookup_${index}">
               </td>
               <td>
                 <input type="hidden" name="coakredit_detail[]">
-                <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${index}"  data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+                <input type="text" name="ketcoakredit_detail[]" id="ketcoakredit_detail${index}"  data-current-value="${detail.coakredit}" class="form-control coakredit-lookup_${index}">
               </td><td>
                 <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
               </td>
@@ -1038,57 +1045,59 @@
           $('#detailList tbody').append(detailRow)
           setTotal();
 
-          $('.coadebet-lookup').last().lookupV3({
-            title: 'Coa Debet Lookup',
-            fileName: 'akunpusatV3',
-            searching: ['coa','keterangancoa'],
-            labelColumn: true,
-            extendSize: md_extendSize_1,
-            multiColumnSize:true,
-            filterToolbar: true,
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-                levelCoa: '3',
-              }
-            },
-            onSelectRow: (akunpusat, element) => {
-              element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
-              element.val(akunpusat.keterangancoa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
+          // $('.coadebet-lookup').last().lookupV3({
+          //   title: 'Coa Debet Lookup',
+          //   fileName: 'akunpusatV3',
+          //   searching: ['coa','keterangancoa'],
+          //   labelColumn: true,
+          //   extendSize: md_extendSize_1,
+          //   multiColumnSize:true,
+          //   filterToolbar: true,
+          //   beforeProcess: function(test) {
+          //     this.postData = {
+          //       Aktif: 'AKTIF',
+          //       levelCoa: '3',
+          //     }
+          //   },
+          //   onSelectRow: (akunpusat, element) => {
+          //     element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+          //     element.val(akunpusat.keterangancoa)
+          //     element.data('currentValue', element.val())
+          //   },
+          //   onCancel: (element) => {
+          //     element.val(element.data('currentValue'))
+          //   },
+          //   onClear: (element) => {
+          //     element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
+          //     element.val('')
+          //     element.data('currentValue', element.val())
+          //   }
+          // })
 
-          $('.coakredit-lookup').last().lookupV3({
-            title: 'Coa Kredit Lookup',
-            fileName: 'akunpusatV3',
-            searching: ['coa','keterangancoa'],
-            labelColumn: true,
-            extendSize: md_extendSize_1,
-            multiColumnSize:true,
-            filterToolbar: true,
-            onSelectRow: (akunpusat, element) => {
-              element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
-              element.val(akunpusat.keterangancoa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
+          // $('.coakredit-lookup').last().lookupV3({
+          //   title: 'Coa Kredit Lookup',
+          //   fileName: 'akunpusatV3',
+          //   searching: ['coa','keterangancoa'],
+          //   labelColumn: true,
+          //   extendSize: md_extendSize_1,
+          //   multiColumnSize:true,
+          //   filterToolbar: true,
+          //   onSelectRow: (akunpusat, element) => {
+          //     element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+          //     element.val(akunpusat.keterangancoa)
+          //     element.data('currentValue', element.val())
+          //   },
+          //   onCancel: (element) => {
+          //     element.val(element.data('currentValue'))
+          //   },
+          //   onClear: (element) => {
+          //     element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
+          //     element.val('')
+          //     element.data('currentValue', element.val())
+          //   }
+          // })
+          initLookupDetail(index);
+          lastIndex = index;
         })
         setRowNumbers()
       },
@@ -1125,6 +1134,72 @@
           reject(error)
         }
       })
+    })
+  }
+
+  function initLookupDetail(index) {
+    let rowLookup = index
+
+    $(`.coadebet-lookup_${rowLookup}`).lookupV3({
+      title: 'Coa Debet Lookup',
+      fileName: 'akunpusatV3',
+      searching: ['coa', 'keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_3,
+      multiColumnSize: true,
+      filterToolbar: true,
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {          
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+          limits: 50,
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
+    $(`.coakredit-lookup_${rowLookup}`).lookupV3({
+      title: 'Coa Kredit Lookup',
+      fileName: 'akunpusatV3',
+      searching: ['coa', 'keterangancoa'],
+      labelColumn: true,
+      extendSize: md_extendSize_3,
+      multiColumnSize: true,
+      filterToolbar: true,
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {          
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+          limits: 50,
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
   }
 </script>

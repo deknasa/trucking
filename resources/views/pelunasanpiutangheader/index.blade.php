@@ -150,7 +150,8 @@
     loadPenerimaanGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
     loadJurnalPengeluaranGrid(nobukti)
-
+    syncHeaderScroll('jurnalPengeluaranGrid');
+    
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
@@ -586,8 +587,8 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           $('#gs_').attr('disabled', false)
-          setHighlight($(this))
           getQueryParameter()
+          setHighlight($(this))
         }
       })
 

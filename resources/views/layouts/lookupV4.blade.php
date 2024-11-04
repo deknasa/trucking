@@ -238,7 +238,9 @@
                             `#lookup-${element.attr("id")}`
                         );
                         
-                        if (element.val() != '') {
+                        console.log('activ',activate);
+                        if (element.val() != '' && activate == false) {
+                            console.log("onblur");
                             getFirst(settings.searching, settings.endpoint, lookupContainer, element);
                         }                        
                     }
@@ -253,6 +255,7 @@
                 if (isSelectedRow) {
                     return ;
                 }
+                isSelectedRow = true
                 let rulesFirst = []
                 dataval = element.val();
 
@@ -705,7 +708,7 @@
                                   element.focus();
                                    activate = false;
                                    bindKey = false;
-
+                                   isSelectedRow = true;
                                },
                                onSelectRow: function (id) {
                                    selectedIdV4 = id;
@@ -718,6 +721,7 @@
                                    element.focus();
                                    activate = false;
                                    bindKey = false;
+                                   isSelectedRow = true;
                                },
                            });
                        }
@@ -758,13 +762,17 @@
                             lookupContainer.hide();
                             lookupContainer.remove();
                             element.data("hasLookup", false);
+                            element.data("currentValue",element.val())
 
                             activate = false;
                             $(element).removeClass('active');
-
-                            if (element.data("currentValue") != '') {
-                                // console.log($(event.target).closest(lookupContainer),$(event.target).closest(".input-group").length );
-                                getFirst(settings.searching, settings.endpoint, lookupContainer, element);
+                              
+                            if (element.data("currentValue") != '' || element.val() != '') {
+                                // if  (detectDeviceType() == "desktop") {
+                                    console.log("sembarang",activate);
+                                    // console.log($(event.target).closest(lookupContainer),$(event.target).closest(".input-group").length );
+                                    getFirst(settings.searching, settings.endpoint, lookupContainer, element);
+                                // }
                             }
                             
                         }
@@ -806,6 +814,7 @@
             }
 
             function handleSelectedRow(id, lookupContainer, element, statusDataFirst = false, dataFirst = {}) {
+                isSelectedRow = true;
                 if (id !== null) {
                     bottomSelected = 10;
                     topSelected = 1;
@@ -821,6 +830,8 @@
 
                     const obj = rowData;
                     const array = Object.values(obj);
+
+                    console.log('rowData',rowData.id);
 
                     // element.val(rowData.name);
                     element.val(rowData.name);
@@ -842,7 +853,7 @@
 
                     let detailElement = $(".overflow");
                     isLookupOpenV4 = false;
-                    isSelectedRow = true;
+
                     // keydownIndexV4 = false;
 
                     // indexRowSelectV4 = 1
@@ -852,9 +863,11 @@
             function handleOnCancel(element) {
 
                 settings.onCancel(element);
+                activate=false
             }
 
             function handleOnClear(element) {
+                activate=false
                 let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);
                 let grid = lookupContainer.find(".lookup-grid");
 
