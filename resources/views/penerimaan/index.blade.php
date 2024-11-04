@@ -148,21 +148,8 @@
       $('#gs_').prop('checked', false)
     })
 
-
-    var grid = $("#jqGrid");
-    grid.jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaanheader' }}`,
-        mtype: "GET",
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        postData: {
-          tgldari: $('#tgldariheader').val(),
-          tglsampai: $('#tglsampaiheader').val(),
-          bank: $('#bankheader').val(),
-
-        },
-        datatype: "json",
-        colModel: [{
+    function createColModel() {
+      return [{
             label: '',
             name: '',
             width: 40,
@@ -488,7 +475,56 @@
               newformat: "d-m-Y H:i:s"
             }
           },
-        ],
+        
+      ];
+    }
+
+    function getSavedColumnOrder() {
+      // return JSON.parse(localStorage.getItem(`tas_${window.location.href}_${authUserId}`));
+      // console.log(authUserId);
+      
+      return colModelUser.penerimaan;
+    }
+    // Menyimpan urutan kolom ke local storage
+    function saveColumnOrder() {
+      var colOrder = $("#jqGrid").jqGrid("getGridParam", "colModel").map(function(col) {
+        return col.name;
+      });
+      // localStorage.setItem(`tas_${window.location.href}_${authUserId}`, JSON.stringify(colOrder));
+    }
+    // Mengatur ulang urutan colModel berdasarkan urutan yang disimpan
+    function reorderColModel(colModel, colOrder) {
+      if (!colOrder) return colModel;
+      var orderedColModel = [];
+      colOrder.forEach(function(colName) {
+        var col = colModel.find(function(c) {
+          return c.name === colName;
+        });
+        if (col) orderedColModel.push(col);
+      });
+      return orderedColModel;
+    }
+    var colModel = createColModel();
+    var savedColOrder = getSavedColumnOrder();
+    var orderedColModel = reorderColModel(colModel, savedColOrder);
+
+
+
+
+    var grid = $("#jqGrid");
+    grid.jqGrid({
+        url: `{{ config('app.api_url') . 'penerimaanheader' }}`,
+        mtype: "GET",
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        postData: {
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          bank: $('#bankheader').val(),
+
+        },
+        datatype: "json",
+        colModel: orderedColModel
         autowidth: true,
         shrinkToFit: false,
         height: 350,

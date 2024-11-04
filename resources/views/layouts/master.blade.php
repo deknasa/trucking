@@ -416,7 +416,13 @@
   <!-- Report -->
   @stack('report-scripts')
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
-  @stack('colmodel')
+
+  <script>
+    let colModelUser ={}
+    </script>
+  @if (file_exists(public_path('libraries/tas-grid-column/colModel-'.auth()->user()->id.'.js')))
+  <script src="{{ asset('libraries/tas-grid-column/colModel-'.auth()->user()->id.'.js?version=' . date('YmdHis')) }}"></script>
+  @endif
 
   <!-- Custom global script -->
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\pager.js')) }}"></script>
