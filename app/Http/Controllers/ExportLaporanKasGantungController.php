@@ -24,7 +24,7 @@ class ExportLaporanKasGantungController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;        
-        $bank = DB::table('bank')->where('tipe','KAS')->first();
+        $bank = DB::table('bank')->where('tipe','KAS')->where('statusaktif',1)->first();
         $data = [
             'pagename' => 'Menu Utama Export Laporan Kas Gantung',
             'bank_id' => $bank->id,
