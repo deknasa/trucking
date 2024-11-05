@@ -840,42 +840,49 @@
                     element.off("focusout");
                     // Event `focusout` untuk menangani saat elemen kehilangan fokus
                     element.on("focusout", function() {
-                      
-                        let currentElement = $(this);
-                        let elementValue = currentElement.val(); // Simpan nilai untuk pengecekan nanti
-                        let lookupContainer = currentElement.siblings(`#lookup-${currentElement.attr("id")}`);
-                        
-                     
+                    let currentElement = $(this);
+                    let elementValue = currentElement.val(); // Simpan nilai untuk pengecekan nanti
+                    let lookupContainer = currentElement.siblings(`#lookup-${currentElement.attr("id")}`);
+                    let lookupClicked = false; // Tambahkan flag baru
+                    console.log('container', lookupContainer);
+
                         isSwitchingFocus = true;
 
+                        lookupContainer.on("click", function() {
+                            console.log('click');
+                            lookupClicked = true; // Ubah flag menjadi true jika lookupContainer diklik
+                            return;
+                        });
+
+                        console.log('ell', currentElement);
+
                         setTimeout(() => {
-                            if (activeElement && activeElement[0] === currentElement[0] && isSwitchingFocus) {
+                            // Cek apakah lookupContainer tidak diklik sebelum melanjutkan
+                            if (!lookupClicked && activeElement && activeElement[0] === currentElement[0] && isSwitchingFocus) {
                                 lookupContainer.hide();
                                 lookupContainer.remove();
+
                                 activeElement.data("hasLookup", false);
                                 activeElement.data("currentValue", elementValue);
                                 activate = false;
                                 activeElement.removeClass('active');
                                 activeElement = null;
 
-                                
                                 let lookupName = currentElement.data('lookup-name');
                                 let lookupUrl = currentElement.data('lookup-url');
 
-                             
                                 // Ambil konfigurasi `settings`, `searching`, dan `endpoint` secara dinamis
                                 let settings = lookupSettings[lookupName];
                                 let searching = settings ? settings.searching : [];
                                 let endpoint = settings ? settings.endpoint : null;
 
-                              
                                 if (elementValue !== '') {
-                                    getFirst(searching, lookupContainer, currentElement,settings,lookupUrl);
-                            
+                                    getFirst(searching, lookupContainer, currentElement, settings, lookupUrl);
                                 }
                             }
                         }, 600);
                     });
+
                 }
 
             
@@ -961,6 +968,7 @@
             }
 
             function handleOnClear(element) {
+                isSelectedRow = true
                 activate=false
                 let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);
                 let grid = lookupContainer.find(".lookup-grid");
@@ -970,9 +978,9 @@
                 settings.onClear(element);
 
                 rules = [];
-                colMdl.forEach(function(cm) {
-                    $("#gs_" + cm.name).val("");
-                });
+                // colMdl.forEach(function(cm) {
+                //     $("#gs_" + cm.name).val("");
+                // });
 
                 grid.jqGrid("setGridParam", {
                     postData: {
