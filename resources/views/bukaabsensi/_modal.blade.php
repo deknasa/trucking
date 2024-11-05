@@ -334,7 +334,7 @@
 
   function initLookup() {
     $('.user-lookup').lookupV3({
-      title: 'Supir Lookup',
+      title: 'User Lookup',
       fileName: 'userV3',
       searching: ['user'],
       labelColumn: false,
