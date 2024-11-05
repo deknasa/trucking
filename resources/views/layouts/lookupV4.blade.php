@@ -5,6 +5,7 @@
         let dataParsed 
         let filterPostData
         let urlRequestGrid
+        let elementInput
 
         const serializeLookupV4 = function(obj) {
             var str = [];
@@ -58,6 +59,10 @@
 
         let offsetWindowV4;
 
+        const lookupSettings = {};
+
+        let previousLookupElementV4 = null; // Variabel untuk menyimpan lookup lama
+        
         $.fn.lookupV4 = function(options) {
             let defaults = {
                 title: null,
@@ -91,6 +96,10 @@
             let settings = $.extend({}, defaults, options);
             let sidebarIsOpen = false;
 
+            if (settings.lookupName) {
+                lookupSettings[settings.lookupName] = settings;
+            }
+
             this.each(function() {
                 let element = $(this);
                 let lookupContainer;
@@ -123,12 +132,14 @@
                         event.preventDefault();
                         element.data("input", false);
 
+                        let elementInput = $(this).closest('.input-group').find('input');
+
+                        
                         let lookupContainer = element.siblings(
                             `#lookup-${element.attr("id")}`
                         );
-
+                        
                         if (activeLookupElementV4 != null) {
-                            
                             if (aktifIdV4 != `#lookup-${element.attr("id")}`) {
                                 bottomSelected = 10;
                                 topSelected = 0;
@@ -139,15 +150,23 @@
                             }
                         }
                         if (activeLookupElementV4) {
+                            
+                            oldElement = $(activeLookupElementV4.prevObject[0])
+
+                            let lookupName = oldElement.data('lookup-name');
+
+                          
+                            // Ambil konfigurasi `settings`, `searching`, dan `endpoint` secara dinamis
+                            let settings = lookupSettings[lookupName];
+                            let searching = settings ? settings.searching : [];
+                            let endpoint = settings ? settings.endpoint : null;
+                          
                             activeLookupElementV4.hide();
-
+                            
                             lookupContainer.remove();
-                            element.data("hasLookup", false);
+                            element.data("hasLookup", false)
 
-                            if (element.val() == '') {
-                                 handleOnCancel(element);
-                            }
-
+                            getFirst(searching, $(aktifIdV4), oldElement,settings);
                             
                             // detailElement.css("overflow", "auto");
                         }
@@ -158,7 +177,7 @@
 
                         if (activate) {
                             $(aktifIdV4).hide();
-
+                            
                             activate = false;
 
                             lookupContainer.remove();
@@ -168,6 +187,8 @@
 
                             // $(".modal-overflow").css("overflow-y", "auto");
                         } else {
+                           
+                            
                             activateLookup(element, element.val());
                             element.focus();
                             activate = true;
@@ -237,11 +258,9 @@
                         const lookupContainer = element.siblings(
                             `#lookup-${element.attr("id")}`
                         );
-                        
-                        console.log('activ',activate);
                         if (element.val() != '' && activate == false) {
-                            console.log("onblur");
-                            getFirst(settings.searching, settings.endpoint, lookupContainer, element);
+                           
+                            getFirst(settings.searching, lookupContainer, element);
                         }                        
                     }
                    
@@ -251,15 +270,16 @@
 
             });
 
-            function getFirst(fields, endpoint, lookupContainer, element) {
+            function getFirst(fields, lookupContainer, element,settings = {},lookupUrl = null) {
+
+               
                 if (isSelectedRow) {
                     return ;
                 }
-                isSelectedRow = true
+                // isSelectedRow = true
                 let rulesFirst = []
                 dataval = element.val();
 
-            
                 fields.forEach((field) => {
                     rulesFirst.push({
                         field: field,
@@ -267,7 +287,6 @@
                         data: dataval.toUpperCase(),
                     });
                 });
-
 
                 let postData = {
                     filters: JSON.stringify({
@@ -280,8 +299,14 @@
                     ...filterPostData,
                     ...postData,
                 }
+                defaultUrl = urlRequestGrid
+
+                if (lookupUrl) {
+                    defaultUrl = lookupUrl
+                }
+               
                 $.ajax({
-                    url: `${urlRequestGrid}`,
+                    url: `${defaultUrl}`,
                     method: 'GET',
                     dataType: 'JSON',
                     headers: {
@@ -290,9 +315,19 @@
                     data: filterPostData,
                     success: response => {
                         firstdata = response.data[0]
-                        handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata)
+                        // handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata)
+                        if (Object.keys(settings).length > 0) {
+                            handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata, settings);
+                           
+                        } else {
+                            handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata);
+                            
+                        }
+                        isSelectedRow = false
                     },
                     error: error => {
+                        console.log('err',error);
+                        
                         if (error.status === 422) {
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
@@ -311,18 +346,19 @@
             async function activateLookup(element, searchValue = null, singlecolumn) {
                 let bottomSelected = 11;
                 let topSelected = 0;
+                elementInput = $(element)
                 // let indexRowSelectV4 = 1;
                 isSelectedRow = false;
-                
 
                 offsetWindowV4 = window.pageYOffset;
 
                 settings.beforeProcess();
                 settings.onShowLookup();
 
-                // console.log('asdsd',settings.beforeProcess());
+             
                 
-
+                element.attr('data-lookup-name', settings.lookupName);
+               
                 $('.input-group').removeClass('active');
                 element.addClass('active');
 
@@ -457,7 +493,7 @@
                     getValue: getValue = '',
                     lookupName: lookupName = ''
                 } = settings;
-
+                
                 dataParsed =settings.postData
                 
                 let lookupBody = $(
@@ -466,9 +502,11 @@
                     lookupContainer
                 );
 
+                
+
                 getLookupV4(flnm, pst, element, title, src, singleclm, hidelbl, filter,lookupName).then(
                     (response) => {
-                        
+                         
                             var myvar =   `<?php
                             $idLookup = isset($id) ? $id : null;
                             $name = '`+ flnm + `';
@@ -739,46 +777,104 @@
                         
                         activate = false;
                         // bindKey = false;
-                        getFirst(settings.searching, settings.endpoint, lookupContainer, element);
+                        getFirst(settings.searching, lookupContainer, element);
                         return false;
                     }
                 });
 
                 lookupContainer.show();
-
+                let activeElement = null;
+                let isSwitchingFocus = false;
                 if (!settings.selectedRequired) {
-                    $(document).on("click.lookup", function(event) {
+                    $(document).off("click.lookup");
 
+                    $(document).on("click.lookup", function(event) {
+                        // Cek apakah elemen yang sedang aktif adalah elemen yang diklik
                         const isActive = $(element).hasClass('active');
 
-                        let lookupContainer = element.siblings(
-                            `#lookup-${element.attr("id")}`
-                        );
-
-
-                        if (isActive && !$(event.target).closest(lookupContainer).length && !$(event.target)
-                            .closest(".input-group").length) {
-
-                            lookupContainer.hide();
-                            lookupContainer.remove();
-                            element.data("hasLookup", false);
-                            element.data("currentValue",element.val())
-
-                            activate = false;
-                            $(element).removeClass('active');
-                              
-                            if (element.data("currentValue") != '' || element.val() != '') {
-                                // if  (detectDeviceType() == "desktop") {
-                                    console.log("sembarang",activate);
-                                    // console.log($(event.target).closest(lookupContainer),$(event.target).closest(".input-group").length );
-                                    getFirst(settings.searching, settings.endpoint, lookupContainer, element);
-                                // }
+                        if (isActive) {
+                            if (!activeElement || activeElement[0] !== element[0]) {
+                                activeElement = element;
                             }
-                            
+
+                            let lookupContainer = activeElement.siblings(
+                                `#lookup-${activeElement.attr("id")}`
+                            );
+
+                            if (!$(event.target).closest(lookupContainer).length && !$(event.target).closest(".input-group").length) {
+                                lookupContainer.hide();
+                                lookupContainer.remove();
+                                activeElement.data("hasLookup", false);
+                                activeElement.data("currentValue", activeElement.val());
+
+                                activate = false;
+                                $(activeElement).removeClass('active');
+
+                                if (activeElement.data("currentValue") != '' || activeElement.val() != '') {
+                                    console.log("sembarang", activeElement);
+                                    getFirst(settings.searching, lookupContainer, activeElement);
+                                }
+
+                                activeElement = null;
+                            }
                         }
+                    });
+                    element.off("focusin");
+                    element.on("focusin", function() {
+                        console.log('focusin');
+                        
+                        if (activeElement && activeElement[0] !== this) {
+                            let previousLookupContainer = activeElement.siblings(`#lookup-${activeElement.attr("id")}`);
+                            previousLookupContainer.hide();
+                            previousLookupContainer.remove();
+                            activeElement.data("hasLookup", false);
+                            activeElement.removeClass('active');
+                        }
+                        
+                        activeElement = $(this);
+                        $(this).addClass('active');
+                        isSwitchingFocus = false; 
+                        isSelectedRow = false
+                    });
 
-                         
+                    element.off("focusout");
+                    // Event `focusout` untuk menangani saat elemen kehilangan fokus
+                    element.on("focusout", function() {
+                      
+                        let currentElement = $(this);
+                        let elementValue = currentElement.val(); // Simpan nilai untuk pengecekan nanti
+                        let lookupContainer = currentElement.siblings(`#lookup-${currentElement.attr("id")}`);
+                        
+                     
+                        isSwitchingFocus = true;
 
+                        setTimeout(() => {
+                            if (activeElement && activeElement[0] === currentElement[0] && isSwitchingFocus) {
+                                lookupContainer.hide();
+                                lookupContainer.remove();
+                                activeElement.data("hasLookup", false);
+                                activeElement.data("currentValue", elementValue);
+                                activate = false;
+                                activeElement.removeClass('active');
+                                activeElement = null;
+
+                                
+                                let lookupName = currentElement.data('lookup-name');
+                                let lookupUrl = currentElement.data('lookup-url');
+
+                             
+                                // Ambil konfigurasi `settings`, `searching`, dan `endpoint` secara dinamis
+                                let settings = lookupSettings[lookupName];
+                                let searching = settings ? settings.searching : [];
+                                let endpoint = settings ? settings.endpoint : null;
+
+                              
+                                if (elementValue !== '') {
+                                    getFirst(searching, lookupContainer, currentElement,settings,lookupUrl);
+                            
+                                }
+                            }
+                        }, 600);
                     });
                 }
 
@@ -813,7 +909,7 @@
                 windowOffset = window.pageYOffset;
             }
 
-            function handleSelectedRow(id, lookupContainer, element, statusDataFirst = false, dataFirst = {}) {
+            function handleSelectedRow(id, lookupContainer, element, statusDataFirst = false, dataFirst = {},settingsOld= {}) {
                 isSelectedRow = true;
                 if (id !== null) {
                     bottomSelected = 10;
@@ -825,13 +921,11 @@
 
                     if (statusDataFirst) {
                         rowData = dataFirst;
-                    }
 
+                    }
 
                     const obj = rowData;
                     const array = Object.values(obj);
-
-                    console.log('rowData',rowData.id);
 
                     // element.val(rowData.name);
                     element.val(rowData.name);
@@ -841,10 +935,13 @@
                         lookupContainer.hide();
                         return rowData;
                     }
-
+ 
+                    if (Object.keys(settingsOld).length > 0) {
+                        settingsOld.onSelectRow(rowData, element);
+                    }else{
+                        settings.onSelectRow(rowData, element);
+                    }
                    
-
-                    settings.onSelectRow(rowData, element);
 
                     lookupContainer.hide();
 
@@ -854,14 +951,11 @@
                     let detailElement = $(".overflow");
                     isLookupOpenV4 = false;
 
-                    // keydownIndexV4 = false;
-
-                    // indexRowSelectV4 = 1
                 }
             }
 
             function handleOnCancel(element) {
-
+              
                 settings.onCancel(element);
                 activate=false
             }
@@ -924,21 +1018,6 @@
                                 i,
                                 cm;
 
-                            // searching = settings.searching;
-
-                            // cm = colModel[searching];
-
-                            // if (
-                            //     cm.search !== false &&
-                            //     (cm.stype === undefined || cm.stype === "text")
-                            // ) {
-                            //     rules.push({
-                            //         field: cm.name,
-                            //         op: "cn",
-                            //         data: searchValue.toUpperCase(),
-                            //     });
-                            // }
-
                             for (i = 0; i < l; i++) {
                                 cm = colModel[i];
 
@@ -984,24 +1063,6 @@
 
                             searching = settings.searching;
 
-                            // Loop through the array of column indices
-                            // for (j = 0; j < searching.length; j++) {
-                            //     var searchIndex = searching[j];
-                            //     cm = colModel[searchIndex];
-
-                            //     console.log(cm,colModel);
-
-                            //     if (
-                            //         cm.search !== false &&
-                            //         (cm.stype === undefined || cm.stype === "text")
-                            //     ) {
-                            //         rules.push({
-                            //             field: cm.name,
-                            //             op: "cn",
-                            //             data: searchValue.toUpperCase(),
-                            //         });
-                            //     }
-                            // }
                             for (i = 0; i < l; i++) {
                                 cm = colModel[i];
 
@@ -1121,4 +1182,16 @@
 
             return this;
         };
+
+        function getLookupSetting(lookupName, settingKey) {
+          
+            return lookupSettings[lookupName] ? lookupSettings[lookupName][settingKey] : null;
+        }
+
+        // Contoh cara mengubah settings secara dinamis dari luar:
+        function updateLookupSetting(lookupName, settingKey, newValue) {
+            if (lookupSettings[lookupName]) {
+                lookupSettings[lookupName][settingKey] = newValue;
+            }
+        }
     </script>
