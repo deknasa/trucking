@@ -73,6 +73,18 @@ $idLookup = isset($id) ? $id : null;
         hidden: true,
         search: false,
       },
+        {
+          label: 'supir',
+          name: 'supir_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'supirid',
+          name: 'supirid',
+          search: false,
+          hidden: true
+        },
 
     
   ];

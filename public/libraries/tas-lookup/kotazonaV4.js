@@ -20,7 +20,6 @@ if (detectDeviceType() == "desktop" && label == false) {
 } else if (detectDeviceType() == "mobile") {
     width = '350px'
 }
-console.log(detectDeviceType(),label,detectDeviceType() == "desktop" ,label == false);
 
 
 column = [
@@ -43,11 +42,11 @@ column = [
 
 filterPostData = {
     aktif: parsePostData.Aktif || '',
-    kotaZona: parsePostData.$kotaZona || '',
-    isLookup: parsePostData.$isLookup || '',
-    statuslongtrip: parsePostData.$statuslongtrip || '',
-    dari_id: parsePostData.$dari_id || '',
-    from: parsePostData.$from || '',
+    kotaZona: parsePostData.kotaZona || '',
+    isLookup: parsePostData.isLookup || '',
+    statuslongtrip: parsePostData.statuslongtrip || '',
+    dari_id: parsePostData.dari_id || '',
+    from: parsePostData.from || '',
     forLookup: true,
 };
 
