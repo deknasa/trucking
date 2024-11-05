@@ -314,15 +314,23 @@
                     },
                     data: filterPostData,
                     success: response => {
-                        firstdata = response.data[0]
-                        // handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata)
-                        if (Object.keys(settings).length > 0) {
-                            handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata, settings);
-                           
-                        } else {
-                            handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata);
+                        if (response.data.length == 0) {
+                            handleOnCancel(element)
                             
+                            // settings.onCancel(element);
+                          
+                        }else{
+                            firstdata = response.data[0]
+                            // handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata)
+                            if (Object.keys(settings).length > 0) {
+                                handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata, settings);
+                            
+                            } else {
+                                handleSelectedRow(firstdata.id, lookupContainer, element, true, firstdata);
+                                
+                            }
                         }
+                        
                         isSelectedRow = false
                     },
                     error: error => {
@@ -805,8 +813,7 @@
                                 lookupContainer.hide();
                                 lookupContainer.remove();
                                 activeElement.data("hasLookup", false);
-                                activeElement.data("currentValue", activeElement.val());
-
+                              
                                 activate = false;
                                 $(activeElement).removeClass('active');
 
@@ -962,7 +969,8 @@
             }
 
             function handleOnCancel(element) {
-              
+                console.log('cancel',element);
+                
                 settings.onCancel(element);
                 activate=false
             }
