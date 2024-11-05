@@ -46,6 +46,7 @@ filterPostData = {
 };
 
 urlRequestGrid = `${apiUrl}statuscontainer`;
+elementInput.attr('data-lookup-url',urlRequestGrid);
 
 selector.jqGrid({
     url: urlRequestGrid,

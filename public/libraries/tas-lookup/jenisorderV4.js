@@ -45,7 +45,8 @@ filterPostData = {
     forLookup: true,
 };
 
-urlRequestGrid = `${apiUrl}jenisorder`
+urlRequestGrid = `${apiUrl}jenisorder`                           
+elementInput.attr('data-lookup-url',urlRequestGrid);
 
 selector.jqGrid({
     url: urlRequestGrid,

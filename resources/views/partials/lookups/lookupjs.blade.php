@@ -11,7 +11,7 @@ if (isset($id)) { ?>
 
 </div>
 
-<script src="{{ asset('libraries/tas-lookup/'. $filename.'.js?version='. config('app.version')) }}">  
+<script src="{{ asset('libraries/tas-lookup/'. $filename.'.js?version='. time()) }}">  
 
 
 
