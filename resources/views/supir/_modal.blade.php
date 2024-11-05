@@ -70,7 +70,7 @@
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label">No SIM <span class="text-danger">*</span></label>
                   <div class="col-sm-10">
-                    <input type="text" name="nosim" id="nosim" maxlength="15" class="form-control numbernoseparate">
+                    <input type="text" name="nosim" id="nosim" maxlength="16" class="form-control numbernoseparate">
                   </div>
                 </div>
 
