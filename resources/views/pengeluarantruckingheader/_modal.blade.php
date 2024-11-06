@@ -3813,6 +3813,30 @@
   function selectAllRowsBBM() {
 
     let originalData = $("#tablePelunasanbbm").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      rowId = value.id
+      let localRow = $("#tablePelunasanbbm").jqGrid("getLocalRow", rowId);
+      let originalGridData = $("#tablePelunasanbbm")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+      if ($('#crudForm').data('action') == 'edit') {
+        if (parseFloat(localRow.bayar) != 0) {
+          localRow.nominal = parseFloat(originalGridData.nominal)
+          $("#tablePelunasanbbm").jqGrid("setCell", rowId, "sisa", originalGridData.sisa);
+        } else { 
+          localRow.nominal = parseFloat(localRow.sisa)
+          $("#tablePelunasanbbm").jqGrid("setCell", rowId, "sisa", 0);
+        }
+
+      } else {
+        localRow.nominal = originalGridData.sisa
+        $("#tablePelunasanbbm").jqGrid("setCell", rowId, "sisa", 0);
+      }
+      
+      $("#tablePelunasanbbm").jqGrid("setCell", rowId, "nominal", localRow.nominal);
+      
+      initAutoNumeric($(`#tablePelunasanbbm tr#${rowId}`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`))
+    })
     let getSelectedRows = originalData.map((data) => data.id);
     $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
 
@@ -4185,9 +4209,17 @@
           // } else {
           //   localRow.nominal = originalGridData.sisa
           // }
-          localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal) + parseFloat(originalGridData.potongan))
+          localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+        } else {
+          localRow.nominal = originalGridData.sisa
         }
-
+        $("#tablePelunasanbbm").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          0
+        );
+        $("#tablePelunasanbbm").jqGrid("setCell", rowId, "nominal", localRow.nominal);
         initAutoNumeric($(`#tablePelunasanbbm tr#${rowId}`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`))
         setTotalNominalPelunasan()
         setTotalSisaPelunasan()
