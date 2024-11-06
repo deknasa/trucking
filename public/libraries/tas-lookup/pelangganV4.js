@@ -52,6 +52,7 @@ filterPostData = {
 };
 
 urlRequestGrid = `${apiUrl}shipper`,
+elementInput.attr('data-lookup-url',urlRequestGrid);
 
 selector.jqGrid({
     url: `${apiUrl}shipper`,

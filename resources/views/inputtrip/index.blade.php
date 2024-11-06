@@ -2360,7 +2360,8 @@
         $('#crudForm [name=dari]').val(upahsupir.kotadari)
         $('#crudForm [name=sampai_id]').val(upahsupir.kotasampai_id)
         $('#crudForm [name=sampai]').val(upahsupir.kotasampai)
-        element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
+        // element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
+        element.val(upahsupir.kotadarisampai)
 
         tarifrincianId = upahsupir.tarif_id
         if (kodeStatusContainer != 'FULL EMPTY') {

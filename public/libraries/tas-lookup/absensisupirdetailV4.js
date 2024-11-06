@@ -100,6 +100,7 @@ filterPostData = {
     forLookup: true,
 };
 urlRequestGrid = `${apiUrl}absensisupirdetail/get`
+elementInput.attr('data-lookup-url',urlRequestGrid);
 
 selector.jqGrid({
     url: urlRequestGrid,
