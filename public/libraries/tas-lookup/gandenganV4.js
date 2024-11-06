@@ -59,6 +59,7 @@ filterPostData = {
 };
 
 urlRequestGrid = parsePostData.url || `${apiUrl}gandengan`,
+elementInput.attr('data-lookup-url',urlRequestGrid);
 
 selector.jqGrid({
     url: urlRequestGrid,

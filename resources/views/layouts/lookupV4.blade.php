@@ -841,7 +841,7 @@
                         activeElement = $(this);
                         $(this).addClass('active');
                         isSwitchingFocus = false; 
-                        isSelectedRow = false
+                        // isSelectedRow = false
                     });
 
                     element.off("focusout");
@@ -882,7 +882,7 @@
                                 let settings = lookupSettings[lookupName];
                                 let searching = settings ? settings.searching : [];
                                 let endpoint = settings ? settings.endpoint : null;
-
+                                
                                 if (elementValue !== '') {
                                     getFirst(searching, lookupContainer, currentElement, settings, lookupUrl);
                                 }
