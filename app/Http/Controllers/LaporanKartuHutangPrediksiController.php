@@ -28,29 +28,30 @@ class LaporanKartuHutangPrediksiController extends MyController
         return view('laporankartuhutangprediksi.index', compact('title'));
     }
 
-    // public function report(Request $request)
-    // {
-    //     $detailParams = [
-    //         'sampai' => $request->sampai,
-    //         'dari' => $request->dari,
-    //     ];
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'sampai' => $request->sampai,
+            'dari' => $request->dari,
+        ];
 
-    //     $header = Http::withHeaders(request()->header())
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'laporankartuhutangprediksi/report', $detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporankartuhutangprediksi/report', $detailParams);
 
 
-    //         if ($header->successful()) {
-    //             $data = $header['data'];
-    //             $user = Auth::user();
-    //             $dataCabang['namacabang'] = $header['namacabang'];
-    //             return view('reports.laporankartuhutangprediksi', compact('data','dataCabang', 'user', 'detailParams'));
-    //         } else {
-    //             return response()->json($header->json(), $header->status());
-    //         }
+        // if ($header->successful()) {
+        $data = $header['data'];
+        $user = Auth::user();
+        $dataCabang['namacabang'] = $header['namacabang'];
+        $cabang['cabang'] = session('cabang');
+        return view('reports.laporankartuhutangprediksi', compact('data', 'dataCabang', 'user', 'detailParams','cabang'));
+        // } else {
+        //     return response()->json($header->json(), $header->status());
+        // }
 
-    // }
+    }
 
     // public function export(Request $request): void
     // {
@@ -71,7 +72,7 @@ class LaporanKartuHutangPrediksiController extends MyController
     //     }
     //     $namacabang = $header['namacabang'];
 
-        
+
     //     $disetujui = $data[0]['disetujui'] ?? '';
     //     $diperiksa = $data[0]['diperiksa'] ?? '';
 
@@ -155,7 +156,7 @@ class LaporanKartuHutangPrediksiController extends MyController
     //             'label' => 'Saldo',
     //             'index' => 'saldo',
     //         ],
-           
+
     //     ];
 
     //     foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -175,7 +176,7 @@ class LaporanKartuHutangPrediksiController extends MyController
     //             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
     //         }
     //         $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
-            
+
     //         $sheet->setCellValue("A$detail_start_row", $response_detail['noebs']);
     //         $sheet->setCellValue("B$detail_start_row", $dateValue);
     //         $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
@@ -194,7 +195,7 @@ class LaporanKartuHutangPrediksiController extends MyController
     //         $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
     //          $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
     //          $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-           
+
     //          $previousRow = $dataRow; // Update the previous row number
 
     //          $dataRow++;

@@ -89,41 +89,41 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-
-        $.ajax({
-                url: `${apiUrl}laporankartuhutangprediksi/report`,
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    dari: dari,
-                    sampai: sampai
-                },
-                success: function(response) {
-                    // console.log(response)
-                    let data = response.data
-                    let dataCabang = response.namacabang
-                    let detailParams = {
-                        dari: dari,
-                        sampai: sampai
-                    };
-                    laporankartuhutangprediksi(data, detailParams, dataCabang);
-                },
-                error: function(error) {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
-                        $('#rangeTglModal').modal('hide')
-                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON.message);
-                    }
-                }
-            })
-            .always(() => {
-                $('#processingLoader').addClass('d-none')
-            });
+        window.open(`{{ route('laporankartuhutangprediksi.report') }}?sampai=${sampai}&dari=${dari}`)
+        // $.ajax({
+        //         url: `${apiUrl}laporankartuhutangprediksi/report`,
+        //         method: 'GET',
+        //         headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //         },
+        //         data: {
+        //             dari: dari,
+        //             sampai: sampai
+        //         },
+        //         success: function(response) {
+        //             // console.log(response)
+        //             let data = response.data
+        //             let dataCabang = response.namacabang
+        //             let detailParams = {
+        //                 dari: dari,
+        //                 sampai: sampai
+        //             };
+        //             laporankartuhutangprediksi(data, detailParams, dataCabang);
+        //         },
+        //         error: function(error) {
+        //             if (error.status === 422) {
+        //                 $('.is-invalid').removeClass('is-invalid');
+        //                 $('.invalid-feedback').remove();
+        //                 $('#rangeTglModal').modal('hide')
+        //                 setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        //             } else {
+        //                 showDialog(error.responseJSON.message);
+        //             }
+        //         }
+        //     })
+        //     .always(() => {
+        //         $('#processingLoader').addClass('d-none')
+        //     });
 
     })
 
@@ -132,7 +132,7 @@
         let dari = $('#crudForm').find('[name=dari]').val()
 
 
-        if (dari != '' && sampai != '') {
+        if (sampai != '') {
 
             $('#processingLoader').removeClass('d-none')
 
