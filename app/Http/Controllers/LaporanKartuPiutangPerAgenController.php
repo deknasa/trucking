@@ -39,7 +39,8 @@ class LaporanKartuPiutangPerAgenController extends MyController
             'pelanggandari_id' => $request->pelanggandari_id,
             'pelanggansampai_id' => $request->pelanggansampai_id,
             'pelanggandari' => $request->pelanggandari,
-            'pelanggansampai' => $request->pelanggansampai
+            'pelanggansampai' => $request->pelanggansampai,
+            'jenislaporan' => $request->jenislaporan
 
         ];
         // dd($detailParams);

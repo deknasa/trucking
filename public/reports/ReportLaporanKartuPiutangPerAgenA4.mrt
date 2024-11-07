@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "e4bd7defea491d3d82a0ab347378fee9",
+  "ReportGuid": "747ccec165b2eb6c5a328178fe149526",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportLaporanKartuPiutangPerAgen.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgenA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1728620941000+0700)/",
+  "ReportChanged": "/Date(1730967452000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -228,28 +228,28 @@
             "Type": "System.String"
           },
           "2": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "4": {
+          "3": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "5": {
+          "4": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
+          },
+          "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
           },
           "6": {
             "Name": "pivot",
@@ -326,28 +326,28 @@
             "Type": "System.String"
           },
           "9": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
-          },
-          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "11": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "12": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
+          },
+          "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
           },
           "13": {
             "Name": "menu",
@@ -427,6 +427,12 @@
             "Name": "pelanggansampai",
             "NameInSource": "pelanggansampai",
             "Alias": "pelanggansampai",
+            "Type": "System.String"
+          },
+          "10": {
+            "Name": "jenislaporan",
+            "NameInSource": "jenislaporan",
+            "Alias": "jenislaporan",
             "Type": "System.String"
           }
         },
@@ -511,7 +517,7 @@
               "Ident": "StiText",
               "Name": "Text30",
               "Guid": "f9e0dacc24784ff49e0cd8a323264a87",
-              "ClientRectangle": "0.3,2.79,1.9,0.61",
+              "ClientRectangle": "0.3,2.59,1.9,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Conditions": {
                 "0": {

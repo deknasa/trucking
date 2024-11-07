@@ -61,6 +61,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group row jenislaporan">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS LAPORAN</label>
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="jenislaporan" id="jenislaporan">
+                                <input type="text" id="jenislaporan" name="jenislaporannama" class="form-control jenislaporan-lookup">
+                            </div>
+                        </div>
+
 
                         <div class="row">
 
@@ -84,11 +92,6 @@
     </div>
 </div>
 @push('report-scripts')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.viewer.office2013.whiteblue.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('libraries/stimulsoft-report/2023.1.1/css/stimulsoft.designer.office2013.whiteblue.css') }}"> --}}
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.reports.js') }}"></script> --}}
-{{-- <script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.viewer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('libraries/stimulsoft-report/2023.1.1/scripts/stimulsoft.designer.js') }}"></script> --}}
 @endpush()
 @push('scripts')
 <script>
@@ -114,9 +117,11 @@
         setLaporanPiutangPerAgen($('#crudForm'))
         if (accessCabang == 'BITUNG-EMKL') {
             $('.agen').hide()
+            $('.jenislaporan').hide()
             $('.shipper').show()
         } else {
             $('.agen').show()
+            $('.jenislaporan').show()
             $('.shipper').hide()
         }
         initDatepicker()
@@ -205,13 +210,14 @@
         let agensampai_id = $('#crudForm').find('[name=agensampai_id]').val()
         let agendari = $('#crudForm').find('[name=agendari]').val()
         let agensampai = $('#crudForm').find('[name=agensampai]').val()
-        let pelanggandari_id= $('#crudForm').find('[name=pelanggandari_id]').val()
-        let pelanggansampai_id= $('#crudForm').find('[name=pelanggansampai_id]').val()
-        let pelanggandari= $('#crudForm').find('[name=pelanggandari]').val()
-        let pelanggansampai= $('#crudForm').find('[name=pelanggansampai]').val()
+        let pelanggandari_id = $('#crudForm').find('[name=pelanggandari_id]').val()
+        let pelanggansampai_id = $('#crudForm').find('[name=pelanggansampai_id]').val()
+        let pelanggandari = $('#crudForm').find('[name=pelanggandari]').val()
+        let pelanggansampai = $('#crudForm').find('[name=pelanggansampai]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
 
         getCekReport().then((response) => {
-            window.open(`{{ route('laporankartupiutangperagen.report') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}&pelanggandari_id=${pelanggandari_id}&pelanggansampai_id=${pelanggansampai_id}&pelanggandari=${pelanggandari}&pelanggansampai=${pelanggansampai}`);
+            window.open(`{{ route('laporankartupiutangperagen.report') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}&pelanggandari_id=${pelanggandari_id}&pelanggansampai_id=${pelanggansampai_id}&pelanggandari=${pelanggandari}&pelanggansampai=${pelanggansampai}&jenislaporan=${jenislaporan}`);
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -259,6 +265,7 @@
         let agensampai_id = $('#crudForm').find('[name=agensampai_id]').val()
         let agendari = $('#crudForm').find('[name=agendari]').val()
         let agensampai = $('#crudForm').find('[name=agensampai]').val()
+        let jenislaporan = $('#crudForm').find('[name=jenislaporan]').val()
 
         $.ajax({
             url: `${apiUrl}laporankartupiutangperagen/export`,
@@ -271,6 +278,7 @@
                 agensampai_id: agensampai_id,
                 agendari: agendari,
                 agensampai: agensampai,
+                jenislaporan: jenislaporan,
                 pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
                 pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
                 pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
@@ -476,6 +484,33 @@
             },
             onClear: (element) => {
                 $('#crudForm [name=pelanggansampai_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        
+        $('.jenislaporan-lookup').lookupV3({
+            title: 'Jenis Laporan Lookup',
+            fileName: 'parameterV3',
+            searching: ['text'],
+            labelColumn: false,
+            beforeProcess: function(test) {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'JENIS KARTU PIUTANG',
+                    subgrp: 'JENIS KARTU PIUTANG',
+                }
+            },
+            onSelectRow: (jenislaporan, element) => {
+                $('#crudForm [name=jenislaporan]').first().val(jenislaporan.id)
+                element.val(jenislaporan.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=jenislaporan]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
