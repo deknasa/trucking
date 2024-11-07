@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2024.3.6",
-  "ReportGuid": "747ccec165b2eb6c5a328178fe149526",
+  "ReportGuid": "42d71f07b94932b6c7b354f9dd65f476",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgenA4.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1730967478000+0700)/",
+  "ReportChanged": "/Date(1730967895000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -517,7 +517,7 @@
               "Ident": "StiText",
               "Name": "Text30",
               "Guid": "f9e0dacc24784ff49e0cd8a323264a87",
-              "ClientRectangle": "0.3,2.59,1.9,0.61",
+              "ClientRectangle": "0.3,2.61,1.9,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Conditions": {
                 "0": {
@@ -551,7 +551,7 @@
               "Ident": "StiText",
               "Name": "Text37",
               "Guid": "9414ea36c9be6badb528dd4809c90473",
-              "ClientRectangle": "0.3,2.59,1.9,0.61",
+              "ClientRectangle": "0.3,2.61,1.9,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Conditions": {
                 "0": {
@@ -818,7 +818,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{root_data.judulLaporan}"
+                "Value": "{data.judulLaporan}"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
