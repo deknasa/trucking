@@ -1,4 +1,4 @@
-<?php require base_path('reports/stireport_config.inc'); ?>
+<?php require base_path('reports/app_config.inc'); ?>
 
 <!DOCTYPE html>
 <html>
@@ -14,25 +14,31 @@
   <!--  <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-    
-    
-    function Start() {
-      Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
-      var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
-      viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
+    let cabang = <?= json_encode($cabang) ?>;
 
-      var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
+    function Start() {
+      Stimulsoft.Base.StiLicense.Key = "<?= $lisenceKeySti2024 ?>";
+      // var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
+      // viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
+
+      // var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
 
-     //  var options = new Stimulsoft.Designer.StiDesignerOptions()
-     //  options.appearance.fullScreenMode = true
+      //  var options = new Stimulsoft.Designer.StiDesignerOptions()
+      //  options.appearance.fullScreenMode = true
 
       // var designer = new Stimulsoft.Designer.StiDesigner(options, "Designer", false)
 
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
-      viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksi.mrt') }}`)
+      // viewer.renderHtml('content')
+      if (cabang['cabang'] == 'MEDAN') {
+        report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksiA4.mrt') }}`)
+      } else if (cabang['cabang'] == 'MAKASSAR') {
+        report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksiLetter.mrt') }}`)
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportLaporanKartuHutangPrediksi.mrt') }}`);
+      }
 
       report.dictionary.dataSources.clear()
 
@@ -47,9 +53,19 @@
       report.dictionary.synchronize()
       // designer.report = report;
       // designer.renderHtml('content');
-      viewer.report = report
-      
-     
+      // viewer.report = report
+      report.renderAsync(function() {
+        report.exportDocumentAsync(function(pdfData) {
+          let blob = new Blob([new Uint8Array(pdfData)], {
+            type: 'application/pdf'
+          });
+          let fileURL = URL.createObjectURL(blob);
+          // window.open(fileURL);
+          window.location.href = fileURL;
+          manipulatePdfWithJsPdf(pdfData);
+        }, Stimulsoft.Report.StiExportFormat.Pdf);
+      });
+
     }
   </script>
   <style>
