@@ -47,6 +47,18 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  Kode Perkiraan
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="coa">
+                <input type="text" id="ketcoa" name="ketcoa" class="form-control coa-lookup">
+              </div>
+            </div>
+
 
             <div class="overflow scroll-container mb-2">
               <div class="table-container">
@@ -722,7 +734,7 @@
               element.val(value)
             }
 
-            if (index == 'akunpusat') {
+            if (index == 'ketcoa') {
               element.data('current-value', value)
             }
             if (index == 'supplier') {
@@ -909,6 +921,31 @@
     //     element.data('currentValue', element.val())
     //   }
     // })
+
+    $('.coa-lookup').lookupV3({
+      title: 'Kode Perk. Lookup',
+      fileName: 'akunpusatV3',
+      labelColumn: false,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          levelCoa: '3',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        $(`#crudForm [name="coa"]`).first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="coa"]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
 
   }
   const setTglBukti = function(form) {
