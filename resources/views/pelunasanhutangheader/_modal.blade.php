@@ -558,6 +558,7 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     selectedRows = []
+    selectedbukti = []
     statusApproval = ''
     statusApprovalPengeluaran = ''
     removeEditingBy($('#crudForm').find('[name=id]').val())
@@ -1882,6 +1883,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var error = response.error
         if (error) {
@@ -2102,6 +2106,7 @@
 
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
+        selectedbukti = []
         $('#gs_').prop('checked', false)
       },
       error: error => {
