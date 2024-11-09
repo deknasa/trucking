@@ -435,6 +435,12 @@
             }
           },
           {
+            label: 'KETERANGAN',
+            name: 'keteranganheader',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+            align: 'left'
+          },
+          {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
