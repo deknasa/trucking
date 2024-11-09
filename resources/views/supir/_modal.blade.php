@@ -357,6 +357,8 @@
   var data_id
   let modalBody = $('#crudModal').find('.modal-body').html()
   let linkPdf
+  let noktp_readonly = '';
+  let dataReadonly = '';
   $(document).ready(function() {
 
     linkPdf = document.createElement('a');
@@ -462,7 +464,8 @@
   })
   $('#crudModal').on('hidden.bs.modal', () => {
     $('#crudModal').find('.modal-body').html(modalBody)
-
+    dataReadonly = '';
+    noktp_readonly = '';
     activeGrid = '#jqGrid'
     removeEditingBy(data_id)
     $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
@@ -685,6 +688,10 @@
             let mandor = $('#crudForm').find(`[name=mandor]`).css({
               background: '#e9ecef'
             })
+            if(dataReadonly != ''){
+              $('#crudForm').find(`[name="tgllahir"].hasDatepicker`).parent('.input-group').find('.input-group-append').hide()
+              $('#crudForm').find(`[name="tglmasuk"].hasDatepicker`).parent('.input-group').find('.input-group-append').hide()
+            }
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -849,6 +856,8 @@
             }
           })
           if (response.data.noktp_readonly != '') {
+            noktp_readonly = response.data.noktp_readonly 
+            dataReadonly = response.data
             form.find(`[name="noktp"]`).attr(response.data.noktp_readonly, true)
             form.find(`[name="namasupir"]`).attr(response.data.namasupir_readonly, true)
             form.find(`[name="tgllahir"]`).attr(response.data.tgllahir_readonly, true)
