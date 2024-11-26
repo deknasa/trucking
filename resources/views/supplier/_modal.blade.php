@@ -134,7 +134,7 @@
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Jenis Usaha <span class="text-danger">*</span>
-                </label>
+                </label> 
               </div>
               <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="jenisusaha" class="form-control">
@@ -342,7 +342,7 @@
       })
 
       switch (action) {
-        case 'add':
+        case 'add': 
           method = 'POST'
           url = `${apiUrl}supplier`
           break;
@@ -372,6 +372,8 @@
         },
         data: data,
         success: response => {
+          console.log(response);
+          
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
@@ -886,7 +888,7 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
+            console.log(response, response.data, index, value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 

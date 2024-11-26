@@ -34,6 +34,7 @@ class CekTokenMiddleware
         ->withToken(session('access_token'))
         ->get(config('app.api_url') . 'checkuser');
          // Cek jika status 401 (Unauthorized)
+        //  dd(session('access_token'), $response);
          if ($response->status() === 401) {
             // Panggil fungsi refresh token
             $this->refreshToken();
@@ -69,6 +70,7 @@ class CekTokenMiddleware
         }
 
         try {
+            // dd(env('TRUCKINGAPI_CLIENT_ID'),env('TRUCKINGAPI_CLIENT_SECRET'));
             $response =  $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',

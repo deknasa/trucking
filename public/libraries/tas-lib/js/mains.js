@@ -152,6 +152,8 @@ window.onbeforeunload = () => {
 };
 
 function changeJqGridRowListText() {
+    // console.log($(document));
+    
     $(document).find('select[id$="rowList"] option[value=0]').text("ALL");
 }
 
@@ -1012,7 +1014,7 @@ function additionalRulesGlobalSearch(params) {
 
 function clearColumnSearch(grid) {
     $(`#gview_${grid.getGridParam("id")}`)
-        .find('input[id*="gs_"]')
+        .find('input[id*="gs_"]')   
         .val("");
     $(`#gview_${grid.getGridParam("id")}`)
         .find('select[id*="gs_"]')
@@ -2086,9 +2088,14 @@ function detectDeviceType() {
 }
 
 function setGridLastRequest(grid, lastRequest) {
+    // console.log(grid, lastRequest); 
+    
     grid.setGridParam({
         lastRequest,
     });
+    // const a = grid.getGridParam()
+    // console.log(a);
+    
 }
 
 function getGridLastRequest(grid) {
@@ -2099,6 +2106,8 @@ function abortGridLastRequest(grid) {
     // getGridLastRequest(grid)?.abort()
 
     var lastRequest = getGridLastRequest(grid);
+    // console.log(lastRequest);
+    
     if (lastRequest) {
         lastRequest.abort();
         grid.abortComplete = false; // Set completion flag to false

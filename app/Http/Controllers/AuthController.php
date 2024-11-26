@@ -56,9 +56,9 @@ class AuthController extends MyController
         // $dataIp['ipclient'] = "192.168.12.3";
         $dataIp['ipclient'] = $request->clientippublic;
         $cekIp = $this->cekIp($request->clientippublic);
-
         $isLocal = $cekIp->original['data']['status'];
         $user = User::where('user', $request->user)->first();
+        // dd($request, $request->user, $request->password, $credentials, $dataIp, $isLocal, $user);
 
         if (!$isLocal) {
 
@@ -93,7 +93,7 @@ class AuthController extends MyController
             $credentials['longitude'] = $long;
             $credentials['browser'] = $this->get_client_browser();
             $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
-
+            // dd(env('TRUCKINGAPI_CLIENT_ID'),env('TRUCKINGAPI_CLIENT_SECRET'),config('app.api_url'),env('TRUCKINGAPI_OUTH_URL').'oauth/token', $credentials['user'], $credentials['password']);
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
@@ -105,13 +105,15 @@ class AuthController extends MyController
                     'password'=>$credentials['password'],
                     'scope'=>''
             ]);
+            // dd($response->json());
             if ($response->getStatusCode() > 200) {
                 return redirect()->back()->withErrors([
                     'user_not_found' => 'Autentikasi token Gagal'
                 ]);
             }
-            $token = json_decode((string) $response->getBody(),true);
             
+            $token = json_decode((string) $response->getBody(),true);
+
             $location = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',

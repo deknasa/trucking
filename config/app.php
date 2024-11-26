@@ -241,11 +241,11 @@ return [
      */
 
     'jwt_key' => env('JWT_KEY', 'ddwadu918412g4bkuaukawf91824g12uvakvaskuvuaf'),
-    'jwt_alg' => env('JWT_ALG', 'HS256'),
+    'jwt_alg' => env('JWT_ALG', 'HS256'), 
 
     'api_url' => env('API_URL', config('app.api_url') . ''),
 
-   
+    
 
     'emkl_api_url' => env('EMKL_API_URL', 'https://tasmdn.kozow.com:8074/emkl-api/public/api/'),
 

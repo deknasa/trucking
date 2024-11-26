@@ -347,6 +347,7 @@
                 <li class="breadcrumb-item active" style="text-transform: uppercase;">
                   {!! $breadcrumb !!}
                 </li>
+                <!-- <li>asd</li> -->
               </ol>
             </div>
           </div>
@@ -457,7 +458,7 @@
     let info = `{{ session('info') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
-    let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
+    let apiEmklUrl = `{{ config('app.emkl_api_url') }}` 
     let apiTruckingTnlUrl = `{{ config('app.trucking_api_tnl') }}`
     let apiTruckingMdnUrl = `{{ config('app.trucking_api_mdn_url') }}`
     let apiTruckingJktUrl = `{{ config('app.trucking_api_jkt_url') }}`

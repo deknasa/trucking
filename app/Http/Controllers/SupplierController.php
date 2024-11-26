@@ -10,7 +10,8 @@ class SupplierController extends MyController
     public $title = 'Supplier';
 
     public function index(Request $request)
-    {
+    { 
+        // dd($request);
         $title = $this->title;
 
         $data = [            
@@ -20,24 +21,25 @@ class SupplierController extends MyController
             'combopostingtnl' => $this->comboList('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
             'listbtn' => $this->getListBtn()
         ];
+        // dd($data);
 
         return view('supplier.index', compact('title', 'data'));
     }
 
     public function comboList($aksi, $grp, $subgrp)
     {
-
+        // dd($aksi);
         $status = [
             'status' => $aksi,
             'grp' => $grp,
             'subgrp' => $subgrp,
         ];
-
+        
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter/combolist', $status);
-
+            // dd($aksi, $grp, $subgrp, $status, $response['data']);
         return $response['data'];
     }
 
@@ -104,7 +106,7 @@ class SupplierController extends MyController
             ->get(config('app.api_url') . 'supplier', $request->all());
 
         $suppliers = $response['data'];
-
+        // dd($request, $response, $suppliers);
         $i = 0;
         foreach ($suppliers as $index => $params) {
 

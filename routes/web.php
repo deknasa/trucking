@@ -310,6 +310,7 @@ use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\InvoiceEmklHeaderController;
 use App\Http\Controllers\LaporanKomisiSupirController;
+use App\Http\Controllers\PenjualController;
 
 /*
 |--------------------------------------------------------------------------
@@ -780,7 +781,7 @@ Route::middleware(['auth', 'check.token','authorized'])->group(function () {
     Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
     Route::get('supplier/get', [SupplierController::class, 'get'])->name('supplier.get');
     Route::get('supplier/index', [SupplierController::class, 'index']);
-    Route::resource('supplier', SupplierController::class);
+    Route::resource('supplier', SupplierController::class); 
 
     Route::get('kategori/field_length', [KategoriController::class, 'fieldLength'])->name('kategori.field_length');
     Route::get('kategori/{id}/delete', [KategoriController::class, 'delete'])->name('kategori.delete');
@@ -1847,6 +1848,10 @@ Route::middleware(['auth', 'check.token','authorized'])->group(function () {
 
     Route::get('laporankomisisupir/index', [LaporanKomisiSupirController::class, 'index']);
     Route::resource('laporankomisisupir', LaporanKomisiSupirController::class);
+
+    Route::get('penjual/report', [PenjualController::class, 'report'])->name('penjual.report');
+    Route::get('penjual/index', [PenjualController::class, 'index']);
+    Route::resource('penjual', PenjualController::class); 
 });
 
 Route::patch('format', [FormatController::class, 'update']);

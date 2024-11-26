@@ -79,7 +79,7 @@
     $("#jqGrid").jqGrid({
         url: `${apiUrl}supplier`,
         mtype: "GET",
-        styleUI: 'Bootstrap4',
+        styleUI: 'Bootstrap4', 
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
@@ -103,6 +103,7 @@
                   $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
+                    
                   } else {
                     clearSelectedRows()
                   }
@@ -111,6 +112,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
+              // console.log(value, rowOptions, rowData);
               return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           },
@@ -132,8 +134,8 @@
             searchoptions: {
               value: `<?php
                       $i = 1;
-
                       foreach ($data['comboapproval'] as $status) :
+                        // dd($data, $data['comboapproval'], $status, $status['param'], $status['parameter']);
                         echo "$status[param]:$status[parameter]";
                         if ($i !== count($data['comboapproval'])) {
                           echo ";";
@@ -151,6 +153,7 @@
               }
             },
             formatter: (value, options, rowData) => {
+              // console.log(value, options, rowData);
               let statusApproval = JSON.parse(value)
 
               if (statusApproval == null) {
@@ -158,7 +161,10 @@
               }
 
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; 
+                // color: #ffc0cb;
+                color: #fff;
+                ">
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
@@ -166,6 +172,8 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
+              // console.log(rowId, value, rowObject);
+              
               let statusApproval = JSON.parse(rowObject.statusapproval)
               if (statusApproval == null) {
                 return '';
@@ -270,6 +278,7 @@
                       $i = 1;
 
                       foreach ($data['combodaftarharga'] as $status) :
+                        // dd($data, $data['combodaftarharga'], $data['comboaktif']);
                         echo "$status[param]:$status[parameter]";
                         if ($i !== count($data['combodaftarharga'])) {
                           echo ";";
@@ -323,6 +332,7 @@
             },
             formatter: (value, options, rowData) => {
               let statusAktif = JSON.parse(value)
+              
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                   <span>${statusAktif.SINGKATAN}</span>
@@ -393,12 +403,15 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: function(jqXHR) {
+          // console.log(jqXHR);
+          
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
 
           setGridLastRequest($(this), jqXHR)
-        },
+        }, 
         onSelectRow: function(id) {
           activeGrid = $(this)
+          
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
@@ -409,21 +422,25 @@
           masterSupplierId = id
         },
         loadComplete: function(data) {
+          // console.log(data);
+          
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
             $('#jqGrid').each((index, element) => {
+              // console.log(index, element);
+              
               abortGridLastRequest($(element))
               clearGridHeader($(element))
             })
           }
-
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
 
           $.each(selectedRows, function(key, value) {
-
+            
             $('#jqGrid tbody tr').each(function(row, tr) {
               if ($(this).find(`td input:checkbox`).val() == value) {
                 $(this).find(`td input:checkbox`).prop('checked', true)
@@ -442,7 +459,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch($(this))
+            clearColumnSearch($(this)) 
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
